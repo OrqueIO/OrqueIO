@@ -39,7 +39,8 @@ const BATCH_OPERATIONS: BatchOperationDef[] = [
     icon: faPauseCircle,
     badgeClass: 'badge--amber',
     available: true,
-    actionBtnKey: 'cockpit.batchOps.suspend.actionBtn'
+    actionBtnKey: 'cockpit.batchOps.suspend.actionBtn',
+    actionBtnQueryKey: 'cockpit.batchOps.suspend.actionBtnQuery'
   },
   {
     id: 'activate',
@@ -47,7 +48,9 @@ const BATCH_OPERATIONS: BatchOperationDef[] = [
     descKey: 'cockpit.batchOps.activate.desc',
     icon: faPlayCircle,
     badgeClass: 'badge--green',
-    available: false
+    available: true,
+    actionBtnKey: 'cockpit.batchOps.activate.actionBtn',
+    actionBtnQueryKey: 'cockpit.batchOps.activate.actionBtnQuery'
   },
   {
     id: 'delete-running',
@@ -245,8 +248,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
     this.instanceLoad$.pipe(
       switchMap(() => {
+        const lockedState = this.selectedOperationId === 'activate' ? 'suspended' : 'active';
         const criteria: MultiValueFilter[] = [
-          { field: 'state', values: ['active'] },
+          { field: 'state', values: [lockedState] },
           ...this.filterCriteria
         ];
         const firstResult = (this.instancesPage - 1) * this.instancesPageSize;
@@ -286,7 +290,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === id) return;
     this.selectedOperationId = id;
     this.resetForm();
-    if (id === 'suspend') {
+    if (id === 'suspend' || id === 'activate') {
       this.loadInstances();
     }
     this.cdr.markForCheck();
@@ -413,10 +417,11 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   get confirmPayloadJson(): string {
+    const suspended = this.selectedOperationId === 'suspend';
     if (this.mode === 'instances') {
-      return JSON.stringify({ suspended: true, processInstanceIds: [...this.selectedIds] }, null, 2);
+      return JSON.stringify({ suspended, processInstanceIds: [...this.selectedIds] }, null, 2);
     }
-    return JSON.stringify({ suspended: true, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() }, null, 2);
+    return JSON.stringify({ suspended, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() }, null, 2);
   }
 
   get confirmEndpoint(): string {
@@ -430,7 +435,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
    * divergence (guard against Camunda issue #4910).
    */
   buildHistoricQueryForBatch(): Record<string, unknown> {
-    const query: Record<string, unknown> = { active: true, unfinished: true };
+    const isActivate = this.selectedOperationId === 'activate';
+    const query: Record<string, unknown> = isActivate
+      ? { suspended: true, unfinished: true }
+      : { active: true, unfinished: true };
     for (const f of this.filterCriteria) {
       switch (f.field) {
         case 'instanceId':
@@ -482,9 +490,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
 
+    const suspended = this.selectedOperationId === 'suspend';
     const payload = this.mode === 'instances'
-      ? { suspended: true, processInstanceIds: [...this.selectedIds] }
-      : { suspended: true, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() };
+      ? { suspended, processInstanceIds: [...this.selectedIds] }
+      : { suspended, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() };
 
     this.processInstanceService.suspendInstancesAsync(payload)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -560,13 +569,55 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       const restoredStep: number = state.step ?? 1;
       this.currentStep = restoredStep >= 3 ? 1 : restoredStep as 1 | 2;
 
-      if (this.currentStep === 1 && this.selectedOperationId === 'suspend') {
+      if (this.currentStep === 1 && (this.selectedOperationId === 'suspend' || this.selectedOperationId === 'activate')) {
         this.loadInstances();
       }
       this.cdr.markForCheck();
     } catch {
       // Corrupt data or sessionStorage unavailable — degrade silently
     }
+  }
+
+  // ── Operation-specific computed properties ────────────────────────────────
+
+  get lockedFilterState(): 'active' | 'suspended' {
+    return this.selectedOperationId === 'activate' ? 'suspended' : 'active';
+  }
+
+  get operationOnlyNoteKey(): string {
+    return this.selectedOperationId === 'activate'
+      ? 'cockpit.batchOps.activate.onlySuspendedNote'
+      : 'cockpit.batchOps.suspend.onlyRunningNote';
+  }
+
+  get operationNoInstancesKey(): string {
+    return this.selectedOperationId === 'activate'
+      ? 'cockpit.batchOps.activate.noInstances'
+      : 'cockpit.batchOps.suspend.noInstances';
+  }
+
+  get confirmInstancesSummaryKey(): string {
+    return this.selectedOperationId === 'activate'
+      ? 'cockpit.batchOps.confirm.activateSummary'
+      : 'cockpit.batchOps.confirm.suspendSummary';
+  }
+
+  get confirmQuerySummaryKey(): string {
+    return this.selectedOperationId === 'activate'
+      ? 'cockpit.batchOps.confirm.activateQuerySummary'
+      : 'cockpit.batchOps.confirm.querySummary';
+  }
+
+  get confirmInstancesBtnKey(): string {
+    return this.selectedOperationId === 'activate'
+      ? 'cockpit.batchOps.confirm.activateBtn'
+      : 'cockpit.batchOps.confirm.suspendBtn';
+  }
+
+  get confirmQueryBtnKey(): string {
+    return this.selectedOperationId === 'activate'
+      ? 'cockpit.batchOps.confirm.activateBtnQuery'
+      : 'cockpit.batchOps.confirm.suspendBtnQuery';
   }
 
   getDefinitionDisplay(inst: ProcessInstance): string {

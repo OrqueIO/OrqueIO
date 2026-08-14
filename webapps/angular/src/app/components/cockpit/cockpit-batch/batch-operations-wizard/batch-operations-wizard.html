@@ -47,8 +47,8 @@
 
     </div>
 
-    <!-- ─── Suspend form (shown when "suspend" is selected) ──────────── -->
-    <div *ngIf="selectedOperationId === 'suspend'" class="operation-steps">
+    <!-- ─── Operation form (shown when suspend or activate is selected) ─ -->
+    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate'" class="operation-steps">
 
       <!-- ── Carte 1 : Définition de la requête ────────────────────── -->
       <div class="operation-card">
@@ -72,7 +72,7 @@
         <!-- Info note — instances mode only -->
         <div *ngIf="mode === 'instances'" class="info-note">
           <fa-icon [icon]="faInfoCircle"></fa-icon>
-          <span>{{ 'cockpit.batchOps.suspend.onlyRunningNote' | translate }}</span>
+          <span>{{ operationOnlyNoteKey | translate }}</span>
         </div>
 
         <!-- Query warning — required by Camunda 7.18 spec -->
@@ -83,7 +83,7 @@
 
         <!-- Filter panel — both modes -->
         <app-instance-filter-panel
-          [lockedState]="'active'"
+          [lockedState]="lockedFilterState"
           (criteriaChange)="onFilterChange($event)">
         </app-instance-filter-panel>
 
@@ -110,7 +110,7 @@
 
         <!-- Empty -->
         <div *ngIf="!instancesLoading && instances.length === 0" class="empty-state">
-          {{ 'cockpit.batchOps.suspend.noInstances' | translate }}
+          {{ operationNoInstancesKey | translate }}
         </div>
 
         <ng-container *ngIf="!instancesLoading && instances.length > 0">
@@ -206,7 +206,7 @@
                 type="button" class="btn-primary"
                 [disabled]="!canContinue"
                 (click)="continue()">
-          {{ 'cockpit.batchOps.suspend.actionBtnQuery' | translate }}
+          {{ (selectedOperation?.actionBtnQueryKey ?? 'cockpit.batchOps.continue') | translate }}
         </button>
       </div>
 
@@ -225,10 +225,10 @@
     <div class="confirm-card">
       <p class="confirm-summary">
         <ng-container *ngIf="mode === 'instances'">
-          {{ 'cockpit.batchOps.confirm.suspendSummary' | translate: { count: selectedCount.toString() } }}
+          {{ confirmInstancesSummaryKey | translate: { count: selectedCount.toString() } }}
         </ng-container>
         <ng-container *ngIf="mode === 'query'">
-          {{ 'cockpit.batchOps.confirm.querySummary' | translate: { count: selectedCount.toString() } }}
+          {{ confirmQuerySummaryKey | translate: { count: selectedCount.toString() } }}
         </ng-container>
       </p>
 
@@ -259,10 +259,10 @@
         {{ 'cockpit.batchOps.back' | translate }}
       </button>
       <button *ngIf="mode === 'instances'" type="button" class="btn-danger" (click)="execute()">
-        {{ 'cockpit.batchOps.confirm.suspendBtn' | translate: { count: selectedCount.toString() } }}
+        {{ confirmInstancesBtnKey | translate: { count: selectedCount.toString() } }}
       </button>
       <button *ngIf="mode === 'query'" type="button" class="btn-danger" (click)="execute()">
-        {{ 'cockpit.batchOps.confirm.suspendBtnQuery' | translate }}
+        {{ confirmQueryBtnKey | translate }}
       </button>
     </div>
   </div>

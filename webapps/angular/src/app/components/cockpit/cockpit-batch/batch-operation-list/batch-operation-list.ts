@@ -16,8 +16,8 @@ export interface BatchOperationDef {
   icon: IconDefinition;
   badgeClass: string;
   available: boolean;
-  /** Translation key for the step-1 action button, e.g. "Suspend {{count}} instances" */
   actionBtnKey?: string;
+  actionBtnQueryKey?: string;
 }
 
 /**
