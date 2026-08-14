@@ -672,7 +672,6 @@
 .ctn-content-top.maximized {
   flex: 1 1 100%;
   min-height: 100%;
-  z-index: 100;
 }
 
 /* Fullscreen diagram mode - hide sidebar, expand content */
