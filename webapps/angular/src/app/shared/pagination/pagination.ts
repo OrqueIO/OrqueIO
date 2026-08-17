@@ -23,6 +23,22 @@ export class PaginationComponent {
   @Input() compact: boolean = false;
   @Input() showSizeSelector: boolean = false;
 
+  // ── Keyset mode ──────────────────────────────────────────────────────────
+  // When true, the prev/next buttons use keyset navigation (cursor-based) instead of
+  // offset pagination. The page indicator shows the current page number without a total.
+  // The size selector and "Showing X-Y" summary remain visible and functional.
+  @Input() keysetMode: boolean = false;
+  @Input() keysetHasNext: boolean = false;
+  @Input() keysetHasPrev: boolean = false;
+  // Real 1-based position of the first item on the current keyset page.
+  // Tracked cumulatively by the wizard (sum of items seen on prior pages).
+  // Avoids naive (page-1)*size+1 which drifts whenever a page is partial.
+  @Input() keysetStartIndex: number = 1;
+  // Number of items actually rendered on the current keyset page (for the summary end index).
+  @Input() keysetItemCount: number = 0;
+  @Output() keysetNext = new EventEmitter<void>();
+  @Output() keysetPrev = new EventEmitter<void>();
+
   @Output() pageChange = new EventEmitter<PageChangeEvent>();
 
   get totalPages(): number {
@@ -38,29 +54,38 @@ export class PaginationComponent {
   }
 
   get startIndex(): number {
-    return (this.current - 1) * this.size + 1;
+    return this.keysetMode ? this.keysetStartIndex : (this.current - 1) * this.size + 1;
   }
 
   get endIndex(): number {
+    if (this.keysetMode) {
+      const raw = this.keysetStartIndex + this.keysetItemCount - 1;
+      if (raw > this.total) {
+        console.warn(`[Pagination] keyset endIndex (${raw}) exceeds total (${this.total}) — startIndex=${this.keysetStartIndex}, itemCount=${this.keysetItemCount}`);
+      }
+      return Math.min(raw, this.total);
+    }
     return Math.min(this.current * this.size, this.total);
   }
 
   goToPage(page: number): void {
     if (page >= 1 && page <= this.totalPages && page !== this.current) {
-      // Don't mutate Input properties - just emit the event
-      // The parent component should update the current page through Input binding
       this.pageChange.emit({ current: page, size: this.size });
     }
   }
 
   nextPage(): void {
-    if (this.hasNext) {
+    if (this.keysetMode) {
+      if (this.keysetHasNext) this.keysetNext.emit();
+    } else if (this.hasNext) {
       this.goToPage(this.current + 1);
     }
   }
 
   previousPage(): void {
-    if (this.hasPrevious) {
+    if (this.keysetMode) {
+      if (this.keysetHasPrev) this.keysetPrev.emit();
+    } else if (this.hasPrevious) {
       this.goToPage(this.current - 1);
     }
   }
@@ -68,7 +93,6 @@ export class PaginationComponent {
   changePageSize(event: Event): void {
     const newSize = parseInt((event.target as HTMLSelectElement).value, 10);
     if (newSize !== this.size) {
-      // Emit with page 1 and new size - parent will update both values
       this.pageChange.emit({ current: 1, size: newSize });
     }
   }

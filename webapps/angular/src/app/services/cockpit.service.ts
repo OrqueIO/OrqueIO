@@ -573,6 +573,7 @@ export interface DeploymentQueryParams {
 export class CockpitService {
   private readonly baseUrl = environment.engineUrl + '/default';
   private readonly historyUrl = `${this.baseUrl}/history`;
+  private readonly CAMUNDA_QUERY_MAX = 2000;
 
   constructor(
     private http: HttpClient,
@@ -582,10 +583,6 @@ export class CockpitService {
     private decisionService: DecisionService,
     private deploymentService: DeploymentService
   ) {}
-
-  // ============================================
-  // Dashboard Statistics (delegated to DashboardService)
-  // ============================================
 
   /**
    * Get main dashboard statistics
@@ -1278,6 +1275,9 @@ export class CockpitService {
               case 'suspended':  base.suspended = true; base.unfinished = true; break;
               case 'completed':  base.completed = true; base.finished = true; break;
               case 'terminated': base.externallyTerminated = true; base.finished = true; break;
+              // Virtual state injected by the wizard for delete-finished: covers all terminal
+              // states (completed + externally/internally terminated) via a single Camunda flag.
+              case 'finished':   base.finished = true; break;
             }
           }
           break;
@@ -1390,10 +1390,107 @@ export class CockpitService {
     if (variants.length === 1) {
       return this.processInstanceService.queryProcessInstances(variants[0], firstResult, maxResults);
     }
-    const needed = firstResult + maxResults;
+    // Cap needed at CAMUNDA_QUERY_MAX (2000) to avoid engine rejection.
+    const needed = Math.min(firstResult + maxResults, this.CAMUNDA_QUERY_MAX);
     return forkJoin(
       variants.map(body => this.processInstanceService.queryProcessInstances(body, 0, needed))
     ).pipe(map(resultArrays => this.mergeSortSlice(resultArrays, firstResult, maxResults)));
+  }
+
+  /**
+   * Keyset (cursor-based) pagination for multi-state and single-state queries.
+   *
+   * PRINCIPLE
+   * ─────────
+   * Instead of "restart from firstResult=0 every page", each page fetches exactly
+   * `pageSize + 1` items per state body using `startedBefore = cursor` (ISO startTime
+   * of the last displayed item). Because the window is bounded to `pageSize + 1`
+   * regardless of page depth, there is NO Camunda 2000-item limit to hit.
+   *
+   * Cursor = startTime of the last displayed item (ISO string).
+   * Next page: inject `startedBefore = cursor` into each per-state body, fetch `pageSize + 1`.
+   * hasMore: if merged result length > pageSize, there is a next page.
+   *
+   * KNOWN LIMITATION — tie-breaking at cursor boundary
+   * ─────────────────────────────────────────────────
+   * `startedBefore` is exclusive (< cursor). If multiple instances share the exact
+   * same startTime millisecond at a page boundary, some may be skipped. In practice
+   * this is negligible: Camunda stores startTime in milliseconds, and two instances
+   * starting at the exact same millisecond is extremely rare. The tradeoff is accepted
+   * in exchange for O(pageSize) fetch cost per page regardless of depth.
+   *
+   * Cursor stability: page N+1 reflects engine state at navigation time, not at the
+   * time page N was loaded. Instances created or deleted between pages may cause minor
+   * discrepancies — this is standard for cursor-based pagination.
+   *
+   * SCOPE — does NOT affect the offset-based path (searchProcessInstancesGlobal):
+   * count queries, query-mode previews, and single-state operations continue unchanged.
+   */
+  searchProcessInstancesGlobalKeyset(
+    filters: MultiValueFilter[],
+    variableNamesIgnoreCase = false,
+    variableValuesIgnoreCase = false,
+    pageSize: number,
+    cursor: string | null
+  ): Observable<{ items: ProcessInstance[]; nextCursor: string | null }> {
+    const statePill = filters.find(f => f.field === 'state');
+    const bodies = (statePill && statePill.values.length > 1)
+      ? this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase)
+      : this.buildPayloadVariants(filters, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    return this.fetchKeysetPage(bodies, pageSize, cursor);
+  }
+
+  private fetchKeysetPage(
+    bodies: any[],
+    pageSize: number,
+    cursor: string | null
+  ): Observable<{ items: ProcessInstance[]; nextCursor: string | null }> {
+    // Inject startedBefore cursor into each body; take the more restrictive bound
+    // if the body already has a user-supplied startedBefore filter.
+    const bodiesWithCursor: any[] = cursor
+      ? bodies.map(body => {
+          if (body['startedBefore']) {
+            const existingMs = new Date(body['startedBefore'] as string).getTime();
+            const cursorMs = new Date(cursor).getTime();
+            // Use the earlier date (smaller ms = stricter upper bound for startTime)
+            return { ...body, startedBefore: cursorMs < existingMs ? cursor : body['startedBefore'] };
+          }
+          return { ...body, startedBefore: cursor };
+        })
+      : bodies;
+
+    // CRITICAL: explicit sorting is required on each per-state body.
+    //
+    // Without it, Camunda's POST /history/process-instance uses its default DB order
+    // (typically START_TIME ASC — oldest first). mergeSortSlice re-sorts client-side,
+    // but it can only work with what Camunda returned. If Camunda returned the oldest
+    // pageSize+1 items instead of the newest, the cursor (= lastItem.startTime) ends
+    // up at a very old timestamp. The next page then uses startedBefore=very_old_date
+    // → nearly nothing qualifies → hasMore=false and only a handful of items shown,
+    // even though thousands of instances remain undisplayed.
+    //
+    // Forcing sortBy=startTime desc makes Camunda return the TOP pageSize+1 most-recent
+    // items per state before the cursor, giving a stable and correct cursor at every page.
+    const bodiesReady = bodiesWithCursor.map(body => ({
+      ...body,
+      sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }],
+    }));
+
+    // Fetch pageSize + 1 to detect hasMore without an extra round-trip.
+    return forkJoin(
+      bodiesReady.map(body =>
+        this.processInstanceService.queryProcessInstances(body, 0, pageSize + 1)
+      )
+    ).pipe(
+      map(resultArrays => {
+        const merged = this.mergeSortSlice(resultArrays, 0, pageSize + 1);
+        const hasMore = merged.length > pageSize;
+        const items = hasMore ? merged.slice(0, pageSize) : merged;
+        const lastItem = items[items.length - 1];
+        const nextCursor = hasMore && lastItem ? (lastItem.startTime ?? null) : null;
+        return { items, nextCursor };
+      })
+    );
   }
 
   searchProcessInstancesGlobalCount(
@@ -1463,10 +1560,15 @@ export class CockpitService {
   ): Observable<ProcessInstance[]> {
     // One request per state_fragment × variant — BK/variable conditions at root level.
     // Camunda 7 does not reliably support processInstanceBusinessKeyLike inside orQuery
-    // entries, so we use separate requests via buildPerStateBodies (works for any number
-    // of variants). Each request fetches at most `needed` items (not 2000): correct
-    // pagination without a hard instance limit.
-    const needed = firstResult + maxResults;
+    // entries (nor finished/unfinished flags inside orQueries), so we use separate requests
+    // via buildPerStateBodies.
+    //
+    // STRUCTURAL LIMIT: Camunda rejects maxResults > CAMUNDA_QUERY_MAX (2000). We cap
+    // `needed` here so the engine never receives an over-limit value. The wizard caps
+    // pagination to CAMUNDA_QUERY_MAX items so the user cannot navigate to pages where
+    // firstResult >= CAMUNDA_QUERY_MAX (results beyond that point are incomplete because
+    // each body only holds its top-2000 items — cross-body sort order breaks down).
+    const needed = Math.min(firstResult + maxResults, this.CAMUNDA_QUERY_MAX);
     return forkJoin(
       this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase)
         .map(body => this.processInstanceService.queryProcessInstances(body, 0, needed))

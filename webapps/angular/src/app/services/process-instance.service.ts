@@ -470,6 +470,17 @@ export class ProcessInstanceService {
     );
   }
 
+  deleteFinishedInstancesAsync(payload: {
+    deleteReason?: string;
+    historicProcessInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.historyUrl}/process-instance/delete`,
+      payload
+    );
+  }
+
   /**
    * Resume (activate) a process instance
    */
