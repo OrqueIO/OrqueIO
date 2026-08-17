@@ -151,21 +151,12 @@
       </div>
       <!-- /carte 1 -->
 
-      <!-- Pagination — keyset mode for multi-state+instances, offset mode otherwise.
-           The same component handles both; only nav behaviour and page indicator differ. -->
       <app-pagination
         *ngIf="!instancesLoading && instances.length > 0"
-        [current]="isMultiStateOperation && mode === 'instances' ? keysetPage : instancesPage"
+        [current]="instancesPage"
         [size]="instancesPageSize"
         [total]="instancesTotal"
         [showSizeSelector]="true"
-        [keysetMode]="isMultiStateOperation && mode === 'instances'"
-        [keysetHasNext]="hasKeysetNext"
-        [keysetHasPrev]="hasKeysetPrev"
-        [keysetStartIndex]="keysetStartIndex"
-        [keysetItemCount]="instances.length"
-        (keysetNext)="goKeysetNext()"
-        (keysetPrev)="goKeysetPrev()"
         (pageChange)="onInstancesPageChange($event)">
       </app-pagination>
 

@@ -6,7 +6,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { forkJoin, Subject, switchMap, catchError, EMPTY, map } from 'rxjs';
+import { forkJoin, Subject, switchMap, catchError, EMPTY } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
@@ -212,7 +212,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   operations: BatchOperationDef[] = BATCH_OPERATIONS;
 
   private readonly SESSION_KEY = 'batchOpsWizardState';
-  private readonly MULTI_STATE_MAX = 2000;
 
   currentStep: 1 | 2 | 3 = 1;
   selectedOperationId: string | null = null;
@@ -234,12 +233,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   skipCustomListeners = false;
   skipIoMappings = false;
 
-  keyCursor: string | null = null;
-  private nextKeyCursor: string | null = null;
-  private cursorStack: Array<{ cursor: string | null; startIndex: number }> = [];
-  keysetPage = 1;
-  keysetStartIndex = 1;
-
   private knownInstances = new Map<string, ProcessInstance>();
 
   private readonly instanceLoad$ = new Subject<void>();
@@ -256,14 +249,12 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
 
     this.instanceLoad$.pipe(
-      switchMap((): import('rxjs').Observable<{ results: ProcessInstance[]; count: number; nextCursor: string | null }> => {
+      switchMap(() => {
         let injectedStatePill: MultiValueFilter | null;
         if (this.selectedOperationId === 'activate') {
           injectedStatePill = { field: 'state', values: ['suspended'] };
         } else if (this.selectedOperationId === 'delete-running') {
-          injectedStatePill = this.filterCriteria.some(f => f.field === 'state')
-            ? null
-            : { field: 'state', values: ['active', 'suspended'] };
+          injectedStatePill = { field: 'state', values: ['unfinished'] };
         } else if (this.selectedOperationId === 'delete-finished') {
           injectedStatePill = { field: 'state', values: ['finished'] };
         } else {
@@ -273,31 +264,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           ? [injectedStatePill, ...this.filterCriteria]
           : [...this.filterCriteria];
 
-        if (this.isMultiStateOperation && this.mode === 'instances') {
-          return forkJoin({
-            keyset: this.cockpitService.searchProcessInstancesGlobalKeyset(
-              criteria, this.vnIgnoreCase, this.vvIgnoreCase,
-              this.instancesPageSize, this.keyCursor
-            ),
-            count: this.cockpitService.searchProcessInstancesGlobalCount(
-              criteria, this.vnIgnoreCase, this.vvIgnoreCase)
-          }).pipe(
-            map(({ keyset, count }) => ({
-              results: keyset.items,
-              count,
-              nextCursor: keyset.nextCursor
-            })),
-            catchError(() => {
-              this.instances = [];
-              this.instancesTotal = 0;
-              this.nextKeyCursor = null;
-              this.instancesLoading = false;
-              this.cdr.markForCheck();
-              return EMPTY;
-            })
-          );
-        }
-
         const firstResult = (this.instancesPage - 1) * this.instancesPageSize;
         return forkJoin({
           results: this.cockpitService.searchProcessInstancesGlobal(
@@ -305,7 +271,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           count: this.cockpitService.searchProcessInstancesGlobalCount(
             criteria, this.vnIgnoreCase, this.vvIgnoreCase)
         }).pipe(
-          map(({ results, count }) => ({ results, count, nextCursor: null as (string | null) })),
           catchError(() => {
             this.instances = [];
             this.instancesTotal = 0;
@@ -316,10 +281,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         );
       }),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(({ results, count, nextCursor }) => {
+    ).subscribe(({ results, count }) => {
       this.instances = results;
       this.instancesTotal = Math.max(count, results.length);
-      this.nextKeyCursor = nextCursor;
       results.forEach(i => this.knownInstances.set(i.id, i));
       this.instancesLoading = false;
       this.cdr.markForCheck();
@@ -354,17 +318,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.mode === m) return;
     this.mode = m;
     this.selectedIds = new Set();
-    this.resetKeysetState();
     this.cdr.markForCheck();
     this.saveToSessionStorage();
-  }
-
-  private resetKeysetState(): void {
-    this.keyCursor = null;
-    this.nextKeyCursor = null;
-    this.cursorStack = [];
-    this.keysetPage = 1;
-    this.keysetStartIndex = 1;
   }
 
   private resetForm(): void {
@@ -381,7 +336,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.deleteReason = '';
     this.skipCustomListeners = false;
     this.skipIoMappings = false;
-    this.resetKeysetState();
   }
 
   onRowClick(id: string): void {
@@ -401,7 +355,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.hasActiveCriteria = event.criteria.length > 0;
     this.instancesPage = 1;
     this.selectedIds = new Set();
-    this.resetKeysetState();
     this.loadInstances();
     this.saveToSessionStorage();
   }
@@ -455,17 +408,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   onInstancesPageChange(event: PageChangeEvent): void {
-    if (this.isMultiStateOperation && this.mode === 'instances') {
-      if (event.size !== this.instancesPageSize) {
-        this.instancesPageSize = event.size;
-        this.resetKeysetState();
-        this.loadInstances();
-      }
-    } else {
-      this.instancesPage = event.current;
-      this.instancesPageSize = event.size;
-      this.loadInstances();
-    }
+    this.instancesPage = event.current;
+    this.instancesPageSize = event.size;
+    this.loadInstances();
   }
 
   continue(): void {
@@ -775,43 +720,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     return this.selectedOperationId === 'delete-finished'
       ? 'cockpit.batchOps.deleteFinished.largeVolumeWarning'
       : 'cockpit.batchOps.deleteRunning.largeVolumeWarning';
-  }
-
-  get isMultiStateOperation(): boolean {
-    if (this.selectedOperationId === 'delete-running') {
-      return !this.filterCriteria.some(f => f.field === 'state');
-    }
-    return false;
-  }
-
-  get hasKeysetNext(): boolean {
-    return this.nextKeyCursor !== null && !this.instancesLoading;
-  }
-
-  get hasKeysetPrev(): boolean {
-    return this.cursorStack.length > 0 && !this.instancesLoading;
-  }
-
-  goKeysetNext(): void {
-    this.cursorStack.push({ cursor: this.keyCursor, startIndex: this.keysetStartIndex });
-    this.keysetStartIndex += this.instances.length;
-    this.keyCursor = this.nextKeyCursor;
-    this.keysetPage++;
-    this.instancesLoading = true;
-    this.instanceLoad$.next();
-  }
-
-  goKeysetPrev(): void {
-    const prev = this.cursorStack.pop()!;
-    this.keyCursor = prev.cursor;
-    this.keysetStartIndex = prev.startIndex;
-    this.keysetPage--;
-    this.instancesLoading = true;
-    this.instanceLoad$.next();
-  }
-
-  get effectivePaginationTotal(): number {
-    return this.instancesTotal;
   }
 
   getDefinitionDisplay(inst: ProcessInstance): string {
