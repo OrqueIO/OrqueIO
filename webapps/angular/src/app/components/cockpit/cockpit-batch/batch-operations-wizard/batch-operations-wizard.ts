@@ -58,7 +58,9 @@ const BATCH_OPERATIONS: BatchOperationDef[] = [
     descKey: 'cockpit.batchOps.deleteRunning.desc',
     icon: faTrash,
     badgeClass: 'badge--red',
-    available: false
+    available: true,
+    actionBtnKey: 'cockpit.batchOps.deleteRunning.actionBtn',
+    actionBtnQueryKey: 'cockpit.batchOps.deleteRunning.actionBtnQuery'
   },
   {
     id: 'delete-finished',
@@ -150,6 +152,9 @@ interface WizardPersistedState {
   vnIgnoreCase: boolean;
   vvIgnoreCase: boolean;
   selectedIds: string[];
+  deleteReason?: string;
+  skipCustomListeners?: boolean;
+  skipIoMappings?: boolean;
 }
 
 @Component({
@@ -226,6 +231,11 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   vvIgnoreCase = false;
   hasActiveCriteria = false;
 
+  // Delete-running specific options
+  deleteReason = '';
+  skipCustomListeners = false;
+  skipIoMappings = false;
+
   // Metadata cache: accumulates instances seen on any browsed page for step-3 display
   private knownInstances = new Map<string, ProcessInstance>();
 
@@ -248,11 +258,21 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
     this.instanceLoad$.pipe(
       switchMap(() => {
-        const lockedState = this.selectedOperationId === 'activate' ? 'suspended' : 'active';
-        const criteria: MultiValueFilter[] = [
-          { field: 'state', values: [lockedState] },
-          ...this.filterCriteria
-        ];
+        // For delete-running: default to active+suspended unless user already pinned a state filter.
+        // For suspend/activate: state is always locked to a single value.
+        let injectedStatePill: MultiValueFilter | null;
+        if (this.selectedOperationId === 'activate') {
+          injectedStatePill = { field: 'state', values: ['suspended'] };
+        } else if (this.selectedOperationId === 'delete-running') {
+          injectedStatePill = this.filterCriteria.some(f => f.field === 'state')
+            ? null
+            : { field: 'state', values: ['active', 'suspended'] };
+        } else {
+          injectedStatePill = { field: 'state', values: ['active'] };
+        }
+        const criteria: MultiValueFilter[] = injectedStatePill
+          ? [injectedStatePill, ...this.filterCriteria]
+          : [...this.filterCriteria];
         const firstResult = (this.instancesPage - 1) * this.instancesPageSize;
         return forkJoin({
           results: this.cockpitService.searchProcessInstancesGlobal(
@@ -290,7 +310,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === id) return;
     this.selectedOperationId = id;
     this.resetForm();
-    if (id === 'suspend' || id === 'activate') {
+    if (id === 'suspend' || id === 'activate' || id === 'delete-running') {
       this.loadInstances();
     }
     this.cdr.markForCheck();
@@ -323,6 +343,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.knownInstances = new Map();
     this.instancesPage = 1;
     this.selectedIds = new Set();
+    this.deleteReason = '';
+    this.skipCustomListeners = false;
+    this.skipIoMappings = false;
   }
 
   onRowClick(id: string): void {
@@ -417,6 +440,17 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   get confirmPayloadJson(): string {
+    if (this.selectedOperationId === 'delete-running') {
+      const base: Record<string, unknown> = {
+        skipCustomListeners: this.skipCustomListeners,
+        skipIoMappings: this.skipIoMappings
+      };
+      if (this.deleteReason.trim()) base['deleteReason'] = this.deleteReason.trim();
+      if (this.mode === 'instances') {
+        return JSON.stringify({ ...base, processInstanceIds: [...this.selectedIds] }, null, 2);
+      }
+      return JSON.stringify({ ...base, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() }, null, 2);
+    }
     const suspended = this.selectedOperationId === 'suspend';
     if (this.mode === 'instances') {
       return JSON.stringify({ suspended, processInstanceIds: [...this.selectedIds] }, null, 2);
@@ -425,7 +459,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   get confirmEndpoint(): string {
-    return `POST ${environment.engineUrl}/default/process-instance/suspended-async`;
+    const endpoint = this.selectedOperationId === 'delete-running'
+      ? 'process-instance/delete'
+      : 'process-instance/suspended-async';
+    return `POST ${environment.engineUrl}/default/${endpoint}`;
   }
 
   /**
@@ -435,10 +472,14 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
    * divergence (guard against Camunda issue #4910).
    */
   buildHistoricQueryForBatch(): Record<string, unknown> {
-    const isActivate = this.selectedOperationId === 'activate';
-    const query: Record<string, unknown> = isActivate
-      ? { suspended: true, unfinished: true }
-      : { active: true, unfinished: true };
+    let query: Record<string, unknown>;
+    if (this.selectedOperationId === 'activate') {
+      query = { suspended: true, unfinished: true };
+    } else if (this.selectedOperationId === 'delete-running') {
+      query = { unfinished: true };
+    } else {
+      query = { active: true, unfinished: true };
+    }
     for (const f of this.filterCriteria) {
       switch (f.field) {
         case 'instanceId':
@@ -490,6 +531,29 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
 
+    if (this.selectedOperationId === 'delete-running') {
+      const deleteReason = this.deleteReason.trim() || undefined;
+      const deletePayload = this.mode === 'instances'
+        ? { deleteReason, skipCustomListeners: this.skipCustomListeners, skipIoMappings: this.skipIoMappings, processInstanceIds: [...this.selectedIds] }
+        : { deleteReason, skipCustomListeners: this.skipCustomListeners, skipIoMappings: this.skipIoMappings, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() };
+      this.processInstanceService.deleteInstancesAsync(deletePayload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: batch => {
+            this.batchId = batch.id;
+            this.executing = false;
+            this.clearSessionStorage();
+            this.cdr.markForCheck();
+          },
+          error: () => {
+            this.batchError = true;
+            this.executing = false;
+            this.cdr.markForCheck();
+          }
+        });
+      return;
+    }
+
     const suspended = this.selectedOperationId === 'suspend';
     const payload = this.mode === 'instances'
       ? { suspended, processInstanceIds: [...this.selectedIds] }
@@ -535,7 +599,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         filterCriteria: this.filterCriteria,
         vnIgnoreCase: this.vnIgnoreCase,
         vvIgnoreCase: this.vvIgnoreCase,
-        selectedIds: [...this.selectedIds]
+        selectedIds: [...this.selectedIds],
+        deleteReason: this.deleteReason,
+        skipCustomListeners: this.skipCustomListeners,
+        skipIoMappings: this.skipIoMappings
       };
       sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(state));
     } catch {
@@ -565,11 +632,14 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.vvIgnoreCase = state.vvIgnoreCase ?? false;
       this.hasActiveCriteria = this.filterCriteria.length > 0;
       this.selectedIds = new Set(state.selectedIds ?? []);
+      this.deleteReason = state.deleteReason ?? '';
+      this.skipCustomListeners = state.skipCustomListeners ?? false;
+      this.skipIoMappings = state.skipIoMappings ?? false;
       // Never restore Results step — step 3 means a batch was submitted
       const restoredStep: number = state.step ?? 1;
       this.currentStep = restoredStep >= 3 ? 1 : restoredStep as 1 | 2;
 
-      if (this.currentStep === 1 && (this.selectedOperationId === 'suspend' || this.selectedOperationId === 'activate')) {
+      if (this.currentStep === 1 && (this.selectedOperationId === 'suspend' || this.selectedOperationId === 'activate' || this.selectedOperationId === 'delete-running')) {
         this.loadInstances();
       }
       this.cdr.markForCheck();
@@ -580,44 +650,50 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   // ── Operation-specific computed properties ────────────────────────────────
 
-  get lockedFilterState(): 'active' | 'suspended' {
-    return this.selectedOperationId === 'activate' ? 'suspended' : 'active';
+  get lockedFilterState(): 'active' | 'suspended' | null {
+    if (this.selectedOperationId === 'activate') return 'suspended';
+    if (this.selectedOperationId === 'delete-running') return null;
+    return 'active';
   }
 
   get operationOnlyNoteKey(): string {
-    return this.selectedOperationId === 'activate'
-      ? 'cockpit.batchOps.activate.onlySuspendedNote'
-      : 'cockpit.batchOps.suspend.onlyRunningNote';
+    if (this.selectedOperationId === 'activate') return 'cockpit.batchOps.activate.onlySuspendedNote';
+    if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.deleteRunning.onlyRunningNote';
+    return 'cockpit.batchOps.suspend.onlyRunningNote';
   }
 
   get operationNoInstancesKey(): string {
-    return this.selectedOperationId === 'activate'
-      ? 'cockpit.batchOps.activate.noInstances'
-      : 'cockpit.batchOps.suspend.noInstances';
+    if (this.selectedOperationId === 'activate') return 'cockpit.batchOps.activate.noInstances';
+    if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.deleteRunning.noInstances';
+    return 'cockpit.batchOps.suspend.noInstances';
   }
 
   get confirmInstancesSummaryKey(): string {
-    return this.selectedOperationId === 'activate'
-      ? 'cockpit.batchOps.confirm.activateSummary'
-      : 'cockpit.batchOps.confirm.suspendSummary';
+    if (this.selectedOperationId === 'activate') return 'cockpit.batchOps.confirm.activateSummary';
+    if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.confirm.deleteRunningSummary';
+    return 'cockpit.batchOps.confirm.suspendSummary';
   }
 
   get confirmQuerySummaryKey(): string {
-    return this.selectedOperationId === 'activate'
-      ? 'cockpit.batchOps.confirm.activateQuerySummary'
-      : 'cockpit.batchOps.confirm.querySummary';
+    if (this.selectedOperationId === 'activate') return 'cockpit.batchOps.confirm.activateQuerySummary';
+    if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.confirm.deleteRunningQuerySummary';
+    return 'cockpit.batchOps.confirm.querySummary';
   }
 
   get confirmInstancesBtnKey(): string {
-    return this.selectedOperationId === 'activate'
-      ? 'cockpit.batchOps.confirm.activateBtn'
-      : 'cockpit.batchOps.confirm.suspendBtn';
+    if (this.selectedOperationId === 'activate') return 'cockpit.batchOps.confirm.activateBtn';
+    if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.confirm.deleteRunningBtn';
+    return 'cockpit.batchOps.confirm.suspendBtn';
   }
 
   get confirmQueryBtnKey(): string {
-    return this.selectedOperationId === 'activate'
-      ? 'cockpit.batchOps.confirm.activateBtnQuery'
-      : 'cockpit.batchOps.confirm.suspendBtnQuery';
+    if (this.selectedOperationId === 'activate') return 'cockpit.batchOps.confirm.activateBtnQuery';
+    if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.confirm.deleteRunningBtnQuery';
+    return 'cockpit.batchOps.confirm.suspendBtnQuery';
+  }
+
+  get showLargeVolumeWarning(): boolean {
+    return this.selectedOperationId === 'delete-running' && this.mode === 'query' && this.instancesTotal > 1000;
   }
 
   getDefinitionDisplay(inst: ProcessInstance): string {

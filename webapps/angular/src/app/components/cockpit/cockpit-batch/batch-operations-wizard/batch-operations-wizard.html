@@ -47,8 +47,8 @@
 
     </div>
 
-    <!-- ─── Operation form (shown when suspend or activate is selected) ─ -->
-    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate'" class="operation-steps">
+    <!-- ─── Operation form (shown when suspend, activate, or delete-running is selected) ─ -->
+    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running'" class="operation-steps">
 
       <!-- ── Carte 1 : Définition de la requête ────────────────────── -->
       <div class="operation-card">
@@ -69,8 +69,8 @@
           </button>
         </div>
 
-        <!-- Info note — instances mode only -->
-        <div *ngIf="mode === 'instances'" class="info-note">
+        <!-- Info note — instances mode for suspend/activate; both modes for delete-running -->
+        <div *ngIf="mode === 'instances' || selectedOperationId === 'delete-running'" class="info-note">
           <fa-icon [icon]="faInfoCircle"></fa-icon>
           <span>{{ operationOnlyNoteKey | translate }}</span>
         </div>
@@ -81,11 +81,57 @@
           <span>{{ 'cockpit.batchOps.suspend.queryWarning' | translate }}</span>
         </div>
 
+        <!-- Delete-running options: delete reason + skip toggles — above "Add criteria" -->
+        <div *ngIf="selectedOperationId === 'delete-running'" class="delete-options">
+
+          <!-- Delete Reason -->
+          <div class="delete-reason-field">
+            <label class="delete-reason-label">
+              {{ 'cockpit.batchOps.deleteRunning.deleteReasonLabel' | translate }}
+            </label>
+            <input type="text" class="delete-options__input"
+                   [(ngModel)]="deleteReason"
+                   [placeholder]="'cockpit.batchOps.deleteRunning.deleteReasonPlaceholder' | translate">
+          </div>
+
+          <!-- Skip options — compact groups centered in the card -->
+          <div class="skip-options-row">
+            <label class="toggle-block">
+              <span class="toggle-wrap">
+                <input type="checkbox" class="toggle-input" [(ngModel)]="skipCustomListeners">
+                <span class="toggle-track"></span>
+              </span>
+              <span class="toggle-body">
+                <span class="toggle-label">{{ 'cockpit.batchOps.deleteRunning.skipCustomListeners' | translate }}</span>
+                <span class="toggle-desc">{{ 'cockpit.batchOps.deleteRunning.skipCustomListenersDesc' | translate }}</span>
+              </span>
+            </label>
+
+            <label class="toggle-block">
+              <span class="toggle-wrap">
+                <input type="checkbox" class="toggle-input" [(ngModel)]="skipIoMappings">
+                <span class="toggle-track"></span>
+              </span>
+              <span class="toggle-body">
+                <span class="toggle-label">{{ 'cockpit.batchOps.deleteRunning.skipIoMappings' | translate }}</span>
+                <span class="toggle-desc">{{ 'cockpit.batchOps.deleteRunning.skipIoMappingsDesc' | translate }}</span>
+              </span>
+            </label>
+          </div>
+
+        </div>
+
         <!-- Filter panel — both modes -->
         <app-instance-filter-panel
           [lockedState]="lockedFilterState"
           (criteriaChange)="onFilterChange($event)">
         </app-instance-filter-panel>
+
+        <!-- Large volume warning — CAM-8738 risk for delete in query mode -->
+        <div *ngIf="showLargeVolumeWarning" class="danger-warning">
+          <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+          <span>{{ 'cockpit.batchOps.deleteRunning.largeVolumeWarning' | translate: { count: instancesTotal.toString() } }}</span>
+        </div>
 
       </div>
       <!-- /carte 1 -->
@@ -223,6 +269,11 @@
     <h2 class="step-title">{{ 'cockpit.batchOps.confirm.title' | translate }}</h2>
 
     <div class="confirm-card">
+      <div *ngIf="selectedOperationId === 'delete-running'" class="danger-warning confirm-danger">
+        <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+        <span>{{ 'cockpit.batchOps.deleteRunning.irreversibleWarning' | translate }}</span>
+      </div>
+
       <p class="confirm-summary">
         <ng-container *ngIf="mode === 'instances'">
           {{ confirmInstancesSummaryKey | translate: { count: selectedCount.toString() } }}
