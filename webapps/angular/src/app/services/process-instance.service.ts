@@ -457,6 +457,19 @@ export class ProcessInstanceService {
     );
   }
 
+  deleteInstancesAsync(payload: {
+    deleteReason?: string;
+    skipCustomListeners: boolean;
+    skipIoMappings: boolean;
+    processInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.baseUrl}/process-instance/delete`,
+      payload
+    );
+  }
+
   /**
    * Resume (activate) a process instance
    */
