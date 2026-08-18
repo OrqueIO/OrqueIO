@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, forkJoin } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -64,7 +64,7 @@ export type {
   TasksByGroup
 } from './dashboard.service';
 
-// Interfaces pour les types de données
+// Interfaces pour les types de donnÃ©es
 
 export interface ProcessDefinition {
   id: string;
@@ -454,12 +454,17 @@ export interface MultiValueFilter {
   variableLines?: VariableLine[];
 }
 
-/**
- * Converts a raw string value entered by the user into the correct JS type
- * before sending it to the Camunda variable-search API.
- * Camunda compares by strict type: a Double stored as 20.5 never matches the
- * string "20.5", so we must send 20.5 (number) instead.
- */
+export interface MultiStateCursor {
+  offsets: Record<string, number>;
+}
+
+export interface KeysetPage {
+  items: ProcessInstance[];
+  nextCursor: MultiStateCursor;
+  hasMore: boolean;
+}
+
+
 export function parseVariableValue(raw: string, operator: string): any {
   if (operator === 'like') {
     return raw.includes('%') ? raw : `%${raw}%`;
@@ -648,9 +653,6 @@ export class CockpitService {
     return this.dashboardService.getDeploymentsCount();
   }
 
-  // ============================================
-  // Process Definitions (delegated to ProcessDefinitionService)
-  // ============================================
 
   /**
    * @deprecated Use ProcessDefinitionService.getProcessDefinitions() directly
@@ -1338,7 +1340,7 @@ export class CockpitService {
     if (variableNamesIgnoreCase) base.variableNamesIgnoreCase = true;
     if (variableValuesIgnoreCase) base.variableValuesIgnoreCase = true;
 
-    // Dimensions: bk values (or [null]) × each variable pill's values
+    // Dimensions: bk values (or [null]) Ã— each variable pill's values
     const bkDim: Array<string | null> = bkValues.length > 0 ? bkValues : [null];
     const varDims = varPills.map(p =>
       p.values.map(v => ({ name: p.name, op: p.op, rawValue: v, vvIgnoreCase: p.vvIgnoreCase }))
@@ -1379,11 +1381,27 @@ export class CockpitService {
     variableNamesIgnoreCase = false,
     variableValuesIgnoreCase = false,
     firstResult = 0,
-    maxResults = 20
+    maxResults = 20,
+    cache?: Map<string, ProcessInstance[]>
   ): Observable<ProcessInstance[]> {
     const statePill = filters.find(f => f.field === 'state');
-    if (statePill && statePill.values.length > 1) {
-      return this.searchPerState(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase, firstResult, maxResults);
+    // When all possible states are selected, any instance qualifies â€” drop the state filter
+    if (statePill && this.isExhaustiveStateSelection(statePill.values)) {
+      filters = filters.filter(f => f.field !== 'state');
+    } else if (statePill && statePill.values.length > 1) {
+      const nativeFlag = this.resolveNativeStateFlag(statePill.values);
+      if (nativeFlag) {
+        const resolved: MultiValueFilter[] = [{ field: 'state', values: [nativeFlag] }, ...filters.filter(f => f.field !== 'state')];
+        const nativeVariants = this.buildPayloadVariants(resolved, variableNamesIgnoreCase, variableValuesIgnoreCase);
+        if (nativeVariants.length === 1) {
+          return this.processInstanceService.queryProcessInstances(nativeVariants[0], firstResult, maxResults);
+        }
+        const nativeNeeded = Math.min(firstResult + maxResults, this.CAMUNDA_QUERY_MAX);
+        return forkJoin(
+          nativeVariants.map(body => this.processInstanceService.queryProcessInstances(body, 0, nativeNeeded))
+        ).pipe(map(resultArrays => this.mergeSortSlice(resultArrays, firstResult, maxResults)));
+      }
+      return this.searchPerState(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase, firstResult, maxResults, cache);
     }
     const variants = this.buildPayloadVariants(filters, variableNamesIgnoreCase, variableValuesIgnoreCase);
     if (variants.length === 1) {
@@ -1402,7 +1420,21 @@ export class CockpitService {
     variableValuesIgnoreCase = false
   ): Observable<number> {
     const statePill = filters.find(f => f.field === 'state');
-    if (statePill && statePill.values.length > 1) {
+    // When all possible states are selected, any instance qualifies â€” drop the state filter
+    if (statePill && this.isExhaustiveStateSelection(statePill.values)) {
+      filters = filters.filter(f => f.field !== 'state');
+    } else if (statePill && statePill.values.length > 1) {
+      const nativeFlag = this.resolveNativeStateFlag(statePill.values);
+      if (nativeFlag) {
+        const resolved: MultiValueFilter[] = [{ field: 'state', values: [nativeFlag] }, ...filters.filter(f => f.field !== 'state')];
+        const nativeVariants = this.buildPayloadVariants(resolved, variableNamesIgnoreCase, variableValuesIgnoreCase);
+        if (nativeVariants.length === 1) {
+          return this.processInstanceService.queryProcessInstancesCount(nativeVariants[0]);
+        }
+        return forkJoin(
+          nativeVariants.map(body => this.processInstanceService.queryProcessInstancesCount(body))
+        ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
+      }
       return this.countPerState(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
     }
     const variants = this.buildPayloadVariants(filters, variableNamesIgnoreCase, variableValuesIgnoreCase);
@@ -1420,23 +1452,37 @@ export class CockpitService {
     ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
   }
 
+  // All selectable state values in the search UI â€” used to detect "no state filter needed"
+  private static readonly ALL_STATE_VALUES = new Set<string>(['active', 'suspended', 'completed', 'terminated']);
+
+  private isExhaustiveStateSelection(stateValues: string[]): boolean {
+    return stateValues.length === CockpitService.ALL_STATE_VALUES.size &&
+      stateValues.every(v => CockpitService.ALL_STATE_VALUES.has(v));
+  }
+
+  private resolveNativeStateFlag(stateValues: string[]): string | null {
+    const sorted = [...stateValues].sort().join(',');
+    if (sorted === 'active,suspended') return 'unfinished';
+    if (sorted === 'completed,terminated') return 'finished';
+    return null;
+  }
+
   // Returns the state-specific body fragments (flags only, no other criteria)
-  private stateBodyFragment(stateVal: string): Record<string, boolean>[] {
+  private stateBodyFragment(stateVal: string): Record<string, unknown>[] {
     switch (stateVal) {
       case 'active':    return [{ active: true, unfinished: true }];
       case 'suspended': return [{ suspended: true, unfinished: true }];
       case 'completed': return [{ completed: true, finished: true }];
-      case 'terminated': return [
-        // An instance is terminated either externally (API cancel) or internally (process flow)
-        { externallyTerminated: true, finished: true },
-        { internallyTerminated: true, finished: true }
-      ];
+      case 'terminated': return [{
+        finished: true,
+        orQueries: [{ externallyTerminated: true }, { internallyTerminated: true }]
+      }];
       default: return [];
     }
   }
 
   // Build one request body per state value, each a copy of the non-state base body
-  // plus the state-specific flags. No orQueries across states — avoids Camunda's
+  // plus the state-specific flags. No orQueries across states - avoids Camunda's
   // finished/unfinished flag hoisting which makes cross-group queries return 0 results.
   private buildPerStateBodies(
     filters: MultiValueFilter[],
@@ -1459,23 +1505,96 @@ export class CockpitService {
     variableNamesIgnoreCase: boolean,
     variableValuesIgnoreCase: boolean,
     firstResult: number,
-    maxResults: number
+    maxResults: number,
+    cache?: Map<string, ProcessInstance[]>
   ): Observable<ProcessInstance[]> {
-    // One request per state_fragment × variant — BK/variable conditions at root level.
-    // Camunda 7 does not reliably support processInstanceBusinessKeyLike inside orQuery
-    // entries (nor finished/unfinished flags inside orQueries), so we use separate requests
-    // via buildPerStateBodies.
-    //
-    // STRUCTURAL LIMIT: Camunda rejects maxResults > CAMUNDA_QUERY_MAX (2000). We cap
-    // `needed` here so the engine never receives an over-limit value. The wizard caps
-    // pagination to CAMUNDA_QUERY_MAX items so the user cannot navigate to pages where
-    // firstResult >= CAMUNDA_QUERY_MAX (results beyond that point are incomplete because
-    // each body only holds its top-2000 items — cross-body sort order breaks down).
     const needed = Math.min(firstResult + maxResults, this.CAMUNDA_QUERY_MAX);
-    return forkJoin(
-      this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase)
-        .map(body => this.processInstanceService.queryProcessInstances(body, 0, needed))
-    ).pipe(map(resultArrays => this.mergeSortSlice(resultArrays, firstResult, maxResults)));
+    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+
+    const fetches: Observable<ProcessInstance[]>[] = bodies.map(body => {
+      const key = JSON.stringify(body);
+      const cached = cache?.get(key) ?? [];
+
+      if (cached.length >= needed) {
+        return of(cached.slice(0, needed));
+      }
+
+      return this.processInstanceService.queryProcessInstances(body, cached.length, needed - cached.length).pipe(
+        map(delta => {
+          const full = [...cached, ...delta];
+          cache?.set(key, full);
+          return full.slice(0, needed);
+        })
+      );
+    });
+
+    return forkJoin(fetches).pipe(
+      map(resultArrays => this.mergeSortSlice(resultArrays, firstResult, maxResults))
+    );
+  }
+
+  searchPerStatePaged(
+    filters: MultiValueFilter[],
+    statePill: MultiValueFilter,
+    variableNamesIgnoreCase: boolean,
+    variableValuesIgnoreCase: boolean,
+    pageSize: number,
+    cursor: MultiStateCursor | null
+  ): Observable<KeysetPage> {
+    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    const ps = +pageSize;
+    const fetchSize = ps + 1;
+    const currentOffsets = cursor?.offsets ?? {};
+
+    const fetches = bodies.map((body, idx) => {
+      const offset = currentOffsets[String(idx)] ?? 0;
+      return this.processInstanceService
+        .queryProcessInstances(body, offset, fetchSize)
+        .pipe(map(items => ({ items, idx })));
+    });
+
+    return forkJoin(fetches).pipe(
+      map(results => {
+        const itemBodies = new Map<string, Set<number>>();
+        for (const { items, idx } of results) {
+          for (const item of items) {
+            if (!itemBodies.has(item.id)) itemBodies.set(item.id, new Set());
+            itemBodies.get(item.id)!.add(idx);
+          }
+        }
+
+        const seen = new Set<string>();
+        const allUnique: ProcessInstance[] = [];
+        for (const { items } of results) {
+          for (const item of items) {
+            if (item.id && !seen.has(item.id)) {
+              seen.add(item.id);
+              allUnique.push(item);
+            }
+          }
+        }
+
+        allUnique.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+
+        const hasMore = allUnique.length > ps;
+        const pageItems = allUnique.slice(0, ps);
+
+        const consumed = new Map<number, number>();
+        for (const item of pageItems) {
+          for (const bodyIdx of (itemBodies.get(item.id) ?? new Set())) {
+            consumed.set(bodyIdx, (consumed.get(bodyIdx) ?? 0) + 1);
+          }
+        }
+
+        const nextOffsets: Record<string, number> = {};
+        for (let i = 0; i < bodies.length; i++) {
+          const key = String(i);
+          nextOffsets[key] = (currentOffsets[key] ?? 0) + (consumed.get(i) ?? 0);
+        }
+
+        return { items: pageItems, nextCursor: { offsets: nextOffsets }, hasMore };
+      })
+    );
   }
 
   private mergeSortSlice(resultArrays: ProcessInstance[][], firstResult: number, maxResults: number): ProcessInstance[] {
@@ -1490,10 +1609,7 @@ export class CockpitService {
     return merged.slice(firstResult, firstResult + maxResults);
   }
 
-  // One queryProcessInstancesCount call per state_fragment × variant body.
-  // States are mutually exclusive per instance (exact count). BK/variable LIKE
-  // variants can overlap (slight overcount when one instance matches two patterns),
-  // but this is rare in practice and avoids any hard instance-fetch limit.
+
   private countPerState(
     filters: MultiValueFilter[],
     statePill: MultiValueFilter,

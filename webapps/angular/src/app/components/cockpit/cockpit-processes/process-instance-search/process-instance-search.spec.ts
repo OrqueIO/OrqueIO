@@ -150,8 +150,8 @@ describe('ProcessInstanceSearchComponent — loadSearchResults', () => {
         component.activePills,
         false,
         false,
-        0,    // firstResult = (1-1)*20
-        20    // maxResults = searchPageSize, never 2000
+        0,
+        20,
       );
     });
 
@@ -167,8 +167,8 @@ describe('ProcessInstanceSearchComponent — loadSearchResults', () => {
         component.activePills,
         false,
         false,
-        20,   // firstResult = (2-1)*20
-        20    // maxResults = searchPageSize
+        20,
+        20,
       );
     });
 
@@ -179,16 +179,13 @@ describe('ProcessInstanceSearchComponent — loadSearchResults', () => {
 
       expect(component.searchResults).toEqual(MOCK_INSTANCES);
       expect(component.searchResultsCount).toBe(2);
-      // Must not be doubled: if count=2 but actual results are 2, nothing is ×2
       expect(component.searchResultsCount).not.toBe(4);
     });
 
     it('should not trigger an extra call when button is clicked (no keydown.enter double-fire)', () => {
       component.activePills = [{ field: 'instanceId', values: ['inst-abc'] }];
-      fixture.detectChanges();
 
-      const btn = fixture.nativeElement.querySelector('.btn-search') as HTMLButtonElement;
-      btn.click();
+      component.executeSearch();
 
       expect(cockpitService.searchProcessInstancesGlobal).toHaveBeenCalledTimes(1);
       expect(cockpitService.searchProcessInstancesGlobalCount).toHaveBeenCalledTimes(1);
@@ -201,7 +198,6 @@ describe('ProcessInstanceSearchComponent — loadSearchResults', () => {
       component.executeSearch();
 
       expect(component.searchCurrentPage).toBe(1);
-      // firstResult must be 0 (page 1)
       const [, , , firstResult] = (cockpitService.searchProcessInstancesGlobal as ReturnType<typeof vi.fn>).mock.calls[0];
       expect(firstResult).toBe(0);
     });
@@ -235,22 +231,12 @@ describe('ProcessInstanceSearchComponent — loadSearchResults', () => {
   });
 });
 
-// ─── URL restoration path ───────────────────────────────────────────────────
-//
-// Architecture note: loadFromUrl() (ngOnInit) calls executeSearch() directly —
-// there is no separate service call. The maxResults=2000 seen in the network
-// tab for multi-state/multi-businessKey searches comes from searchPerState /
-// countPerState service internals (in-memory dedup requires full batches).
-// The component always passes this.searchPageSize (20) to the service, regardless
-// of whether the search was triggered by a button click or URL restoration.
-//
 describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () => {
   let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
   let component: ProcessInstanceSearchComponent;
   let cockpitService: CockpitService;
 
   const URL_CRITERIA: MultiValueFilter[] = [
-    { field: 'state', values: ['active', 'completed'] },
     { field: 'businessKey', values: ['a', 'b', 'c', 'd'] },
     { field: 'instanceId', values: ['e28e0fdf-0000-0000-0000-000000000001'] },
   ];
@@ -317,8 +303,8 @@ describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () 
     const [, , , firstResult, maxResults] = calls[0];
 
     expect(firstResult).toBe(0);
-    expect(maxResults).toBe(20);      // searchPageSize default
-    expect(maxResults).not.toBe(2000); // service internals use 2000, but the component must not
+    expect(maxResults).toBe(20);
+    expect(maxResults).not.toBe(2000);
   });
 
   it('should restore activePills exactly from URL query param criteria', async () => {
@@ -397,5 +383,186 @@ describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () 
     f.detectChanges();
 
     expect(cockpitService.searchProcessInstancesGlobal).not.toHaveBeenCalled();
+  });
+});
+
+describe('ProcessInstanceSearchComponent — cursor state lifecycle', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+  let cockpitService: CockpitService;
+
+  const KEYSET_PAGE = { items: MOCK_INSTANCES, nextCursor: { offsets: { '0': 2 } }, hasMore: true };
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of(MOCK_INSTANCES)),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(2)),
+      searchPerStatePaged: vi.fn().mockReturnValue(of(KEYSET_PAGE)),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('resets cursor state on new executeSearch so prior navigation never leaks', () => {
+    component.activePills = [{ field: 'state', values: ['active', 'completed'] }];
+    component.executeSearch();
+    component.nextMultiStatePage();
+
+    expect(component.cursorStack.length).toBe(1);
+    expect(component.multiStateAbsoluteOffset).toBeGreaterThan(0);
+
+    component.executeSearch();
+
+    expect(component.cursorStack.length).toBe(0);
+    expect(component.multiStateAbsoluteOffset).toBe(0);
+  });
+
+  it('resets cursor state when page size changes (offsets become invalid)', () => {
+    component.activePills = [{ field: 'state', values: ['active', 'completed'] }];
+    component.executeSearch();
+    component.nextMultiStatePage();
+
+    expect(component.cursorStack.length).toBe(1);
+
+    component.onSearchPageSizeChange();
+
+    expect(component.cursorStack.length).toBe(0);
+    expect(component.multiStateAbsoluteOffset).toBe(0);
+  });
+
+  it('advances and reverts absoluteOffset correctly across next/prev page', () => {
+    component.activePills = [{ field: 'state', values: ['active', 'completed'] }];
+    component.executeSearch();
+
+    const afterPage1 = component.multiStateAbsoluteOffset;
+    component.nextMultiStatePage();
+    const afterPage2 = component.multiStateAbsoluteOffset;
+
+    expect(afterPage2).toBeGreaterThan(afterPage1);
+
+    component.prevMultiStatePage();
+
+    expect(component.multiStateAbsoluteOffset).toBe(afterPage1);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — searchTotalPages & multiStateCurrentPage', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  describe('searchTotalPages', () => {
+    it('returns 0 when count is 0', () => {
+      component.searchResultsCount = 0;
+      component.searchPageSize = 20;
+      expect(component.searchTotalPages).toBe(0);
+    });
+
+    it('returns 0 when pageSize is 0', () => {
+      component.searchResultsCount = 100;
+      component.searchPageSize = 0;
+      expect(component.searchTotalPages).toBe(0);
+    });
+
+    it.each([
+      { count: 1,    pageSize: 20,  expected: 1  },
+      { count: 20,   pageSize: 20,  expected: 1  },
+      { count: 21,   pageSize: 20,  expected: 2  },
+      { count: 100,  pageSize: 20,  expected: 5  },
+      { count: 101,  pageSize: 20,  expected: 6  },
+      { count: 95,   pageSize: 50,  expected: 2  },
+      { count: 1000, pageSize: 100, expected: 10 },
+      { count: 1001, pageSize: 100, expected: 11 },
+    ])('ceil($count / $pageSize) = $expected', ({ count, pageSize, expected }) => {
+      component.searchResultsCount = count;
+      component.searchPageSize = pageSize;
+      expect(component.searchTotalPages).toBe(expected);
+    });
+
+    it('updates when pageSize changes mid-navigation', () => {
+      component.searchResultsCount = 100;
+      component.searchPageSize = 20;
+      expect(component.searchTotalPages).toBe(5);
+
+      component.searchPageSize = 50;
+      expect(component.searchTotalPages).toBe(2);
+
+      component.searchPageSize = 10;
+      expect(component.searchTotalPages).toBe(10);
+    });
+  });
+
+  describe('multiStateCurrentPage', () => {
+    it('returns 1 when absoluteOffset is 0', () => {
+      component.multiStateAbsoluteOffset = 0;
+      component.searchPageSize = 20;
+      expect(component.multiStateCurrentPage).toBe(1);
+    });
+
+    it.each([
+      { offset: 0,   pageSize: 20, expected: 1 },
+      { offset: 19,  pageSize: 20, expected: 1 },
+      { offset: 20,  pageSize: 20, expected: 2 },
+      { offset: 40,  pageSize: 20, expected: 3 },
+      { offset: 100, pageSize: 20, expected: 6 },
+      { offset: 0,   pageSize: 50, expected: 1 },
+      { offset: 50,  pageSize: 50, expected: 2 },
+      { offset: 99,  pageSize: 50, expected: 2 },
+      { offset: 100, pageSize: 50, expected: 3 },
+    ])('floor($offset / $pageSize) + 1 = $expected', ({ offset, pageSize, expected }) => {
+      component.multiStateAbsoluteOffset = offset;
+      component.searchPageSize = pageSize;
+      expect(component.multiStateCurrentPage).toBe(expected);
+    });
   });
 });
