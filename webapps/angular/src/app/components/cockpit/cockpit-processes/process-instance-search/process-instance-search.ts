@@ -13,7 +13,7 @@ import {
   faSpinner, faSearch, faExclamationTriangle, faCheckCircle,
   faPlayCircle, faEye, faPlus, faTimes, faPauseCircle, faTimesCircle,
   faFilter, faChevronLeft, faChevronRight, faChevronDown,
-  faKey, faHashtag, faCircleDot, faCalendarAlt, faCode, faRotateLeft, faCheck
+  faKey, faHashtag, faCircleDot, faCalendarAlt, faCode, faRotateLeft, faCheck, faSitemap
 } from '@fortawesome/free-solid-svg-icons';
 
 type VariableOperator = 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
@@ -94,6 +94,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   faCode = faCode;
   faRotateLeft = faRotateLeft;
   faCheck = faCheck;
+  faSitemap = faSitemap;
 
   breadcrumbs: BreadcrumbItem[] = [
     { label: 'Processes', translateKey: 'cockpit.menu.processes' }
@@ -109,6 +110,8 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   pendingVariableName = '';
   pendingVariableOperator: VariableOperator = 'eq';
   pendingStateValues: string[] = [];
+  pendingProcessDefinitionKeys: string[] = [];
+  availableProcessDefinitions: Array<{key: string; name: string}> = [];
   pendingDateValue = '';
   pendingVariableLines: PendingVariableLine[] = [];
   editingPillIndex: number | null = null;
@@ -180,6 +183,15 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       });
 
     this.loadFromUrl();
+
+    this.cockpitService.getProcessDefinitions(1000)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(defs => {
+        this.availableProcessDefinitions = defs
+          .filter(d => d.key)
+          .map(d => ({ key: d.key, name: d.name || d.key }));
+        this.cdr.markForCheck();
+      });
   }
 
   ngOnDestroy(): void {
@@ -360,6 +372,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.pendingVariableName = '';
     this.pendingVariableOperator = 'eq';
     this.pendingStateValues = [];
+    this.pendingProcessDefinitionKeys = [];
     this.pendingDateValue = '';
     this.pendingVariableLines = type === 'variables'
       ? [{ name: '', operator: 'eq', values: [] }]
@@ -377,6 +390,15 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  toggleProcessDefinitionKey(key: string): void {
+    if (this.pendingProcessDefinitionKeys.includes(key)) {
+      this.pendingProcessDefinitionKeys = this.pendingProcessDefinitionKeys.filter(k => k !== key);
+    } else {
+      this.pendingProcessDefinitionKeys = [...this.pendingProcessDefinitionKeys, key];
+    }
+    this.cdr.markForCheck();
+  }
+
   startEditPill(index: number, event: Event): void {
     event.stopPropagation();
     this.showCriteriaDropdown = false;
@@ -390,6 +412,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   private populatePendingFromPill(pill: MultiValueFilter): void {
     this.pendingValues = [];
     this.pendingStateValues = [];
+    this.pendingProcessDefinitionKeys = [];
     this.pendingVariableLines = [];
     switch (pill.field) {
       case 'businessKey':
@@ -398,6 +421,9 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
         break;
       case 'state':
         this.pendingStateValues = [...pill.values];
+        break;
+      case 'processDefinition':
+        this.pendingProcessDefinitionKeys = [...pill.values];
         break;
       case 'variable':
         this.pendingValues = [...pill.values];
@@ -445,6 +471,21 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
           return;
         }
         pill = { field: 'state', values: [...this.pendingStateValues] };
+        break;
+      case 'processDefinition':
+        if (this.pendingProcessDefinitionKeys.length === 0) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.popoverFlipped = false;
+            this.cdr.markForCheck();
+            this.syncCriteriaToUrl();
+          }
+          return;
+        }
+        pill = { field: 'processDefinition', values: [...this.pendingProcessDefinitionKeys] };
         break;
       case 'startedAfter':
       case 'startedBefore':
@@ -507,6 +548,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.activeEditorType = null;
     this.pendingValues = [];
     this.pendingStateValues = [];
+    this.pendingProcessDefinitionKeys = [];
     this.pendingVariableLines = [];
     this.editingPillIndex = null;
     this.openOperatorMenuIndex = null;
@@ -722,6 +764,13 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       case 'instanceId':     return t('cockpit.processes.globalSearch.pill.instanceId', { value: pill.values.join(', ') });
       case 'state':          return t('cockpit.processes.globalSearch.pill.state', { value: pill.values.map(v => this.getStateDisplayLabel(v)).join(', ') });
       case 'withIncidents':  return t('cockpit.processes.globalSearch.pill.withIncidents');
+      case 'processDefinition': {
+        const names = pill.values.map(k => {
+          const found = this.availableProcessDefinitions.find(d => d.key === k);
+          return found ? found.name : k;
+        });
+        return t('cockpit.processes.globalSearch.pill.processDefinition', { value: names.join(', ') });
+      }
       case 'startedAfter':   return t('cockpit.processes.globalSearch.pill.startedAfter', { value: this.formatDisplayDate(pill.values[0]) });
       case 'startedBefore':  return t('cockpit.processes.globalSearch.pill.startedBefore', { value: this.formatDisplayDate(pill.values[0]) });
       case 'finishedAfter':  return t('cockpit.processes.globalSearch.pill.finishedAfter', { value: this.formatDisplayDate(pill.values[0]) });
@@ -744,6 +793,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       case 'instanceId':      return this.faHashtag;
       case 'state':           return this.faCircleDot;
       case 'withIncidents':   return this.faExclamationTriangle;
+      case 'processDefinition': return this.faSitemap;
       case 'startedAfter':
       case 'startedBefore':
       case 'finishedAfter':

@@ -1258,3 +1258,54 @@ describe('CockpitService — countPerState: no double-count when BK matches mult
     expect(queryInstances).toHaveBeenCalledTimes(12);
   });
 });
+
+describe('CockpitService — processDefinition filter (buildPayloadVariants)', () => {
+
+  it('places processDefinitionKeyIn on the request body when processDefinition filter has multiple values', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'processDefinition', values: ['proc-a', 'proc-b'] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+    const [body] = queryInstances.mock.calls[0];
+    expect(body.processDefinitionKeyIn).toEqual(['proc-a', 'proc-b']);
+  });
+
+  it('combines processDefinitionKeyIn with state flags in a single request body', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'processDefinition', values: ['proc-x'] },
+      { field: 'state', values: ['active'] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+    const [body] = queryInstances.mock.calls[0];
+    expect(body.processDefinitionKeyIn).toEqual(['proc-x']);
+    expect(body.active).toBe(true);
+    expect(body.unfinished).toBe(true);
+  });
+
+  it('omits processDefinitionKeyIn when processDefinition filter has no values', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'processDefinition', values: [] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+    const [body] = queryInstances.mock.calls[0];
+    expect(body).not.toHaveProperty('processDefinitionKeyIn');
+  });
+});

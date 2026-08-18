@@ -380,6 +380,7 @@
 .criteria-icon-wrap--teal   { background: rgba(20,  184, 166, 0.10); color: #0d9488; }
 .criteria-icon-wrap--slate  { background: rgba(100, 116, 139, 0.10); color: #475569; }
 .criteria-icon-wrap--indigo { background: rgba(99,  102, 241, 0.10); color: #6366f1; }
+.criteria-icon-wrap--orange { background: rgba(234, 88,  12,  0.10); color: #ea580c; }
 
 .criteria-option-body {
   display: flex;
@@ -703,6 +704,25 @@
   font-size: 0.7rem;
   color: var(--color-primary);
   flex-shrink: 0;
+}
+
+.processdef-checklist {
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.processdef-row-icon {
+  font-size: 0.75rem;
+  color: #ea580c;
+  flex-shrink: 0;
+}
+
+.processdef-empty {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  padding: var(--space-3);
+  display: block;
+  text-align: center;
 }
 
 .editor-popover-actions--state {
