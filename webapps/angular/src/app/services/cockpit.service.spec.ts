@@ -82,18 +82,19 @@ describe('CockpitService — countPerState (via searchProcessInstancesGlobalCoun
     expect(queryInstances).not.toHaveBeenCalled();
   });
 
-  it('sends one queryProcessInstancesCount per state×BK body when businessKey has 2 values', async () => {
-    const queryCount = vi.fn()
-      .mockReturnValueOnce(of(2))
-      .mockReturnValueOnce(of(1))
-      .mockReturnValueOnce(of(1))
-      .mockReturnValueOnce(of(0));
-    const queryInstances = vi.fn();
+  it('uses queryProcessInstances (not queryCount) to count when BK has 2 values; deduplicates result', async () => {
+    const i1 = makeInstance('inst-a1'); const i2 = makeInstance('inst-a2');
+    const i3 = makeInstance('inst-b1');
+    const i4 = makeInstance('inst-c1');
 
-    const svc = makeService({
-      queryProcessInstancesCount: queryCount,
-      queryProcessInstances: queryInstances,
-    });
+    const queryInstances = vi.fn()
+      .mockReturnValueOnce(of([i1, i2]))
+      .mockReturnValueOnce(of([i3]))
+      .mockReturnValueOnce(of([i4]))
+      .mockReturnValueOnce(of([]));
+    const queryCount = vi.fn();
+
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: queryCount });
 
     const filters: MultiValueFilter[] = [
       { field: 'state',       values: ['active', 'completed'] },
@@ -103,29 +104,29 @@ describe('CockpitService — countPerState (via searchProcessInstancesGlobalCoun
     const count = await lastValueFrom(svc.searchProcessInstancesGlobalCount(filters));
 
     expect(count).toBe(4);
-    expect(queryCount).toHaveBeenCalledTimes(4);
-    expect(queryInstances).not.toHaveBeenCalled();
+    expect(queryInstances).toHaveBeenCalledTimes(4);
+    expect(queryCount).not.toHaveBeenCalled();
 
-    for (const [body] of queryCount.mock.calls) {
+    for (const [body] of queryInstances.mock.calls) {
       expect(body).toHaveProperty('processInstanceBusinessKeyLike');
       expect(body).not.toHaveProperty('orQueries');
     }
 
-    expect(queryCount.mock.calls[0][0]).toMatchObject({ active: true, unfinished: true });
-    expect(queryCount.mock.calls[1][0]).toMatchObject({ active: true, unfinished: true });
-    expect(queryCount.mock.calls[2][0]).toMatchObject({ completed: true, finished: true });
-    expect(queryCount.mock.calls[3][0]).toMatchObject({ completed: true, finished: true });
+    expect(queryInstances.mock.calls[0][0]).toMatchObject({ active: true, unfinished: true });
+    expect(queryInstances.mock.calls[1][0]).toMatchObject({ active: true, unfinished: true });
+    expect(queryInstances.mock.calls[2][0]).toMatchObject({ completed: true, finished: true });
+    expect(queryInstances.mock.calls[3][0]).toMatchObject({ completed: true, finished: true });
   });
 
 
-  it('issues exactly 8 count calls (2 states × 4 BK values), each with BK at root', async () => {
-    const queryCount = vi.fn().mockReturnValue(of(2));
-    const queryInstances = vi.fn();
-
-    const svc = makeService({
-      queryProcessInstancesCount: queryCount,
-      queryProcessInstances: queryInstances,
+  it('issues exactly 8 queryProcessInstances calls (2 states × 4 BK values); counts unique IDs', async () => {
+    const queryInstances = vi.fn().mockImplementation((_body: any, _fr: number, _mr: number) => {
+      const callIdx = queryInstances.mock.calls.length - 1;
+      return of([makeInstance('u' + callIdx + '_1'), makeInstance('u' + callIdx + '_2')]);
     });
+    const queryCount = vi.fn();
+
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: queryCount });
 
     const filters: MultiValueFilter[] = [
       { field: 'state',       values: ['active', 'completed'] },
@@ -134,11 +135,11 @@ describe('CockpitService — countPerState (via searchProcessInstancesGlobalCoun
 
     const count = await lastValueFrom(svc.searchProcessInstancesGlobalCount(filters));
 
-    expect(queryCount).toHaveBeenCalledTimes(8);
-    expect(queryInstances).not.toHaveBeenCalled();
+    expect(queryInstances).toHaveBeenCalledTimes(8);
+    expect(queryCount).not.toHaveBeenCalled();
     expect(count).toBe(16);
 
-    for (const [body] of queryCount.mock.calls) {
+    for (const [body] of queryInstances.mock.calls) {
       expect(body).toHaveProperty('processInstanceBusinessKeyLike');
       expect(body).not.toHaveProperty('orQueries');
     }
@@ -617,7 +618,7 @@ describe('CockpitService — Fix 2: all-states selection bypasses searchPerState
     expect(body).not.toHaveProperty('orQueries');
   });
 
-  it('issues 1 request per BK variant (no state filter) when all 4 states + 2 BK values', async () => {
+  it('issues 2 separate requests (one per BK) when all 4 states + 2 BK values', async () => {
     const queryInstances = vi.fn().mockReturnValue(of([]));
     const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
 
@@ -629,13 +630,11 @@ describe('CockpitService — Fix 2: all-states selection bypasses searchPerState
     await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
 
     expect(queryInstances).toHaveBeenCalledTimes(2);
-    for (const [body] of queryInstances.mock.calls) {
-      expect(body).toHaveProperty('processInstanceBusinessKeyLike');
-      expect(body).not.toHaveProperty('active');
-      expect(body).not.toHaveProperty('finished');
-      expect(body).not.toHaveProperty('unfinished');
-      expect(body).not.toHaveProperty('orQueries');
-    }
+    const bodies = queryInstances.mock.calls.map(([b]: [any]) => b);
+    expect(bodies.some((b: any) => b.processInstanceBusinessKeyLike === '%bk1%')).toBe(true);
+    expect(bodies.some((b: any) => b.processInstanceBusinessKeyLike === '%bk2%')).toBe(true);
+    expect(bodies.every((b: any) => !b.active && !b.finished && !b.unfinished)).toBe(true);
+    expect(bodies.every((b: any) => !b.orQueries)).toBe(true);
   });
 
   it('triggers short-circuit regardless of state value order', async () => {
@@ -913,6 +912,61 @@ describe('CockpitService — searchPerStatePaged T5: fetch cost independent of d
   });
 });
 
+describe('CockpitService — searchPerStatePaged T4b: fetchSize depends on BK cardinality', () => {
+
+  it('uses CAMUNDA_QUERY_MAX (not pageSize+1) when BK has >1 value', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances });
+
+    const statePill: MultiValueFilter = { field: 'state', values: ['active', 'completed'] };
+    const filters: MultiValueFilter[] = [
+      statePill,
+      { field: 'businessKey', values: ['alpha', 'beta'] },
+    ];
+    const pageSize = 20;
+
+    await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, pageSize, null));
+
+    for (const [, , maxResults] of queryInstances.mock.calls) {
+      expect(maxResults).toBe(2000);
+    }
+  });
+
+  it('uses pageSize+1 (not CAMUNDA_QUERY_MAX) when BK has exactly 1 value', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances });
+
+    const statePill: MultiValueFilter = { field: 'state', values: ['active', 'completed'] };
+    const filters: MultiValueFilter[] = [
+      statePill,
+      { field: 'businessKey', values: ['alpha'] },
+    ];
+    const pageSize = 20;
+
+    await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, pageSize, null));
+
+    for (const [, , maxResults] of queryInstances.mock.calls) {
+      expect(maxResults).toBe(pageSize + 1);
+    }
+  });
+
+  it('uses pageSize+1 when there is no BK filter', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances });
+
+    const statePill: MultiValueFilter = { field: 'state', values: ['active', 'completed'] };
+    const filters: MultiValueFilter[] = [statePill];
+    const pageSize = 20;
+
+    await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, pageSize, null));
+
+    for (const [, , maxResults] of queryInstances.mock.calls) {
+      expect(maxResults).toBe(pageSize + 1);
+    }
+  });
+});
+
+
 describe('CockpitService - searchPerStatePaged: maxResults always equals pageSize+1', () => {
 
   const filters: MultiValueFilter[] = [{ field: 'state', values: ['active', 'completed'] }];
@@ -960,5 +1014,247 @@ describe('CockpitService - searchPerStatePaged: maxResults always equals pageSiz
       svc.searchPerStatePaged(filters, filters[0], false, false, '20' as unknown as number, null)
     );
     expect(result.items.length).toBeLessThanOrEqual(20);
+  });
+});
+
+
+describe('CockpitService — buildPerStateBodies: BK multi-value stays at root (M×N bodies)', () => {
+
+  it('3 states + 1 BK → 3 bodies, BK at root (no orQueries for BK)', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances });
+
+    const statePill: MultiValueFilter = { field: 'state', values: ['active', 'suspended', 'completed'] };
+    const filters: MultiValueFilter[] = [statePill, { field: 'businessKey', values: ['KEY-1'] }];
+
+    await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, 10, null));
+
+    expect(queryInstances.mock.calls.length).toBe(3);
+
+    for (const [body] of queryInstances.mock.calls) {
+      expect(body.processInstanceBusinessKeyLike).toBe('%KEY-1%');
+      const orQ: any[] = body.orQueries ?? [];
+      const hasBkInOrQ = orQ.some((e: any) => 'processInstanceBusinessKeyLike' in e);
+      expect(hasBkInOrQ).toBe(false);
+    }
+  });
+
+  it('3 states + 2 BK → 6 bodies (M×N), BK at root per body', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances });
+
+    const statePill: MultiValueFilter = { field: 'state', values: ['active', 'suspended', 'completed'] };
+    const filters: MultiValueFilter[] = [statePill, { field: 'businessKey', values: ['alpha', 'beta'] }];
+
+    await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, 10, null));
+
+    expect(queryInstances.mock.calls.length).toBe(6);
+
+    for (const [body] of queryInstances.mock.calls) {
+      expect(body).toHaveProperty('processInstanceBusinessKeyLike');
+      const orQ: any[] = body.orQueries ?? [];
+      expect(orQ.some((e: any) => 'processInstanceBusinessKeyLike' in e)).toBe(false);
+    }
+  });
+
+  it('terminated + 2 BK → 2 bodies (1 state-fragment × 2 BK); orQueries contains only termination sub-types', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances });
+
+    const statePill: MultiValueFilter = { field: 'state', values: ['terminated'] };
+    const filters: MultiValueFilter[] = [statePill, { field: 'businessKey', values: ['alpha', 'beta'] }];
+
+    await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, 10, null));
+
+    expect(queryInstances.mock.calls.length).toBe(2);
+
+    for (const [body] of queryInstances.mock.calls) {
+      expect(body).toHaveProperty('processInstanceBusinessKeyLike');
+      expect(body.orQueries).toEqual([{ externallyTerminated: true }, { internallyTerminated: true }]);
+    }
+    expect(queryInstances.mock.calls[0][0].processInstanceBusinessKeyLike).toBe('%alpha%');
+    expect(queryInstances.mock.calls[1][0].processInstanceBusinessKeyLike).toBe('%beta%');
+  });
+
+  it('returns matching instances when 3 states combined with multi-BK (regression: must not be empty)', async () => {
+    const activeInst = makeInstance('a1', '2024-06-01T10:00:00.000Z');
+    activeInst.state = 'ACTIVE';
+    const completedInst = makeInstance('c1', '2024-05-01T10:00:00.000Z');
+    completedInst.state = 'COMPLETED';
+
+    const queryInstances = vi.fn()
+      .mockReturnValueOnce(of([activeInst]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([completedInst]))
+      .mockReturnValueOnce(of([]));
+
+    const svc = makeService({ queryProcessInstances: queryInstances });
+
+    const statePill: MultiValueFilter = { field: 'state', values: ['active', 'suspended', 'completed'] };
+    const filters: MultiValueFilter[] = [statePill, { field: 'businessKey', values: ['alpha', 'beta'] }];
+
+    const result = await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, 10, null));
+
+    expect(result.items.length).toBe(2);
+    expect(result.items.map((i: any) => i.id).sort()).toEqual(['a1', 'c1']);
+  });
+
+  it('7 unique instances across 6 bodies (3 states × 2 BK), pageSize=100 → all 7 displayed', async () => {
+    const I = (id: string, t: number) => makeInstance(id, `2024-0${t}-01T00:00:00.000Z`);
+    const [i1, i2, i3, i4, i5, i6, i7] = [
+      I('i1', 7), I('i2', 6), I('i3', 5), I('i4', 4), I('i5', 3), I('i6', 2), I('i7', 1)
+    ];
+
+    const queryInstances = vi.fn()
+      .mockReturnValueOnce(of([i1, i2]))
+      .mockReturnValueOnce(of([i3]))
+      .mockReturnValueOnce(of([i4]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([i5, i6]))
+      .mockReturnValueOnce(of([i7]));
+
+    const svc = makeService({ queryProcessInstances: queryInstances });
+    const statePill: MultiValueFilter = { field: 'state', values: ['active', 'suspended', 'completed'] };
+    const filters: MultiValueFilter[] = [statePill, { field: 'businessKey', values: ['alpha', 'beta'] }];
+
+    const result = await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, 100, null));
+
+    expect(result.items.length).toBe(7);
+    expect(result.hasMore).toBe(false);
+    expect(result.items.map((i: any) => i.id).sort()).toEqual(['i1', 'i2', 'i3', 'i4', 'i5', 'i6', 'i7']);
+  });
+});
+
+
+describe('CockpitService — root cause: overcounting when instance BK matches multiple patterns', () => {
+
+  it('3 unique instances matching broad patterns: count must be 3, not 7 (overcounted sum)', async () => {
+    const [I1, I2, I3] = [makeInstance('aB'), makeInstance('a-first'), makeInstance('a-second')];
+
+    const queryInstances = vi.fn()
+      .mockReturnValueOnce(of([I1, I2, I3]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([I3]))
+      .mockReturnValueOnce(of([I3]))
+      .mockReturnValueOnce(of([I2]))
+      .mockReturnValueOnce(of([I3]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]));
+
+    const svc = makeService({ queryProcessInstances: queryInstances });
+
+    const statePill: MultiValueFilter = { field: 'state', values: ['active', 'suspended', 'completed'] };
+    const filters: MultiValueFilter[] = [statePill, { field: 'businessKey', values: ['a', 'b', 'c', 'd', 'first', 'sec'] }];
+
+    const count = await lastValueFrom(svc.searchProcessInstancesGlobalCount(filters));
+
+    expect(count).toBe(3);
+    expect(queryInstances).toHaveBeenCalledTimes(18);
+  });
+
+  it('list also shows 3 unique rows (not 7) when instances match multiple patterns', async () => {
+    const [I1, I2, I3] = [
+      makeInstance('aB',       '2024-06-01T00:00:00.000Z'),
+      makeInstance('a-first',  '2024-05-01T00:00:00.000Z'),
+      makeInstance('a-second', '2024-04-01T00:00:00.000Z'),
+    ];
+
+    const queryInstances = vi.fn()
+      .mockReturnValueOnce(of([I1, I2, I3]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([I3]))
+      .mockReturnValueOnce(of([I3]))
+      .mockReturnValueOnce(of([I2]))
+      .mockReturnValueOnce(of([I3]))
+      .mockReturnValueOnce(of([])).mockReturnValueOnce(of([])).mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([])).mockReturnValueOnce(of([])).mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([])).mockReturnValueOnce(of([])).mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([])).mockReturnValueOnce(of([])).mockReturnValueOnce(of([]));
+
+    const svc = makeService({ queryProcessInstances: queryInstances });
+
+    const statePill: MultiValueFilter = { field: 'state', values: ['active', 'suspended', 'completed'] };
+    const filters: MultiValueFilter[] = [statePill, { field: 'businessKey', values: ['a', 'b', 'c', 'd', 'first', 'sec'] }];
+
+    const result = await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, 100, null));
+
+    expect(result.items.length).toBe(3);
+    expect(result.items.map((i: any) => i.id).sort()).toEqual(['a-first', 'a-second', 'aB']);
+    expect(queryInstances).toHaveBeenCalledTimes(18);
+  });
+});
+
+
+describe('CockpitService — countPerState: no double-count when BK matches multiple patterns', () => {
+
+  it('3 states + 2 BK, no BK overlap → count equals unique instance count (no overcounting)', async () => {
+    const queryInstances = vi.fn()
+      .mockReturnValueOnce(of([makeInstance('i1'), makeInstance('i2')]))
+      .mockReturnValueOnce(of([makeInstance('i3')]))
+      .mockReturnValueOnce(of([makeInstance('i4')]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([makeInstance('i5'), makeInstance('i6')]))
+      .mockReturnValueOnce(of([makeInstance('i7')]));
+
+    const svc = makeService({ queryProcessInstances: queryInstances });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['active', 'suspended', 'completed'] },
+      { field: 'businessKey', values: ['alpha', 'beta'] }
+    ];
+
+    const count = await lastValueFrom(svc.searchProcessInstancesGlobalCount(filters));
+
+    expect(count).toBe(7);
+    expect(queryInstances).toHaveBeenCalledTimes(6);
+  });
+
+  it('3 states + 2 BK, instance whose BK matches BOTH patterns → count must not double-count it', async () => {
+    const I = (id: string, t: number) => makeInstance(id, `2024-0${t}-01T00:00:00.000Z`);
+    const [i1, i3_overlap, i2, i4, i5, i6, i7] = [
+      I('i1', 7), I('i3', 6), I('i2', 5), I('i4', 4), I('i5', 3), I('i6', 2), I('i7', 1)
+    ];
+
+    const queryInstances = vi.fn()
+      .mockReturnValueOnce(of([i1, i3_overlap]))
+      .mockReturnValueOnce(of([i2, i3_overlap]))
+      .mockReturnValueOnce(of([i4]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([i5, i6]))
+      .mockReturnValueOnce(of([i7]))
+      .mockReturnValueOnce(of([i1, i3_overlap]))
+      .mockReturnValueOnce(of([i2, i3_overlap]))
+      .mockReturnValueOnce(of([i4]))
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([i5, i6]))
+      .mockReturnValueOnce(of([i7]));
+
+    const svc = makeService({ queryProcessInstances: queryInstances });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['active', 'suspended', 'completed'] },
+      { field: 'businessKey', values: ['alpha', 'beta'] }
+    ];
+
+    const statePill = filters[0];
+    const listResult = await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, 100, null));
+    expect(listResult.items.length).toBe(7);
+    expect(listResult.items.filter((i: any) => i.id === 'i3').length).toBe(1);
+
+    const count = await lastValueFrom(svc.searchProcessInstancesGlobalCount(filters));
+    expect(count).toBe(7);
+    expect(queryInstances).toHaveBeenCalledTimes(12);
   });
 });

@@ -1407,7 +1407,7 @@ export class CockpitService {
     if (variants.length === 1) {
       return this.processInstanceService.queryProcessInstances(variants[0], firstResult, maxResults);
     }
-    // Cap needed at CAMUNDA_QUERY_MAX (2000) to avoid engine rejection.
+
     const needed = Math.min(firstResult + maxResults, this.CAMUNDA_QUERY_MAX);
     return forkJoin(
       variants.map(body => this.processInstanceService.queryProcessInstances(body, 0, needed))
@@ -1420,7 +1420,6 @@ export class CockpitService {
     variableValuesIgnoreCase = false
   ): Observable<number> {
     const statePill = filters.find(f => f.field === 'state');
-    // When all possible states are selected, any instance qualifies â€” drop the state filter
     if (statePill && this.isExhaustiveStateSelection(statePill.values)) {
       filters = filters.filter(f => f.field !== 'state');
     } else if (statePill && statePill.values.length > 1) {
@@ -1441,18 +1440,20 @@ export class CockpitService {
     if (variants.length === 1) {
       return this.processInstanceService.queryProcessInstancesCount(variants[0]);
     }
-    // Multiple variants: one queryProcessInstancesCount call per BK/variable variant.
-    // States are mutually exclusive per instance; BK LIKE patterns can overlap (an
-    // instance matching both '%fir%' and '%sec%' is counted twice), but this is rare
-    // in practice and avoids any hard instance-fetch limit.
-    // Camunda 7 does not reliably support processInstanceBusinessKeyLike inside
-    // orQuery entries, so we use separate root-level requests per variant.
+    if (filters.some(f => f.field === 'state')) {
+      return forkJoin(
+        variants.map(body => this.processInstanceService.queryProcessInstancesCount(body))
+      ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
+    }
     return forkJoin(
-      variants.map(body => this.processInstanceService.queryProcessInstancesCount(body))
-    ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
+      variants.map(body => this.processInstanceService.queryProcessInstances(body, 0, this.CAMUNDA_QUERY_MAX))
+    ).pipe(map(resultArrays => {
+      const seen = new Set<string>();
+      for (const items of resultArrays) for (const item of items) if (item.id) seen.add(item.id);
+      return seen.size;
+    }));
   }
 
-  // All selectable state values in the search UI â€” used to detect "no state filter needed"
   private static readonly ALL_STATE_VALUES = new Set<string>(['active', 'suspended', 'completed', 'terminated']);
 
   private isExhaustiveStateSelection(stateValues: string[]): boolean {
@@ -1481,9 +1482,6 @@ export class CockpitService {
     }
   }
 
-  // Build one request body per state value, each a copy of the non-state base body
-  // plus the state-specific flags. No orQueries across states - avoids Camunda's
-  // finished/unfinished flag hoisting which makes cross-group queries return 0 results.
   private buildPerStateBodies(
     filters: MultiValueFilter[],
     statePill: MultiValueFilter,
@@ -1543,7 +1541,8 @@ export class CockpitService {
   ): Observable<KeysetPage> {
     const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
     const ps = +pageSize;
-    const fetchSize = ps + 1;
+    const bkFilter = filters.find(f => f.field === 'businessKey');
+    const fetchSize = (bkFilter && bkFilter.values.length > 1) ? this.CAMUNDA_QUERY_MAX : ps + 1;
     const currentOffsets = cursor?.offsets ?? {};
 
     const fetches = bodies.map((body, idx) => {
@@ -1616,10 +1615,26 @@ export class CockpitService {
     variableNamesIgnoreCase: boolean,
     variableValuesIgnoreCase: boolean
   ): Observable<number> {
+    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    const bkFilter = filters.find(f => f.field === 'businessKey');
+    if (!bkFilter || bkFilter.values.length <= 1) {
+      return forkJoin(
+        bodies.map(body => this.processInstanceService.queryProcessInstancesCount(body))
+      ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
+    }
     return forkJoin(
-      this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase)
-        .map(body => this.processInstanceService.queryProcessInstancesCount(body))
-    ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
+      bodies.map(body => this.processInstanceService.queryProcessInstances(body, 0, this.CAMUNDA_QUERY_MAX))
+    ).pipe(
+      map(resultArrays => {
+        const seen = new Set<string>();
+        for (const items of resultArrays) {
+          for (const item of items) {
+            if (item.id) seen.add(item.id);
+          }
+        }
+        return seen.size;
+      })
+    );
   }
 
   // ============================================
