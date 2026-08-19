@@ -47,6 +47,15 @@ const TEST_TRANSLATIONS: Record<string, string> = {
   'cockpit.processes.globalSearch.valuePlaceholder': 'Value',
   'cockpit.processes.globalSearch.chipInputHint': 'Press Enter to add',
   'cockpit.processes.globalSearch.chipInputHintTip': 'Tip: paste comma-separated values',
+  'cockpit.processes.globalSearch.noProcessDefs': 'No process definitions available',
+  'cockpit.processes.globalSearch.noMatchingProcessDefs': 'No matching process definitions',
+  'cockpit.processes.globalSearch.searchProcessDefs': 'Search...',
+  'cockpit.processes.globalSearch.selectAll': 'Select all',
+  'cockpit.processes.globalSearch.selectedOf': '{{selected}} of {{total}}',
+  'cockpit.processes.filters.processDefinition': 'Process Definition',
+  'cockpit.processes.globalSearch.pill.processDefinition': 'Process: {{value}}',
+  'cockpit.processes.globalSearch.clearBtn': 'Clear',
+  'cockpit.processes.deployedDefinitions': 'Deployed Definitions',
   'cockpit.processes.filters.businessKey': 'Business Key',
   'cockpit.processes.filters.instanceId': 'Instance ID',
   'cockpit.processes.filters.state': 'State',
@@ -98,6 +107,7 @@ describe('ProcessInstanceSearchComponent — loadSearchResults', () => {
     cockpitService = {
       searchProcessInstancesGlobal: vi.fn().mockReturnValue(of(MOCK_INSTANCES)),
       searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(2)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
     } as any;
 
     const navMenuService: Partial<NavMenuService> = {
@@ -247,6 +257,7 @@ describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () 
     cockpitService = {
       searchProcessInstancesGlobal: vi.fn().mockReturnValue(of(MOCK_INSTANCES)),
       searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(2)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
     } as any;
 
     const navMenuService: Partial<NavMenuService> = {
@@ -334,6 +345,7 @@ describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () 
     cockpitService = {
       searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
       searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
     } as any;
 
     await TestBed.configureTestingModule({
@@ -363,6 +375,7 @@ describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () 
     cockpitService = {
       searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
       searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
     } as any;
 
     await TestBed.configureTestingModule({
@@ -400,6 +413,7 @@ describe('ProcessInstanceSearchComponent — cursor state lifecycle', () => {
       searchProcessInstancesGlobal: vi.fn().mockReturnValue(of(MOCK_INSTANCES)),
       searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(2)),
       searchPerStatePaged: vi.fn().mockReturnValue(of(KEYSET_PAGE)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
     } as any;
 
     await TestBed.configureTestingModule({
@@ -477,6 +491,7 @@ describe('ProcessInstanceSearchComponent — searchTotalPages & multiStateCurren
     const cockpitService = {
       searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
       searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
     } as any;
 
     await TestBed.configureTestingModule({
@@ -564,5 +579,106 @@ describe('ProcessInstanceSearchComponent — searchTotalPages & multiStateCurren
       component.searchPageSize = pageSize;
       expect(component.multiStateCurrentPage).toBe(expected);
     });
+  });
+});
+
+describe('ProcessInstanceSearchComponent — processDefinition search filter', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+  let mockGetProcessDefinitions: ReturnType<typeof vi.fn>;
+
+  const DEFS = [
+    { key: 'order-proc',   name: 'Order Processing' },
+    { key: 'invoice-val',  name: 'Invoice Validation' },
+    { key: 'cust-onboard', name: 'Customer Onboarding' },
+    { key: 'report-gen',   name: 'Report Generator' },
+  ];
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    mockGetProcessDefinitions = vi.fn().mockReturnValue(of(DEFS));
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: mockGetProcessDefinitions,
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+    TestBed.resetTestingModule();
+  });
+
+  it('filters definitions by name (case-insensitive contains) when search text is set', () => {
+    component.processDefinitionSearchText = 'report';
+    const visible = component.filteredProcessDefinitions;
+    expect(visible.length).toBe(1);
+    expect(visible[0].key).toBe('report-gen');
+
+    component.processDefinitionSearchText = 'INVOICE';
+    expect(component.filteredProcessDefinitions.length).toBe(1);
+    expect(component.filteredProcessDefinitions[0].key).toBe('invoice-val');
+
+    component.processDefinitionSearchText = 'on'; // "Order Processing", "Customer Onboarding"
+    expect(component.filteredProcessDefinitions.length).toBe(2);
+
+    component.processDefinitionSearchText = '';
+    expect(component.filteredProcessDefinitions.length).toBe(DEFS.length);
+  });
+
+  it('Select All with active filter selects only the visible items, not all definitions', () => {
+    component.processDefinitionSearchText = 'order';
+    expect(component.filteredProcessDefinitions.length).toBe(1);
+
+    component.toggleSelectAllProcessDefinitions();
+
+    expect(component.pendingProcessDefinitionKeys).toContain('order-proc');
+    expect(component.pendingProcessDefinitionKeys).not.toContain('invoice-val');
+    expect(component.pendingProcessDefinitionKeys).not.toContain('cust-onboard');
+    expect(component.pendingProcessDefinitionKeys).not.toContain('report-gen');
+    expect(component.pendingProcessDefinitionKeys.length).toBe(1);
+  });
+
+  it('selections persist after clearing or changing the search text', () => {
+    component.processDefinitionSearchText = 'order';
+    component.toggleSelectAllProcessDefinitions(); // selects 'order-proc'
+
+    component.processDefinitionSearchText = ''; // clear
+    expect(component.pendingProcessDefinitionKeys).toContain('order-proc');
+    expect(component.filteredProcessDefinitions.length).toBe(DEFS.length);
+
+    component.processDefinitionSearchText = 'report'; // change filter
+    expect(component.pendingProcessDefinitionKeys).toContain('order-proc'); // still selected
+    expect(component.filteredProcessDefinitions.some(d => d.key === 'order-proc')).toBe(false);
+  });
+
+  it('typing in the search field triggers no additional getProcessDefinitions network calls', () => {
+    const callsAfterInit = mockGetProcessDefinitions.mock.calls.length;
+    expect(callsAfterInit).toBe(1); // called once in ngOnInit
+
+    component.processDefinitionSearchText = 'order';
+    component.processDefinitionSearchText = 'invoice';
+    component.processDefinitionSearchText = '';
+
+    expect(mockGetProcessDefinitions.mock.calls.length).toBe(callsAfterInit);
   });
 });
