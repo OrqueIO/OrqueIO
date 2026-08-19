@@ -275,20 +275,33 @@
   <!-- Process Definition -->
   <div class="editor-popover-body editor-popover-body--state" *ngIf="activeEditorType === 'processDefinition'"
        (keydown.enter)="$event.preventDefault(); confirmCriterion()">
-    <div class="state-checklist processdef-checklist">
-      <ng-container *ngIf="availableProcessDefinitions.length > 0; else noProcessDefs">
+    <ng-container *ngIf="availableProcessDefinitions.length > 0; else noProcessDefs">
+      <button class="state-row processdef-select-all-row"
+              (click)="toggleSelectAllProcessDefinitions()" type="button">
+        <span class="processdef-sa-badge">
+          <fa-icon *ngIf="!pdAllSelected && !pdSomeSelected" [icon]="faSquare"      class="processdef-sa-icon processdef-sa-icon--empty"></fa-icon>
+          <fa-icon *ngIf="pdSomeSelected"                    [icon]="faSquareMinus" class="processdef-sa-icon processdef-sa-icon--partial"></fa-icon>
+          <fa-icon *ngIf="pdAllSelected"                     [icon]="faSquareCheck" class="processdef-sa-icon processdef-sa-icon--all"></fa-icon>
+        </span>
+        <span class="state-row-label">
+          {{ 'cockpit.processes.globalSearch.selectAll' | translate }}
+        </span>
+        <span class="processdef-select-all-count">{{ 'cockpit.processes.globalSearch.selectedOf' | translate: { selected: pendingProcessDefinitionKeys.length.toString(), total: availableProcessDefinitions.length.toString() } }}</span>
+      </button>
+      <div class="processdef-select-all-divider"></div>
+      <div class="state-checklist processdef-checklist">
         <button *ngFor="let pd of availableProcessDefinitions"
-                class="state-row" [class.state-row--selected]="pendingProcessDefinitionKeys.includes(pd.key)"
+                class="state-row processdef-row"
                 (click)="toggleProcessDefinitionKey(pd.key)" type="button">
           <fa-icon [icon]="faSitemap" class="processdef-row-icon"></fa-icon>
           <span class="state-row-label" [class.is-selected]="pendingProcessDefinitionKeys.includes(pd.key)">{{ pd.name }}</span>
           <fa-icon *ngIf="pendingProcessDefinitionKeys.includes(pd.key)" [icon]="faCheck" class="state-row-check"></fa-icon>
         </button>
-      </ng-container>
-      <ng-template #noProcessDefs>
-        <span class="processdef-empty">{{ 'cockpit.processes.globalSearch.noProcessDefs' | translate }}</span>
-      </ng-template>
-    </div>
+      </div>
+    </ng-container>
+    <ng-template #noProcessDefs>
+      <span class="processdef-empty">{{ 'cockpit.processes.globalSearch.noProcessDefs' | translate }}</span>
+    </ng-template>
   </div>
 
   <!-- Date filters -->
@@ -416,9 +429,12 @@
     <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
     <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
   </div>
-  <div class="editor-popover-actions" [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'variables'">
+  <div class="editor-popover-actions" [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'processDefinition' || activeEditorType === 'variables'">
     <span class="state-count-label" *ngIf="activeEditorType === 'state'">
       {{ pendingStateValues.length }} {{ 'cockpit.processes.globalSearch.selected' | translate }}
+    </span>
+    <span class="state-count-label" *ngIf="activeEditorType === 'processDefinition'">
+      {{ pendingProcessDefinitionKeys.length }} {{ 'cockpit.processes.globalSearch.selected' | translate }}
     </span>
     <span class="state-count-label" *ngIf="activeEditorType === 'variables'">
       {{ validVariableLineCount }} {{ 'cockpit.processes.globalSearch.variablesWord' | translate }}

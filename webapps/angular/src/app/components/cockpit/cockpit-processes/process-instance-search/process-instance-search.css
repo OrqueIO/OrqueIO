@@ -706,15 +706,50 @@
   flex-shrink: 0;
 }
 
-.processdef-checklist {
-  max-height: 280px;
-  overflow-y: auto;
+.processdef-select-all-row {
+  padding: 7px var(--space-3);
 }
 
 .processdef-row-icon {
-  font-size: 0.75rem;
-  color: #ea580c;
+  font-size: 0.875rem;
   flex-shrink: 0;
+  color: #ea580c;
+}
+
+.processdef-row .state-row-check {
+  color: var(--color-success);
+}
+
+.processdef-sa-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  flex-shrink: 0;
+}
+
+.processdef-sa-icon { font-size: 1rem; }
+.processdef-sa-icon--empty   { color: var(--text-muted); }
+.processdef-sa-icon--partial { color: #ea580c; }
+.processdef-sa-icon--all     { color: var(--color-success); }
+
+.processdef-select-all-count {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.processdef-select-all-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: var(--space-1) var(--space-2);
+}
+
+/* Scrollable individual list */
+.processdef-checklist {
+  max-height: 240px;
+  overflow-y: auto;
 }
 
 .processdef-empty {

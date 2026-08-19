@@ -1,3 +1,4 @@
+
 import {
   Component, OnInit, OnDestroy, DestroyRef, inject,
   ChangeDetectionStrategy, ChangeDetectorRef, HostListener
@@ -13,8 +14,10 @@ import {
   faSpinner, faSearch, faExclamationTriangle, faCheckCircle,
   faPlayCircle, faEye, faPlus, faTimes, faPauseCircle, faTimesCircle,
   faFilter, faChevronLeft, faChevronRight, faChevronDown,
-  faKey, faHashtag, faCircleDot, faCalendarAlt, faCode, faRotateLeft, faCheck, faSitemap
+  faKey, faHashtag, faCircleDot, faCalendarAlt, faCode, faRotateLeft, faCheck, faSitemap,
+  faSquareMinus, faSquareCheck
 } from '@fortawesome/free-solid-svg-icons';
+import { faSquare } from '@fortawesome/free-regular-svg-icons';
 
 type VariableOperator = 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
 
@@ -95,6 +98,9 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   faRotateLeft = faRotateLeft;
   faCheck = faCheck;
   faSitemap = faSitemap;
+  faSquare = faSquare;
+  faSquareMinus = faSquareMinus;
+  faSquareCheck = faSquareCheck;
 
   breadcrumbs: BreadcrumbItem[] = [
     { label: 'Processes', translateKey: 'cockpit.menu.processes' }
@@ -396,6 +402,22 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     } else {
       this.pendingProcessDefinitionKeys = [...this.pendingProcessDefinitionKeys, key];
     }
+    this.cdr.markForCheck();
+  }
+
+  get pdAllSelected(): boolean {
+    return this.availableProcessDefinitions.length > 0
+      && this.pendingProcessDefinitionKeys.length === this.availableProcessDefinitions.length;
+  }
+
+  get pdSomeSelected(): boolean {
+    return this.pendingProcessDefinitionKeys.length > 0 && !this.pdAllSelected;
+  }
+
+  toggleSelectAllProcessDefinitions(): void {
+    this.pendingProcessDefinitionKeys = this.pdAllSelected
+      ? []
+      : this.availableProcessDefinitions.map(d => d.key);
     this.cdr.markForCheck();
   }
 
@@ -766,8 +788,8 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       case 'withIncidents':  return t('cockpit.processes.globalSearch.pill.withIncidents');
       case 'processDefinition': {
         const names = pill.values.map(k => {
-          const found = this.availableProcessDefinitions.find(d => d.key === k);
-          return found ? found.name : k;
+          const d = this.availableProcessDefinitions.find(d => d.key === k);
+          return d ? d.name : k;
         });
         return t('cockpit.processes.globalSearch.pill.processDefinition', { value: names.join(', ') });
       }

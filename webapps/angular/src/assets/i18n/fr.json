@@ -313,6 +313,8 @@
   "cockpit.processes.globalSearch.searchBtn": "Rechercher",
   "cockpit.processes.globalSearch.clearBtn": "Effacer",
   "cockpit.processes.globalSearch.noProcessDefs": "Aucune définition de processus trouvée",
+  "cockpit.processes.globalSearch.selectAll": "Tout sélectionner",
+  "cockpit.processes.globalSearch.selectedOf": "{{selected}} sur {{total}}",
   "cockpit.processes.globalSearch.valuePlaceholder": "Entrer une valeur...",
   "cockpit.processes.globalSearch.chipInputHint": "Appuyez sur Entrée ou virgule pour ajouter une valeur",
   "cockpit.processes.globalSearch.chipInputHintTip": "Astuce : collez une liste séparée par des virgules pour en ajouter plusieurs à la fois",

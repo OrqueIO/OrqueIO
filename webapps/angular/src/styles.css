@@ -1,9 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
+
 @import './app/shared/tooltip/tooltip.css';
 
-/* =====================================================
-   DESIGN TOKENS - UNIFIED UI SYSTEM
-   ===================================================== */
 
 :root {
   /* ===== PRIMARY COLORS ===== */
