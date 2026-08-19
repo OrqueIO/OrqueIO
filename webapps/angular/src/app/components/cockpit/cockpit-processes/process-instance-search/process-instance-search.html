@@ -443,12 +443,11 @@
     <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
     <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
   </div>
-  <div class="editor-popover-actions" [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'processDefinition' || activeEditorType === 'variables'">
+  <div class="editor-popover-actions"
+       [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'variables'"
+       [class.editor-popover-actions--processdef]="activeEditorType === 'processDefinition'">
     <span class="state-count-label" *ngIf="activeEditorType === 'state'">
       {{ pendingStateValues.length }} {{ 'cockpit.processes.globalSearch.selected' | translate }}
-    </span>
-    <span class="state-count-label" *ngIf="activeEditorType === 'processDefinition'">
-      {{ pendingProcessDefinitionKeys.length }} {{ 'cockpit.processes.globalSearch.selected' | translate }}
     </span>
     <span class="state-count-label" *ngIf="activeEditorType === 'variables'">
       {{ validVariableLineCount }} {{ 'cockpit.processes.globalSearch.variablesWord' | translate }}

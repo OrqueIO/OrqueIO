@@ -433,12 +433,10 @@
   </div>
 
   <div class="editor-popover-actions"
-       [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'processDefinition' || activeEditorType === 'variables'">
+       [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'variables'"
+       [class.editor-popover-actions--processdef]="activeEditorType === 'processDefinition'">
     <span class="state-count-label" *ngIf="activeEditorType === 'state'">
       {{ pendingStateValues.length }} {{ 'cockpit.processes.globalSearch.selected' | translate }}
-    </span>
-    <span class="state-count-label" *ngIf="activeEditorType === 'processDefinition'">
-      {{ pendingProcessDefinitionKeys.length }} {{ 'cockpit.processes.globalSearch.selected' | translate }}
     </span>
     <span class="state-count-label" *ngIf="activeEditorType === 'variables'">
       {{ validVariableLineCount }} {{ 'cockpit.processes.globalSearch.variablesWord' | translate }}
