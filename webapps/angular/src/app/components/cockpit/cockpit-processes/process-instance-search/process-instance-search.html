@@ -101,6 +101,16 @@
                       </span>
                     </button>
 
+                    <button class="criteria-option" (click)="selectCriteriaType('processDefinition')" type="button" role="menuitem">
+                      <span class="criteria-icon-wrap criteria-icon-wrap--orange">
+                        <fa-icon [icon]="faSitemap"></fa-icon>
+                      </span>
+                      <span class="criteria-option-body">
+                        <span class="criteria-option-name">{{ 'cockpit.processes.filters.processDefinition' | translate }}</span>
+                        <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.processDefinition' | translate }}</span>
+                      </span>
+                    </button>
+
                     <button class="criteria-option" (click)="selectCriteriaType('withIncidents')" type="button" role="menuitem">
                       <span class="criteria-icon-wrap criteria-icon-wrap--amber">
                         <fa-icon [icon]="faExclamationTriangle"></fa-icon>
@@ -190,13 +200,17 @@
           </div>
 
 <ng-template #editorPopoverContent>
-  <div class="editor-popover-header" *ngIf="activeEditorType !== 'state' && activeEditorType !== 'variables'">
+  <div class="editor-popover-header" *ngIf="activeEditorType !== 'state' && activeEditorType !== 'variables' && activeEditorType !== 'processDefinition'">
     <fa-icon [icon]="getEditorIcon()" class="editor-popover-icon editor-popover-icon--{{ activeEditorType }}"></fa-icon>
     <span class="editor-popover-title">{{ ('cockpit.processes.filters.' + activeEditorType) | translate }}</span>
   </div>
   <div class="state-popover-header" *ngIf="activeEditorType === 'state'">
     <span class="state-popover-label">{{ 'cockpit.processes.filters.state' | translate }}</span>
     <button class="state-popover-clear" (click)="pendingStateValues = []" type="button">{{ 'cockpit.processes.globalSearch.clearBtn' | translate }}</button>
+  </div>
+  <div class="state-popover-header" *ngIf="activeEditorType === 'processDefinition'">
+    <span class="state-popover-label">{{ 'cockpit.processes.filters.processDefinition' | translate }}</span>
+    <button class="state-popover-clear" (click)="pendingProcessDefinitionKeys = []" type="button">{{ 'cockpit.processes.globalSearch.clearBtn' | translate }}</button>
   </div>
   <div class="variables-popover-header" *ngIf="activeEditorType === 'variables'">
     <div class="variables-popover-title-row">
@@ -256,6 +270,52 @@
         <fa-icon *ngIf="pendingStateValues.includes('terminated')" [icon]="faCheck" class="state-row-check"></fa-icon>
       </button>
     </div>
+  </div>
+
+  <!-- Process Definition -->
+  <div class="editor-popover-body editor-popover-body--state" *ngIf="activeEditorType === 'processDefinition'"
+       (keydown.enter)="$event.preventDefault(); confirmCriterion()">
+    <ng-container *ngIf="availableProcessDefinitions.length > 0; else noProcessDefs">
+      <div class="processdef-search-wrap">
+        <input
+          type="text"
+          class="processdef-search-input"
+          [(ngModel)]="processDefinitionSearchText"
+          [placeholder]="'cockpit.processes.globalSearch.searchProcessDefs' | translate"
+          autocomplete="off"
+        />
+      </div>
+      <button class="state-row processdef-select-all-row"
+              (click)="toggleSelectAllProcessDefinitions()" type="button">
+        <span class="processdef-sa-badge">
+          <fa-icon *ngIf="!pdAllSelected && !pdSomeSelected" [icon]="faSquare"      class="processdef-sa-icon processdef-sa-icon--empty"></fa-icon>
+          <fa-icon *ngIf="pdSomeSelected"                    [icon]="faSquareMinus" class="processdef-sa-icon processdef-sa-icon--partial"></fa-icon>
+          <fa-icon *ngIf="pdAllSelected"                     [icon]="faSquareCheck" class="processdef-sa-icon processdef-sa-icon--all"></fa-icon>
+        </span>
+        <span class="state-row-label">
+          {{ 'cockpit.processes.globalSearch.selectAll' | translate }}
+        </span>
+        <span class="processdef-select-all-count">{{ 'cockpit.processes.globalSearch.selectedOf' | translate: { selected: pdVisibleSelectedCount.toString(), total: filteredProcessDefinitions.length.toString() } }}</span>
+      </button>
+      <div class="processdef-select-all-divider"></div>
+      <ng-container *ngIf="filteredProcessDefinitions.length > 0; else noMatchingDefs">
+        <div class="state-checklist processdef-checklist">
+          <button *ngFor="let pd of filteredProcessDefinitions"
+                  class="state-row processdef-row"
+                  (click)="toggleProcessDefinitionKey(pd.key)" type="button">
+            <fa-icon [icon]="faSitemap" class="processdef-row-icon"></fa-icon>
+            <span class="state-row-label" [class.is-selected]="pendingProcessDefinitionKeys.includes(pd.key)">{{ pd.name }}</span>
+            <fa-icon *ngIf="pendingProcessDefinitionKeys.includes(pd.key)" [icon]="faCheck" class="state-row-check"></fa-icon>
+          </button>
+        </div>
+      </ng-container>
+      <ng-template #noMatchingDefs>
+        <span class="processdef-empty">{{ 'cockpit.processes.globalSearch.noMatchingProcessDefs' | translate }}</span>
+      </ng-template>
+    </ng-container>
+    <ng-template #noProcessDefs>
+      <span class="processdef-empty">{{ 'cockpit.processes.globalSearch.noProcessDefs' | translate }}</span>
+    </ng-template>
   </div>
 
   <!-- Date filters -->
@@ -383,9 +443,12 @@
     <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
     <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
   </div>
-  <div class="editor-popover-actions" [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'variables'">
+  <div class="editor-popover-actions" [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'processDefinition' || activeEditorType === 'variables'">
     <span class="state-count-label" *ngIf="activeEditorType === 'state'">
       {{ pendingStateValues.length }} {{ 'cockpit.processes.globalSearch.selected' | translate }}
+    </span>
+    <span class="state-count-label" *ngIf="activeEditorType === 'processDefinition'">
+      {{ pendingProcessDefinitionKeys.length }} {{ 'cockpit.processes.globalSearch.selected' | translate }}
     </span>
     <span class="state-count-label" *ngIf="activeEditorType === 'variables'">
       {{ validVariableLineCount }} {{ 'cockpit.processes.globalSearch.variablesWord' | translate }}
@@ -396,6 +459,7 @@
       </button>
       <button class="btn-editor-confirm-icon" (click)="confirmCriterion()" type="button" [title]="'cockpit.processes.globalSearch.applyAction' | translate"
               [disabled]="(activeEditorType === 'state' && pendingStateValues.length === 0 && editingPillIndex === null) ||
+                          (activeEditorType === 'processDefinition' && pendingProcessDefinitionKeys.length === 0 && editingPillIndex === null) ||
                           (activeEditorType === 'variables' && validVariableLineCount === 0 && editingPillIndex === null) ||
                           (activeEditorType === 'variables' && hasInvalidVariableValues)">
         <fa-icon [icon]="faCheck"></fa-icon>
