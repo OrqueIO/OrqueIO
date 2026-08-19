@@ -335,7 +335,7 @@
   "cockpit.processes.globalSearch.groupDates": "Dates",
   "cockpit.processes.globalSearch.desc.businessKey": "Filter by process business key",
   "cockpit.processes.globalSearch.desc.instanceId": "Filter by instance identifier",
-  "cockpit.processes.globalSearch.desc.state": "Active, suspended, completedâ€¦",
+  "cockpit.processes.globalSearch.desc.state": "Active, suspended, completed…",
   "cockpit.processes.globalSearch.desc.withIncidents": "Show instances with open incidents",
   "cockpit.processes.globalSearch.desc.processDefinition": "Filter by process definition",
   "cockpit.processes.globalSearch.desc.startedAfter": "Started after a given date",

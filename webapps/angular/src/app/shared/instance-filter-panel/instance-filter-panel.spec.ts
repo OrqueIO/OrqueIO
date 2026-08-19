@@ -151,3 +151,50 @@ describe('InstanceFilterPanelComponent — State criterion visibility based on l
     expect(fixture.debugElement.queryAll(By.css('.criteria-option')).length).toBe(10);
   });
 });
+
+describe('InstanceFilterPanelComponent — State criterion editor: all 4 states present', () => {
+  let fixture: ComponentFixture<InstanceFilterPanelComponent>;
+  let component: InstanceFilterPanelComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [InstanceFilterPanelComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: CockpitService, useValue: cockpitService },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(InstanceFilterPanelComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: {} };
+
+    fixture.detectChanges();
+  });
+
+  it('should render Active, Suspended, Completed and Terminated state rows', () => {
+    component.selectCriteriaType('state');
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.query(By.css('.state-dot--active'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.state-dot--suspended'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.state-dot--completed'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.state-dot--terminated'))).not.toBeNull();
+  });
+
+  it('should render exactly 4 state rows (no state missing, no duplicate)', () => {
+    component.selectCriteriaType('state');
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.queryAll(By.css('.state-row')).length).toBe(4);
+  });
+});
