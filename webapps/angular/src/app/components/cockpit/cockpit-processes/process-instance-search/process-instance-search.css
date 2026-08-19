@@ -771,7 +771,7 @@
 
 /* Scrollable individual list */
 .processdef-checklist {
-  max-height: 240px;
+  max-height: 175px;
   overflow-y: auto;
 }
 
@@ -787,6 +787,12 @@
   border-top: 0.5px solid var(--border-color);
   justify-content: space-between;
   align-items: center;
+}
+
+.editor-popover-actions--processdef {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-top: 0.5px solid var(--border-color-light);
 }
 
 .state-count-label {
