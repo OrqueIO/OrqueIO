@@ -667,7 +667,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   get lockedFilterState(): string | null {
     if (this.selectedOperationId === 'activate') return 'suspended';
-    if (this.selectedOperationId === 'delete-running') return null;
+    if (this.selectedOperationId === 'delete-running') return 'unfinished';
     if (this.selectedOperationId === 'delete-finished') return 'finished';
     return 'active';
   }

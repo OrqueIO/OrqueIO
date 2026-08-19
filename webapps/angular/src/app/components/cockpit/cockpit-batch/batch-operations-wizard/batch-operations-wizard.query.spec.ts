@@ -2,6 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { BatchOperationsWizardComponent } from './batch-operations-wizard';
 import { MultiValueFilter } from '../../../../services/cockpit.service';
 
+function getLockedFilterState(selectedOperationId: string): string | null {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'lockedFilterState');
+  return desc?.get?.call({ selectedOperationId }) as string | null;
+}
+
 /**
  * Tests for buildHistoricQueryForBatch() — verifies that the processDefinition
  * criterion combines correctly with the locked state for each operation.
@@ -66,6 +71,29 @@ describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch processD
     expect(result['unfinished']).toBe(true);
     expect(result['processInstanceBusinessKeyLike']).toBe('%ORDER-123%');
     expect(result['processDefinitionKeyIn']).toBeUndefined();
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — lockedFilterState: State always hidden in all 4 batch operations', () => {
+
+  it('suspend: lockedFilterState is non-null → State criterion hidden', () => {
+    expect(getLockedFilterState('suspend')).not.toBeNull();
+  });
+
+  it('activate: lockedFilterState is non-null → State criterion hidden', () => {
+    expect(getLockedFilterState('activate')).not.toBeNull();
+  });
+
+  it('delete-running: lockedFilterState returns unfinished sentinel → State criterion hidden', () => {
+    // delete-running locks state via unfinished:true — must return a non-null sentinel
+    // so InstanceFilterPanelComponent hides the State option from Add criteria.
+    expect(getLockedFilterState('delete-running')).not.toBeNull();
+    expect(getLockedFilterState('delete-running')).toBe('unfinished');
+  });
+
+  it('delete-finished: lockedFilterState is non-null → State criterion hidden', () => {
+    expect(getLockedFilterState('delete-finished')).not.toBeNull();
   });
 
 });
