@@ -1,16 +1,19 @@
 import {
-  Component, Input, Output, EventEmitter,
-  ChangeDetectionStrategy, ChangeDetectorRef, HostListener, inject
+  Component, Input, Output, EventEmitter, OnInit,
+  ChangeDetectionStrategy, ChangeDetectorRef, HostListener, inject, DestroyRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faPlus, faTimes, faFilter, faChevronDown,
   faKey, faHashtag, faCalendarAlt, faCode,
-  faExclamationTriangle, faCheck, faCircleDot
+  faExclamationTriangle, faCheck, faCircleDot,
+  faSitemap, faSquareMinus, faSquareCheck
 } from '@fortawesome/free-solid-svg-icons';
-import { MultiValueFilter, GlobalSearchField, VariableLine } from '../../services/cockpit.service';
+import { faSquare } from '@fortawesome/free-regular-svg-icons';
+import { CockpitService, MultiValueFilter, GlobalSearchField, VariableLine } from '../../services/cockpit.service';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 import { TranslateService } from '../../i18n/translate.service';
 import { MultiValueChipInputComponent } from '../multi-value-chip-input/multi-value-chip-input';
@@ -44,13 +47,15 @@ interface VariableConflictInfo {
   styleUrl: './instance-filter-panel.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InstanceFilterPanelComponent {
+export class InstanceFilterPanelComponent implements OnInit {
   /** When set, the 'state' criterion is hidden from the Add menu — state is locked externally. */
   @Input() lockedState: string | null = null;
   @Output() criteriaChange = new EventEmitter<FilterPanelChange>();
 
   private cdr = inject(ChangeDetectorRef);
   private translateService = inject(TranslateService);
+  private cockpitService = inject(CockpitService);
+  private destroyRef = inject(DestroyRef);
 
   faPlus = faPlus;
   faTimes = faTimes;
@@ -63,6 +68,10 @@ export class InstanceFilterPanelComponent {
   faExclamationTriangle = faExclamationTriangle;
   faCheck = faCheck;
   faCircleDot = faCircleDot;
+  faSitemap = faSitemap;
+  faSquare = faSquare;
+  faSquareMinus = faSquareMinus;
+  faSquareCheck = faSquareCheck;
 
   showCriteriaDropdown = false;
   activeEditorType: GlobalSearchField | null = null;
@@ -70,6 +79,9 @@ export class InstanceFilterPanelComponent {
 
   pendingValues: string[] = [];
   pendingStateValues: string[] = [];
+  pendingProcessDefinitionKeys: string[] = [];
+  availableProcessDefinitions: Array<{key: string; name: string}> = [];
+  processDefinitionSearchText = '';
   pendingVariableOperator: VariableOperator = 'eq';
   pendingDateValue = '';
   pendingVariableLines: PendingVariableLine[] = [];
@@ -137,6 +149,18 @@ export class InstanceFilterPanelComponent {
     if (changed) this.cdr.markForCheck();
   }
 
+  ngOnInit(): void {
+    this.cockpitService.getProcessDefinitions(1000)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(defs => {
+        this.availableProcessDefinitions = defs
+          .map(d => ({ key: d.key, name: d.name || d.key }))
+          .filter((d, i, arr) => arr.findIndex(x => x.key === d.key) === i)
+          .sort((a, b) => a.name.localeCompare(b.name));
+        this.cdr.markForCheck();
+      });
+  }
+
   toggleCriteriaDropdown(event: Event): void {
     event.stopPropagation();
     if (this.activeEditorType) {
@@ -171,6 +195,8 @@ export class InstanceFilterPanelComponent {
 
     this.activeEditorType = type;
     this.pendingValues = [];
+    this.pendingProcessDefinitionKeys = [];
+    this.processDefinitionSearchText = '';
     this.pendingVariableOperator = 'eq';
     this.pendingDateValue = '';
     this.pendingVariableLines = type === 'variables'
@@ -185,6 +211,9 @@ export class InstanceFilterPanelComponent {
     this.showCriteriaDropdown = false;
     this.editingPillIndex = index;
     this.activeEditorType = this.activePills[index].field as GlobalSearchField;
+    if (this.activeEditorType === 'processDefinition') {
+      this.processDefinitionSearchText = '';
+    }
     this.populatePendingFromPill(this.activePills[index]);
     this.cdr.markForCheck();
     this.schedulePositionCheck();
@@ -198,9 +227,50 @@ export class InstanceFilterPanelComponent {
     this.cdr.markForCheck();
   }
 
+  toggleProcessDefinitionKey(key: string): void {
+    if (this.pendingProcessDefinitionKeys.includes(key)) {
+      this.pendingProcessDefinitionKeys = this.pendingProcessDefinitionKeys.filter(k => k !== key);
+    } else {
+      this.pendingProcessDefinitionKeys = [...this.pendingProcessDefinitionKeys, key];
+    }
+    this.cdr.markForCheck();
+  }
+
+  get filteredProcessDefinitions(): Array<{key: string; name: string}> {
+    const q = this.processDefinitionSearchText.trim().toLowerCase();
+    if (!q) return this.availableProcessDefinitions;
+    return this.availableProcessDefinitions.filter(d => d.name.toLowerCase().includes(q));
+  }
+
+  get pdVisibleSelectedCount(): number {
+    return this.filteredProcessDefinitions.filter(d => this.pendingProcessDefinitionKeys.includes(d.key)).length;
+  }
+
+  get pdAllSelected(): boolean {
+    const visible = this.filteredProcessDefinitions;
+    return visible.length > 0 && visible.every(d => this.pendingProcessDefinitionKeys.includes(d.key));
+  }
+
+  get pdSomeSelected(): boolean {
+    const visible = this.filteredProcessDefinitions;
+    return visible.some(d => this.pendingProcessDefinitionKeys.includes(d.key)) && !this.pdAllSelected;
+  }
+
+  toggleSelectAllProcessDefinitions(): void {
+    const visibleKeys = this.filteredProcessDefinitions.map(d => d.key);
+    if (this.pdAllSelected) {
+      this.pendingProcessDefinitionKeys = this.pendingProcessDefinitionKeys.filter(k => !visibleKeys.includes(k));
+    } else {
+      const combined = new Set([...this.pendingProcessDefinitionKeys, ...visibleKeys]);
+      this.pendingProcessDefinitionKeys = [...combined];
+    }
+    this.cdr.markForCheck();
+  }
+
   private populatePendingFromPill(pill: MultiValueFilter): void {
     this.pendingValues = [];
     this.pendingStateValues = [];
+    this.pendingProcessDefinitionKeys = [];
     this.pendingVariableLines = [];
     switch (pill.field) {
       case 'businessKey':
@@ -209,6 +279,9 @@ export class InstanceFilterPanelComponent {
         break;
       case 'state':
         this.pendingStateValues = [...pill.values];
+        break;
+      case 'processDefinition':
+        this.pendingProcessDefinitionKeys = [...pill.values];
         break;
       case 'variable':
         this.pendingValues = [...pill.values];
@@ -244,6 +317,21 @@ export class InstanceFilterPanelComponent {
       case 'state':
         if (this.pendingStateValues.length === 0) return;
         pill = { field: 'state', values: [...this.pendingStateValues] };
+        break;
+      case 'processDefinition':
+        if (this.pendingProcessDefinitionKeys.length === 0) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.popoverFlipped = false;
+            this.cdr.markForCheck();
+            this.emit();
+          }
+          return;
+        }
+        pill = { field: 'processDefinition', values: [...this.pendingProcessDefinitionKeys] };
         break;
       case 'startedAfter':
       case 'startedBefore':
@@ -297,6 +385,8 @@ export class InstanceFilterPanelComponent {
     this.activeEditorType = null;
     this.pendingValues = [];
     this.pendingStateValues = [];
+    this.pendingProcessDefinitionKeys = [];
+    this.processDefinitionSearchText = '';
     this.pendingVariableLines = [];
     this.editingPillIndex = null;
     this.openOperatorMenuIndex = null;
@@ -493,6 +583,13 @@ export class InstanceFilterPanelComponent {
       case 'businessKey':    return t('cockpit.processes.globalSearch.pill.businessKey',  { value: pill.values.join(', ') });
       case 'instanceId':     return t('cockpit.processes.globalSearch.pill.instanceId',   { value: pill.values.join(', ') });
       case 'withIncidents':  return t('cockpit.processes.globalSearch.pill.withIncidents');
+      case 'processDefinition': {
+        const names = pill.values.map(k => {
+          const d = this.availableProcessDefinitions.find(d => d.key === k);
+          return d ? d.name : k;
+        });
+        return t('cockpit.processes.globalSearch.pill.processDefinition', { value: names.join(', ') });
+      }
       case 'startedAfter':   return t('cockpit.processes.globalSearch.pill.startedAfter',  { value: this.formatDisplayDate(pill.values[0]) });
       case 'startedBefore':  return t('cockpit.processes.globalSearch.pill.startedBefore', { value: this.formatDisplayDate(pill.values[0]) });
       case 'finishedAfter':  return t('cockpit.processes.globalSearch.pill.finishedAfter', { value: this.formatDisplayDate(pill.values[0]) });
@@ -510,6 +607,7 @@ export class InstanceFilterPanelComponent {
       case 'businessKey':                                    return this.faKey;
       case 'instanceId':                                     return this.faHashtag;
       case 'withIncidents':                                  return this.faExclamationTriangle;
+      case 'processDefinition':                              return this.faSitemap;
       case 'startedAfter': case 'startedBefore':
       case 'finishedAfter': case 'finishedBefore':           return this.faCalendarAlt;
       case 'variables': case 'variable':                     return this.faCode;
