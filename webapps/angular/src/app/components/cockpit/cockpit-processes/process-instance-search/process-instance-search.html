@@ -276,6 +276,15 @@
   <div class="editor-popover-body editor-popover-body--state" *ngIf="activeEditorType === 'processDefinition'"
        (keydown.enter)="$event.preventDefault(); confirmCriterion()">
     <ng-container *ngIf="availableProcessDefinitions.length > 0; else noProcessDefs">
+      <div class="processdef-search-wrap">
+        <input
+          type="text"
+          class="processdef-search-input"
+          [(ngModel)]="processDefinitionSearchText"
+          [placeholder]="'cockpit.processes.globalSearch.searchProcessDefs' | translate"
+          autocomplete="off"
+        />
+      </div>
       <button class="state-row processdef-select-all-row"
               (click)="toggleSelectAllProcessDefinitions()" type="button">
         <span class="processdef-sa-badge">
@@ -286,18 +295,23 @@
         <span class="state-row-label">
           {{ 'cockpit.processes.globalSearch.selectAll' | translate }}
         </span>
-        <span class="processdef-select-all-count">{{ 'cockpit.processes.globalSearch.selectedOf' | translate: { selected: pendingProcessDefinitionKeys.length.toString(), total: availableProcessDefinitions.length.toString() } }}</span>
+        <span class="processdef-select-all-count">{{ 'cockpit.processes.globalSearch.selectedOf' | translate: { selected: pdVisibleSelectedCount.toString(), total: filteredProcessDefinitions.length.toString() } }}</span>
       </button>
       <div class="processdef-select-all-divider"></div>
-      <div class="state-checklist processdef-checklist">
-        <button *ngFor="let pd of availableProcessDefinitions"
-                class="state-row processdef-row"
-                (click)="toggleProcessDefinitionKey(pd.key)" type="button">
-          <fa-icon [icon]="faSitemap" class="processdef-row-icon"></fa-icon>
-          <span class="state-row-label" [class.is-selected]="pendingProcessDefinitionKeys.includes(pd.key)">{{ pd.name }}</span>
-          <fa-icon *ngIf="pendingProcessDefinitionKeys.includes(pd.key)" [icon]="faCheck" class="state-row-check"></fa-icon>
-        </button>
-      </div>
+      <ng-container *ngIf="filteredProcessDefinitions.length > 0; else noMatchingDefs">
+        <div class="state-checklist processdef-checklist">
+          <button *ngFor="let pd of filteredProcessDefinitions"
+                  class="state-row processdef-row"
+                  (click)="toggleProcessDefinitionKey(pd.key)" type="button">
+            <fa-icon [icon]="faSitemap" class="processdef-row-icon"></fa-icon>
+            <span class="state-row-label" [class.is-selected]="pendingProcessDefinitionKeys.includes(pd.key)">{{ pd.name }}</span>
+            <fa-icon *ngIf="pendingProcessDefinitionKeys.includes(pd.key)" [icon]="faCheck" class="state-row-check"></fa-icon>
+          </button>
+        </div>
+      </ng-container>
+      <ng-template #noMatchingDefs>
+        <span class="processdef-empty">{{ 'cockpit.processes.globalSearch.noMatchingProcessDefs' | translate }}</span>
+      </ng-template>
     </ng-container>
     <ng-template #noProcessDefs>
       <span class="processdef-empty">{{ 'cockpit.processes.globalSearch.noProcessDefs' | translate }}</span>

@@ -316,6 +316,8 @@
   "cockpit.processes.globalSearch.searchBtn": "Search",
   "cockpit.processes.globalSearch.clearBtn": "Clear",
   "cockpit.processes.globalSearch.noProcessDefs": "No process definitions available",
+  "cockpit.processes.globalSearch.noMatchingProcessDefs": "No matching process definitions",
+  "cockpit.processes.globalSearch.searchProcessDefs": "Search...",
   "cockpit.processes.globalSearch.selectAll": "Select all",
   "cockpit.processes.globalSearch.selectedOf": "{{selected}} of {{total}}",
   "cockpit.processes.globalSearch.valuePlaceholder": "Enter value...",

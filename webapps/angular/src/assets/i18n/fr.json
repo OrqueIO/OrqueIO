@@ -313,6 +313,8 @@
   "cockpit.processes.globalSearch.searchBtn": "Rechercher",
   "cockpit.processes.globalSearch.clearBtn": "Effacer",
   "cockpit.processes.globalSearch.noProcessDefs": "Aucune définition de processus trouvée",
+  "cockpit.processes.globalSearch.noMatchingProcessDefs": "Aucune définition correspondante",
+  "cockpit.processes.globalSearch.searchProcessDefs": "Rechercher...",
   "cockpit.processes.globalSearch.selectAll": "Tout sélectionner",
   "cockpit.processes.globalSearch.selectedOf": "{{selected}} sur {{total}}",
   "cockpit.processes.globalSearch.valuePlaceholder": "Entrer une valeur...",

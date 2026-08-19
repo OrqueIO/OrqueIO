@@ -118,6 +118,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   pendingStateValues: string[] = [];
   pendingProcessDefinitionKeys: string[] = [];
   availableProcessDefinitions: Array<{key: string; name: string}> = [];
+  processDefinitionSearchText = '';
   pendingDateValue = '';
   pendingVariableLines: PendingVariableLine[] = [];
   editingPillIndex: number | null = null;
@@ -379,6 +380,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.pendingVariableOperator = 'eq';
     this.pendingStateValues = [];
     this.pendingProcessDefinitionKeys = [];
+    this.processDefinitionSearchText = '';
     this.pendingDateValue = '';
     this.pendingVariableLines = type === 'variables'
       ? [{ name: '', operator: 'eq', values: [] }]
@@ -405,19 +407,34 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  get filteredProcessDefinitions(): Array<{key: string; name: string}> {
+    const q = this.processDefinitionSearchText.trim().toLowerCase();
+    if (!q) return this.availableProcessDefinitions;
+    return this.availableProcessDefinitions.filter(d => d.name.toLowerCase().includes(q));
+  }
+
+  get pdVisibleSelectedCount(): number {
+    return this.filteredProcessDefinitions.filter(d => this.pendingProcessDefinitionKeys.includes(d.key)).length;
+  }
+
   get pdAllSelected(): boolean {
-    return this.availableProcessDefinitions.length > 0
-      && this.pendingProcessDefinitionKeys.length === this.availableProcessDefinitions.length;
+    const visible = this.filteredProcessDefinitions;
+    return visible.length > 0 && visible.every(d => this.pendingProcessDefinitionKeys.includes(d.key));
   }
 
   get pdSomeSelected(): boolean {
-    return this.pendingProcessDefinitionKeys.length > 0 && !this.pdAllSelected;
+    const visible = this.filteredProcessDefinitions;
+    return visible.some(d => this.pendingProcessDefinitionKeys.includes(d.key)) && !this.pdAllSelected;
   }
 
   toggleSelectAllProcessDefinitions(): void {
-    this.pendingProcessDefinitionKeys = this.pdAllSelected
-      ? []
-      : this.availableProcessDefinitions.map(d => d.key);
+    const visibleKeys = this.filteredProcessDefinitions.map(d => d.key);
+    if (this.pdAllSelected) {
+      this.pendingProcessDefinitionKeys = this.pendingProcessDefinitionKeys.filter(k => !visibleKeys.includes(k));
+    } else {
+      const combined = new Set([...this.pendingProcessDefinitionKeys, ...visibleKeys]);
+      this.pendingProcessDefinitionKeys = [...combined];
+    }
     this.cdr.markForCheck();
   }
 
@@ -426,6 +443,9 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.showCriteriaDropdown = false;
     this.editingPillIndex = index;
     this.activeEditorType = this.activePills[index].field as GlobalSearchField;
+    if (this.activeEditorType === 'processDefinition') {
+      this.processDefinitionSearchText = '';
+    }
     this.populatePendingFromPill(this.activePills[index]);
     this.cdr.markForCheck();
     this.schedulePositionCheck();
@@ -571,6 +591,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.pendingValues = [];
     this.pendingStateValues = [];
     this.pendingProcessDefinitionKeys = [];
+    this.processDefinitionSearchText = '';
     this.pendingVariableLines = [];
     this.editingPillIndex = null;
     this.openOperatorMenuIndex = null;
