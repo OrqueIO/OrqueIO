@@ -47,8 +47,8 @@
 
     </div>
 
-    <!-- ─── Operation form (shown when suspend, activate, or delete-running is selected) ─ -->
-    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running'" class="operation-steps">
+    <!-- ─── Operation form (shown when suspend, activate, delete-running, or delete-finished is selected) ─ -->
+    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished'" class="operation-steps">
 
       <!-- ── Carte 1 : Définition de la requête ────────────────────── -->
       <div class="operation-card">
@@ -69,8 +69,8 @@
           </button>
         </div>
 
-        <!-- Info note — instances mode for suspend/activate; both modes for delete-running -->
-        <div *ngIf="mode === 'instances' || selectedOperationId === 'delete-running'" class="info-note">
+        <!-- Info note — instances mode for suspend/activate; both modes for delete-running and delete-finished -->
+        <div *ngIf="mode === 'instances' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished'" class="info-note">
           <fa-icon [icon]="faInfoCircle"></fa-icon>
           <span>{{ operationOnlyNoteKey | translate }}</span>
         </div>
@@ -121,6 +121,21 @@
 
         </div>
 
+        <!-- Delete-finished options: delete reason only — above "Add criteria" -->
+        <div *ngIf="selectedOperationId === 'delete-finished'" class="delete-options">
+
+          <!-- Delete Reason -->
+          <div class="delete-reason-field">
+            <label class="delete-reason-label">
+              {{ 'cockpit.batchOps.deleteFinished.deleteReasonLabel' | translate }}
+            </label>
+            <input type="text" class="delete-options__input"
+                   [(ngModel)]="deleteReason"
+                   [placeholder]="'cockpit.batchOps.deleteFinished.deleteReasonPlaceholder' | translate">
+          </div>
+
+        </div>
+
         <!-- Filter panel — both modes -->
         <app-instance-filter-panel
           [lockedState]="lockedFilterState"
@@ -130,7 +145,7 @@
         <!-- Large volume warning — CAM-8738 risk for delete in query mode -->
         <div *ngIf="showLargeVolumeWarning" class="danger-warning">
           <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-          <span>{{ 'cockpit.batchOps.deleteRunning.largeVolumeWarning' | translate: { count: instancesTotal.toString() } }}</span>
+          <span>{{ largeVolumeWarningKey | translate: { count: instancesTotal.toString() } }}</span>
         </div>
 
       </div>
@@ -272,6 +287,11 @@
       <div *ngIf="selectedOperationId === 'delete-running'" class="danger-warning confirm-danger">
         <fa-icon [icon]="faExclamationTriangle"></fa-icon>
         <span>{{ 'cockpit.batchOps.deleteRunning.irreversibleWarning' | translate }}</span>
+      </div>
+
+      <div *ngIf="selectedOperationId === 'delete-finished'" class="danger-warning confirm-danger">
+        <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+        <span>{{ 'cockpit.batchOps.deleteFinished.irreversibleWarning' | translate }}</span>
       </div>
 
       <p class="confirm-summary">

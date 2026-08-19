@@ -5,7 +5,8 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject, EMPTY } from 'rxjs';
+import { switchMap, catchError, map } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
@@ -36,7 +37,9 @@ import {
   ProcessInstance,
   MultiValueFilter,
   GlobalSearchField,
-  VariableLine
+  VariableLine,
+  MultiStateCursor,
+  KeysetPage
 } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
@@ -136,14 +139,88 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   searchPageSize = 20;
   readonly searchPageSizeOptions = [10, 20, 50, 100];
 
+  cursorStack: Array<{ cursor: MultiStateCursor | null; absoluteOffset: number }> = [];
+  private currentCursor: MultiStateCursor | null = null;
+  private lastKeysetPage: KeysetPage | null = null;
+  multiStateAbsoluteOffset = 0;
+  multiStateHasMore = false;
+
+  private readonly searchRequest$ = new Subject<boolean>();
+
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadPageSize();
+
+    this.searchRequest$
+      .pipe(
+        switchMap(recomputeCount => {
+          const source$ = this.isArbitraryMultiState
+            ? this.buildKeysetSource(recomputeCount)
+            : this.buildOffsetSource(recomputeCount);
+          return source$.pipe(
+            catchError(() => {
+              this.searchLoading = false;
+              this.searchError = true;
+              this.cdr.detectChanges();
+              return EMPTY;
+            })
+          );
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(({ results, count, keysetPage }) => {
+        this.searchResults = results;
+        this.searchResultsCount = count;
+        if (keysetPage) {
+          this.lastKeysetPage = keysetPage;
+          this.multiStateHasMore = keysetPage.hasMore;
+        }
+        this.searchLoading = false;
+        this.cdr.detectChanges();
+      });
+
     this.loadFromUrl();
   }
 
   ngOnDestroy(): void {
     this.navMenuService.clearMenuItems();
+  }
+
+  private buildKeysetSource(recomputeCount: boolean) {
+    const statePill = this.activePills.find(f => f.field === 'state')!;
+    const page$ = this.cockpitService.searchPerStatePaged(
+      this.activePills, statePill,
+      this.variableNamesIgnoreCase, this.variableValuesIgnoreCase,
+      this.searchPageSize, this.currentCursor
+    );
+    type R = { results: ProcessInstance[]; count: number; keysetPage: KeysetPage };
+    if (recomputeCount) {
+      return forkJoin({
+        page: page$,
+        count: this.cockpitService.searchProcessInstancesGlobalCount(
+          this.activePills, this.variableNamesIgnoreCase, this.variableValuesIgnoreCase
+        )
+      }).pipe(map(({ page, count }): R => ({ results: page.items, count, keysetPage: page })));
+    }
+    return page$.pipe(map((page): R => ({ results: page.items, count: this.searchResultsCount, keysetPage: page })));
+  }
+
+  private buildOffsetSource(recomputeCount: boolean) {
+    const firstResult = (this.searchCurrentPage - 1) * this.searchPageSize;
+    const results$ = this.cockpitService.searchProcessInstancesGlobal(
+      this.activePills, this.variableNamesIgnoreCase, this.variableValuesIgnoreCase,
+      firstResult, this.searchPageSize
+    );
+    type R = { results: ProcessInstance[]; count: number; keysetPage?: KeysetPage };
+    if (recomputeCount) {
+      return forkJoin({
+        results: results$,
+        count: this.cockpitService.searchProcessInstancesGlobalCount(
+          this.activePills, this.variableNamesIgnoreCase, this.variableValuesIgnoreCase
+        )
+      }).pipe(map(({ results, count }): R => ({ results, count })));
+    }
+    return results$.pipe(map((results): R => ({ results, count: this.searchResultsCount })));
   }
 
   private loadPageSize(): void {
@@ -687,40 +764,49 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   }
 
   executeSearch(): void {
+    if (this.activeEditorType) {
+      this.confirmCriterion();
+    }
     if (this.activePills.length === 0) return;
     this.searchLoading = true;
     this.searchExecuted = true;
     this.searchError = false;
     this.searchCurrentPage = 1;
+    this.resetCursorState();
     this.cdr.markForCheck();
-    this.loadSearchResults();
+    this.loadSearchResults(true);
   }
 
-  private loadSearchResults(): void {
-    const firstResult = (this.searchCurrentPage - 1) * this.searchPageSize;
+  private resetCursorState(): void {
+    this.cursorStack = [];
+    this.currentCursor = null;
+    this.lastKeysetPage = null;
+    this.multiStateAbsoluteOffset = 0;
+    this.multiStateHasMore = false;
+  }
 
-    forkJoin({
-      results: this.cockpitService.searchProcessInstancesGlobal(
-        this.activePills, this.variableNamesIgnoreCase, this.variableValuesIgnoreCase,
-        firstResult, this.searchPageSize
-      ),
-      count: this.cockpitService.searchProcessInstancesGlobalCount(
-        this.activePills, this.variableNamesIgnoreCase, this.variableValuesIgnoreCase
-      )
-    }).pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: ({ results, count }) => {
-          this.searchResults = results;
-          this.searchResultsCount = count;
-          this.searchLoading = false;
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.searchLoading = false;
-          this.searchError = true;
-          this.cdr.detectChanges();
-        }
-      });
+  nextMultiStatePage(): void {
+    if (!this.multiStateHasMore || !this.lastKeysetPage) return;
+    this.cursorStack.push({ cursor: this.currentCursor, absoluteOffset: this.multiStateAbsoluteOffset });
+    this.multiStateAbsoluteOffset += this.searchResults.length;
+    this.currentCursor = this.lastKeysetPage.nextCursor;
+    this.searchLoading = true;
+    this.cdr.markForCheck();
+    this.loadSearchResults(false);
+  }
+
+  prevMultiStatePage(): void {
+    const prev = this.cursorStack.pop();
+    if (!prev) return;
+    this.currentCursor = prev.cursor;
+    this.multiStateAbsoluteOffset = prev.absoluteOffset;
+    this.searchLoading = true;
+    this.cdr.markForCheck();
+    this.loadSearchResults(false);
+  }
+
+  private loadSearchResults(recomputeCount = false): void {
+    this.searchRequest$.next(recomputeCount);
   }
 
   clearSearch(): void {
@@ -738,32 +824,55 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.syncCriteriaToUrl();
   }
 
+  get isArbitraryMultiState(): boolean {
+    const statePill = this.activePills.find(p => p.field === 'state');
+    if (!statePill || statePill.values.length <= 1) return false;
+    const sorted = [...statePill.values].sort().join(',');
+    return sorted !== 'active,suspended' && sorted !== 'completed,terminated';
+  }
+
+  get effectiveSearchCount(): number {
+    return this.searchResultsCount;
+  }
+
   get searchTotalPages(): number {
-    return Math.ceil(this.searchResultsCount / this.searchPageSize);
+    if (!this.searchPageSize || this.effectiveSearchCount === 0) return 0;
+    return Math.ceil(this.effectiveSearchCount / this.searchPageSize);
+  }
+
+  get multiStateCurrentPage(): number {
+    if (!this.searchPageSize) return 1;
+    return Math.floor(this.multiStateAbsoluteOffset / this.searchPageSize) + 1;
   }
 
   get searchStartIndex(): number {
-    if (this.searchResultsCount === 0) return 0;
+    if (this.searchResultsCount === 0 && this.searchResults.length === 0) return 0;
+    if (this.isArbitraryMultiState) return this.multiStateAbsoluteOffset + 1;
     return (this.searchCurrentPage - 1) * this.searchPageSize + 1;
   }
 
   get searchEndIndex(): number {
-    return Math.min(this.searchCurrentPage * this.searchPageSize, this.searchResultsCount);
+    if (this.isArbitraryMultiState) {
+      return this.multiStateAbsoluteOffset + this.searchResults.length;
+    }
+    return Math.min(this.searchCurrentPage * this.searchPageSize, this.effectiveSearchCount);
   }
 
   onSearchPageChange(page: number): void {
     this.searchCurrentPage = page;
     this.searchLoading = true;
     this.cdr.markForCheck();
-    this.loadSearchResults();
+    this.loadSearchResults(false);
   }
 
   onSearchPageSizeChange(): void {
+    this.searchPageSize = +this.searchPageSize;
     this.searchCurrentPage = 1;
+    this.resetCursorState();
     this.searchLoading = true;
     this.savePageSize();
     this.cdr.markForCheck();
-    this.loadSearchResults();
+    this.loadSearchResults(false);
   }
 
   getInstanceStateClass(instance: ProcessInstance): string {

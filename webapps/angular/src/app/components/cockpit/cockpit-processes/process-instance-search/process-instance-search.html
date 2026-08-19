@@ -493,9 +493,30 @@
               <div class="search-toolbar">
                 <span class="results-info">
                   {{ 'cockpit.processes.showing' | translate }} {{ searchStartIndex }} - {{ searchEndIndex }}
-                  {{ 'cockpit.processes.of' | translate }} {{ searchResultsCount }}
+                  {{ 'cockpit.processes.of' | translate }} {{ effectiveSearchCount }}
                 </span>
-                <div class="compact-pagination" *ngIf="searchTotalPages > 1">
+
+                <!-- Cursor navigation (arbitrary multi-state: no native Camunda flag) -->
+                <div class="compact-pagination" *ngIf="isArbitraryMultiState && searchTotalPages > 1">
+                  <button
+                    class="pagination-nav"
+                    [disabled]="cursorStack.length === 0"
+                    (click)="prevMultiStatePage()"
+                  >
+                    <fa-icon [icon]="faChevronLeft"></fa-icon>
+                  </button>
+                  <span class="pagination-current">{{ multiStateCurrentPage }} / {{ searchTotalPages }}</span>
+                  <button
+                    class="pagination-nav"
+                    [disabled]="!multiStateHasMore"
+                    (click)="nextMultiStatePage()"
+                  >
+                    <fa-icon [icon]="faChevronRight"></fa-icon>
+                  </button>
+                </div>
+
+                <!-- Offset navigation (single-state / native flag) -->
+                <div class="compact-pagination" *ngIf="!isArbitraryMultiState && searchTotalPages > 1">
                   <button
                     class="pagination-nav"
                     [disabled]="searchCurrentPage === 1"
@@ -512,9 +533,10 @@
                     <fa-icon [icon]="faChevronRight"></fa-icon>
                   </button>
                 </div>
+
                 <div class="page-size-selector">
                   <select [(ngModel)]="searchPageSize" (change)="onSearchPageSizeChange()">
-                    <option *ngFor="let size of searchPageSizeOptions" [value]="size">{{ size }}</option>
+                    <option *ngFor="let size of searchPageSizeOptions" [ngValue]="size">{{ size }}</option>
                   </select>
                 </div>
               </div>

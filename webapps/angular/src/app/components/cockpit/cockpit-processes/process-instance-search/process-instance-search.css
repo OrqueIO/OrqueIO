@@ -894,6 +894,23 @@
   font-weight: 500;
 }
 
+.multistate-cap-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-warning-bg, #fff8e1);
+  border-left: 3px solid var(--color-warning, #f59e0b);
+  color: var(--color-warning-text, #92400e);
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+}
+
+.multistate-cap-warning fa-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
 .compact-pagination {
   display: flex;
   align-items: center;
