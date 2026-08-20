@@ -40,125 +40,195 @@
             <span class="criteria-dropdown-header-title">{{ 'cockpit.processes.globalSearch.dropdownTitle' | translate }}</span>
           </div>
 
-          <!-- Group: Instance -->
-          <div class="criteria-group">
-            <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupInstance' | translate }}</div>
+          <!-- ── Process criteria (default) ───────────────────────────── -->
+          <ng-container *ngIf="criteriaSet === 'process'">
 
-            <button class="criteria-option" (click)="selectCriteriaType('businessKey')" type="button" role="menuitem">
-              <span class="criteria-icon-wrap criteria-icon-wrap--blue">
-                <fa-icon [icon]="faKey"></fa-icon>
-              </span>
-              <span class="criteria-option-body">
-                <span class="criteria-option-name">{{ 'cockpit.processes.filters.businessKey' | translate }}</span>
-                <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.businessKey' | translate }}</span>
-              </span>
-            </button>
+            <!-- Group: Instance -->
+            <div class="criteria-group">
+              <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupInstance' | translate }}</div>
 
-            <button class="criteria-option" (click)="selectCriteriaType('instanceId')" type="button" role="menuitem">
-              <span class="criteria-icon-wrap criteria-icon-wrap--violet">
-                <fa-icon [icon]="faHashtag"></fa-icon>
-              </span>
-              <span class="criteria-option-body">
-                <span class="criteria-option-name">{{ 'cockpit.processes.filters.instanceId' | translate }}</span>
-                <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.instanceId' | translate }}</span>
-              </span>
-            </button>
+              <button class="criteria-option" (click)="selectCriteriaType('businessKey')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--blue">
+                  <fa-icon [icon]="faKey"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.businessKey' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.businessKey' | translate }}</span>
+                </span>
+              </button>
 
-            <!-- State: hidden when a state is locked externally -->
-            <button *ngIf="!lockedState" class="criteria-option" (click)="selectCriteriaType('state')" type="button" role="menuitem">
-              <span class="criteria-icon-wrap criteria-icon-wrap--emerald">
-                <fa-icon [icon]="faCircleDot"></fa-icon>
-              </span>
-              <span class="criteria-option-body">
-                <span class="criteria-option-name">{{ 'cockpit.processes.filters.state' | translate }}</span>
-                <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.state' | translate }}</span>
-              </span>
-            </button>
+              <button class="criteria-option" (click)="selectCriteriaType('instanceId')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--violet">
+                  <fa-icon [icon]="faHashtag"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.instanceId' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.instanceId' | translate }}</span>
+                </span>
+              </button>
 
-            <button class="criteria-option" (click)="selectCriteriaType('processDefinition')" type="button" role="menuitem">
-              <span class="criteria-icon-wrap criteria-icon-wrap--orange">
-                <fa-icon [icon]="faSitemap"></fa-icon>
-              </span>
-              <span class="criteria-option-body">
-                <span class="criteria-option-name">{{ 'cockpit.processes.filters.processDefinition' | translate }}</span>
-                <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.processDefinition' | translate }}</span>
-              </span>
-            </button>
+              <!-- State: hidden when a state is locked externally -->
+              <button *ngIf="!lockedState" class="criteria-option" (click)="selectCriteriaType('state')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--emerald">
+                  <fa-icon [icon]="faCircleDot"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.state' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.state' | translate }}</span>
+                </span>
+              </button>
 
-            <button class="criteria-option" (click)="selectCriteriaType('withIncidents')" type="button" role="menuitem">
-              <span class="criteria-icon-wrap criteria-icon-wrap--amber">
-                <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-              </span>
-              <span class="criteria-option-body">
-                <span class="criteria-option-name">{{ 'cockpit.processes.filters.withIncidents' | translate }}</span>
-                <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.withIncidents' | translate }}</span>
-              </span>
-            </button>
-          </div>
+              <button class="criteria-option" (click)="selectCriteriaType('processDefinition')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--orange">
+                  <fa-icon [icon]="faSitemap"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.processDefinition' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.processDefinition' | translate }}</span>
+                </span>
+              </button>
 
-          <div class="criteria-separator"></div>
+              <button class="criteria-option" (click)="selectCriteriaType('withIncidents')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--amber">
+                  <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.withIncidents' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.withIncidents' | translate }}</span>
+                </span>
+              </button>
+            </div>
 
-          <!-- Group: Dates -->
-          <div class="criteria-group">
-            <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupDates' | translate }}</div>
+            <div class="criteria-separator"></div>
 
-            <button class="criteria-option" (click)="selectCriteriaType('startedAfter')" type="button" role="menuitem">
-              <span class="criteria-icon-wrap criteria-icon-wrap--teal">
-                <fa-icon [icon]="faCalendarAlt"></fa-icon>
-              </span>
-              <span class="criteria-option-body">
-                <span class="criteria-option-name">{{ 'cockpit.processes.filters.startedAfter' | translate }}</span>
-                <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.startedAfter' | translate }}</span>
-              </span>
-            </button>
+            <!-- Group: Dates -->
+            <div class="criteria-group">
+              <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupDates' | translate }}</div>
 
-            <button class="criteria-option" (click)="selectCriteriaType('startedBefore')" type="button" role="menuitem">
-              <span class="criteria-icon-wrap criteria-icon-wrap--teal">
-                <fa-icon [icon]="faCalendarAlt"></fa-icon>
-              </span>
-              <span class="criteria-option-body">
-                <span class="criteria-option-name">{{ 'cockpit.processes.filters.startedBefore' | translate }}</span>
-                <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.startedBefore' | translate }}</span>
-              </span>
-            </button>
+              <button class="criteria-option" (click)="selectCriteriaType('startedAfter')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--teal">
+                  <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.startedAfter' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.startedAfter' | translate }}</span>
+                </span>
+              </button>
 
-            <button class="criteria-option" (click)="selectCriteriaType('finishedAfter')" type="button" role="menuitem">
-              <span class="criteria-icon-wrap criteria-icon-wrap--slate">
-                <fa-icon [icon]="faCalendarAlt"></fa-icon>
-              </span>
-              <span class="criteria-option-body">
-                <span class="criteria-option-name">{{ 'cockpit.processes.filters.finishedAfter' | translate }}</span>
-                <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.finishedAfter' | translate }}</span>
-              </span>
-            </button>
+              <button class="criteria-option" (click)="selectCriteriaType('startedBefore')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--teal">
+                  <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.startedBefore' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.startedBefore' | translate }}</span>
+                </span>
+              </button>
 
-            <button class="criteria-option" (click)="selectCriteriaType('finishedBefore')" type="button" role="menuitem">
-              <span class="criteria-icon-wrap criteria-icon-wrap--slate">
-                <fa-icon [icon]="faCalendarAlt"></fa-icon>
-              </span>
-              <span class="criteria-option-body">
-                <span class="criteria-option-name">{{ 'cockpit.processes.filters.finishedBefore' | translate }}</span>
-                <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.finishedBefore' | translate }}</span>
-              </span>
-            </button>
-          </div>
+              <button class="criteria-option" (click)="selectCriteriaType('finishedAfter')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--slate">
+                  <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.finishedAfter' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.finishedAfter' | translate }}</span>
+                </span>
+              </button>
 
-          <div class="criteria-separator"></div>
+              <button class="criteria-option" (click)="selectCriteriaType('finishedBefore')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--slate">
+                  <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.finishedBefore' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.finishedBefore' | translate }}</span>
+                </span>
+              </button>
+            </div>
 
-          <!-- Group: Variables -->
-          <div class="criteria-group">
-            <div class="criteria-group-label">{{ 'cockpit.processes.filters.variable' | translate }}</div>
+            <div class="criteria-separator"></div>
 
-            <button class="criteria-option" (click)="selectCriteriaType('variables')" type="button" role="menuitem">
-              <span class="criteria-icon-wrap criteria-icon-wrap--indigo">
-                <fa-icon [icon]="faCode"></fa-icon>
-              </span>
-              <span class="criteria-option-body">
-                <span class="criteria-option-name">{{ 'cockpit.processes.filters.variable' | translate }}</span>
-                <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.variables' | translate }}</span>
-              </span>
-            </button>
-          </div>
+            <!-- Group: Variables -->
+            <div class="criteria-group">
+              <div class="criteria-group-label">{{ 'cockpit.processes.filters.variable' | translate }}</div>
+
+              <button class="criteria-option" (click)="selectCriteriaType('variables')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--indigo">
+                  <fa-icon [icon]="faCode"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.variable' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.variables' | translate }}</span>
+                </span>
+              </button>
+            </div>
+
+          </ng-container>
+
+          <!-- ── Decision criteria ──────────────────────────────────────── -->
+          <ng-container *ngIf="criteriaSet === 'decision'">
+
+            <div class="criteria-group">
+              <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupInstance' | translate }}</div>
+
+              <button class="criteria-option" (click)="selectCriteriaType('decisionInstanceId')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--violet">
+                  <fa-icon [icon]="faHashtag"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.decisionInstanceId' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.decisionInstanceId' | translate }}</span>
+                </span>
+              </button>
+
+              <button class="criteria-option" (click)="selectCriteriaType('processInstanceId')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--blue">
+                  <fa-icon [icon]="faKey"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.processInstanceId' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.processInstanceId' | translate }}</span>
+                </span>
+              </button>
+
+              <button class="criteria-option" (click)="selectCriteriaType('decisionDefinition')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--orange">
+                  <fa-icon [icon]="faSitemap"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.decisionDefinition' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.decisionDefinition' | translate }}</span>
+                </span>
+              </button>
+            </div>
+
+            <div class="criteria-separator"></div>
+
+            <div class="criteria-group">
+              <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupDates' | translate }}</div>
+
+              <button class="criteria-option" (click)="selectCriteriaType('evaluatedAfter')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--teal">
+                  <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.evaluatedAfter' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.evaluatedAfter' | translate }}</span>
+                </span>
+              </button>
+
+              <button class="criteria-option" (click)="selectCriteriaType('evaluatedBefore')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--teal">
+                  <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.evaluatedBefore' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.evaluatedBefore' | translate }}</span>
+                </span>
+              </button>
+            </div>
+
+          </ng-container>
 
         </div>
 
@@ -207,7 +277,7 @@
 
   <!-- Header for simple editors -->
   <div class="editor-popover-header"
-       *ngIf="activeEditorType !== 'state' && activeEditorType !== 'variables' && activeEditorType !== 'processDefinition'">
+       *ngIf="activeEditorType !== 'state' && activeEditorType !== 'variables' && activeEditorType !== 'processDefinition' && activeEditorType !== 'decisionDefinition'">
     <fa-icon [icon]="getEditorIcon()" class="editor-popover-icon editor-popover-icon--{{ activeEditorType }}"></fa-icon>
     <span class="editor-popover-title">{{ ('cockpit.processes.filters.' + activeEditorType) | translate }}</span>
   </div>
@@ -228,6 +298,14 @@
     </button>
   </div>
 
+  <!-- Header for decisionDefinition editor -->
+  <div class="state-popover-header" *ngIf="activeEditorType === 'decisionDefinition'">
+    <span class="state-popover-label">{{ 'cockpit.processes.filters.decisionDefinition' | translate }}</span>
+    <button class="state-popover-clear" (click)="pendingDecisionDefinitionKeys = []" type="button">
+      {{ 'cockpit.processes.globalSearch.clearBtn' | translate }}
+    </button>
+  </div>
+
   <!-- Header for variables editor -->
   <div class="variables-popover-header" *ngIf="activeEditorType === 'variables'">
     <div class="variables-popover-title-row">
@@ -239,9 +317,9 @@
     </button>
   </div>
 
-  <!-- Business Key / Instance ID -->
+  <!-- Business Key / Instance ID / Decision Instance ID / Process Instance ID -->
   <div class="editor-popover-body"
-       *ngIf="activeEditorType === 'businessKey' || activeEditorType === 'instanceId'"
+       *ngIf="activeEditorType === 'businessKey' || activeEditorType === 'instanceId' || activeEditorType === 'decisionInstanceId' || activeEditorType === 'processInstanceId'"
        (keydown.enter)="confirmCriterion()">
     <app-multi-value-chip-input
       [(values)]="pendingValues"
@@ -336,9 +414,53 @@
     </ng-template>
   </div>
 
-  <!-- Date filters -->
+  <!-- Decision Definition -->
+  <div class="editor-popover-body editor-popover-body--state" *ngIf="activeEditorType === 'decisionDefinition'"
+       (keydown.enter)="$event.preventDefault(); confirmCriterion()">
+    <ng-container *ngIf="availableDecisionDefinitions.length > 0; else noDecisionDefs">
+      <div class="processdef-search-wrap">
+        <input
+          type="text"
+          class="processdef-search-input"
+          [(ngModel)]="decisionDefinitionSearchText"
+          [placeholder]="'cockpit.processes.globalSearch.searchDecisionDefs' | translate"
+          autocomplete="off"
+        />
+      </div>
+      <button class="state-row processdef-select-all-row"
+              (click)="toggleSelectAllDecisionDefinitions()" type="button">
+        <span class="processdef-sa-badge">
+          <fa-icon *ngIf="!ddAllSelected && !ddSomeSelected" [icon]="faSquare"      class="processdef-sa-icon processdef-sa-icon--empty"></fa-icon>
+          <fa-icon *ngIf="ddSomeSelected"                    [icon]="faSquareMinus" class="processdef-sa-icon processdef-sa-icon--partial"></fa-icon>
+          <fa-icon *ngIf="ddAllSelected"                     [icon]="faSquareCheck" class="processdef-sa-icon processdef-sa-icon--all"></fa-icon>
+        </span>
+        <span class="state-row-label">{{ 'cockpit.processes.globalSearch.selectAll' | translate }}</span>
+        <span class="processdef-select-all-count">{{ 'cockpit.processes.globalSearch.selectedOf' | translate: { selected: ddVisibleSelectedCount.toString(), total: filteredDecisionDefinitions.length.toString() } }}</span>
+      </button>
+      <div class="processdef-select-all-divider"></div>
+      <ng-container *ngIf="filteredDecisionDefinitions.length > 0; else noMatchingDecisionDefs">
+        <div class="state-checklist processdef-checklist">
+          <button *ngFor="let dd of filteredDecisionDefinitions"
+                  class="state-row processdef-row"
+                  (click)="toggleDecisionDefinitionKey(dd.key)" type="button">
+            <fa-icon [icon]="faSitemap" class="processdef-row-icon"></fa-icon>
+            <span class="state-row-label" [class.is-selected]="pendingDecisionDefinitionKeys.includes(dd.key)">{{ dd.name }}</span>
+            <fa-icon *ngIf="pendingDecisionDefinitionKeys.includes(dd.key)" [icon]="faCheck" class="state-row-check"></fa-icon>
+          </button>
+        </div>
+      </ng-container>
+      <ng-template #noMatchingDecisionDefs>
+        <span class="processdef-empty">{{ 'cockpit.processes.globalSearch.noMatchingDecisionDefs' | translate }}</span>
+      </ng-template>
+    </ng-container>
+    <ng-template #noDecisionDefs>
+      <span class="processdef-empty">{{ 'cockpit.processes.globalSearch.noDecisionDefs' | translate }}</span>
+    </ng-template>
+  </div>
+
+  <!-- Date filters (process: started/finished; decision: evaluated) -->
   <div class="editor-popover-body"
-       *ngIf="activeEditorType === 'startedAfter' || activeEditorType === 'startedBefore' || activeEditorType === 'finishedAfter' || activeEditorType === 'finishedBefore'">
+       *ngIf="activeEditorType === 'startedAfter' || activeEditorType === 'startedBefore' || activeEditorType === 'finishedAfter' || activeEditorType === 'finishedBefore' || activeEditorType === 'evaluatedAfter' || activeEditorType === 'evaluatedBefore'">
     <input type="date" class="editor-input" [(ngModel)]="pendingDateValue" />
   </div>
 
@@ -427,14 +549,14 @@
   </div>
 
   <div class="chip-input-hint-block"
-       *ngIf="activeEditorType === 'businessKey' || activeEditorType === 'instanceId' || activeEditorType === 'variables'">
+       *ngIf="activeEditorType === 'businessKey' || activeEditorType === 'instanceId' || activeEditorType === 'decisionInstanceId' || activeEditorType === 'processInstanceId' || activeEditorType === 'variables'">
     <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
     <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
   </div>
 
   <div class="editor-popover-actions"
        [class.editor-popover-actions--state]="activeEditorType === 'state' || activeEditorType === 'variables'"
-       [class.editor-popover-actions--processdef]="activeEditorType === 'processDefinition'">
+       [class.editor-popover-actions--processdef]="activeEditorType === 'processDefinition' || activeEditorType === 'decisionDefinition'">
     <span class="state-count-label" *ngIf="activeEditorType === 'state'">
       {{ pendingStateValues.length }} {{ 'cockpit.processes.globalSearch.selected' | translate }}
     </span>
@@ -450,6 +572,7 @@
               [title]="'cockpit.processes.globalSearch.applyAction' | translate"
               [disabled]="(activeEditorType === 'state' && pendingStateValues.length === 0 && editingPillIndex === null) ||
                           (activeEditorType === 'processDefinition' && pendingProcessDefinitionKeys.length === 0 && editingPillIndex === null) ||
+                          (activeEditorType === 'decisionDefinition' && pendingDecisionDefinitionKeys.length === 0 && editingPillIndex === null) ||
                           (activeEditorType === 'variables' && validVariableLineCount === 0 && editingPillIndex === null) ||
                           (activeEditorType === 'variables' && hasInvalidVariableValues)">
         <fa-icon [icon]="faCheck"></fa-icon>

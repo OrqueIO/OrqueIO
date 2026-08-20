@@ -21,6 +21,7 @@ import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { ProcessInstanceService, ProcessInstance } from '../../../../services/process-instance.service';
 import { CockpitService, MultiValueFilter } from '../../../../services/cockpit.service';
+import { DecisionService, DecisionInstance } from '../../../../services/decision.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { CamDatePipe } from '../../../../pipes';
@@ -30,6 +31,24 @@ import { BatchWizardStepperComponent, WizardStep } from '../batch-wizard-stepper
 import { BatchOperationListComponent, BatchOperationDef } from '../batch-operation-list/batch-operation-list';
 import { environment } from '../../../../../environments/environment';
 
+
+function formatDateForBatchApi(dateStr: string, endOfDay: boolean): string {
+  const withTime = `${dateStr}${endOfDay ? 'T23:59:59' : 'T00:00:00'}`;
+  const d = new Date(withTime);
+  if (isNaN(d.getTime())) return dateStr;
+  const offset = -d.getTimezoneOffset();
+  const sign = offset >= 0 ? '+' : '-';
+  const absOff = Math.abs(offset);
+  const hh = String(Math.floor(absOff / 60)).padStart(2, '0');
+  const mm = String(absOff % 60).padStart(2, '0');
+  const year = d.getFullYear();
+  const mon  = String(d.getMonth() + 1).padStart(2, '0');
+  const day  = String(d.getDate()).padStart(2, '0');
+  const hrs  = String(d.getHours()).padStart(2, '0');
+  const min  = String(d.getMinutes()).padStart(2, '0');
+  const sec  = String(d.getSeconds()).padStart(2, '0');
+  return `${year}-${mon}-${day}T${hrs}:${min}:${sec}.000${sign}${hh}${mm}`;
+}
 
 const BATCH_OPERATIONS: BatchOperationDef[] = [
   {
@@ -78,7 +97,9 @@ const BATCH_OPERATIONS: BatchOperationDef[] = [
     descKey: 'cockpit.batchOps.deleteDecision.desc',
     icon: faDatabase,
     badgeClass: 'badge--red',
-    available: false
+    available: true,
+    actionBtnKey: 'cockpit.batchOps.deleteDecision.actionBtn',
+    actionBtnQueryKey: 'cockpit.batchOps.deleteDecision.actionBtnQuery'
   },
   {
     id: 'set-retries-jobs',
@@ -157,6 +178,8 @@ interface WizardPersistedState {
   deleteReason?: string;
   skipCustomListeners?: boolean;
   skipIoMappings?: boolean;
+  decisionSelectedIds?: string[];
+  decisionFilterCriteria?: MultiValueFilter[];
 }
 
 @Component({
@@ -183,6 +206,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   private navMenuService = inject(NavMenuService);
   private processInstanceService = inject(ProcessInstanceService);
   private cockpitService = inject(CockpitService);
+  private decisionService = inject(DecisionService);
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
   private translateService = inject(TranslateService);
@@ -233,9 +257,19 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   skipCustomListeners = false;
   skipIoMappings = false;
 
+  decisionFilterCriteria: MultiValueFilter[] = [];
+  decisionHasActiveCriteria = false;
+  decisionInstances: DecisionInstance[] = [];
+  decisionInstancesTotal = 0;
+  decisionInstancesLoading = false;
+  decisionInstancesPage = 1;
+  decisionInstancesPageSize = 10;
+  selectedDecisionIds = new Set<string>();
+
   private knownInstances = new Map<string, ProcessInstance>();
 
   private readonly instanceLoad$ = new Subject<void>();
+  private readonly decisionInstanceLoad$ = new Subject<void>();
 
   selectedIds = new Set<string>();
 
@@ -289,6 +323,31 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.cdr.markForCheck();
     });
 
+    this.decisionInstanceLoad$.pipe(
+      switchMap(() => {
+        const params = this.buildDecisionInstanceQueryParams();
+        const countParams = this.buildDecisionInstanceQueryParams(true);
+        return forkJoin({
+          results: this.decisionService.getDecisionInstancesPaginated(params),
+          count: this.decisionService.getDecisionInstancesCountFiltered(countParams)
+        }).pipe(
+          catchError(() => {
+            this.decisionInstances = [];
+            this.decisionInstancesTotal = 0;
+            this.decisionInstancesLoading = false;
+            this.cdr.markForCheck();
+            return EMPTY;
+          })
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(({ results, count }) => {
+      this.decisionInstances = results;
+      this.decisionInstancesTotal = Math.max(count, results.length);
+      this.decisionInstancesLoading = false;
+      this.cdr.markForCheck();
+    });
+
     this.loadFromSessionStorage();
   }
 
@@ -302,6 +361,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.resetForm();
     if (id === 'suspend' || id === 'activate' || id === 'delete-running' || id === 'delete-finished') {
       this.loadInstances();
+    } else if (id === 'delete-decision') {
+      this.loadDecisionInstances();
     }
     this.cdr.markForCheck();
     this.saveToSessionStorage();
@@ -318,6 +379,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.mode === m) return;
     this.mode = m;
     this.selectedIds = new Set();
+    this.selectedDecisionIds = new Set();
     this.cdr.markForCheck();
     this.saveToSessionStorage();
   }
@@ -336,6 +398,12 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.deleteReason = '';
     this.skipCustomListeners = false;
     this.skipIoMappings = false;
+    this.decisionFilterCriteria = [];
+    this.decisionHasActiveCriteria = false;
+    this.decisionInstances = [];
+    this.decisionInstancesTotal = 0;
+    this.decisionInstancesPage = 1;
+    this.selectedDecisionIds = new Set();
   }
 
   onRowClick(id: string): void {
@@ -357,6 +425,100 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.selectedIds = new Set();
     this.loadInstances();
     this.saveToSessionStorage();
+  }
+
+  onDecisionFilterChange(event: FilterPanelChange): void {
+    this.decisionFilterCriteria = event.criteria;
+    this.decisionHasActiveCriteria = event.criteria.length > 0;
+    this.decisionInstancesPage = 1;
+    this.selectedDecisionIds = new Set();
+    this.loadDecisionInstances();
+    this.saveToSessionStorage();
+  }
+
+  private loadDecisionInstances(): void {
+    this.decisionInstancesLoading = true;
+    this.cdr.markForCheck();
+    this.decisionInstanceLoad$.next();
+  }
+
+  private buildDecisionInstanceQueryParams(countOnly = false): import('../../../../services/decision.service').DecisionInstanceQueryParams {
+    const params: import('../../../../services/decision.service').DecisionInstanceQueryParams = {};
+    if (!countOnly) {
+      params.sortBy = 'evaluationTime';
+      params.sortOrder = 'desc';
+      params.firstResult = (this.decisionInstancesPage - 1) * this.decisionInstancesPageSize;
+      params.maxResults = this.decisionInstancesPageSize;
+    }
+    for (const f of this.decisionFilterCriteria) {
+      switch (f.field) {
+        case 'decisionDefinition':
+          if (f.values.length === 1) params.decisionDefinitionKey = f.values[0];
+          else if (f.values.length > 1) params.decisionDefinitionKeyIn = f.values;
+          break;
+        case 'decisionInstanceId':
+          if (f.values.length === 1) params.decisionInstanceId = f.values[0];
+          else if (f.values.length > 1) params.decisionInstanceIdIn = f.values;
+          break;
+        case 'processInstanceId':
+          if (f.values[0]) params.processInstanceId = f.values[0];
+          break;
+        case 'evaluatedAfter':
+          if (f.values[0]) params.evaluatedAfter = f.values[0];
+          break;
+        case 'evaluatedBefore':
+          if (f.values[0]) params.evaluatedBefore = f.values[0];
+          break;
+      }
+    }
+    return params;
+  }
+
+  toggleDecisionInstance(id: string): void {
+    const next = new Set(this.selectedDecisionIds);
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
+    this.selectedDecisionIds = next;
+    this.cdr.markForCheck();
+    this.saveToSessionStorage();
+  }
+
+  isDecisionSelected(id: string): boolean {
+    return this.selectedDecisionIds.has(id);
+  }
+
+  get isAllDecisionOnPageSelected(): boolean {
+    return this.decisionInstances.length > 0 && this.decisionInstances.every(d => this.selectedDecisionIds.has(d.id));
+  }
+
+  get isDecisionIndeterminate(): boolean {
+    const count = this.decisionInstances.filter(d => this.selectedDecisionIds.has(d.id)).length;
+    return count > 0 && count < this.decisionInstances.length;
+  }
+
+  toggleSelectAllDecision(): void {
+    const next = new Set(this.selectedDecisionIds);
+    if (this.isAllDecisionOnPageSelected) {
+      this.decisionInstances.forEach(d => next.delete(d.id));
+    } else {
+      this.decisionInstances.forEach(d => next.add(d.id));
+    }
+    this.selectedDecisionIds = next;
+    this.cdr.markForCheck();
+    this.saveToSessionStorage();
+  }
+
+  onDecisionRowClick(id: string): void {
+    if (this.mode === 'instances') this.toggleDecisionInstance(id);
+  }
+
+  onDecisionInstancesPageChange(event: PageChangeEvent): void {
+    this.decisionInstancesPage = event.current;
+    this.decisionInstancesPageSize = event.size;
+    this.loadDecisionInstances();
   }
 
   toggleInstance(id: string): void {
@@ -403,6 +565,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   get canContinue(): boolean {
+    if (this.selectedOperationId === 'delete-decision') {
+      return this.mode === 'instances' ? this.selectedDecisionIds.size > 0 : true;
+    }
     if (this.mode === 'instances') return this.selectedIds.size > 0;
     return true;
   }
@@ -423,10 +588,21 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   get selectedCount(): number {
+    if (this.selectedOperationId === 'delete-decision') {
+      return this.mode === 'instances' ? this.selectedDecisionIds.size : this.decisionInstancesTotal;
+    }
     return this.mode === 'instances' ? this.selectedIds.size : this.instancesTotal;
   }
 
   get confirmPayloadJson(): string {
+    if (this.selectedOperationId === 'delete-decision') {
+      const base: Record<string, unknown> = {};
+      if (this.deleteReason.trim()) base['deleteReason'] = this.deleteReason.trim();
+      if (this.mode === 'instances') {
+        return JSON.stringify({ ...base, historicDecisionInstanceIds: [...this.selectedDecisionIds] }, null, 2);
+      }
+      return JSON.stringify({ ...base, historicDecisionInstanceQuery: this.buildHistoricDecisionQueryForBatch() }, null, 2);
+    }
     if (this.selectedOperationId === 'delete-running') {
       const base: Record<string, unknown> = {
         skipCustomListeners: this.skipCustomListeners,
@@ -454,6 +630,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   get confirmEndpoint(): string {
+    if (this.selectedOperationId === 'delete-decision') {
+      return `POST ${environment.engineUrl}/default/history/decision-instance/delete`;
+    }
     if (this.selectedOperationId === 'delete-running') {
       return `POST ${environment.engineUrl}/default/process-instance/delete`;
     }
@@ -506,6 +685,32 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     return query;
   }
 
+  buildHistoricDecisionQueryForBatch(): Record<string, unknown> {
+    const query: Record<string, unknown> = {};
+    for (const f of this.decisionFilterCriteria) {
+      switch (f.field) {
+        case 'decisionDefinition':
+          if (f.values.length === 1) query['decisionDefinitionKey'] = f.values[0];
+          else if (f.values.length > 1) query['decisionDefinitionKeyIn'] = [...f.values];
+          break;
+        case 'decisionInstanceId':
+          if (f.values.length === 1) query['decisionInstanceId'] = f.values[0];
+          else if (f.values.length > 1) query['decisionInstanceIdIn'] = [...f.values];
+          break;
+        case 'processInstanceId':
+          if (f.values[0]) query['processInstanceId'] = f.values[0];
+          break;
+        case 'evaluatedAfter':
+          if (f.values[0]) query['evaluatedAfter'] = f.values[0];
+          break;
+        case 'evaluatedBefore':
+          if (f.values[0]) query['evaluatedBefore'] = f.values[0];
+          break;
+      }
+    }
+    return query;
+  }
+
   toggleTechnicalDetails(): void {
     this.showTechnicalDetails = !this.showTechnicalDetails;
     this.cdr.markForCheck();
@@ -526,6 +731,29 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.currentStep = 3;
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
+
+    if (this.selectedOperationId === 'delete-decision') {
+      const deleteReason = this.deleteReason.trim() || undefined;
+      const payload = this.mode === 'instances'
+        ? { deleteReason, historicDecisionInstanceIds: [...this.selectedDecisionIds] }
+        : { deleteReason, historicDecisionInstanceQuery: this.buildHistoricDecisionQueryForBatch() };
+      this.decisionService.deleteDecisionInstancesAsync(payload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: batch => {
+            this.batchId = batch.id;
+            this.executing = false;
+            this.clearSessionStorage();
+            this.cdr.markForCheck();
+          },
+          error: () => {
+            this.batchError = true;
+            this.executing = false;
+            this.cdr.markForCheck();
+          }
+        });
+      return;
+    }
 
     if (this.selectedOperationId === 'delete-running') {
       const deleteReason = this.deleteReason.trim() || undefined;
@@ -621,7 +849,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         selectedIds: [...this.selectedIds],
         deleteReason: this.deleteReason,
         skipCustomListeners: this.skipCustomListeners,
-        skipIoMappings: this.skipIoMappings
+        skipIoMappings: this.skipIoMappings,
+        decisionSelectedIds: [...this.selectedDecisionIds],
+        decisionFilterCriteria: this.decisionFilterCriteria
       };
       sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(state));
     } catch {
@@ -653,12 +883,17 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.deleteReason = state.deleteReason ?? '';
       this.skipCustomListeners = state.skipCustomListeners ?? false;
       this.skipIoMappings = state.skipIoMappings ?? false;
+      this.selectedDecisionIds = new Set(state.decisionSelectedIds ?? []);
+      this.decisionFilterCriteria = state.decisionFilterCriteria ?? [];
+      this.decisionHasActiveCriteria = this.decisionFilterCriteria.length > 0;
       // Never restore Results step — step 3 means a batch was submitted
       const restoredStep: number = state.step ?? 1;
       this.currentStep = restoredStep >= 3 ? 1 : restoredStep as 1 | 2;
 
       if (this.currentStep === 1 && (this.selectedOperationId === 'suspend' || this.selectedOperationId === 'activate' || this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'delete-finished')) {
         this.loadInstances();
+      } else if (this.currentStep === 1 && this.selectedOperationId === 'delete-decision') {
+        this.loadDecisionInstances();
       }
       this.cdr.markForCheck();
     } catch {
@@ -690,6 +925,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'activate') return 'cockpit.batchOps.confirm.activateSummary';
     if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.confirm.deleteRunningSummary';
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedSummary';
+    if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionSummary';
     return 'cockpit.batchOps.confirm.suspendSummary';
   }
 
@@ -697,6 +933,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'activate') return 'cockpit.batchOps.confirm.activateQuerySummary';
     if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.confirm.deleteRunningQuerySummary';
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedQuerySummary';
+    if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionQuerySummary';
     return 'cockpit.batchOps.confirm.querySummary';
   }
 
@@ -704,6 +941,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'activate') return 'cockpit.batchOps.confirm.activateBtn';
     if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.confirm.deleteRunningBtn';
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedBtn';
+    if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionBtn';
     return 'cockpit.batchOps.confirm.suspendBtn';
   }
 
@@ -711,6 +949,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'activate') return 'cockpit.batchOps.confirm.activateBtnQuery';
     if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.confirm.deleteRunningBtnQuery';
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedBtnQuery';
+    if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionBtnQuery';
     return 'cockpit.batchOps.confirm.suspendBtnQuery';
   }
 

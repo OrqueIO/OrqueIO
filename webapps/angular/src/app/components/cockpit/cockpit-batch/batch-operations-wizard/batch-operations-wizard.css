@@ -443,13 +443,14 @@
 }
 
 /* ── Table column widths ────────────────────────────────────────────────── */
-.col-state      { width: 110px; }
-.col-id         { min-width: 260px; }
-.col-definition { min-width: 120px; }
-.col-businesskey{ min-width: 120px; }
-.col-starttime  { width: 150px; }
-.col-endtime    { width: 150px; }
-.col-actions    { width: 56px; text-align: center; }
+.col-state          { width: 110px; }
+.col-id             { min-width: 310px; }
+.col-definition     { min-width: 100px; }
+.col-businesskey    { min-width: 120px; }
+.col-processinstance{ min-width: 310px; }
+.col-starttime      { width: 140px; }
+.col-endtime        { width: 140px; }
+.col-actions        { width: 56px; text-align: center; }
 
 /* ── State badge ────────────────────────────────────────────────────────── */
 .state-badge {
@@ -480,7 +481,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 240px;
+  max-width: 100%;
   display: block;
 }
 

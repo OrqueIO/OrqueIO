@@ -14,6 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { CockpitService, MultiValueFilter, GlobalSearchField, VariableLine } from '../../services/cockpit.service';
+import { DecisionService } from '../../services/decision.service';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 import { TranslateService } from '../../i18n/translate.service';
 import { MultiValueChipInputComponent } from '../multi-value-chip-input/multi-value-chip-input';
@@ -50,11 +51,14 @@ interface VariableConflictInfo {
 export class InstanceFilterPanelComponent implements OnInit {
   /** When set, the 'state' criterion is hidden from the Add menu — state is locked externally. */
   @Input() lockedState: string | null = null;
+  /** Controls which set of criteria are available: 'process' (default) or 'decision'. */
+  @Input() criteriaSet: 'process' | 'decision' = 'process';
   @Output() criteriaChange = new EventEmitter<FilterPanelChange>();
 
   private cdr = inject(ChangeDetectorRef);
   private translateService = inject(TranslateService);
   private cockpitService = inject(CockpitService);
+  private decisionService = inject(DecisionService);
   private destroyRef = inject(DestroyRef);
 
   faPlus = faPlus;
@@ -82,6 +86,9 @@ export class InstanceFilterPanelComponent implements OnInit {
   pendingProcessDefinitionKeys: string[] = [];
   availableProcessDefinitions: Array<{key: string; name: string}> = [];
   processDefinitionSearchText = '';
+  pendingDecisionDefinitionKeys: string[] = [];
+  availableDecisionDefinitions: Array<{key: string; name: string}> = [];
+  decisionDefinitionSearchText = '';
   pendingVariableOperator: VariableOperator = 'eq';
   pendingDateValue = '';
   pendingVariableLines: PendingVariableLine[] = [];
@@ -150,15 +157,27 @@ export class InstanceFilterPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cockpitService.getProcessDefinitions(1000)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(defs => {
-        this.availableProcessDefinitions = defs
-          .map(d => ({ key: d.key, name: d.name || d.key }))
-          .filter((d, i, arr) => arr.findIndex(x => x.key === d.key) === i)
-          .sort((a, b) => a.name.localeCompare(b.name));
-        this.cdr.markForCheck();
-      });
+    if (this.criteriaSet === 'decision') {
+      this.decisionService.getDecisionDefinitions(1000)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(defs => {
+          this.availableDecisionDefinitions = defs
+            .map(d => ({ key: d.key, name: d.name || d.key }))
+            .filter((d, i, arr) => arr.findIndex(x => x.key === d.key) === i)
+            .sort((a, b) => a.name.localeCompare(b.name));
+          this.cdr.markForCheck();
+        });
+    } else {
+      this.cockpitService.getProcessDefinitions(1000)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(defs => {
+          this.availableProcessDefinitions = defs
+            .map(d => ({ key: d.key, name: d.name || d.key }))
+            .filter((d, i, arr) => arr.findIndex(x => x.key === d.key) === i)
+            .sort((a, b) => a.name.localeCompare(b.name));
+          this.cdr.markForCheck();
+        });
+    }
   }
 
   toggleCriteriaDropdown(event: Event): void {
@@ -196,6 +215,8 @@ export class InstanceFilterPanelComponent implements OnInit {
     this.pendingValues = [];
     this.pendingProcessDefinitionKeys = [];
     this.processDefinitionSearchText = '';
+    this.pendingDecisionDefinitionKeys = [];
+    this.decisionDefinitionSearchText = '';
     this.pendingVariableOperator = 'eq';
     this.pendingDateValue = '';
     this.pendingVariableLines = type === 'variables'
@@ -212,6 +233,9 @@ export class InstanceFilterPanelComponent implements OnInit {
     this.activeEditorType = this.activePills[index].field as GlobalSearchField;
     if (this.activeEditorType === 'processDefinition') {
       this.processDefinitionSearchText = '';
+    }
+    if (this.activeEditorType === 'decisionDefinition') {
+      this.decisionDefinitionSearchText = '';
     }
     this.populatePendingFromPill(this.activePills[index]);
     this.cdr.markForCheck();
@@ -266,6 +290,48 @@ export class InstanceFilterPanelComponent implements OnInit {
     this.cdr.markForCheck();
   }
 
+  toggleDecisionDefinitionKey(key: string): void {
+    if (this.pendingDecisionDefinitionKeys.includes(key)) {
+      this.pendingDecisionDefinitionKeys = this.pendingDecisionDefinitionKeys.filter(k => k !== key);
+    } else {
+      this.pendingDecisionDefinitionKeys = [...this.pendingDecisionDefinitionKeys, key];
+    }
+    this.cdr.markForCheck();
+  }
+
+  get filteredDecisionDefinitions(): Array<{key: string; name: string}> {
+    const q = this.decisionDefinitionSearchText.trim().toLowerCase();
+    if (!q) return this.availableDecisionDefinitions;
+    return this.availableDecisionDefinitions.filter(d =>
+      d.name.toLowerCase().includes(q) || d.key.toLowerCase().includes(q)
+    );
+  }
+
+  get ddVisibleSelectedCount(): number {
+    return this.filteredDecisionDefinitions.filter(d => this.pendingDecisionDefinitionKeys.includes(d.key)).length;
+  }
+
+  get ddAllSelected(): boolean {
+    const visible = this.filteredDecisionDefinitions;
+    return visible.length > 0 && visible.every(d => this.pendingDecisionDefinitionKeys.includes(d.key));
+  }
+
+  get ddSomeSelected(): boolean {
+    const visible = this.filteredDecisionDefinitions;
+    return visible.some(d => this.pendingDecisionDefinitionKeys.includes(d.key)) && !this.ddAllSelected;
+  }
+
+  toggleSelectAllDecisionDefinitions(): void {
+    const visibleKeys = this.filteredDecisionDefinitions.map(d => d.key);
+    if (this.ddAllSelected) {
+      this.pendingDecisionDefinitionKeys = this.pendingDecisionDefinitionKeys.filter(k => !visibleKeys.includes(k));
+    } else {
+      const combined = new Set([...this.pendingDecisionDefinitionKeys, ...visibleKeys]);
+      this.pendingDecisionDefinitionKeys = [...combined];
+    }
+    this.cdr.markForCheck();
+  }
+
   private populatePendingFromPill(pill: MultiValueFilter): void {
     this.pendingValues = [];
     this.pendingStateValues = [];
@@ -274,6 +340,8 @@ export class InstanceFilterPanelComponent implements OnInit {
     switch (pill.field) {
       case 'businessKey':
       case 'instanceId':
+      case 'decisionInstanceId':
+      case 'processInstanceId':
         this.pendingValues = [...pill.values];
         break;
       case 'state':
@@ -281,6 +349,9 @@ export class InstanceFilterPanelComponent implements OnInit {
         break;
       case 'processDefinition':
         this.pendingProcessDefinitionKeys = [...pill.values];
+        break;
+      case 'decisionDefinition':
+        this.pendingDecisionDefinitionKeys = [...pill.values];
         break;
       case 'variable':
         this.pendingValues = [...pill.values];
@@ -297,6 +368,8 @@ export class InstanceFilterPanelComponent implements OnInit {
       case 'startedBefore':
       case 'finishedAfter':
       case 'finishedBefore':
+      case 'evaluatedAfter':
+      case 'evaluatedBefore':
         this.pendingDateValue = this.extractDateOnly(pill.values[0] || '');
         break;
     }
@@ -310,6 +383,8 @@ export class InstanceFilterPanelComponent implements OnInit {
     switch (type) {
       case 'businessKey':
       case 'instanceId':
+      case 'decisionInstanceId':
+      case 'processInstanceId':
         if (this.pendingValues.length === 0) return;
         pill = { field: type, values: [...this.pendingValues] };
         break;
@@ -335,14 +410,31 @@ export class InstanceFilterPanelComponent implements OnInit {
       case 'startedAfter':
       case 'startedBefore':
       case 'finishedAfter':
-      case 'finishedBefore': {
+      case 'finishedBefore':
+      case 'evaluatedAfter':
+      case 'evaluatedBefore': {
         if (!this.pendingDateValue) return;
-        const endOfDay = type === 'startedBefore' || type === 'finishedBefore';
+        const endOfDay = type === 'startedBefore' || type === 'finishedBefore' || type === 'evaluatedBefore';
         const formatted = this.formatDateForApi(this.pendingDateValue, endOfDay);
         if (!formatted) return;
         pill = { field: type, values: [formatted] };
         break;
       }
+      case 'decisionDefinition':
+        if (this.pendingDecisionDefinitionKeys.length === 0) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.popoverFlipped = false;
+            this.cdr.markForCheck();
+            this.emit();
+          }
+          return;
+        }
+        pill = { field: 'decisionDefinition', values: [...this.pendingDecisionDefinitionKeys] };
+        break;
       case 'variables': {
         const validLines: VariableLine[] = this.pendingVariableLines
           .filter(l => l.name.trim() && l.values.length > 0)
@@ -386,6 +478,8 @@ export class InstanceFilterPanelComponent implements OnInit {
     this.pendingStateValues = [];
     this.pendingProcessDefinitionKeys = [];
     this.processDefinitionSearchText = '';
+    this.pendingDecisionDefinitionKeys = [];
+    this.decisionDefinitionSearchText = '';
     this.pendingVariableLines = [];
     this.editingPillIndex = null;
     this.openOperatorMenuIndex = null;
@@ -593,6 +687,17 @@ export class InstanceFilterPanelComponent implements OnInit {
       case 'startedBefore':  return t('cockpit.processes.globalSearch.pill.startedBefore', { value: this.formatDisplayDate(pill.values[0]) });
       case 'finishedAfter':  return t('cockpit.processes.globalSearch.pill.finishedAfter', { value: this.formatDisplayDate(pill.values[0]) });
       case 'finishedBefore': return t('cockpit.processes.globalSearch.pill.finishedBefore',{ value: this.formatDisplayDate(pill.values[0]) });
+      case 'decisionDefinition': {
+        const names = pill.values.map(k => {
+          const d = this.availableDecisionDefinitions.find(x => x.key === k);
+          return d ? d.name : k;
+        });
+        return t('cockpit.processes.globalSearch.pill.decisionDefinition', { value: names.join(', ') });
+      }
+      case 'evaluatedAfter':  return t('cockpit.processes.globalSearch.pill.evaluatedAfter',  { value: this.formatDisplayDate(pill.values[0]) });
+      case 'evaluatedBefore': return t('cockpit.processes.globalSearch.pill.evaluatedBefore', { value: this.formatDisplayDate(pill.values[0]) });
+      case 'decisionInstanceId': return t('cockpit.processes.globalSearch.pill.decisionInstanceId', { value: pill.values.join(', ') });
+      case 'processInstanceId':  return t('cockpit.processes.globalSearch.pill.processInstanceId',  { value: pill.values.join(', ') });
       case 'variables': {
         const n = pill.variableLines?.filter(l => l.variableName).length ?? 0;
         return t('cockpit.processes.globalSearch.pill.variables', { count: String(n) });
@@ -604,11 +709,15 @@ export class InstanceFilterPanelComponent implements OnInit {
   getPillIcon(pill: MultiValueFilter): any {
     switch (pill.field) {
       case 'businessKey':                                    return this.faKey;
-      case 'instanceId':                                     return this.faHashtag;
+      case 'instanceId':
+      case 'decisionInstanceId':                             return this.faHashtag;
+      case 'processInstanceId':                              return this.faKey;
       case 'withIncidents':                                  return this.faExclamationTriangle;
-      case 'processDefinition':                              return this.faSitemap;
+      case 'processDefinition':
+      case 'decisionDefinition':                             return this.faSitemap;
       case 'startedAfter': case 'startedBefore':
-      case 'finishedAfter': case 'finishedBefore':           return this.faCalendarAlt;
+      case 'finishedAfter': case 'finishedBefore':
+      case 'evaluatedAfter': case 'evaluatedBefore':         return this.faCalendarAlt;
       case 'variables': case 'variable':                     return this.faCode;
       default:                                               return this.faFilter;
     }
