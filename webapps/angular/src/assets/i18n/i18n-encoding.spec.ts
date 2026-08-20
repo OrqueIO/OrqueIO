@@ -19,6 +19,9 @@ const MOJIBAKE_PATTERNS: Array<{ pattern: RegExp; description: string }> = [
   { pattern: /Ã»/, description: 'Ã» (mojibake of û)' },
   { pattern: /Ã¹/, description: 'Ã¹ (mojibake of ù)' },
   { pattern: /Ã§/, description: 'Ã§ (mojibake of ç)' },
+  { pattern: /â€¦/, description: 'â€¦ (mojibake of … U+2026 HORIZONTAL ELLIPSIS)' },
+  { pattern: /â€™/, description: "â€™ (mojibake of ’ U+2019 RIGHT SINGLE QUOTATION MARK)" },
+  { pattern: /â€œ/, description: 'â€œ (mojibake of “ U+201C LEFT DOUBLE QUOTATION MARK)' },
 ];
 
 describe('i18n encoding integrity', () => {

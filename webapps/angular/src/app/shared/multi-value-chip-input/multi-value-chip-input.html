@@ -1,6 +1,25 @@
 <div class="chip-input-container">
-  <span class="chip" *ngFor="let v of values; let i = index">
-    {{ v }}
+  <span
+    class="chip"
+    [class.chip--editing]="editingIndex === i"
+    *ngFor="let v of values; let i = index"
+  >
+    <span
+      *ngIf="editingIndex !== i"
+      class="chip-text"
+      (click)="startEdit(i)"
+    >{{ v }}</span>
+    <input
+      *ngIf="editingIndex === i"
+      #editInputEl
+      class="chip-edit-input"
+      [class.chip-edit-input--error]="editingError"
+      type="text"
+      [(ngModel)]="editingValue"
+      [attr.size]="editingValue.length || 1"
+      (keydown)="onEditKeydown($event)"
+      (blur)="onEditBlur()"
+    />
     <button class="chip-remove" (click)="removeValue(i)" type="button" aria-label="Remove">×</button>
   </span>
   <input
@@ -14,4 +33,5 @@
     (paste)="onPaste($event)"
   />
 </div>
-<span class="chip-input-hint">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</span>
+<span class="chip-input-error" *ngIf="editingError">{{ editingError | translate }}</span>
+<span class="chip-input-hint" *ngIf="!editingError">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</span>

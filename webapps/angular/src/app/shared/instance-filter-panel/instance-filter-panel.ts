@@ -163,9 +163,8 @@ export class InstanceFilterPanelComponent implements OnInit {
 
   toggleCriteriaDropdown(event: Event): void {
     event.stopPropagation();
-    if (this.activeEditorType) {
-      this.activeEditorType = null;
-      this.pendingValues = [];
+    if (this.activeEditorType || this.editingPillIndex !== null) {
+      this.cancelCriterion();
     }
     this.showCriteriaDropdown = !this.showCriteriaDropdown;
     this.cdr.markForCheck();

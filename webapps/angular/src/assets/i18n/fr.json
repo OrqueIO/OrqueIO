@@ -320,6 +320,8 @@
   "cockpit.processes.globalSearch.valuePlaceholder": "Entrer une valeur...",
   "cockpit.processes.globalSearch.chipInputHint": "Appuyez sur Entrée ou virgule pour ajouter une valeur",
   "cockpit.processes.globalSearch.chipInputHintTip": "Astuce : collez une liste séparée par des virgules pour en ajouter plusieurs à la fois",
+  "cockpit.processes.globalSearch.chipEditErrorEmpty": "La valeur ne peut pas être vide",
+  "cockpit.processes.globalSearch.chipEditErrorDuplicate": "Cette valeur est déjà dans la liste",
   "cockpit.processes.globalSearch.likeHint": "L'opérateur Like fonctionne mieux sur les variables texte. Il n'a aucun effet sur les variables numériques.",
   "cockpit.processes.globalSearch.comparisonValueError": "Valeur numérique requise pour cet opérateur",
   "cockpit.processes.globalSearch.conflictImpossible": "est impossible — aucune valeur ne peut satisfaire",

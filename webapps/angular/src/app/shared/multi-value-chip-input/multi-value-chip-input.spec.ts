@@ -219,3 +219,98 @@ describe('MultiValueChipInputComponent', () => {
     expect(component.currentInput).toBe('');
   });
 });
+
+
+describe('MultiValueChipInputComponent — chip inline-edit', () => {
+  let component: MultiValueChipInputComponent;
+  let fixture: ComponentFixture<MultiValueChipInputComponent>;
+
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MultiValueChipInputComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(MultiValueChipInputComponent);
+    component = fixture.componentInstance;
+    component.values = ['alpha', 'beta', 'gamma'];
+    fixture.detectChanges();
+  });
+
+  it('should update the chip value and close edit mode on Enter with a valid new value', () => {
+    const emitted: string[][] = [];
+    component.valuesChange.subscribe(v => emitted.push(v));
+
+    component.startEdit(1);
+    expect(component.editingIndex).toBe(1);
+    expect(component.editingValue).toBe('beta');
+
+    component.editingValue = 'delta';
+    component.onEditKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.values).toEqual(['alpha', 'delta', 'gamma']);
+    expect(component.editingIndex).toBeNull();
+    expect(component.editingError).toBeNull();
+    expect(emitted.length).toBe(1);
+    expect(emitted[0]).toEqual(['alpha', 'delta', 'gamma']);
+    // no duplicate chip: list length unchanged
+    expect(component.values.length).toBe(3);
+  });
+
+  it('should restore the original chip value on Escape and leave values unchanged', () => {
+    const emitted: string[][] = [];
+    component.valuesChange.subscribe(v => emitted.push(v));
+
+    component.startEdit(0);
+    component.editingValue = 'changed';
+    component.onEditKeydown(new KeyboardEvent('keydown', { key: 'Escape' }));
+
+    expect(component.values).toEqual(['alpha', 'beta', 'gamma']);
+    expect(component.editingIndex).toBeNull();
+    expect(component.editingError).toBeNull();
+    expect(emitted.length).toBe(0);
+  });
+
+  it('should block confirmation and set an error when the new value is empty', () => {
+    component.startEdit(0);
+    component.editingValue = '   ';
+    component.onEditKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.editingIndex).toBe(0);
+    expect(component.editingError).toBe('cockpit.processes.globalSearch.chipEditErrorEmpty');
+    expect(component.values).toEqual(['alpha', 'beta', 'gamma']);
+  });
+
+  it('should block confirmation and set a duplicate error when the new value matches another chip', () => {
+    component.startEdit(0);
+    component.editingValue = 'gamma';
+    component.onEditKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.editingIndex).toBe(0);
+    expect(component.editingError).toBe('cockpit.processes.globalSearch.chipEditErrorDuplicate');
+    expect(component.values).toEqual(['alpha', 'beta', 'gamma']);
+  });
+
+  it('should remove the chip being edited and clear edit state when its remove button is clicked', () => {
+    component.startEdit(1);
+    expect(component.editingIndex).toBe(1);
+
+    component.removeValue(1);
+
+    expect(component.values).toEqual(['alpha', 'gamma']);
+    expect(component.editingIndex).toBeNull();
+    expect(component.editingError).toBeNull();
+  });
+
+  it('should adjust editingIndex when a chip before the edited one is removed', () => {
+    component.startEdit(2);
+    expect(component.editingIndex).toBe(2);
+
+    component.removeValue(0);
+
+    expect(component.values).toEqual(['beta', 'gamma']);
+    expect(component.editingIndex).toBe(1);
+  });
+});
