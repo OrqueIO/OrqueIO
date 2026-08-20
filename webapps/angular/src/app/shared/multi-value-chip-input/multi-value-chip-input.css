@@ -30,6 +30,35 @@
   font-weight: var(--font-weight-medium);
 }
 
+.chip-text {
+  cursor: pointer;
+}
+
+.chip-text:hover {
+  text-decoration: underline;
+}
+
+.chip--editing {
+  background: var(--bg-card);
+  border-color: var(--color-primary);
+}
+
+.chip-edit-input {
+  border: none;
+  background: transparent;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  padding: 0;
+  outline: none;
+  min-width: 40px;
+}
+
+.chip-edit-input--error {
+  color: var(--color-danger);
+}
+
 .chip-remove {
   border: none;
   background: none;
@@ -69,5 +98,13 @@
   margin-top: 4px;
   font-size: 11px;
   color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.chip-input-error {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--color-danger);
   line-height: 1.3;
 }
