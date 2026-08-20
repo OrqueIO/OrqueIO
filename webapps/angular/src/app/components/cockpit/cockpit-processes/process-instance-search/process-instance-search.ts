@@ -920,6 +920,10 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     const statePill = this.activePills.find(p => p.field === 'state');
     if (!statePill || statePill.values.length <= 1) return false;
     const sorted = [...statePill.values].sort().join(',');
+    // All 4 states = no filter at all → same fast offset path as zero states selected.
+    // The exhaustive shortcut in CockpitService.searchProcessInstancesGlobal drops the
+    // state pill from the query body, so no state flag reaches the engine.
+    if (sorted === 'active,completed,suspended,terminated') return false;
     return sorted !== 'active,suspended' && sorted !== 'completed,terminated';
   }
 
@@ -945,7 +949,12 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
 
   get searchEndIndex(): number {
     if (this.isArbitraryMultiState) {
-      return this.multiStateAbsoluteOffset + this.searchResults.length;
+      // Math.min guards against a race where the data page returns N+1 items while the count
+      // query (run earlier) returned N — prevents "Showing 7101-7132 of 7131".
+      return Math.min(
+        this.multiStateAbsoluteOffset + this.searchResults.length,
+        this.effectiveSearchCount
+      );
     }
     return Math.min(this.searchCurrentPage * this.searchPageSize, this.effectiveSearchCount);
   }

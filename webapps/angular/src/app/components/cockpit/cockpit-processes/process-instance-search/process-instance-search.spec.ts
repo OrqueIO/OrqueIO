@@ -682,3 +682,265 @@ describe('ProcessInstanceSearchComponent — processDefinition search filter', (
     expect(mockGetProcessDefinitions.mock.calls.length).toBe(callsAfterInit);
   });
 });
+
+// ---------------------------------------------------------------------------
+// searchEndIndex / searchStartIndex — guard: endIndex must never exceed total
+// ---------------------------------------------------------------------------
+describe('ProcessInstanceSearchComponent — searchEndIndex never exceeds total (bug: "Showing 7101-7132 of 7131")', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  // 2 states that ARE isArbitraryMultiState = true → keyset path
+  const KEYSET_STATES = { field: 'state', values: ['active', 'completed'] };
+  // All 4 states → isArbitraryMultiState = false → offset path (exhaustive shortcut)
+  const ALL_4_STATES = { field: 'state', values: ['active', 'suspended', 'completed', 'terminated'] };
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      searchPerStatePaged: vi.fn().mockReturnValue(of({ items: [], nextCursor: null, hasMore: false })),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+    TestBed.resetTestingModule();
+  });
+
+  // ── Keyset path (isArbitraryMultiState = true — genuine 2-state combos) ──
+
+  it('[keyset] exact last page: total=7131, offset=7100, 31 items → endIndex=7131', () => {
+    component.activePills = [KEYSET_STATES];
+    component.multiStateAbsoluteOffset = 7100;
+    component.searchResults = Array(31).fill(MOCK_INSTANCES[0]);
+    component.searchResultsCount = 7131;
+    expect(component.searchEndIndex).toBe(7131);
+  });
+
+  it('[keyset] race-condition extra item: total=7131, offset=7100, 32 items → endIndex clamped to 7131', () => {
+    // Reproduction of "Showing 7101-7132 of 7131":
+    // count query returned 7131; a new instance was created; data query returned 32.
+    // Without Math.min the display would show 7132.
+    component.activePills = [KEYSET_STATES];
+    component.multiStateAbsoluteOffset = 7100;
+    component.searchResults = Array(32).fill(MOCK_INSTANCES[0]);
+    component.searchResultsCount = 7131;
+    expect(component.searchEndIndex).toBe(7131);
+  });
+
+  it('[keyset] mid-page with non-round total: total=150, pageSize=100, offset=100, 50 items → endIndex=150', () => {
+    component.activePills = [KEYSET_STATES];
+    component.searchPageSize = 100;
+    component.multiStateAbsoluteOffset = 100;
+    component.searchResults = Array(50).fill(MOCK_INSTANCES[0]);
+    component.searchResultsCount = 150;
+    expect(component.searchEndIndex).toBe(150);
+  });
+
+  it('[keyset] endIndex is never greater than total across a range of totals', () => {
+    component.activePills = [KEYSET_STATES];
+    for (const { total, offset, items } of [
+      { total: 7131, offset: 7100, items: 32 },
+      { total: 1,    offset: 0,    items: 2  },
+      { total: 100,  offset: 90,   items: 15 },
+      { total: 999,  offset: 990,  items: 12 },
+    ]) {
+      component.searchResultsCount = total;
+      component.multiStateAbsoluteOffset = offset;
+      component.searchResults = Array(items).fill(MOCK_INSTANCES[0]);
+      expect(component.searchEndIndex).toBeLessThanOrEqual(total);
+    }
+  });
+
+  // ── Offset path (isArbitraryMultiState = false) ──────────────────────────
+
+  it('[offset] last page clamped: total=7131, page=72, pageSize=100 → endIndex=7131 not 7200', () => {
+    component.activePills = []; // no state pill → isArbitraryMultiState = false
+    component.searchResultsCount = 7131;
+    component.searchCurrentPage = 72;
+    component.searchPageSize = 100;
+    expect(component.searchEndIndex).toBe(7131);
+  });
+
+  it('[offset] full last page (exact multiple): total=7000, page=70, pageSize=100 → endIndex=7000', () => {
+    component.activePills = [];
+    component.searchResultsCount = 7000;
+    component.searchCurrentPage = 70;
+    component.searchPageSize = 100;
+    expect(component.searchEndIndex).toBe(7000);
+  });
+
+  // ── startIndex (both paths) ───────────────────────────────────────────────
+
+  it('[keyset] startIndex = absoluteOffset + 1', () => {
+    component.activePills = [KEYSET_STATES];
+    component.multiStateAbsoluteOffset = 7100;
+    component.searchResultsCount = 7131;
+    component.searchResults = Array(31).fill(MOCK_INSTANCES[0]);
+    expect(component.searchStartIndex).toBe(7101);
+  });
+
+  it('[offset] startIndex = (page-1)*pageSize + 1', () => {
+    component.activePills = [];
+    component.searchResultsCount = 7131;
+    component.searchCurrentPage = 72;
+    component.searchPageSize = 100;
+    component.searchResults = Array(31).fill(MOCK_INSTANCES[0]);
+    expect(component.searchStartIndex).toBe(7101);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// isArbitraryMultiState — exhaustive 4-state shortcut
+// ---------------------------------------------------------------------------
+describe('ProcessInstanceSearchComponent — isArbitraryMultiState: 4 states = offset path (exhaustive shortcut)', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+  let mockSearchGlobal: ReturnType<typeof vi.fn>;
+  let mockSearchPerStatePaged: ReturnType<typeof vi.fn>;
+
+  const ALL_4_STATES = { field: 'state', values: ['active', 'suspended', 'completed', 'terminated'] };
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    mockSearchGlobal = vi.fn().mockReturnValue(of([]));
+    mockSearchPerStatePaged = vi.fn().mockReturnValue(of({ items: [], nextCursor: null, hasMore: false }));
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: mockSearchGlobal,
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      searchPerStatePaged: mockSearchPerStatePaged,
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+    TestBed.resetTestingModule();
+  });
+
+  // ── isArbitraryMultiState getter ─────────────────────────────────────────
+
+  it('returns false for all 4 states (exhaustive = no filter needed)', () => {
+    component.activePills = [ALL_4_STATES];
+    expect(component.isArbitraryMultiState).toBe(false);
+  });
+
+  it('returns false when no state pill is present', () => {
+    component.activePills = [];
+    expect(component.isArbitraryMultiState).toBe(false);
+  });
+
+  it('returns false for single-state pills', () => {
+    component.activePills = [{ field: 'state', values: ['active'] }];
+    expect(component.isArbitraryMultiState).toBe(false);
+  });
+
+  it('returns false for active+suspended (native unfinished flag → offset path)', () => {
+    component.activePills = [{ field: 'state', values: ['active', 'suspended'] }];
+    expect(component.isArbitraryMultiState).toBe(false);
+  });
+
+  it('returns false for completed+terminated (native finished flag → offset path)', () => {
+    component.activePills = [{ field: 'state', values: ['completed', 'terminated'] }];
+    expect(component.isArbitraryMultiState).toBe(false);
+  });
+
+  it.each([
+    ['active', 'completed'],
+    ['active', 'terminated'],
+    ['suspended', 'completed'],
+    ['suspended', 'terminated'],
+    ['active', 'completed', 'suspended'],
+    ['active', 'completed', 'terminated'],
+    ['active', 'suspended', 'terminated'],
+    ['completed', 'suspended', 'terminated'],
+  ])('returns true for non-native non-exhaustive combo %j', (...states) => {
+    component.activePills = [{ field: 'state', values: states.flat() }];
+    expect(component.isArbitraryMultiState).toBe(true);
+  });
+
+  // ── Routing: 4 states → searchProcessInstancesGlobal, NOT searchPerStatePaged ──
+
+  it('4 states: executeSearch() calls searchProcessInstancesGlobal, never searchPerStatePaged', () => {
+    component.activePills = [ALL_4_STATES];
+    component.executeSearch();
+
+    expect(mockSearchGlobal).toHaveBeenCalled();
+    expect(mockSearchPerStatePaged).not.toHaveBeenCalled();
+  });
+
+  it('2 non-native states: executeSearch() calls searchPerStatePaged, not only searchProcessInstancesGlobal', () => {
+    component.activePills = [{ field: 'state', values: ['active', 'completed'] }];
+    component.executeSearch();
+
+    expect(mockSearchPerStatePaged).toHaveBeenCalled();
+  });
+
+  // ── searchEndIndex for 4-state uses offset formula ────────────────────────
+
+  it('4 states: searchEndIndex uses offset formula Math.min(page*size, total)', () => {
+    component.activePills = [ALL_4_STATES];
+    component.searchResultsCount = 7131;
+    component.searchCurrentPage = 72;
+    component.searchPageSize = 100;
+    // offset formula: Math.min(72 * 100, 7131) = 7131
+    expect(component.searchEndIndex).toBe(7131);
+  });
+
+  it('4 states: searchStartIndex uses offset formula (page-1)*size + 1', () => {
+    component.activePills = [ALL_4_STATES];
+    component.searchResultsCount = 7131;
+    component.searchCurrentPage = 72;
+    component.searchPageSize = 100;
+    expect(component.searchStartIndex).toBe(7101);
+  });
+
+  it('4 states last-page endIndex never exceeds total even if extra data arrives', () => {
+    component.activePills = [ALL_4_STATES];
+    component.searchResultsCount = 7131;
+    component.searchCurrentPage = 72;
+    component.searchPageSize = 100;
+    // Math.min(7200, 7131) = 7131 — no keyset offset involved
+    expect(component.searchEndIndex).toBeLessThanOrEqual(7131);
+  });
+});

@@ -1348,3 +1348,81 @@ describe('CockpitService — processDefinition filter (buildPayloadVariants)', (
     }
   });
 });
+
+// ─── Large-scale offset pagination ────────────────────────────────────────────
+// Without an explicit sort, the DB optimizer switches from sequential scan to
+// index scan above ~10k rows, returning rows in a different order. At offset
+// 15600 this caused only 19 items to appear instead of 82 on the last page of
+// 15682 total. The fix: buildPayloadVariants always adds sorting:[startTime DESC]
+// so queryProcessInstances forces ORDER BY; queryProcessInstancesCount strips it.
+
+describe('CockpitService — large-scale offset pagination stability (>10k rows)', () => {
+  const TOTAL = 15_682;
+  const PAGE_SIZE = 100;
+  const LAST_PAGE = Math.ceil(TOTAL / PAGE_SIZE);      // 157
+  const FIRST_RESULT = (LAST_PAGE - 1) * PAGE_SIZE;    // 15600
+  const EXPECTED_ON_LAST = TOTAL - FIRST_RESULT;       // 82
+
+  it('page count Math.ceil(15682 / 100) = 157', () => {
+    expect(Math.ceil(TOTAL / PAGE_SIZE)).toBe(157);
+  });
+
+  it('last page returns TOTAL % PAGE_SIZE items (82), not a truncated subset (19)', async () => {
+    const mockItems = Array.from({ length: EXPECTED_ON_LAST }, (_, i) =>
+      makeInstance(`inst-${FIRST_RESULT + i}`, `2024-01-01T00:00:00.000Z`)
+    );
+    const queryInstances = vi.fn().mockReturnValue(of(mockItems));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const results = await lastValueFrom(
+      svc.searchProcessInstancesGlobal(
+        [{ field: 'state', values: ['active', 'suspended', 'completed', 'terminated'] }],
+        false, false, FIRST_RESULT, PAGE_SIZE
+      )
+    );
+
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+    const [, firstResult, maxResults] = queryInstances.mock.calls[0];
+    expect(firstResult).toBe(FIRST_RESULT);    // 15600
+    expect(maxResults).toBe(PAGE_SIZE);         // 100
+    expect(results).toHaveLength(EXPECTED_ON_LAST); // 82 — not 19
+  });
+
+  it('every body contains sorting:[{startTime desc}] for stable large-offset pagination', async () => {
+    // Covers the boundary values around the threshold that triggered the bug
+    for (const firstResult of [0, 15_000, 15_500, FIRST_RESULT, FIRST_RESULT + 50]) {
+      const queryInstances = vi.fn().mockReturnValue(of([]));
+      const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+      await lastValueFrom(
+        svc.searchProcessInstancesGlobal(
+          [{ field: 'state', values: ['active', 'suspended', 'completed', 'terminated'] }],
+          false, false, firstResult, PAGE_SIZE
+        )
+      );
+
+      const [body] = queryInstances.mock.calls[0];
+      expect(body.sorting, `firstResult=${firstResult}`).toEqual([{ sortBy: 'startTime', sortOrder: 'desc' }]);
+    }
+  });
+
+  it('sorting is present in bodies for all filter combinations (single state, processDefinition, etc.)', async () => {
+    const cases: MultiValueFilter[][] = [
+      [{ field: 'state', values: ['active'] }],
+      [{ field: 'state', values: ['active', 'suspended', 'completed', 'terminated'] }],
+      [{ field: 'processDefinition', values: ['my-proc'] }],
+      [{ field: 'processDefinition', values: ['proc-a', 'proc-b'] }, { field: 'state', values: ['active'] }],
+    ];
+
+    for (const filters of cases) {
+      const queryInstances = vi.fn().mockReturnValue(of([]));
+      const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+      await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, FIRST_RESULT, PAGE_SIZE));
+
+      for (const call of queryInstances.mock.calls) {
+        expect(call[0].sorting).toEqual([{ sortBy: 'startTime', sortOrder: 'desc' }]);
+      }
+    }
+  });
+});
