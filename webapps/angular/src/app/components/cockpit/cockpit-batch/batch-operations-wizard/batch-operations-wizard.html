@@ -273,6 +273,175 @@
 
     </div>
     <!-- /operation-steps -->
+
+    <!-- ─── Delete-decision form ──────────────────────────────────────────── -->
+    <div *ngIf="selectedOperationId === 'delete-decision'" class="operation-steps">
+
+      <!-- ── Card 1: filter + reason ─────────────────────────────────────── -->
+      <div class="operation-card">
+
+        <!-- Mode toggle -->
+        <div class="mode-toggle" role="group">
+          <button type="button" class="mode-btn"
+                  [class.mode-btn--active]="mode === 'instances'"
+                  (click)="setMode('instances')">
+            {{ 'cockpit.batchOps.deleteDecision.modeInstances' | translate }}
+          </button>
+          <button type="button" class="mode-btn"
+                  [class.mode-btn--active]="mode === 'query'"
+                  (click)="setMode('query')">
+            {{ 'cockpit.batchOps.deleteDecision.modeQuery' | translate }}
+          </button>
+        </div>
+
+        <!-- Info note -->
+        <div class="info-note">
+          <fa-icon [icon]="faInfoCircle"></fa-icon>
+          <span>{{ 'cockpit.batchOps.deleteDecision.onlyHistoricNote' | translate }}</span>
+        </div>
+
+        <!-- Delete reason -->
+        <div class="delete-options">
+          <div class="delete-reason-field">
+            <label class="delete-reason-label">
+              {{ 'cockpit.batchOps.deleteDecision.deleteReasonLabel' | translate }}
+            </label>
+            <input type="text" class="delete-options__input"
+                   [(ngModel)]="deleteReason"
+                   [placeholder]="'cockpit.batchOps.deleteDecision.deleteReasonPlaceholder' | translate">
+          </div>
+        </div>
+
+        <!-- Filter panel (decision mode) — both modes -->
+        <app-instance-filter-panel
+          [criteriaSet]="'decision'"
+          (criteriaChange)="onDecisionFilterChange($event)">
+        </app-instance-filter-panel>
+
+      </div>
+      <!-- /card 1 -->
+
+      <!-- Pagination -->
+      <app-pagination
+        *ngIf="!decisionInstancesLoading && decisionInstances.length > 0"
+        [current]="decisionInstancesPage"
+        [size]="decisionInstancesPageSize"
+        [total]="decisionInstancesTotal"
+        [showSizeSelector]="true"
+        (pageChange)="onDecisionInstancesPageChange($event)">
+      </app-pagination>
+
+      <!-- ── Card 2: Decision instances table ─────────────────────────────── -->
+      <div class="operation-card">
+
+        <!-- Loading -->
+        <div *ngIf="decisionInstancesLoading" class="loading-state">
+          <fa-icon [icon]="faSpinner" [animation]="'spin'"></fa-icon>
+          <span>{{ 'common.loading' | translate }}</span>
+        </div>
+
+        <!-- Empty -->
+        <div *ngIf="!decisionInstancesLoading && decisionInstances.length === 0" class="empty-state">
+          {{ 'cockpit.batchOps.deleteDecision.noInstances' | translate }}
+        </div>
+
+        <ng-container *ngIf="!decisionInstancesLoading && decisionInstances.length > 0">
+
+          <!-- Select-all bar — instances mode only -->
+          <div *ngIf="mode === 'instances'" class="select-all-bar">
+            <label class="select-all-label">
+              <input type="checkbox"
+                     [checked]="isAllDecisionOnPageSelected"
+                     [indeterminate]="isDecisionIndeterminate"
+                     (change)="toggleSelectAllDecision()">
+              <span>{{ 'cockpit.batchOps.suspend.selectAllOnPage' | translate: { count: decisionInstances.length.toString() } }}</span>
+            </label>
+            <span class="selection-count"
+                  [class.selection-count--empty]="selectedDecisionIds.size === 0">
+              {{ 'cockpit.batchOps.selectedCount' | translate: { count: selectedDecisionIds.size.toString() } }}
+            </span>
+          </div>
+
+          <!-- Query preview note -->
+          <div *ngIf="mode === 'query'" class="query-preview-note">
+            <fa-icon [icon]="faInfoCircle"></fa-icon>
+            <span>{{ 'cockpit.batchOps.suspend.queryPreviewNote' | translate }}</span>
+          </div>
+
+          <div class="table-container">
+            <table class="instances-table">
+              <thead>
+                <tr>
+                  <th *ngIf="mode === 'instances'" class="col-check"></th>
+                  <th class="col-id">{{ 'cockpit.processes.columns.id' | translate }}</th>
+                  <th class="col-definition">{{ 'cockpit.batchOps.deleteDecision.colDecisionDef' | translate }}</th>
+                  <th class="col-starttime">{{ 'cockpit.batchOps.deleteDecision.colEvalTime' | translate }}</th>
+                  <th class="col-processinstance">{{ 'cockpit.batchOps.deleteDecision.colProcessInstance' | translate }}</th>
+                  <th class="col-actions">{{ 'cockpit.processes.columns.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let di of decisionInstances"
+                    [class.row--selected]="mode === 'instances' && isDecisionSelected(di.id)"
+                    [style.cursor]="mode === 'instances' ? 'pointer' : 'default'"
+                    (click)="onDecisionRowClick(di.id)">
+                  <td *ngIf="mode === 'instances'" class="col-check"
+                      (click)="$event.stopPropagation(); toggleDecisionInstance(di.id)">
+                    <input type="checkbox"
+                           [checked]="isDecisionSelected(di.id)"
+                           (change)="toggleDecisionInstance(di.id)"
+                           (click)="$event.stopPropagation()">
+                  </td>
+                  <td class="col-id" (click)="$event.stopPropagation()">
+                    <a [routerLink]="['/cockpit/decision-instance', di.id]"
+                       class="instance-link mono"
+                       [title]="di.id">{{ di.id }}</a>
+                  </td>
+                  <td class="col-definition">{{ di.decisionDefinitionName || di.decisionDefinitionKey }}</td>
+                  <td class="col-starttime cell-nowrap">{{ di.evaluationTime | camDate }}</td>
+                  <td class="col-processinstance">
+                    <a *ngIf="di.processInstanceId"
+                       [routerLink]="['/cockpit/processes/instance', di.processInstanceId]"
+                       class="instance-link mono"
+                       [title]="di.processInstanceId">{{ di.processInstanceId }}</a>
+                    <span *ngIf="!di.processInstanceId">—</span>
+                  </td>
+                  <td class="col-actions" (click)="$event.stopPropagation()">
+                    <a [routerLink]="['/cockpit/decision-instance', di.id]"
+                       class="action-btn"
+                       [title]="'cockpit.processes.viewDetails' | translate">
+                      <fa-icon [icon]="faEye"></fa-icon>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </ng-container>
+
+      </div>
+      <!-- /card 2 -->
+
+      <!-- Action buttons -->
+      <div class="step-footer">
+        <button *ngIf="mode === 'instances'"
+                type="button" class="btn-primary"
+                [disabled]="!canContinue"
+                (click)="continue()">
+          {{ (selectedOperation?.actionBtnKey ?? '') | translate: { count: selectedDecisionIds.size.toString() } }}
+        </button>
+        <button *ngIf="mode === 'query'"
+                type="button" class="btn-primary"
+                [disabled]="!canContinue"
+                (click)="continue()">
+          {{ (selectedOperation?.actionBtnQueryKey ?? '') | translate }}
+        </button>
+      </div>
+
+    </div>
+    <!-- /delete-decision form -->
+
   </div>
   <!-- /step 1 -->
 
@@ -292,6 +461,11 @@
       <div *ngIf="selectedOperationId === 'delete-finished'" class="danger-warning confirm-danger">
         <fa-icon [icon]="faExclamationTriangle"></fa-icon>
         <span>{{ 'cockpit.batchOps.deleteFinished.irreversibleWarning' | translate }}</span>
+      </div>
+
+      <div *ngIf="selectedOperationId === 'delete-decision'" class="danger-warning confirm-danger">
+        <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+        <span>{{ 'cockpit.batchOps.deleteDecision.irreversibleWarning' | translate }}</span>
       </div>
 
       <p class="confirm-summary">
