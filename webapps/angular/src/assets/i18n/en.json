@@ -323,6 +323,8 @@
   "cockpit.processes.globalSearch.valuePlaceholder": "Enter value...",
   "cockpit.processes.globalSearch.chipInputHint": "Press Enter or comma to add a value",
   "cockpit.processes.globalSearch.chipInputHintTip": "Tip: paste a comma-separated list to add several at once",
+  "cockpit.processes.globalSearch.chipEditErrorEmpty": "Value cannot be empty",
+  "cockpit.processes.globalSearch.chipEditErrorDuplicate": "This value is already in the list",
   "cockpit.processes.globalSearch.likeHint": "Like operator works best on text variables. It has no effect on number variables.",
   "cockpit.processes.globalSearch.comparisonValueError": "Must be a number for this operator",
   "cockpit.processes.globalSearch.conflictImpossible": "has no solution — no value can satisfy",
