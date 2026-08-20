@@ -444,7 +444,9 @@ export interface VariableLine {
 export type GlobalSearchField =
   | 'businessKey' | 'instanceId' | 'state' | 'withIncidents' | 'processDefinition'
   | 'startedAfter' | 'startedBefore' | 'finishedAfter' | 'finishedBefore'
-  | 'variable' | 'variables';
+  | 'variable' | 'variables'
+  | 'decisionDefinition' | 'evaluatedAfter' | 'evaluatedBefore'
+  | 'decisionInstanceId' | 'processInstanceId';
 
 export interface MultiValueFilter {
   field: GlobalSearchField;
@@ -1374,6 +1376,11 @@ export class CockpitService {
           body.variableValuesIgnoreCase = true;
         }
       }
+
+      // Explicit sort so offset pagination is stable at any scale. Without ORDER BY, the DB
+      // optimizer switches from sequential to index scan above ~10k rows, causing offset 15000+
+      // to land on different rows than expected. queryProcessInstancesCount strips this field.
+      body.sorting = [{ sortBy: 'startTime', sortOrder: 'desc' }];
 
       return body;
     });
