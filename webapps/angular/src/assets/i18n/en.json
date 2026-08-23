@@ -1644,7 +1644,7 @@
   "cockpit.batchOps.suspend.queryPreviewNote": "Preview. The table shows instances that would be affected. Selection checkboxes are disabled in Query mode.",
   "cockpit.batchOps.suspend.actionBtn": "Suspend {{count}} instances",
   "cockpit.batchOps.suspend.actionBtnQuery": "Suspend all matching instances",
-  "cockpit.batchOps.activate.label": "Activate process instances",
+  "cockpit.batchOps.activate.label": "Activate suspended process instances",
   "cockpit.batchOps.activate.desc": "Resume suspended process instances",
   "cockpit.batchOps.activate.onlySuspendedNote": "Only suspended instances can be activated",
   "cockpit.batchOps.activate.noInstances": "No suspended instances found",
