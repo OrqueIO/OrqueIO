@@ -198,3 +198,115 @@ describe('InstanceFilterPanelComponent — State criterion editor: all 4 states 
     expect(fixture.debugElement.queryAll(By.css('.state-row')).length).toBe(4);
   });
 });
+
+describe('InstanceFilterPanelComponent — auto-removal of empty multi-value criteria', () => {
+  let fixture: ComponentFixture<InstanceFilterPanelComponent>;
+  let component: InstanceFilterPanelComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [InstanceFilterPanelComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: CockpitService, useValue: cockpitService },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(InstanceFilterPanelComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: {} };
+
+    fixture.detectChanges();
+  });
+
+  const chipFields = ['businessKey', 'instanceId', 'decisionInstanceId', 'processInstanceId'] as const;
+
+  chipFields.forEach(field => {
+    it(`should remove the ${field} pill when all chips are cleared and confirmCriterion is called`, () => {
+      component.activePills = [{ field, values: ['val-1', 'val-2'] }];
+      component.editingPillIndex = 0;
+      component.activeEditorType = field;
+      component.pendingValues = [];
+
+      component.confirmCriterion();
+
+      expect(component.activePills.length).toBe(0);
+      expect(component.editingPillIndex).toBeNull();
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it(`should not remove the ${field} pill when chips remain (non-regression)`, () => {
+      component.activePills = [{ field, values: ['old'] }];
+      component.editingPillIndex = 0;
+      component.activeEditorType = field;
+      component.pendingValues = ['new-val'];
+
+      component.confirmCriterion();
+
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].values).toEqual(['new-val']);
+    });
+  });
+
+  it('should remove the state pill when all state values are cleared and confirmCriterion is called', () => {
+    component.activePills = [{ field: 'state', values: ['active'] }];
+    component.editingPillIndex = 0;
+    component.activeEditorType = 'state';
+    component.pendingStateValues = [];
+
+    component.confirmCriterion();
+
+    expect(component.activePills.length).toBe(0);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should not remove a non-editing pill when another pill shares the same type', () => {
+    component.activePills = [
+      { field: 'businessKey', values: ['BK-1'] },
+      { field: 'instanceId', values: ['inst-1'] },
+    ];
+    component.editingPillIndex = 0;
+    component.activeEditorType = 'businessKey';
+    component.pendingValues = [];
+
+    component.confirmCriterion();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('instanceId');
+  });
+
+  it('should emit criteriaChange after auto-removing an empty businessKey pill', () => {
+    const emitted: unknown[] = [];
+    component.criteriaChange.subscribe(e => emitted.push(e));
+
+    component.activePills = [{ field: 'businessKey', values: ['BK-001'] }];
+    component.editingPillIndex = 0;
+    component.activeEditorType = 'businessKey';
+    component.pendingValues = [];
+
+    component.confirmCriterion();
+
+    expect(emitted.length).toBe(1);
+  });
+
+  it('should not remove a chip-field pill when editingPillIndex is null (new criterion, not editing)', () => {
+    component.activePills = [{ field: 'businessKey', values: ['existing'] }];
+    component.editingPillIndex = null;
+    component.activeEditorType = 'businessKey';
+    component.pendingValues = [];
+
+    component.confirmCriterion();
+
+    expect(component.activePills.length).toBe(1);
+  });
+});
