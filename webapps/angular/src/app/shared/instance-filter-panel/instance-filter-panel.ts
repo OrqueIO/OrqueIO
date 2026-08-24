@@ -385,11 +385,33 @@ export class InstanceFilterPanelComponent implements OnInit {
       case 'instanceId':
       case 'decisionInstanceId':
       case 'processInstanceId':
-        if (this.pendingValues.length === 0) return;
+        if (this.pendingValues.length === 0) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.popoverFlipped = false;
+            this.cdr.markForCheck();
+            this.emit();
+          }
+          return;
+        }
         pill = { field: type, values: [...this.pendingValues] };
         break;
       case 'state':
-        if (this.pendingStateValues.length === 0) return;
+        if (this.pendingStateValues.length === 0) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.popoverFlipped = false;
+            this.cdr.markForCheck();
+            this.emit();
+          }
+          return;
+        }
         pill = { field: 'state', values: [...this.pendingStateValues] };
         break;
       case 'processDefinition':

@@ -1626,7 +1626,7 @@
   "cockpit.batchOps.suspend.queryPreviewNote": "Aperçu. Le tableau affiche les instances qui seraient affectées. Les cases à cocher sont désactivées en mode Requête.",
   "cockpit.batchOps.suspend.actionBtn": "Suspendre {{count}} instances",
   "cockpit.batchOps.suspend.actionBtnQuery": "Suspendre toutes les instances correspondantes",
-  "cockpit.batchOps.activate.label": "Activer des instances de processus",
+  "cockpit.batchOps.activate.label": "Activer les instances de processus suspendues",
   "cockpit.batchOps.activate.desc": "Reprendre les instances de processus suspendues",
   "cockpit.batchOps.activate.onlySuspendedNote": "Seules les instances suspendues peuvent être activées",
   "cockpit.batchOps.activate.noInstances": "Aucune instance suspendue trouvée",
