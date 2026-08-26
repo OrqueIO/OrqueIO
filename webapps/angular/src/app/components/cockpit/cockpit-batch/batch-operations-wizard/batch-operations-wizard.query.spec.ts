@@ -194,4 +194,245 @@ describe('BatchOperationsWizardComponent — lockedFilterState: State always hid
     expect(getLockedFilterState('delete-finished')).not.toBeNull();
   });
 
+  it('set-retries-jobs: lockedFilterState is non-null (unfinished) → State criterion hidden', () => {
+    expect(getLockedFilterState('set-retries-jobs')).not.toBeNull();
+    expect(getLockedFilterState('set-retries-jobs')).toBe('unfinished');
+  });
+
+});
+
+// ─── Helpers for canContinue and confirmPayloadJson ────────────────────────
+
+function getCanContinue(stub: Record<string, unknown>): boolean {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'canContinue');
+  return desc?.get?.call(stub) as boolean;
+}
+
+function getConfirmPayloadJson(stub: Record<string, unknown>): string {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmPayloadJson');
+  return desc?.get?.call(stub) as string;
+}
+
+function getConfirmEndpoint(stub: Record<string, unknown>): string {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmEndpoint');
+  return desc?.get?.call(stub) as string;
+}
+
+// ─── set-retries-jobs: buildHistoricQueryForBatch ──────────────────────────
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: buildHistoricQueryForBatch', () => {
+
+  it('uses unfinished base — includes active AND suspended, not limited to active only', () => {
+    const result = buildQuery('set-retries-jobs', []);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+    expect(result['finished']).toBeUndefined();
+  });
+
+  it('combines unfinished with processDefinitionKeyIn filter — active not set', () => {
+    const result = buildQuery('set-retries-jobs', [
+      { field: 'processDefinition', values: ['order-proc', 'invoice'] }
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc', 'invoice']);
+  });
+
+  it('combines active+unfinished with businessKey filter', () => {
+    const result = buildQuery('set-retries-jobs', [
+      { field: 'businessKey', values: ['ORD-99'] }
+    ]);
+    expect(result['processInstanceBusinessKeyLike']).toBe('%ORD-99%');
+  });
+
+});
+
+// ─── set-retries-jobs: canContinue ─────────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: canContinue validation', () => {
+
+  it('returns false when no instances are selected (instances mode)', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 3,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set<string>()
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('returns true when instances selected and retries is 0', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 0,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+  it('returns true when instances selected and retries > 0', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 3,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set(['inst-1', 'inst-2'])
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+  it('returns false when retries is negative', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: -1,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('returns false when setDueDate is true but retriesDueDate is empty', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 3,
+      setDueDate: true,
+      retriesDueDate: '',
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('returns true when setDueDate is true and retriesDueDate is filled', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 3,
+      setDueDate: true,
+      retriesDueDate: '2025-12-31',
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+  it('returns true in query mode regardless of selectedIds', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'query',
+      retries: 1,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set<string>()
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+});
+
+// ─── set-retries-jobs: confirmPayloadJson ──────────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: confirmPayloadJson', () => {
+
+  it('instances mode — body contains retries and jobQuery.processInstanceIds array', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 5,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set(['inst-a', 'inst-b']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['retries']).toBe(5);
+    expect(payload['jobQuery']['processInstanceIds']).toEqual(expect.arrayContaining(['inst-a', 'inst-b']));
+    expect(payload['processInstances']).toBeUndefined();
+    expect(payload['dueDate']).toBeUndefined();
+    expect(payload['historicProcessInstanceQuery']).toBeUndefined();
+  });
+
+  it('instances mode — dueDate included when setDueDate is true', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 3,
+      setDueDate: true,
+      retriesDueDate: '2025-06-15',
+      selectedIds: new Set(['inst-x']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['retries']).toBe(3);
+    expect(payload['dueDate']).toMatch(/^2025-06-15T00:00:00\.000[+-]\d{4}$/);
+  });
+
+  it('query mode — body contains retries and historicProcessInstanceQuery', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'query',
+      retries: 2,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set<string>(),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['retries']).toBe(2);
+    expect(payload['historicProcessInstanceQuery']).toBeDefined();
+    expect(payload['jobQuery']).toBeUndefined();
+  });
+
+  it('query mode — dueDate absent when setDueDate is false', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'query',
+      retries: 1,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set<string>(),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['dueDate']).toBeUndefined();
+  });
+
+});
+
+// ─── set-retries-jobs: confirmEndpoint ─────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: confirmEndpoint', () => {
+
+  it('instances mode → /job/retries', () => {
+    const stub = { selectedOperationId: 'set-retries-jobs', mode: 'instances' };
+    expect(getConfirmEndpoint(stub)).toContain('/job/retries');
+    expect(getConfirmEndpoint(stub)).not.toContain('process-instance/job-retries');
+    expect(getConfirmEndpoint(stub)).not.toContain('historic-query-based');
+  });
+
+  it('query mode → /process-instance/job-retries-historic-query-based', () => {
+    const stub = { selectedOperationId: 'set-retries-jobs', mode: 'query' };
+    expect(getConfirmEndpoint(stub)).toContain('/process-instance/job-retries-historic-query-based');
+  });
+
 });
