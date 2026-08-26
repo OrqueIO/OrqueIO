@@ -47,8 +47,7 @@
 
     </div>
 
-    <!-- ─── Operation form (shown when suspend, activate, delete-running, or delete-finished is selected) ─ -->
-    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished'" class="operation-steps">
+    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs'" class="operation-steps">
 
       <!-- ── Carte 1 : Définition de la requête ────────────────────── -->
       <div class="operation-card">
@@ -136,9 +135,40 @@
 
         </div>
 
+        <!-- Set-retries-jobs options: retries input + due date choice — above "Add criteria" -->
+        <div *ngIf="selectedOperationId === 'set-retries-jobs'" class="retries-options">
+
+          <!-- Retries number input -->
+          <div class="retries-field">
+            <label class="retries-label">{{ 'cockpit.batchOps.setRetriesJobs.retriesLabel' | translate }}</label>
+            <input type="number" class="retries-input" [(ngModel)]="retries" min="0" step="1"
+                   [placeholder]="'cockpit.batchOps.setRetriesJobs.retriesPlaceholder' | translate">
+            <span class="field-hint">{{ 'cockpit.batchOps.setRetriesJobs.retriesHint' | translate }}</span>
+          </div>
+
+          <!-- Due date — custom radio buttons -->
+          <div class="due-date-options">
+            <label class="due-date-option" (click)="setDueDate = false">
+              <span class="radio-circle" [class.radio-circle--selected]="!setDueDate">
+                <span class="radio-circle__dot" *ngIf="!setDueDate"></span>
+              </span>
+              <span class="due-date-option__label">{{ 'cockpit.batchOps.setRetriesJobs.keepDueDate' | translate }}</span>
+            </label>
+            <label class="due-date-option" (click)="setDueDate = true">
+              <span class="radio-circle" [class.radio-circle--selected]="setDueDate">
+                <span class="radio-circle__dot" *ngIf="setDueDate"></span>
+              </span>
+              <span class="due-date-option__label">{{ 'cockpit.batchOps.setRetriesJobs.setDueDate' | translate }}</span>
+            </label>
+            <input *ngIf="setDueDate" type="date" class="due-date-input" [(ngModel)]="retriesDueDate">
+          </div>
+
+        </div>
+
         <!-- Filter panel — both modes -->
         <app-instance-filter-panel
           [lockedState]="lockedFilterState"
+          [initialPills]="filterCriteria"
           (criteriaChange)="onFilterChange($event)">
         </app-instance-filter-panel>
 
@@ -315,6 +345,7 @@
         <!-- Filter panel (decision mode) — both modes -->
         <app-instance-filter-panel
           [criteriaSet]="'decision'"
+          [initialPills]="decisionFilterCriteria"
           (criteriaChange)="onDecisionFilterChange($event)">
         </app-instance-filter-panel>
 

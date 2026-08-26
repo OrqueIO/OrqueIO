@@ -49,10 +49,9 @@ interface VariableConflictInfo {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InstanceFilterPanelComponent implements OnInit {
-  /** When set, the 'state' criterion is hidden from the Add menu — state is locked externally. */
   @Input() lockedState: string | null = null;
-  /** Controls which set of criteria are available: 'process' (default) or 'decision'. */
   @Input() criteriaSet: 'process' | 'decision' = 'process';
+  @Input() initialPills: MultiValueFilter[] = [];
   @Output() criteriaChange = new EventEmitter<FilterPanelChange>();
 
   private cdr = inject(ChangeDetectorRef);
@@ -157,6 +156,9 @@ export class InstanceFilterPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.initialPills.length > 0) {
+      this.activePills = this.initialPills.map(p => ({ ...p, values: [...p.values] }));
+    }
     if (this.criteriaSet === 'decision') {
       this.decisionService.getDecisionDefinitions(1000)
         .pipe(takeUntilDestroyed(this.destroyRef))

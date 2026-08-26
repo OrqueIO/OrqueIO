@@ -481,6 +481,25 @@ export class ProcessInstanceService {
     );
   }
 
+  setJobRetriesAsync(payload: {
+    retries: number;
+    dueDate?: string;
+    processInstances?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    if (payload.historicProcessInstanceQuery) {
+      const body: Record<string, unknown> = { retries: payload.retries, historicProcessInstanceQuery: payload.historicProcessInstanceQuery };
+      if (payload.dueDate) body['dueDate'] = payload.dueDate;
+      return this.http.post<{ id: string }>(`${this.baseUrl}/process-instance/job-retries-historic-query-based`, body);
+    }
+    const body: Record<string, unknown> = { retries: payload.retries };
+    if (payload.dueDate) body['dueDate'] = payload.dueDate;
+    if (payload.processInstances?.length) {
+      body['jobQuery'] = { processInstanceIds: payload.processInstances };
+    }
+    return this.http.post<{ id: string }>(`${this.baseUrl}/job/retries`, body);
+  }
+
   /**
    * Resume (activate) a process instance
    */
