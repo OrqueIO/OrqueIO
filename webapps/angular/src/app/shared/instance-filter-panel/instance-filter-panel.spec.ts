@@ -310,3 +310,84 @@ describe('InstanceFilterPanelComponent — auto-removal of empty multi-value cri
     expect(component.activePills.length).toBe(1);
   });
 });
+
+describe('InstanceFilterPanelComponent — initialPills chip restoration', () => {
+  let fixture: ComponentFixture<InstanceFilterPanelComponent>;
+  let component: InstanceFilterPanelComponent;
+
+  async function createWithPills(pills: { field: string; values: string[] }[]) {
+    initTestEnvironment();
+
+    const cockpitService = {
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [InstanceFilterPanelComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: CockpitService, useValue: cockpitService },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(InstanceFilterPanelComponent);
+    component = fixture.componentInstance;
+    component.initialPills = pills as any;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: {} };
+
+    fixture.detectChanges();
+  }
+
+  it('restores a single State pill passed via initialPills', async () => {
+    await createWithPills([{ field: 'state', values: ['active', 'suspended'] }]);
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('state');
+    expect(component.activePills[0].values).toEqual(['active', 'suspended']);
+  });
+
+  it('restores a businessKey pill (multi-value text criterion) via initialPills', async () => {
+    await createWithPills([{ field: 'businessKey', values: ['BK-001', 'BK-002'] }]);
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('businessKey');
+    expect(component.activePills[0].values).toEqual(['BK-001', 'BK-002']);
+  });
+
+  it('restores a date criterion pill via initialPills', async () => {
+    await createWithPills([{ field: 'startedAfter', values: ['2024-01-01T00:00:00.000+0100'] }]);
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('startedAfter');
+    expect(component.activePills[0].values[0]).toContain('2024-01-01');
+  });
+
+  it('restores multiple criterion pills of different types simultaneously', async () => {
+    await createWithPills([
+      { field: 'state', values: ['active'] },
+      { field: 'businessKey', values: ['ORDER-1'] },
+      { field: 'startedAfter', values: ['2024-06-01T00:00:00.000+0200'] },
+    ]);
+
+    expect(component.activePills.length).toBe(3);
+    expect(component.activePills.map(p => p.field)).toEqual(['state', 'businessKey', 'startedAfter']);
+  });
+
+  it('starts with empty activePills when initialPills is empty (no session to restore)', async () => {
+    await createWithPills([]);
+
+    expect(component.activePills.length).toBe(0);
+  });
+
+  it('produces a defensive copy — mutating the original initialPills does not change activePills', async () => {
+    const original = [{ field: 'businessKey', values: ['BK-1'] }];
+    await createWithPills(original);
+
+    original[0].values.push('BK-INJECTED');
+
+    expect(component.activePills[0].values).toEqual(['BK-1']);
+  });
+});
