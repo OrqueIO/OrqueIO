@@ -1,0 +1,57 @@
+<div class="modal-backdrop" (click)="onOverlayClick($event)">
+  <div class="modal-dialog">
+
+    <div class="modal-header">
+      <h3 class="modal-title">{{ 'cockpit.batchOps.setVariables.modalTitle' | translate }}</h3>
+      <button type="button" class="close-btn" (click)="onClose()">&#x2715;</button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-hint">{{ 'cockpit.batchOps.setVariables.modalHint' | translate }}</p>
+
+      <div class="var-table-header">
+        <span class="col-name-label">{{ 'cockpit.batchOps.setVariables.colName' | translate }}</span>
+        <span class="col-type-label">{{ 'cockpit.batchOps.setVariables.colType' | translate }}</span>
+        <span class="col-value-label">{{ 'cockpit.batchOps.setVariables.colValue' | translate }}</span>
+        <span class="col-remove-label"></span>
+      </div>
+
+      <div class="var-rows">
+        <div *ngFor="let row of rows; let i = index; trackBy: trackByIndex" class="var-row">
+          <input type="text"
+                 class="var-input col-name-field"
+                 [(ngModel)]="rows[i].name"
+                 [placeholder]="'cockpit.batchOps.setVariables.varNamePlaceholder' | translate">
+          <select class="var-select col-type-field" [(ngModel)]="rows[i].type">
+            <option value="String">String</option>
+            <option value="Integer">Integer</option>
+            <option value="Long">Long</option>
+            <option value="Short">Short</option>
+            <option value="Double">Double</option>
+            <option value="Boolean">Boolean</option>
+            <option value="Date">Date</option>
+          </select>
+          <input type="text"
+                 class="var-input col-value-field"
+                 [(ngModel)]="rows[i].value"
+                 [placeholder]="'cockpit.batchOps.setVariables.varValuePlaceholder' | translate">
+          <button type="button" class="var-remove-btn col-remove-field" (click)="removeRow(i)">&#x2715;</button>
+        </div>
+      </div>
+
+      <button type="button" class="var-add-btn" (click)="addRow()">
+        {{ 'cockpit.batchOps.setVariables.addVariable' | translate }}
+      </button>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button type="button" class="btn btn-primary" [disabled]="!canApply" (click)="onApply()">
+        {{ 'cockpit.batchOps.setVariables.modalApplyBtn' | translate }}
+      </button>
+    </div>
+
+  </div>
+</div>
