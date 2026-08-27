@@ -47,7 +47,7 @@
 
     </div>
 
-    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs'" class="operation-steps">
+    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-variables'" class="operation-steps">
 
       <!-- ── Carte 1 : Définition de la requête ────────────────────── -->
       <div class="operation-card">
@@ -69,7 +69,7 @@
         </div>
 
         <!-- Info note — instances mode for suspend/activate; both modes for delete-running and delete-finished -->
-        <div *ngIf="mode === 'instances' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished'" class="info-note">
+        <div *ngIf="mode === 'instances' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-variables'" class="info-note">
           <fa-icon [icon]="faInfoCircle"></fa-icon>
           <span>{{ operationOnlyNoteKey | translate }}</span>
         </div>
@@ -161,6 +161,28 @@
               <span class="due-date-option__label">{{ 'cockpit.batchOps.setRetriesJobs.setDueDate' | translate }}</span>
             </label>
             <input *ngIf="setDueDate" type="date" class="due-date-input" [(ngModel)]="retriesDueDate">
+          </div>
+
+        </div>
+
+        <!-- Set-variables: add zone + chips -->
+        <div *ngIf="selectedOperationId === 'set-variables'" class="set-vars-section">
+
+          <button type="button" class="set-vars-btn" (click)="openVariablesModal()">
+            <fa-icon [icon]="faCirclePlus" class="set-vars-btn__icon"></fa-icon>
+            <span class="set-vars-btn__text">{{ 'cockpit.batchOps.setVariables.openModalBtn' | translate }}</span>
+          </button>
+
+          <div *ngIf="variableDefinitions.length > 0" class="var-chips">
+            <div *ngFor="let v of variableDefinitions; let i = index; trackBy: trackByIndex" class="var-chip">
+              <button type="button" class="var-chip__edit" (click)="openEditVariableModal(i)">
+                <span class="var-chip__name">{{ v.name }}</span>
+                <span class="var-chip__eq">=</span>
+                <span class="var-chip__value">{{ v.value }}</span>
+                <span class="var-chip__type">{{ v.type }}</span>
+              </button>
+              <button type="button" class="var-chip__remove" (click)="removeVariableDefinition(i)" title="Remove">&#x2715;</button>
+            </div>
           </div>
 
         </div>
@@ -585,6 +607,14 @@
     </div>
   </div>
   <!-- /step 3 -->
+
+  <!-- Variable definitions modal -->
+  <app-variable-definitions-modal
+    *ngIf="showVariablesModal"
+    [initialVariables]="modalInitialVariables"
+    (apply)="onVariablesApplied($event)"
+    (closeModal)="closeVariablesModal()">
+  </app-variable-definitions-modal>
 
 </div>
 <!-- /wizard-page -->
