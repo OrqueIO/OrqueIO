@@ -819,12 +819,10 @@ describe('BatchOperationsWizardComponent — set-variables: execute payload', ()
 
 function applyVars(
   existing: VariableDef[],
-  incoming: VariableDef[],
-  editingIndex: number | null = null
+  incoming: VariableDef[]
 ): VariableDef[] {
   const stub = {
     variableDefinitions: [...existing],
-    editingVariableIndex: editingIndex,
     showVariablesModal: true,
     saveToSessionStorage: () => {},
     cdr: { markForCheck: () => {} },
@@ -864,31 +862,41 @@ describe('BatchOperationsWizardComponent — set-variables: onVariablesApplied d
     expect(result).toHaveLength(2);
   });
 
-  it('edit mode — merges modal result into full list, variables not in modal are preserved', () => {
-    // Chip-edit modal only shows the clicked variable. Apply emits the edited variable.
-    // Other chips (label) must survive — they were never in the modal.
-    const result = applyVars(
-      [{ name: 'amount', type: 'Integer', value: '100' }, { name: 'label', type: 'String', value: 'ok' }],
-      [{ name: 'amount', type: 'Integer', value: '200' }],
-      0
-    );
-    expect(result).toHaveLength(2);
-    expect(result.find(v => v.name === 'amount')?.value).toBe('200');
-    expect(result.find(v => v.name === 'label')?.value).toBe('ok');
+  it('chip click — modal opens with all 3 existing variables, not just the clicked one', () => {
+    const existing = [
+      { name: 'montant', type: 'Integer', value: '100' },
+      { name: 'label', type: 'String', value: 'ok' },
+      { name: 'active', type: 'Boolean', value: false },
+    ];
+    const stub = { variableDefinitions: [...existing] };
+    const get = Object.getOwnPropertyDescriptor(
+      BatchOperationsWizardComponent.prototype, 'modalInitialVariables'
+    )!.get!;
+    const result: VariableDef[] = get.call(stub);
+    expect(result).toHaveLength(3);
+    expect(result.map((v: VariableDef) => v.name)).toEqual(['montant', 'label', 'active']);
   });
 
-  it('edit mode — user adds extra variables in the modal, all merged into the list', () => {
-    // Modal opened with [amount=100]. User changes it and also adds [newVar=x].
-    // label=hello is untouched — it stays.
+  it('rename a variable in the modal — total count unchanged, old name gone, new name present', () => {
+    // Modal receives all vars. User renames "montant" → "montantTotal", keeps label unchanged.
+    // Expect 2 vars total — no duplication, no ghost of the old name.
+    const result = applyVars(
+      [{ name: 'montant', type: 'Integer', value: '100' }, { name: 'label', type: 'String', value: 'ok' }],
+      [{ name: 'montantTotal', type: 'Integer', value: '100' }, { name: 'label', type: 'String', value: 'ok' }]
+    );
+    expect(result).toHaveLength(2);
+    expect(result.find(v => v.name === 'montantTotal')?.value).toBe('100');
+    expect(result.find(v => v.name === 'montant')).toBeUndefined();
+  });
+
+  it('modify type or value without renaming — non-regression', () => {
     const result = applyVars(
       [{ name: 'amount', type: 'Integer', value: '100' }, { name: 'label', type: 'String', value: 'hello' }],
-      [{ name: 'amount', type: 'Integer', value: '200' }, { name: 'newVar', type: 'String', value: 'x' }],
-      0
+      [{ name: 'amount', type: 'Integer', value: '999' }, { name: 'label', type: 'String', value: 'hello' }]
     );
-    expect(result).toHaveLength(3);
-    expect(result.find(v => v.name === 'amount')?.value).toBe('200');
+    expect(result).toHaveLength(2);
+    expect(result.find(v => v.name === 'amount')?.value).toBe('999');
     expect(result.find(v => v.name === 'label')?.value).toBe('hello');
-    expect(result.find(v => v.name === 'newVar')?.value).toBe('x');
   });
 
   it('three rows with two duplicate names → deduplicated to two unique chips', () => {

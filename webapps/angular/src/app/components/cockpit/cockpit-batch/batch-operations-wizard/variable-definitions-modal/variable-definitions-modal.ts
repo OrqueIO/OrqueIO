@@ -52,6 +52,10 @@ export class VariableDefinitionsModalComponent implements OnInit {
     return this.rows.some((r, i) => i !== index && r.name.trim() === trimmed) ? trimmed : null;
   }
 
+  getNameCautionWarning(name: string): boolean {
+    return name.length > 0 && !/^[a-zA-Z0-9_]*$/.test(name);
+  }
+
   getDefaultValue(type: string): any {
     return type === 'Boolean' ? false : '';
   }

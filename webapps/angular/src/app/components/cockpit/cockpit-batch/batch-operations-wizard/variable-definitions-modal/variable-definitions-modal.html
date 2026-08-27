@@ -29,6 +29,9 @@
             <span *ngIf="getNameDuplicateWarning(rows[i].name, i) as warnName" class="var-name-warn">
               <i class="ti ti-alert-triangle"></i>{{ 'cockpit.batchOps.setVariables.warnNameDuplicate' | translate: { name: warnName } }}
             </span>
+            <span *ngIf="getNameCautionWarning(rows[i].name)" class="var-name-caution">
+              <i class="ti ti-info-circle"></i>{{ 'cockpit.batchOps.setVariables.warnNameSpecialChars' | translate }}
+            </span>
           </div>
 
           <!-- Type: keyup.enter so the change event fires first and onTypeChange updates rows before onEnter reads them -->

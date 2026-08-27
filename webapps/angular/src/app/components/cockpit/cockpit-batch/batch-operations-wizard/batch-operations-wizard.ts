@@ -306,7 +306,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   showTechnicalDetails = false;
   showVariablesModal = false;
-  editingVariableIndex: number | null = null;
 
   executing = false;
   batchId: string | null = null;
@@ -811,47 +810,29 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   get modalInitialVariables(): VariableDef[] {
-    if (this.editingVariableIndex !== null) {
-      return [this.variableDefinitions[this.editingVariableIndex]];
-    }
     return this.variableDefinitions;
   }
 
   openVariablesModal(): void {
-    this.editingVariableIndex = null;
     this.showVariablesModal = true;
     this.cdr.markForCheck();
   }
 
   openEditVariableModal(index: number): void {
-    this.editingVariableIndex = index;
     this.showVariablesModal = true;
     this.cdr.markForCheck();
   }
 
   onVariablesApplied(vars: VariableDef[]): void {
-    if (this.editingVariableIndex !== null) {
-      // Chip-edit mode: modal only shows the one pre-filled variable (user may add more).
-      // Merge into the full list so variables absent from the modal are preserved.
-      // Case-sensitive: Camunda 7 variable names are case-sensitive map keys.
-      const merged = new Map<string, VariableDef>();
-      for (const v of this.variableDefinitions) { merged.set(v.name, v); }
-      for (const v of vars) { merged.set(v.name, v); }
-      this.variableDefinitions = [...merged.values()];
-      this.editingVariableIndex = null;
-    } else {
-      // Add mode: replace entire list with deduplication (last occurrence wins).
-      const seen = new Map<string, VariableDef>();
-      for (const v of vars) { seen.set(v.name, v); }
-      this.variableDefinitions = [...seen.values()];
-    }
+    const seen = new Map<string, VariableDef>();
+    for (const v of vars) { seen.set(v.name, v); }
+    this.variableDefinitions = [...seen.values()];
     this.showVariablesModal = false;
     this.saveToSessionStorage();
     this.cdr.markForCheck();
   }
 
   closeVariablesModal(): void {
-    this.editingVariableIndex = null;
     this.showVariablesModal = false;
     this.cdr.markForCheck();
   }

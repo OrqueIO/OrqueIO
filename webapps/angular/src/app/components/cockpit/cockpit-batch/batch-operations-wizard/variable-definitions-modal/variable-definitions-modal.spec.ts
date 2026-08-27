@@ -102,6 +102,30 @@ describe('VariableDefinitionsModalComponent', () => {
     });
   });
 
+  describe('getNameCautionWarning — informational hint for any character outside [a-zA-Z0-9_]', () => {
+    it('returns true for a name containing a dash', () => {
+      expect(make([]).getNameCautionWarning('my-var')).toBe(true);
+    });
+
+    it('returns true for names with spaces, quotes, or parentheses', () => {
+      expect(make([]).getNameCautionWarning('my var')).toBe(true);
+      expect(make([]).getNameCautionWarning('"quoted"')).toBe(true);
+      expect(make([]).getNameCautionWarning('foo(bar)')).toBe(true);
+    });
+
+    it('returns false for a name with only letters, digits, and underscores', () => {
+      expect(make([]).getNameCautionWarning('myVar_123')).toBe(false);
+      expect(make([]).getNameCautionWarning('camelCase')).toBe(false);
+      expect(make([]).getNameCautionWarning('_private')).toBe(false);
+    });
+
+    it('does not affect canApply — Apply stays enabled even when the caution is shown', () => {
+      const inst = make([row('my-var', 'String', 'hello')]);
+      expect(inst.getNameCautionWarning('my-var')).toBe(true);
+      expect(inst.canApply).toBe(true);
+    });
+  });
+
   describe('canApply', () => {
     it('is false when all rows have an empty name', () => {
       expect(make([row('', 'String', 'val')]).canApply).toBe(false);

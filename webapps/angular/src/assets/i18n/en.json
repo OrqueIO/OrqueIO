@@ -1740,6 +1740,7 @@
   "cockpit.batchOps.setVariables.noVarsHint": "No variables defined. Click \"Add variables\" to get started.",
   "cockpit.batchOps.setVariables.modalApplyBtn": "Apply",
   "cockpit.batchOps.setVariables.warnNameDuplicate": "This will replace the existing '{{name}}' variable",
+  "cockpit.batchOps.setVariables.warnNameSpecialChars": "This name might cause issues if used later in process expressions. Stick to letters, numbers, and underscore.",
   "cockpit.batchOps.setVariables.errorInvalidInteger": "Only whole numbers are allowed, no decimals or letters",
   "cockpit.batchOps.setVariables.errorInvalidDouble": "Must be a valid decimal number",
   "cockpit.batchOps.setVariables.errorInvalidDate": "Please select a date and time.",
