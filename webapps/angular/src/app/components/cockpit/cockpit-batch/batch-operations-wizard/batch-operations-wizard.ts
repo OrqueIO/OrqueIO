@@ -801,7 +801,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       } else if (v.type === 'Double') {
         parsed = parseFloat(v.value);
       } else if (v.type === 'Boolean') {
-        parsed = v.value === 'true';
+        parsed = v.value === true || v.value === 'true';
       }
       vars[v.name.trim()] = { value: parsed, type: v.type };
     }

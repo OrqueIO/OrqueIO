@@ -18,11 +18,15 @@
 
       <div class="var-rows">
         <div *ngFor="let row of rows; let i = index; trackBy: trackByIndex" class="var-row">
+
+          <!-- Name: free text, no format constraint (Camunda 7 has no strict naming rules) -->
           <input type="text"
-                 class="var-input col-name-field"
+                 class="var-input"
                  [(ngModel)]="rows[i].name"
                  [placeholder]="'cockpit.batchOps.setVariables.varNamePlaceholder' | translate">
-          <select class="var-select col-type-field" [(ngModel)]="rows[i].type">
+
+          <!-- Type -->
+          <select class="var-select" [(ngModel)]="rows[i].type">
             <option value="String">String</option>
             <option value="Integer">Integer</option>
             <option value="Long">Long</option>
@@ -31,11 +35,43 @@
             <option value="Boolean">Boolean</option>
             <option value="Date">Date</option>
           </select>
-          <input type="text"
-                 class="var-input col-value-field"
-                 [(ngModel)]="rows[i].value"
-                 [placeholder]="'cockpit.batchOps.setVariables.varValuePlaceholder' | translate">
-          <button type="button" class="var-remove-btn col-remove-field" (click)="removeRow(i)">&#x2715;</button>
+
+          <!-- Value column: wrapped so the inline error message fits below the input -->
+          <div class="var-value-wrap">
+
+            <!-- Integer / Long / Short: type="text" — never type="number" (silently converts "5e3"→5000). -->
+            <input *ngIf="isIntegerType(row.type)"
+                   type="text"
+                   inputmode="numeric"
+                   class="var-input"
+                   [value]="row.value"
+                   (keydown)="onIntegerKeydown($event, row.value)"
+                   (paste)="onIntegerPaste($event)"
+                   (input)="rows[i].value = $any($event.target).value"
+                   [class.input-error]="!isValueValid(row)"
+                   [placeholder]="'cockpit.batchOps.setVariables.varValuePlaceholder' | translate">
+
+            <!-- Double / Date / String: browser native handling, same as StartProcessModalComponent -->
+            <input *ngIf="!isIntegerType(row.type) && row.type !== 'Boolean'"
+                   [type]="getInputType(row.type)"
+                   class="var-input"
+                   [(ngModel)]="rows[i].value"
+                   [placeholder]="'cockpit.batchOps.setVariables.varValuePlaceholder' | translate">
+
+            <!-- Boolean: checkbox + live label, same as StartProcessModalComponent -->
+            <label class="var-checkbox-label" *ngIf="row.type === 'Boolean'">
+              <input type="checkbox" [(ngModel)]="rows[i].value">
+              {{ rows[i].value ? 'true' : 'false' }}
+            </label>
+
+            <!-- Inline error — *ngIf="... as errKey" narrows string|null → string for the translate pipe -->
+            <span *ngIf="getValueError(row) as errKey" class="var-field-error">
+              <i class="ti ti-alert-circle"></i>{{ errKey | translate }}
+            </span>
+
+          </div>
+
+          <button type="button" class="var-remove-btn" (click)="removeRow(i)">&#x2715;</button>
         </div>
       </div>
 
