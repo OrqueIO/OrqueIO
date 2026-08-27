@@ -71,11 +71,11 @@
 
           </div>
 
-          <button *ngIf="!isEditMode" type="button" class="var-remove-btn" (click)="removeRow(i)">&#x2715;</button>
+          <button type="button" class="var-remove-btn" (click)="removeRow(i)">&#x2715;</button>
         </div>
       </div>
 
-      <button *ngIf="!isEditMode" type="button" class="var-add-btn" (click)="addRow()">
+      <button type="button" class="var-add-btn" (click)="addRow()">
         {{ 'cockpit.batchOps.setVariables.addVariable' | translate }}
       </button>
     </div>
@@ -85,7 +85,7 @@
         {{ 'common.cancel' | translate }}
       </button>
       <button type="button" class="btn btn-primary" [disabled]="!canApply" (click)="onApply()">
-        {{ (isEditMode ? 'cockpit.batchOps.setVariables.modalUpdateBtn' : 'cockpit.batchOps.setVariables.modalApplyBtn') | translate }}
+        {{ 'cockpit.batchOps.setVariables.modalApplyBtn' | translate }}
       </button>
     </div>
 

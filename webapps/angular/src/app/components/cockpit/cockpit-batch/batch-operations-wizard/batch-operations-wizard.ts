@@ -830,12 +830,19 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   onVariablesApplied(vars: VariableDef[]): void {
     if (this.editingVariableIndex !== null) {
-      const updated = [...this.variableDefinitions];
-      updated[this.editingVariableIndex] = vars[0];
-      this.variableDefinitions = updated;
+      // Chip-edit mode: modal only shows the one pre-filled variable (user may add more).
+      // Merge into the full list so variables absent from the modal are preserved.
+      // Case-sensitive: Camunda 7 variable names are case-sensitive map keys.
+      const merged = new Map<string, VariableDef>();
+      for (const v of this.variableDefinitions) { merged.set(v.name, v); }
+      for (const v of vars) { merged.set(v.name, v); }
+      this.variableDefinitions = [...merged.values()];
       this.editingVariableIndex = null;
     } else {
-      this.variableDefinitions = vars;
+      // Add mode: replace entire list with deduplication (last occurrence wins).
+      const seen = new Map<string, VariableDef>();
+      for (const v of vars) { seen.set(v.name, v); }
+      this.variableDefinitions = [...seen.values()];
     }
     this.showVariablesModal = false;
     this.saveToSessionStorage();

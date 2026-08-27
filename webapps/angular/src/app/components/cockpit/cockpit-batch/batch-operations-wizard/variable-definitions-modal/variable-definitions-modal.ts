@@ -28,7 +28,6 @@ export class VariableDefinitionsModalComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   @Input() initialVariables: VariableDef[] = [];
-  @Input() isEditMode = false;
   @Output() apply = new EventEmitter<VariableDef[]>();
   @Output() closeModal = new EventEmitter<void>();
 

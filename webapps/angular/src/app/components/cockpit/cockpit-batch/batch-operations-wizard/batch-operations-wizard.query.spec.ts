@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { BatchOperationsWizardComponent } from './batch-operations-wizard';
 import { MultiValueFilter } from '../../../../services/cockpit.service';
+import { VariableDef } from './variable-definitions-modal/variable-definitions-modal';
 
 function getLockedFilterState(selectedOperationId: string): string | null {
   const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'lockedFilterState');
@@ -789,6 +790,98 @@ describe('BatchOperationsWizardComponent — set-variables: execute payload', ()
     // Camunda engine requires a JSON number for Integer, not the string "7"
     expect(typeof variable.value).toBe('number');
     expect(variable.value).toBe(7);
+  });
+
+});
+
+// ─── set-variables: onVariablesApplied deduplication ──────────────────────
+
+function applyVars(
+  existing: VariableDef[],
+  incoming: VariableDef[],
+  editingIndex: number | null = null
+): VariableDef[] {
+  const stub = {
+    variableDefinitions: [...existing],
+    editingVariableIndex: editingIndex,
+    showVariablesModal: true,
+    saveToSessionStorage: () => {},
+    cdr: { markForCheck: () => {} },
+  };
+  BatchOperationsWizardComponent.prototype.onVariablesApplied.call(stub, incoming);
+  return stub.variableDefinitions;
+}
+
+describe('BatchOperationsWizardComponent — set-variables: onVariablesApplied deduplication', () => {
+
+  it('same name appears twice in apply list → single chip with the new value (last wins)', () => {
+    // Scenario: existing [amount=100], user opens modal and adds a second row [amount=200].
+    // Apply emits both rows; only one chip should remain, with value 200.
+    const result = applyVars(
+      [{ name: 'amount', type: 'Integer', value: '100' }],
+      [{ name: 'amount', type: 'Integer', value: '100' }, { name: 'amount', type: 'Integer', value: '200' }]
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe('amount');
+    expect(result[0].value).toBe('200');
+  });
+
+  it('two different names → both chips coexist — no false positive deduplication', () => {
+    const result = applyVars(
+      [],
+      [{ name: 'amount', type: 'Integer', value: '100' }, { name: 'label', type: 'String', value: 'hello' }]
+    );
+    expect(result).toHaveLength(2);
+    expect(result.map(v => v.name)).toEqual(['amount', 'label']);
+  });
+
+  it('deduplication is case-sensitive — "amount" and "Amount" are distinct Camunda variables', () => {
+    const result = applyVars(
+      [],
+      [{ name: 'amount', type: 'Integer', value: '100' }, { name: 'Amount', type: 'Integer', value: '200' }]
+    );
+    expect(result).toHaveLength(2);
+  });
+
+  it('edit mode — merges modal result into full list, variables not in modal are preserved', () => {
+    // Chip-edit modal only shows the clicked variable. Apply emits the edited variable.
+    // Other chips (label) must survive — they were never in the modal.
+    const result = applyVars(
+      [{ name: 'amount', type: 'Integer', value: '100' }, { name: 'label', type: 'String', value: 'ok' }],
+      [{ name: 'amount', type: 'Integer', value: '200' }],
+      0
+    );
+    expect(result).toHaveLength(2);
+    expect(result.find(v => v.name === 'amount')?.value).toBe('200');
+    expect(result.find(v => v.name === 'label')?.value).toBe('ok');
+  });
+
+  it('edit mode — user adds extra variables in the modal, all merged into the list', () => {
+    // Modal opened with [amount=100]. User changes it and also adds [newVar=x].
+    // label=hello is untouched — it stays.
+    const result = applyVars(
+      [{ name: 'amount', type: 'Integer', value: '100' }, { name: 'label', type: 'String', value: 'hello' }],
+      [{ name: 'amount', type: 'Integer', value: '200' }, { name: 'newVar', type: 'String', value: 'x' }],
+      0
+    );
+    expect(result).toHaveLength(3);
+    expect(result.find(v => v.name === 'amount')?.value).toBe('200');
+    expect(result.find(v => v.name === 'label')?.value).toBe('hello');
+    expect(result.find(v => v.name === 'newVar')?.value).toBe('x');
+  });
+
+  it('three rows with two duplicate names → deduplicated to two unique chips', () => {
+    const result = applyVars(
+      [],
+      [
+        { name: 'x', type: 'String', value: 'first' },
+        { name: 'y', type: 'String', value: 'keep' },
+        { name: 'x', type: 'String', value: 'second' },
+      ]
+    );
+    expect(result).toHaveLength(2);
+    expect(result.find(v => v.name === 'x')?.value).toBe('second');
+    expect(result.find(v => v.name === 'y')?.value).toBe('keep');
   });
 
 });

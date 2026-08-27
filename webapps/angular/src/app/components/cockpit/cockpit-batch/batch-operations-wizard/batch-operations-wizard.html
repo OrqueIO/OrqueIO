@@ -612,7 +612,6 @@
   <app-variable-definitions-modal
     *ngIf="showVariablesModal"
     [initialVariables]="modalInitialVariables"
-    [isEditMode]="editingVariableIndex !== null"
     (apply)="onVariablesApplied($event)"
     (closeModal)="closeVariablesModal()">
   </app-variable-definitions-modal>

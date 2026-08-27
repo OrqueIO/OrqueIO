@@ -1,11 +1,10 @@
 import { VariableDefinitionsModalComponent, VariableDef } from './variable-definitions-modal';
 import { getVariableInputType } from '../../../../../utils/variable-type.util';
 
-function make(rows: VariableDef[], isEditMode = false): VariableDefinitionsModalComponent {
+function make(rows: VariableDef[]): VariableDefinitionsModalComponent {
   const inst = Object.create(VariableDefinitionsModalComponent.prototype) as VariableDefinitionsModalComponent;
   (inst as any).rows = rows;
   (inst as any).cdr = { markForCheck: () => {} };
-  (inst as any).isEditMode = isEditMode;
   return inst;
 }
 
@@ -457,37 +456,6 @@ describe('VariableDefinitionsModalComponent', () => {
       const before = inst.rows;
       inst.onTypeChange(0, 'Boolean');
       expect(inst.rows).not.toBe(before);
-    });
-  });
-
-  describe('isEditMode', () => {
-    it('defaults to false — add mode', () => {
-      const inst = make([row('x', 'String', 'hello')]);
-      expect(inst.isEditMode).toBe(false);
-    });
-
-    it('can be set to true — edit mode', () => {
-      const inst = make([row('x', 'Integer', '42')], true);
-      expect(inst.isEditMode).toBe(true);
-    });
-
-    it('canApply works identically in edit mode', () => {
-      const inst = make([row('x', 'Integer', '42')], true);
-      expect(inst.canApply).toBe(true);
-    });
-
-    it('canApply is false in edit mode when integer value is invalid', () => {
-      const inst = make([row('x', 'Integer', '5e3')], true);
-      expect(inst.canApply).toBe(false);
-    });
-
-    it('onApply emits the single row in edit mode', () => {
-      const inst = make([row('myVar', 'Long', '99')], true);
-      const emitted: VariableDef[][] = [];
-      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
-      inst.onApply();
-      expect(emitted[0]).toHaveLength(1);
-      expect(emitted[0][0]).toEqual({ name: 'myVar', type: 'Long', value: '99' });
     });
   });
 
