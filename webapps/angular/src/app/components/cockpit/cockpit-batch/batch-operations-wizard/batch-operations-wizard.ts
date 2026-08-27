@@ -33,25 +33,6 @@ import { BatchOperationListComponent, BatchOperationDef } from '../batch-operati
 import { environment } from '../../../../../environments/environment';
 import { VariableDefinitionsModalComponent, VariableDef } from './variable-definitions-modal/variable-definitions-modal';
 
-
-function formatDateForBatchApi(dateStr: string, endOfDay: boolean): string {
-  const withTime = `${dateStr}${endOfDay ? 'T23:59:59' : 'T00:00:00'}`;
-  const d = new Date(withTime);
-  if (isNaN(d.getTime())) return dateStr;
-  const offset = -d.getTimezoneOffset();
-  const sign = offset >= 0 ? '+' : '-';
-  const absOff = Math.abs(offset);
-  const hh = String(Math.floor(absOff / 60)).padStart(2, '0');
-  const mm = String(absOff % 60).padStart(2, '0');
-  const year = d.getFullYear();
-  const mon  = String(d.getMonth() + 1).padStart(2, '0');
-  const day  = String(d.getDate()).padStart(2, '0');
-  const hrs  = String(d.getHours()).padStart(2, '0');
-  const min  = String(d.getMinutes()).padStart(2, '0');
-  const sec  = String(d.getSeconds()).padStart(2, '0');
-  return `${year}-${mon}-${day}T${hrs}:${min}:${sec}.000${sign}${hh}${mm}`;
-}
-
 function formatDateTimeVariableForApi(value: string): string {
   if (!value) return value;
   const tIdx = value.indexOf('T');

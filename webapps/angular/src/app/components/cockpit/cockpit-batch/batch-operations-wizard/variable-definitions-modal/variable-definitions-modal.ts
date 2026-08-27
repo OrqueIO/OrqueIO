@@ -1,6 +1,7 @@
 import {
   Component, Input, Output, EventEmitter, OnInit,
-  ChangeDetectionStrategy, ChangeDetectorRef, inject, HostListener
+  ChangeDetectionStrategy, ChangeDetectorRef, inject, HostListener,
+  ViewChild, ElementRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -30,6 +31,8 @@ export class VariableDefinitionsModalComponent implements OnInit {
   @Input() initialVariables: VariableDef[] = [];
   @Output() apply = new EventEmitter<VariableDef[]>();
   @Output() closeModal = new EventEmitter<void>();
+
+  @ViewChild('dialogEl') dialogEl!: ElementRef<HTMLElement>;
 
   rows: VariableDef[] = [];
 
@@ -141,6 +144,22 @@ export class VariableDefinitionsModalComponent implements OnInit {
     if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
       this.closeModal.emit();
     }
+  }
+
+  // Enter in a field: blur only — does NOT apply. stopPropagation prevents onModalEnter from firing.
+  onFieldEnter(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+    (event.target as HTMLElement).blur();
+    this.dialogEl?.nativeElement?.focus();
+  }
+
+  // Enter on the dialog div itself (after all fields are blurred): apply if valid.
+  // event.target check ensures we ignore events bubbling from child elements.
+  onModalEnter(event: Event): void {
+    if ((event.target as HTMLElement) !== this.dialogEl?.nativeElement) return;
+    if (!this.canApply) return;
+    this.onApply();
   }
 
   @HostListener('document:keydown.escape')

@@ -1,5 +1,5 @@
 <div class="modal-backdrop" (click)="onOverlayClick($event)">
-  <div class="modal-dialog">
+  <div class="modal-dialog" #dialogEl tabindex="-1" (keydown.enter)="onModalEnter($event)">
 
     <div class="modal-header">
       <h3 class="modal-title">{{ 'cockpit.batchOps.setVariables.modalTitle' | translate }}</h3>
@@ -24,14 +24,15 @@
             <input type="text"
                    class="var-input"
                    [(ngModel)]="rows[i].name"
+                   (keydown.enter)="onFieldEnter($event)"
                    [placeholder]="'cockpit.batchOps.setVariables.varNamePlaceholder' | translate">
             <span *ngIf="getNameDuplicateWarning(rows[i].name, i) as warnName" class="var-name-warn">
               <i class="ti ti-alert-triangle"></i>{{ 'cockpit.batchOps.setVariables.warnNameDuplicate' | translate: { name: warnName } }}
             </span>
           </div>
 
-          <!-- Type -->
-          <select class="var-select" [ngModel]="rows[i].type" (ngModelChange)="onTypeChange(i, $event)">
+          <!-- Type: keyup.enter so the change event fires first and onTypeChange updates rows before onEnter reads them -->
+          <select class="var-select" [ngModel]="rows[i].type" (ngModelChange)="onTypeChange(i, $event)" (keyup.enter)="onFieldEnter($event)">
             <option value="String">String</option>
             <option value="Integer">Integer</option>
             <option value="Long">Long</option>
@@ -51,6 +52,7 @@
                    class="var-input"
                    [value]="row.value"
                    (keydown)="onIntegerKeydown($event, row.value)"
+                   (keydown.enter)="onFieldEnter($event)"
                    (paste)="onIntegerPaste($event)"
                    (input)="rows[i].value = $any($event.target).value"
                    [class.input-error]="!isValueValid(row)"
@@ -60,18 +62,20 @@
             <input *ngIf="row.type === 'Date'"
                    type="datetime-local"
                    class="var-input"
-                   [(ngModel)]="rows[i].value">
+                   [(ngModel)]="rows[i].value"
+                   (keydown.enter)="onFieldEnter($event)">
 
             <!-- Double / String: browser native handling -->
             <input *ngIf="!isIntegerType(row.type) && row.type !== 'Boolean' && row.type !== 'Date'"
                    [type]="getInputType(row.type)"
                    class="var-input"
                    [(ngModel)]="rows[i].value"
+                   (keydown.enter)="onFieldEnter($event)"
                    [placeholder]="'cockpit.batchOps.setVariables.varValuePlaceholder' | translate">
 
             <!-- Boolean: checkbox + live label, same as StartProcessModalComponent -->
             <label class="var-checkbox-label" *ngIf="row.type === 'Boolean'">
-              <input type="checkbox" [(ngModel)]="rows[i].value">
+              <input type="checkbox" [(ngModel)]="rows[i].value" (keydown.enter)="onFieldEnter($event)">
               {{ rows[i].value ? 'true' : 'false' }}
             </label>
 

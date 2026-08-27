@@ -520,4 +520,94 @@ describe('VariableDefinitionsModalComponent', () => {
     });
   });
 
+  describe('onFieldEnter — Enter in a field blurs without applying', () => {
+    function fakeFieldEvent() {
+      const state = { blurred: false, stopped: false, prevented: false };
+      const ev = {
+        target: { blur: () => { state.blurred = true; } },
+        stopPropagation: () => { state.stopped = true; },
+        preventDefault: () => { state.prevented = true; },
+      } as unknown as Event;
+      return { ev, state };
+    }
+
+    it('blurs the focused element', () => {
+      const inst = make([row('a', 'String', 'v')]);
+      const { ev, state } = fakeFieldEvent();
+      inst.onFieldEnter(ev);
+      expect(state.blurred).toBe(true);
+    });
+
+    it('stops propagation so onModalEnter does not fire', () => {
+      const inst = make([row('a', 'String', 'v')]);
+      const { ev, state } = fakeFieldEvent();
+      inst.onFieldEnter(ev);
+      expect(state.stopped).toBe(true);
+    });
+
+    it('prevents default to block native browser behaviors (checkbox toggle, form submit)', () => {
+      const inst = make([row('a', 'String', 'v')]);
+      const { ev, state } = fakeFieldEvent();
+      inst.onFieldEnter(ev);
+      expect(state.prevented).toBe(true);
+    });
+
+    it('does NOT emit apply — modal stays open after field blur', () => {
+      const inst = make([row('a', 'String', 'v')]);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      const { ev } = fakeFieldEvent();
+      inst.onFieldEnter(ev);
+      expect(emitted).toHaveLength(0);
+    });
+  });
+
+  describe('onModalEnter — Enter on the dialog div applies when valid', () => {
+    function makeWithApply(rows: VariableDef[]) {
+      const inst = make(rows);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      const dialogNative = {};
+      (inst as any).dialogEl = { nativeElement: dialogNative };
+      return { inst, emitted, dialogNative };
+    }
+
+    it('valid state + target is dialog → applies (same function as Apply button)', () => {
+      const { inst, emitted, dialogNative } = makeWithApply([row('myVar', 'String', 'hello')]);
+      inst.onModalEnter({ target: dialogNative } as unknown as KeyboardEvent);
+      expect(emitted).toHaveLength(1);
+      expect(emitted[0]).toEqual([row('myVar', 'String', 'hello')]);
+    });
+
+    it('empty name (canApply=false) + target is dialog → does nothing, modal stays open', () => {
+      const { inst, emitted, dialogNative } = makeWithApply([row('', 'String', '')]);
+      inst.onModalEnter({ target: dialogNative } as unknown as KeyboardEvent);
+      expect(emitted).toHaveLength(0);
+    });
+
+    it('event target is a field input (not the dialog) → ignored even if valid', () => {
+      const { inst, emitted } = makeWithApply([row('myVar', 'String', 'hello')]);
+      const fieldInput = { tagName: 'INPUT' };
+      inst.onModalEnter({ target: fieldInput } as unknown as KeyboardEvent);
+      expect(emitted).toHaveLength(0);
+    });
+
+    it('multiple rows with one unnamed → emits only named+valid rows', () => {
+      const { inst, emitted, dialogNative } = makeWithApply([
+        row('a', 'String', 'alpha'),
+        row('b', 'Integer', '42'),
+        row('', 'String', ''),
+      ]);
+      inst.onModalEnter({ target: dialogNative } as unknown as KeyboardEvent);
+      expect(emitted).toHaveLength(1);
+      expect(emitted[0]).toEqual([row('a', 'String', 'alpha'), row('b', 'Integer', '42')]);
+    });
+
+    it('invalid integer value (canApply=false) + target is dialog → does nothing', () => {
+      const { inst, emitted, dialogNative } = makeWithApply([row('myInt', 'Integer', 'abc')]);
+      inst.onModalEnter({ target: dialogNative } as unknown as KeyboardEvent);
+      expect(emitted).toHaveLength(0);
+    });
+  });
+
 });
