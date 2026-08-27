@@ -611,9 +611,30 @@ describe('BatchOperationsWizardComponent — set-variables: buildVariablesPayloa
     expect(result['myBool']).toEqual({ value: false, type: 'Boolean' });
   });
 
-  it('Date type — value stays as string', () => {
-    const result = buildVariablesPayload([{ name: 'myDate', type: 'Date', value: '2025-01-15T00:00:00.000+0100' }]);
-    expect(result['myDate']).toEqual({ value: '2025-01-15T00:00:00.000+0100', type: 'Date' });
+  it('Date type — date-only value (yyyy-MM-dd) converts to midnight local time', () => {
+    const result = buildVariablesPayload([{ name: 'myDate', type: 'Date', value: '2025-01-15' }]);
+    const dateValue = result['myDate'].value as string;
+    expect(dateValue).toMatch(/^2025-01-15T00:00:00\.000[+-]\d{4}$/);
+    expect(result['myDate'].type).toBe('Date');
+  });
+
+  it('Date type — datetime-local value (yyyy-MM-ddTHH:mm) preserves the specified time', () => {
+    const result = buildVariablesPayload([{ name: 'myDate', type: 'Date', value: '2025-01-15T14:30' }]);
+    const dateValue = result['myDate'].value as string;
+    expect(dateValue).toMatch(/^2025-01-15T14:30:00\.000[+-]\d{4}$/);
+    expect(result['myDate'].type).toBe('Date');
+  });
+
+  it('Date type — datetime-local at midnight (yyyy-MM-ddT00:00) produces midnight output', () => {
+    const result = buildVariablesPayload([{ name: 'myDate', type: 'Date', value: '2025-01-15T00:00' }]);
+    const dateValue = result['myDate'].value as string;
+    expect(dateValue).toMatch(/^2025-01-15T00:00:00\.000[+-]\d{4}$/);
+    expect(result['myDate'].type).toBe('Date');
+  });
+
+  it('Date type — empty value (no date picked yet) is passed as-is without conversion', () => {
+    const result = buildVariablesPayload([{ name: 'myDate', type: 'Date', value: '' }]);
+    expect(result['myDate']).toEqual({ value: '', type: 'Date' });
   });
 
   it('skips entries with empty name', () => {

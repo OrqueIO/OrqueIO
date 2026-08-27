@@ -1739,6 +1739,7 @@
   "cockpit.batchOps.setVariables.editVariablesBtn": "Edit variables...",
   "cockpit.batchOps.setVariables.noVarsHint": "No variables defined. Click \"Add variables\" to get started.",
   "cockpit.batchOps.setVariables.modalApplyBtn": "Apply",
+  "cockpit.batchOps.setVariables.warnNameDuplicate": "This will replace the existing '{{name}}' variable",
   "cockpit.batchOps.setVariables.modalUpdateBtn": "Update",
   "cockpit.batchOps.setVariables.errorInvalidInteger": "Only whole numbers are allowed, no decimals or letters",
   "cockpit.batchOps.setVariables.errorInvalidDouble": "Must be a valid decimal number",

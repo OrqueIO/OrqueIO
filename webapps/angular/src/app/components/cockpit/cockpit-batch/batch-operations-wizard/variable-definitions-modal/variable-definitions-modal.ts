@@ -43,6 +43,12 @@ export class VariableDefinitionsModalComponent implements OnInit {
     return INTEGER_TYPES.includes(type);
   }
 
+  getNameDuplicateWarning(name: string, index: number): string | null {
+    const trimmed = name.trim();
+    if (!trimmed) return null;
+    return this.rows.some((r, i) => i !== index && r.name.trim() === trimmed) ? trimmed : null;
+  }
+
   getDefaultValue(type: string): any {
     return type === 'Boolean' ? false : '';
   }

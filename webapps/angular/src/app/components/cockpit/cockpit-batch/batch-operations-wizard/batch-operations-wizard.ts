@@ -52,6 +52,24 @@ function formatDateForBatchApi(dateStr: string, endOfDay: boolean): string {
   return `${year}-${mon}-${day}T${hrs}:${min}:${sec}.000${sign}${hh}${mm}`;
 }
 
+function formatDateTimeVariableForApi(value: string): string {
+  if (!value) return value;
+  const tIdx = value.indexOf('T');
+  const datePart = tIdx >= 0 ? value.slice(0, tIdx) : value;
+  const timePart = tIdx >= 0 ? value.slice(tIdx + 1) : '00:00';
+  const [year, month, day] = datePart.split('-').map(Number);
+  const [hours = 0, minutes = 0] = timePart.split(':').map(Number);
+  const d = new Date(year, month - 1, day, hours, minutes, 0, 0);
+  if (isNaN(d.getTime())) return value;
+  const offset = -d.getTimezoneOffset();
+  const sign = offset >= 0 ? '+' : '-';
+  const absOff = Math.abs(offset);
+  const hh = String(Math.floor(absOff / 60)).padStart(2, '0');
+  const mm = String(absOff % 60).padStart(2, '0');
+  const p = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:00.000${sign}${hh}${mm}`;
+}
+
 function formatDueDateForApi(dateStr: string): string {
   const [year, month, day] = dateStr.split('-').map(Number);
   const d = new Date(year, month - 1, day, 0, 0, 0, 0);
@@ -803,6 +821,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         parsed = parseFloat(v.value);
       } else if (v.type === 'Boolean') {
         parsed = v.value === true || v.value === 'true';
+      } else if (v.type === 'Date' && v.value) {
+        parsed = formatDateTimeVariableForApi(String(v.value));
       }
       vars[v.name.trim()] = { value: parsed, type: v.type };
     }

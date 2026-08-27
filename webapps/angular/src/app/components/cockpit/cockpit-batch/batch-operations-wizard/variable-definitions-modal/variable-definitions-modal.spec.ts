@@ -383,6 +383,50 @@ describe('VariableDefinitionsModalComponent', () => {
     });
   });
 
+  describe('getNameDuplicateWarning', () => {
+    it('returns null when name is unique across all rows', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('label', 'String', 'hello')]);
+      expect(inst.getNameDuplicateWarning('amount', 0)).toBeNull();
+      expect(inst.getNameDuplicateWarning('label', 1)).toBeNull();
+    });
+
+    it('returns the name when another row has the same name', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('amount', 'Integer', '200')]);
+      expect(inst.getNameDuplicateWarning('amount', 1)).toBe('amount');
+    });
+
+    it('does not flag a row against itself', () => {
+      const inst = make([row('amount', 'Integer', '100')]);
+      expect(inst.getNameDuplicateWarning('amount', 0)).toBeNull();
+    });
+
+    it('returns null for empty name', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('', 'String', '')]);
+      expect(inst.getNameDuplicateWarning('', 1)).toBeNull();
+    });
+
+    it('returns null for whitespace-only name', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('  ', 'String', '')]);
+      expect(inst.getNameDuplicateWarning('  ', 1)).toBeNull();
+    });
+
+    it('is case-sensitive — "amount" and "Amount" are distinct, no warning', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('Amount', 'Integer', '200')]);
+      expect(inst.getNameDuplicateWarning('Amount', 1)).toBeNull();
+    });
+
+    it('trims whitespace when comparing — "amount " matches "amount"', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('amount ', 'Integer', '200')]);
+      expect(inst.getNameDuplicateWarning('amount ', 1)).toBe('amount');
+    });
+
+    it('warning does not block apply — canApply is true even when duplicate name exists', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('amount', 'Integer', '200')]);
+      expect(inst.getNameDuplicateWarning('amount', 1)).not.toBeNull();
+      expect(inst.canApply).toBe(true);
+    });
+  });
+
   describe('getDefaultValue', () => {
     it('returns false for Boolean', () => {
       expect(make([]).getDefaultValue('Boolean')).toBe(false);
