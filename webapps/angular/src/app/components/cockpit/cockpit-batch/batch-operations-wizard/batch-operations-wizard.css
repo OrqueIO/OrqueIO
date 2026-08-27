@@ -857,6 +857,131 @@ app-pagination {
   white-space: nowrap;
 }
 
+/* ── Set-variables: button + chips ──────────────────────────────────────────── */
+.set-vars-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.set-vars-btn {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border: 1.5px dashed var(--border-strong, var(--border-color-dark));
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.set-vars-btn:hover {
+  background: var(--color-gray-50);
+  border-color: var(--color-primary);
+}
+
+.set-vars-btn__icon {
+  color: var(--text-accent, var(--color-primary));
+  font-size: 16px;
+}
+
+.set-vars-btn__text {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.var-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.var-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: var(--surface-1, var(--bg-card));
+  border: 0.5px solid var(--border-strong, var(--border-color-dark));
+  border-radius: 8px;
+}
+
+.var-chip__name {
+  font-weight: 500;
+  font-size: 12.5px;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.var-chip__eq {
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+
+.var-chip__value {
+  color: var(--text-accent, var(--color-primary));
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.var-chip__type {
+  background: var(--surface-2, var(--color-gray-100));
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 10.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.var-chip__edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  flex: 1;
+  min-width: 0;
+}
+
+.var-chip__edit:hover .var-chip__name,
+.var-chip__edit:hover .var-chip__value {
+  text-decoration: underline;
+}
+
+.var-chip__remove {
+  margin-left: 2px;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.var-chip__remove:hover {
+  color: var(--color-danger, #ef4444);
+  background: rgba(239, 68, 68, 0.08);
+}
+
 /* ── Responsive adjustments ─────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   /* Reduce page padding on narrow screens */

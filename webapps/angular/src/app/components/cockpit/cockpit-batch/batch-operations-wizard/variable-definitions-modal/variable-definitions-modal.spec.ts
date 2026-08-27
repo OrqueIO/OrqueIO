@@ -1,0 +1,637 @@
+import { VariableDefinitionsModalComponent, VariableDef } from './variable-definitions-modal';
+import { getVariableInputType } from '../../../../../utils/variable-type.util';
+
+function make(rows: VariableDef[]): VariableDefinitionsModalComponent {
+  const inst = Object.create(VariableDefinitionsModalComponent.prototype) as VariableDefinitionsModalComponent;
+  (inst as any).rows = rows;
+  (inst as any).cdr = { markForCheck: () => {} };
+  return inst;
+}
+
+function row(name: string, type: string, value: any): VariableDef {
+  return { name, type, value };
+}
+
+describe('getVariableInputType (shared util)', () => {
+  it('maps Integer, Long, Short to "number"', () => {
+    expect(getVariableInputType('Integer')).toBe('number');
+    expect(getVariableInputType('Long')).toBe('number');
+    expect(getVariableInputType('Short')).toBe('number');
+  });
+
+  it('maps Double to "number"', () => {
+    expect(getVariableInputType('Double')).toBe('number');
+  });
+
+  it('maps Boolean to "checkbox"', () => {
+    expect(getVariableInputType('Boolean')).toBe('checkbox');
+  });
+
+  it('maps Date to "date"', () => {
+    expect(getVariableInputType('Date')).toBe('date');
+  });
+
+  it('maps String and unknown types to "text"', () => {
+    expect(getVariableInputType('String')).toBe('text');
+    expect(getVariableInputType('Unknown')).toBe('text');
+  });
+
+  it('is case-insensitive', () => {
+    expect(getVariableInputType('integer')).toBe('number');
+    expect(getVariableInputType('BOOLEAN')).toBe('checkbox');
+  });
+});
+
+describe('VariableDefinitionsModalComponent', () => {
+
+  describe('getInputType', () => {
+    it('returns "checkbox" for Boolean — triggers checkbox in template, not a text/select field', () => {
+      expect(make([]).getInputType('Boolean')).toBe('checkbox');
+    });
+
+    it('returns "number" for Integer, Long, Short, Double', () => {
+      const inst = make([]);
+      expect(inst.getInputType('Integer')).toBe('number');
+      expect(inst.getInputType('Long')).toBe('number');
+      expect(inst.getInputType('Short')).toBe('number');
+      expect(inst.getInputType('Double')).toBe('number');
+    });
+
+    it('returns "date" for Date', () => {
+      expect(make([]).getInputType('Date')).toBe('date');
+    });
+
+    it('returns "text" for String', () => {
+      expect(make([]).getInputType('String')).toBe('text');
+    });
+  });
+
+  describe('Boolean type — checkbox (same as StartProcessModalComponent)', () => {
+    it('getInputType returns "checkbox" — template renders checkbox + label, not a text input', () => {
+      expect(make([]).getInputType('Boolean')).toBe('checkbox');
+    });
+
+    it('checkbox value is a real boolean when toggled via [(ngModel)] — no string coercion needed', () => {
+      const inst = make([row('active', 'Boolean', true)]);
+      expect(inst.rows[0].value).toBe(true);
+      expect(inst.rows[0].value ? 'true' : 'false').toBe('true');
+    });
+
+    it('unchecked state: value is false, label reads "false"', () => {
+      const inst = make([row('active', 'Boolean', false)]);
+      expect(inst.rows[0].value ? 'true' : 'false').toBe('false');
+    });
+
+    it('initial rows start with value "" — checkbox shows unchecked (falsy)', () => {
+      const inst = make([row('active', 'Boolean', '')]);
+      expect(!!inst.rows[0].value).toBe(false);
+    });
+  });
+
+  describe('variable name format', () => {
+    it('does not block names with hyphens', () => {
+      expect(make([row('my-var', 'String', 'val')]).canApply).toBe(true);
+    });
+
+    it('does not block names with spaces', () => {
+      expect(make([row('my var', 'String', 'val')]).canApply).toBe(true);
+    });
+
+    it('does not block names with mixed special characters', () => {
+      expect(make([row('var.name_1-x', 'String', '')]).canApply).toBe(true);
+    });
+  });
+
+  describe('getNameCautionWarning — informational hint for any character outside [a-zA-Z0-9_]', () => {
+    it('returns true for a name containing a dash', () => {
+      expect(make([]).getNameCautionWarning('my-var')).toBe(true);
+    });
+
+    it('returns true for names with spaces, quotes, or parentheses', () => {
+      expect(make([]).getNameCautionWarning('my var')).toBe(true);
+      expect(make([]).getNameCautionWarning('"quoted"')).toBe(true);
+      expect(make([]).getNameCautionWarning('foo(bar)')).toBe(true);
+    });
+
+    it('returns false for a name with only letters, digits, and underscores', () => {
+      expect(make([]).getNameCautionWarning('myVar_123')).toBe(false);
+      expect(make([]).getNameCautionWarning('camelCase')).toBe(false);
+      expect(make([]).getNameCautionWarning('_private')).toBe(false);
+    });
+
+    it('does not affect canApply — Apply stays enabled even when the caution is shown', () => {
+      const inst = make([row('my-var', 'String', 'hello')]);
+      expect(inst.getNameCautionWarning('my-var')).toBe(true);
+      expect(inst.canApply).toBe(true);
+    });
+  });
+
+  describe('canApply', () => {
+    it('is false when all rows have an empty name', () => {
+      expect(make([row('', 'String', 'val')]).canApply).toBe(false);
+    });
+
+    it('is true when at least one row has a non-empty name', () => {
+      expect(make([row('x', 'String', '')]).canApply).toBe(true);
+    });
+
+    it('is false when a named Integer row has an invalid value', () => {
+      expect(make([row('x', 'Integer', 'not-a-number')]).canApply).toBe(false);
+      expect(make([row('x', 'Integer', '5e3')]).canApply).toBe(false);
+    });
+
+    it('is true for Double/Date/String regardless of value — browser native handling only', () => {
+      expect(make([row('x', 'Double', '')]).canApply).toBe(true);
+      expect(make([row('x', 'Date', '')]).canApply).toBe(true);
+      expect(make([row('x', 'String', '')]).canApply).toBe(true);
+    });
+
+    it('is true with a mix of named and unnamed rows', () => {
+      expect(make([
+        row('x', 'String', 'ok'),
+        row('', 'Integer', ''),
+      ]).canApply).toBe(true);
+    });
+  });
+
+  describe('integer type validation', () => {
+    describe('scientific notation rejection', () => {
+      it('rejects "5e3" for Integer — scientific notation is not a valid integer input', () => {
+        const inst = make([row('x', 'Integer', '5e3')]);
+        expect(inst.isValueValid(inst.rows[0])).toBe(false);
+        expect(inst.getValueError(inst.rows[0])).toBe('cockpit.batchOps.setVariables.errorInvalidInteger');
+      });
+
+      it('rejects "5e3" for Long', () => {
+        const inst = make([row('x', 'Long', '5e3')]);
+        expect(inst.isValueValid(inst.rows[0])).toBe(false);
+        expect(inst.getValueError(inst.rows[0])).toBe('cockpit.batchOps.setVariables.errorInvalidInteger');
+      });
+
+      it('rejects "5e3" for Short', () => {
+        const inst = make([row('x', 'Short', '5e3')]);
+        expect(inst.isValueValid(inst.rows[0])).toBe(false);
+        expect(inst.getValueError(inst.rows[0])).toBe('cockpit.batchOps.setVariables.errorInvalidInteger');
+      });
+    });
+
+    describe('valid negative integers', () => {
+      it('accepts "-5" for Integer — leading minus is correct', () => {
+        expect(make([]).isValueValid(row('x', 'Integer', '-5'))).toBe(true);
+      });
+
+      it('accepts "-5" for Long', () => {
+        expect(make([]).isValueValid(row('x', 'Long', '-5'))).toBe(true);
+      });
+
+      it('accepts "-5" for Short', () => {
+        expect(make([]).isValueValid(row('x', 'Short', '-5'))).toBe(true);
+      });
+    });
+
+    describe('invalid minus placement', () => {
+      it('rejects "5-3" — minus not in first position', () => {
+        const inst = make([row('x', 'Integer', '5-3')]);
+        expect(inst.isValueValid(inst.rows[0])).toBe(false);
+        expect(inst.getValueError(inst.rows[0])).toBe('cockpit.batchOps.setVariables.errorInvalidInteger');
+      });
+
+      it('rejects "5-" — trailing minus', () => {
+        expect(make([]).isValueValid(row('x', 'Integer', '5-'))).toBe(false);
+      });
+
+      it('rejects "--5" — double minus', () => {
+        expect(make([]).isValueValid(row('x', 'Integer', '--5'))).toBe(false);
+      });
+    });
+
+    describe('other invalid inputs', () => {
+      it('rejects empty string', () => {
+        expect(make([]).isValueValid(row('x', 'Integer', ''))).toBe(false);
+      });
+
+      it('rejects decimal "3.14"', () => {
+        expect(make([]).isValueValid(row('x', 'Integer', '3.14'))).toBe(false);
+      });
+
+      it('rejects plain text "abc"', () => {
+        expect(make([]).isValueValid(row('x', 'Integer', 'abc'))).toBe(false);
+      });
+    });
+
+    describe('valid positive integers', () => {
+      it('accepts "42"', () => {
+        expect(make([]).isValueValid(row('x', 'Integer', '42'))).toBe(true);
+      });
+
+      it('accepts "0"', () => {
+        expect(make([]).isValueValid(row('x', 'Integer', '0'))).toBe(true);
+      });
+
+      it('accepts large value "9999999999" for Long', () => {
+        expect(make([]).isValueValid(row('x', 'Long', '9999999999'))).toBe(true);
+      });
+    });
+
+    describe('non-regression: StartProcessModalComponent unaffected', () => {
+      it('getVariableInputType("Integer") still returns "number" — StartProcessModal uses this unchanged', () => {
+        const inst = make([]);
+        expect(inst.getInputType('Integer')).toBe('number');
+        expect(inst.isIntegerType('Integer')).toBe(true);
+      });
+    });
+
+    describe('getValueError for unnamed rows', () => {
+      it('returns null for an unnamed integer row even if value is invalid', () => {
+        expect(make([]).getValueError(row('', 'Integer', '5e3'))).toBeNull();
+      });
+    });
+  });
+
+  describe('onIntegerKeydown', () => {
+    function fakeKey(key: string, selectionStart = 0): KeyboardEvent & { defaultPrevented: boolean } {
+      let prevented = false;
+      return {
+        key,
+        target: { selectionStart },
+        preventDefault: () => { prevented = true; },
+        get defaultPrevented() { return prevented; },
+      } as any;
+    }
+
+    describe('allows digits 0–9', () => {
+      it.each(['0', '1', '5', '9'])('allows "%s"', (key) => {
+        const inst = make([]);
+        const evt = fakeKey(key);
+        inst.onIntegerKeydown(evt as any, '');
+        expect(evt.defaultPrevented).toBe(false);
+      });
+    });
+
+    describe('allows explicit control keys', () => {
+      it.each(['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Home', 'End'])(
+        'allows "%s"', (key) => {
+          const inst = make([]);
+          const evt = fakeKey(key);
+          inst.onIntegerKeydown(evt as any, '');
+          expect(evt.defaultPrevented).toBe(false);
+        });
+    });
+
+    describe('allows leading minus', () => {
+      it('allows "-" at position 0 in empty field', () => {
+        const inst = make([]);
+        const evt = fakeKey('-', 0);
+        inst.onIntegerKeydown(evt as any, '');
+        expect(evt.defaultPrevented).toBe(false);
+      });
+
+      it('allows "-" at position 0 when currentValue has no "-"', () => {
+        const inst = make([]);
+        const evt = fakeKey('-', 0);
+        inst.onIntegerKeydown(evt as any, '123');
+        expect(evt.defaultPrevented).toBe(false);
+      });
+    });
+
+    describe('blocks minus in invalid positions or when "-" already present', () => {
+      it('blocks "-" at position > 0', () => {
+        const inst = make([]);
+        const evt = fakeKey('-', 1);
+        inst.onIntegerKeydown(evt as any, '123');
+        expect(evt.defaultPrevented).toBe(true);
+      });
+
+      it('blocks "-" at position 0 when currentValue already contains "-"', () => {
+        const inst = make([]);
+        const evt = fakeKey('-', 0);
+        inst.onIntegerKeydown(evt as any, '-123');
+        expect(evt.defaultPrevented).toBe(true);
+      });
+    });
+
+    describe('blocks all invalid single characters', () => {
+      it.each(['e', 'E', 'a', 'z', 'A', 'Z', '.', '+', ' ', '@', '!', ','])(
+        'blocks "%s"', (key) => {
+          const inst = make([]);
+          const evt = fakeKey(key, 1);
+          inst.onIntegerKeydown(evt as any, '5');
+          expect(evt.defaultPrevented).toBe(true);
+        });
+    });
+  });
+
+  describe('onIntegerPaste', () => {
+    function fakePaste(text: string, inputValue = '', selStart = 0, selEnd?: number) {
+      const end = selEnd ?? inputValue.length;
+      let dispatched = false;
+      const inputEl = {
+        value: inputValue,
+        selectionStart: selStart,
+        selectionEnd: end,
+        dispatchEvent: () => { dispatched = true; },
+      };
+      const event = {
+        preventDefault: () => {},
+        clipboardData: { getData: () => text },
+        target: inputEl,
+      } as any as ClipboardEvent;
+      return { event, inputEl, wasDispatched: () => dispatched };
+    }
+
+    it('pastes "5e3abc" into empty field — keeps leading valid prefix "5"', () => {
+      const { event, inputEl } = fakePaste('5e3abc');
+      make([]).onIntegerPaste(event);
+      expect(inputEl.value).toBe('5');
+    });
+
+    it('pastes valid integer "42" — keeps it intact', () => {
+      const { event, inputEl } = fakePaste('42');
+      make([]).onIntegerPaste(event);
+      expect(inputEl.value).toBe('42');
+    });
+
+    it('pastes "-99" — keeps negative integer', () => {
+      const { event, inputEl } = fakePaste('-99');
+      make([]).onIntegerPaste(event);
+      expect(inputEl.value).toBe('-99');
+    });
+
+    it('pastes "3.14" — keeps only the leading integer "3"', () => {
+      const { event, inputEl } = fakePaste('3.14');
+      make([]).onIntegerPaste(event);
+      expect(inputEl.value).toBe('3');
+    });
+
+    it('pastes "abc" (no leading digits) — value becomes ""', () => {
+      const { event, inputEl } = fakePaste('abc', '');
+      make([]).onIntegerPaste(event);
+      expect(inputEl.value).toBe('');
+    });
+
+    it('pastes "5" after existing "-" (cursor at end) — produces "-5"', () => {
+      const { event, inputEl } = fakePaste('5', '-', 1, 1);
+      make([]).onIntegerPaste(event);
+      expect(inputEl.value).toBe('-5');
+    });
+
+    it('dispatches synthetic input event so Angular (input) binding can sync', () => {
+      const { event, wasDispatched } = fakePaste('7');
+      make([]).onIntegerPaste(event);
+      expect(wasDispatched()).toBe(true);
+    });
+  });
+
+  describe('addRow', () => {
+    it('appends a new empty String row', () => {
+      const inst = make([row('x', 'Integer', '1')]);
+      inst.addRow();
+      expect(inst.rows).toHaveLength(2);
+      expect(inst.rows[1]).toEqual({ name: '', type: 'String', value: '' });
+    });
+  });
+
+  describe('removeRow', () => {
+    it('removes the row at the given index', () => {
+      const inst = make([row('a', 'String', ''), row('b', 'String', '')]);
+      inst.removeRow(0);
+      expect(inst.rows).toHaveLength(1);
+      expect(inst.rows[0].name).toBe('b');
+    });
+
+    it('resets to a single empty row when the last row is removed', () => {
+      const inst = make([row('x', 'String', 'val')]);
+      inst.removeRow(0);
+      expect(inst.rows).toHaveLength(1);
+      expect(inst.rows[0]).toEqual({ name: '', type: 'String', value: '' });
+    });
+  });
+
+  describe('getNameDuplicateWarning', () => {
+    it('returns null when name is unique across all rows', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('label', 'String', 'hello')]);
+      expect(inst.getNameDuplicateWarning('amount', 0)).toBeNull();
+      expect(inst.getNameDuplicateWarning('label', 1)).toBeNull();
+    });
+
+    it('returns the name when another row has the same name', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('amount', 'Integer', '200')]);
+      expect(inst.getNameDuplicateWarning('amount', 1)).toBe('amount');
+    });
+
+    it('does not flag a row against itself', () => {
+      const inst = make([row('amount', 'Integer', '100')]);
+      expect(inst.getNameDuplicateWarning('amount', 0)).toBeNull();
+    });
+
+    it('returns null for empty name', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('', 'String', '')]);
+      expect(inst.getNameDuplicateWarning('', 1)).toBeNull();
+    });
+
+    it('returns null for whitespace-only name', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('  ', 'String', '')]);
+      expect(inst.getNameDuplicateWarning('  ', 1)).toBeNull();
+    });
+
+    it('is case-sensitive — "amount" and "Amount" are distinct, no warning', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('Amount', 'Integer', '200')]);
+      expect(inst.getNameDuplicateWarning('Amount', 1)).toBeNull();
+    });
+
+    it('trims whitespace when comparing — "amount " matches "amount"', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('amount ', 'Integer', '200')]);
+      expect(inst.getNameDuplicateWarning('amount ', 1)).toBe('amount');
+    });
+
+    it('warning does not block apply — canApply is true even when duplicate name exists', () => {
+      const inst = make([row('amount', 'Integer', '100'), row('amount', 'Integer', '200')]);
+      expect(inst.getNameDuplicateWarning('amount', 1)).not.toBeNull();
+      expect(inst.canApply).toBe(true);
+    });
+  });
+
+  describe('getDefaultValue', () => {
+    it('returns false for Boolean', () => {
+      expect(make([]).getDefaultValue('Boolean')).toBe(false);
+    });
+
+    it('returns "" for String, Integer, Long, Short, Double, Date', () => {
+      const inst = make([]);
+      for (const t of ['String', 'Integer', 'Long', 'Short', 'Double', 'Date']) {
+        expect(inst.getDefaultValue(t)).toBe('');
+      }
+    });
+  });
+
+  describe('onTypeChange', () => {
+    it('Double → Boolean: value becomes false, not the old Double value', () => {
+      const inst = make([row('x', 'Double', '20.5')]);
+      inst.onTypeChange(0, 'Boolean');
+      expect(inst.rows[0].type).toBe('Boolean');
+      expect(inst.rows[0].value).toBe(false);
+    });
+
+    it('Boolean → Integer: value becomes "" (user must fill in a number)', () => {
+      const inst = make([row('x', 'Boolean', true)]);
+      inst.onTypeChange(0, 'Integer');
+      expect(inst.rows[0].type).toBe('Integer');
+      expect(inst.rows[0].value).toBe('');
+    });
+
+    it('Integer → String: value becomes ""', () => {
+      const inst = make([row('x', 'Integer', '42')]);
+      inst.onTypeChange(0, 'String');
+      expect(inst.rows[0].type).toBe('String');
+      expect(inst.rows[0].value).toBe('');
+    });
+
+    it('Double → Date: value becomes ""', () => {
+      const inst = make([row('x', 'Double', '3.14')]);
+      inst.onTypeChange(0, 'Date');
+      expect(inst.rows[0].type).toBe('Date');
+      expect(inst.rows[0].value).toBe('');
+    });
+
+    it('String → Long: value becomes ""', () => {
+      const inst = make([row('x', 'String', 'hello')]);
+      inst.onTypeChange(0, 'Long');
+      expect(inst.rows[0].type).toBe('Long');
+      expect(inst.rows[0].value).toBe('');
+    });
+
+    it('does not affect other rows when changing one row type', () => {
+      const inst = make([row('a', 'String', 'hello'), row('b', 'Double', '20.5')]);
+      inst.onTypeChange(1, 'Boolean');
+      expect(inst.rows[0].value).toBe('hello');
+      expect(inst.rows[1].value).toBe(false);
+    });
+
+    it('canApply is true after Double → Boolean (false is a valid boolean value)', () => {
+      const inst = make([row('x', 'Double', '20.5')]);
+      inst.onTypeChange(0, 'Boolean');
+      expect(inst.canApply).toBe(true);
+    });
+
+    it('canApply is false after Double → Integer (empty value blocks apply)', () => {
+      const inst = make([row('x', 'Double', '3.14')]);
+      inst.onTypeChange(0, 'Integer');
+      expect(inst.canApply).toBe(false);
+    });
+
+    it('produces a new rows array (immutable update — OnPush safe)', () => {
+      const inst = make([row('x', 'String', 'v')]);
+      const before = inst.rows;
+      inst.onTypeChange(0, 'Boolean');
+      expect(inst.rows).not.toBe(before);
+    });
+  });
+
+  describe('onApply', () => {
+    it('emits only rows with non-empty names', () => {
+      const inst = make([
+        row('x', 'String', 'hello'),
+        row('', 'Integer', '42'),
+        row('y', 'Boolean', true),
+      ]);
+
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      inst.onApply();
+      expect(emitted[0]).toHaveLength(2);
+      expect(emitted[0][0].name).toBe('x');
+      expect(emitted[0][1].name).toBe('y');
+    });
+  });
+
+  describe('onFieldEnter — Enter in a field blurs without applying', () => {
+    function fakeFieldEvent() {
+      const state = { blurred: false, stopped: false, prevented: false };
+      const ev = {
+        target: { blur: () => { state.blurred = true; } },
+        stopPropagation: () => { state.stopped = true; },
+        preventDefault: () => { state.prevented = true; },
+      } as unknown as Event;
+      return { ev, state };
+    }
+
+    it('blurs the focused element', () => {
+      const inst = make([row('a', 'String', 'v')]);
+      const { ev, state } = fakeFieldEvent();
+      inst.onFieldEnter(ev);
+      expect(state.blurred).toBe(true);
+    });
+
+    it('stops propagation so onModalEnter does not fire', () => {
+      const inst = make([row('a', 'String', 'v')]);
+      const { ev, state } = fakeFieldEvent();
+      inst.onFieldEnter(ev);
+      expect(state.stopped).toBe(true);
+    });
+
+    it('prevents default to block native browser behaviors (checkbox toggle, form submit)', () => {
+      const inst = make([row('a', 'String', 'v')]);
+      const { ev, state } = fakeFieldEvent();
+      inst.onFieldEnter(ev);
+      expect(state.prevented).toBe(true);
+    });
+
+    it('does NOT emit apply — modal stays open after field blur', () => {
+      const inst = make([row('a', 'String', 'v')]);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      const { ev } = fakeFieldEvent();
+      inst.onFieldEnter(ev);
+      expect(emitted).toHaveLength(0);
+    });
+  });
+
+  describe('onModalEnter — Enter on the dialog div applies when valid', () => {
+    function makeWithApply(rows: VariableDef[]) {
+      const inst = make(rows);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      const dialogNative = {};
+      (inst as any).dialogEl = { nativeElement: dialogNative };
+      return { inst, emitted, dialogNative };
+    }
+
+    it('valid state + target is dialog → applies (same function as Apply button)', () => {
+      const { inst, emitted, dialogNative } = makeWithApply([row('myVar', 'String', 'hello')]);
+      inst.onModalEnter({ target: dialogNative } as unknown as KeyboardEvent);
+      expect(emitted).toHaveLength(1);
+      expect(emitted[0]).toEqual([row('myVar', 'String', 'hello')]);
+    });
+
+    it('empty name (canApply=false) + target is dialog → does nothing, modal stays open', () => {
+      const { inst, emitted, dialogNative } = makeWithApply([row('', 'String', '')]);
+      inst.onModalEnter({ target: dialogNative } as unknown as KeyboardEvent);
+      expect(emitted).toHaveLength(0);
+    });
+
+    it('event target is a field input (not the dialog) → ignored even if valid', () => {
+      const { inst, emitted } = makeWithApply([row('myVar', 'String', 'hello')]);
+      const fieldInput = { tagName: 'INPUT' };
+      inst.onModalEnter({ target: fieldInput } as unknown as KeyboardEvent);
+      expect(emitted).toHaveLength(0);
+    });
+
+    it('multiple rows with one unnamed → emits only named+valid rows', () => {
+      const { inst, emitted, dialogNative } = makeWithApply([
+        row('a', 'String', 'alpha'),
+        row('b', 'Integer', '42'),
+        row('', 'String', ''),
+      ]);
+      inst.onModalEnter({ target: dialogNative } as unknown as KeyboardEvent);
+      expect(emitted).toHaveLength(1);
+      expect(emitted[0]).toEqual([row('a', 'String', 'alpha'), row('b', 'Integer', '42')]);
+    });
+
+    it('invalid integer value (canApply=false) + target is dialog → does nothing', () => {
+      const { inst, emitted, dialogNative } = makeWithApply([row('myInt', 'Integer', 'abc')]);
+      inst.onModalEnter({ target: dialogNative } as unknown as KeyboardEvent);
+      expect(emitted).toHaveLength(0);
+    });
+  });
+
+});

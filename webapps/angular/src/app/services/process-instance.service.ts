@@ -500,6 +500,17 @@ export class ProcessInstanceService {
     return this.http.post<{ id: string }>(`${this.baseUrl}/job/retries`, body);
   }
 
+  setVariablesAsync(payload: {
+    variables: Record<string, { value: unknown; type: string }>;
+    processInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.baseUrl}/process-instance/variables-async`,
+      payload
+    );
+  }
+
   /**
    * Resume (activate) a process instance
    */
