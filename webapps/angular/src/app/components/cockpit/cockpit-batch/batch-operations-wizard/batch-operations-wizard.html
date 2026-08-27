@@ -175,10 +175,12 @@
 
           <div *ngIf="variableDefinitions.length > 0" class="var-chips">
             <div *ngFor="let v of variableDefinitions; let i = index; trackBy: trackByIndex" class="var-chip">
-              <span class="var-chip__name">{{ v.name }}</span>
-              <span class="var-chip__eq">=</span>
-              <span class="var-chip__value">{{ v.value }}</span>
-              <span class="var-chip__type">{{ v.type }}</span>
+              <button type="button" class="var-chip__edit" (click)="openEditVariableModal(i)">
+                <span class="var-chip__name">{{ v.name }}</span>
+                <span class="var-chip__eq">=</span>
+                <span class="var-chip__value">{{ v.value }}</span>
+                <span class="var-chip__type">{{ v.type }}</span>
+              </button>
               <button type="button" class="var-chip__remove" (click)="removeVariableDefinition(i)" title="Remove">&#x2715;</button>
             </div>
           </div>
@@ -609,7 +611,8 @@
   <!-- Variable definitions modal -->
   <app-variable-definitions-modal
     *ngIf="showVariablesModal"
-    [initialVariables]="variableDefinitions"
+    [initialVariables]="modalInitialVariables"
+    [isEditMode]="editingVariableIndex !== null"
     (apply)="onVariablesApplied($event)"
     (closeModal)="closeVariablesModal()">
   </app-variable-definitions-modal>

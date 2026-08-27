@@ -1,10 +1,11 @@
 import { VariableDefinitionsModalComponent, VariableDef } from './variable-definitions-modal';
 import { getVariableInputType } from '../../../../../utils/variable-type.util';
 
-function make(rows: VariableDef[]): VariableDefinitionsModalComponent {
+function make(rows: VariableDef[], isEditMode = false): VariableDefinitionsModalComponent {
   const inst = Object.create(VariableDefinitionsModalComponent.prototype) as VariableDefinitionsModalComponent;
   (inst as any).rows = rows;
   (inst as any).cdr = { markForCheck: () => {} };
+  (inst as any).isEditMode = isEditMode;
   return inst;
 }
 
@@ -380,6 +381,113 @@ describe('VariableDefinitionsModalComponent', () => {
       inst.removeRow(0);
       expect(inst.rows).toHaveLength(1);
       expect(inst.rows[0]).toEqual({ name: '', type: 'String', value: '' });
+    });
+  });
+
+  describe('getDefaultValue', () => {
+    it('returns false for Boolean', () => {
+      expect(make([]).getDefaultValue('Boolean')).toBe(false);
+    });
+
+    it('returns "" for String, Integer, Long, Short, Double, Date', () => {
+      const inst = make([]);
+      for (const t of ['String', 'Integer', 'Long', 'Short', 'Double', 'Date']) {
+        expect(inst.getDefaultValue(t)).toBe('');
+      }
+    });
+  });
+
+  describe('onTypeChange', () => {
+    it('Double → Boolean: value becomes false, not the old Double value', () => {
+      const inst = make([row('x', 'Double', '20.5')]);
+      inst.onTypeChange(0, 'Boolean');
+      expect(inst.rows[0].type).toBe('Boolean');
+      expect(inst.rows[0].value).toBe(false);
+    });
+
+    it('Boolean → Integer: value becomes "" (user must fill in a number)', () => {
+      const inst = make([row('x', 'Boolean', true)]);
+      inst.onTypeChange(0, 'Integer');
+      expect(inst.rows[0].type).toBe('Integer');
+      expect(inst.rows[0].value).toBe('');
+    });
+
+    it('Integer → String: value becomes ""', () => {
+      const inst = make([row('x', 'Integer', '42')]);
+      inst.onTypeChange(0, 'String');
+      expect(inst.rows[0].type).toBe('String');
+      expect(inst.rows[0].value).toBe('');
+    });
+
+    it('Double → Date: value becomes ""', () => {
+      const inst = make([row('x', 'Double', '3.14')]);
+      inst.onTypeChange(0, 'Date');
+      expect(inst.rows[0].type).toBe('Date');
+      expect(inst.rows[0].value).toBe('');
+    });
+
+    it('String → Long: value becomes ""', () => {
+      const inst = make([row('x', 'String', 'hello')]);
+      inst.onTypeChange(0, 'Long');
+      expect(inst.rows[0].type).toBe('Long');
+      expect(inst.rows[0].value).toBe('');
+    });
+
+    it('does not affect other rows when changing one row type', () => {
+      const inst = make([row('a', 'String', 'hello'), row('b', 'Double', '20.5')]);
+      inst.onTypeChange(1, 'Boolean');
+      expect(inst.rows[0].value).toBe('hello');
+      expect(inst.rows[1].value).toBe(false);
+    });
+
+    it('canApply is true after Double → Boolean (false is a valid boolean value)', () => {
+      const inst = make([row('x', 'Double', '20.5')]);
+      inst.onTypeChange(0, 'Boolean');
+      expect(inst.canApply).toBe(true);
+    });
+
+    it('canApply is false after Double → Integer (empty value blocks apply)', () => {
+      const inst = make([row('x', 'Double', '3.14')]);
+      inst.onTypeChange(0, 'Integer');
+      expect(inst.canApply).toBe(false);
+    });
+
+    it('produces a new rows array (immutable update — OnPush safe)', () => {
+      const inst = make([row('x', 'String', 'v')]);
+      const before = inst.rows;
+      inst.onTypeChange(0, 'Boolean');
+      expect(inst.rows).not.toBe(before);
+    });
+  });
+
+  describe('isEditMode', () => {
+    it('defaults to false — add mode', () => {
+      const inst = make([row('x', 'String', 'hello')]);
+      expect(inst.isEditMode).toBe(false);
+    });
+
+    it('can be set to true — edit mode', () => {
+      const inst = make([row('x', 'Integer', '42')], true);
+      expect(inst.isEditMode).toBe(true);
+    });
+
+    it('canApply works identically in edit mode', () => {
+      const inst = make([row('x', 'Integer', '42')], true);
+      expect(inst.canApply).toBe(true);
+    });
+
+    it('canApply is false in edit mode when integer value is invalid', () => {
+      const inst = make([row('x', 'Integer', '5e3')], true);
+      expect(inst.canApply).toBe(false);
+    });
+
+    it('onApply emits the single row in edit mode', () => {
+      const inst = make([row('myVar', 'Long', '99')], true);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      inst.onApply();
+      expect(emitted[0]).toHaveLength(1);
+      expect(emitted[0][0]).toEqual({ name: 'myVar', type: 'Long', value: '99' });
     });
   });
 

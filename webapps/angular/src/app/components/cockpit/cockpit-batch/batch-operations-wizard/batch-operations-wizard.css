@@ -939,6 +939,26 @@ app-pagination {
   white-space: nowrap;
 }
 
+.var-chip__edit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  flex: 1;
+  min-width: 0;
+}
+
+.var-chip__edit:hover .var-chip__name,
+.var-chip__edit:hover .var-chip__value {
+  text-decoration: underline;
+}
+
 .var-chip__remove {
   margin-left: 2px;
   flex-shrink: 0;

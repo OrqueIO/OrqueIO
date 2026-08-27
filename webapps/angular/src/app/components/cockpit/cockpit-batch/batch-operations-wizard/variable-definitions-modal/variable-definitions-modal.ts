@@ -28,6 +28,7 @@ export class VariableDefinitionsModalComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   @Input() initialVariables: VariableDef[] = [];
+  @Input() isEditMode = false;
   @Output() apply = new EventEmitter<VariableDef[]>();
   @Output() closeModal = new EventEmitter<void>();
 
@@ -41,6 +42,17 @@ export class VariableDefinitionsModalComponent implements OnInit {
 
   isIntegerType(type: string): boolean {
     return INTEGER_TYPES.includes(type);
+  }
+
+  getDefaultValue(type: string): any {
+    return type === 'Boolean' ? false : '';
+  }
+
+  onTypeChange(index: number, newType: string): void {
+    const updated = [...this.rows];
+    updated[index] = { ...updated[index], type: newType, value: this.getDefaultValue(newType) };
+    this.rows = updated;
+    this.cdr.markForCheck();
   }
 
   onIntegerKeydown(event: KeyboardEvent, currentValue: string): void {

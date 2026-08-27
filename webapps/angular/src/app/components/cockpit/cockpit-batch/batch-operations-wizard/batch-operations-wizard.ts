@@ -307,6 +307,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   showTechnicalDetails = false;
   showVariablesModal = false;
+  editingVariableIndex: number | null = null;
 
   executing = false;
   batchId: string | null = null;
@@ -808,19 +809,41 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     return vars;
   }
 
+  get modalInitialVariables(): VariableDef[] {
+    if (this.editingVariableIndex !== null) {
+      return [this.variableDefinitions[this.editingVariableIndex]];
+    }
+    return this.variableDefinitions;
+  }
+
   openVariablesModal(): void {
+    this.editingVariableIndex = null;
+    this.showVariablesModal = true;
+    this.cdr.markForCheck();
+  }
+
+  openEditVariableModal(index: number): void {
+    this.editingVariableIndex = index;
     this.showVariablesModal = true;
     this.cdr.markForCheck();
   }
 
   onVariablesApplied(vars: VariableDef[]): void {
-    this.variableDefinitions = vars;
+    if (this.editingVariableIndex !== null) {
+      const updated = [...this.variableDefinitions];
+      updated[this.editingVariableIndex] = vars[0];
+      this.variableDefinitions = updated;
+      this.editingVariableIndex = null;
+    } else {
+      this.variableDefinitions = vars;
+    }
     this.showVariablesModal = false;
     this.saveToSessionStorage();
     this.cdr.markForCheck();
   }
 
   closeVariablesModal(): void {
+    this.editingVariableIndex = null;
     this.showVariablesModal = false;
     this.cdr.markForCheck();
   }
