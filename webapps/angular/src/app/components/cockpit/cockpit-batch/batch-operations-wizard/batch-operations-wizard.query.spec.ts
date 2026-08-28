@@ -1063,6 +1063,156 @@ describe('BatchOperationsWizardComponent — set-variables: engine constraint (u
 
 });
 
+// ── set-retries-external ──────────────────────────────────────────────────────
+// External tasks only exist on unfinished instances → locked state is 'unfinished'.
+// Endpoint: POST /external-task/retries-async
+// Body — instances mode: { retries, processInstanceIds: [...] }
+//       — query mode:    { retries, historicProcessInstanceQuery: { unfinished:true, ... } }
+// No due-date field (confirmed absent on the Camunda 7 EE reference instance).
+
+describe('BatchOperationsWizardComponent — set-retries-external: buildHistoricQueryForBatch', () => {
+
+  it('includes unfinished:true — external tasks only exist on running instances', () => {
+    const result = buildQuery('set-retries-external', []);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['finished']).toBeUndefined();
+  });
+
+  it('combines unfinished base with processDefinitionKeyIn filter', () => {
+    const result = buildQuery('set-retries-external', [
+      { field: 'processDefinition', values: ['invoice-proc'] }
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['invoice-proc']);
+  });
+
+  it('combines unfinished base with processDefinitionIdIn (version-specific filter)', () => {
+    const result = buildQuery('set-retries-external', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['invoice-proc:2:abc'] }
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['processDefinitionIdIn']).toEqual(['invoice-proc:2:abc']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — set-retries-external: lockedFilterState', () => {
+
+  it('returns "unfinished" — external tasks are only present on active or suspended instances', () => {
+    expect(getLockedFilterState('set-retries-external')).toBe('unfinished');
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — set-retries-external: canContinue', () => {
+
+  function canContinue(overrides: object): boolean {
+    const stub = {
+      selectedOperationId: 'set-retries-external',
+      mode: 'instances',
+      retries: 1,
+      selectedIds: new Set<string>(),
+      variableDefinitions: [],
+      setDueDate: false,
+      retriesDueDate: '',
+      ...overrides
+    };
+    const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'canContinue');
+    return desc?.get?.call(stub) as boolean;
+  }
+
+  it('returns false when no instances are selected (instances mode)', () => {
+    expect(canContinue({ retries: 3, selectedIds: new Set() })).toBe(false);
+  });
+
+  it('returns true when instances selected and retries is 0', () => {
+    expect(canContinue({ retries: 0, selectedIds: new Set(['inst-1']) })).toBe(true);
+  });
+
+  it('returns true when instances selected and retries > 0', () => {
+    expect(canContinue({ retries: 5, selectedIds: new Set(['inst-1']) })).toBe(true);
+  });
+
+  it('returns false when retries is negative', () => {
+    expect(canContinue({ retries: -1, selectedIds: new Set(['inst-1']) })).toBe(false);
+  });
+
+  it('returns true in query mode regardless of selectedIds', () => {
+    expect(canContinue({ mode: 'query', retries: 3, selectedIds: new Set() })).toBe(true);
+  });
+
+  it('no due-date field — retries alone is sufficient (unlike set-retries-jobs)', () => {
+    // set-retries-external has no dueDate validation — canContinue only checks retries + selectedIds
+    expect(canContinue({ retries: 1, selectedIds: new Set(['inst-1']), setDueDate: true, retriesDueDate: '' })).toBe(true);
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — set-retries-external: confirmPayloadJson', () => {
+
+  function getPayload(mode: 'instances' | 'query', overrides: object = {}): Record<string, unknown> {
+    const stub = {
+      selectedOperationId: 'set-retries-external',
+      mode,
+      retries: 3,
+      selectedIds: new Set(['pi-1', 'pi-2']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      ...overrides
+    };
+    const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmPayloadJson');
+    return JSON.parse(desc?.get?.call(stub) as string);
+  }
+
+  it('instances mode — body contains retries and processInstanceIds array', () => {
+    const payload = getPayload('instances');
+    expect(payload['retries']).toBe(3);
+    expect(payload['processInstanceIds']).toEqual(expect.arrayContaining(['pi-1', 'pi-2']));
+    expect(payload['historicProcessInstanceQuery']).toBeUndefined();
+  });
+
+  it('instances mode — no dueDate field (absent for external tasks)', () => {
+    const payload = getPayload('instances');
+    expect(payload).not.toHaveProperty('dueDate');
+  });
+
+  it('query mode — body contains retries and historicProcessInstanceQuery with unfinished:true', () => {
+    const payload = getPayload('query');
+    expect(payload['retries']).toBe(3);
+    expect(payload['historicProcessInstanceQuery']).toBeDefined();
+    expect((payload['historicProcessInstanceQuery'] as Record<string, unknown>)['unfinished']).toBe(true);
+    expect(payload['processInstanceIds']).toBeUndefined();
+  });
+
+  it('query mode — no dueDate field', () => {
+    const payload = getPayload('query');
+    expect(payload).not.toHaveProperty('dueDate');
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — set-retries-external: confirmEndpoint', () => {
+
+  function getEndpoint(mode: 'instances' | 'query'): string {
+    const stub = { selectedOperationId: 'set-retries-external', mode };
+    const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmEndpoint');
+    return desc?.get?.call(stub) as string;
+  }
+
+  it('instances mode → /external-task/retries-async', () => {
+    expect(getEndpoint('instances')).toContain('/external-task/retries-async');
+  });
+
+  it('query mode → /external-task/retries-async (same endpoint, body differs)', () => {
+    expect(getEndpoint('query')).toContain('/external-task/retries-async');
+  });
+
+});
+
 describe('BatchOperationsWizardComponent — batch instances load: no multi-state fusion', () => {
 
   // In the batch wizard, instanceLoad$ always injects { field: 'state', values: [lockedFilterState] }.
@@ -1070,8 +1220,8 @@ describe('BatchOperationsWizardComponent — batch instances load: no multi-stat
   // statePill.values.length > 1.  Since lockedFilterState is always a single non-null string,
   // multi-state fusion is structurally unreachable regardless of what user filters are added.
 
-  it('all 6 process operations have a non-null single-string lockedFilterState → injected pill length is always 1', () => {
-    const ALL_PROCESS_OPS = ['suspend', 'activate', 'delete-running', 'delete-finished', 'set-retries-jobs', 'set-variables'];
+  it('all 7 process operations have a non-null single-string lockedFilterState → injected pill length is always 1', () => {
+    const ALL_PROCESS_OPS = ['suspend', 'activate', 'delete-running', 'delete-finished', 'set-retries-jobs', 'set-variables', 'set-retries-external'];
     for (const op of ALL_PROCESS_OPS) {
       const locked = getLockedFilterState(op);
       // Non-null + single string → { field: 'state', values: [locked] } → length 1
@@ -1093,12 +1243,13 @@ describe('BatchOperationsWizardComponent — batch instances load: no multi-stat
     ];
 
     const CASES: { op: string; flags: Record<string, unknown> }[] = [
-      { op: 'suspend',          flags: { active: true, unfinished: true } },
-      { op: 'activate',         flags: { suspended: true, unfinished: true } },
-      { op: 'delete-running',   flags: { unfinished: true } },
-      { op: 'delete-finished',  flags: { finished: true } },
-      { op: 'set-retries-jobs', flags: { unfinished: true } },
-      { op: 'set-variables',    flags: { unfinished: true } },
+      { op: 'suspend',               flags: { active: true, unfinished: true } },
+      { op: 'activate',              flags: { suspended: true, unfinished: true } },
+      { op: 'delete-running',        flags: { unfinished: true } },
+      { op: 'delete-finished',       flags: { finished: true } },
+      { op: 'set-retries-jobs',      flags: { unfinished: true } },
+      { op: 'set-variables',         flags: { unfinished: true } },
+      { op: 'set-retries-external',  flags: { unfinished: true } },
     ];
 
     for (const { op, flags } of CASES) {

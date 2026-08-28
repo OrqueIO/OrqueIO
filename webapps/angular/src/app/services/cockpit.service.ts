@@ -451,6 +451,7 @@ export type GlobalSearchField =
 export interface MultiValueFilter {
   field: GlobalSearchField;
   values: string[];
+  processDefinitionIds?: string[];
   variableName?: string;
   variableOperator?: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
   variableLines?: VariableLine[];
