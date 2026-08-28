@@ -747,6 +747,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         case 'finishedBefore': query['finishedBefore'] = f.values[0]; break;
         case 'processDefinition':
           if (f.values.length > 0) query['processDefinitionKeyIn'] = f.values;
+          if (f.processDefinitionIds?.length) query['processDefinitionIdIn'] = f.processDefinitionIds;
           break;
         case 'variables':
           if (f.variableLines?.length) {
