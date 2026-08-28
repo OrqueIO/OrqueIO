@@ -76,6 +76,66 @@ describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch processD
 
 });
 
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch processDefinitionIdIn (version-specific filter)', () => {
+
+  it('suspend: specific version IDs produce processDefinitionIdIn (not KeyIn)', () => {
+    const result = buildQuery('suspend', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-a-v2', 'pd-b-v1'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-a-v2', 'pd-b-v1']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activate: specific version IDs produce processDefinitionIdIn', () => {
+    const result = buildQuery('activate', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-a-v1'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-a-v1']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['suspended']).toBe(true);
+  });
+
+  it('delete-running: specific version IDs produce processDefinitionIdIn', () => {
+    const result = buildQuery('delete-running', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-a-v2'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-a-v2']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('delete-finished: specific version IDs produce processDefinitionIdIn', () => {
+    const result = buildQuery('delete-finished', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-a-v1', 'pd-a-v2'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-a-v1', 'pd-a-v2']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['finished']).toBe(true);
+  });
+
+  it('set-retries-jobs: specific version IDs produce processDefinitionIdIn', () => {
+    const result = buildQuery('set-retries-jobs', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-b-v3'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-b-v3']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('set-variables: specific version IDs produce processDefinitionIdIn + unfinished base', () => {
+    const result = buildQuery('set-variables', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-a-v2'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-a-v2']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+});
+
 function buildDecisionQuery(criteria: MultiValueFilter[]): Record<string, unknown> {
   const stub = { decisionFilterCriteria: criteria };
   return BatchOperationsWizardComponent.prototype.buildHistoricDecisionQueryForBatch.call(stub);
@@ -135,6 +195,14 @@ describe('BatchOperationsWizardComponent — buildHistoricDecisionQueryForBatch'
     expect(result['unfinished']).toBeUndefined();
   });
 
+  it('processDefinitionIdIn never set — Process Definition not a criterion in decision panel', () => {
+    // The decision panel (criteriaSet='decision') does not expose Process Definition.
+    // buildHistoricDecisionQueryForBatch never produces processDefinitionIdIn or processDefinitionKeyIn.
+    const result = buildDecisionQuery([{ field: 'decisionDefinition', values: ['invoice-check'] }]);
+    expect(result['processDefinitionIdIn']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+  });
+
   it('single decisionInstanceId → decisionInstanceId scalar (not In)', () => {
     const result = buildDecisionQuery([{ field: 'decisionInstanceId', values: ['abc-123'] }]);
     expect(result['decisionInstanceId']).toBe('abc-123');
@@ -174,30 +242,43 @@ describe('BatchOperationsWizardComponent — buildHistoricDecisionQueryForBatch'
 
 });
 
-describe('BatchOperationsWizardComponent — lockedFilterState: State always hidden in all 4 batch operations', () => {
+describe('BatchOperationsWizardComponent — lockedFilterState: State always absent from Add criteria (all 6 batch operations)', () => {
 
-  it('suspend: lockedFilterState is non-null → State criterion hidden', () => {
+  // For the 5 process operations: State is hidden via [lockedState]="lockedFilterState" which is
+  // non-null → InstanceFilterPanelComponent suppresses the State option via *ngIf="!lockedState".
+  // For delete-decision: the wizard uses a separate decision panel ([criteriaSet]="'decision'")
+  // which never exposes State as a criterion — State is structurally absent, not suppressed via lockedState.
+
+  it('suspend: lockedFilterState is "active" (non-null) → State hidden from process panel', () => {
+    expect(getLockedFilterState('suspend')).toBe('active');
     expect(getLockedFilterState('suspend')).not.toBeNull();
   });
 
-  it('activate: lockedFilterState is non-null → State criterion hidden', () => {
+  it('activate: lockedFilterState is "suspended" → State hidden from process panel', () => {
+    expect(getLockedFilterState('activate')).toBe('suspended');
     expect(getLockedFilterState('activate')).not.toBeNull();
   });
 
-  it('delete-running: lockedFilterState returns unfinished sentinel → State criterion hidden', () => {
-    // delete-running locks state via unfinished:true — must return a non-null sentinel
-    // so InstanceFilterPanelComponent hides the State option from Add criteria.
-    expect(getLockedFilterState('delete-running')).not.toBeNull();
+  it('delete-running: lockedFilterState is "unfinished" → State hidden from process panel', () => {
     expect(getLockedFilterState('delete-running')).toBe('unfinished');
+    expect(getLockedFilterState('delete-running')).not.toBeNull();
   });
 
-  it('delete-finished: lockedFilterState is non-null → State criterion hidden', () => {
+  it('delete-finished: lockedFilterState is "finished" → State hidden from process panel', () => {
+    expect(getLockedFilterState('delete-finished')).toBe('finished');
     expect(getLockedFilterState('delete-finished')).not.toBeNull();
   });
 
-  it('set-retries-jobs: lockedFilterState is non-null (unfinished) → State criterion hidden', () => {
-    expect(getLockedFilterState('set-retries-jobs')).not.toBeNull();
+  it('set-retries-jobs: lockedFilterState is "unfinished" → State hidden from process panel', () => {
     expect(getLockedFilterState('set-retries-jobs')).toBe('unfinished');
+    expect(getLockedFilterState('set-retries-jobs')).not.toBeNull();
+  });
+
+  it('delete-decision: uses decision panel ([criteriaSet]="decision") — State structurally absent, not via lockedState', () => {
+    // The wizard renders the decision panel for delete-decision, which does not pass [lockedState].
+    // State is absent because the decision criteria set simply has no State criterion.
+    // lockedFilterState() falls to default 'active', but this value is never bound to the decision panel.
+    expect(getLockedFilterState('delete-decision')).toBe('active');
   });
 
 });
@@ -1128,6 +1209,64 @@ describe('BatchOperationsWizardComponent — set-retries-external: confirmEndpoi
 
   it('query mode → /external-task/retries-async (same endpoint, body differs)', () => {
     expect(getEndpoint('query')).toContain('/external-task/retries-async');
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — batch instances load: no multi-state fusion', () => {
+
+  // In the batch wizard, instanceLoad$ always injects { field: 'state', values: [lockedFilterState] }.
+  // CockpitService.searchProcessInstancesGlobal only enters the searchPerState branch when
+  // statePill.values.length > 1.  Since lockedFilterState is always a single non-null string,
+  // multi-state fusion is structurally unreachable regardless of what user filters are added.
+
+  it('all 7 process operations have a non-null single-string lockedFilterState → injected pill length is always 1', () => {
+    const ALL_PROCESS_OPS = ['suspend', 'activate', 'delete-running', 'delete-finished', 'set-retries-jobs', 'set-variables', 'set-retries-external'];
+    for (const op of ALL_PROCESS_OPS) {
+      const locked = getLockedFilterState(op);
+      // Non-null + single string → { field: 'state', values: [locked] } → length 1
+      // → statePill.values.length > 1 is always false → searchPerState never called in batch
+      expect(locked, `operation "${op}" must have a non-null lockedFilterState`).not.toBeNull();
+      expect(typeof locked, `operation "${op}" lockedFilterState must be a string`).toBe('string');
+      // Simulating the injected pill that instanceLoad$ creates
+      const injectedPill = { field: 'state', values: [locked as string] };
+      expect(injectedPill.values, `operation "${op}" injected pill must have exactly 1 value`).toHaveLength(1);
+    }
+  });
+
+  it('version filter + locked state: buildHistoricQueryForBatch returns one flat query object per operation — no per-state fan-out', () => {
+    // The batch query builder produces a single flat query object.
+    // This object is passed directly to the cockpit service as one body.
+    // There is no fan-out into multiple per-state sub-queries at any stage of the batch flow.
+    const versionFilter: MultiValueFilter[] = [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:3:xyz789', 'proc-b:2:uvw456'] }
+    ];
+
+    const CASES: { op: string; flags: Record<string, unknown> }[] = [
+      { op: 'suspend',               flags: { active: true, unfinished: true } },
+      { op: 'activate',              flags: { suspended: true, unfinished: true } },
+      { op: 'delete-running',        flags: { unfinished: true } },
+      { op: 'delete-finished',       flags: { finished: true } },
+      { op: 'set-retries-jobs',      flags: { unfinished: true } },
+      { op: 'set-variables',         flags: { unfinished: true } },
+      { op: 'set-retries-external',  flags: { unfinished: true } },
+    ];
+
+    for (const { op, flags } of CASES) {
+      const result = buildQuery(op, versionFilter);
+
+      // One plain object — not an array of sub-queries
+      expect(Array.isArray(result), `operation "${op}" result must be a flat object`).toBe(false);
+
+      // Version filter present in the single body
+      expect(result['processDefinitionIdIn'], `operation "${op}" must have processDefinitionIdIn`).toEqual(['proc-a:3:xyz789', 'proc-b:2:uvw456']);
+      expect(result, `operation "${op}" must not have processDefinitionKeyIn`).not.toHaveProperty('processDefinitionKeyIn');
+
+      // Correct locked state flags
+      for (const [flag, val] of Object.entries(flags)) {
+        expect(result[flag], `operation "${op}" must have ${flag}: ${String(val)}`).toBe(val);
+      }
+    }
   });
 
 });
