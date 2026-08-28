@@ -747,6 +747,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         case 'finishedBefore': query['finishedBefore'] = f.values[0]; break;
         case 'processDefinition':
           if (f.values.length > 0) query['processDefinitionKeyIn'] = f.values;
+          if (f.processDefinitionIds?.length) query['processDefinitionIdIn'] = f.processDefinitionIds;
           break;
         case 'variables':
           if (f.variableLines?.length) {
@@ -1177,6 +1178,16 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   getDefinitionDisplay(inst: ProcessInstance): string {
     return inst.processDefinitionName || inst.processDefinitionKey || inst.processDefinitionId;
+  }
+
+  extractVersionNumber(processDefinitionId: string): number | null {
+    if (!processDefinitionId) return null;
+    const parts = processDefinitionId.split(':');
+    if (parts.length >= 3) {
+      const v = parseInt(parts[1], 10);
+      return isNaN(v) ? null : v;
+    }
+    return null;
   }
 
   getInstanceStateClass(inst: ProcessInstance): string {

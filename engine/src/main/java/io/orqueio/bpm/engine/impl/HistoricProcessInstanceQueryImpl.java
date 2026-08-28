@@ -88,6 +88,7 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
   protected Date executedJobBefore;
   protected String processDefinitionKey;
   protected String[] processDefinitionKeys;
+  protected String[] processDefinitionIds;
   protected Set<String> processInstanceIds;
   protected String[] processInstanceIdNotIn;
   protected String[] tenantIds;
@@ -150,6 +151,12 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
   public HistoricProcessInstanceQuery processDefinitionKeyIn(String... processDefinitionKeys) {
     ensureNotNull("processDefinitionKeys", (Object[]) processDefinitionKeys);
     this.processDefinitionKeys = processDefinitionKeys;
+    return this;
+  }
+
+  public HistoricProcessInstanceQuery processDefinitionIdIn(String... processDefinitionIds) {
+    ensureNotNull("processDefinitionIds", (Object[]) processDefinitionIds);
+    this.processDefinitionIds = processDefinitionIds;
     return this;
   }
 
@@ -562,6 +569,10 @@ public class HistoricProcessInstanceQueryImpl extends AbstractVariableQueryImpl<
 
   public String[] getProcessDefinitionKeys() {
     return processDefinitionKeys;
+  }
+
+  public String[] getProcessDefinitionIds() {
+    return processDefinitionIds;
   }
 
   public String getProcessDefinitionIdLike() {

@@ -454,6 +454,7 @@ export interface MultiValueFilter {
   variableName?: string;
   variableOperator?: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
   variableLines?: VariableLine[];
+  processDefinitionIds?: string[];
 }
 
 export interface MultiStateCursor {
@@ -659,8 +660,8 @@ export class CockpitService {
   /**
    * @deprecated Use ProcessDefinitionService.getProcessDefinitions() directly
    */
-  getProcessDefinitions(maxResults: number = 1000): Observable<ProcessDefinition[]> {
-    return this.processDefinitionService.getProcessDefinitions(maxResults);
+  getProcessDefinitions(maxResults: number = 1000, latestVersionOnly = true): Observable<ProcessDefinition[]> {
+    return this.processDefinitionService.getProcessDefinitions(maxResults, latestVersionOnly);
   }
 
   /**
@@ -1289,6 +1290,7 @@ export class CockpitService {
           break;
         case 'processDefinition':
           if (filter.values.length > 0) base.processDefinitionKeyIn = filter.values;
+          if (filter.processDefinitionIds?.length) base.processDefinitionIdIn = filter.processDefinitionIds;
           break;
         case 'startedAfter':
           if (filter.values[0]) base.startedAfter = filter.values[0];

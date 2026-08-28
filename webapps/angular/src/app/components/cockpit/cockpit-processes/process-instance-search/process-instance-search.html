@@ -275,7 +275,7 @@
   <!-- Process Definition -->
   <div class="editor-popover-body editor-popover-body--state" *ngIf="activeEditorType === 'processDefinition'"
        (keydown.enter)="$event.preventDefault(); confirmCriterion()">
-    <ng-container *ngIf="availableProcessDefinitions.length > 0; else noProcessDefs">
+    <ng-container *ngIf="availableProcessDefinitionGroups.length > 0; else noProcessDefs">
       <div class="processdef-search-wrap">
         <input
           type="text"
@@ -295,18 +295,48 @@
         <span class="state-row-label">
           {{ 'cockpit.processes.globalSearch.selectAll' | translate }}
         </span>
-        <span class="processdef-select-all-count">{{ 'cockpit.processes.globalSearch.selectedOf' | translate: { selected: pdVisibleSelectedCount.toString(), total: filteredProcessDefinitions.length.toString() } }}</span>
+        <span class="processdef-select-all-count">{{ 'cockpit.processes.globalSearch.selectedOf' | translate: { selected: pdVisibleSelectedCount.toString(), total: filteredProcessDefinitionGroups.length.toString() } }}</span>
       </button>
       <div class="processdef-select-all-divider"></div>
-      <ng-container *ngIf="filteredProcessDefinitions.length > 0; else noMatchingDefs">
+      <ng-container *ngIf="filteredProcessDefinitionGroups.length > 0; else noMatchingDefs">
         <div class="state-checklist processdef-checklist">
-          <button *ngFor="let pd of filteredProcessDefinitions"
-                  class="state-row processdef-row"
-                  (click)="toggleProcessDefinitionKey(pd.key)" type="button">
-            <fa-icon [icon]="faSitemap" class="processdef-row-icon"></fa-icon>
-            <span class="state-row-label" [class.is-selected]="pendingProcessDefinitionKeys.includes(pd.key)">{{ pd.name }}</span>
-            <fa-icon *ngIf="pendingProcessDefinitionKeys.includes(pd.key)" [icon]="faCheck" class="state-row-check"></fa-icon>
-          </button>
+          <div *ngFor="let group of filteredProcessDefinitionGroups" class="processdef-group-wrap">
+            <!-- Group name row -->
+            <div class="processdef-name-row">
+              <button *ngIf="group.versions.length > 1; else expandPlaceholder"
+                      class="processdef-expand-btn"
+                      (click)="toggleProcessDefinitionExpand(group.key); $event.stopPropagation()"
+                      type="button">
+                <fa-icon [icon]="faChevronRight"
+                         class="processdef-chevron"
+                         [class.processdef-chevron--open]="expandedProcessDefinitionKeys.has(group.key)"></fa-icon>
+              </button>
+              <ng-template #expandPlaceholder>
+                <span class="processdef-expand-placeholder"></span>
+              </ng-template>
+              <button class="state-row processdef-name-btn"
+                      [class.is-selected]="isProcessGroupSelected(group)"
+                      (click)="toggleProcessDefinitionKey(group.key)" type="button">
+                <fa-icon [icon]="faSitemap" class="processdef-row-icon"></fa-icon>
+                <span class="state-row-label">{{ group.name }}</span>
+                <span *ngIf="group.versions.length > 1" class="processdef-version-count">{{ group.versions.length }} versions</span>
+                <fa-icon *ngIf="isProcessGroupSelected(group)" [icon]="faCheck" class="state-row-check"></fa-icon>
+              </button>
+            </div>
+            <!-- Version rows (shown when expanded and multi-version) -->
+            <ng-container *ngIf="group.versions.length > 1 && expandedProcessDefinitionKeys.has(group.key)">
+              <button *ngFor="let ver of group.versions; trackBy: trackVersion"
+                      class="processdef-version-row"
+                      [class.is-selected]="isVersionSelected(ver.id, group.key)"
+                      (click)="toggleProcessDefinitionVersion(group.key, ver.id)" type="button">
+                <fa-icon [icon]="faCodeBranch" class="processdef-version-icon"></fa-icon>
+                <span class="state-row-label">
+                  Version {{ ver.version }}<span *ngIf="ver.isLatest" class="processdef-version-latest"> (latest)</span>
+                </span>
+                <fa-icon *ngIf="isVersionSelected(ver.id, group.key)" [icon]="faCheck" class="state-row-check"></fa-icon>
+              </button>
+            </ng-container>
+          </div>
         </div>
       </ng-container>
       <ng-template #noMatchingDefs>
@@ -458,7 +488,7 @@
       </button>
       <button class="btn-editor-confirm-icon" (click)="confirmCriterion()" type="button" [title]="'cockpit.processes.globalSearch.applyAction' | translate"
               [disabled]="(activeEditorType === 'state' && pendingStateValues.length === 0 && editingPillIndex === null) ||
-                          (activeEditorType === 'processDefinition' && pendingProcessDefinitionKeys.length === 0 && editingPillIndex === null) ||
+                          (activeEditorType === 'processDefinition' && pendingProcessDefinitionKeys.length === 0 && pendingProcessDefinitionIds.length === 0 && editingPillIndex === null) ||
                           (activeEditorType === 'variables' && validVariableLineCount === 0 && editingPillIndex === null) ||
                           (activeEditorType === 'variables' && hasInvalidVariableValues)">
         <fa-icon [icon]="faCheck"></fa-icon>

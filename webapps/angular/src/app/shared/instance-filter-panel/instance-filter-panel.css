@@ -898,10 +898,6 @@
   color: #ea580c;
 }
 
-.processdef-row .state-row-check {
-  color: var(--color-success);
-}
-
 .processdef-sa-badge {
   display: flex;
   align-items: center;
@@ -938,4 +934,106 @@
   color: var(--text-muted);
   padding: var(--space-3);
   display: block;
+}
+
+/* Group + version expand rows */
+
+.processdef-group-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.processdef-name-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.processdef-expand-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--text-muted);
+}
+
+.processdef-expand-placeholder {
+  width: 18px;
+  flex-shrink: 0;
+}
+
+.processdef-chevron {
+  font-size: 10px;
+  transition: transform 0.15s ease;
+}
+
+.processdef-chevron--open {
+  transform: rotate(90deg);
+}
+
+.processdef-name-btn {
+  flex: 1;
+  min-width: 0;
+}
+
+.processdef-name-row .state-row-check {
+  margin-left: auto;
+}
+
+.processdef-version-count {
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--surface-2, #e9ecef);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 1px 5px;
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+
+.processdef-version-icon {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.processdef-version-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px 3px 52px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.processdef-version-row:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.processdef-version-row .state-row-label {
+  flex: 1;
+  text-align: left;
+}
+
+.processdef-version-row .state-row-check {
+  margin-left: auto;
+  color: var(--primary);
+}
+
+.processdef-version-latest {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-style: italic;
 }

@@ -14,7 +14,7 @@ import {
   faSpinner, faSearch, faExclamationTriangle, faCheckCircle,
   faPlayCircle, faEye, faPlus, faTimes, faPauseCircle, faTimesCircle,
   faFilter, faChevronLeft, faChevronRight, faChevronDown,
-  faKey, faHashtag, faCircleDot, faCalendarAlt, faCode, faRotateLeft, faCheck, faSitemap,
+  faKey, faHashtag, faCircleDot, faCalendarAlt, faCode, faRotateLeft, faCheck, faSitemap, faCodeBranch,
   faSquareMinus, faSquareCheck
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
@@ -31,6 +31,18 @@ interface VariableConflictInfo {
   name: string;
   type: 'generic' | 'impossible';
   detail: string;
+}
+
+interface ProcessDefinitionVersion {
+  id: string;
+  version: number;
+  isLatest: boolean;
+}
+
+interface ProcessDefinitionGroup {
+  key: string;
+  name: string;
+  versions: ProcessDefinitionVersion[];
 }
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
@@ -98,6 +110,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   faRotateLeft = faRotateLeft;
   faCheck = faCheck;
   faSitemap = faSitemap;
+  faCodeBranch = faCodeBranch;
   faSquare = faSquare;
   faSquareMinus = faSquareMinus;
   faSquareCheck = faSquareCheck;
@@ -117,7 +130,9 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   pendingVariableOperator: VariableOperator = 'eq';
   pendingStateValues: string[] = [];
   pendingProcessDefinitionKeys: string[] = [];
-  availableProcessDefinitions: Array<{key: string; name: string}> = [];
+  pendingProcessDefinitionIds: string[] = [];
+  availableProcessDefinitionGroups: ProcessDefinitionGroup[] = [];
+  expandedProcessDefinitionKeys = new Set<string>();
   processDefinitionSearchText = '';
   pendingDateValue = '';
   pendingVariableLines: PendingVariableLine[] = [];
@@ -171,7 +186,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
             catchError(() => {
               this.searchLoading = false;
               this.searchError = true;
-              this.cdr.detectChanges();
+              this.cdr.markForCheck();
               return EMPTY;
             })
           );
@@ -186,17 +201,27 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
           this.multiStateHasMore = keysetPage.hasMore;
         }
         this.searchLoading = false;
-        this.cdr.detectChanges();
+        this.cdr.markForCheck();
       });
 
     this.loadFromUrl();
 
-    this.cockpitService.getProcessDefinitions(1000)
+    this.cockpitService.getProcessDefinitions(1000, false)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(defs => {
-        this.availableProcessDefinitions = defs
-          .filter(d => d.key)
-          .map(d => ({ key: d.key, name: d.name || d.key }));
+        const groupMap = new Map<string, ProcessDefinitionGroup>();
+        for (const d of defs.filter(d => d.key)) {
+          if (!groupMap.has(d.key)) {
+            groupMap.set(d.key, { key: d.key, name: d.name || d.key, versions: [] });
+          }
+          groupMap.get(d.key)!.versions.push({ id: d.id, version: d.version, isLatest: false });
+        }
+        for (const g of groupMap.values()) {
+          g.versions.sort((a, b) => b.version - a.version);
+          if (g.versions.length > 0) g.versions[0].isLatest = true;
+        }
+        this.availableProcessDefinitionGroups = [...groupMap.values()]
+          .sort((a, b) => a.name.localeCompare(b.name));
         this.cdr.markForCheck();
       });
   }
@@ -379,6 +404,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.pendingVariableOperator = 'eq';
     this.pendingStateValues = [];
     this.pendingProcessDefinitionKeys = [];
+    this.pendingProcessDefinitionIds = [];
     this.processDefinitionSearchText = '';
     this.pendingDateValue = '';
     this.pendingVariableLines = type === 'variables'
@@ -398,6 +424,11 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   }
 
   toggleProcessDefinitionKey(key: string): void {
+    const group = this.availableProcessDefinitionGroups.find(g => g.key === key);
+    if (group) {
+      const vIds = group.versions.map(v => v.id);
+      this.pendingProcessDefinitionIds = this.pendingProcessDefinitionIds.filter(id => !vIds.includes(id));
+    }
     if (this.pendingProcessDefinitionKeys.includes(key)) {
       this.pendingProcessDefinitionKeys = this.pendingProcessDefinitionKeys.filter(k => k !== key);
     } else {
@@ -406,31 +437,74 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  get filteredProcessDefinitions(): Array<{key: string; name: string}> {
+  toggleProcessDefinitionExpand(key: string): void {
+    if (this.expandedProcessDefinitionKeys.has(key)) {
+      this.expandedProcessDefinitionKeys.delete(key);
+    } else {
+      this.expandedProcessDefinitionKeys.add(key);
+    }
+    this.cdr.markForCheck();
+  }
+
+  toggleProcessDefinitionVersion(groupKey: string, versionId: string): void {
+    this.pendingProcessDefinitionKeys = this.pendingProcessDefinitionKeys.filter(k => k !== groupKey);
+    if (this.pendingProcessDefinitionIds.includes(versionId)) {
+      this.pendingProcessDefinitionIds = this.pendingProcessDefinitionIds.filter(id => id !== versionId);
+    } else {
+      this.pendingProcessDefinitionIds = [...this.pendingProcessDefinitionIds, versionId];
+    }
+    this.cdr.markForCheck();
+  }
+
+  isProcessGroupSelected(group: ProcessDefinitionGroup): boolean {
+    return this.pendingProcessDefinitionKeys.includes(group.key) ||
+      group.versions.some(v => this.pendingProcessDefinitionIds.includes(v.id));
+  }
+
+  isVersionSelected(versionId: string, groupKey: string): boolean {
+    return this.pendingProcessDefinitionKeys.includes(groupKey) ||
+      this.pendingProcessDefinitionIds.includes(versionId);
+  }
+
+  get filteredProcessDefinitionGroups(): ProcessDefinitionGroup[] {
     const q = this.processDefinitionSearchText.trim().toLowerCase();
-    if (!q) return this.availableProcessDefinitions;
-    return this.availableProcessDefinitions.filter(d => d.name.toLowerCase().includes(q));
+    if (!q) return this.availableProcessDefinitionGroups;
+    return this.availableProcessDefinitionGroups.filter(g => g.name.toLowerCase().includes(q));
   }
 
   get pdVisibleSelectedCount(): number {
-    return this.filteredProcessDefinitions.filter(d => this.pendingProcessDefinitionKeys.includes(d.key)).length;
+    return this.filteredProcessDefinitionGroups.filter(g =>
+      this.pendingProcessDefinitionKeys.includes(g.key) ||
+      g.versions.some(v => this.pendingProcessDefinitionIds.includes(v.id))
+    ).length;
   }
 
   get pdAllSelected(): boolean {
-    const visible = this.filteredProcessDefinitions;
-    return visible.length > 0 && visible.every(d => this.pendingProcessDefinitionKeys.includes(d.key));
+    const groups = this.filteredProcessDefinitionGroups;
+    if (!groups.length) return false;
+    return groups.every(g =>
+      this.pendingProcessDefinitionKeys.includes(g.key) ||
+      g.versions.every(v => this.pendingProcessDefinitionIds.includes(v.id))
+    );
   }
 
   get pdSomeSelected(): boolean {
-    const visible = this.filteredProcessDefinitions;
-    return visible.some(d => this.pendingProcessDefinitionKeys.includes(d.key)) && !this.pdAllSelected;
+    const groups = this.filteredProcessDefinitionGroups;
+    return groups.some(g =>
+      this.pendingProcessDefinitionKeys.includes(g.key) ||
+      g.versions.some(v => this.pendingProcessDefinitionIds.includes(v.id))
+    ) && !this.pdAllSelected;
   }
 
   toggleSelectAllProcessDefinitions(): void {
-    const visibleKeys = this.filteredProcessDefinitions.map(d => d.key);
+    const visibleGroups = this.filteredProcessDefinitionGroups;
+    const visibleKeys = visibleGroups.map(g => g.key);
+    const visibleVersionIds = visibleGroups.flatMap(g => g.versions.map(v => v.id));
     if (this.pdAllSelected) {
       this.pendingProcessDefinitionKeys = this.pendingProcessDefinitionKeys.filter(k => !visibleKeys.includes(k));
+      this.pendingProcessDefinitionIds = this.pendingProcessDefinitionIds.filter(id => !visibleVersionIds.includes(id));
     } else {
+      this.pendingProcessDefinitionIds = this.pendingProcessDefinitionIds.filter(id => !visibleVersionIds.includes(id));
       const combined = new Set([...this.pendingProcessDefinitionKeys, ...visibleKeys]);
       this.pendingProcessDefinitionKeys = [...combined];
     }
@@ -454,6 +528,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.pendingValues = [];
     this.pendingStateValues = [];
     this.pendingProcessDefinitionKeys = [];
+    this.pendingProcessDefinitionIds = [];
     this.pendingVariableLines = [];
     switch (pill.field) {
       case 'businessKey':
@@ -465,6 +540,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
         break;
       case 'processDefinition':
         this.pendingProcessDefinitionKeys = [...pill.values];
+        this.pendingProcessDefinitionIds = [...(pill.processDefinitionIds ?? [])];
         break;
       case 'variable':
         this.pendingValues = [...pill.values];
@@ -513,8 +589,8 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
         }
         pill = { field: 'state', values: [...this.pendingStateValues] };
         break;
-      case 'processDefinition':
-        if (this.pendingProcessDefinitionKeys.length === 0) {
+      case 'processDefinition': {
+        if (this.pendingProcessDefinitionKeys.length === 0 && this.pendingProcessDefinitionIds.length === 0) {
           if (this.editingPillIndex !== null) {
             const idx = this.editingPillIndex;
             this.activePills = this.activePills.filter((_, i) => i !== idx);
@@ -526,8 +602,27 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
           }
           return;
         }
-        pill = { field: 'processDefinition', values: [...this.pendingProcessDefinitionKeys] };
+        const hasKeys = this.pendingProcessDefinitionKeys.length > 0;
+        const hasIds = this.pendingProcessDefinitionIds.length > 0;
+        let pillValues: string[];
+        let pillIds: string[] | undefined;
+        if (hasKeys && hasIds) {
+          const resolvedIds = this.pendingProcessDefinitionKeys.flatMap(k => {
+            const g = this.availableProcessDefinitionGroups.find(g => g.key === k);
+            return g ? g.versions.map(v => v.id) : [];
+          });
+          pillValues = [];
+          pillIds = [...resolvedIds, ...this.pendingProcessDefinitionIds];
+        } else if (hasIds) {
+          pillValues = [];
+          pillIds = [...this.pendingProcessDefinitionIds];
+        } else {
+          pillValues = [...this.pendingProcessDefinitionKeys];
+          pillIds = undefined;
+        }
+        pill = { field: 'processDefinition', values: pillValues, ...(pillIds ? { processDefinitionIds: pillIds } : {}) };
         break;
+      }
       case 'startedAfter':
       case 'startedBefore':
       case 'finishedAfter':
@@ -590,6 +685,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.pendingValues = [];
     this.pendingStateValues = [];
     this.pendingProcessDefinitionKeys = [];
+    this.pendingProcessDefinitionIds = [];
     this.processDefinitionSearchText = '';
     this.pendingVariableLines = [];
     this.editingPillIndex = null;
@@ -631,6 +727,10 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
 
   trackVariableLine(index: number): number {
     return index;
+  }
+
+  trackVersion(_index: number, ver: ProcessDefinitionVersion): string {
+    return ver.id;
   }
 
   isMultiValueOperator(op: VariableOperator): boolean {
@@ -807,11 +907,22 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       case 'state':          return t('cockpit.processes.globalSearch.pill.state', { value: pill.values.map(v => this.getStateDisplayLabel(v)).join(', ') });
       case 'withIncidents':  return t('cockpit.processes.globalSearch.pill.withIncidents');
       case 'processDefinition': {
-        const names = pill.values.map(k => {
-          const d = this.availableProcessDefinitions.find(d => d.key === k);
-          return d ? d.name : k;
-        });
-        return t('cockpit.processes.globalSearch.pill.processDefinition', { value: names.join(', ') });
+        let labels: string[];
+        if (pill.processDefinitionIds?.length) {
+          labels = pill.processDefinitionIds.map(id => {
+            for (const g of this.availableProcessDefinitionGroups) {
+              const v = g.versions.find(v => v.id === id);
+              if (v) return `${g.name} v${v.version}`;
+            }
+            return id;
+          });
+        } else {
+          labels = pill.values.map(k => {
+            const g = this.availableProcessDefinitionGroups.find(g => g.key === k);
+            return g ? g.name : k;
+          });
+        }
+        return t('cockpit.processes.globalSearch.pill.processDefinition', { value: labels.join(', ') });
       }
       case 'startedAfter':   return t('cockpit.processes.globalSearch.pill.startedAfter', { value: this.formatDisplayDate(pill.values[0]) });
       case 'startedBefore':  return t('cockpit.processes.globalSearch.pill.startedBefore', { value: this.formatDisplayDate(pill.values[0]) });
