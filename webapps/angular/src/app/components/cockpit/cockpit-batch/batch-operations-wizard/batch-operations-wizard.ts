@@ -1180,6 +1180,16 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     return inst.processDefinitionName || inst.processDefinitionKey || inst.processDefinitionId;
   }
 
+  extractVersionNumber(processDefinitionId: string): number | null {
+    if (!processDefinitionId) return null;
+    const parts = processDefinitionId.split(':');
+    if (parts.length >= 3) {
+      const v = parseInt(parts[1], 10);
+      return isNaN(v) ? null : v;
+    }
+    return null;
+  }
+
   getInstanceStateClass(inst: ProcessInstance): string {
     switch (this.computeInstanceState(inst)) {
       case 'running':    return 'state-active';
