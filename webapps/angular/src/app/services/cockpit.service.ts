@@ -451,6 +451,7 @@ export type GlobalSearchField =
 export interface MultiValueFilter {
   field: GlobalSearchField;
   values: string[];
+  processDefinitionIds?: string[];
   variableName?: string;
   variableOperator?: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
   variableLines?: VariableLine[];
@@ -1289,6 +1290,7 @@ export class CockpitService {
           break;
         case 'processDefinition':
           if (filter.values.length > 0) base.processDefinitionKeyIn = filter.values;
+          if (filter.processDefinitionIds?.length) base.processDefinitionIdIn = filter.processDefinitionIds;
           break;
         case 'startedAfter':
           if (filter.values[0]) base.startedAfter = filter.values[0];
