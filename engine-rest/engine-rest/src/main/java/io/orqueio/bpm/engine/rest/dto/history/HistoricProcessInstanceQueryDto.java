@@ -76,6 +76,7 @@ public class HistoricProcessInstanceQueryDto extends AbstractQueryDto<HistoricPr
   private List<String> processInstanceIdNotIn;
   private String rootProcessInstanceId;
   private String processDefinitionId;
+  private List<String> processDefinitionIds;
   private String processDefinitionKey;
   private List<String> processDefinitionKeys;
   private String processDefinitionName;
@@ -169,6 +170,11 @@ public class HistoricProcessInstanceQueryDto extends AbstractQueryDto<HistoricPr
   @OrqueioQueryParam("processDefinitionId")
   public void setProcessDefinitionId(String processDefinitionId) {
     this.processDefinitionId = processDefinitionId;
+  }
+
+  @OrqueioQueryParam(value = "processDefinitionIdIn", converter = StringListConverter.class)
+  public void setProcessDefinitionIdIn(List<String> processDefinitionIds) {
+    this.processDefinitionIds = processDefinitionIds;
   }
 
   @OrqueioQueryParam("processDefinitionName")
@@ -443,6 +449,9 @@ public class HistoricProcessInstanceQueryDto extends AbstractQueryDto<HistoricPr
     }
     if (processDefinitionId != null) {
       query.processDefinitionId(processDefinitionId);
+    }
+    if (processDefinitionIds != null && !processDefinitionIds.isEmpty()) {
+      query.processDefinitionIdIn(processDefinitionIds.toArray(new String[0]));
     }
     if (processDefinitionKey != null) {
       query.processDefinitionKey(processDefinitionKey);

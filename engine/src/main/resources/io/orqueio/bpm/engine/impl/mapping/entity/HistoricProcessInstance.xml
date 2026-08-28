@@ -487,6 +487,13 @@
             <if test="query.processDefinitionId != null">
               ${queryType} SELF.PROC_DEF_ID_ = #{query.processDefinitionId}
             </if>
+            <if test="query.processDefinitionIds != null &amp;&amp; query.processDefinitionIds.length > 0">
+              ${queryType} SELF.PROC_DEF_ID_ IN
+              <foreach item="item" index="index" collection="query.processDefinitionIds"
+                       open="(" separator="," close=")">
+                #{item}
+              </foreach>
+            </if>
             <if test="query.processDefinitionKey != null">
               ${queryType} DEF.KEY_ = #{query.processDefinitionKey}
             </if>
