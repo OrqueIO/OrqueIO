@@ -455,7 +455,6 @@ export interface MultiValueFilter {
   variableName?: string;
   variableOperator?: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
   variableLines?: VariableLine[];
-  processDefinitionIds?: string[];
 }
 
 export interface MultiStateCursor {
