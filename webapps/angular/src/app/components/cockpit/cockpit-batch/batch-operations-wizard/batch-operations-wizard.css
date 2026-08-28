@@ -552,6 +552,14 @@
 .col-state          { width: 110px; }
 .col-id             { min-width: 310px; }
 .col-definition     { min-width: 100px; }
+
+.definition-version {
+  display: inline-block;
+  margin-left: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  font-weight: var(--font-weight-medium);
+}
 .col-businesskey    { min-width: 120px; }
 .col-processinstance{ min-width: 310px; }
 .col-starttime      { width: 140px; }

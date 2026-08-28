@@ -286,7 +286,12 @@
                        class="instance-link mono"
                        [title]="inst.id">{{ inst.id }}</a>
                   </td>
-                  <td class="col-definition">{{ getDefinitionDisplay(inst) }}</td>
+                  <td class="col-definition">
+                    {{ getDefinitionDisplay(inst) }}<span
+                      class="definition-version"
+                      *ngIf="extractVersionNumber(inst.processDefinitionId) !== null"
+                    >v{{ extractVersionNumber(inst.processDefinitionId) }}</span>
+                  </td>
                   <td class="col-businesskey">{{ inst.businessKey || '—' }}</td>
                   <td class="col-starttime cell-nowrap">{{ inst.startTime | camDate }}</td>
                   <td class="col-endtime cell-nowrap">{{ (inst.endTime | camDate) || '—' }}</td>

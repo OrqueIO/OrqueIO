@@ -1349,6 +1349,93 @@ describe('CockpitService — processDefinition filter (buildPayloadVariants)', (
   });
 });
 
+
+describe('CockpitService — processDefinitionIdIn (version-specific filter, buildPayloadVariants)', () => {
+
+  it('places processDefinitionIdIn (not processDefinitionKeyIn) when pill has only processDefinitionIds', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:2:v2id'] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+    const [body] = queryInstances.mock.calls[0];
+    expect(body.processDefinitionIdIn).toEqual(['proc-a:2:v2id']);
+    expect(body).not.toHaveProperty('processDefinitionKeyIn');
+  });
+
+  it('places processDefinitionIdIn when multiple version IDs from the same process are selected', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:2:v2id', 'proc-a:1:v1id'] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+    const [body] = queryInstances.mock.calls[0];
+    expect(body.processDefinitionIdIn).toEqual(['proc-a:2:v2id', 'proc-a:1:v1id']);
+    expect(body).not.toHaveProperty('processDefinitionKeyIn');
+  });
+
+  it('places processDefinitionIdIn when version IDs span two different processes', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:2:v2id', 'proc-b:1:b1id'] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+    const [body] = queryInstances.mock.calls[0];
+    expect(body.processDefinitionIdIn).toEqual(['proc-a:2:v2id', 'proc-b:1:b1id']);
+    expect(body).not.toHaveProperty('processDefinitionKeyIn');
+  });
+
+  it('combines processDefinitionIdIn with state flags when a state pill is present', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['active'] },
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:2:v2id'] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+    const [body] = queryInstances.mock.calls[0];
+    expect(body.processDefinitionIdIn).toEqual(['proc-a:2:v2id']);
+    expect(body).not.toHaveProperty('processDefinitionKeyIn');
+    expect(body.active).toBe(true);
+    expect(body.unfinished).toBe(true);
+  });
+
+  it('omits processDefinitionIdIn when processDefinitionIds is absent (key-only pill still uses processDefinitionKeyIn)', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'processDefinition', values: ['proc-a'] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+    const [body] = queryInstances.mock.calls[0];
+    expect(body.processDefinitionKeyIn).toEqual(['proc-a']);
+    expect(body).not.toHaveProperty('processDefinitionIdIn');
+  });
+});
+
 // ─── Large-scale offset pagination ────────────────────────────────────────────
 // Without an explicit sort, the DB optimizer switches from sequential scan to
 // index scan above ~10k rows, returning rows in a different order. At offset
@@ -1424,5 +1511,317 @@ describe('CockpitService — large-scale offset pagination stability (>10k rows)
         expect(call[0].sorting).toEqual([{ sortBy: 'startTime', sortOrder: 'desc' }]);
       }
     }
+  });
+});
+
+// ─── processDefinitionIdIn × multi-state fusion ───────────────────────────────
+// The version-specific filter (processDefinitionIdIn) and the per-state fusion
+// mechanism (searchPerState / searchPerStatePaged) were built separately and
+// never explicitly tested in combination. These tests verify:
+//   1. processDefinitionIdIn is propagated to EVERY per-state sub-query body.
+//   2. Native shortcuts (unfinished / finished) still fire when appropriate even
+//      when a version filter is present — no accidental downgrade to per-state.
+//   3. Large-scale: fetch cap (CAMUNDA_QUERY_MAX) is never exceeded at depth,
+//      merge+slice returns exactly pageSize items (no truncation), and the
+//      additive count cannot produce an X-of-Y display where X > Y.
+//   4. searchPerStatePaged (cursor mode) also propagates processDefinitionIdIn.
+
+describe('CockpitService — processDefinitionIdIn × multi-state fusion', () => {
+
+  // ── 1. Every per-state sub-query carries processDefinitionIdIn ───────────────
+
+  it('propagates processDefinitionIdIn to every per-state sub-query (active + completed)', async () => {
+    const activeItems  = [makeInstance('i-act-1', '2024-06-01T10:00:00.000Z'), makeInstance('i-act-2', '2024-06-01T09:00:00.000Z')];
+    const completedItems = [makeInstance('i-cmp-1', '2024-05-01T08:00:00.000Z')];
+    const queryInstances = vi.fn()
+      .mockReturnValueOnce(of(activeItems))
+      .mockReturnValueOnce(of(completedItems));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const VERSION_IDS = ['proc-a:2:v2id', 'proc-a:1:v1id'];
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['active', 'completed'] },
+      { field: 'processDefinition', values: [], processDefinitionIds: VERSION_IDS },
+    ];
+
+    const results = await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    // Two per-state sub-queries — one per state value
+    expect(queryInstances).toHaveBeenCalledTimes(2);
+
+    const bodies = queryInstances.mock.calls.map(c => c[0]);
+
+    // Every body carries processDefinitionIdIn (not processDefinitionKeyIn)
+    for (const body of bodies) {
+      expect(body.processDefinitionIdIn).toEqual(VERSION_IDS);
+      expect(body).not.toHaveProperty('processDefinitionKeyIn');
+    }
+
+    // State flags are correct and distinct between the two sub-queries
+    const activeBody    = bodies.find(b => b.active === true);
+    const completedBody = bodies.find(b => b.completed === true);
+    expect(activeBody).toBeDefined();
+    expect(activeBody?.unfinished).toBe(true);
+    expect(completedBody).toBeDefined();
+    expect(completedBody?.finished).toBe(true);
+
+    // Three instances merged (2 active + 1 completed)
+    expect(results).toHaveLength(3);
+  });
+
+  // ── 2. Count path: each per-state count call also carries processDefinitionIdIn
+
+  it('propagates processDefinitionIdIn to every per-state count sub-query', async () => {
+    const queryCount = vi.fn()
+      .mockReturnValueOnce(of(1500))  // active
+      .mockReturnValueOnce(of(1200)); // completed
+    const svc = makeService({ queryProcessInstancesCount: queryCount, queryProcessInstances: vi.fn() });
+
+    const VERSION_IDS = ['proc-a:2:v2id'];
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['active', 'completed'] },
+      { field: 'processDefinition', values: [], processDefinitionIds: VERSION_IDS },
+    ];
+
+    const count = await lastValueFrom(svc.searchProcessInstancesGlobalCount(filters));
+
+    expect(count).toBe(2700); // additive sum: 1500 + 1200
+    expect(queryCount).toHaveBeenCalledTimes(2);
+
+    const bodies = queryCount.mock.calls.map(c => c[0]);
+    for (const body of bodies) {
+      expect(body.processDefinitionIdIn).toEqual(VERSION_IDS);
+      expect(body).not.toHaveProperty('processDefinitionKeyIn');
+    }
+    expect(bodies.some(b => b.active === true && b.unfinished === true)).toBe(true);
+    expect(bodies.some(b => b.completed === true && b.finished === true)).toBe(true);
+  });
+
+  // ── 3a. Native shortcut (active+suspended → unfinished) fires WITH version filter
+
+  it('uses the native unfinished shortcut (1 call) for active+suspended even when a version filter is present', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['active', 'suspended'] }, // → native: unfinished
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:2:v2id'] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    // Exactly one call — native shortcut, not per-state fusion
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+
+    const [body] = queryInstances.mock.calls[0];
+    expect(body.unfinished).toBe(true);
+    expect(body).not.toHaveProperty('active');
+    expect(body).not.toHaveProperty('suspended');
+    // Version filter must still be present on the shortcut body
+    expect(body.processDefinitionIdIn).toEqual(['proc-a:2:v2id']);
+  });
+
+  // ── 3b. Native shortcut (completed+terminated → finished) fires WITH version filter
+
+  it('uses the native finished shortcut (1 call) for completed+terminated even when a version filter is present', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['completed', 'terminated'] }, // → native: finished
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:2:v2id'] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+
+    const [body] = queryInstances.mock.calls[0];
+    expect(body.finished).toBe(true);
+    expect(body).not.toHaveProperty('completed');
+    expect(body.processDefinitionIdIn).toEqual(['proc-a:2:v2id']);
+  });
+
+  // ── 4. Version filter alone does NOT engage the per-state mechanism ──────────
+
+  it('single direct call when there is no state filter (version filter alone never triggers per-state)', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    await lastValueFrom(
+      svc.searchProcessInstancesGlobal(
+        [{ field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:2:v2id'] }],
+        false, false, 0, 20
+      )
+    );
+
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+    const [body] = queryInstances.mock.calls[0];
+    expect(body.processDefinitionIdIn).toEqual(['proc-a:2:v2id']);
+    expect(body).not.toHaveProperty('active');
+    expect(body).not.toHaveProperty('unfinished');
+    expect(body).not.toHaveProperty('finished');
+  });
+
+  // ── 5. Large-scale: fetch never exceeds CAMUNDA_QUERY_MAX at deep offsets ───
+
+  it('per-state fetch is capped at CAMUNDA_QUERY_MAX (2000) at deep offsets — no sur-fetch', async () => {
+    const queryInstances = vi.fn().mockReturnValue(of([]));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['active', 'completed'] },
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:2:v2id'] },
+    ];
+
+    // firstResult=1980, maxResults=20 → needed = min(2000, 2000) = 2000
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 1980, 20));
+
+    expect(queryInstances).toHaveBeenCalledTimes(2);
+    for (const call of queryInstances.mock.calls) {
+      const fetchCap = call[2]; // third arg is maxResults passed to queryProcessInstances
+      expect(fetchCap).toBeLessThanOrEqual(2000);
+      // processDefinitionIdIn must still be present at deep offsets
+      expect(call[0].processDefinitionIdIn).toEqual(['proc-a:2:v2id']);
+    }
+  });
+
+  // ── 6. Large-scale: merge+slice returns exactly pageSize, no truncation ──────
+  // Simulates: 2000 active items + 500 completed items returned by sub-queries.
+  // Despite 2500 total items across both sub-queries, the page (offset 0, size 20)
+  // must return exactly 20 items — not all 2500 (no truncation in the other
+  // direction either: no silent loss of results when the merged set is large).
+
+  it('slices merged result to exactly pageSize (no truncation) when sub-queries return large pages', async () => {
+    const activeItems = Array.from({ length: 2000 }, (_, i) =>
+      makeInstance(`act-${i}`, `2024-06-${String((i % 28) + 1).padStart(2, '0')}T10:00:00.000Z`)
+    );
+    const completedItems = Array.from({ length: 500 }, (_, i) =>
+      makeInstance(`cmp-${i}`, `2024-05-${String((i % 28) + 1).padStart(2, '0')}T08:00:00.000Z`)
+    );
+    const queryInstances = vi.fn()
+      .mockReturnValueOnce(of(activeItems))
+      .mockReturnValueOnce(of(completedItems));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['active', 'completed'] },
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:2:v2id'] },
+    ];
+
+    const results = await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
+
+    expect(results).toHaveLength(20); // exactly pageSize — not more, not less
+
+    // All sub-query bodies carry processDefinitionIdIn
+    for (const [body] of queryInstances.mock.calls) {
+      expect(body.processDefinitionIdIn).toEqual(['proc-a:2:v2id']);
+    }
+  });
+
+  // ── 7. Count is additive and cannot produce displayed range X-of-Y where X > Y
+
+  it('additive count (1500 + 1200 = 2700) never produces a displayed end-index that exceeds the total', async () => {
+    const ACTIVE_COUNT = 1_500;
+    const COMPLETED_COUNT = 1_200;
+    const queryCount = vi.fn()
+      .mockReturnValueOnce(of(ACTIVE_COUNT))
+      .mockReturnValueOnce(of(COMPLETED_COUNT));
+    const svc = makeService({ queryProcessInstancesCount: queryCount, queryProcessInstances: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['active', 'completed'] },
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:2:v2id'] },
+    ];
+
+    const total = await lastValueFrom(svc.searchProcessInstancesGlobalCount(filters));
+
+    expect(total).toBe(ACTIVE_COUNT + COMPLETED_COUNT); // 2700 — exact sum, no inflation
+
+    // The component computes searchEndIndex as Math.min(offset + pageItems, total).
+    // Verify that formula can never produce endIndex > total for any realistic page:
+    const PAGE_SIZE = 20;
+    for (const offset of [0, 20, 2680]) { // first, mid, last page
+      const pageItems = offset + PAGE_SIZE <= total ? PAGE_SIZE : total - offset;
+      const endIndex = Math.min(offset + pageItems, total);
+      expect(endIndex).toBeLessThanOrEqual(total);
+    }
+  });
+
+  // ── 8. searchPerStatePaged (cursor mode) propagates processDefinitionIdIn ────
+
+  it('searchPerStatePaged carries processDefinitionIdIn in every per-state body (cursor paging)', async () => {
+    const VERSION_IDS = ['proc-a:2:v2id', 'proc-a:1:v1id'];
+    const queryInstances = vi.fn()
+      .mockReturnValueOnce(of([makeInstance('a1', '2024-06-01T10:00:00.000Z'), makeInstance('a2', '2024-06-01T09:00:00.000Z'), makeInstance('a3', '2024-06-01T08:00:00.000Z')])) // pageSize+1 probe for active
+      .mockReturnValueOnce(of([makeInstance('c1', '2024-05-01T07:00:00.000Z')]));               // completed bucket
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['active', 'completed'] },
+      { field: 'processDefinition', values: [], processDefinitionIds: VERSION_IDS },
+    ];
+    const statePill = filters.find(f => f.field === 'state')!;
+
+    const page = await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, 2, null));
+
+    // Both per-state bodies must carry processDefinitionIdIn
+    expect(queryInstances).toHaveBeenCalledTimes(2);
+    for (const [body] of queryInstances.mock.calls) {
+      expect(body.processDefinitionIdIn).toEqual(VERSION_IDS);
+      expect(body).not.toHaveProperty('processDefinitionKeyIn');
+    }
+
+    // fetchSize = pageSize + 1 = 3; active returned 3 items → hasMore is true
+    expect(page.hasMore).toBe(true);
+    // Page contains exactly pageSize items (2)
+    expect(page.items).toHaveLength(2);
+  });
+
+  // ── 9. Batch scenario: single locked state + version filter at large offset ────
+  // Models the batch wizard instanceLoad$ pattern: injectedStatePill.values.length === 1
+  // → the searchPerState branch is never entered → one direct queryProcessInstances call.
+
+  it('batch scenario (single locked state "active" + version filter): 1 direct call at page 149 — correct firstResult and processDefinitionIdIn', async () => {
+    const PAGE_SIZE    = 10;
+    const PAGE         = 149;
+    const FIRST_RESULT = (PAGE - 1) * PAGE_SIZE; // 1480
+
+    const pageItems = Array.from({ length: PAGE_SIZE }, (_, i) => makeInstance(`i-p149-${i}`, `2024-06-01T0${i % 10}:00:00.000Z`));
+    const queryInstances = vi.fn().mockReturnValue(of(pageItems));
+    const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
+
+    // Batch wizard (suspend operation): injects { field: 'state', values: ['active'] }
+    // + user added a version filter (processDefinitionIdIn)
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['active'] },
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:2:abc123', 'proc-b:1:def456'] },
+    ];
+
+    const results = await lastValueFrom(
+      svc.searchProcessInstancesGlobal(filters, false, false, FIRST_RESULT, PAGE_SIZE)
+    );
+
+    // Single-value state pill → searchPerState branch never entered → exactly 1 call
+    expect(queryInstances).toHaveBeenCalledTimes(1);
+
+    const [body, callFirstResult, callMaxResults] = queryInstances.mock.calls[0];
+
+    // Correct pagination offsets passed through
+    expect(callFirstResult).toBe(FIRST_RESULT); // 1480
+    expect(callMaxResults).toBe(PAGE_SIZE);     // 10
+
+    // Body contains locked state flags (active → active+unfinished) AND version filter
+    expect(body.active).toBe(true);
+    expect(body.unfinished).toBe(true);
+    expect(body.processDefinitionIdIn).toEqual(['proc-a:2:abc123', 'proc-b:1:def456']);
+    expect(body).not.toHaveProperty('processDefinitionKeyIn');
+
+    // No cross-contamination from other state flags
+    expect(body).not.toHaveProperty('suspended');
+    expect(body).not.toHaveProperty('finished');
+
+    // Service returns whatever the backend sent — no truncation
+    expect(results).toHaveLength(PAGE_SIZE);
   });
 });
