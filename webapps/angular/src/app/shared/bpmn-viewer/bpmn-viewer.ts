@@ -41,6 +41,8 @@ export interface BpmnElement {
   id: string;
   type: string;
   name?: string;
+  isInEventSubprocessScope?: boolean;
+  isInMultiInstanceScope?: boolean;
 }
 
 export interface CallActivityClickEvent {
@@ -214,7 +216,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         this.elementClick.emit({
           id: element.id,
           type: element.type,
-          name: element.businessObject?.name
+          name: element.businessObject?.name,
+          isInEventSubprocessScope: this.checkEventSubprocessScope(element),
+          isInMultiInstanceScope: this.checkMultiInstanceScope(element)
         });
       }
     });
@@ -600,6 +604,28 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     // so Angular's OnPush parent is never marked dirty automatically.
     // detectChanges() bypasses the parent check and re-renders this component immediately.
     this.cdr.detectChanges();
+  }
+
+  private checkEventSubprocessScope(element: any): boolean {
+    let current = element.parent;
+    while (current) {
+      if (current.type === 'bpmn:SubProcess' && current.businessObject?.triggeredByEvent) {
+        return true;
+      }
+      current = current.parent;
+    }
+    return false;
+  }
+
+  private checkMultiInstanceScope(element: any): boolean {
+    let current = element.parent;
+    while (current) {
+      if (current.type === 'bpmn:SubProcess' && current.businessObject?.loopCharacteristics) {
+        return true;
+      }
+      current = current.parent;
+    }
+    return false;
   }
 
   private destroyViewer(): void {

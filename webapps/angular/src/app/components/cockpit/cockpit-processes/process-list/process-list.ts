@@ -41,7 +41,9 @@ import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/
 import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics, Incident, JobDefinition, CalledProcessDefinition, parseVariableValue } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
-import { BpmnViewerComponent, ActivityBadge, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { TranslateService } from '../../../../i18n/translate.service';
+import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { ModifyTabComponent, ModifyOverlay } from '../modify-tab/modify-tab';
 
 interface SortConfig {
   column: string;
@@ -77,7 +79,8 @@ interface FilterState {
     FontAwesomeModule,
     CockpitHeaderComponent,
     TranslatePipe,
-    BpmnViewerComponent
+    BpmnViewerComponent,
+    ModifyTabComponent
   ],
   templateUrl: './process-list.html',
   styleUrls: ['./process-list.css'],
@@ -87,6 +90,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private navMenuService = inject(NavMenuService);
   private cockpitService = inject(CockpitService);
+  private translateService = inject(TranslateService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
@@ -125,6 +129,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   faArrowUp = faArrowUp;
 
   @ViewChild('bpmnViewer') bpmnViewer!: BpmnViewerComponent;
+  @ViewChild('modifyTab') modifyTab?: ModifyTabComponent;
 
   breadcrumbs: BreadcrumbItem[] = [
     { translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' }
@@ -181,7 +186,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   sortableColumns = ['startTime', 'endTime', 'businessKey'];
 
   // Tabs
-  activeTab: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' = 'instances';
+  activeTab: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' | 'modify' = 'instances';
 
   // Tab data - Incidents
   incidents: Incident[] = [];
@@ -198,6 +203,8 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   // Tab data - Called Process Definitions
   calledProcessDefinitions: CalledProcessDefinition[] = [];
   calledProcessDefinitionsLoading = false;
+
+  private modifyOverlayIds: string[] = [];
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
@@ -816,7 +823,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     }
   }
 
-  switchTab(tab: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions'): void {
+  switchTab(tab: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' | 'modify'): void {
     this.activeTab = tab;
 
     // Load data for the tab if not already loaded
@@ -836,6 +843,10 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           this.loadCalledProcessDefinitions();
         }
         break;
+    }
+
+    if (tab !== 'modify') {
+      this.clearModifyOverlays();
     }
 
     this.cdr.markForCheck();
@@ -978,6 +989,130 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       params['ancestors'] = JSON.stringify(newAncestors);
     }
     return params;
+  }
+
+  get modifyTabEnabled(): boolean {
+    return this.selectedVersion !== 'all' && !!this.processDefinition;
+  }
+
+  onModifyRefreshRequested(): void {
+    const definitionId = this.selectedVersion === 'all'
+      ? this.processDefinition?.id
+      : this.selectedVersion;
+    if (definitionId) {
+      this.cockpitService.getActivityStatistics(definitionId, true)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(stats => {
+          this.activityStatistics = stats;
+          this.cdr.detectChanges();
+        });
+    }
+    this.loadProcessInstances();
+  }
+
+  onBpmnElementClick(element: BpmnElement): void {
+    if (this.activeTab === 'modify' && this.modifyTab) {
+      this.modifyTab.onElementClick(element);
+    }
+  }
+
+  onModifyOverlaysChanged(overlays: ModifyOverlay[]): void {
+    this.clearModifyOverlays();
+
+    if (!this.bpmnViewer) return;
+
+    const viewer = (this.bpmnViewer as any).viewer;
+    if (!viewer) return;
+
+    const overlayService = viewer.get('overlays');
+    const canvas = viewer.get('canvas');
+    const elementRegistry = viewer.get('elementRegistry');
+
+    for (const overlay of overlays) {
+      const isSource = overlay.role === 'source';
+      const markerCss = isSource ? 'modify-source' : 'modify-target';
+
+      if (canvas) {
+        try {
+          canvas.addMarker(overlay.activityId, markerCss);
+        } catch (_) {}
+      }
+
+      this.addModifyOverlayLabel(overlayService, overlay.activityId, isSource);
+
+      if (elementRegistry) {
+        const element = elementRegistry.get(overlay.activityId);
+        if (element) {
+          const collapsed = this.findCollapsedSubprocessAncestor(element);
+          if (collapsed) {
+            if (canvas) {
+              try { canvas.addMarker(collapsed.id, markerCss); } catch (_) {}
+            }
+            this.addModifyOverlayLabel(overlayService, collapsed.id, isSource);
+          }
+        }
+      }
+    }
+  }
+
+  private addModifyOverlayLabel(overlayService: any, elementId: string, isSource: boolean): void {
+    if (!overlayService) return;
+    const marker = document.createElement('div');
+    marker.className = isSource
+      ? 'bpmn-modify-marker bpmn-modify-marker--source'
+      : 'bpmn-modify-marker bpmn-modify-marker--target';
+    marker.textContent = isSource
+      ? this.translateService.instant('cockpit.modify.overlaySource')
+      : this.translateService.instant('cockpit.modify.overlayTarget');
+
+    try {
+      const id = overlayService.add(elementId, {
+        position: { bottom: 2, left: -4 },
+        html: marker
+      });
+      this.modifyOverlayIds.push(id);
+    } catch (_) {}
+  }
+
+  private findCollapsedSubprocessAncestor(element: any): any {
+    let current = element.parent;
+    let result: any = null;
+    while (current) {
+      if (current.type === 'bpmn:SubProcess' && current.collapsed) {
+        result = current;
+      }
+      current = current.parent;
+    }
+    return result;
+  }
+
+  private clearModifyOverlays(): void {
+    if (!this.bpmnViewer) return;
+
+    const viewer = (this.bpmnViewer as any).viewer;
+    if (!viewer) return;
+
+    const overlayService = viewer.get('overlays');
+    const canvas = viewer.get('canvas');
+
+    if (overlayService) {
+      for (const id of this.modifyOverlayIds) {
+        try { overlayService.remove(id); } catch (_) {}
+      }
+    }
+    this.modifyOverlayIds = [];
+
+    if (canvas) {
+      const elementRegistry = viewer.get('elementRegistry');
+      if (elementRegistry) {
+        elementRegistry.forEach((element: any) => {
+          try {
+            canvas.removeMarker(element.id, 'modify-source');
+            canvas.removeMarker(element.id, 'modify-target');
+          } catch (_) {}
+        });
+      }
+    }
   }
 
   navigateToCalledDefinition(event: CallActivityClickEvent): void {

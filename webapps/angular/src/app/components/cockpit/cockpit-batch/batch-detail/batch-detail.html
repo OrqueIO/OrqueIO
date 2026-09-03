@@ -110,6 +110,16 @@
             </table>
           </div>
 
+          <ng-container *ngIf="annotation$ | async as annotation">
+            <div class="annotation-section">
+              <h4 class="annotation-title">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+                Annotation
+              </h4>
+              <p class="annotation-text">{{ annotation }}</p>
+            </div>
+          </ng-container>
+
           <!-- Failed Jobs — independent scrollable section -->
           <app-batch-jobs-list></app-batch-jobs-list>
 
