@@ -370,3 +370,37 @@ button.breadcrumb-parent-name {
   stroke-width: 1px !important;
   opacity: 0.5;
 }
+
+.modify-source .djs-visual > :nth-child(1) {
+  stroke: #dc2626 !important;
+  stroke-width: 2.5px !important;
+  stroke-dasharray: 6 3 !important;
+}
+
+.modify-target .djs-visual > :nth-child(1) {
+  stroke: #10b981 !important;
+  stroke-width: 2.5px !important;
+}
+
+.bpmn-modify-marker {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  cursor: default;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.bpmn-modify-marker--source {
+  background: #dc2626;
+}
+
+.bpmn-modify-marker--target {
+  background: #10b981;
+}

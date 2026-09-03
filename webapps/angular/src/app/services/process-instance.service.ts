@@ -19,6 +19,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { ModificationDto } from '../models/cockpit/modification.model';
 
 // ============================================
 // Process Instance Interfaces
@@ -523,6 +524,13 @@ export class ProcessInstanceService {
     return this.http.post<{ id: string }>(
       `${this.baseUrl}/process-instance/variables-async`,
       payload
+    );
+  }
+
+  executeModificationAsync(dto: ModificationDto): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.baseUrl}/modification/executeAsync`,
+      dto
     );
   }
 
