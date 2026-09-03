@@ -203,6 +203,7 @@
                 [parentBreadcrumb]="activeParentBreadcrumb"
                 (expandToggle)="toggleDiagramMaximize()"
                 (callActivityClick)="navigateToCalledDefinition($event)"
+                (elementClick)="onBpmnElementClick($event)"
               ></app-bpmn-viewer>
 
               <div class="empty-state" *ngIf="!loadingDiagram && !bpmnXml">
@@ -244,6 +245,15 @@
                   (click)="switchTab('job-definitions')"
                 >
                   {{ 'cockpit.processes.tabs.jobDefinitions' | translate }}
+                </a>
+                <a
+                  class="process-tab"
+                  [class.active]="activeTab === 'modify'"
+                  [class.disabled]="!modifyTabEnabled"
+                  (click)="modifyTabEnabled && switchTab('modify')"
+                  [title]="!modifyTabEnabled ? ('cockpit.modify.selectVersion' | translate) : ''"
+                >
+                  {{ 'cockpit.processes.tabs.modify' | translate }}
                 </a>
               </nav>
               <button class="tabs-expand-btn"
@@ -606,6 +616,16 @@
                 <fa-icon [icon]="faCog"></fa-icon>
                 <p>{{ 'cockpit.jobDefinitions.noJobDefinitions' | translate }}</p>
               </div>
+            </div>
+
+            <div class="tab-content modify-tab-content" *ngIf="activeTab === 'modify'">
+              <app-modify-tab
+                #modifyTab
+                [processDefinitionId]="selectedVersion !== 'all' ? selectedVersion : null"
+                [bpmnXml]="bpmnXml"
+                (overlaysChanged)="onModifyOverlaysChanged($event)"
+                (refreshRequested)="onModifyRefreshRequested()"
+              ></app-modify-tab>
             </div>
           </section>
         </div>

@@ -1,0 +1,180 @@
+<ng-container *ngIf="step === 'edit'">
+
+  <div class="modify-empty" *ngIf="!hasInstructions">
+    <fa-icon [icon]="faCrosshairs" class="modify-empty__icon"></fa-icon>
+    <p class="modify-empty__title">{{ 'cockpit.modify.emptyState' | translate }}</p>
+    <p class="modify-empty__hint">{{ 'cockpit.modify.emptyStateHint' | translate }}</p>
+  </div>
+
+  <ng-container *ngIf="hasInstructions">
+
+    <div class="modify-alert modify-alert--info" *ngIf="!canSelectInstances && !eventSubprocessWarning">
+      <fa-icon [icon]="faInfoCircle" class="modify-alert__icon"></fa-icon>
+      <span class="modify-alert__text">
+        {{ (selectionMode === 'target'
+          ? 'cockpit.modify.selectionMode.target'
+          : 'cockpit.modify.selectionMode.source') | translate }}
+      </span>
+    </div>
+
+    <div class="modify-alert modify-alert--danger" *ngIf="eventSubprocessWarning">
+      <fa-icon [icon]="faExclamationCircle" class="modify-alert__icon"></fa-icon>
+      <span class="modify-alert__text">
+        {{ 'cockpit.modify.eventSubprocessBlocked' | translate }}
+      </span>
+    </div>
+
+    <div class="modify-alert modify-alert--warning" *ngIf="multiInstanceWarning && canSelectInstances">
+      <fa-icon [icon]="faExclamationTriangle" class="modify-alert__icon"></fa-icon>
+      <span class="modify-alert__text">
+        {{ 'cockpit.modify.multiInstanceWarning' | translate }}
+      </span>
+    </div>
+
+    <div class="modify-alert modify-alert--warning" *ngIf="callActivityWarning && canSelectInstances">
+      <fa-icon [icon]="faExclamationTriangle" class="modify-alert__icon"></fa-icon>
+      <span class="modify-alert__text">
+        {{ 'cockpit.modify.callActivityWarning' | translate }}
+      </span>
+    </div>
+
+    <div class="section-label">{{ 'cockpit.modify.instructions' | translate }}</div>
+
+    <div class="instruction-line">
+      <div class="instruction-card" [class.instruction-card--empty]="!sourceActivity"
+           [class.instruction-card--source]="!!sourceActivity">
+        <div class="instruction-card__header">
+          <span class="instruction-card__badge instruction-card__badge--source">
+            <fa-icon [icon]="faTimesCircle" size="xs"></fa-icon>
+          </span>
+          <span class="instruction-card__type">{{ 'cockpit.modify.source' | translate }}</span>
+          <button class="instruction-card__remove" *ngIf="sourceActivity"
+                  (click)="setSource(null)" type="button"
+                  [title]="'cockpit.modify.removeInstruction' | translate">
+            <fa-icon [icon]="faTimes" size="xs"></fa-icon>
+          </button>
+        </div>
+        <div class="instruction-card__body" *ngIf="sourceActivity">
+          <span class="instruction-card__name">{{ sourceActivity.name || sourceActivity.id }}</span>
+          <code class="instruction-card__id" *ngIf="sourceActivity.name">{{ sourceActivity.id }}</code>
+        </div>
+        <div class="instruction-card__body instruction-card__body--empty" *ngIf="!sourceActivity">
+          <span>{{ 'cockpit.modify.clickToSelect' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="instruction-line__arrow">
+        <fa-icon [icon]="faArrowRight"></fa-icon>
+      </div>
+
+      <div class="instruction-card" [class.instruction-card--empty]="!targetActivity"
+           [class.instruction-card--target]="!!targetActivity">
+        <div class="instruction-card__header">
+          <span class="instruction-card__badge instruction-card__badge--target">
+            <fa-icon [icon]="faPlayCircle" size="xs"></fa-icon>
+          </span>
+          <span class="instruction-card__type">{{ 'cockpit.modify.target' | translate }}</span>
+          <button class="instruction-card__remove" *ngIf="targetActivity"
+                  (click)="setTarget(null)" type="button"
+                  [title]="'cockpit.modify.removeInstruction' | translate">
+            <fa-icon [icon]="faTimes" size="xs"></fa-icon>
+          </button>
+        </div>
+        <div class="instruction-card__body" *ngIf="targetActivity">
+          <span class="instruction-card__name">{{ targetActivity.name || targetActivity.id }}</span>
+          <code class="instruction-card__id" *ngIf="targetActivity.name">{{ targetActivity.id }}</code>
+        </div>
+        <div class="instruction-card__body instruction-card__body--empty" *ngIf="!targetActivity">
+          <span>{{ 'cockpit.modify.clickToSelect' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="payload-details" *ngIf="instructions.length > 0">
+      <button type="button" class="payload-toggle-btn" (click)="togglePayload()"
+              [class.payload-toggle-btn--open]="showPayload">
+        <fa-icon [icon]="faCode" class="payload-toggle-btn__icon"></fa-icon>
+        <span>{{ 'cockpit.modify.showPayload' | translate }}</span>
+        <fa-icon [icon]="showPayload ? faChevronUp : faChevronDown" class="payload-toggle-btn__chevron"></fa-icon>
+      </button>
+      <div class="payload-content" *ngIf="showPayload">
+        <pre class="payload-json">{{ payloadJson }}</pre>
+      </div>
+    </div>
+
+    <div class="modify-actions">
+      <button class="btn-secondary" (click)="clearAll()" type="button"
+              [disabled]="!sourceActivity && !targetActivity">
+        <fa-icon [icon]="faTimes"></fa-icon>
+        {{ 'cockpit.modify.clearAll' | translate }}
+      </button>
+      <button class="btn-primary" (click)="openSelectInstancesDialog()" type="button"
+              [disabled]="!canSelectInstances">
+        <fa-icon [icon]="faListCheck"></fa-icon>
+        {{ 'cockpit.modify.selectInstances' | translate }}
+      </button>
+    </div>
+  </ng-container>
+</ng-container>
+
+<div class="modify-result" *ngIf="step === 'submitting'">
+  <fa-icon [icon]="faSpinner" animation="spin" class="result-icon result-icon--loading"></fa-icon>
+  <p>{{ 'cockpit.modify.results.processing' | translate }}</p>
+</div>
+
+<div class="modify-result" *ngIf="step === 'result'">
+  <ng-container *ngIf="!batchError">
+    <fa-icon [icon]="batchCompleted ? faCheckCircle : faSpinner"
+             [animation]="batchCompleted ? undefined : 'spin'"
+             class="result-icon"
+             [class.result-icon--success]="batchCompleted"
+             [class.result-icon--loading]="!batchCompleted"></fa-icon>
+    <p *ngIf="!batchCompleted">{{ 'cockpit.modify.results.executing' | translate }}</p>
+    <p *ngIf="batchCompleted">{{ 'cockpit.modify.results.completed' | translate }}</p>
+    <p class="result-batch-id">{{ 'cockpit.modify.results.batchId' | translate: { id: batchId ?? '' } }}</p>
+    <div class="batch-progress" *ngIf="!batchCompleted && batchTotal > 0">
+      <div class="batch-progress__bar">
+        <div class="batch-progress__fill" [style.width.%]="(batchProgress / batchTotal) * 100"></div>
+      </div>
+      <span class="batch-progress__text">{{ batchProgress }} / {{ batchTotal }}</span>
+    </div>
+    <div class="result-actions">
+      <a routerLink="/cockpit/batch" class="btn-primary">
+        {{ 'cockpit.modify.results.viewBatches' | translate }}
+      </a>
+      <button class="btn-secondary" (click)="startNewModification()" type="button">
+        {{ 'cockpit.modify.results.newModification' | translate }}
+      </button>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="batchError">
+    <fa-icon [icon]="faTimesCircle" class="result-icon result-icon--error"></fa-icon>
+    <p>{{ 'cockpit.modify.results.error' | translate }}</p>
+    <div class="result-actions">
+      <button class="btn-secondary" (click)="startNewModification()" type="button">
+        {{ 'cockpit.modify.results.newModification' | translate }}
+      </button>
+    </div>
+  </ng-container>
+</div>
+
+<app-select-instances-dialog
+  *ngIf="showSelectDialog"
+  [processDefinitionId]="processDefinitionId!"
+  [sourceActivityId]="sourceActivity?.id || null"
+  (cancelled)="onSelectDialogCancelled()"
+  (confirmed)="onInstancesSelected($event)"
+></app-select-instances-dialog>
+
+<app-confirm-modification-dialog
+  *ngIf="showConfirmDialog"
+  [instanceCount]="selectionCount"
+  [isQueryMode]="selectionIsQuery"
+  [sourceActivity]="sourceActivity"
+  [targetActivity]="targetActivity"
+  [hasMultiInstanceWarning]="multiInstanceWarning"
+  [hasCallActivityWarning]="callActivityWarning"
+  (back)="onConfirmDialogBack()"
+  (cancelled)="onConfirmDialogCancelled()"
+  (confirmed)="onConfirmProceed($event)"
+></app-confirm-modification-dialog>
