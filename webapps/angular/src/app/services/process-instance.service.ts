@@ -500,6 +500,23 @@ export class ProcessInstanceService {
     return this.http.post<{ id: string }>(`${this.baseUrl}/job/retries`, body);
   }
 
+  setExternalTaskRetriesAsync(payload: {
+    retries: number;
+    processInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    if (payload.historicProcessInstanceQuery) {
+      return this.http.post<{ id: string }>(`${this.baseUrl}/external-task/retries-async-historic-query-based`, {
+        retries: payload.retries,
+        historicProcessInstanceQuery: payload.historicProcessInstanceQuery
+      });
+    }
+    return this.http.post<{ id: string }>(`${this.baseUrl}/external-task/retries-async`, {
+      retries: payload.retries,
+      externalTaskQuery: { processInstanceIdIn: payload.processInstanceIds ?? [] }
+    });
+  }
+
   /**
    * Resume (activate) a process instance
    */

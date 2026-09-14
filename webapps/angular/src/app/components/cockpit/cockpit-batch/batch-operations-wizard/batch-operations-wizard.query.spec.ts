@@ -436,3 +436,45 @@ describe('BatchOperationsWizardComponent — set-retries-jobs: confirmEndpoint',
   });
 
 });
+
+// ─── set-retries-jobs: error classification ──────────────────────────────────────────
+
+/**
+ * Mirrors the error handler in execute() for set-retries-jobs.
+ * Isolated here so we can assert flag values without Angular TestBed.
+ */
+function classifyJobsError(err: unknown): { batchError: boolean; batchErrorNoJobs: boolean } {
+  const msg: string = (err as { error?: { message?: string } } | null)?.error?.message ?? '';
+  return {
+    batchError: true,
+    batchErrorNoJobs: msg.includes('jobIds is empty'),
+  };
+}
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: error classification', () => {
+
+  it('engine message "jobIds is empty" → batchErrorNoJobs=true, batchError=true', () => {
+    const result = classifyJobsError({ error: { message: 'ENGINE-13011 Batch set retries: jobIds is empty.' } });
+    expect(result.batchError).toBe(true);
+    expect(result.batchErrorNoJobs).toBe(true);
+  });
+
+  it('other 400 error message → batchErrorNoJobs=false, batchError=true (generic path)', () => {
+    const result = classifyJobsError({ error: { message: 'ENGINE-00001 Some unrelated engine error.' } });
+    expect(result.batchError).toBe(true);
+    expect(result.batchErrorNoJobs).toBe(false);
+  });
+
+  it('null error object → batchErrorNoJobs=false, batchError=true (graceful fallback)', () => {
+    const result = classifyJobsError(null);
+    expect(result.batchError).toBe(true);
+    expect(result.batchErrorNoJobs).toBe(false);
+  });
+
+  it('error without message field → batchErrorNoJobs=false, batchError=true', () => {
+    const result = classifyJobsError({ error: {} });
+    expect(result.batchError).toBe(true);
+    expect(result.batchErrorNoJobs).toBe(false);
+  });
+
+});
