@@ -961,6 +961,53 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.selectedOperationId === 'set-retries-external') {
+      const externalPayload = this.mode === 'instances'
+        ? { retries: this.retries, processInstanceIds: [...this.selectedIds] }
+        : { retries: this.retries, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() };
+      this.processInstanceService.setExternalTaskRetriesAsync(externalPayload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: batch => {
+            this.batchId = batch.id;
+            this.executing = false;
+            this.clearSessionStorage();
+            this.cdr.markForCheck();
+          },
+          error: (err) => {
+            const msg: string = err?.error?.message ?? '';
+            this.batchErrorNoExternalTasks = msg.includes('externalTaskIds is empty');
+            this.batchError = true;
+            this.executing = false;
+            this.cdr.markForCheck();
+          }
+        });
+      return;
+    }
+
+    if (this.selectedOperationId === 'set-variables') {
+      const variables = this.buildVariablesPayload();
+      const setVarsPayload = this.mode === 'instances'
+        ? { processInstanceIds: [...this.selectedIds], variables }
+        : { historicProcessInstanceQuery: this.buildHistoricQueryForBatch(), variables };
+      this.processInstanceService.setVariablesAsync(setVarsPayload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: batch => {
+            this.batchId = batch.id;
+            this.executing = false;
+            this.clearSessionStorage();
+            this.cdr.markForCheck();
+          },
+          error: () => {
+            this.batchError = true;
+            this.executing = false;
+            this.cdr.markForCheck();
+          }
+        });
+      return;
+    }
+
     if (this.selectedOperationId === 'delete-decision') {
       const deleteReason = this.deleteReason.trim() || undefined;
       const payload = this.mode === 'instances'

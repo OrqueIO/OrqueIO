@@ -561,6 +561,7 @@ describe('BatchOperationsWizardComponent — set-retries-jobs: error classificat
 
 });
 
+
 // ─── set-variables: buildHistoricQueryForBatch ─────────────────────────────
 
 describe('BatchOperationsWizardComponent — set-variables: buildHistoricQueryForBatch', () => {
