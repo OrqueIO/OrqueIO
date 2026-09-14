@@ -1,0 +1,111 @@
+<div class="modal-backdrop" (click)="onOverlayClick($event)">
+  <div class="modal-dialog" #dialogEl tabindex="-1" (keydown.enter)="onModalEnter($event)">
+
+    <div class="modal-header">
+      <h3 class="modal-title">{{ 'cockpit.batchOps.setVariables.modalTitle' | translate }}</h3>
+      <button type="button" class="close-btn" (click)="onClose()">&#x2715;</button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-hint">{{ 'cockpit.batchOps.setVariables.modalHint' | translate }}</p>
+
+      <div class="var-table-header">
+        <span class="col-name-label">{{ 'cockpit.batchOps.setVariables.colName' | translate }}</span>
+        <span class="col-type-label">{{ 'cockpit.batchOps.setVariables.colType' | translate }}</span>
+        <span class="col-value-label">{{ 'cockpit.batchOps.setVariables.colValue' | translate }}</span>
+        <span class="col-remove-label"></span>
+      </div>
+
+      <div class="var-rows">
+        <div *ngFor="let row of rows; let i = index; trackBy: trackByIndex" class="var-row">
+
+          <!-- Name: free text, no format constraint (Camunda 7 has no strict naming rules) -->
+          <div class="var-name-wrap">
+            <input type="text"
+                   class="var-input"
+                   [(ngModel)]="rows[i].name"
+                   (keydown.enter)="onFieldEnter($event)"
+                   [placeholder]="'cockpit.batchOps.setVariables.varNamePlaceholder' | translate">
+            <span *ngIf="getNameDuplicateWarning(rows[i].name, i) as warnName" class="var-name-warn">
+              <i class="ti ti-alert-triangle"></i>{{ 'cockpit.batchOps.setVariables.warnNameDuplicate' | translate: { name: warnName } }}
+            </span>
+            <span *ngIf="getNameCautionWarning(rows[i].name)" class="var-name-caution">
+              <i class="ti ti-info-circle"></i>{{ 'cockpit.batchOps.setVariables.warnNameSpecialChars' | translate }}
+            </span>
+          </div>
+
+          <!-- Type: keyup.enter so the change event fires first and onTypeChange updates rows before onEnter reads them -->
+          <select class="var-select" [ngModel]="rows[i].type" (ngModelChange)="onTypeChange(i, $event)" (keyup.enter)="onFieldEnter($event)">
+            <option value="String">String</option>
+            <option value="Integer">Integer</option>
+            <option value="Long">Long</option>
+            <option value="Short">Short</option>
+            <option value="Double">Double</option>
+            <option value="Boolean">Boolean</option>
+            <option value="Date">Date</option>
+          </select>
+
+          <!-- Value column: wrapped so the inline error message fits below the input -->
+          <div class="var-value-wrap">
+
+            <!-- Integer / Long / Short: type="text" — never type="number" (silently converts "5e3"→5000). -->
+            <input *ngIf="isIntegerType(row.type)"
+                   type="text"
+                   inputmode="numeric"
+                   class="var-input"
+                   [value]="row.value"
+                   (keydown)="onIntegerKeydown($event, row.value)"
+                   (keydown.enter)="onFieldEnter($event)"
+                   (paste)="onIntegerPaste($event)"
+                   (input)="rows[i].value = $any($event.target).value"
+                   [class.input-error]="!isValueValid(row)"
+                   [placeholder]="'cockpit.batchOps.setVariables.varValuePlaceholder' | translate">
+
+            <!-- Date: datetime-local for Camunda's Date type (includes time) -->
+            <input *ngIf="row.type === 'Date'"
+                   type="datetime-local"
+                   class="var-input"
+                   [(ngModel)]="rows[i].value"
+                   (keydown.enter)="onFieldEnter($event)">
+
+            <!-- Double / String: browser native handling -->
+            <input *ngIf="!isIntegerType(row.type) && row.type !== 'Boolean' && row.type !== 'Date'"
+                   [type]="getInputType(row.type)"
+                   class="var-input"
+                   [(ngModel)]="rows[i].value"
+                   (keydown.enter)="onFieldEnter($event)"
+                   [placeholder]="'cockpit.batchOps.setVariables.varValuePlaceholder' | translate">
+
+            <!-- Boolean: checkbox + live label, same as StartProcessModalComponent -->
+            <label class="var-checkbox-label" *ngIf="row.type === 'Boolean'">
+              <input type="checkbox" [(ngModel)]="rows[i].value" (keydown.enter)="onFieldEnter($event)">
+              {{ rows[i].value ? 'true' : 'false' }}
+            </label>
+
+            <!-- Inline error — *ngIf="... as errKey" narrows string|null → string for the translate pipe -->
+            <span *ngIf="getValueError(row) as errKey" class="var-field-error">
+              <i class="ti ti-alert-circle"></i>{{ errKey | translate }}
+            </span>
+
+          </div>
+
+          <button type="button" class="var-remove-btn" (click)="removeRow(i)">&#x2715;</button>
+        </div>
+      </div>
+
+      <button type="button" class="var-add-btn" (click)="addRow()">
+        {{ 'cockpit.batchOps.setVariables.addVariable' | translate }}
+      </button>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">
+        {{ 'common.cancel' | translate }}
+      </button>
+      <button type="button" class="btn btn-primary" [disabled]="!canApply" (click)="onApply()">
+        {{ 'cockpit.batchOps.setVariables.modalApplyBtn' | translate }}
+      </button>
+    </div>
+
+  </div>
+</div>

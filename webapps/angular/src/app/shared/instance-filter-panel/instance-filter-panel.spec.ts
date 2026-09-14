@@ -9,6 +9,7 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 import { InstanceFilterPanelComponent } from './instance-filter-panel';
 import { CockpitService } from '../../services/cockpit.service';
+import { DecisionService } from '../../services/decision.service';
 import { TranslateService } from '../../i18n/translate.service';
 import { initTestEnvironment } from '../../testing/test-utils';
 
@@ -389,5 +390,216 @@ describe('InstanceFilterPanelComponent — initialPills chip restoration', () =>
     original[0].values.push('BK-INJECTED');
 
     expect(component.activePills[0].values).toEqual(['BK-1']);
+  });
+});
+
+describe('InstanceFilterPanelComponent — criteriaSet=decision: State structurally absent (delete-decision batch op)', () => {
+  let fixture: ComponentFixture<InstanceFilterPanelComponent>;
+  let component: InstanceFilterPanelComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+    const decisionService = {
+      getDecisionDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [InstanceFilterPanelComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: DecisionService, useValue: decisionService },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(InstanceFilterPanelComponent);
+    component = fixture.componentInstance;
+    component.criteriaSet = 'decision';
+    // lockedState intentionally null — as in the wizard's decision panel binding
+    component.lockedState = null;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: {} };
+
+    fixture.detectChanges();
+  });
+
+  it('State option is absent from Add criteria when criteriaSet=decision (even with lockedState=null)', () => {
+    // For delete-decision, the wizard passes criteriaSet='decision' without lockedState.
+    // State must be absent because the decision criteria set simply has no State criterion —
+    // not because of the lockedState mechanism. This test confirms the structural exclusion.
+    const fakeEvent = { stopPropagation: vi.fn() } as unknown as Event;
+    component.toggleCriteriaDropdown(fakeEvent);
+    fixture.detectChanges();
+
+    // The emerald State button should not exist in the decision criteria panel
+    expect(fixture.debugElement.query(By.css('.criteria-icon-wrap--emerald'))).toBeNull();
+  });
+
+  it('Process Definition option is absent from Add criteria when criteriaSet=decision', () => {
+    // Only decision-specific criteria appear when criteriaSet='decision':
+    // decisionInstanceId, processInstanceId, decisionDefinition, evaluatedAfter, evaluatedBefore
+    const fakeEvent = { stopPropagation: vi.fn() } as unknown as Event;
+    component.toggleCriteriaDropdown(fakeEvent);
+    fixture.detectChanges();
+
+    // The orange Process Definition button (criteria-icon-wrap--orange) is present in decision
+    // mode only for decisionDefinition, not processDefinition — and the dropdown shows exactly
+    // the decision criteria set (5 buttons: decisionInstanceId, processInstanceId,
+    // decisionDefinition, evaluatedAfter, evaluatedBefore)
+    const options = fixture.debugElement.queryAll(By.css('.criteria-option'));
+    expect(options.length).toBe(5);
+    // State (emerald) is absent
+    expect(fixture.debugElement.query(By.css('.criteria-icon-wrap--emerald'))).toBeNull();
+  });
+});
+
+describe('InstanceFilterPanelComponent — Process Definition version filter', () => {
+  const fakeDefs = [
+    { id: 'pd-a-v2', key: 'proc-a', name: 'Process A', version: 2 },
+    { id: 'pd-a-v1', key: 'proc-a', name: 'Process A', version: 1 },
+    { id: 'pd-b-v1', key: 'proc-b', name: 'Process B', version: 1 },
+  ];
+
+  async function createWithDefs(defs: typeof fakeDefs) {
+    initTestEnvironment();
+
+    const cockpitService = {
+      getProcessDefinitions: vi.fn().mockReturnValue(of(defs)),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [InstanceFilterPanelComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: CockpitService, useValue: cockpitService },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(InstanceFilterPanelComponent);
+    const component = fixture.componentInstance;
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: {} };
+    fixture.detectChanges();
+    return { fixture, component };
+  }
+
+  it('groups definitions by key, sorts versions descending and marks the highest as latest', async () => {
+    const { component } = await createWithDefs(fakeDefs);
+
+    expect(component.availableProcessDefinitionGroups.length).toBe(2);
+    const groupA = component.availableProcessDefinitionGroups.find(g => g.key === 'proc-a')!;
+    expect(groupA.versions.length).toBe(2);
+    expect(groupA.versions[0].version).toBe(2);
+    expect(groupA.versions[0].isLatest).toBe(true);
+    expect(groupA.versions[1].version).toBe(1);
+    expect(groupA.versions[1].isLatest).toBe(false);
+  });
+
+  it('selecting a group by key clears any pre-existing version IDs for that group', async () => {
+    const { component } = await createWithDefs(fakeDefs);
+
+    component.pendingProcessDefinitionIds = ['pd-a-v1'];
+    component.toggleProcessDefinitionKey('proc-a');
+
+    expect(component.pendingProcessDefinitionKeys).toContain('proc-a');
+    expect(component.pendingProcessDefinitionIds).not.toContain('pd-a-v1');
+  });
+
+  it('selecting a specific version removes the group key and adds the version ID', async () => {
+    const { component } = await createWithDefs(fakeDefs);
+
+    component.pendingProcessDefinitionKeys = ['proc-a'];
+    component.toggleProcessDefinitionVersion('proc-a', 'pd-a-v1');
+
+    expect(component.pendingProcessDefinitionKeys).not.toContain('proc-a');
+    expect(component.pendingProcessDefinitionIds).toContain('pd-a-v1');
+  });
+
+  it('single-version process confirmed by key produces values[] with no processDefinitionIds', async () => {
+    const { component } = await createWithDefs(fakeDefs);
+
+    component.activeEditorType = 'processDefinition';
+    component.pendingProcessDefinitionKeys = ['proc-b'];
+    component.pendingProcessDefinitionIds = [];
+    component.confirmCriterion();
+
+    expect(component.activePills.length).toBe(1);
+    const pill = component.activePills[0];
+    expect(pill.values).toEqual(['proc-b']);
+    expect((pill as any).processDefinitionIds).toBeUndefined();
+  });
+
+  it('selecting only one version of a multi-version process → emit fires with processDefinitionIds (not KeyIn)', async () => {
+    const { component } = await createWithDefs(fakeDefs);
+    const emitted: any[] = [];
+    component.criteriaChange.subscribe((e: any) => emitted.push(e));
+
+    // Open the processDefinition editor
+    component.activeEditorType = 'processDefinition';
+    // Click only pd-a-v2 (proc-a has 2 versions — no promote-to-key should happen)
+    component.toggleProcessDefinitionVersion('proc-a', 'pd-a-v2');
+
+    // Data structure: ID added, key NOT added
+    expect(component.pendingProcessDefinitionIds).toContain('pd-a-v2');
+    expect(component.pendingProcessDefinitionKeys).not.toContain('proc-a');
+
+    component.confirmCriterion();
+
+    // criteriaChange should have fired exactly once
+    expect(emitted.length).toBe(1);
+    const criteria: any[] = emitted[0].criteria;
+    expect(criteria.length).toBe(1);
+    const pill = criteria[0];
+    expect(pill.field).toBe('processDefinition');
+    expect(pill.values).toEqual([]);
+    expect(pill.processDefinitionIds).toEqual(['pd-a-v2']);
+  });
+
+  it('selecting all versions of a multi-version process one-by-one promotes to key level', async () => {
+    const { component } = await createWithDefs(fakeDefs);
+
+    // proc-a has pd-a-v2 (v2) and pd-a-v1 (v1)
+    component.toggleProcessDefinitionVersion('proc-a', 'pd-a-v2');
+    expect(component.pendingProcessDefinitionIds).toContain('pd-a-v2');
+    expect(component.pendingProcessDefinitionKeys).not.toContain('proc-a');
+
+    // Selecting the second (and last) version triggers promotion
+    component.toggleProcessDefinitionVersion('proc-a', 'pd-a-v1');
+    expect(component.pendingProcessDefinitionIds).not.toContain('pd-a-v2');
+    expect(component.pendingProcessDefinitionIds).not.toContain('pd-a-v1');
+    expect(component.pendingProcessDefinitionKeys).toContain('proc-a');
+  });
+
+  it('isProcessGroupSelected returns true when only one version is selected (partial) — R3 parity', async () => {
+    const { component } = await createWithDefs(fakeDefs);
+    const groupA = component.availableProcessDefinitionGroups.find(g => g.key === 'proc-a')!;
+
+    // proc-a has 2 versions — selecting only one is a partial selection
+    component.toggleProcessDefinitionVersion('proc-a', 'pd-a-v2');
+
+    expect(component.isProcessGroupSelected(groupA)).toBe(true);
+  });
+
+  it('isProcessGroupSelected returns true when whole group is selected by key — non-regression', async () => {
+    const { component } = await createWithDefs(fakeDefs);
+    const groupA = component.availableProcessDefinitionGroups.find(g => g.key === 'proc-a')!;
+
+    component.toggleProcessDefinitionKey('proc-a');
+
+    expect(component.isProcessGroupSelected(groupA)).toBe(true);
+  });
+
+  it('isProcessGroupSelected returns false when nothing is selected for a group', async () => {
+    const { component } = await createWithDefs(fakeDefs);
+    const groupA = component.availableProcessDefinitionGroups.find(g => g.key === 'proc-a')!;
+
+    expect(component.isProcessGroupSelected(groupA)).toBe(false);
   });
 });

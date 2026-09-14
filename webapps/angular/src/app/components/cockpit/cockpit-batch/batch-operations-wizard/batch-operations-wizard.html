@@ -47,7 +47,7 @@
 
     </div>
 
-    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external'" class="operation-steps">
+    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external' || selectedOperationId === 'set-variables'" class="operation-steps">
 
       <!-- ── Carte 1 : Définition de la requête ────────────────────── -->
       <div class="operation-card">
@@ -68,7 +68,7 @@
           </button>
         </div>
 
-        <!-- Info note — set-retries-external: pending external tasks pre-check (both modes) -->
+        <!-- Info note — set-retries-external: pending tasks pre-check warning (both modes) -->
         <div *ngIf="selectedOperationId === 'set-retries-external'" class="info-note">
           <fa-icon [icon]="faInfoCircle"></fa-icon>
           <span>{{ 'cockpit.batchOps.setRetriesExternal.pendingTasksNote' | translate }}</span>
@@ -80,8 +80,8 @@
           <span>{{ 'cockpit.batchOps.setRetriesJobs.pendingJobsNote' | translate }}</span>
         </div>
 
-        <!-- Info note — instances mode for suspend/activate; both modes for delete-running and delete-finished -->
-        <div *ngIf="(mode === 'instances' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished') && selectedOperationId !== 'set-retries-external' && selectedOperationId !== 'set-retries-jobs'" class="info-note">
+        <!-- Info note — instances mode for suspend/activate; both modes for delete-running, delete-finished, set-variables -->
+        <div *ngIf="(mode === 'instances' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-variables') && selectedOperationId !== 'set-retries-external' && selectedOperationId !== 'set-retries-jobs'" class="info-note">
           <fa-icon [icon]="faInfoCircle"></fa-icon>
           <span>{{ operationOnlyNoteKey | translate }}</span>
         </div>
@@ -148,18 +148,19 @@
         </div>
 
         <!-- Set-retries-jobs options: retries input + due date choice — above "Add criteria" -->
-        <div *ngIf="selectedOperationId === 'set-retries-jobs'" class="retries-options">
+        <div *ngIf="selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external'" class="retries-options">
 
           <!-- Retries number input -->
           <div class="retries-field">
             <label class="retries-label">{{ 'cockpit.batchOps.setRetriesJobs.retriesLabel' | translate }}</label>
             <input type="number" class="retries-input" [(ngModel)]="retries" min="0" step="1"
                    [placeholder]="'cockpit.batchOps.setRetriesJobs.retriesPlaceholder' | translate">
-            <span class="field-hint">{{ 'cockpit.batchOps.setRetriesJobs.retriesHint' | translate }}</span>
+            <span class="field-hint" *ngIf="selectedOperationId === 'set-retries-jobs'">{{ 'cockpit.batchOps.setRetriesJobs.retriesHint' | translate }}</span>
+            <span class="field-hint" *ngIf="selectedOperationId === 'set-retries-external'">{{ 'cockpit.batchOps.setRetriesExternal.retriesHint' | translate }}</span>
           </div>
 
-          <!-- Due date — custom radio buttons -->
-          <div class="due-date-options">
+          <!-- Due date — custom radio buttons — jobs only (not applicable to external tasks) -->
+          <div *ngIf="selectedOperationId === 'set-retries-jobs'" class="due-date-options">
             <label class="due-date-option" (click)="setDueDate = false">
               <span class="radio-circle" [class.radio-circle--selected]="!setDueDate">
                 <span class="radio-circle__dot" *ngIf="!setDueDate"></span>
@@ -177,14 +178,24 @@
 
         </div>
 
-        <!-- Set-retries-external options: retries input — above "Add criteria" -->
-        <div *ngIf="selectedOperationId === 'set-retries-external'" class="retries-options">
+        <!-- Set-variables: add zone + chips -->
+        <div *ngIf="selectedOperationId === 'set-variables'" class="set-vars-section">
 
-          <div class="retries-field">
-            <label class="retries-label">{{ 'cockpit.batchOps.setRetriesExternal.retriesLabel' | translate }}</label>
-            <input type="number" class="retries-input" [(ngModel)]="retries" min="0" step="1"
-                   [placeholder]="'cockpit.batchOps.setRetriesJobs.retriesPlaceholder' | translate">
-            <span class="field-hint">{{ 'cockpit.batchOps.setRetriesExternal.retriesHint' | translate }}</span>
+          <button type="button" class="set-vars-btn" (click)="openVariablesModal()">
+            <fa-icon [icon]="faCirclePlus" class="set-vars-btn__icon"></fa-icon>
+            <span class="set-vars-btn__text">{{ 'cockpit.batchOps.setVariables.openModalBtn' | translate }}</span>
+          </button>
+
+          <div *ngIf="variableDefinitions.length > 0" class="var-chips">
+            <div *ngFor="let v of variableDefinitions; let i = index; trackBy: trackByIndex" class="var-chip">
+              <button type="button" class="var-chip__edit" (click)="openEditVariableModal(i)">
+                <span class="var-chip__name">{{ v.name }}</span>
+                <span class="var-chip__eq">=</span>
+                <span class="var-chip__value">{{ v.value }}</span>
+                <span class="var-chip__type">{{ v.type }}</span>
+              </button>
+              <button type="button" class="var-chip__remove" (click)="removeVariableDefinition(i)" title="Remove">&#x2715;</button>
+            </div>
           </div>
 
         </div>
@@ -288,7 +299,12 @@
                        class="instance-link mono"
                        [title]="inst.id">{{ inst.id }}</a>
                   </td>
-                  <td class="col-definition">{{ getDefinitionDisplay(inst) }}</td>
+                  <td class="col-definition">
+                    {{ getDefinitionDisplay(inst) }}<span
+                      class="definition-version"
+                      *ngIf="extractVersionNumber(inst.processDefinitionId) !== null"
+                    >v{{ extractVersionNumber(inst.processDefinitionId) }}</span>
+                  </td>
                   <td class="col-businesskey">{{ inst.businessKey || '—' }}</td>
                   <td class="col-starttime cell-nowrap">{{ inst.startTime | camDate }}</td>
                   <td class="col-endtime cell-nowrap">{{ (inst.endTime | camDate) || '—' }}</td>
@@ -607,6 +623,14 @@
     </div>
   </div>
   <!-- /step 3 -->
+
+  <!-- Variable definitions modal -->
+  <app-variable-definitions-modal
+    *ngIf="showVariablesModal"
+    [initialVariables]="modalInitialVariables"
+    (apply)="onVariablesApplied($event)"
+    (closeModal)="closeVariablesModal()">
+  </app-variable-definitions-modal>
 
 </div>
 <!-- /wizard-page -->

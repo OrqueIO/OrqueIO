@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Subject, forkJoin, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil, catchError, switchMap } from 'rxjs/operators';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
+import { getVariableInputType } from '../../../utils/variable-type.util';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
 import { AuthService } from '../../../services/auth';
 import { ProcessDefinition, TaskForm, Task } from '../../../models/tasklist/task.model';
@@ -309,22 +310,7 @@ export class StartProcessModalComponent implements OnInit, OnChanges, OnDestroy 
   }
 
   getInputType(type: string): string {
-    switch (type.toLowerCase()) {
-      case 'integer':
-      case 'long':
-      case 'short':
-      case 'double':
-      case 'number':
-        return 'number';
-      case 'boolean':
-        return 'checkbox';
-      case 'date':
-        return 'date';
-      case 'datetime':
-        return 'datetime-local';
-      default:
-        return 'text';
-    }
+    return getVariableInputType(type);
   }
 
   get totalPages(): number {
