@@ -90,6 +90,8 @@ const STEP3_KEYS = [
   'cockpit.batchOps.results.batchSubmitted',
   'cockpit.batchOps.results.batchId',
   'cockpit.batchOps.results.batchError',
+  'cockpit.batchOps.setRetriesExternal.noExternalTasks',
+  'cockpit.batchOps.setRetriesExternal.pendingTasksNote',
   'cockpit.batchOps.results.newOperation',
   'cockpit.batchOps.results.viewBatches',
 ];
