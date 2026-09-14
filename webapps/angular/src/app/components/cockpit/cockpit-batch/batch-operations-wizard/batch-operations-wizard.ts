@@ -312,6 +312,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   executing = false;
   batchId: string | null = null;
   batchError = false;
+  batchErrorNoExternalTasks = false;
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
@@ -923,7 +924,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
             this.clearSessionStorage();
             this.cdr.markForCheck();
           },
-          error: () => {
+          error: (err) => {
+            const msg: string = err?.error?.message ?? '';
+            this.batchErrorNoExternalTasks = msg.includes('externalTaskIds is empty');
             this.batchError = true;
             this.executing = false;
             this.cdr.markForCheck();
@@ -1053,6 +1056,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.resetForm();
     this.batchId = null;
     this.batchError = false;
+    this.batchErrorNoExternalTasks = false;
     this.executing = false;
     this.showTechnicalDetails = false;
     window.scrollTo(0, 0);
