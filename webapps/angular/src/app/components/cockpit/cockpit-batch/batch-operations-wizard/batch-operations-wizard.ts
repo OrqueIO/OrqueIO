@@ -902,7 +902,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
             this.clearSessionStorage();
             this.cdr.markForCheck();
           },
-          error: () => {
+          error: (err) => {
+            const msg: string = err?.error?.message ?? '';
+            this.batchErrorNoJobs = msg.includes('jobIds is empty');
             this.batchError = true;
             this.executing = false;
             this.cdr.markForCheck();
@@ -1057,6 +1059,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.batchId = null;
     this.batchError = false;
     this.batchErrorNoExternalTasks = false;
+    this.batchErrorNoJobs = false;
     this.executing = false;
     this.showTechnicalDetails = false;
     window.scrollTo(0, 0);
@@ -1154,7 +1157,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.deleteRunning.onlyRunningNote';
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.deleteFinished.onlyFinishedNote';
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.setRetriesJobs.onlyActiveNote';
-    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.setRetriesExternal.onlyActiveNote';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.setVariables.anyStateNote';
     return 'cockpit.batchOps.suspend.onlyRunningNote';
   }
@@ -1197,7 +1199,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedBtn';
     if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionBtn';
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsBtn';
-    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalBtn';
+    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.setRetriesExternal.actionBtn';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesBtn';
     return 'cockpit.batchOps.confirm.suspendBtn';
   }
@@ -1208,7 +1210,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedBtnQuery';
     if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionBtnQuery';
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsBtnQuery';
-    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalBtnQuery';
+    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.setRetriesExternal.actionBtnQuery';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesBtnQuery';
     return 'cockpit.batchOps.confirm.suspendBtnQuery';
   }
