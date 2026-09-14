@@ -1,6 +1,7 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
+import { tap, switchMap, of, distinctUntilChanged, filter } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faSpinner,
@@ -18,6 +19,7 @@ import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confir
 import { BatchJobsListComponent } from '../batch-jobs-list/batch-jobs-list';
 
 import { BatchStatistics, HistoryBatch, BATCH_DETAIL_KEYS } from '../../../../models/cockpit/batch.model';
+import { BatchService } from '../../../../services/batch.service';
 import * as BatchActions from '../../../../store/cockpit/batch/batch.actions';
 import * as BatchSelectors from '../../../../store/cockpit/batch/batch.selectors';
 
@@ -39,6 +41,8 @@ import * as BatchSelectors from '../../../../store/cockpit/batch/batch.selectors
 })
 export class BatchDetailComponent {
   private store = inject(Store);
+  private batchService = inject(BatchService);
+  private cdr = inject(ChangeDetectorRef);
 
   // Icons
   faSpinner = faSpinner;
@@ -57,6 +61,17 @@ export class BatchDetailComponent {
   hasFailedJobs$ = this.store.select(BatchSelectors.selectHasFailedJobs);
   batchJobDefinitionId$ = this.store.select(BatchSelectors.selectBatchJobDefinitionId);
   users$ = this.store.select(BatchSelectors.selectRuntimeUsers);
+
+  annotation$ = this.batch$.pipe(
+    distinctUntilChanged((a, b) => a?.id === b?.id),
+    switchMap(batch => {
+      console.log('[BatchDetail] batch:', batch?.id, 'type:', batch?.type);
+      if (!batch?.id || batch.type !== 'instance-modification') return of(null);
+      return this.batchService.getOperationAnnotation(batch.id).pipe(
+        tap(annotation => console.log('[BatchDetail] annotation response:', annotation))
+      );
+    })
+  );
 
   // Delete modal state
   showDeleteModal = false;

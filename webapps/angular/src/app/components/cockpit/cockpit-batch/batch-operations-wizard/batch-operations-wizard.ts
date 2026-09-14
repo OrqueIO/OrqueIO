@@ -313,6 +313,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   batchId: string | null = null;
   batchError = false;
   batchErrorNoExternalTasks = false;
+  batchErrorNoJobs = false;
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
@@ -885,6 +886,30 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
 
+    if (this.selectedOperationId === 'set-retries-external') {
+      const retriesPayload = this.mode === 'instances'
+        ? { retries: this.retries, processInstanceIds: [...this.selectedIds] }
+        : { retries: this.retries, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() };
+      this.processInstanceService.setExternalTaskRetriesAsync(retriesPayload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: batch => {
+            this.batchId = batch.id;
+            this.executing = false;
+            this.clearSessionStorage();
+            this.cdr.markForCheck();
+          },
+          error: (err) => {
+            const msg: string = err?.error?.message ?? '';
+            this.batchErrorNoExternalTasks = msg.includes('externalTaskIds is empty');
+            this.batchError = true;
+            this.executing = false;
+            this.cdr.markForCheck();
+          }
+        });
+      return;
+    }
+
     if (this.selectedOperationId === 'set-retries-jobs') {
       const base: { retries: number; dueDate?: string } = { retries: this.retries };
       if (this.setDueDate && this.retriesDueDate) {
@@ -905,30 +930,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           error: (err) => {
             const msg: string = err?.error?.message ?? '';
             this.batchErrorNoJobs = msg.includes('jobIds is empty');
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
-        });
-      return;
-    }
-
-    if (this.selectedOperationId === 'set-retries-external') {
-      const externalPayload = this.mode === 'instances'
-        ? { retries: this.retries, processInstanceIds: [...this.selectedIds] }
-        : { retries: this.retries, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() };
-      this.processInstanceService.setExternalTaskRetriesAsync(externalPayload)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
-          error: (err) => {
-            const msg: string = err?.error?.message ?? '';
-            this.batchErrorNoExternalTasks = msg.includes('externalTaskIds is empty');
             this.batchError = true;
             this.executing = false;
             this.cdr.markForCheck();

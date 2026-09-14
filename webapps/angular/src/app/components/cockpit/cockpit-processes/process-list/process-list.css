@@ -105,6 +105,18 @@
   border-bottom-color: var(--color-primary);
 }
 
+.process-tab.disabled {
+  color: var(--text-muted);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modify-tab-content {
+  padding: 1rem;
+  overflow-y: auto;
+  min-height: 0;
+}
+
 .tab-content {
   flex: 1;
   display: flex;
