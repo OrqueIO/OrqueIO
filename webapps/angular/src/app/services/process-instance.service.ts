@@ -19,6 +19,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { ModificationDto } from '../models/cockpit/modification.model';
 
 // ============================================
 // Process Instance Interfaces
@@ -500,6 +501,21 @@ export class ProcessInstanceService {
     return this.http.post<{ id: string }>(`${this.baseUrl}/job/retries`, body);
   }
 
+  setExternalTaskRetriesAsync(payload: {
+    retries: number;
+    processInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    const body: Record<string, unknown> = { retries: payload.retries };
+    if (payload.processInstanceIds?.length) {
+      body['processInstanceIds'] = payload.processInstanceIds;
+    }
+    if (payload.historicProcessInstanceQuery) {
+      body['historicProcessInstanceQuery'] = payload.historicProcessInstanceQuery;
+    }
+    return this.http.post<{ id: string }>(`${this.baseUrl}/external-task/retries-async`, body);
+  }
+
   setVariablesAsync(payload: {
     variables: Record<string, { value: unknown; type: string }>;
     processInstanceIds?: string[];
@@ -508,6 +524,13 @@ export class ProcessInstanceService {
     return this.http.post<{ id: string }>(
       `${this.baseUrl}/process-instance/variables-async`,
       payload
+    );
+  }
+
+  executeModificationAsync(dto: ModificationDto): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.baseUrl}/modification/executeAsync`,
+      dto
     );
   }
 

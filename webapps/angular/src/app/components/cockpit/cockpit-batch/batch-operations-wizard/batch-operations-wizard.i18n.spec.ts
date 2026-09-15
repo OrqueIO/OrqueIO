@@ -70,6 +70,12 @@ const STEP1_KEYS = [
   'cockpit.batchOps.selectedCount',
   'cockpit.batchOps.continue',
   'common.loading',
+  'cockpit.batchOps.setRetriesJobs.pendingJobsNote',
+  'cockpit.batchOps.setRetriesExternal.pendingTasksNote',
+  'cockpit.batchOps.setRetriesExternal.retriesLabel',
+  'cockpit.batchOps.setRetriesExternal.retriesHint',
+  'cockpit.batchOps.setRetriesExternal.actionBtn',
+  'cockpit.batchOps.setRetriesExternal.actionBtnQuery',
 ];
 
 const STEP2_KEYS = [
@@ -90,6 +96,8 @@ const STEP3_KEYS = [
   'cockpit.batchOps.results.batchSubmitted',
   'cockpit.batchOps.results.batchId',
   'cockpit.batchOps.results.batchError',
+  'cockpit.batchOps.setRetriesExternal.noExternalTasks',
+  'cockpit.batchOps.setRetriesJobs.noJobs',
   'cockpit.batchOps.results.newOperation',
   'cockpit.batchOps.results.viewBatches',
 ];
