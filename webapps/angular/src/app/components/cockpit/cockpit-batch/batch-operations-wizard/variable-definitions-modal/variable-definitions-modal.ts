@@ -289,7 +289,7 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
   }
 
   isUnsupportedSuggestionType(type: string): boolean {
-    return type === 'Object' || type === 'File';
+    return type === 'Object' || type === 'File' || type === 'Bytes';
   }
 
   onSuggestionClick(rowIndex: number, suggestion: VarSuggestion): void {

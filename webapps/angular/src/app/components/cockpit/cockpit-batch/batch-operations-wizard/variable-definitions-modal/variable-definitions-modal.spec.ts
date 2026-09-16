@@ -885,10 +885,11 @@ describe('VariableDefinitionsModalComponent', () => {
         expect(inst.getFilteredSuggestions('')[0].type).toBe('File');
       });
 
-      it('isUnsupportedSuggestionType returns true for Object and File', () => {
+      it('isUnsupportedSuggestionType returns true for Object, File and Bytes', () => {
         const inst = make([row('', 'String', '')]);
         expect(inst.isUnsupportedSuggestionType('Object')).toBe(true);
         expect(inst.isUnsupportedSuggestionType('File')).toBe(true);
+        expect(inst.isUnsupportedSuggestionType('Bytes')).toBe(true);
       });
 
       it('isUnsupportedSuggestionType returns false for all supported types', () => {
@@ -916,6 +917,28 @@ describe('VariableDefinitionsModalComponent', () => {
         const inst = make([row('', 'String', '')]);
         (inst as any).activeSuggestionRow = 0;
         inst.onSuggestionClick(0, { name: 'myObj', type: 'Object', value: null, valuesConflict: false });
+        expect(inst.activeSuggestionRow).toBe(0);
+      });
+
+      it('Bytes suggestion is visible in filtered list — not hidden', () => {
+        const inst = makeWithSuggestions([
+          { name: 'myBytes', type: 'Bytes', value: null, valuesConflict: false }
+        ]);
+        expect(inst.getFilteredSuggestions('').length).toBe(1);
+        expect(inst.getFilteredSuggestions('')[0].type).toBe('Bytes');
+      });
+
+      it('clicking a Bytes suggestion does not pre-fill name or type', () => {
+        const inst = make([row('', 'String', '')]);
+        inst.onSuggestionClick(0, { name: 'myBytes', type: 'Bytes', value: null, valuesConflict: false });
+        expect(inst.rows[0].name).toBe('');
+        expect(inst.rows[0].type).toBe('String');
+      });
+
+      it('clicking a Bytes suggestion leaves the dropdown open (activeSuggestionRow unchanged)', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).activeSuggestionRow = 0;
+        inst.onSuggestionClick(0, { name: 'myBytes', type: 'Bytes', value: null, valuesConflict: false });
         expect(inst.activeSuggestionRow).toBe(0);
       });
 

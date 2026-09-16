@@ -363,8 +363,19 @@ export class ProcessInstanceService {
   }
 
   private deduplicateVariables(vars: Variable[]): { name: string; type: string; value: any; valuesConflict: boolean }[] {
-    const nameMap = new Map<string, { type: string; value: any; conflict: boolean }>();
+    const perInstance = new Map<string, Variable>();
     for (const v of vars) {
+      const key = `${v.processInstanceId}::${v.name}`;
+      const cur = perInstance.get(key);
+      const vIsRoot = v.executionId != null && v.executionId === v.processInstanceId;
+      const curIsRoot = cur != null && cur.executionId != null && cur.executionId === cur.processInstanceId;
+      if (!cur || (vIsRoot && !curIsRoot)) {
+        perInstance.set(key, v);
+      }
+    }
+
+    const nameMap = new Map<string, { type: string; value: any; conflict: boolean }>();
+    for (const v of perInstance.values()) {
       const existing = nameMap.get(v.name);
       if (!existing) {
         nameMap.set(v.name, { type: v.type, value: v.value, conflict: false });
@@ -372,6 +383,7 @@ export class ProcessInstanceService {
         nameMap.set(v.name, { ...existing, conflict: true });
       }
     }
+
     return Array.from(nameMap.entries()).map(([name, { type, value, conflict }]) => ({
       name,
       type,
