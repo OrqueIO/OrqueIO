@@ -133,7 +133,9 @@ const BATCH_OPERATIONS: BatchOperationDef[] = [
     descKey: 'cockpit.batchOps.setRetriesExternal.desc',
     icon: faSyncAlt,
     badgeClass: 'badge--blue',
-    available: false
+    available: true,
+    actionBtnKey: 'cockpit.batchOps.setRetriesExternal.actionBtn',
+    actionBtnQueryKey: 'cockpit.batchOps.setRetriesExternal.actionBtnQuery'
   },
   {
     id: 'set-variables',
@@ -310,6 +312,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   executing = false;
   batchId: string | null = null;
   batchError = false;
+  batchErrorNoExternalTasks = false;
+  batchErrorNoJobs = false;
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
@@ -319,7 +323,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         let injectedStatePill: MultiValueFilter | null;
         if (this.selectedOperationId === 'activate') {
           injectedStatePill = { field: 'state', values: ['suspended'] };
-        } else if (this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'set-retries-jobs') {
+        } else if (this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external') {
           injectedStatePill = { field: 'state', values: ['unfinished'] };
         } else if (this.selectedOperationId === 'delete-finished') {
           injectedStatePill = { field: 'state', values: ['finished'] };
@@ -393,7 +397,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === id) return;
     this.selectedOperationId = id;
     this.resetForm();
-    if (id === 'suspend' || id === 'activate' || id === 'delete-running' || id === 'delete-finished' || id === 'set-retries-jobs' || id === 'set-variables') {
+    if (id === 'suspend' || id === 'activate' || id === 'delete-running' || id === 'delete-finished' || id === 'set-retries-jobs' || id === 'set-retries-external' || id === 'set-variables') {
       this.loadInstances();
     } else if (id === 'delete-decision') {
       this.loadDecisionInstances();
@@ -612,6 +616,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       if (!retriesValid || !dueDateValid) return false;
       return this.mode === 'instances' ? this.selectedIds.size > 0 : true;
     }
+    if (this.selectedOperationId === 'set-retries-external') {
+      if (!Number.isInteger(this.retries) || this.retries < 0) return false;
+      return this.mode === 'instances' ? this.selectedIds.size > 0 : true;
+    }
     if (this.selectedOperationId === 'set-variables') {
       const varsValid = this.variableDefinitions.length > 0 &&
         this.variableDefinitions.every(v => v.name.trim() !== '');
@@ -662,6 +670,12 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       }
       return JSON.stringify({ ...base, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() }, null, 2);
     }
+    if (this.selectedOperationId === 'set-retries-external') {
+      if (this.mode === 'instances') {
+        return JSON.stringify({ retries: this.retries, processInstanceIds: [...this.selectedIds] }, null, 2);
+      }
+      return JSON.stringify({ retries: this.retries, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() }, null, 2);
+    }
     if (this.selectedOperationId === 'delete-decision') {
       const base: Record<string, unknown> = {};
       if (this.deleteReason.trim()) base['deleteReason'] = this.deleteReason.trim();
@@ -705,6 +719,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         ? `POST ${environment.engineUrl}/default/job/retries`
         : `POST ${environment.engineUrl}/default/process-instance/job-retries-historic-query-based`;
     }
+    if (this.selectedOperationId === 'set-retries-external') {
+      return `POST ${environment.engineUrl}/default/external-task/retries-async`;
+    }
     if (this.selectedOperationId === 'delete-decision') {
       return `POST ${environment.engineUrl}/default/history/decision-instance/delete`;
     }
@@ -721,7 +738,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     let query: Record<string, unknown>;
     if (this.selectedOperationId === 'activate') {
       query = { suspended: true, unfinished: true };
-    } else if (this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'set-retries-jobs') {
+    } else if (this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external') {
       query = { unfinished: true };
     } else if (this.selectedOperationId === 'delete-finished') {
       query = { finished: true };
@@ -747,6 +764,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         case 'finishedBefore': query['finishedBefore'] = f.values[0]; break;
         case 'processDefinition':
           if (f.values.length > 0) query['processDefinitionKeyIn'] = f.values;
+          if (f.processDefinitionIds?.length) query['processDefinitionIdIn'] = f.processDefinitionIds;
           break;
         case 'variables':
           if (f.variableLines?.length) {
@@ -872,6 +890,30 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
 
+    if (this.selectedOperationId === 'set-retries-external') {
+      const retriesPayload = this.mode === 'instances'
+        ? { retries: this.retries, processInstanceIds: [...this.selectedIds] }
+        : { retries: this.retries, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() };
+      this.processInstanceService.setExternalTaskRetriesAsync(retriesPayload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: batch => {
+            this.batchId = batch.id;
+            this.executing = false;
+            this.clearSessionStorage();
+            this.cdr.markForCheck();
+          },
+          error: (err) => {
+            const msg: string = err?.error?.message ?? '';
+            this.batchErrorNoExternalTasks = msg.includes('externalTaskIds is empty');
+            this.batchError = true;
+            this.executing = false;
+            this.cdr.markForCheck();
+          }
+        });
+      return;
+    }
+
     if (this.selectedOperationId === 'set-retries-jobs') {
       const base: { retries: number; dueDate?: string } = { retries: this.retries };
       if (this.setDueDate && this.retriesDueDate) {
@@ -889,7 +931,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
             this.clearSessionStorage();
             this.cdr.markForCheck();
           },
-          error: () => {
+          error: (err) => {
+            const msg: string = err?.error?.message ?? '';
+            this.batchErrorNoJobs = msg.includes('jobIds is empty');
             this.batchError = true;
             this.executing = false;
             this.cdr.markForCheck();
@@ -1019,6 +1063,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.resetForm();
     this.batchId = null;
     this.batchError = false;
+    this.batchErrorNoExternalTasks = false;
+    this.batchErrorNoJobs = false;
     this.executing = false;
     this.showTechnicalDetails = false;
     window.scrollTo(0, 0);
@@ -1087,7 +1133,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       const restoredStep: number = state.step ?? 1;
       this.currentStep = restoredStep >= 3 ? 1 : restoredStep as 1 | 2;
 
-      if (this.currentStep === 1 && (this.selectedOperationId === 'suspend' || this.selectedOperationId === 'activate' || this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'delete-finished' || this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-variables')) {
+      if (this.currentStep === 1 && (this.selectedOperationId === 'suspend' || this.selectedOperationId === 'activate' || this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'delete-finished' || this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external' || this.selectedOperationId === 'set-variables')) {
         this.loadInstances();
       } else if (this.currentStep === 1 && this.selectedOperationId === 'delete-decision') {
         this.loadDecisionInstances();
@@ -1101,6 +1147,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'activate') return 'suspended';
     if (this.selectedOperationId === 'delete-running') return 'unfinished';
     if (this.selectedOperationId === 'set-retries-jobs') return 'unfinished';
+    if (this.selectedOperationId === 'set-retries-external') return 'unfinished';
     if (this.selectedOperationId === 'delete-finished') return 'finished';
     // 'unfinished' (not null): SetVariablesToProcessInstancesBatchCmd forces .unfinished()
     // on historicProcessInstanceQuery and uses a runtime-only query for processInstanceIds.
@@ -1124,6 +1171,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'delete-running') return 'cockpit.batchOps.deleteRunning.noInstances';
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.deleteFinished.noInstances';
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.setRetriesJobs.noInstances';
+    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.setRetriesExternal.noInstances';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.setVariables.noInstances';
     return 'cockpit.batchOps.suspend.noInstances';
   }
@@ -1134,6 +1182,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedSummary';
     if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionSummary';
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsSummary';
+    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalSummary';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesSummary';
     return 'cockpit.batchOps.confirm.suspendSummary';
   }
@@ -1144,6 +1193,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedQuerySummary';
     if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionQuerySummary';
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsQuerySummary';
+    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalQuerySummary';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesQuerySummary';
     return 'cockpit.batchOps.confirm.querySummary';
   }
@@ -1154,6 +1204,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedBtn';
     if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionBtn';
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsBtn';
+    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.setRetriesExternal.actionBtn';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesBtn';
     return 'cockpit.batchOps.confirm.suspendBtn';
   }
@@ -1164,6 +1215,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedBtnQuery';
     if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionBtnQuery';
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsBtnQuery';
+    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.setRetriesExternal.actionBtnQuery';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesBtnQuery';
     return 'cockpit.batchOps.confirm.suspendBtnQuery';
   }
@@ -1181,6 +1233,16 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   getDefinitionDisplay(inst: ProcessInstance): string {
     return inst.processDefinitionName || inst.processDefinitionKey || inst.processDefinitionId;
+  }
+
+  extractVersionNumber(processDefinitionId: string): number | null {
+    if (!processDefinitionId) return null;
+    const parts = processDefinitionId.split(':');
+    if (parts.length >= 3) {
+      const v = parseInt(parts[1], 10);
+      return isNaN(v) ? null : v;
+    }
+    return null;
   }
 
   getInstanceStateClass(inst: ProcessInstance): string {

@@ -47,7 +47,7 @@
 
     </div>
 
-    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-variables'" class="operation-steps">
+    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external' || selectedOperationId === 'set-variables'" class="operation-steps">
 
       <!-- ── Carte 1 : Définition de la requête ────────────────────── -->
       <div class="operation-card">
@@ -68,8 +68,20 @@
           </button>
         </div>
 
-        <!-- Info note — instances mode for suspend/activate; both modes for delete-running and delete-finished -->
-        <div *ngIf="mode === 'instances' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-variables'" class="info-note">
+        <!-- Info note — set-retries-external: pending tasks pre-check warning (both modes) -->
+        <div *ngIf="selectedOperationId === 'set-retries-external'" class="info-note">
+          <fa-icon [icon]="faInfoCircle"></fa-icon>
+          <span>{{ 'cockpit.batchOps.setRetriesExternal.pendingTasksNote' | translate }}</span>
+        </div>
+
+        <!-- Info note — set-retries-jobs: pending jobs pre-check (both modes) -->
+        <div *ngIf="selectedOperationId === 'set-retries-jobs'" class="info-note">
+          <fa-icon [icon]="faInfoCircle"></fa-icon>
+          <span>{{ 'cockpit.batchOps.setRetriesJobs.pendingJobsNote' | translate }}</span>
+        </div>
+
+        <!-- Info note — instances mode for suspend/activate; both modes for delete-running, delete-finished, set-variables -->
+        <div *ngIf="(mode === 'instances' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-variables') && selectedOperationId !== 'set-retries-external' && selectedOperationId !== 'set-retries-jobs'" class="info-note">
           <fa-icon [icon]="faInfoCircle"></fa-icon>
           <span>{{ operationOnlyNoteKey | translate }}</span>
         </div>
@@ -136,18 +148,19 @@
         </div>
 
         <!-- Set-retries-jobs options: retries input + due date choice — above "Add criteria" -->
-        <div *ngIf="selectedOperationId === 'set-retries-jobs'" class="retries-options">
+        <div *ngIf="selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external'" class="retries-options">
 
           <!-- Retries number input -->
           <div class="retries-field">
             <label class="retries-label">{{ 'cockpit.batchOps.setRetriesJobs.retriesLabel' | translate }}</label>
             <input type="number" class="retries-input" [(ngModel)]="retries" min="0" step="1"
                    [placeholder]="'cockpit.batchOps.setRetriesJobs.retriesPlaceholder' | translate">
-            <span class="field-hint">{{ 'cockpit.batchOps.setRetriesJobs.retriesHint' | translate }}</span>
+            <span class="field-hint" *ngIf="selectedOperationId === 'set-retries-jobs'">{{ 'cockpit.batchOps.setRetriesJobs.retriesHint' | translate }}</span>
+            <span class="field-hint" *ngIf="selectedOperationId === 'set-retries-external'">{{ 'cockpit.batchOps.setRetriesExternal.retriesHint' | translate }}</span>
           </div>
 
-          <!-- Due date — custom radio buttons -->
-          <div class="due-date-options">
+          <!-- Due date — custom radio buttons — jobs only (not applicable to external tasks) -->
+          <div *ngIf="selectedOperationId === 'set-retries-jobs'" class="due-date-options">
             <label class="due-date-option" (click)="setDueDate = false">
               <span class="radio-circle" [class.radio-circle--selected]="!setDueDate">
                 <span class="radio-circle__dot" *ngIf="!setDueDate"></span>
@@ -286,7 +299,12 @@
                        class="instance-link mono"
                        [title]="inst.id">{{ inst.id }}</a>
                   </td>
-                  <td class="col-definition">{{ getDefinitionDisplay(inst) }}</td>
+                  <td class="col-definition">
+                    {{ getDefinitionDisplay(inst) }}<span
+                      class="definition-version"
+                      *ngIf="extractVersionNumber(inst.processDefinitionId) !== null"
+                    >v{{ extractVersionNumber(inst.processDefinitionId) }}</span>
+                  </td>
                   <td class="col-businesskey">{{ inst.businessKey || '—' }}</td>
                   <td class="col-starttime cell-nowrap">{{ inst.startTime | camDate }}</td>
                   <td class="col-endtime cell-nowrap">{{ (inst.endTime | camDate) || '—' }}</td>
@@ -521,13 +539,9 @@
         <span>{{ 'cockpit.batchOps.deleteDecision.irreversibleWarning' | translate }}</span>
       </div>
 
-      <p class="confirm-summary">
-        <ng-container *ngIf="mode === 'instances'">
-          {{ confirmInstancesSummaryKey | translate: { count: selectedCount.toString() } }}
-        </ng-container>
-        <ng-container *ngIf="mode === 'query'">
-          {{ confirmQuerySummaryKey | translate: { count: selectedCount.toString() } }}
-        </ng-container>
+      <p class="confirm-summary"
+         [innerHTML]="(mode === 'instances' ? confirmInstancesSummaryKey : confirmQuerySummaryKey)
+           | translate: { count: selectedCount.toString(), retries: retries.toString() }">
       </p>
 
       <!-- Technical details (collapsible) -->
@@ -587,7 +601,9 @@
            [class.results-summary--error]="batchError">
         <fa-icon [icon]="batchError ? faTimesCircle : faCheckCircle"></fa-icon>
         <span *ngIf="!batchError">{{ 'cockpit.batchOps.results.batchSubmitted' | translate }}</span>
-        <span *ngIf="batchError">{{ 'cockpit.batchOps.results.batchError' | translate }}</span>
+        <span *ngIf="batchError && !batchErrorNoExternalTasks && !batchErrorNoJobs">{{ 'cockpit.batchOps.results.batchError' | translate }}</span>
+        <span *ngIf="batchErrorNoExternalTasks">{{ 'cockpit.batchOps.setRetriesExternal.noExternalTasks' | translate }}</span>
+        <span *ngIf="batchErrorNoJobs">{{ 'cockpit.batchOps.setRetriesJobs.noJobs' | translate }}</span>
       </div>
 
       <p *ngIf="batchId" class="page-note">

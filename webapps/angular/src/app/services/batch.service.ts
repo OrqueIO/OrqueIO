@@ -356,6 +356,21 @@ export class BatchService {
     }
   }
 
+  getOperationAnnotation(batchId: string): Observable<string | null> {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/history/user-operation`,
+      { params: new HttpParams().set('batchId', batchId).set('maxResults', '1') }
+    ).pipe(
+      map(entries => {
+        if (entries.length > 0 && entries[0].annotation) {
+          return entries[0].annotation;
+        }
+        return null;
+      }),
+      catchError(() => of(null))
+    );
+  }
+
   // ============================================
   // HELPERS
   // ============================================

@@ -213,6 +213,51 @@ describe('ProcessInstanceSearchComponent — loadSearchResults', () => {
     });
   });
 
+  describe('OnPush change detection — page change must render without user interaction', () => {
+    it('should clear loading state and show results after onSearchPageChange without extra fixture.detectChanges()', () => {
+      // Arrange: establish initial search results on page 1
+      component.activePills = [{ field: 'businessKey', values: ['BK-001'] }];
+      component.executeSearch();
+      fixture.detectChanges();
+
+      // Verify page 1 is rendered (results visible, not loading)
+      const resultsBefore = fixture.nativeElement.querySelectorAll('.instance-row, .search-result-row, tr[data-instance-id], .result-item');
+      const loadingBefore = fixture.nativeElement.querySelector('.loading-state');
+      expect(loadingBefore).toBeNull();
+
+      // Act: navigate to page 2 — simulate the pagination button click handler
+      component.onSearchPageChange(2);
+      // ONE fixture.detectChanges() = ONE Angular CD cycle, equivalent to what NgZone
+      // triggers automatically after an async event (HTTP response).
+      // With markForCheck(), the component is marked dirty in the subscribe callback
+      // so this single cycle is enough to render the new state.
+      // With the old detectChanges(), the test was still passing but the real browser
+      // showed "Loading" because detectChanges() did not propagate to ancestor OnPush views.
+      fixture.detectChanges();
+
+      // Assert: loading state gone, results shown — no further interaction needed
+      const loadingAfter = fixture.nativeElement.querySelector('.loading-state');
+      expect(loadingAfter).toBeNull();
+      expect(component.searchLoading).toBe(false);
+      expect(component.searchResults).toEqual(MOCK_INSTANCES);
+      expect(component.searchCurrentPage).toBe(2);
+    });
+
+    it('should clear loading state after onSearchPageSizeChange without extra fixture.detectChanges()', () => {
+      component.activePills = [{ field: 'businessKey', values: ['BK-001'] }];
+      component.executeSearch();
+      fixture.detectChanges();
+
+      component.searchPageSize = 50;
+      component.onSearchPageSizeChange();
+      fixture.detectChanges();
+
+      const loadingAfter = fixture.nativeElement.querySelector('.loading-state');
+      expect(loadingAfter).toBeNull();
+      expect(component.searchLoading).toBe(false);
+    });
+  });
+
   describe('instanceId pill passes through to service (no client-side .includes())', () => {
     it('should pass instanceId pill unchanged in activePills to the service', () => {
       const idPill: MultiValueFilter = { field: 'instanceId', values: ['abc-123', 'def-456'] };
@@ -588,10 +633,10 @@ describe('ProcessInstanceSearchComponent — processDefinition search filter', (
   let mockGetProcessDefinitions: ReturnType<typeof vi.fn>;
 
   const DEFS = [
-    { key: 'order-proc',   name: 'Order Processing' },
-    { key: 'invoice-val',  name: 'Invoice Validation' },
-    { key: 'cust-onboard', name: 'Customer Onboarding' },
-    { key: 'report-gen',   name: 'Report Generator' },
+    { id: 'order-proc:1:aaa',    key: 'order-proc',   name: 'Order Processing',    version: 1 },
+    { id: 'invoice-val:1:bbb',   key: 'invoice-val',  name: 'Invoice Validation',  version: 1 },
+    { id: 'cust-onboard:1:ccc',  key: 'cust-onboard', name: 'Customer Onboarding', version: 1 },
+    { id: 'report-gen:1:ddd',    key: 'report-gen',   name: 'Report Generator',    version: 1 },
   ];
 
   beforeEach(async () => {
@@ -630,24 +675,24 @@ describe('ProcessInstanceSearchComponent — processDefinition search filter', (
 
   it('filters definitions by name (case-insensitive contains) when search text is set', () => {
     component.processDefinitionSearchText = 'report';
-    const visible = component.filteredProcessDefinitions;
+    const visible = component.filteredProcessDefinitionGroups;
     expect(visible.length).toBe(1);
-    expect(visible[0].key).toBe('report-gen');
+    expect(visible[0].key).toBe('report-gen');  // group.key == process key
 
     component.processDefinitionSearchText = 'INVOICE';
-    expect(component.filteredProcessDefinitions.length).toBe(1);
-    expect(component.filteredProcessDefinitions[0].key).toBe('invoice-val');
+    expect(component.filteredProcessDefinitionGroups.length).toBe(1);
+    expect(component.filteredProcessDefinitionGroups[0].key).toBe('invoice-val');
 
     component.processDefinitionSearchText = 'on'; // "Order Processing", "Customer Onboarding"
-    expect(component.filteredProcessDefinitions.length).toBe(2);
+    expect(component.filteredProcessDefinitionGroups.length).toBe(2);
 
     component.processDefinitionSearchText = '';
-    expect(component.filteredProcessDefinitions.length).toBe(DEFS.length);
+    expect(component.filteredProcessDefinitionGroups.length).toBe(DEFS.length);
   });
 
   it('Select All with active filter selects only the visible items, not all definitions', () => {
     component.processDefinitionSearchText = 'order';
-    expect(component.filteredProcessDefinitions.length).toBe(1);
+    expect(component.filteredProcessDefinitionGroups.length).toBe(1);
 
     component.toggleSelectAllProcessDefinitions();
 
@@ -664,11 +709,11 @@ describe('ProcessInstanceSearchComponent — processDefinition search filter', (
 
     component.processDefinitionSearchText = ''; // clear
     expect(component.pendingProcessDefinitionKeys).toContain('order-proc');
-    expect(component.filteredProcessDefinitions.length).toBe(DEFS.length);
+    expect(component.filteredProcessDefinitionGroups.length).toBe(DEFS.length);
 
     component.processDefinitionSearchText = 'report'; // change filter
     expect(component.pendingProcessDefinitionKeys).toContain('order-proc'); // still selected
-    expect(component.filteredProcessDefinitions.some(d => d.key === 'order-proc')).toBe(false);
+    expect(component.filteredProcessDefinitionGroups.some(d => d.key === 'order-proc')).toBe(false);
   });
 
   it('typing in the search field triggers no additional getProcessDefinitions network calls', () => {
@@ -942,5 +987,114 @@ describe('ProcessInstanceSearchComponent — isArbitraryMultiState: 4 states = o
     component.searchPageSize = 100;
     // Math.min(7200, 7131) = 7131 — no keyset offset involved
     expect(component.searchEndIndex).toBeLessThanOrEqual(7131);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// pdVisibleSelectedCount — counts processes (groups), not individual versions
+// ---------------------------------------------------------------------------
+describe('ProcessInstanceSearchComponent — pdVisibleSelectedCount counts processes not versions', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  // 4 process groups: A (3 versions), B/C/D (1 version each)
+  const MULTI_VERSION_DEFS = [
+    { id: 'proc-a:3:id3', key: 'proc-a', name: 'Process A', version: 3 },
+    { id: 'proc-a:2:id2', key: 'proc-a', name: 'Process A', version: 2 },
+    { id: 'proc-a:1:id1', key: 'proc-a', name: 'Process A', version: 1 },
+    { id: 'proc-b:1:idb', key: 'proc-b', name: 'Process B', version: 1 },
+    { id: 'proc-c:1:idc', key: 'proc-c', name: 'Process C', version: 1 },
+    { id: 'proc-d:1:idd', key: 'proc-d', name: 'Process D', version: 1 },
+  ];
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of(MULTI_VERSION_DEFS)),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+    TestBed.resetTestingModule();
+  });
+
+  it('selecting all 3 versions of a single process counts as 1, not 3', () => {
+    // All 3 version IDs of Process A explicitly selected — NO key in pendingKeys
+    component.pendingProcessDefinitionIds = ['proc-a:3:id3', 'proc-a:2:id2', 'proc-a:1:id1'];
+    component.pendingProcessDefinitionKeys = [];
+
+    expect(component.pdVisibleSelectedCount).toBe(1);
+    expect(component.filteredProcessDefinitionGroups.length).toBe(4); // Y still = 4 processes
+  });
+
+  it('selecting one version each from 2 different processes counts as 2', () => {
+    component.pendingProcessDefinitionIds = ['proc-a:3:id3', 'proc-b:1:idb'];
+    component.pendingProcessDefinitionKeys = [];
+
+    expect(component.pdVisibleSelectedCount).toBe(2);
+  });
+
+  it('all processes fully covered → pdVisibleSelectedCount equals total and pdAllSelected is true', () => {
+    // Mix: Process A selected by key, B/C/D selected by individual version ID
+    component.pendingProcessDefinitionKeys = ['proc-a'];
+    component.pendingProcessDefinitionIds = ['proc-b:1:idb', 'proc-c:1:idc', 'proc-d:1:idd'];
+
+    const total = component.filteredProcessDefinitionGroups.length; // 4
+    expect(component.pdVisibleSelectedCount).toBe(total);
+    expect(component.pdAllSelected).toBe(true);
+  });
+
+  it('unchecking one version after Select All moves badge to partial while process count stays the same', () => {
+    // Select all 4 processes by key via Select All
+    component.toggleSelectAllProcessDefinitions();
+    expect(component.pdAllSelected).toBe(true);
+    expect(component.pdVisibleSelectedCount).toBe(4);
+
+    // Click version 2 of Process A: removes proc-a from pendingKeys, adds only version-2 ID
+    component.toggleProcessDefinitionVersion('proc-a', 'proc-a:2:id2');
+
+    // Badge: proc-a now has only 1 of 3 versions selected → not all versions covered → partial
+    expect(component.pdAllSelected).toBe(false);
+    expect(component.pdSomeSelected).toBe(true);
+    // Counter: proc-a still has a selected version → still counts as 1 process → total unchanged
+    expect(component.pdVisibleSelectedCount).toBe(4);
+  });
+
+  it('rechecking the two missing versions of proc-a restores badge to full', () => {
+    // Start from same partially-uncovered state as above
+    component.toggleSelectAllProcessDefinitions();
+    component.toggleProcessDefinitionVersion('proc-a', 'proc-a:2:id2');
+    // proc-a: only version 2 selected; proc-b/c/d: still selected by key
+    expect(component.pdAllSelected).toBe(false);
+
+    // Add the two missing versions of proc-a
+    component.toggleProcessDefinitionVersion('proc-a', 'proc-a:3:id3');
+    component.toggleProcessDefinitionVersion('proc-a', 'proc-a:1:id1');
+    // proc-a: all 3 version IDs in pendingIds; proc-b/c/d: in pendingKeys → every group fully covered
+
+    expect(component.pdAllSelected).toBe(true);
+    expect(component.pdSomeSelected).toBe(false);
+    expect(component.pdVisibleSelectedCount).toBe(4);
   });
 });
