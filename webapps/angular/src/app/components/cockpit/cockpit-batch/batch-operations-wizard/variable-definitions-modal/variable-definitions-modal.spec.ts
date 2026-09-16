@@ -1158,6 +1158,30 @@ describe('VariableDefinitionsModalComponent', () => {
         }
       });
 
+      it('mode Query + no criteria: suggestions array is populated from global search results', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          (inst as any).targetInstanceIds = null;
+          (inst as any).queryFilter = null;
+          (inst as any).activeSuggestionRow = 0;
+          const fakeResults = [
+            { name: 'amount', type: 'Double', value: 42, valuesConflict: false },
+            { name: 'amount', type: 'Long', value: 99, valuesConflict: true },
+          ];
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: (_q: string, _ids: string[]) => ({
+              subscribe: (fn: Function) => { fn(fakeResults); return { unsubscribe: () => {} }; }
+            })
+          };
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect((inst as any).suggestions).toEqual(fakeResults);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
       it('non-regression: mode Instances uses IDs directly — queryProcessInstances is never called', () => {
         vi.useFakeTimers();
         try {
