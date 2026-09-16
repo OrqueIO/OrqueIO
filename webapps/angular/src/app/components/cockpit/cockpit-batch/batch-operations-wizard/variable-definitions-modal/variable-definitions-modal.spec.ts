@@ -1,9 +1,10 @@
-import { VariableDefinitionsModalComponent, VariableDef } from './variable-definitions-modal';
+import { VariableDefinitionsModalComponent, VariableDef, VarSuggestion } from './variable-definitions-modal';
 import { getVariableInputType } from '../../../../../utils/variable-type.util';
 
 function make(rows: VariableDef[]): VariableDefinitionsModalComponent {
   const inst = Object.create(VariableDefinitionsModalComponent.prototype) as VariableDefinitionsModalComponent;
   (inst as any).rows = rows;
+  (inst as any).rowValueConflicts = rows.map(() => false);
   (inst as any).cdr = { markForCheck: () => {} };
   return inst;
 }
@@ -583,6 +584,313 @@ describe('VariableDefinitionsModalComponent', () => {
       const { ev } = fakeFieldEvent();
       inst.onFieldEnter(ev);
       expect(emitted).toHaveLength(0);
+    });
+  });
+
+  describe('variable name autocomplete', () => {
+    const SUGGESTIONS: VarSuggestion[] = [
+      { name: 'amount', type: 'Integer', value: 42, valuesConflict: false },
+      { name: 'label', type: 'String', value: 'hello', valuesConflict: false },
+      { name: 'status', type: 'String', value: null, valuesConflict: true },
+    ];
+
+    function makeWithSuggestions(suggestions: VarSuggestion[]): VariableDefinitionsModalComponent {
+      const inst = make([row('', 'String', '')]);
+      (inst as any).allSuggestions = suggestions;
+      (inst as any).suggestionsLoaded = true;
+      return inst;
+    }
+
+    function mockService(inst: VariableDefinitionsModalComponent, capturer?: { ids: string[] }) {
+      (inst as any).processInstanceService = {
+        getVariableSuggestions: (ids: string[]) => {
+          if (capturer) capturer.ids = ids;
+          return { subscribe: (fn: (v: VarSuggestion[]) => void) => fn([]) };
+        }
+      };
+    }
+
+    describe('getFilteredSuggestions', () => {
+      it('returns all suggestions when name is empty — clicking the field shows the full list', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        expect(inst.getFilteredSuggestions('')).toHaveLength(3);
+      });
+
+      it('filters case-insensitively by contains match when user types', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        const result = inst.getFilteredSuggestions('AM');
+        expect(result).toHaveLength(1);
+        expect(result[0].name).toBe('amount');
+      });
+
+      it('returns multiple matches when several names contain the query', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        // 'u' appears in 'amount' and 'status' but not 'label'
+        expect(inst.getFilteredSuggestions('u')).toHaveLength(2);
+      });
+
+      it('returns empty array when nothing matches — no error, no suggestions shown', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        expect(inst.getFilteredSuggestions('xyz')).toHaveLength(0);
+      });
+    });
+
+    describe('getHighlightParts', () => {
+      it('returns a single non-bold part when query is empty', () => {
+        expect(make([]).getHighlightParts('amount', '')).toEqual([{ text: 'amount', bold: false }]);
+      });
+
+      it('bolds matched portion in the middle', () => {
+        expect(make([]).getHighlightParts('amount', 'ount')).toEqual([
+          { text: 'am', bold: false },
+          { text: 'ount', bold: true },
+        ]);
+      });
+
+      it('bolds matched portion at the beginning', () => {
+        expect(make([]).getHighlightParts('amount', 'am')).toEqual([
+          { text: 'am', bold: true },
+          { text: 'ount', bold: false },
+        ]);
+      });
+
+      it('bolds matched portion at the end', () => {
+        expect(make([]).getHighlightParts('amount', 'unt')).toEqual([
+          { text: 'amo', bold: false },
+          { text: 'unt', bold: true },
+        ]);
+      });
+
+      it('returns single non-bold part when no match', () => {
+        expect(make([]).getHighlightParts('amount', 'xyz')).toEqual([{ text: 'amount', bold: false }]);
+      });
+
+      it('match is case-insensitive — bold segment uses original casing', () => {
+        const parts = make([]).getHighlightParts('Amount', 'am');
+        expect(parts[0]).toEqual({ text: 'Am', bold: true });
+        expect(parts[1]).toEqual({ text: 'ount', bold: false });
+      });
+    });
+
+    describe('onNameFocus', () => {
+      it('sets activeSuggestionRow to the focused row index (non-regression: first open)', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        inst.onNameFocus(0);
+        expect(inst.activeSuggestionRow).toBe(0);
+      });
+
+      it('does not reload suggestions when already loaded', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        let callCount = 0;
+        (inst as any).processInstanceService = {
+          getVariableSuggestions: () => { callCount++; return { subscribe: (fn: Function) => fn([]) }; }
+        };
+        inst.onNameFocus(0);
+        inst.onNameFocus(0);
+        expect(callCount).toBe(0);
+      });
+
+      it('reopens the dropdown when called again after a suggestion was selected (simulates re-click while already focused)', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        // First selection: pick 'amount'
+        inst.onNameFocus(0);
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.activeSuggestionRow).toBeNull(); // dropdown closed after selection
+        // Re-click on the name field (already focused — only (click) fires, not (focus))
+        inst.onNameFocus(0);
+        expect(inst.activeSuggestionRow).toBe(0); // dropdown visible again
+      });
+
+      it('second suggestion selection fully replaces Name/Type/Value from the first — no residue', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        // First selection
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        // Re-open and pick a different suggestion
+        inst.onNameFocus(0);
+        inst.onSuggestionClick(0, { name: 'label', type: 'String', value: 'hello', valuesConflict: false });
+        expect(inst.rows[0].name).toBe('label');
+        expect(inst.rows[0].type).toBe('String');
+        expect(inst.rows[0].value).toBe('hello');
+      });
+
+      it('reopens dropdown automatically when user types after a selection (simulates (input) event binding)', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        // Select a suggestion — this closes the dropdown
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.activeSuggestionRow).toBeNull();
+        // User edits the name field: [(ngModel)] updates the name, then (input) fires onNameFocus(i)
+        inst.rows[0].name = 'am';
+        inst.onNameFocus(0); // triggered by (input) binding
+        expect(inst.activeSuggestionRow).toBe(0);
+        // Template would render the dropdown: 'am' matches 'amount'
+        expect(inst.getFilteredSuggestions('am').length).toBeGreaterThan(0);
+      });
+
+      it('keeps activeSuggestionRow set but filtered list is empty when typed text matches nothing', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        inst.onNameFocus(0);
+        // User types something that matches no suggestion
+        inst.rows[0].name = 'xyz_nomatch';
+        inst.onNameFocus(0); // triggered by (input) binding
+        expect(inst.activeSuggestionRow).toBe(0);
+        // Template condition: activeSuggestionRow === i && getFilteredSuggestions(...).length > 0 → false → dropdown hidden
+        expect(inst.getFilteredSuggestions('xyz_nomatch')).toHaveLength(0);
+      });
+
+      it('non-regression: first-open flow (focus → see suggestions → select) still works end-to-end', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        // Initial open
+        inst.onNameFocus(0);
+        expect(inst.activeSuggestionRow).toBe(0);
+        expect(inst.getFilteredSuggestions('').length).toBe(SUGGESTIONS.length);
+        // Selection
+        inst.onSuggestionClick(0, SUGGESTIONS[0]);
+        expect(inst.rows[0].name).toBe(SUGGESTIONS[0].name);
+        expect(inst.activeSuggestionRow).toBeNull();
+      });
+    });
+
+    describe('onNameBlur', () => {
+      it('hides the dropdown by setting activeSuggestionRow to null', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        inst.onNameFocus(0);
+        inst.onNameBlur();
+        expect(inst.activeSuggestionRow).toBeNull();
+      });
+    });
+
+    describe('onSuggestionClick', () => {
+      it('fills both name and type from the clicked suggestion', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.rows[0].name).toBe('amount');
+        expect(inst.rows[0].type).toBe('Integer');
+      });
+
+      it('pre-fills value from the suggestion when all instances agree (valuesConflict: false)', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.rows[0].value).toBe('42'); // number coerced to string for Integer text input
+      });
+
+      it('leaves value at default when instances have conflicting values (valuesConflict: true)', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: true });
+        expect(inst.rows[0].value).toBe(''); // default for Integer
+      });
+
+      it('uses default value for Boolean when values conflict', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'flag', type: 'Boolean', value: true, valuesConflict: true });
+        expect(inst.rows[0].value).toBe(false);
+      });
+
+      it('pre-fills Boolean value when all instances agree', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'flag', type: 'Boolean', value: true, valuesConflict: false });
+        expect(inst.rows[0].value).toBe(true);
+      });
+
+      it('still pre-fills type from the suggestion regardless of conflict (non-regression)', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'active', type: 'Boolean', value: false, valuesConflict: true });
+        expect(inst.rows[0].type).toBe('Boolean');
+      });
+
+      it('sets hasValueConflict when values differ across instances', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: true });
+        expect(inst.hasValueConflict(0)).toBe(true);
+      });
+
+      it('clears hasValueConflict when user subsequently edits the value', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: true });
+        expect(inst.hasValueConflict(0)).toBe(true);
+        inst.onValueChange(0);
+        expect(inst.hasValueConflict(0)).toBe(false);
+      });
+
+      it('does not set hasValueConflict when all instances agree on the same value', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.hasValueConflict(0)).toBe(false);
+      });
+
+      it('closes the dropdown after selection', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        inst.onNameFocus(0);
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.activeSuggestionRow).toBeNull();
+      });
+
+      it('does not affect other rows', () => {
+        const inst = make([row('x', 'String', 'hello'), row('', 'String', '')]);
+        (inst as any).allSuggestions = SUGGESTIONS;
+        (inst as any).rowValueConflicts = [false, false];
+        inst.onSuggestionClick(1, { name: 'label', type: 'String', value: 'hello', valuesConflict: false });
+        expect(inst.rows[0].name).toBe('x');
+        expect(inst.rows[0].value).toBe('hello');
+        expect(inst.rows[1].name).toBe('label');
+      });
+
+      it('produces a new rows array (immutable update — OnPush safe)', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        (inst as any).rowValueConflicts = [false];
+        const before = inst.rows;
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.rows).not.toBe(before);
+      });
+    });
+
+    describe('loadSuggestions — sample limit', () => {
+      it('limits request to at most 50 instances even when more are targeted', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).targetInstanceIds = Array.from({ length: 120 }, (_, k) => `inst-${k}`);
+        (inst as any).suggestionsLoaded = false;
+        const captured = { ids: [] as string[] };
+        mockService(inst, captured);
+        inst.onNameFocus(0);
+        expect(captured.ids.length).toBeLessThanOrEqual(50);
+        expect(captured.ids.length).toBeGreaterThan(0);
+      });
+
+      it('makes no HTTP request when targetInstanceIds is empty', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).targetInstanceIds = [];
+        (inst as any).suggestionsLoaded = false;
+        let called = false;
+        (inst as any).processInstanceService = {
+          getVariableSuggestions: () => { called = true; return { subscribe: (fn: Function) => fn([]) }; }
+        };
+        inst.onNameFocus(0);
+        expect(called).toBe(false);
+      });
+
+      it('shows no suggestions when none are found — no error, getFilteredSuggestions returns []', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).allSuggestions = [];
+        (inst as any).suggestionsLoaded = true;
+        mockService(inst);
+        inst.onNameFocus(0);
+        expect(inst.getFilteredSuggestions('')).toHaveLength(0);
+      });
     });
   });
 

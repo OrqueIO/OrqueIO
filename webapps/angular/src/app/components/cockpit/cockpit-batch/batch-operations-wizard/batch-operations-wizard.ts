@@ -813,6 +813,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     return this.variableDefinitions;
   }
 
+  get modalTargetInstanceIds(): string[] {
+    return this.mode === 'instances' ? [...this.selectedIds] : [];
+  }
+
   openVariablesModal(): void {
     this.showVariablesModal = true;
     this.cdr.markForCheck();

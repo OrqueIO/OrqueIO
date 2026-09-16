@@ -1744,6 +1744,8 @@
   "cockpit.batchOps.setVariables.errorInvalidInteger": "Only whole numbers are allowed, no decimals or letters",
   "cockpit.batchOps.setVariables.errorInvalidDouble": "Must be a valid decimal number",
   "cockpit.batchOps.setVariables.errorInvalidDate": "Please select a date and time.",
+  "cockpit.batchOps.setVariables.suggestionsHeader": "Existing variables",
+  "cockpit.batchOps.setVariables.valuesDifferHint": "Values may differ across selected instances",
   "cockpit.batchOps.confirm.setVariablesSummary": "Variables will be set on {{count}} process instance(s).",
   "cockpit.batchOps.confirm.setVariablesQuerySummary": "Variables will be set on all matching process instances.",
   "cockpit.batchOps.confirm.setVariablesBtn": "Set variables for {{count}} instance(s)",

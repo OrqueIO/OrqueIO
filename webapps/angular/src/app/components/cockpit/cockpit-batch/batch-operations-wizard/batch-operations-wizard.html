@@ -612,6 +612,7 @@
   <app-variable-definitions-modal
     *ngIf="showVariablesModal"
     [initialVariables]="modalInitialVariables"
+    [targetInstanceIds]="modalTargetInstanceIds"
     (apply)="onVariablesApplied($event)"
     (closeModal)="closeVariablesModal()">
   </app-variable-definitions-modal>

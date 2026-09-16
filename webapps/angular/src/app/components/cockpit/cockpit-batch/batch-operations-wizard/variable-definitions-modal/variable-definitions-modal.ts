@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '../../../../../i18n/translate.pipe';
 import { getVariableInputType } from '../../../../../utils/variable-type.util';
+import { ProcessInstanceService } from '../../../../../services/process-instance.service';
 
 export interface VariableDef {
   name: string;
@@ -14,8 +15,16 @@ export interface VariableDef {
   value: any;
 }
 
+export interface VarSuggestion {
+  name: string;
+  type: string;
+  value: any;
+  valuesConflict: boolean;
+}
+
 const INTEGER_TYPES = ['Integer', 'Long', 'Short'];
 const INTEGER_RE = /^-?\d+$/;
+const SUGGESTION_SAMPLE = 50;
 
 @Component({
   selector: 'app-variable-definitions-modal',
@@ -27,19 +36,28 @@ const INTEGER_RE = /^-?\d+$/;
 })
 export class VariableDefinitionsModalComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
+  private processInstanceService = inject(ProcessInstanceService);
 
   @Input() initialVariables: VariableDef[] = [];
+  @Input() targetInstanceIds: string[] = [];
   @Output() apply = new EventEmitter<VariableDef[]>();
   @Output() closeModal = new EventEmitter<void>();
 
   @ViewChild('dialogEl') dialogEl!: ElementRef<HTMLElement>;
 
   rows: VariableDef[] = [];
+  rowValueConflicts: boolean[] = [];
+
+  allSuggestions: VarSuggestion[] = [];
+  private suggestionsLoaded = false;
+  activeSuggestionRow: number | null = null;
+  dropdownStyle: { top: string; left: string; width: string } = { top: '0', left: '0', width: '0' };
 
   ngOnInit(): void {
     this.rows = this.initialVariables.length > 0
       ? this.initialVariables.map(v => ({ ...v }))
       : [{ name: '', type: 'String', value: '' }];
+    this.rowValueConflicts = this.rows.map(() => false);
   }
 
   isIntegerType(type: string): boolean {
@@ -64,6 +82,9 @@ export class VariableDefinitionsModalComponent implements OnInit {
     const updated = [...this.rows];
     updated[index] = { ...updated[index], type: newType, value: this.getDefaultValue(newType) };
     this.rows = updated;
+    const conflicts = [...this.rowValueConflicts];
+    conflicts[index] = false;
+    this.rowValueConflicts = conflicts;
     this.cdr.markForCheck();
   }
 
@@ -124,14 +145,17 @@ export class VariableDefinitionsModalComponent implements OnInit {
 
   addRow(): void {
     this.rows = [...this.rows, { name: '', type: 'String', value: '' }];
+    this.rowValueConflicts = [...this.rowValueConflicts, false];
     this.cdr.markForCheck();
   }
 
   removeRow(index: number): void {
     if (this.rows.length > 1) {
       this.rows = this.rows.filter((_, i) => i !== index);
+      this.rowValueConflicts = this.rowValueConflicts.filter((_, i) => i !== index);
     } else {
       this.rows = [{ name: '', type: 'String', value: '' }];
+      this.rowValueConflicts = [false];
     }
     this.cdr.markForCheck();
   }
@@ -169,6 +193,96 @@ export class VariableDefinitionsModalComponent implements OnInit {
   @HostListener('document:keydown.escape')
   onEscape(): void {
     this.closeModal.emit();
+  }
+
+  getFilteredSuggestions(nameValue: string): VarSuggestion[] {
+    if (!nameValue) return this.allSuggestions;
+    const q = nameValue.toLowerCase();
+    return this.allSuggestions.filter(s => s.name.toLowerCase().includes(q));
+  }
+
+  getHighlightParts(name: string, query: string): { text: string; bold: boolean }[] {
+    if (!query) return [{ text: name, bold: false }];
+    const idx = name.toLowerCase().indexOf(query.toLowerCase());
+    if (idx === -1) return [{ text: name, bold: false }];
+    const parts: { text: string; bold: boolean }[] = [];
+    if (idx > 0) parts.push({ text: name.slice(0, idx), bold: false });
+    parts.push({ text: name.slice(idx, idx + query.length), bold: true });
+    if (idx + query.length < name.length) parts.push({ text: name.slice(idx + query.length), bold: false });
+    return parts;
+  }
+
+  onNameFocus(index: number, event?: Event): void {
+    if (event) {
+      const rect = (event.target as HTMLInputElement).getBoundingClientRect();
+      this.dropdownStyle = {
+        top: `${rect.bottom + 2}px`,
+        left: `${rect.left}px`,
+        width: `${rect.width}px`
+      };
+    }
+    this.activeSuggestionRow = index;
+    if (!this.suggestionsLoaded) {
+      this.loadSuggestions();
+    }
+    this.cdr.markForCheck();
+  }
+
+  onNameBlur(): void {
+    this.activeSuggestionRow = null;
+    this.cdr.markForCheck();
+  }
+
+  onSuggestionClick(rowIndex: number, suggestion: VarSuggestion): void {
+    const updated = [...this.rows];
+    updated[rowIndex] = {
+      ...updated[rowIndex],
+      name: suggestion.name,
+      type: suggestion.type,
+      value: suggestion.valuesConflict
+        ? this.getDefaultValue(suggestion.type)
+        : this.formatValueForInput(suggestion.type, suggestion.value)
+    };
+    this.rows = updated;
+    const conflicts = [...this.rowValueConflicts];
+    conflicts[rowIndex] = suggestion.valuesConflict;
+    this.rowValueConflicts = conflicts;
+    this.activeSuggestionRow = null;
+    this.cdr.markForCheck();
+  }
+
+  onValueChange(index: number): void {
+    if (this.rowValueConflicts[index]) {
+      const conflicts = [...this.rowValueConflicts];
+      conflicts[index] = false;
+      this.rowValueConflicts = conflicts;
+      this.cdr.markForCheck();
+    }
+  }
+
+  hasValueConflict(index: number): boolean {
+    return !!this.rowValueConflicts[index];
+  }
+
+  private formatValueForInput(type: string, value: any): any {
+    if (value == null) return this.getDefaultValue(type);
+    if (INTEGER_TYPES.includes(type)) return String(value);
+    if (type === 'Date' && typeof value === 'string') {
+      // Camunda date format: "2019-04-23T09:42:06.000+0000" → datetime-local needs "2019-04-23T09:42"
+      const match = value.match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/);
+      return match ? match[1] : '';
+    }
+    return value;
+  }
+
+  private loadSuggestions(): void {
+    this.suggestionsLoaded = true;
+    const sampled = this.targetInstanceIds.slice(0, SUGGESTION_SAMPLE);
+    if (!sampled.length) return;
+    this.processInstanceService.getVariableSuggestions(sampled).subscribe(suggestions => {
+      this.allSuggestions = suggestions;
+      this.cdr.markForCheck();
+    });
   }
 
   trackByIndex(index: number): number {
