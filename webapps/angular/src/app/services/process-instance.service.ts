@@ -343,25 +343,41 @@ export class ProcessInstanceService {
     return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, {
       params: { processInstanceIdIn: instanceIds.join(','), maxResults: '1000' }
     }).pipe(
-      map(vars => {
-        const nameMap = new Map<string, { type: string; value: any; conflict: boolean }>();
-        for (const v of vars) {
-          const existing = nameMap.get(v.name);
-          if (!existing) {
-            nameMap.set(v.name, { type: v.type, value: v.value, conflict: false });
-          } else if (!existing.conflict && existing.value !== v.value) {
-            nameMap.set(v.name, { ...existing, conflict: true });
-          }
-        }
-        return Array.from(nameMap.entries()).map(([name, { type, value, conflict }]) => ({
-          name,
-          type,
-          value,
-          valuesConflict: conflict
-        }));
-      }),
+      map(vars => this.deduplicateVariables(vars)),
       catchError(() => of([]))
     );
+  }
+
+  searchVariableSuggestions(query: string, instanceIds: string[]): Observable<{ name: string; type: string; value: any; valuesConflict: boolean }[]> {
+    const params: Record<string, string> = {
+      variableNameLike: `%${query}%`,
+      maxResults: '200'
+    };
+    if (instanceIds.length) {
+      params['processInstanceIdIn'] = instanceIds.join(',');
+    }
+    return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, { params }).pipe(
+      map(vars => this.deduplicateVariables(vars)),
+      catchError(() => of([]))
+    );
+  }
+
+  private deduplicateVariables(vars: Variable[]): { name: string; type: string; value: any; valuesConflict: boolean }[] {
+    const nameMap = new Map<string, { type: string; value: any; conflict: boolean }>();
+    for (const v of vars) {
+      const existing = nameMap.get(v.name);
+      if (!existing) {
+        nameMap.set(v.name, { type: v.type, value: v.value, conflict: false });
+      } else if (!existing.conflict && existing.value !== v.value) {
+        nameMap.set(v.name, { ...existing, conflict: true });
+      }
+    }
+    return Array.from(nameMap.entries()).map(([name, { type, value, conflict }]) => ({
+      name,
+      type,
+      value,
+      valuesConflict: conflict
+    }));
   }
 
   /**

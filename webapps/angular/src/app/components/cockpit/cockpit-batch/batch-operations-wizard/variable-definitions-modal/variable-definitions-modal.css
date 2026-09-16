@@ -244,6 +244,14 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
 }
 
+.autocomplete-start-hint {
+  margin: 0;
+  padding: 8px 10px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
 .autocomplete-header {
   padding: 5px 10px 3px;
   font-size: 10.5px;
@@ -273,6 +281,16 @@
 
 .autocomplete-item:hover {
   background: var(--color-gray-50, rgba(0, 0, 0, 0.04));
+}
+
+.autocomplete-item--disabled {
+  color: var(--text-muted);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.autocomplete-item--disabled:hover {
+  background: transparent;
 }
 
 .autocomplete-name {

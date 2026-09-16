@@ -6,6 +6,7 @@ function make(rows: VariableDef[]): VariableDefinitionsModalComponent {
   (inst as any).rows = rows;
   (inst as any).rowValueConflicts = rows.map(() => false);
   (inst as any).cdr = { markForCheck: () => {} };
+  (inst as any).targetInstanceIds = null; // null = mode Query (global search allowed)
   return inst;
 }
 
@@ -596,17 +597,18 @@ describe('VariableDefinitionsModalComponent', () => {
 
     function makeWithSuggestions(suggestions: VarSuggestion[]): VariableDefinitionsModalComponent {
       const inst = make([row('', 'String', '')]);
-      (inst as any).allSuggestions = suggestions;
-      (inst as any).suggestionsLoaded = true;
+      (inst as any).suggestions = suggestions;
       return inst;
     }
 
-    function mockService(inst: VariableDefinitionsModalComponent, capturer?: { ids: string[] }) {
+    function mockService(inst: VariableDefinitionsModalComponent, results: VarSuggestion[] = []) {
       (inst as any).processInstanceService = {
-        getVariableSuggestions: (ids: string[]) => {
-          if (capturer) capturer.ids = ids;
-          return { subscribe: (fn: (v: VarSuggestion[]) => void) => fn([]) };
-        }
+        searchVariableSuggestions: (_query: string, _ids: string[]) => ({
+          subscribe: (fn: (v: VarSuggestion[]) => void) => {
+            fn(results);
+            return { unsubscribe: () => {} };
+          }
+        })
       };
     }
 
@@ -680,17 +682,6 @@ describe('VariableDefinitionsModalComponent', () => {
         expect(inst.activeSuggestionRow).toBe(0);
       });
 
-      it('does not reload suggestions when already loaded', () => {
-        const inst = makeWithSuggestions(SUGGESTIONS);
-        let callCount = 0;
-        (inst as any).processInstanceService = {
-          getVariableSuggestions: () => { callCount++; return { subscribe: (fn: Function) => fn([]) }; }
-        };
-        inst.onNameFocus(0);
-        inst.onNameFocus(0);
-        expect(callCount).toBe(0);
-      });
-
       it('reopens the dropdown when called again after a suggestion was selected (simulates re-click while already focused)', () => {
         const inst = makeWithSuggestions(SUGGESTIONS);
         mockService(inst);
@@ -717,42 +708,61 @@ describe('VariableDefinitionsModalComponent', () => {
       });
 
       it('reopens dropdown automatically when user types after a selection (simulates (input) event binding)', () => {
-        const inst = makeWithSuggestions(SUGGESTIONS);
-        mockService(inst);
-        // Select a suggestion — this closes the dropdown
-        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
-        expect(inst.activeSuggestionRow).toBeNull();
-        // User edits the name field: [(ngModel)] updates the name, then (input) fires onNameFocus(i)
-        inst.rows[0].name = 'am';
-        inst.onNameFocus(0); // triggered by (input) binding
-        expect(inst.activeSuggestionRow).toBe(0);
-        // Template would render the dropdown: 'am' matches 'amount'
-        expect(inst.getFilteredSuggestions('am').length).toBeGreaterThan(0);
+        vi.useFakeTimers();
+        try {
+          const inst = makeWithSuggestions(SUGGESTIONS);
+          mockService(inst, SUGGESTIONS);
+          inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+          expect(inst.activeSuggestionRow).toBeNull();
+          // User edits the name field: [(ngModel)] updates the name, then (input) fires onNameInput(i, value)
+          inst.rows[0].name = 'am';
+          inst.onNameInput(0, 'am');
+          expect(inst.activeSuggestionRow).toBe(0);
+          vi.advanceTimersByTime(250);
+          // Template would render the dropdown: mock returns SUGGESTIONS, 'am' client-filters to 'amount'
+          expect(inst.getFilteredSuggestions('am').length).toBeGreaterThan(0);
+        } finally {
+          vi.useRealTimers();
+        }
       });
 
-      it('keeps activeSuggestionRow set but filtered list is empty when typed text matches nothing', () => {
-        const inst = makeWithSuggestions(SUGGESTIONS);
-        mockService(inst);
-        inst.onNameFocus(0);
-        // User types something that matches no suggestion
-        inst.rows[0].name = 'xyz_nomatch';
-        inst.onNameFocus(0); // triggered by (input) binding
-        expect(inst.activeSuggestionRow).toBe(0);
-        // Template condition: activeSuggestionRow === i && getFilteredSuggestions(...).length > 0 → false → dropdown hidden
-        expect(inst.getFilteredSuggestions('xyz_nomatch')).toHaveLength(0);
+      it('keeps activeSuggestionRow set and suggestions empty when typed text matches nothing', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          mockService(inst, []);
+          inst.onNameFocus(0);
+          inst.rows[0].name = 'xyz_nomatch';
+          inst.onNameInput(0, 'xyz_nomatch');
+          vi.advanceTimersByTime(250);
+          expect(inst.activeSuggestionRow).toBe(0);
+          // Server returned nothing → no dropdown
+          expect(inst.getFilteredSuggestions('xyz_nomatch')).toHaveLength(0);
+        } finally {
+          vi.useRealTimers();
+        }
       });
 
-      it('non-regression: first-open flow (focus → see suggestions → select) still works end-to-end', () => {
-        const inst = makeWithSuggestions(SUGGESTIONS);
-        mockService(inst);
-        // Initial open
-        inst.onNameFocus(0);
-        expect(inst.activeSuggestionRow).toBe(0);
-        expect(inst.getFilteredSuggestions('').length).toBe(SUGGESTIONS.length);
-        // Selection
-        inst.onSuggestionClick(0, SUGGESTIONS[0]);
-        expect(inst.rows[0].name).toBe(SUGGESTIONS[0].name);
-        expect(inst.activeSuggestionRow).toBeNull();
+      it('non-regression: first-open flow (focus → type → see suggestions → select) still works end-to-end', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          mockService(inst, SUGGESTIONS);
+          // Focus on empty field: hint shown, no suggestions yet
+          inst.onNameFocus(0);
+          expect(inst.activeSuggestionRow).toBe(0);
+          expect(inst.getFilteredSuggestions('').length).toBe(0);
+          // User types: debounce fires → mock returns SUGGESTIONS
+          inst.onNameInput(0, 'a');
+          vi.advanceTimersByTime(250);
+          expect(inst.suggestions.length).toBe(SUGGESTIONS.length);
+          // Selection
+          inst.onSuggestionClick(0, SUGGESTIONS[0]);
+          expect(inst.rows[0].name).toBe(SUGGESTIONS[0].name);
+          expect(inst.activeSuggestionRow).toBeNull();
+        } finally {
+          vi.useRealTimers();
+        }
       });
     });
 
@@ -842,7 +852,6 @@ describe('VariableDefinitionsModalComponent', () => {
 
       it('does not affect other rows', () => {
         const inst = make([row('x', 'String', 'hello'), row('', 'String', '')]);
-        (inst as any).allSuggestions = SUGGESTIONS;
         (inst as any).rowValueConflicts = [false, false];
         inst.onSuggestionClick(1, { name: 'label', type: 'String', value: 'hello', valuesConflict: false });
         expect(inst.rows[0].name).toBe('x');
@@ -859,37 +868,218 @@ describe('VariableDefinitionsModalComponent', () => {
       });
     });
 
-    describe('loadSuggestions — sample limit', () => {
-      it('limits request to at most 50 instances even when more are targeted', () => {
-        const inst = make([row('', 'String', '')]);
-        (inst as any).targetInstanceIds = Array.from({ length: 120 }, (_, k) => `inst-${k}`);
-        (inst as any).suggestionsLoaded = false;
-        const captured = { ids: [] as string[] };
-        mockService(inst, captured);
-        inst.onNameFocus(0);
-        expect(captured.ids.length).toBeLessThanOrEqual(50);
-        expect(captured.ids.length).toBeGreaterThan(0);
+    describe('disabled suggestions for unsupported types (Object / File)', () => {
+      it('Object suggestion is visible in filtered list — not hidden', () => {
+        const inst = makeWithSuggestions([
+          { name: 'myObj', type: 'Object', value: null, valuesConflict: false }
+        ]);
+        expect(inst.getFilteredSuggestions('')).toHaveLength(1);
+        expect(inst.getFilteredSuggestions('')[0].type).toBe('Object');
       });
 
-      it('makes no HTTP request when targetInstanceIds is empty', () => {
+      it('File suggestion is visible in filtered list — not hidden', () => {
+        const inst = makeWithSuggestions([
+          { name: 'myFile', type: 'File', value: null, valuesConflict: false }
+        ]);
+        expect(inst.getFilteredSuggestions('')).toHaveLength(1);
+        expect(inst.getFilteredSuggestions('')[0].type).toBe('File');
+      });
+
+      it('isUnsupportedSuggestionType returns true for Object and File', () => {
         const inst = make([row('', 'String', '')]);
-        (inst as any).targetInstanceIds = [];
-        (inst as any).suggestionsLoaded = false;
+        expect(inst.isUnsupportedSuggestionType('Object')).toBe(true);
+        expect(inst.isUnsupportedSuggestionType('File')).toBe(true);
+      });
+
+      it('isUnsupportedSuggestionType returns false for all supported types', () => {
+        const inst = make([row('', 'String', '')]);
+        for (const t of ['String', 'Integer', 'Long', 'Short', 'Double', 'Boolean', 'Date']) {
+          expect(inst.isUnsupportedSuggestionType(t)).toBe(false);
+        }
+      });
+
+      it('clicking an Object suggestion does not pre-fill name or type', () => {
+        const inst = make([row('', 'String', '')]);
+        inst.onSuggestionClick(0, { name: 'myObj', type: 'Object', value: { key: 'val' }, valuesConflict: false });
+        expect(inst.rows[0].name).toBe('');
+        expect(inst.rows[0].type).toBe('String');
+      });
+
+      it('clicking a File suggestion does not pre-fill name or type', () => {
+        const inst = make([row('', 'String', '')]);
+        inst.onSuggestionClick(0, { name: 'myFile', type: 'File', value: null, valuesConflict: false });
+        expect(inst.rows[0].name).toBe('');
+        expect(inst.rows[0].type).toBe('String');
+      });
+
+      it('clicking an Object suggestion leaves the dropdown open (activeSuggestionRow unchanged)', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).activeSuggestionRow = 0;
+        inst.onSuggestionClick(0, { name: 'myObj', type: 'Object', value: null, valuesConflict: false });
+        expect(inst.activeSuggestionRow).toBe(0);
+      });
+
+      it('non-regression: clicking a String suggestion still pre-fills name, type and value', () => {
+        const inst = make([row('', 'String', '')]);
+        inst.onSuggestionClick(0, { name: 'label', type: 'String', value: 'hello', valuesConflict: false });
+        expect(inst.rows[0].name).toBe('label');
+        expect(inst.rows[0].type).toBe('String');
+        expect(inst.rows[0].value).toBe('hello');
+      });
+    });
+
+    describe('progressive server-side search (variableNameLike)', () => {
+      it('sends no HTTP request when name field is empty and user focuses the field', () => {
+        const inst = make([row('', 'String', '')]);
         let called = false;
         (inst as any).processInstanceService = {
-          getVariableSuggestions: () => { called = true; return { subscribe: (fn: Function) => fn([]) }; }
+          searchVariableSuggestions: () => {
+            called = true;
+            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+          }
         };
+        (inst as any).targetInstanceIds = ['inst1'];
         inst.onNameFocus(0);
         expect(called).toBe(false);
       });
 
-      it('shows no suggestions when none are found — no error, getFilteredSuggestions returns []', () => {
-        const inst = make([row('', 'String', '')]);
-        (inst as any).allSuggestions = [];
-        (inst as any).suggestionsLoaded = true;
-        mockService(inst);
+      it('triggers searchVariableSuggestions with the typed query after 250ms debounce', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          let capturedQuery = '';
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: (query: string) => {
+              capturedQuery = query;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          (inst as any).targetInstanceIds = null; // null = mode Query: global search allowed
+          inst.onNameInput(0, 'am');
+          expect(capturedQuery).toBe('');
+          vi.advanceTimersByTime(250);
+          expect(capturedQuery).toBe('am');
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('cancels the previous debounce and sends only one request when user types rapidly', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          let callCount = 0;
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: () => {
+              callCount++;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          (inst as any).targetInstanceIds = null; // null = mode Query: global search allowed
+          inst.onNameInput(0, 'a');
+          vi.advanceTimersByTime(100);
+          inst.onNameInput(0, 'am');
+          vi.advanceTimersByTime(100);
+          expect(callCount).toBe(0);
+          vi.advanceTimersByTime(150);
+          expect(callCount).toBe(1);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('passes processInstanceIdIn when targetInstanceIds are provided (mode Instances)', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          let capturedIds: string[] = [];
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: (_query: string, ids: string[]) => {
+              capturedIds = ids;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          (inst as any).targetInstanceIds = ['inst1', 'inst2', 'inst3'];
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(capturedIds).toEqual(['inst1', 'inst2', 'inst3']);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('passes empty instanceIds to service for global search when targetInstanceIds is null (mode Query)', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          let capturedIds: string[] | null = null;
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: (_query: string, ids: string[]) => {
+              capturedIds = ids;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          (inst as any).targetInstanceIds = null; // null = mode Query: no instance filter
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(capturedIds).toEqual([]);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('blocks search when targetInstanceIds is [] (mode Instances, nothing selected)', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          let called = false;
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: () => {
+              called = true;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          (inst as any).targetInstanceIds = []; // [] = mode Instances, nothing selected
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(called).toBe(false);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('blocks search on focus with non-empty field when targetInstanceIds is [] (mode Instances, nothing selected)', () => {
+        const inst = make([row('amount', 'String', '')]);
+        let called = false;
+        (inst as any).processInstanceService = {
+          searchVariableSuggestions: () => {
+            called = true;
+            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+          }
+        };
+        (inst as any).targetInstanceIds = []; // [] = mode Instances, nothing selected
         inst.onNameFocus(0);
-        expect(inst.getFilteredSuggestions('')).toHaveLength(0);
+        expect(called).toBe(false);
+      });
+    });
+
+    describe('isInstancesModeWithNoSelection — hint guard getter', () => {
+      it('returns false when targetInstanceIds is null (mode Query)', () => {
+        const inst = make([]);
+        (inst as any).targetInstanceIds = null;
+        expect(inst.isInstancesModeWithNoSelection).toBe(false);
+      });
+
+      it('returns true when targetInstanceIds is [] (mode Instances, nothing selected)', () => {
+        const inst = make([]);
+        (inst as any).targetInstanceIds = [];
+        expect(inst.isInstancesModeWithNoSelection).toBe(true);
+      });
+
+      it('returns false when targetInstanceIds has IDs (mode Instances, with selection)', () => {
+        const inst = make([]);
+        (inst as any).targetInstanceIds = ['inst1', 'inst2'];
+        expect(inst.isInstancesModeWithNoSelection).toBe(false);
       });
     });
   });

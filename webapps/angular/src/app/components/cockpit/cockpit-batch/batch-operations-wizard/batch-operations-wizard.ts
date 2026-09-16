@@ -831,8 +831,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     return this.variableDefinitions;
   }
 
-  get modalTargetInstanceIds(): string[] {
-    return this.mode === 'instances' ? [...this.selectedIds] : [];
+  get modalTargetInstanceIds(): string[] | null {
+    return this.mode === 'instances' ? [...this.selectedIds] : null;
   }
 
   openVariablesModal(): void {

@@ -27,9 +27,19 @@
                    (keydown.enter)="onFieldEnter($event)"
                    (focus)="onNameFocus(i, $event)"
                    (click)="onNameFocus(i, $event)"
-                   (input)="onNameFocus(i)"
+                   (input)="onNameInput(i, $any($event.target).value)"
                    (blur)="onNameBlur()"
                    [placeholder]="'cockpit.batchOps.setVariables.varNamePlaceholder' | translate">
+            <div class="var-name-autocomplete"
+                 *ngIf="activeSuggestionRow === i && isInstancesModeWithNoSelection"
+                 [ngStyle]="dropdownStyle">
+              <p class="autocomplete-start-hint">{{ 'cockpit.batchOps.setVariables.selectInstancesHint' | translate }}</p>
+            </div>
+            <div class="var-name-autocomplete"
+                 *ngIf="activeSuggestionRow === i && !rows[i].name.trim() && !isInstancesModeWithNoSelection"
+                 [ngStyle]="dropdownStyle">
+              <p class="autocomplete-start-hint">{{ 'cockpit.batchOps.setVariables.startTypingHint' | translate }}</p>
+            </div>
             <div class="var-name-autocomplete"
                  *ngIf="activeSuggestionRow === i && getFilteredSuggestions(rows[i].name).length > 0"
                  [ngStyle]="dropdownStyle">
@@ -40,6 +50,9 @@
                 <button *ngFor="let s of getFilteredSuggestions(rows[i].name)"
                         type="button"
                         class="autocomplete-item"
+                        [class.autocomplete-item--disabled]="isUnsupportedSuggestionType(s.type)"
+                        [attr.title]="isUnsupportedSuggestionType(s.type) ? ('cockpit.batchOps.setVariables.unsupportedTypeTooltip' | translate) : null"
+                        [attr.aria-disabled]="isUnsupportedSuggestionType(s.type) ? 'true' : null"
                         (mousedown)="$event.preventDefault(); onSuggestionClick(i, s)">
                   <span class="autocomplete-name">
                     <ng-container *ngFor="let part of getHighlightParts(s.name, rows[i].name)">

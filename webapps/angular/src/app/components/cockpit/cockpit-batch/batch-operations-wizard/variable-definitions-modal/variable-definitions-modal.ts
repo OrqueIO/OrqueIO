@@ -1,5 +1,5 @@
 import {
-  Component, Input, Output, EventEmitter, OnInit,
+  Component, Input, Output, EventEmitter, OnInit, OnDestroy,
   ChangeDetectionStrategy, ChangeDetectorRef, inject, HostListener,
   ViewChild, ElementRef
 } from '@angular/core';
@@ -24,7 +24,6 @@ export interface VarSuggestion {
 
 const INTEGER_TYPES = ['Integer', 'Long', 'Short'];
 const INTEGER_RE = /^-?\d+$/;
-const SUGGESTION_SAMPLE = 50;
 
 @Component({
   selector: 'app-variable-definitions-modal',
@@ -34,12 +33,12 @@ const SUGGESTION_SAMPLE = 50;
   styleUrls: ['./variable-definitions-modal.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VariableDefinitionsModalComponent implements OnInit {
+export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private processInstanceService = inject(ProcessInstanceService);
 
   @Input() initialVariables: VariableDef[] = [];
-  @Input() targetInstanceIds: string[] = [];
+  @Input() targetInstanceIds: string[] | null = null;
   @Output() apply = new EventEmitter<VariableDef[]>();
   @Output() closeModal = new EventEmitter<void>();
 
@@ -48,8 +47,9 @@ export class VariableDefinitionsModalComponent implements OnInit {
   rows: VariableDef[] = [];
   rowValueConflicts: boolean[] = [];
 
-  allSuggestions: VarSuggestion[] = [];
-  private suggestionsLoaded = false;
+  suggestions: VarSuggestion[] = [];
+  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private pendingSearch: { unsubscribe: () => void } | null = null;
   activeSuggestionRow: number | null = null;
   dropdownStyle: { top: string; left: string; width: string } = { top: '0', left: '0', width: '0' };
 
@@ -196,9 +196,9 @@ export class VariableDefinitionsModalComponent implements OnInit {
   }
 
   getFilteredSuggestions(nameValue: string): VarSuggestion[] {
-    if (!nameValue) return this.allSuggestions;
+    if (!nameValue) return this.suggestions;
     const q = nameValue.toLowerCase();
-    return this.allSuggestions.filter(s => s.name.toLowerCase().includes(q));
+    return this.suggestions.filter(s => s.name.toLowerCase().includes(q));
   }
 
   getHighlightParts(name: string, query: string): { text: string; bold: boolean }[] {
@@ -222,18 +222,78 @@ export class VariableDefinitionsModalComponent implements OnInit {
       };
     }
     this.activeSuggestionRow = index;
-    if (!this.suggestionsLoaded) {
-      this.loadSuggestions();
+    const currentQuery = this.rows[index]?.name ?? '';
+    if (currentQuery.trim()) {
+      this.searchNow(index, currentQuery);
+    } else {
+      this.cancelPendingSearch();
+      this.suggestions = [];
     }
     this.cdr.markForCheck();
   }
 
   onNameBlur(): void {
+    this.cancelPendingSearch();
     this.activeSuggestionRow = null;
+    this.suggestions = [];
     this.cdr.markForCheck();
   }
 
+  onNameInput(index: number, query: string): void {
+    this.activeSuggestionRow = index;
+    this.cancelPendingSearch();
+    if (!query.trim()) {
+      this.suggestions = [];
+      this.cdr.markForCheck();
+      return;
+    }
+    this.debounceTimer = setTimeout(() => {
+      this.debounceTimer = null;
+      this.searchNow(index, query);
+    }, 250);
+    this.cdr.markForCheck();
+  }
+
+  ngOnDestroy(): void {
+    this.cancelPendingSearch();
+  }
+
+  private searchNow(index: number, query: string): void {
+    // null = mode Query (global search); [] = mode Instances, no selection → block
+    if (this.targetInstanceIds !== null && this.targetInstanceIds.length === 0) return;
+    this.cancelPendingSearch();
+    this.pendingSearch = this.processInstanceService
+      .searchVariableSuggestions(query, this.targetInstanceIds ?? [])
+      .subscribe(results => {
+        this.pendingSearch = null;
+        if (this.activeSuggestionRow === index) {
+          this.suggestions = results;
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+  private cancelPendingSearch(): void {
+    if (this.debounceTimer !== null) {
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = null;
+    }
+    if (this.pendingSearch) {
+      this.pendingSearch.unsubscribe();
+      this.pendingSearch = null;
+    }
+  }
+
+  get isInstancesModeWithNoSelection(): boolean {
+    return this.targetInstanceIds !== null && this.targetInstanceIds.length === 0;
+  }
+
+  isUnsupportedSuggestionType(type: string): boolean {
+    return type === 'Object' || type === 'File';
+  }
+
   onSuggestionClick(rowIndex: number, suggestion: VarSuggestion): void {
+    if (this.isUnsupportedSuggestionType(suggestion.type)) return;
     const updated = [...this.rows];
     updated[rowIndex] = {
       ...updated[rowIndex],
@@ -273,16 +333,6 @@ export class VariableDefinitionsModalComponent implements OnInit {
       return match ? match[1] : '';
     }
     return value;
-  }
-
-  private loadSuggestions(): void {
-    this.suggestionsLoaded = true;
-    const sampled = this.targetInstanceIds.slice(0, SUGGESTION_SAMPLE);
-    if (!sampled.length) return;
-    this.processInstanceService.getVariableSuggestions(sampled).subscribe(suggestions => {
-      this.allSuggestions = suggestions;
-      this.cdr.markForCheck();
-    });
   }
 
   trackByIndex(index: number): number {
