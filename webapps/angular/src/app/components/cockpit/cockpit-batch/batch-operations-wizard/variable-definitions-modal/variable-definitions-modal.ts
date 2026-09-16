@@ -51,6 +51,7 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
   private pendingSearch: { unsubscribe: () => void } | null = null;
   activeSuggestionRow: number | null = null;
+  keyboardHighlightIndex: number | null = null;
   dropdownStyle: { top: string; left: string; width: string } = { top: '0', left: '0', width: '0' };
 
   ngOnInit(): void {
@@ -223,6 +224,7 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
       };
     }
     this.activeSuggestionRow = index;
+    this.keyboardHighlightIndex = null;
     const currentQuery = this.rows[index]?.name ?? '';
     if (currentQuery.trim()) {
       this.searchNow(index, currentQuery);
@@ -236,12 +238,14 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
   onNameBlur(): void {
     this.cancelPendingSearch();
     this.activeSuggestionRow = null;
+    this.keyboardHighlightIndex = null;
     this.suggestions = [];
     this.cdr.markForCheck();
   }
 
   onNameInput(index: number, query: string): void {
     this.activeSuggestionRow = index;
+    this.keyboardHighlightIndex = null;
     this.cancelPendingSearch();
     if (!query.trim()) {
       this.suggestions = [];
@@ -253,6 +257,62 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
       this.searchNow(index, query);
     }, 250);
     this.cdr.markForCheck();
+  }
+
+  onNameKeydown(rowIndex: number, event: KeyboardEvent): void {
+    const filtered = this.getFilteredSuggestions(this.rows[rowIndex]?.name ?? '');
+    const enabledIndices = filtered
+      .map((s, i) => ({ s, i }))
+      .filter(({ s }) => !this.isUnsupportedSuggestionType(s.type))
+      .map(({ i }) => i);
+
+    switch (event.key) {
+      case 'ArrowDown': {
+        event.preventDefault();
+        if (enabledIndices.length === 0) return;
+        if (this.keyboardHighlightIndex === null) {
+          this.keyboardHighlightIndex = enabledIndices[0];
+        } else {
+          const pos = enabledIndices.indexOf(this.keyboardHighlightIndex);
+          if (pos < enabledIndices.length - 1) {
+            this.keyboardHighlightIndex = enabledIndices[pos + 1];
+          }
+        }
+        this.cdr.markForCheck();
+        return;
+      }
+      case 'ArrowUp': {
+        event.preventDefault();
+        if (this.keyboardHighlightIndex === null || enabledIndices.length === 0) return;
+        const pos = enabledIndices.indexOf(this.keyboardHighlightIndex);
+        if (pos > 0) {
+          this.keyboardHighlightIndex = enabledIndices[pos - 1];
+        }
+        this.cdr.markForCheck();
+        return;
+      }
+      case 'Enter': {
+        if (this.keyboardHighlightIndex !== null && filtered[this.keyboardHighlightIndex]) {
+          event.preventDefault();
+          event.stopPropagation();
+          this.onSuggestionClick(rowIndex, filtered[this.keyboardHighlightIndex]);
+          this.keyboardHighlightIndex = null;
+          return;
+        }
+        this.onFieldEnter(event);
+        return;
+      }
+      case 'Escape': {
+        if (filtered.length > 0) {
+          event.stopPropagation();
+          this.activeSuggestionRow = null;
+          this.keyboardHighlightIndex = null;
+          this.suggestions = [];
+          this.cdr.markForCheck();
+        }
+        return;
+      }
+    }
   }
 
   ngOnDestroy(): void {
@@ -309,6 +369,7 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
     conflicts[rowIndex] = suggestion.valuesConflict;
     this.rowValueConflicts = conflicts;
     this.activeSuggestionRow = null;
+    this.keyboardHighlightIndex = null;
     this.cdr.markForCheck();
   }
 

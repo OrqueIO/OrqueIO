@@ -283,6 +283,10 @@
   background: var(--color-gray-50, rgba(0, 0, 0, 0.04));
 }
 
+.autocomplete-item--active {
+  background: rgba(99, 102, 241, 0.1);
+}
+
 .autocomplete-item--disabled {
   color: var(--text-muted);
   opacity: 0.6;

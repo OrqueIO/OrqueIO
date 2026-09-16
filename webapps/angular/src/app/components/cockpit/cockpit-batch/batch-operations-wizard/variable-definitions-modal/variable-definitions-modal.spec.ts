@@ -1156,6 +1156,101 @@ describe('VariableDefinitionsModalComponent', () => {
     });
   });
 
+  describe('keyboard navigation in suggestions dropdown', () => {
+    const KBD_SUGGESTIONS: VarSuggestion[] = [
+      { name: 'amount', type: 'Integer', value: 42, valuesConflict: false },
+      { name: 'data', type: 'Object', value: null, valuesConflict: false },
+      { name: 'label', type: 'String', value: 'foo', valuesConflict: false },
+    ];
+
+    function makeKbd(name = ''): VariableDefinitionsModalComponent {
+      const inst = make([row(name, 'String', '')]);
+      (inst as any).activeSuggestionRow = 0;
+      (inst as any).suggestions = KBD_SUGGESTIONS;
+      (inst as any).dialogEl = { nativeElement: { focus: () => {} } };
+      return inst;
+    }
+
+    function fakeKey(k: string): KeyboardEvent {
+      return {
+        key: k,
+        preventDefault: () => {},
+        stopPropagation: () => {},
+        target: { blur: () => {} },
+      } as unknown as KeyboardEvent;
+    }
+
+    it('ArrowDown from null highlights the first enabled suggestion (skips disabled)', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      expect(inst.keyboardHighlightIndex).toBe(0);
+    });
+
+    it('ArrowDown twice skips the disabled Object suggestion and lands on the next enabled one', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      expect(inst.keyboardHighlightIndex).toBe(2);
+    });
+
+    it('ArrowDown on last enabled suggestion does not move (no wrap)', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      expect(inst.keyboardHighlightIndex).toBe(2);
+    });
+
+    it('ArrowUp from second enabled goes back to first enabled', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowUp'));
+      expect(inst.keyboardHighlightIndex).toBe(0); /
+    });
+
+    it('ArrowUp on first enabled suggestion does not move (no wrap)', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowUp'));
+      expect(inst.keyboardHighlightIndex).toBe(0);
+    });
+
+    it('Enter on highlighted suggestion fills Name / Type / Value as onSuggestionClick would', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('Enter'));
+      expect(inst.rows[0].name).toBe('label');
+      expect(inst.rows[0].type).toBe('String');
+      expect(inst.rows[0].value).toBe('foo');
+      expect(inst.keyboardHighlightIndex).toBeNull();
+      expect(inst.activeSuggestionRow).toBeNull();
+    });
+
+    it('Enter with no highlight does not select a suggestion — name field stays unchanged', () => {
+      const inst = makeKbd('am');
+      inst.onNameKeydown(0, fakeKey('Enter'));
+      expect(inst.rows[0].name).toBe('am');
+    });
+
+    it('Escape closes the dropdown without changing the typed text', () => {
+      const inst = makeKbd('am');
+      inst.onNameKeydown(0, fakeKey('Escape'));
+      expect(inst.activeSuggestionRow).toBeNull();
+      expect(inst.keyboardHighlightIndex).toBeNull();
+      expect(inst.rows[0].name).toBe('am');
+    });
+
+    it('typing after ArrowDown resets the highlight index', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      expect(inst.keyboardHighlightIndex).toBe(0);
+      inst.onNameInput(0, 'lab');
+      expect(inst.keyboardHighlightIndex).toBeNull();
+    });
+  });
+
   describe('edit mode — row deletion (chip deletion bug)', () => {
     function makeEditMode(initialVars: VariableDef[]): VariableDefinitionsModalComponent {
       const inst = make(initialVars.map(v => ({ ...v })));

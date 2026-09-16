@@ -24,7 +24,7 @@
             <input type="text"
                    class="var-input"
                    [(ngModel)]="rows[i].name"
-                   (keydown.enter)="onFieldEnter($event)"
+                   (keydown)="onNameKeydown(i, $event)"
                    (focus)="onNameFocus(i, $event)"
                    (click)="onNameFocus(i, $event)"
                    (input)="onNameInput(i, $any($event.target).value)"
@@ -47,10 +47,11 @@
                 {{ 'cockpit.batchOps.setVariables.suggestionsHeader' | translate }}
               </div>
               <div class="autocomplete-list">
-                <button *ngFor="let s of getFilteredSuggestions(rows[i].name)"
+                <button *ngFor="let s of getFilteredSuggestions(rows[i].name); let idx = index"
                         type="button"
                         class="autocomplete-item"
                         [class.autocomplete-item--disabled]="isUnsupportedSuggestionType(s.type)"
+                        [class.autocomplete-item--active]="keyboardHighlightIndex === idx"
                         [attr.title]="isUnsupportedSuggestionType(s.type) ? ('cockpit.batchOps.setVariables.unsupportedTypeTooltip' | translate) : null"
                         [attr.aria-disabled]="isUnsupportedSuggestionType(s.type) ? 'true' : null"
                         (mousedown)="$event.preventDefault(); onSuggestionClick(i, s)">
