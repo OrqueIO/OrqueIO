@@ -8,6 +8,7 @@ function make(rows: VariableDef[]): VariableDefinitionsModalComponent {
   (inst as any).cdr = { markForCheck: () => {} };
   (inst as any).targetInstanceIds = null; // null = mode Query (global search allowed)
   (inst as any).initialVariables = [];
+  (inst as any).queryFilter = null; // null = no criteria → global search (override for criteria tests)
   return inst;
 }
 
@@ -1087,6 +1088,104 @@ describe('VariableDefinitionsModalComponent', () => {
       });
     });
 
+    describe('searchNow — mode Query with active criteria (two-step ID resolve)', () => {
+      it('resolves instance IDs from queryFilter then passes them to searchVariableSuggestions', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          (inst as any).targetInstanceIds = null;
+          (inst as any).queryFilter = { unfinished: true, processInstanceBusinessKeyLike: 'ORDER' };
+          let capturedIds: string[] = [];
+          (inst as any).processInstanceService = {
+            queryProcessInstances: () => ({
+              subscribe: (fn: Function) => { fn([{ id: 'inst-a' }, { id: 'inst-b' }]); return { unsubscribe: () => {} }; }
+            }),
+            searchVariableSuggestions: (q: string, ids: string[]) => {
+              capturedIds = ids;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(capturedIds).toEqual(['inst-a', 'inst-b']);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('returns empty suggestions when queryFilter matches no instances (does not call searchVariableSuggestions)', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          (inst as any).targetInstanceIds = null;
+          (inst as any).queryFilter = { unfinished: true, processInstanceBusinessKeyLike: 'NOMATCH' };
+          let searchCalled = false;
+          (inst as any).processInstanceService = {
+            queryProcessInstances: () => ({
+              subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; }
+            }),
+            searchVariableSuggestions: () => {
+              searchCalled = true;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(searchCalled).toBe(false);
+          expect(inst.suggestions).toEqual([]);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('non-regression: queryFilter null (no criteria) still does an unrestricted global search', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          (inst as any).targetInstanceIds = null;
+          let capturedIds: string[] = ['sentinel'];
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: (q: string, ids: string[]) => {
+              capturedIds = ids;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(capturedIds).toEqual([]);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('non-regression: mode Instances uses IDs directly — queryProcessInstances is never called', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          (inst as any).targetInstanceIds = ['inst-1', 'inst-2'];
+          (inst as any).queryFilter = { unfinished: true };
+          let queryCalled = false;
+          let capturedIds: string[] = [];
+          (inst as any).processInstanceService = {
+            queryProcessInstances: () => {
+              queryCalled = true;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            },
+            searchVariableSuggestions: (q: string, ids: string[]) => {
+              capturedIds = ids;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(queryCalled).toBe(false);
+          expect(capturedIds).toEqual(['inst-1', 'inst-2']);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+    });
+
     describe('isInstancesModeWithNoSelection — hint guard getter', () => {
       it('returns false when targetInstanceIds is null (mode Query)', () => {
         const inst = make([]);
@@ -1206,7 +1305,7 @@ describe('VariableDefinitionsModalComponent', () => {
       inst.onNameKeydown(0, fakeKey('ArrowDown'));
       inst.onNameKeydown(0, fakeKey('ArrowDown'));
       inst.onNameKeydown(0, fakeKey('ArrowUp'));
-      expect(inst.keyboardHighlightIndex).toBe(0); /
+      expect(inst.keyboardHighlightIndex).toBe(0);
     });
 
     it('ArrowUp on first enabled suggestion does not move (no wrap)', () => {

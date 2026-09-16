@@ -39,6 +39,7 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
 
   @Input() initialVariables: VariableDef[] = [];
   @Input() targetInstanceIds: string[] | null = null;
+  @Input() queryFilter: Record<string, unknown> | null = null;
   @Output() apply = new EventEmitter<VariableDef[]>();
   @Output() closeModal = new EventEmitter<void>();
 
@@ -323,8 +324,49 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
     // null = mode Query (global search); [] = mode Instances, no selection → block
     if (this.targetInstanceIds !== null && this.targetInstanceIds.length === 0) return;
     this.cancelPendingSearch();
+
+    if (this.targetInstanceIds !== null) {
+      this.pendingSearch = this.processInstanceService
+        .searchVariableSuggestions(query, this.targetInstanceIds)
+        .subscribe(results => {
+          this.pendingSearch = null;
+          if (this.activeSuggestionRow === index) {
+            this.suggestions = results;
+            this.cdr.markForCheck();
+          }
+        });
+      return;
+    }
+
+    if (this.queryFilter !== null) {
+      const filter = this.queryFilter;
+      this.pendingSearch = this.processInstanceService
+        .queryProcessInstances(filter, 0, 100)
+        .subscribe(instances => {
+          const ids = instances.map(i => i.id);
+          if (!ids.length) {
+            this.pendingSearch = null;
+            if (this.activeSuggestionRow === index) {
+              this.suggestions = [];
+              this.cdr.markForCheck();
+            }
+            return;
+          }
+          this.pendingSearch = this.processInstanceService
+            .searchVariableSuggestions(query, ids)
+            .subscribe(results => {
+              this.pendingSearch = null;
+              if (this.activeSuggestionRow === index) {
+                this.suggestions = results;
+                this.cdr.markForCheck();
+              }
+            });
+        });
+      return;
+    }
+
     this.pendingSearch = this.processInstanceService
-      .searchVariableSuggestions(query, this.targetInstanceIds ?? [])
+      .searchVariableSuggestions(query, [])
       .subscribe(results => {
         this.pendingSearch = null;
         if (this.activeSuggestionRow === index) {

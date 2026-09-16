@@ -629,6 +629,7 @@
     *ngIf="showVariablesModal"
     [initialVariables]="modalInitialVariables"
     [targetInstanceIds]="modalTargetInstanceIds"
+    [queryFilter]="modalQueryFilter"
     (apply)="onVariablesApplied($event)"
     (closeModal)="closeVariablesModal()">
   </app-variable-definitions-modal>

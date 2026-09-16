@@ -835,6 +835,11 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     return this.mode === 'instances' ? [...this.selectedIds] : null;
   }
 
+  get modalQueryFilter(): Record<string, unknown> | null {
+    if (this.mode !== 'query' || !this.hasActiveCriteria) return null;
+    return this.buildHistoricQueryForBatch();
+  }
+
   openVariablesModal(): void {
     this.showVariablesModal = true;
     this.cdr.markForCheck();
