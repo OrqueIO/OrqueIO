@@ -7,6 +7,7 @@ function make(rows: VariableDef[]): VariableDefinitionsModalComponent {
   (inst as any).rowValueConflicts = rows.map(() => false);
   (inst as any).cdr = { markForCheck: () => {} };
   (inst as any).targetInstanceIds = null; // null = mode Query (global search allowed)
+  (inst as any).initialVariables = [];
   return inst;
 }
 
@@ -1152,6 +1153,64 @@ describe('VariableDefinitionsModalComponent', () => {
       const { inst, emitted, dialogNative } = makeWithApply([row('myInt', 'Integer', 'abc')]);
       inst.onModalEnter({ target: dialogNative } as unknown as KeyboardEvent);
       expect(emitted).toHaveLength(0);
+    });
+  });
+
+  describe('edit mode — row deletion (chip deletion bug)', () => {
+    function makeEditMode(initialVars: VariableDef[]): VariableDefinitionsModalComponent {
+      const inst = make(initialVars.map(v => ({ ...v })));
+      (inst as any).initialVariables = initialVars;
+      return inst;
+    }
+
+    it('canApply is true after deleting the only row in edit mode', () => {
+      const inst = makeEditMode([row('amount', 'Integer', '100')]);
+      inst.removeRow(0);
+      expect(inst.canApply).toBe(true);
+    });
+
+    it('onApply emits [] after deleting the only row — wizard must remove the chip', () => {
+      const inst = makeEditMode([row('amount', 'Integer', '100')]);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      inst.removeRow(0);
+      inst.onApply();
+      expect(emitted[0]).toEqual([]);
+    });
+
+    it('deletes one of two rows — Apply emits only the surviving variable', () => {
+      const inst = makeEditMode([row('amount', 'Integer', '100'), row('label', 'String', 'foo')]);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      inst.removeRow(0);
+      expect(inst.canApply).toBe(true);
+      inst.onApply();
+      expect(emitted[0]).toEqual([row('label', 'String', 'foo')]);
+    });
+
+    it('deletes one row and modifies another — Apply applies both changes', () => {
+      const inst = makeEditMode([row('amount', 'Integer', '100'), row('label', 'String', 'foo')]);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      inst.removeRow(0);
+      inst.rows[0].value = 'bar';
+      inst.onApply();
+      expect(emitted[0]).toEqual([row('label', 'String', 'bar')]);
+    });
+
+    it('non-regression: renaming a variable in edit mode applies the new name', () => {
+      const inst = makeEditMode([row('amount', 'Integer', '100')]);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      inst.rows[0].name = 'total';
+      expect(inst.canApply).toBe(true);
+      inst.onApply();
+      expect(emitted[0]).toEqual([row('total', 'Integer', '100')]);
+    });
+
+    it('non-regression: canApply remains false for fresh modal with empty rows (no initialVariables)', () => {
+      const inst = make([row('', 'String', '')]);
+      expect(inst.canApply).toBe(false);
     });
   });
 

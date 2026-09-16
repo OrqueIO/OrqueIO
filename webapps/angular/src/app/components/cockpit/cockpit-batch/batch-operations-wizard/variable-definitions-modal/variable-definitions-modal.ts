@@ -140,7 +140,8 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
 
   get canApply(): boolean {
     const namedRows = this.rows.filter(r => r.name.trim() !== '');
-    return namedRows.length > 0 && namedRows.every(r => this.isValueValid(r));
+    if (namedRows.length === 0) return this.initialVariables.length > 0;
+    return namedRows.every(r => this.isValueValid(r));
   }
 
   addRow(): void {
