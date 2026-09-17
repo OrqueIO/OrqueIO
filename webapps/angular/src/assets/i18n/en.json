@@ -1728,6 +1728,8 @@
   "cockpit.batchOps.setRetriesExternal.actionBtnQuery": "Set retries for matching instances",
   "cockpit.batchOps.confirm.setRetriesExternalSummary": "Retries will be set to <strong>{{retries}}</strong> for external tasks of {{count}} process instance(s).",
   "cockpit.batchOps.confirm.setRetriesExternalQuerySummary": "Retries will be set to <strong>{{retries}}</strong> for external tasks of all matching active process instances.",
+  "cockpit.batchOps.confirm.setRetriesExternalBtn": "Set retries for {{count}} instance(s)",
+  "cockpit.batchOps.confirm.setRetriesExternalBtnQuery": "Set retries for matching instances",
   "cockpit.batchOps.setVariables.label": "Set variables",
   "cockpit.batchOps.setVariables.desc": "Update process variable values in bulk",
   "cockpit.batchOps.setVariables.actionBtn": "Set variables for {{count}} instance(s)",

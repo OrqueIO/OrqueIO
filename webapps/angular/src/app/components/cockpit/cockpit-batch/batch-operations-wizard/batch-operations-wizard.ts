@@ -1209,7 +1209,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedBtn';
     if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionBtn';
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsBtn';
-    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.setRetriesExternal.actionBtn';
+    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalBtn';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesBtn';
     return 'cockpit.batchOps.confirm.suspendBtn';
   }
@@ -1220,7 +1220,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.confirm.deleteFinishedBtnQuery';
     if (this.selectedOperationId === 'delete-decision') return 'cockpit.batchOps.confirm.deleteDecisionBtnQuery';
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsBtnQuery';
-    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.setRetriesExternal.actionBtnQuery';
+    if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalBtnQuery';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesBtnQuery';
     return 'cockpit.batchOps.confirm.suspendBtnQuery';
   }
