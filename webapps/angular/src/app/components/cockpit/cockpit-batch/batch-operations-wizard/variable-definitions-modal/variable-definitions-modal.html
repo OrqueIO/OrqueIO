@@ -24,8 +24,47 @@
             <input type="text"
                    class="var-input"
                    [(ngModel)]="rows[i].name"
-                   (keydown.enter)="onFieldEnter($event)"
+                   (keydown)="onNameKeydown(i, $event)"
+                   (focus)="onNameFocus(i, $event)"
+                   (click)="onNameFocus(i, $event)"
+                   (input)="onNameInput(i, $any($event.target).value)"
+                   (blur)="onNameBlur()"
                    [placeholder]="'cockpit.batchOps.setVariables.varNamePlaceholder' | translate">
+            <div class="var-name-autocomplete"
+                 *ngIf="activeSuggestionRow === i && isInstancesModeWithNoSelection"
+                 [ngStyle]="dropdownStyle">
+              <p class="autocomplete-start-hint">{{ 'cockpit.batchOps.setVariables.selectInstancesHint' | translate }}</p>
+            </div>
+            <div class="var-name-autocomplete"
+                 *ngIf="activeSuggestionRow === i && !rows[i].name.trim() && !isInstancesModeWithNoSelection"
+                 [ngStyle]="dropdownStyle">
+              <p class="autocomplete-start-hint">{{ 'cockpit.batchOps.setVariables.startTypingHint' | translate }}</p>
+            </div>
+            <div class="var-name-autocomplete"
+                 *ngIf="activeSuggestionRow === i && getFilteredSuggestions(rows[i].name).length > 0"
+                 [ngStyle]="dropdownStyle">
+              <div class="autocomplete-header">
+                {{ 'cockpit.batchOps.setVariables.suggestionsHeader' | translate }}
+              </div>
+              <div class="autocomplete-list">
+                <button *ngFor="let s of getFilteredSuggestions(rows[i].name); let idx = index"
+                        type="button"
+                        class="autocomplete-item"
+                        [class.autocomplete-item--disabled]="isUnsupportedSuggestionType(s.type)"
+                        [class.autocomplete-item--active]="keyboardHighlightIndex === idx"
+                        [attr.title]="isUnsupportedSuggestionType(s.type) ? ('cockpit.batchOps.setVariables.unsupportedTypeTooltip' | translate) : null"
+                        [attr.aria-disabled]="isUnsupportedSuggestionType(s.type) ? 'true' : null"
+                        (mousedown)="$event.preventDefault(); onSuggestionClick(i, s)">
+                  <span class="autocomplete-name">
+                    <ng-container *ngFor="let part of getHighlightParts(s.name, rows[i].name)">
+                      <b *ngIf="part.bold">{{ part.text }}</b>
+                      <span *ngIf="!part.bold">{{ part.text }}</span>
+                    </ng-container>
+                  </span>
+                  <span class="autocomplete-type">{{ s.type }}</span>
+                </button>
+              </div>
+            </div>
             <span *ngIf="getNameDuplicateWarning(rows[i].name, i) as warnName" class="var-name-warn">
               <i class="ti ti-alert-triangle"></i>{{ 'cockpit.batchOps.setVariables.warnNameDuplicate' | translate: { name: warnName } }}
             </span>
@@ -57,7 +96,7 @@
                    (keydown)="onIntegerKeydown($event, row.value)"
                    (keydown.enter)="onFieldEnter($event)"
                    (paste)="onIntegerPaste($event)"
-                   (input)="rows[i].value = $any($event.target).value"
+                   (input)="rows[i].value = $any($event.target).value; onValueChange(i)"
                    [class.input-error]="!isValueValid(row)"
                    [placeholder]="'cockpit.batchOps.setVariables.varValuePlaceholder' | translate">
 
@@ -66,6 +105,7 @@
                    type="datetime-local"
                    class="var-input"
                    [(ngModel)]="rows[i].value"
+                   (ngModelChange)="onValueChange(i)"
                    (keydown.enter)="onFieldEnter($event)">
 
             <!-- Double / String: browser native handling -->
@@ -73,14 +113,20 @@
                    [type]="getInputType(row.type)"
                    class="var-input"
                    [(ngModel)]="rows[i].value"
+                   (ngModelChange)="onValueChange(i)"
                    (keydown.enter)="onFieldEnter($event)"
                    [placeholder]="'cockpit.batchOps.setVariables.varValuePlaceholder' | translate">
 
             <!-- Boolean: checkbox + live label, same as StartProcessModalComponent -->
             <label class="var-checkbox-label" *ngIf="row.type === 'Boolean'">
-              <input type="checkbox" [(ngModel)]="rows[i].value" (keydown.enter)="onFieldEnter($event)">
+              <input type="checkbox" [(ngModel)]="rows[i].value" (ngModelChange)="onValueChange(i)" (keydown.enter)="onFieldEnter($event)">
               {{ rows[i].value ? 'true' : 'false' }}
             </label>
+
+            <!-- Conflict hint: shown when instances had different values and value was intentionally left empty -->
+            <span *ngIf="hasValueConflict(i)" class="var-value-conflict-hint">
+              <i class="ti ti-info-circle"></i>{{ 'cockpit.batchOps.setVariables.valuesDifferHint' | translate }}
+            </span>
 
             <!-- Inline error — *ngIf="... as errKey" narrows string|null → string for the translate pipe -->
             <span *ngIf="getValueError(row) as errKey" class="var-field-error">

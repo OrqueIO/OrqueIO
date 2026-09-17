@@ -338,6 +338,60 @@ export class ProcessInstanceService {
     }).pipe(catchError(() => of([])));
   }
 
+  getVariableSuggestions(instanceIds: string[]): Observable<{ name: string; type: string; value: any; valuesConflict: boolean }[]> {
+    if (!instanceIds.length) return of([]);
+    return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, {
+      params: { processInstanceIdIn: instanceIds.join(','), maxResults: '1000' }
+    }).pipe(
+      map(vars => this.deduplicateVariables(vars)),
+      catchError(() => of([]))
+    );
+  }
+
+  searchVariableSuggestions(query: string, instanceIds: string[]): Observable<{ name: string; type: string; value: any; valuesConflict: boolean }[]> {
+    const params: Record<string, string> = {
+      variableNameLike: `%${query}%`,
+      maxResults: '2000'
+    };
+    if (instanceIds.length) {
+      params['processInstanceIdIn'] = instanceIds.join(',');
+    }
+    return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, { params }).pipe(
+      map(vars => this.deduplicateVariables(vars)),
+      catchError(() => of([]))
+    );
+  }
+
+  private deduplicateVariables(vars: Variable[]): { name: string; type: string; value: any; valuesConflict: boolean }[] {
+    const perInstance = new Map<string, Variable>();
+    for (const v of vars) {
+      const key = `${v.processInstanceId}::${v.name}`;
+      const cur = perInstance.get(key);
+      const vIsRoot = v.executionId != null && v.executionId === v.processInstanceId;
+      const curIsRoot = cur != null && cur.executionId != null && cur.executionId === cur.processInstanceId;
+      if (!cur || (vIsRoot && !curIsRoot)) {
+        perInstance.set(key, v);
+      }
+    }
+
+    const nameMap = new Map<string, { type: string; value: any; conflict: boolean }>();
+    for (const v of perInstance.values()) {
+      const existing = nameMap.get(v.name);
+      if (!existing) {
+        nameMap.set(v.name, { type: v.type, value: v.value, conflict: false });
+      } else if (!existing.conflict && existing.value !== v.value) {
+        nameMap.set(v.name, { ...existing, conflict: true });
+      }
+    }
+
+    return Array.from(nameMap.entries()).map(([name, { type, value, conflict }]) => ({
+      name,
+      type,
+      value,
+      valuesConflict: conflict
+    }));
+  }
+
   /**
    * Set a variable on a process instance
    */

@@ -495,9 +495,79 @@ describe('ProcessInstanceService', () => {
     });
   });
 
-  // =============================================
-  // Called/Super Process Instances
-  // =============================================
+
+  describe('deduplicateVariables', () => {
+    function v(name: string, type: string, value: any, processInstanceId: string, executionId?: string): Variable {
+      return { name, type, value, processInstanceId, executionId };
+    }
+    function dedup(vars: Variable[]) {
+      return (service as any).deduplicateVariables(vars) as { name: string; type: string; value: any; valuesConflict: boolean }[];
+    }
+
+    it('8 identical values (same type, same content) → no conflict', () => {
+      const vars = Array.from({ length: 8 }, (_, i) =>
+        v('amount', 'Integer', 100, `inst-${i}`, `inst-${i}`)
+      );
+      const result = dedup(vars);
+      expect(result.length).toBe(1);
+      expect(result[0].name).toBe('amount');
+      expect(result[0].valuesConflict).toBe(false);
+    });
+
+    it('one value differs among 8 → genuine conflict reported', () => {
+      const vars = [
+        ...Array.from({ length: 7 }, (_, i) => v('amount', 'Integer', 100, `inst-${i}`, `inst-${i}`)),
+        v('amount', 'Integer', 200, 'inst-7', 'inst-7'),
+      ];
+      const result = dedup(vars);
+      expect(result[0].valuesConflict).toBe(true);
+    });
+
+    it('multi-scope false positive: instance with sub-execution scope (value differs at scope level) → no false conflict when root scopes all agree', () => {
+      const vars = [
+        v('amount', 'Integer', 100, 'inst-0', 'inst-0'),
+        v('amount', 'Integer', null, 'inst-0', 'sub-exec-0'),
+        ...Array.from({ length: 7 }, (_, i) => v('amount', 'Integer', 100, `inst-${i + 1}`, `inst-${i + 1}`)),
+      ];
+      const result = dedup(vars);
+      expect(result[0].valuesConflict).toBe(false);
+    });
+
+    it('sub-scope without root scope (executionId unavailable): keeps first entry, no crash', () => {
+      const vars = Array.from({ length: 4 }, (_, i) => v('flag', 'Boolean', true, `inst-${i}`));
+      const result = dedup(vars);
+      expect(result[0].valuesConflict).toBe(false);
+    });
+
+    it('"5" (String) vs 5 (Integer) under the same name → genuine type conflict, not normalised', () => {
+      const vars = [
+        v('count', 'String', '5', 'inst-0', 'inst-0'),
+        v('count', 'Integer', 5, 'inst-1', 'inst-1'),
+      ];
+      const result = dedup(vars);
+      expect(result[0].valuesConflict).toBe(true);
+    });
+
+    it('all null values across instances → no conflict', () => {
+      const vars = Array.from({ length: 3 }, (_, i) => v('opt', 'String', null, `inst-${i}`, `inst-${i}`));
+      const result = dedup(vars);
+      expect(result[0].valuesConflict).toBe(false);
+    });
+
+    it('multiple variable names in a single batch → each resolved independently', () => {
+      const vars = [
+        v('amount', 'Integer', 100, 'inst-0', 'inst-0'),
+        v('amount', 'Integer', 100, 'inst-1', 'inst-1'),
+        v('label', 'String', 'foo', 'inst-0', 'inst-0'),
+        v('label', 'String', 'bar', 'inst-1', 'inst-1'),
+      ];
+      const result = dedup(vars);
+      const amount = result.find(r => r.name === 'amount')!;
+      const label = result.find(r => r.name === 'label')!;
+      expect(amount.valuesConflict).toBe(false);
+      expect(label.valuesConflict).toBe(true);
+    });
+  });
 
   describe('getCalledProcessInstances', () => {
     it('should fetch sub-process instances', () => {

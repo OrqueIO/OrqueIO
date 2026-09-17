@@ -1,5 +1,5 @@
 import {
-  Component, Input, Output, EventEmitter, OnInit,
+  Component, Input, Output, EventEmitter, OnInit, OnDestroy,
   ChangeDetectionStrategy, ChangeDetectorRef, inject, HostListener,
   ViewChild, ElementRef
 } from '@angular/core';
@@ -7,11 +7,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '../../../../../i18n/translate.pipe';
 import { getVariableInputType } from '../../../../../utils/variable-type.util';
+import { ProcessInstanceService } from '../../../../../services/process-instance.service';
 
 export interface VariableDef {
   name: string;
   type: string;
   value: any;
+}
+
+export interface VarSuggestion {
+  name: string;
+  type: string;
+  value: any;
+  valuesConflict: boolean;
 }
 
 const INTEGER_TYPES = ['Integer', 'Long', 'Short'];
@@ -25,21 +33,33 @@ const INTEGER_RE = /^-?\d+$/;
   styleUrls: ['./variable-definitions-modal.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VariableDefinitionsModalComponent implements OnInit {
+export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
+  private processInstanceService = inject(ProcessInstanceService);
 
   @Input() initialVariables: VariableDef[] = [];
+  @Input() targetInstanceIds: string[] | null = null;
+  @Input() queryFilter: Record<string, unknown> | null = null;
   @Output() apply = new EventEmitter<VariableDef[]>();
   @Output() closeModal = new EventEmitter<void>();
 
   @ViewChild('dialogEl') dialogEl!: ElementRef<HTMLElement>;
 
   rows: VariableDef[] = [];
+  rowValueConflicts: boolean[] = [];
+
+  suggestions: VarSuggestion[] = [];
+  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private pendingSearch: { unsubscribe: () => void } | null = null;
+  activeSuggestionRow: number | null = null;
+  keyboardHighlightIndex: number | null = null;
+  dropdownStyle: { top: string; left: string; width: string } = { top: '0', left: '0', width: '0' };
 
   ngOnInit(): void {
     this.rows = this.initialVariables.length > 0
       ? this.initialVariables.map(v => ({ ...v }))
       : [{ name: '', type: 'String', value: '' }];
+    this.rowValueConflicts = this.rows.map(() => false);
   }
 
   isIntegerType(type: string): boolean {
@@ -64,6 +84,9 @@ export class VariableDefinitionsModalComponent implements OnInit {
     const updated = [...this.rows];
     updated[index] = { ...updated[index], type: newType, value: this.getDefaultValue(newType) };
     this.rows = updated;
+    const conflicts = [...this.rowValueConflicts];
+    conflicts[index] = false;
+    this.rowValueConflicts = conflicts;
     this.cdr.markForCheck();
   }
 
@@ -119,19 +142,23 @@ export class VariableDefinitionsModalComponent implements OnInit {
 
   get canApply(): boolean {
     const namedRows = this.rows.filter(r => r.name.trim() !== '');
-    return namedRows.length > 0 && namedRows.every(r => this.isValueValid(r));
+    if (namedRows.length === 0) return this.initialVariables.length > 0;
+    return namedRows.every(r => this.isValueValid(r));
   }
 
   addRow(): void {
     this.rows = [...this.rows, { name: '', type: 'String', value: '' }];
+    this.rowValueConflicts = [...this.rowValueConflicts, false];
     this.cdr.markForCheck();
   }
 
   removeRow(index: number): void {
     if (this.rows.length > 1) {
       this.rows = this.rows.filter((_, i) => i !== index);
+      this.rowValueConflicts = this.rowValueConflicts.filter((_, i) => i !== index);
     } else {
       this.rows = [{ name: '', type: 'String', value: '' }];
+      this.rowValueConflicts = [false];
     }
     this.cdr.markForCheck();
   }
@@ -169,6 +196,247 @@ export class VariableDefinitionsModalComponent implements OnInit {
   @HostListener('document:keydown.escape')
   onEscape(): void {
     this.closeModal.emit();
+  }
+
+  getFilteredSuggestions(nameValue: string): VarSuggestion[] {
+    if (!nameValue) return this.suggestions;
+    const q = nameValue.toLowerCase();
+    return this.suggestions.filter(s => s.name.toLowerCase().includes(q));
+  }
+
+  getHighlightParts(name: string, query: string): { text: string; bold: boolean }[] {
+    if (!query) return [{ text: name, bold: false }];
+    const idx = name.toLowerCase().indexOf(query.toLowerCase());
+    if (idx === -1) return [{ text: name, bold: false }];
+    const parts: { text: string; bold: boolean }[] = [];
+    if (idx > 0) parts.push({ text: name.slice(0, idx), bold: false });
+    parts.push({ text: name.slice(idx, idx + query.length), bold: true });
+    if (idx + query.length < name.length) parts.push({ text: name.slice(idx + query.length), bold: false });
+    return parts;
+  }
+
+  onNameFocus(index: number, event?: Event): void {
+    if (event) {
+      const rect = (event.target as HTMLInputElement).getBoundingClientRect();
+      this.dropdownStyle = {
+        top: `${rect.bottom + 2}px`,
+        left: `${rect.left}px`,
+        width: `${rect.width}px`
+      };
+    }
+    this.activeSuggestionRow = index;
+    this.keyboardHighlightIndex = null;
+    const currentQuery = this.rows[index]?.name ?? '';
+    if (currentQuery.trim()) {
+      this.searchNow(index, currentQuery);
+    } else {
+      this.cancelPendingSearch();
+      this.suggestions = [];
+    }
+    this.cdr.markForCheck();
+  }
+
+  onNameBlur(): void {
+    this.cancelPendingSearch();
+    this.activeSuggestionRow = null;
+    this.keyboardHighlightIndex = null;
+    this.suggestions = [];
+    this.cdr.markForCheck();
+  }
+
+  onNameInput(index: number, query: string): void {
+    this.activeSuggestionRow = index;
+    this.keyboardHighlightIndex = null;
+    this.cancelPendingSearch();
+    if (!query.trim()) {
+      this.suggestions = [];
+      this.cdr.markForCheck();
+      return;
+    }
+    this.debounceTimer = setTimeout(() => {
+      this.debounceTimer = null;
+      this.searchNow(index, query);
+    }, 250);
+    this.cdr.markForCheck();
+  }
+
+  onNameKeydown(rowIndex: number, event: KeyboardEvent): void {
+    const filtered = this.getFilteredSuggestions(this.rows[rowIndex]?.name ?? '');
+    const enabledIndices = filtered
+      .map((s, i) => ({ s, i }))
+      .filter(({ s }) => !this.isUnsupportedSuggestionType(s.type))
+      .map(({ i }) => i);
+
+    switch (event.key) {
+      case 'ArrowDown': {
+        event.preventDefault();
+        if (enabledIndices.length === 0) return;
+        if (this.keyboardHighlightIndex === null) {
+          this.keyboardHighlightIndex = enabledIndices[0];
+        } else {
+          const pos = enabledIndices.indexOf(this.keyboardHighlightIndex);
+          if (pos < enabledIndices.length - 1) {
+            this.keyboardHighlightIndex = enabledIndices[pos + 1];
+          }
+        }
+        this.cdr.markForCheck();
+        return;
+      }
+      case 'ArrowUp': {
+        event.preventDefault();
+        if (this.keyboardHighlightIndex === null || enabledIndices.length === 0) return;
+        const pos = enabledIndices.indexOf(this.keyboardHighlightIndex);
+        if (pos > 0) {
+          this.keyboardHighlightIndex = enabledIndices[pos - 1];
+        }
+        this.cdr.markForCheck();
+        return;
+      }
+      case 'Enter': {
+        if (this.keyboardHighlightIndex !== null && filtered[this.keyboardHighlightIndex]) {
+          event.preventDefault();
+          event.stopPropagation();
+          this.onSuggestionClick(rowIndex, filtered[this.keyboardHighlightIndex]);
+          this.keyboardHighlightIndex = null;
+          return;
+        }
+        this.onFieldEnter(event);
+        return;
+      }
+      case 'Escape': {
+        if (filtered.length > 0) {
+          event.stopPropagation();
+          this.activeSuggestionRow = null;
+          this.keyboardHighlightIndex = null;
+          this.suggestions = [];
+          this.cdr.markForCheck();
+        }
+        return;
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.cancelPendingSearch();
+  }
+
+  private searchNow(index: number, query: string): void {
+    // null = mode Query (global search); [] = mode Instances, no selection → block
+    if (this.targetInstanceIds !== null && this.targetInstanceIds.length === 0) return;
+    this.cancelPendingSearch();
+
+    if (this.targetInstanceIds !== null) {
+      this.pendingSearch = this.processInstanceService
+        .searchVariableSuggestions(query, this.targetInstanceIds)
+        .subscribe(results => {
+          this.pendingSearch = null;
+          if (this.activeSuggestionRow === index) {
+            this.suggestions = results;
+            this.cdr.markForCheck();
+          }
+        });
+      return;
+    }
+
+    if (this.queryFilter !== null) {
+      const filter = this.queryFilter;
+      this.pendingSearch = this.processInstanceService
+        .queryProcessInstances(filter, 0, 100)
+        .subscribe(instances => {
+          const ids = instances.map(i => i.id);
+          if (!ids.length) {
+            this.pendingSearch = null;
+            if (this.activeSuggestionRow === index) {
+              this.suggestions = [];
+              this.cdr.markForCheck();
+            }
+            return;
+          }
+          this.pendingSearch = this.processInstanceService
+            .searchVariableSuggestions(query, ids)
+            .subscribe(results => {
+              this.pendingSearch = null;
+              if (this.activeSuggestionRow === index) {
+                this.suggestions = results;
+                this.cdr.markForCheck();
+              }
+            });
+        });
+      return;
+    }
+
+    this.pendingSearch = this.processInstanceService
+      .searchVariableSuggestions(query, [])
+      .subscribe(results => {
+        this.pendingSearch = null;
+        if (this.activeSuggestionRow === index) {
+          this.suggestions = results;
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+  private cancelPendingSearch(): void {
+    if (this.debounceTimer !== null) {
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = null;
+    }
+    if (this.pendingSearch) {
+      this.pendingSearch.unsubscribe();
+      this.pendingSearch = null;
+    }
+  }
+
+  get isInstancesModeWithNoSelection(): boolean {
+    return this.targetInstanceIds !== null && this.targetInstanceIds.length === 0;
+  }
+
+  isUnsupportedSuggestionType(type: string): boolean {
+    return type === 'Object' || type === 'File' || type === 'Bytes';
+  }
+
+  onSuggestionClick(rowIndex: number, suggestion: VarSuggestion): void {
+    if (this.isUnsupportedSuggestionType(suggestion.type)) return;
+    const updated = [...this.rows];
+    updated[rowIndex] = {
+      ...updated[rowIndex],
+      name: suggestion.name,
+      type: suggestion.type,
+      value: suggestion.valuesConflict
+        ? this.getDefaultValue(suggestion.type)
+        : this.formatValueForInput(suggestion.type, suggestion.value)
+    };
+    this.rows = updated;
+    const conflicts = [...this.rowValueConflicts];
+    conflicts[rowIndex] = suggestion.valuesConflict;
+    this.rowValueConflicts = conflicts;
+    this.activeSuggestionRow = null;
+    this.keyboardHighlightIndex = null;
+    this.cdr.markForCheck();
+  }
+
+  onValueChange(index: number): void {
+    if (this.rowValueConflicts[index]) {
+      const conflicts = [...this.rowValueConflicts];
+      conflicts[index] = false;
+      this.rowValueConflicts = conflicts;
+      this.cdr.markForCheck();
+    }
+  }
+
+  hasValueConflict(index: number): boolean {
+    return !!this.rowValueConflicts[index];
+  }
+
+  private formatValueForInput(type: string, value: any): any {
+    if (value == null) return this.getDefaultValue(type);
+    if (INTEGER_TYPES.includes(type)) return String(value);
+    if (type === 'Date' && typeof value === 'string') {
+      // Camunda date format: "2019-04-23T09:42:06.000+0000" → datetime-local needs "2019-04-23T09:42"
+      const match = value.match(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})/);
+      return match ? match[1] : '';
+    }
+    return value;
   }
 
   trackByIndex(index: number): number {
