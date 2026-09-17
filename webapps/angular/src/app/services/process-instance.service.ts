@@ -351,7 +351,7 @@ export class ProcessInstanceService {
   searchVariableSuggestions(query: string, instanceIds: string[]): Observable<{ name: string; type: string; value: any; valuesConflict: boolean }[]> {
     const params: Record<string, string> = {
       variableNameLike: `%${query}%`,
-      maxResults: '200'
+      maxResults: '2000'
     };
     if (instanceIds.length) {
       params['processInstanceIdIn'] = instanceIds.join(',');
