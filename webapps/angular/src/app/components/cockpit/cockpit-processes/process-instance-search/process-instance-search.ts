@@ -451,7 +451,14 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     if (this.pendingProcessDefinitionIds.includes(versionId)) {
       this.pendingProcessDefinitionIds = this.pendingProcessDefinitionIds.filter(id => id !== versionId);
     } else {
-      this.pendingProcessDefinitionIds = [...this.pendingProcessDefinitionIds, versionId];
+      const newIds = [...this.pendingProcessDefinitionIds, versionId];
+      const group = this.availableProcessDefinitionGroups.find(g => g.key === groupKey);
+      if (group && group.versions.every(v => newIds.includes(v.id))) {
+        this.pendingProcessDefinitionIds = newIds.filter(id => !group.versions.some(v => v.id === id));
+        this.pendingProcessDefinitionKeys = [...this.pendingProcessDefinitionKeys, groupKey];
+      } else {
+        this.pendingProcessDefinitionIds = newIds;
+      }
     }
     this.cdr.markForCheck();
   }
@@ -469,7 +476,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   get filteredProcessDefinitionGroups(): ProcessDefinitionGroup[] {
     const q = this.processDefinitionSearchText.trim().toLowerCase();
     if (!q) return this.availableProcessDefinitionGroups;
-    return this.availableProcessDefinitionGroups.filter(g => g.name.toLowerCase().includes(q));
+    return this.availableProcessDefinitionGroups.filter(g => g.name.toLowerCase().includes(q) || g.key.toLowerCase().includes(q));
   }
 
   get pdVisibleSelectedCount(): number {

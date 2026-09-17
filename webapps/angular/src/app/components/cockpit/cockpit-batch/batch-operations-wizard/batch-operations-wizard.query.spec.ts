@@ -1313,3 +1313,128 @@ describe('BatchOperationsWizardComponent — batch instances load: no multi-stat
   });
 
 });
+
+
+function getModalQueryFilter(stub: Record<string, unknown>): Record<string, unknown> | null {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'modalQueryFilter');
+  return desc?.get?.call(stub) as Record<string, unknown> | null;
+}
+
+describe('BatchOperationsWizardComponent — modalQueryFilter', () => {
+
+  it('mode=query + hasActiveCriteria=true → returns non-null query object (unfinished:true for set-variables)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: true,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).not.toBeNull();
+    expect(typeof result).toBe('object');
+    expect(result!['unfinished']).toBe(true);
+  });
+
+  it('mode=query + hasActiveCriteria=false (no criteria) → returns null (no restriction; global search)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: false,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).toBeNull();
+  });
+
+  it('mode=instances → returns null regardless of hasActiveCriteria (targetInstanceIds takes over)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      hasActiveCriteria: true,
+      filterCriteria: [{ field: 'processDefinition', values: ['order-proc'] }],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).toBeNull();
+  });
+
+});
+
+
+function getModalTargetInstanceIds(stub: Record<string, unknown>): string[] | null {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'modalTargetInstanceIds');
+  return desc?.get?.call(stub) as string[] | null;
+}
+
+describe('BatchOperationsWizardComponent — modalTargetInstanceIds', () => {
+
+  it('mode=instances + IDs selected → returns array of selected IDs (not null, not [])', () => {
+    const stub = { mode: 'instances', selectedIds: new Set(['inst-1', 'inst-2', 'inst-3']) };
+    const result = getModalTargetInstanceIds(stub);
+    expect(result).not.toBeNull();
+    expect(result).toEqual(['inst-1', 'inst-2', 'inst-3']);
+  });
+
+  it('mode=instances + empty selection → returns [] (not null) — searchNow blocks search for []', () => {
+    const stub = { mode: 'instances', selectedIds: new Set<string>() };
+    const result = getModalTargetInstanceIds(stub);
+    expect(result).not.toBeNull();
+    expect(result).toEqual([]);
+  });
+
+  it('mode=query → returns null (global search or queryFilter takes over — never uses IDs directly)', () => {
+    const stub = { mode: 'query', selectedIds: new Set(['inst-1', 'inst-2']) };
+    const result = getModalTargetInstanceIds(stub);
+    expect(result).toBeNull();
+  });
+
+  it('cross-check: both getters are mutually exclusive — exactly one is non-null per mode', () => {
+    const instancesStub = {
+      mode: 'instances',
+      selectedIds: new Set(['inst-1']),
+      hasActiveCriteria: true,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedOperationId: 'set-variables',
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    expect(getModalTargetInstanceIds(instancesStub)).not.toBeNull();
+    expect(getModalQueryFilter(instancesStub)).toBeNull();
+
+    const queryStub = {
+      mode: 'query',
+      selectedIds: new Set(['inst-1']),
+      hasActiveCriteria: true,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedOperationId: 'set-variables',
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    expect(getModalTargetInstanceIds(queryStub)).toBeNull();
+    expect(getModalQueryFilter(queryStub)).not.toBeNull();
+
+    const queryNoCriteriaStub = {
+      mode: 'query',
+      selectedIds: new Set<string>(),
+      hasActiveCriteria: false,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedOperationId: 'set-variables',
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    expect(getModalTargetInstanceIds(queryNoCriteriaStub)).toBeNull();
+    expect(getModalQueryFilter(queryNoCriteriaStub)).toBeNull();
+  });
+
+});

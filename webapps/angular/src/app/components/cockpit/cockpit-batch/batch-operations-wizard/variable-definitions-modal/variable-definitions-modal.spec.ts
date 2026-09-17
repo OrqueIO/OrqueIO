@@ -1,10 +1,14 @@
-import { VariableDefinitionsModalComponent, VariableDef } from './variable-definitions-modal';
+import { VariableDefinitionsModalComponent, VariableDef, VarSuggestion } from './variable-definitions-modal';
 import { getVariableInputType } from '../../../../../utils/variable-type.util';
 
 function make(rows: VariableDef[]): VariableDefinitionsModalComponent {
   const inst = Object.create(VariableDefinitionsModalComponent.prototype) as VariableDefinitionsModalComponent;
   (inst as any).rows = rows;
+  (inst as any).rowValueConflicts = rows.map(() => false);
   (inst as any).cdr = { markForCheck: () => {} };
+  (inst as any).targetInstanceIds = null; // null = mode Query (global search allowed)
+  (inst as any).initialVariables = [];
+  (inst as any).queryFilter = null; // null = no criteria → global search (override for criteria tests)
   return inst;
 }
 
@@ -586,6 +590,647 @@ describe('VariableDefinitionsModalComponent', () => {
     });
   });
 
+  describe('variable name autocomplete', () => {
+    const SUGGESTIONS: VarSuggestion[] = [
+      { name: 'amount', type: 'Integer', value: 42, valuesConflict: false },
+      { name: 'label', type: 'String', value: 'hello', valuesConflict: false },
+      { name: 'status', type: 'String', value: null, valuesConflict: true },
+    ];
+
+    function makeWithSuggestions(suggestions: VarSuggestion[]): VariableDefinitionsModalComponent {
+      const inst = make([row('', 'String', '')]);
+      (inst as any).suggestions = suggestions;
+      return inst;
+    }
+
+    function mockService(inst: VariableDefinitionsModalComponent, results: VarSuggestion[] = []) {
+      (inst as any).processInstanceService = {
+        searchVariableSuggestions: (_query: string, _ids: string[]) => ({
+          subscribe: (fn: (v: VarSuggestion[]) => void) => {
+            fn(results);
+            return { unsubscribe: () => {} };
+          }
+        })
+      };
+    }
+
+    describe('getFilteredSuggestions', () => {
+      it('returns all suggestions when name is empty — clicking the field shows the full list', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        expect(inst.getFilteredSuggestions('')).toHaveLength(3);
+      });
+
+      it('filters case-insensitively by contains match when user types', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        const result = inst.getFilteredSuggestions('AM');
+        expect(result).toHaveLength(1);
+        expect(result[0].name).toBe('amount');
+      });
+
+      it('returns multiple matches when several names contain the query', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        // 'u' appears in 'amount' and 'status' but not 'label'
+        expect(inst.getFilteredSuggestions('u')).toHaveLength(2);
+      });
+
+      it('returns empty array when nothing matches — no error, no suggestions shown', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        expect(inst.getFilteredSuggestions('xyz')).toHaveLength(0);
+      });
+    });
+
+    describe('getHighlightParts', () => {
+      it('returns a single non-bold part when query is empty', () => {
+        expect(make([]).getHighlightParts('amount', '')).toEqual([{ text: 'amount', bold: false }]);
+      });
+
+      it('bolds matched portion in the middle', () => {
+        expect(make([]).getHighlightParts('amount', 'ount')).toEqual([
+          { text: 'am', bold: false },
+          { text: 'ount', bold: true },
+        ]);
+      });
+
+      it('bolds matched portion at the beginning', () => {
+        expect(make([]).getHighlightParts('amount', 'am')).toEqual([
+          { text: 'am', bold: true },
+          { text: 'ount', bold: false },
+        ]);
+      });
+
+      it('bolds matched portion at the end', () => {
+        expect(make([]).getHighlightParts('amount', 'unt')).toEqual([
+          { text: 'amo', bold: false },
+          { text: 'unt', bold: true },
+        ]);
+      });
+
+      it('returns single non-bold part when no match', () => {
+        expect(make([]).getHighlightParts('amount', 'xyz')).toEqual([{ text: 'amount', bold: false }]);
+      });
+
+      it('match is case-insensitive — bold segment uses original casing', () => {
+        const parts = make([]).getHighlightParts('Amount', 'am');
+        expect(parts[0]).toEqual({ text: 'Am', bold: true });
+        expect(parts[1]).toEqual({ text: 'ount', bold: false });
+      });
+    });
+
+    describe('onNameFocus', () => {
+      it('sets activeSuggestionRow to the focused row index (non-regression: first open)', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        inst.onNameFocus(0);
+        expect(inst.activeSuggestionRow).toBe(0);
+      });
+
+      it('reopens the dropdown when called again after a suggestion was selected (simulates re-click while already focused)', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        // First selection: pick 'amount'
+        inst.onNameFocus(0);
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.activeSuggestionRow).toBeNull(); // dropdown closed after selection
+        // Re-click on the name field (already focused — only (click) fires, not (focus))
+        inst.onNameFocus(0);
+        expect(inst.activeSuggestionRow).toBe(0); // dropdown visible again
+      });
+
+      it('second suggestion selection fully replaces Name/Type/Value from the first — no residue', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        // First selection
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        // Re-open and pick a different suggestion
+        inst.onNameFocus(0);
+        inst.onSuggestionClick(0, { name: 'label', type: 'String', value: 'hello', valuesConflict: false });
+        expect(inst.rows[0].name).toBe('label');
+        expect(inst.rows[0].type).toBe('String');
+        expect(inst.rows[0].value).toBe('hello');
+      });
+
+      it('reopens dropdown automatically when user types after a selection (simulates (input) event binding)', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = makeWithSuggestions(SUGGESTIONS);
+          mockService(inst, SUGGESTIONS);
+          inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+          expect(inst.activeSuggestionRow).toBeNull();
+          // User edits the name field: [(ngModel)] updates the name, then (input) fires onNameInput(i, value)
+          inst.rows[0].name = 'am';
+          inst.onNameInput(0, 'am');
+          expect(inst.activeSuggestionRow).toBe(0);
+          vi.advanceTimersByTime(250);
+          // Template would render the dropdown: mock returns SUGGESTIONS, 'am' client-filters to 'amount'
+          expect(inst.getFilteredSuggestions('am').length).toBeGreaterThan(0);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('keeps activeSuggestionRow set and suggestions empty when typed text matches nothing', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          mockService(inst, []);
+          inst.onNameFocus(0);
+          inst.rows[0].name = 'xyz_nomatch';
+          inst.onNameInput(0, 'xyz_nomatch');
+          vi.advanceTimersByTime(250);
+          expect(inst.activeSuggestionRow).toBe(0);
+          // Server returned nothing → no dropdown
+          expect(inst.getFilteredSuggestions('xyz_nomatch')).toHaveLength(0);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('non-regression: first-open flow (focus → type → see suggestions → select) still works end-to-end', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          mockService(inst, SUGGESTIONS);
+          // Focus on empty field: hint shown, no suggestions yet
+          inst.onNameFocus(0);
+          expect(inst.activeSuggestionRow).toBe(0);
+          expect(inst.getFilteredSuggestions('').length).toBe(0);
+          // User types: debounce fires → mock returns SUGGESTIONS
+          inst.onNameInput(0, 'a');
+          vi.advanceTimersByTime(250);
+          expect(inst.suggestions.length).toBe(SUGGESTIONS.length);
+          // Selection
+          inst.onSuggestionClick(0, SUGGESTIONS[0]);
+          expect(inst.rows[0].name).toBe(SUGGESTIONS[0].name);
+          expect(inst.activeSuggestionRow).toBeNull();
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+    });
+
+    describe('onNameBlur', () => {
+      it('hides the dropdown by setting activeSuggestionRow to null', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        inst.onNameFocus(0);
+        inst.onNameBlur();
+        expect(inst.activeSuggestionRow).toBeNull();
+      });
+    });
+
+    describe('onSuggestionClick', () => {
+      it('fills both name and type from the clicked suggestion', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.rows[0].name).toBe('amount');
+        expect(inst.rows[0].type).toBe('Integer');
+      });
+
+      it('pre-fills value from the suggestion when all instances agree (valuesConflict: false)', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.rows[0].value).toBe('42'); // number coerced to string for Integer text input
+      });
+
+      it('leaves value at default when instances have conflicting values (valuesConflict: true)', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: true });
+        expect(inst.rows[0].value).toBe(''); // default for Integer
+      });
+
+      it('uses default value for Boolean when values conflict', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'flag', type: 'Boolean', value: true, valuesConflict: true });
+        expect(inst.rows[0].value).toBe(false);
+      });
+
+      it('pre-fills Boolean value when all instances agree', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'flag', type: 'Boolean', value: true, valuesConflict: false });
+        expect(inst.rows[0].value).toBe(true);
+      });
+
+      it('still pre-fills type from the suggestion regardless of conflict (non-regression)', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'active', type: 'Boolean', value: false, valuesConflict: true });
+        expect(inst.rows[0].type).toBe('Boolean');
+      });
+
+      it('sets hasValueConflict when values differ across instances', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: true });
+        expect(inst.hasValueConflict(0)).toBe(true);
+      });
+
+      it('clears hasValueConflict when user subsequently edits the value', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: true });
+        expect(inst.hasValueConflict(0)).toBe(true);
+        inst.onValueChange(0);
+        expect(inst.hasValueConflict(0)).toBe(false);
+      });
+
+      it('does not set hasValueConflict when all instances agree on the same value', () => {
+        const inst = make([row('x', 'String', 'hello')]);
+        (inst as any).rowValueConflicts = [false];
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.hasValueConflict(0)).toBe(false);
+      });
+
+      it('closes the dropdown after selection', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        mockService(inst);
+        inst.onNameFocus(0);
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.activeSuggestionRow).toBeNull();
+      });
+
+      it('does not affect other rows', () => {
+        const inst = make([row('x', 'String', 'hello'), row('', 'String', '')]);
+        (inst as any).rowValueConflicts = [false, false];
+        inst.onSuggestionClick(1, { name: 'label', type: 'String', value: 'hello', valuesConflict: false });
+        expect(inst.rows[0].name).toBe('x');
+        expect(inst.rows[0].value).toBe('hello');
+        expect(inst.rows[1].name).toBe('label');
+      });
+
+      it('produces a new rows array (immutable update — OnPush safe)', () => {
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        (inst as any).rowValueConflicts = [false];
+        const before = inst.rows;
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.rows).not.toBe(before);
+      });
+    });
+
+    describe('disabled suggestions for unsupported types (Object / File)', () => {
+      it('Object suggestion is visible in filtered list — not hidden', () => {
+        const inst = makeWithSuggestions([
+          { name: 'myObj', type: 'Object', value: null, valuesConflict: false }
+        ]);
+        expect(inst.getFilteredSuggestions('')).toHaveLength(1);
+        expect(inst.getFilteredSuggestions('')[0].type).toBe('Object');
+      });
+
+      it('File suggestion is visible in filtered list — not hidden', () => {
+        const inst = makeWithSuggestions([
+          { name: 'myFile', type: 'File', value: null, valuesConflict: false }
+        ]);
+        expect(inst.getFilteredSuggestions('')).toHaveLength(1);
+        expect(inst.getFilteredSuggestions('')[0].type).toBe('File');
+      });
+
+      it('isUnsupportedSuggestionType returns true for Object, File and Bytes', () => {
+        const inst = make([row('', 'String', '')]);
+        expect(inst.isUnsupportedSuggestionType('Object')).toBe(true);
+        expect(inst.isUnsupportedSuggestionType('File')).toBe(true);
+        expect(inst.isUnsupportedSuggestionType('Bytes')).toBe(true);
+      });
+
+      it('isUnsupportedSuggestionType returns false for all supported types', () => {
+        const inst = make([row('', 'String', '')]);
+        for (const t of ['String', 'Integer', 'Long', 'Short', 'Double', 'Boolean', 'Date']) {
+          expect(inst.isUnsupportedSuggestionType(t)).toBe(false);
+        }
+      });
+
+      it('clicking an Object suggestion does not pre-fill name or type', () => {
+        const inst = make([row('', 'String', '')]);
+        inst.onSuggestionClick(0, { name: 'myObj', type: 'Object', value: { key: 'val' }, valuesConflict: false });
+        expect(inst.rows[0].name).toBe('');
+        expect(inst.rows[0].type).toBe('String');
+      });
+
+      it('clicking a File suggestion does not pre-fill name or type', () => {
+        const inst = make([row('', 'String', '')]);
+        inst.onSuggestionClick(0, { name: 'myFile', type: 'File', value: null, valuesConflict: false });
+        expect(inst.rows[0].name).toBe('');
+        expect(inst.rows[0].type).toBe('String');
+      });
+
+      it('clicking an Object suggestion leaves the dropdown open (activeSuggestionRow unchanged)', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).activeSuggestionRow = 0;
+        inst.onSuggestionClick(0, { name: 'myObj', type: 'Object', value: null, valuesConflict: false });
+        expect(inst.activeSuggestionRow).toBe(0);
+      });
+
+      it('Bytes suggestion is visible in filtered list — not hidden', () => {
+        const inst = makeWithSuggestions([
+          { name: 'myBytes', type: 'Bytes', value: null, valuesConflict: false }
+        ]);
+        expect(inst.getFilteredSuggestions('').length).toBe(1);
+        expect(inst.getFilteredSuggestions('')[0].type).toBe('Bytes');
+      });
+
+      it('clicking a Bytes suggestion does not pre-fill name or type', () => {
+        const inst = make([row('', 'String', '')]);
+        inst.onSuggestionClick(0, { name: 'myBytes', type: 'Bytes', value: null, valuesConflict: false });
+        expect(inst.rows[0].name).toBe('');
+        expect(inst.rows[0].type).toBe('String');
+      });
+
+      it('clicking a Bytes suggestion leaves the dropdown open (activeSuggestionRow unchanged)', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).activeSuggestionRow = 0;
+        inst.onSuggestionClick(0, { name: 'myBytes', type: 'Bytes', value: null, valuesConflict: false });
+        expect(inst.activeSuggestionRow).toBe(0);
+      });
+
+      it('non-regression: clicking a String suggestion still pre-fills name, type and value', () => {
+        const inst = make([row('', 'String', '')]);
+        inst.onSuggestionClick(0, { name: 'label', type: 'String', value: 'hello', valuesConflict: false });
+        expect(inst.rows[0].name).toBe('label');
+        expect(inst.rows[0].type).toBe('String');
+        expect(inst.rows[0].value).toBe('hello');
+      });
+    });
+
+    describe('progressive server-side search (variableNameLike)', () => {
+      it('sends no HTTP request when name field is empty and user focuses the field', () => {
+        const inst = make([row('', 'String', '')]);
+        let called = false;
+        (inst as any).processInstanceService = {
+          searchVariableSuggestions: () => {
+            called = true;
+            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+          }
+        };
+        (inst as any).targetInstanceIds = ['inst1'];
+        inst.onNameFocus(0);
+        expect(called).toBe(false);
+      });
+
+      it('triggers searchVariableSuggestions with the typed query after 250ms debounce', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          let capturedQuery = '';
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: (query: string) => {
+              capturedQuery = query;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          (inst as any).targetInstanceIds = null; // null = mode Query: global search allowed
+          inst.onNameInput(0, 'am');
+          expect(capturedQuery).toBe('');
+          vi.advanceTimersByTime(250);
+          expect(capturedQuery).toBe('am');
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('cancels the previous debounce and sends only one request when user types rapidly', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          let callCount = 0;
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: () => {
+              callCount++;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          (inst as any).targetInstanceIds = null; // null = mode Query: global search allowed
+          inst.onNameInput(0, 'a');
+          vi.advanceTimersByTime(100);
+          inst.onNameInput(0, 'am');
+          vi.advanceTimersByTime(100);
+          expect(callCount).toBe(0);
+          vi.advanceTimersByTime(150);
+          expect(callCount).toBe(1);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('passes processInstanceIdIn when targetInstanceIds are provided (mode Instances)', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          let capturedIds: string[] = [];
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: (_query: string, ids: string[]) => {
+              capturedIds = ids;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          (inst as any).targetInstanceIds = ['inst1', 'inst2', 'inst3'];
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(capturedIds).toEqual(['inst1', 'inst2', 'inst3']);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('passes empty instanceIds to service for global search when targetInstanceIds is null (mode Query)', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          let capturedIds: string[] | null = null;
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: (_query: string, ids: string[]) => {
+              capturedIds = ids;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          (inst as any).targetInstanceIds = null; // null = mode Query: no instance filter
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(capturedIds).toEqual([]);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('blocks search when targetInstanceIds is [] (mode Instances, nothing selected)', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          let called = false;
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: () => {
+              called = true;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          (inst as any).targetInstanceIds = []; // [] = mode Instances, nothing selected
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(called).toBe(false);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('blocks search on focus with non-empty field when targetInstanceIds is [] (mode Instances, nothing selected)', () => {
+        const inst = make([row('amount', 'String', '')]);
+        let called = false;
+        (inst as any).processInstanceService = {
+          searchVariableSuggestions: () => {
+            called = true;
+            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+          }
+        };
+        (inst as any).targetInstanceIds = []; // [] = mode Instances, nothing selected
+        inst.onNameFocus(0);
+        expect(called).toBe(false);
+      });
+    });
+
+    describe('searchNow — mode Query with active criteria (two-step ID resolve)', () => {
+      it('resolves instance IDs from queryFilter then passes them to searchVariableSuggestions', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          (inst as any).targetInstanceIds = null;
+          (inst as any).queryFilter = { unfinished: true, processInstanceBusinessKeyLike: 'ORDER' };
+          let capturedIds: string[] = [];
+          (inst as any).processInstanceService = {
+            queryProcessInstances: () => ({
+              subscribe: (fn: Function) => { fn([{ id: 'inst-a' }, { id: 'inst-b' }]); return { unsubscribe: () => {} }; }
+            }),
+            searchVariableSuggestions: (q: string, ids: string[]) => {
+              capturedIds = ids;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(capturedIds).toEqual(['inst-a', 'inst-b']);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('returns empty suggestions when queryFilter matches no instances (does not call searchVariableSuggestions)', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          (inst as any).targetInstanceIds = null;
+          (inst as any).queryFilter = { unfinished: true, processInstanceBusinessKeyLike: 'NOMATCH' };
+          let searchCalled = false;
+          (inst as any).processInstanceService = {
+            queryProcessInstances: () => ({
+              subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; }
+            }),
+            searchVariableSuggestions: () => {
+              searchCalled = true;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(searchCalled).toBe(false);
+          expect(inst.suggestions).toEqual([]);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('non-regression: queryFilter null (no criteria) still does an unrestricted global search', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          (inst as any).targetInstanceIds = null;
+          let capturedIds: string[] = ['sentinel'];
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: (q: string, ids: string[]) => {
+              capturedIds = ids;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(capturedIds).toEqual([]);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('mode Query + no criteria: suggestions array is populated from global search results', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          (inst as any).targetInstanceIds = null;
+          (inst as any).queryFilter = null;
+          (inst as any).activeSuggestionRow = 0;
+          const fakeResults = [
+            { name: 'amount', type: 'Double', value: 42, valuesConflict: false },
+            { name: 'amount', type: 'Long', value: 99, valuesConflict: true },
+          ];
+          (inst as any).processInstanceService = {
+            searchVariableSuggestions: (_q: string, _ids: string[]) => ({
+              subscribe: (fn: Function) => { fn(fakeResults); return { unsubscribe: () => {} }; }
+            })
+          };
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect((inst as any).suggestions).toEqual(fakeResults);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+
+      it('non-regression: mode Instances uses IDs directly — queryProcessInstances is never called', () => {
+        vi.useFakeTimers();
+        try {
+          const inst = make([row('', 'String', '')]);
+          (inst as any).targetInstanceIds = ['inst-1', 'inst-2'];
+          (inst as any).queryFilter = { unfinished: true };
+          let queryCalled = false;
+          let capturedIds: string[] = [];
+          (inst as any).processInstanceService = {
+            queryProcessInstances: () => {
+              queryCalled = true;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            },
+            searchVariableSuggestions: (q: string, ids: string[]) => {
+              capturedIds = ids;
+              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+            }
+          };
+          inst.onNameInput(0, 'amount');
+          vi.advanceTimersByTime(250);
+          expect(queryCalled).toBe(false);
+          expect(capturedIds).toEqual(['inst-1', 'inst-2']);
+        } finally {
+          vi.useRealTimers();
+        }
+      });
+    });
+
+    describe('isInstancesModeWithNoSelection — hint guard getter', () => {
+      it('returns false when targetInstanceIds is null (mode Query)', () => {
+        const inst = make([]);
+        (inst as any).targetInstanceIds = null;
+        expect(inst.isInstancesModeWithNoSelection).toBe(false);
+      });
+
+      it('returns true when targetInstanceIds is [] (mode Instances, nothing selected)', () => {
+        const inst = make([]);
+        (inst as any).targetInstanceIds = [];
+        expect(inst.isInstancesModeWithNoSelection).toBe(true);
+      });
+
+      it('returns false when targetInstanceIds has IDs (mode Instances, with selection)', () => {
+        const inst = make([]);
+        (inst as any).targetInstanceIds = ['inst1', 'inst2'];
+        expect(inst.isInstancesModeWithNoSelection).toBe(false);
+      });
+    });
+  });
+
   describe('onModalEnter — Enter on the dialog div applies when valid', () => {
     function makeWithApply(rows: VariableDef[]) {
       const inst = make(rows);
@@ -631,6 +1276,159 @@ describe('VariableDefinitionsModalComponent', () => {
       const { inst, emitted, dialogNative } = makeWithApply([row('myInt', 'Integer', 'abc')]);
       inst.onModalEnter({ target: dialogNative } as unknown as KeyboardEvent);
       expect(emitted).toHaveLength(0);
+    });
+  });
+
+  describe('keyboard navigation in suggestions dropdown', () => {
+    const KBD_SUGGESTIONS: VarSuggestion[] = [
+      { name: 'amount', type: 'Integer', value: 42, valuesConflict: false },
+      { name: 'data', type: 'Object', value: null, valuesConflict: false },
+      { name: 'label', type: 'String', value: 'foo', valuesConflict: false },
+    ];
+
+    function makeKbd(name = ''): VariableDefinitionsModalComponent {
+      const inst = make([row(name, 'String', '')]);
+      (inst as any).activeSuggestionRow = 0;
+      (inst as any).suggestions = KBD_SUGGESTIONS;
+      (inst as any).dialogEl = { nativeElement: { focus: () => {} } };
+      return inst;
+    }
+
+    function fakeKey(k: string): KeyboardEvent {
+      return {
+        key: k,
+        preventDefault: () => {},
+        stopPropagation: () => {},
+        target: { blur: () => {} },
+      } as unknown as KeyboardEvent;
+    }
+
+    it('ArrowDown from null highlights the first enabled suggestion (skips disabled)', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      expect(inst.keyboardHighlightIndex).toBe(0);
+    });
+
+    it('ArrowDown twice skips the disabled Object suggestion and lands on the next enabled one', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      expect(inst.keyboardHighlightIndex).toBe(2);
+    });
+
+    it('ArrowDown on last enabled suggestion does not move (no wrap)', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      expect(inst.keyboardHighlightIndex).toBe(2);
+    });
+
+    it('ArrowUp from second enabled goes back to first enabled', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowUp'));
+      expect(inst.keyboardHighlightIndex).toBe(0);
+    });
+
+    it('ArrowUp on first enabled suggestion does not move (no wrap)', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowUp'));
+      expect(inst.keyboardHighlightIndex).toBe(0);
+    });
+
+    it('Enter on highlighted suggestion fills Name / Type / Value as onSuggestionClick would', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      inst.onNameKeydown(0, fakeKey('Enter'));
+      expect(inst.rows[0].name).toBe('label');
+      expect(inst.rows[0].type).toBe('String');
+      expect(inst.rows[0].value).toBe('foo');
+      expect(inst.keyboardHighlightIndex).toBeNull();
+      expect(inst.activeSuggestionRow).toBeNull();
+    });
+
+    it('Enter with no highlight does not select a suggestion — name field stays unchanged', () => {
+      const inst = makeKbd('am');
+      inst.onNameKeydown(0, fakeKey('Enter'));
+      expect(inst.rows[0].name).toBe('am');
+    });
+
+    it('Escape closes the dropdown without changing the typed text', () => {
+      const inst = makeKbd('am');
+      inst.onNameKeydown(0, fakeKey('Escape'));
+      expect(inst.activeSuggestionRow).toBeNull();
+      expect(inst.keyboardHighlightIndex).toBeNull();
+      expect(inst.rows[0].name).toBe('am');
+    });
+
+    it('typing after ArrowDown resets the highlight index', () => {
+      const inst = makeKbd();
+      inst.onNameKeydown(0, fakeKey('ArrowDown'));
+      expect(inst.keyboardHighlightIndex).toBe(0);
+      inst.onNameInput(0, 'lab');
+      expect(inst.keyboardHighlightIndex).toBeNull();
+    });
+  });
+
+  describe('edit mode — row deletion (chip deletion bug)', () => {
+    function makeEditMode(initialVars: VariableDef[]): VariableDefinitionsModalComponent {
+      const inst = make(initialVars.map(v => ({ ...v })));
+      (inst as any).initialVariables = initialVars;
+      return inst;
+    }
+
+    it('canApply is true after deleting the only row in edit mode', () => {
+      const inst = makeEditMode([row('amount', 'Integer', '100')]);
+      inst.removeRow(0);
+      expect(inst.canApply).toBe(true);
+    });
+
+    it('onApply emits [] after deleting the only row — wizard must remove the chip', () => {
+      const inst = makeEditMode([row('amount', 'Integer', '100')]);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      inst.removeRow(0);
+      inst.onApply();
+      expect(emitted[0]).toEqual([]);
+    });
+
+    it('deletes one of two rows — Apply emits only the surviving variable', () => {
+      const inst = makeEditMode([row('amount', 'Integer', '100'), row('label', 'String', 'foo')]);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      inst.removeRow(0);
+      expect(inst.canApply).toBe(true);
+      inst.onApply();
+      expect(emitted[0]).toEqual([row('label', 'String', 'foo')]);
+    });
+
+    it('deletes one row and modifies another — Apply applies both changes', () => {
+      const inst = makeEditMode([row('amount', 'Integer', '100'), row('label', 'String', 'foo')]);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      inst.removeRow(0);
+      inst.rows[0].value = 'bar';
+      inst.onApply();
+      expect(emitted[0]).toEqual([row('label', 'String', 'bar')]);
+    });
+
+    it('non-regression: renaming a variable in edit mode applies the new name', () => {
+      const inst = makeEditMode([row('amount', 'Integer', '100')]);
+      const emitted: VariableDef[][] = [];
+      (inst as any).apply = { emit: (v: VariableDef[]) => emitted.push(v) };
+      inst.rows[0].name = 'total';
+      expect(inst.canApply).toBe(true);
+      inst.onApply();
+      expect(emitted[0]).toEqual([row('total', 'Integer', '100')]);
+    });
+
+    it('non-regression: canApply remains false for fresh modal with empty rows (no initialVariables)', () => {
+      const inst = make([row('', 'String', '')]);
+      expect(inst.canApply).toBe(false);
     });
   });
 

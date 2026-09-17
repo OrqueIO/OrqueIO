@@ -726,6 +726,16 @@ describe('ProcessInstanceSearchComponent — processDefinition search filter', (
 
     expect(mockGetProcessDefinitions.mock.calls.length).toBe(callsAfterInit);
   });
+
+  it('filters by key when search text matches key but not name', () => {
+    component.processDefinitionSearchText = 'order-proc';
+    expect(component.filteredProcessDefinitionGroups.length).toBe(1);
+    expect(component.filteredProcessDefinitionGroups[0].key).toBe('order-proc');
+
+    component.processDefinitionSearchText = 'invoice-val';
+    expect(component.filteredProcessDefinitionGroups.length).toBe(1);
+    expect(component.filteredProcessDefinitionGroups[0].key).toBe('invoice-val');
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -1091,10 +1101,28 @@ describe('ProcessInstanceSearchComponent — pdVisibleSelectedCount counts proce
     // Add the two missing versions of proc-a
     component.toggleProcessDefinitionVersion('proc-a', 'proc-a:3:id3');
     component.toggleProcessDefinitionVersion('proc-a', 'proc-a:1:id1');
-    // proc-a: all 3 version IDs in pendingIds; proc-b/c/d: in pendingKeys → every group fully covered
+    // All 3 versions of proc-a selected → upgraded to key; proc-b/c/d: in pendingKeys
 
     expect(component.pdAllSelected).toBe(true);
     expect(component.pdSomeSelected).toBe(false);
     expect(component.pdVisibleSelectedCount).toBe(4);
+  });
+
+  it('selecting all versions individually upgrades state to key-based for that group', () => {
+    component.toggleProcessDefinitionVersion('proc-a', 'proc-a:1:id1');
+    component.toggleProcessDefinitionVersion('proc-a', 'proc-a:2:id2');
+    component.toggleProcessDefinitionVersion('proc-a', 'proc-a:3:id3');
+
+    expect(component.pendingProcessDefinitionKeys).toContain('proc-a');
+    expect(component.pendingProcessDefinitionIds).not.toContain('proc-a:1:id1');
+    expect(component.pendingProcessDefinitionIds).not.toContain('proc-a:2:id2');
+    expect(component.pendingProcessDefinitionIds).not.toContain('proc-a:3:id3');
+  });
+
+  it('selecting the only version of a single-version process upgrades immediately to key', () => {
+    component.toggleProcessDefinitionVersion('proc-b', 'proc-b:1:idb');
+
+    expect(component.pendingProcessDefinitionKeys).toContain('proc-b');
+    expect(component.pendingProcessDefinitionIds).not.toContain('proc-b:1:idb');
   });
 });
