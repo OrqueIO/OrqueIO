@@ -3,6 +3,7 @@ import 'zone.js/testing';
 import { vi, describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 import { SelectInstancesDialogComponent } from './select-instances-dialog';
 import { CockpitService } from '../../../../services/cockpit.service';
 import { TranslateService } from '../../../../i18n/translate.service';
@@ -34,6 +35,7 @@ async function createComponent(opts: {
   await TestBed.configureTestingModule({
     imports: [SelectInstancesDialogComponent],
     providers: [
+      provideRouter([]),
       { provide: CockpitService, useValue: mockCockpitService },
       { provide: TranslateService, useValue: mockTranslateService }
     ]
@@ -276,5 +278,36 @@ describe('SelectInstancesDialogComponent — activity type icons', () => {
     expect(icon).toBeDefined();
     expect(color).toBe('var(--text-muted)');
     expect(icon).not.toBe(component.getActivityIcon('bpmn:UserTask'));
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — instance ID link navigation', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('renders a link to the process instance detail page for each result row', async () => {
+    mockCockpitService.queryProcessInstances.mockReturnValueOnce(
+      of([{ id: 'inst-abc-123', businessKey: 'my-key' }])
+    );
+    const { fixture } = await createComponent();
+
+    const link = fixture.debugElement.query(By.css('a.instance-link'));
+    expect(link).toBeTruthy();
+    expect(link.nativeElement.getAttribute('href')).toBe('/cockpit/processes/instance/inst-abc-123');
+  });
+
+  it('clicking the instance ID cell does not toggle row selection', async () => {
+    mockCockpitService.queryProcessInstances.mockReturnValueOnce(
+      of([{ id: 'inst-abc-123', businessKey: null }])
+    );
+    const { component, fixture } = await createComponent();
+
+    expect(component.selectedIds.has('inst-abc-123')).toBe(false);
+
+    const idCell = fixture.debugElement.query(By.css('td.col-id'));
+    idCell.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(component.selectedIds.has('inst-abc-123')).toBe(false);
   });
 });

@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef, inject, DestroyRef, OnInit, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -46,7 +47,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter'];
 @Component({
   selector: 'app-select-instances-dialog',
   standalone: true,
-  imports: [CommonModule, FormsModule, FontAwesomeModule, TranslatePipe, MultiValueChipInputComponent],
+  imports: [CommonModule, RouterModule, FormsModule, FontAwesomeModule, TranslatePipe, MultiValueChipInputComponent],
   template: `
     <div class="modal-backdrop" (click)="onBackdropClick($event)">
       <div class="modal-container" role="dialog" aria-modal="true">
@@ -411,7 +412,11 @@ const DATE_FIELDS: MoveField[] = ['startedAfter'];
                         <input type="checkbox" [checked]="selectedIds.has(instance.id)"
                                (click)="$event.stopPropagation()" (change)="toggleInstance(instance.id)" />
                       </td>
-                      <td class="mono">{{ instance.id }}</td>
+                      <td class="col-id" (click)="$event.stopPropagation()">
+                        <a [routerLink]="['/cockpit/processes/instance', instance.id]"
+                           class="instance-link mono"
+                           [title]="instance.id">{{ instance.id }}</a>
+                      </td>
                       <td>{{ instance.businessKey || '-' }}</td>
                     </tr>
                   </tbody>
@@ -994,6 +999,12 @@ const DATE_FIELDS: MoveField[] = ['startedAfter'];
     .instances-table tbody tr.selected { background: var(--bg-info, #e8f4fd); }
     .col-check { width: 40px; text-align: center; }
     .mono { font-family: monospace; font-size: 0.8rem; }
+    .col-id { white-space: nowrap; }
+    .instance-link {
+      color: var(--color-primary, #2563eb);
+      text-decoration: none;
+    }
+    .instance-link:hover { text-decoration: underline; }
     .query-result-info {
       display: flex;
       align-items: center;
