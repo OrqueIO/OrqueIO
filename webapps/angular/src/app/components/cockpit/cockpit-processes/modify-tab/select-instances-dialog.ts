@@ -31,8 +31,8 @@ export interface InstanceSelectionResult {
 type MoveField =
   | 'instanceId' | 'businessKey' | 'superProcessInstanceId' | 'subProcessInstanceId'
   | 'withJobsRetrying' | 'active' | 'suspended' | 'withIncidents'
-  | 'incidentType' | 'incidentMessageLike' | 'activityId'
-  | 'startedAfter' | 'startedBefore';
+  | 'incidentId' | 'incidentType' | 'incidentMessageLike' | 'activityId'
+  | 'startedAfter' | 'variable';
 
 interface MovePill {
   field: MoveField;
@@ -41,7 +41,7 @@ interface MovePill {
 
 const BOOLEAN_FIELDS: MoveField[] = ['active', 'suspended', 'withJobsRetrying', 'withIncidents'];
 const CHIP_FIELDS: MoveField[] = ['instanceId'];
-const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
+const DATE_FIELDS: MoveField[] = ['startedAfter'];
 
 @Component({
   selector: 'app-select-instances-dialog',
@@ -119,11 +119,18 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   <div class="editor-body" *ngSwitchCase="'startedAfter'">
                     <input type="date" [(ngModel)]="pendingDateValue" class="editor-date-input" />
                   </div>
-                  <div class="editor-body" *ngSwitchCase="'startedBefore'">
-                    <input type="date" [(ngModel)]="pendingDateValue" class="editor-date-input" />
-                  </div>
                   <div class="editor-body" *ngSwitchCase="'activityId'">
                     <ng-container *ngTemplateOutlet="activityPickerTpl"></ng-container>
+                  </div>
+                  <div class="editor-body" *ngSwitchCase="'variable'">
+                    <input type="text" [(ngModel)]="pendingVariableName"
+                           placeholder="{{ 'cockpit.modify.selectDialog.queryVariableNamePlaceholder' | translate }}"
+                           class="editor-text-input"
+                           autofocus />
+                    <input type="text" [(ngModel)]="pendingTextValue"
+                           placeholder="{{ 'cockpit.modify.selectDialog.queryVariableValuePlaceholder' | translate }}"
+                           class="editor-text-input editor-text-input--mt"
+                           (keyup.enter)="confirmEdit()" />
                   </div>
                   <div class="editor-body" *ngSwitchDefault>
                     <input type="text" [(ngModel)]="pendingTextValue"
@@ -152,7 +159,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
               <div class="criteria-dropdown" *ngIf="showCriteriaDropdown" role="menu">
                 <div class="criteria-dropdown-header">
                   <fa-icon [icon]="faFilter" class="criteria-dropdown-header-icon"></fa-icon>
-                  <span>{{ 'cockpit.modify.selectDialog.dropdownTitle' | translate }}</span>
+                  <span class="criteria-dropdown-header-title">{{ 'cockpit.modify.selectDialog.dropdownTitle' | translate }}</span>
                 </div>
 
                 <!-- Identifiers -->
@@ -161,22 +168,34 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('instanceId')"
                           (click)="selectCriterion('instanceId', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--violet"><fa-icon [icon]="faHashtag"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryInstanceIds' | translate }}</span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryInstanceIds' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.instanceId' | translate }}</span>
+                    </span>
                   </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('businessKey')"
                           (click)="selectCriterion('businessKey', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--blue"><fa-icon [icon]="faKey"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryBusinessKey' | translate }}</span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryBusinessKey' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.businessKey' | translate }}</span>
+                    </span>
                   </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('superProcessInstanceId')"
                           (click)="selectCriterion('superProcessInstanceId', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--orange"><fa-icon [icon]="faSitemap"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.querySuperProcessInstanceId' | translate }}</span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.querySuperProcessInstanceId' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.superProcessInstanceId' | translate }}</span>
+                    </span>
                   </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('subProcessInstanceId')"
                           (click)="selectCriterion('subProcessInstanceId', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--orange"><fa-icon [icon]="faSitemap"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.querySubProcessInstanceId' | translate }}</span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.querySubProcessInstanceId' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.subProcessInstanceId' | translate }}</span>
+                    </span>
                   </button>
                 </div>
 
@@ -188,22 +207,34 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('active')"
                           (click)="selectCriterion('active', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--emerald"><fa-icon [icon]="faCircleDot"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryActive' | translate }}</span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryActive' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.active' | translate }}</span>
+                    </span>
                   </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('suspended')"
                           (click)="selectCriterion('suspended', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--amber"><fa-icon [icon]="faCircleDot"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.querySuspended' | translate }}</span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.querySuspended' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.suspended' | translate }}</span>
+                    </span>
                   </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('withJobsRetrying')"
                           (click)="selectCriterion('withJobsRetrying', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--teal"><fa-icon [icon]="faSync"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryWithJobsRetrying' | translate }}</span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryWithJobsRetrying' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.withJobsRetrying' | translate }}</span>
+                    </span>
                   </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('withIncidents')"
                           (click)="selectCriterion('withIncidents', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--red"><fa-icon [icon]="faExclamationTriangle"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryWithIncidents' | translate }}</span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryWithIncidents' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.withIncidents' | translate }}</span>
+                    </span>
                   </button>
                 </div>
 
@@ -212,15 +243,29 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                 <!-- Incidents -->
                 <div class="criteria-group">
                   <div class="criteria-group-label">{{ 'cockpit.modify.selectDialog.sectionIncidents' | translate }}</div>
+                  <button class="criteria-option" [class.criteria-option--active]="isPillActive('incidentId')"
+                          (click)="selectCriterion('incidentId', $event)" type="button" role="menuitem">
+                    <span class="criteria-icon-wrap criteria-icon-wrap--amber"><fa-icon [icon]="faHashtag"></fa-icon></span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryIncidentId' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.incidentId' | translate }}</span>
+                    </span>
+                  </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('incidentType')"
                           (click)="selectCriterion('incidentType', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--red"><fa-icon [icon]="faExclamationTriangle"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryIncidentType' | translate }}</span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryIncidentType' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.incidentType' | translate }}</span>
+                    </span>
                   </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('incidentMessageLike')"
                           (click)="selectCriterion('incidentMessageLike', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--amber"><fa-icon [icon]="faExclamationTriangle"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryIncidentMessageLike' | translate }}</span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryIncidentMessageLike' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.incidentMessageLike' | translate }}</span>
+                    </span>
                   </button>
                 </div>
 
@@ -232,17 +277,30 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('activityId')"
                           (click)="selectCriterion('activityId', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--violet"><fa-icon [icon]="faHashtag"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryActivityId' | translate }}</span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryActivityId' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.activityId' | translate }}</span>
+                    </span>
                   </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('startedAfter')"
                           (click)="selectCriterion('startedAfter', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--teal"><fa-icon [icon]="faCalendarAlt"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryStartedAfter' | translate }}</span>
+                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryStartDate' | translate }}</span>
                   </button>
-                  <button class="criteria-option" [class.criteria-option--active]="isPillActive('startedBefore')"
-                          (click)="selectCriterion('startedBefore', $event)" type="button" role="menuitem">
-                    <span class="criteria-icon-wrap criteria-icon-wrap--teal"><fa-icon [icon]="faCalendarAlt"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryStartedBefore' | translate }}</span>
+                </div>
+
+                <div class="criteria-separator"></div>
+
+                <!-- Variables -->
+                <div class="criteria-group">
+                  <div class="criteria-group-label">{{ 'cockpit.modify.selectDialog.sectionVariables' | translate }}</div>
+                  <button class="criteria-option" [class.criteria-option--active]="isPillActive('variable')"
+                          (click)="selectCriterion('variable', $event)" type="button" role="menuitem">
+                    <span class="criteria-icon-wrap criteria-icon-wrap--indigo"><fa-icon [icon]="faCode"></fa-icon></span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryVariable' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.variable' | translate }}</span>
+                    </span>
                   </button>
                 </div>
               </div>
@@ -266,11 +324,18 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   <div class="editor-body" *ngSwitchCase="'startedAfter'">
                     <input type="date" [(ngModel)]="pendingDateValue" class="editor-date-input" />
                   </div>
-                  <div class="editor-body" *ngSwitchCase="'startedBefore'">
-                    <input type="date" [(ngModel)]="pendingDateValue" class="editor-date-input" />
-                  </div>
                   <div class="editor-body" *ngSwitchCase="'activityId'">
                     <ng-container *ngTemplateOutlet="activityPickerTpl"></ng-container>
+                  </div>
+                  <div class="editor-body" *ngSwitchCase="'variable'">
+                    <input type="text" [(ngModel)]="pendingVariableName"
+                           placeholder="{{ 'cockpit.modify.selectDialog.queryVariableNamePlaceholder' | translate }}"
+                           class="editor-text-input"
+                           autofocus />
+                    <input type="text" [(ngModel)]="pendingTextValue"
+                           placeholder="{{ 'cockpit.modify.selectDialog.queryVariableValuePlaceholder' | translate }}"
+                           class="editor-text-input editor-text-input--mt"
+                           (keyup.enter)="confirmEdit()" />
                   </div>
                   <div class="editor-body" *ngSwitchDefault>
                     <input type="text" [(ngModel)]="pendingTextValue"
@@ -447,8 +512,8 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       background: var(--bg-surface, #fff);
       border-radius: 10px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.18);
-      width: 90vw;
-      max-width: 800px;
+      width: 92vw;
+      max-width: 900px;
       max-height: 90vh;
       display: flex;
       flex-direction: column;
@@ -474,7 +539,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
     .process-badge-value { color: var(--text-primary); }
     /* ── Criteria area (outside scroll so dropdowns are never clipped) ── */
     .modal-criteria-area {
-      padding: 0.75rem 1.25rem 0;
+      padding: 0.75rem 1.75rem 0;
       flex-shrink: 0;
       border-bottom: 1px solid var(--border-color);
       padding-bottom: 0.75rem;
@@ -673,38 +738,53 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       color: var(--color-primary, #2563eb);
     }
     /* ── Criteria dropdown ──────────────────────────────────────────────── */
+    @keyframes criteriaDropdownIn {
+      from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0)    scale(1); }
+    }
     .criteria-dropdown {
       position: absolute;
-      top: calc(100% + 4px);
+      top: calc(100% + 6px);
       left: 0;
-      z-index: 200;
-      background: var(--bg-surface, #fff);
+      z-index: 500;
+      background: var(--bg-card, #fff);
       border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.14);
-      min-width: 240px;
-      max-height: 380px;
+      border-radius: 10px;
+      box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.04),
+        0 8px 32px rgba(0, 0, 0, 0.14),
+        0 2px 8px rgba(0, 0, 0, 0.08);
+      min-width: 195px;
+      max-width: 240px;
+      max-height: 340px;
       overflow-y: auto;
-      padding: 0.35rem 0;
+      overflow-x: hidden;
+      animation: criteriaDropdownIn 180ms cubic-bezier(0.16, 1, 0.3, 1);
+      transform-origin: top left;
     }
     .criteria-dropdown-header {
       display: flex;
       align-items: center;
       gap: 0.4rem;
-      padding: 0.4rem 0.75rem;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      border-bottom: 1px solid var(--border-color);
-      margin-bottom: 0.25rem;
+      padding: 0.35rem 0.65rem;
+      border-bottom: 1px solid var(--border-color-light, var(--border-color));
+      background: var(--color-gray-50, #f9fafb);
+      position: sticky;
+      top: 0;
+      z-index: 1;
     }
-    .criteria-dropdown-header-icon { font-size: 0.65rem; }
-    .criteria-group { padding: 0.2rem 0; }
+    .criteria-dropdown-header-icon { font-size: 0.65rem; color: var(--color-primary, #2563eb); }
+    .criteria-dropdown-header-title {
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--text-secondary, #4b5563);
+    }
+    .criteria-group { padding: 0.1rem 0; }
     .criteria-group-label {
-      padding: 0.2rem 0.75rem;
-      font-size: 0.68rem;
+      padding: 0.1rem 0.65rem;
+      font-size: 0.62rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -713,39 +793,70 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
     .criteria-option {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       width: 100%;
-      padding: 0.35rem 0.75rem;
+      padding: 0.18rem 0.65rem;
       border: none;
       background: transparent;
       cursor: pointer;
       text-align: left;
-      font-size: 0.84rem;
-      color: var(--text-primary);
+      transition: background 0.12s;
+      position: relative;
+      min-height: 30px;
     }
-    .criteria-option:hover { background: var(--bg-hover); }
-    .criteria-option--active { color: var(--color-primary, #2563eb); }
-    .criteria-option-name { flex: 1; }
+    .criteria-option::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 3px;
+      bottom: 3px;
+      width: 2px;
+      border-radius: 0 2px 2px 0;
+      background: var(--color-primary, #2563eb);
+      opacity: 0;
+      transform: scaleY(0.4);
+      transition: opacity 0.12s, transform 0.12s;
+    }
+    .criteria-option:hover { background: var(--color-gray-50, #f9fafb); }
+    .criteria-option:hover::before { opacity: 1; transform: scaleY(1); }
+    .criteria-option--active { background: var(--color-primary-bg, rgba(37,99,235,0.06)); }
+    .criteria-option--active::before { opacity: 1; transform: scaleY(1); }
+    .criteria-option-body { display: flex; flex-direction: column; gap: 0; }
+    .criteria-option-name {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .criteria-option-desc { display: none; }
     .criteria-separator { height: 1px; background: var(--border-color-light, var(--border-color)); margin: 0.2rem 0; }
     /* ── Criteria icon wraps ────────────────────────────────────────────── */
     .criteria-icon-wrap {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       justify-content: center;
       width: 22px;
       height: 22px;
       border-radius: 5px;
-      font-size: 0.6rem;
+      font-size: 0.62rem;
       flex-shrink: 0;
-      color: #fff;
+      transition: transform 0.12s, box-shadow 0.12s;
     }
-    .criteria-icon-wrap--violet  { background: #7c3aed; }
-    .criteria-icon-wrap--blue    { background: #2563eb; }
-    .criteria-icon-wrap--orange  { background: #ea580c; }
-    .criteria-icon-wrap--emerald { background: #059669; }
-    .criteria-icon-wrap--amber   { background: #d97706; }
-    .criteria-icon-wrap--teal    { background: #0d9488; }
-    .criteria-icon-wrap--red     { background: #dc2626; }
+    .criteria-option:hover .criteria-icon-wrap {
+      transform: scale(1.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .criteria-icon-wrap--violet  { background: rgba(124, 58,  237, 0.10); color: #7c3aed; }
+    .criteria-icon-wrap--blue    { background: rgba(37,  99,  235, 0.10); color: #2563eb; }
+    .criteria-icon-wrap--orange  { background: rgba(234, 88,  12,  0.10); color: #ea580c; }
+    .criteria-icon-wrap--emerald { background: rgba(16,  185, 129, 0.10); color: #059669; }
+    .criteria-icon-wrap--amber   { background: rgba(245, 158, 11,  0.10); color: #d97706; }
+    .criteria-icon-wrap--teal    { background: rgba(20,  184, 166, 0.10); color: #0d9488; }
+    .criteria-icon-wrap--red     { background: rgba(220, 38,  38,  0.10); color: #dc2626; }
+    .criteria-icon-wrap--indigo  { background: rgba(99,  102, 241, 0.10); color: #6366f1; }
     /* ── Criterion editor popover ───────────────────────────────────────── */
     .criterion-editor-popover {
       position: absolute;
@@ -786,6 +897,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
     }
     .editor-text-input:focus,
     .editor-date-input:focus { outline: none; border-color: var(--color-primary, #2563eb); }
+    .editor-text-input--mt { margin-top: 0.4rem; }
     .editor-actions { display: flex; justify-content: flex-end; }
     .editor-apply-btn {
       padding: 0.3rem 0.75rem;
@@ -915,6 +1027,7 @@ export class SelectInstancesDialogComponent implements OnInit {
   faFilter = faFilter; faHashtag = faHashtag; faKey = faKey; faSitemap = faSitemap;
   faSync = faSync; faCircleDot = faCircleDot; faExclamationTriangle = faExclamationTriangle;
   faCalendarAlt = faCalendarAlt;
+  faCode = faCode;
   faCheck = faCheck;
 
   private readonly ACTIVITY_ICON_MAP: Record<string, { icon: any; color: string }> = {
@@ -958,6 +1071,7 @@ export class SelectInstancesDialogComponent implements OnInit {
   pendingTextValue = '';
   pendingChipValues: string[] = [];
   pendingDateValue = '';
+  pendingVariableName = '';
   hoveredId: string | null = null;
 
   get safeEditorType(): MoveField {
@@ -1033,10 +1147,11 @@ export class SelectInstancesDialogComponent implements OnInit {
       case 'active':
       case 'suspended':             return this.faCircleDot;
       case 'withIncidents':
+      case 'incidentId':
       case 'incidentType':
       case 'incidentMessageLike':   return this.faExclamationTriangle;
-      case 'startedAfter':
-      case 'startedBefore':         return this.faCalendarAlt;
+      case 'startedAfter':           return this.faCalendarAlt;
+      case 'variable':              return this.faCode;
       default:                      return this.faFilter;
     }
   }
@@ -1053,11 +1168,12 @@ export class SelectInstancesDialogComponent implements OnInit {
       case 'active':                 return t('queryActive');
       case 'suspended':              return t('querySuspended');
       case 'withIncidents':          return t('queryWithIncidents');
+      case 'incidentId':             return `${t('queryIncidentId')}: ${v}`;
       case 'incidentType':           return `${t('queryIncidentType')}: ${v}`;
       case 'incidentMessageLike':    return `${t('queryIncidentMessageLike')}: ${v}`;
       case 'activityId':             return `${t('queryActivityId')}: ${v}`;
-      case 'startedAfter':           return `${t('queryStartedAfter')}: ${this.formatDisplayDate(v)}`;
-      case 'startedBefore':          return `${t('queryStartedBefore')}: ${this.formatDisplayDate(v)}`;
+      case 'startedAfter':           return `${t('queryStartDate')}: ${this.formatDisplayDate(v)}`;
+      case 'variable':               return `${pill.values[0] ?? ''} = ${pill.values[1] ?? ''}`;
       default:                       return pill.field;
     }
   }
@@ -1068,11 +1184,12 @@ export class SelectInstancesDialogComponent implements OnInit {
       businessKey: 'queryBusinessKey',
       superProcessInstanceId: 'querySuperProcessInstanceId',
       subProcessInstanceId: 'querySubProcessInstanceId',
+      incidentId: 'queryIncidentId',
       incidentType: 'queryIncidentType',
       incidentMessageLike: 'queryIncidentMessageLike',
       activityId: 'queryActivityId',
-      startedAfter: 'queryStartedAfter',
-      startedBefore: 'queryStartedBefore',
+      startedAfter: 'queryStartDate',
+      variable: 'queryVariable',
     };
     const key = keyMap[field];
     return key
@@ -1083,8 +1200,10 @@ export class SelectInstancesDialogComponent implements OnInit {
   getFieldPlaceholder(field: MoveField): string {
     const keyMap: Partial<Record<MoveField, string>> = {
       businessKey: 'queryBusinessKeyPlaceholder',
+      incidentId: 'queryIncidentIdPlaceholder',
       incidentType: 'queryIncidentTypePlaceholder',
       incidentMessageLike: 'queryIncidentMessageLikePlaceholder',
+      variable: 'queryVariableValuePlaceholder',
     };
     const key = keyMap[field];
     return key
@@ -1142,10 +1261,14 @@ export class SelectInstancesDialogComponent implements OnInit {
     this.pendingTextValue = '';
     this.pendingChipValues = [];
     this.pendingDateValue = '';
+    this.pendingVariableName = '';
     if (this.isChipField(pill.field)) {
       this.pendingChipValues = [...pill.values];
     } else if (this.isDateField(pill.field)) {
       this.pendingDateValue = pill.values[0] || '';
+    } else if (pill.field === 'variable') {
+      this.pendingVariableName = pill.values[0] || '';
+      this.pendingTextValue = pill.values[1] || '';
     } else {
       this.pendingTextValue = pill.values[0] || '';
     }
@@ -1160,6 +1283,10 @@ export class SelectInstancesDialogComponent implements OnInit {
       values = [...this.pendingChipValues];
     } else if (this.isDateField(field)) {
       values = this.pendingDateValue ? [this.pendingDateValue] : [];
+    } else if (field === 'variable') {
+      values = (this.pendingVariableName.trim() && this.pendingTextValue.trim())
+        ? [this.pendingVariableName.trim(), this.pendingTextValue.trim()]
+        : [];
     } else {
       values = this.pendingTextValue.trim() ? [this.pendingTextValue.trim()] : [];
     }
@@ -1186,6 +1313,7 @@ export class SelectInstancesDialogComponent implements OnInit {
     this.pendingTextValue = '';
     this.pendingChipValues = [];
     this.pendingDateValue = '';
+    this.pendingVariableName = '';
     this.cdr.markForCheck();
     this.search();
   }
@@ -1201,6 +1329,7 @@ export class SelectInstancesDialogComponent implements OnInit {
     this.pendingTextValue = '';
     this.pendingChipValues = [];
     this.pendingDateValue = '';
+    this.pendingVariableName = '';
     this.cdr.markForCheck();
   }
 
@@ -1293,6 +1422,9 @@ export class SelectInstancesDialogComponent implements OnInit {
         case 'withIncidents':
           body['withIncidents'] = true;
           break;
+        case 'incidentId':
+          if (pill.values[0]) body['incidentId'] = pill.values[0];
+          break;
         case 'incidentType':
           if (pill.values[0]) body['incidentType'] = pill.values[0];
           break;
@@ -1302,15 +1434,13 @@ export class SelectInstancesDialogComponent implements OnInit {
         case 'activityId':
           if (pill.values.length) body['activeActivityIdIn'] = pill.values;
           break;
+        case 'variable':
+          if (pill.values[0] && pill.values[1] !== undefined) {
+            body['variables'] = [{ name: pill.values[0], operator: 'eq', value: pill.values[1] }];
+          }
+          break;
         case 'startedAfter':
           if (pill.values[0]) body['startedAfter'] = new Date(pill.values[0]).toISOString();
-          break;
-        case 'startedBefore':
-          if (pill.values[0]) {
-            const d = new Date(pill.values[0]);
-            d.setHours(23, 59, 59, 999);
-            body['startedBefore'] = d.toISOString();
-          }
           break;
       }
     }
