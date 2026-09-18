@@ -9,7 +9,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faSpinner, faSearch, faPlus, faTimes, faFilter,
   faHashtag, faKey, faSitemap, faSync, faCircleDot,
-  faExclamationTriangle, faCalendarAlt
+  faExclamationTriangle, faCalendarAlt,
+  faPlay, faCircleStop, faUser, faGear, faCode, faTable,
+  faPaperPlane, faInbox, faHand, faArrowUpRightFromSquare,
+  faLayerGroup, faXmark, faSquare, faCheck
 } from '@fortawesome/free-solid-svg-icons';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
@@ -381,12 +384,21 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                       [title]="act.id === targetActivityId
                         ? ('cockpit.modify.selectDialog.activityIsTarget' | translate)
                         : (act.name || act.id)"
-                      (click)="act.id !== targetActivityId && selectActivity(act.id)">
+                      (click)="act.id !== targetActivityId && selectActivity(act.id)"
+                      (mouseenter)="hoveredId = act.id"
+                      (mouseleave)="hoveredId = null">
+                <fa-icon [icon]="getActivityIcon(act.type)"
+                         class="activity-picker-item__type-icon"
+                         [style.color]="hoveredId === act.id && act.id !== targetActivityId ? 'var(--color-primary)' : getActivityIconColor(act.type)"></fa-icon>
                 <span class="activity-picker-item__name">{{ act.name || act.id }}</span>
                 <span class="activity-picker-item__target-badge"
                       *ngIf="act.id === targetActivityId">
                   {{ 'cockpit.modify.selectDialog.activityIsTargetBadge' | translate }}
                 </span>
+                <fa-icon [icon]="faCheck"
+                         class="activity-picker-item__check"
+                         *ngIf="pendingTextValue === act.id && act.id !== targetActivityId">
+                </fa-icon>
               </button>
             </div>
           </div>
@@ -595,7 +607,8 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
     }
     .activity-picker-item:last-child { border-bottom: none; }
     .activity-picker-item:hover:not(:disabled):not(.activity-picker-item--disabled) {
-      background: var(--bg-hover);
+      background: var(--color-primary-bg);
+      color: var(--color-primary);
     }
     .activity-picker-item--selected {
       background: rgba(37,99,235,0.08);
@@ -606,6 +619,13 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       opacity: 0.45;
       cursor: not-allowed;
       color: var(--text-muted, #6b7280);
+    }
+    .activity-picker-item__type-icon {
+      font-size: 12px;
+      flex-shrink: 0;
+      width: 14px;
+      text-align: center;
+      margin-right: 8px;
     }
     .activity-picker-item__name {
       flex: 1;
@@ -626,6 +646,12 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       border-radius: 4px;
       letter-spacing: 0.02em;
       white-space: nowrap;
+    }
+    .activity-picker-item__check {
+      margin-left: auto;
+      flex-shrink: 0;
+      font-size: 11px;
+      color: var(--color-primary);
     }
     /* ── Add criteria button ────────────────────────────────────────────── */
     .criteria-dropdown-wrapper { position: relative; }
@@ -889,6 +915,35 @@ export class SelectInstancesDialogComponent implements OnInit {
   faFilter = faFilter; faHashtag = faHashtag; faKey = faKey; faSitemap = faSitemap;
   faSync = faSync; faCircleDot = faCircleDot; faExclamationTriangle = faExclamationTriangle;
   faCalendarAlt = faCalendarAlt;
+  faCheck = faCheck;
+
+  private readonly ACTIVITY_ICON_MAP: Record<string, { icon: any; color: string }> = {
+    'bpmn:StartEvent':                { icon: faPlay,                   color: 'var(--color-success)' },
+    'bpmn:EndEvent':                  { icon: faCircleStop,             color: 'var(--color-danger)' },
+    'bpmn:UserTask':                  { icon: faUser,                   color: 'var(--color-primary)' },
+    'bpmn:ServiceTask':               { icon: faGear,                   color: 'var(--color-primary)' },
+    'bpmn:ScriptTask':                { icon: faCode,                   color: 'var(--color-primary)' },
+    'bpmn:BusinessRuleTask':          { icon: faTable,                  color: 'var(--color-primary)' },
+    'bpmn:SendTask':                  { icon: faPaperPlane,             color: 'var(--color-primary)' },
+    'bpmn:ReceiveTask':               { icon: faInbox,                  color: 'var(--color-primary)' },
+    'bpmn:ManualTask':                { icon: faHand,                   color: 'var(--color-primary)' },
+    'bpmn:CallActivity':              { icon: faArrowUpRightFromSquare, color: 'var(--color-primary)' },
+    'bpmn:SubProcess':                { icon: faLayerGroup,             color: 'var(--color-primary)' },
+    'bpmn:ExclusiveGateway':          { icon: faXmark,                  color: 'var(--color-warning)' },
+    'bpmn:ParallelGateway':           { icon: faPlus,                   color: 'var(--color-warning)' },
+    'bpmn:InclusiveGateway':          { icon: faPlus,                   color: 'var(--color-warning)' },
+    'bpmn:IntermediateCatchEvent':    { icon: faCircleDot,              color: 'var(--text-secondary)' },
+    'bpmn:IntermediateThrowEvent':    { icon: faCircleDot,              color: 'var(--text-secondary)' },
+    'bpmn:BoundaryEvent':             { icon: faCircleDot,              color: 'var(--text-secondary)' },
+  };
+
+  getActivityIcon(type: string): any {
+    return (this.ACTIVITY_ICON_MAP[type] ?? { icon: faSquare }).icon;
+  }
+
+  getActivityIconColor(type: string): string {
+    return (this.ACTIVITY_ICON_MAP[type] ?? { color: 'var(--text-muted)' }).color;
+  }
 
   selectionMode: 'instance' | 'query' = 'instance';
   searching = false;
@@ -903,6 +958,7 @@ export class SelectInstancesDialogComponent implements OnInit {
   pendingTextValue = '';
   pendingChipValues: string[] = [];
   pendingDateValue = '';
+  hoveredId: string | null = null;
 
   get safeEditorType(): MoveField {
     return this.activeEditorType!;

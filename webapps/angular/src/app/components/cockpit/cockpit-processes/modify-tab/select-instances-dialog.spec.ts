@@ -167,3 +167,114 @@ describe('SelectInstancesDialogComponent — activity dropdown (Part 2)', () => 
     expect(pill!.values[0]).toBe('ServiceTask_1');
   });
 });
+
+
+describe('SelectInstancesDialogComponent — check icon and hover state', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('check icon appears only on the currently selected activity and moves when selection changes', async () => {
+    const { component, fixture } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    fixture.detectChanges();
+
+    let checks = fixture.debugElement.queryAll(By.css('.activity-picker-item__check'));
+    expect(checks.length).toBe(1);
+
+    const items = fixture.debugElement.queryAll(By.css('.activity-picker-item'));
+    const userTaskItem = items.find(el => el.nativeElement.textContent.includes('User Task'))!;
+    expect(userTaskItem.query(By.css('.activity-picker-item__check'))).toBeTruthy();
+
+    component.selectActivity('ServiceTask_1');
+    fixture.detectChanges();
+
+    checks = fixture.debugElement.queryAll(By.css('.activity-picker-item__check'));
+    expect(checks.length).toBe(1);
+
+    const serviceTaskItem = items.find(el => el.nativeElement.textContent.includes('Service Task'))!;
+    expect(serviceTaskItem.query(By.css('.activity-picker-item__check'))).toBeTruthy();
+    expect(userTaskItem.query(By.css('.activity-picker-item__check'))).toBeNull();
+  });
+
+  it('hoveredId is set on mouseenter and cleared on mouseleave, independently of selection', async () => {
+    const { component, fixture } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    fixture.detectChanges();
+
+    expect(component.hoveredId).toBeNull();
+
+    const items = fixture.debugElement.queryAll(By.css('.activity-picker-item'));
+    const serviceItem = items.find(el => el.nativeElement.textContent.includes('Service Task'))!;
+    serviceItem.nativeElement.dispatchEvent(new MouseEvent('mouseenter'));
+    fixture.detectChanges();
+
+    expect(component.hoveredId).toBe('ServiceTask_1');
+    const checks = fixture.debugElement.queryAll(By.css('.activity-picker-item__check'));
+    expect(checks.length).toBe(1);
+    expect(serviceItem.query(By.css('.activity-picker-item__check'))).toBeNull();
+
+    serviceItem.nativeElement.dispatchEvent(new MouseEvent('mouseleave'));
+    fixture.detectChanges();
+    expect(component.hoveredId).toBeNull();
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — activity type icons', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('returns the correct icon and color for every listed BPMN type', async () => {
+    const { component } = await createComponent();
+
+    const cases: Array<{ type: string; expectedColor: string; label: string }> = [
+      { type: 'bpmn:StartEvent',             expectedColor: 'var(--color-success)',  label: 'startEvent' },
+      { type: 'bpmn:EndEvent',               expectedColor: 'var(--color-danger)',   label: 'endEvent' },
+      { type: 'bpmn:UserTask',               expectedColor: 'var(--color-primary)',  label: 'userTask' },
+      { type: 'bpmn:ServiceTask',            expectedColor: 'var(--color-primary)',  label: 'serviceTask' },
+      { type: 'bpmn:ScriptTask',             expectedColor: 'var(--color-primary)',  label: 'scriptTask' },
+      { type: 'bpmn:BusinessRuleTask',       expectedColor: 'var(--color-primary)',  label: 'businessRuleTask' },
+      { type: 'bpmn:SendTask',               expectedColor: 'var(--color-primary)',  label: 'sendTask' },
+      { type: 'bpmn:ReceiveTask',            expectedColor: 'var(--color-primary)',  label: 'receiveTask' },
+      { type: 'bpmn:ManualTask',             expectedColor: 'var(--color-primary)',  label: 'manualTask' },
+      { type: 'bpmn:CallActivity',           expectedColor: 'var(--color-primary)',  label: 'callActivity' },
+      { type: 'bpmn:SubProcess',             expectedColor: 'var(--color-primary)',  label: 'subProcess' },
+      { type: 'bpmn:ExclusiveGateway',       expectedColor: 'var(--color-warning)',  label: 'exclusiveGateway' },
+      { type: 'bpmn:ParallelGateway',        expectedColor: 'var(--color-warning)',  label: 'parallelGateway' },
+      { type: 'bpmn:InclusiveGateway',       expectedColor: 'var(--color-warning)',  label: 'inclusiveGateway' },
+      { type: 'bpmn:IntermediateCatchEvent', expectedColor: 'var(--text-secondary)', label: 'intermediateCatchEvent' },
+      { type: 'bpmn:IntermediateThrowEvent', expectedColor: 'var(--text-secondary)', label: 'intermediateThrowEvent' },
+      { type: 'bpmn:BoundaryEvent',          expectedColor: 'var(--text-secondary)', label: 'boundaryEvent' },
+    ];
+
+    for (const { type, expectedColor, label } of cases) {
+      const icon = component.getActivityIcon(type);
+      const color = component.getActivityIconColor(type);
+      expect(icon, `${label}: icon should be defined`).toBeDefined();
+      expect(color, `${label}: color`).toBe(expectedColor);
+    }
+
+    const exclusiveIcon = component.getActivityIcon('bpmn:ExclusiveGateway');
+    const parallelIcon  = component.getActivityIcon('bpmn:ParallelGateway');
+    expect(exclusiveIcon).not.toBe(parallelIcon);
+    const inclusiveIcon = component.getActivityIcon('bpmn:InclusiveGateway');
+    expect(inclusiveIcon).toBe(parallelIcon);
+  });
+
+  it('returns fallback icon (faSquare) and muted color for an unrecognised BPMN type', async () => {
+    const { component } = await createComponent();
+
+    const icon = component.getActivityIcon('bpmn:UnknownFutureElement');
+    const color = component.getActivityIconColor('bpmn:UnknownFutureElement');
+
+    expect(icon).toBeDefined();
+    expect(color).toBe('var(--text-muted)');
+    expect(icon).not.toBe(component.getActivityIcon('bpmn:UserTask'));
+  });
+});
