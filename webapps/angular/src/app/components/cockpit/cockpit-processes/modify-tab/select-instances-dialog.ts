@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faSpinner, faSearch, faPlus, faTimes, faFilter,
+  faSpinner, faPlus, faTimes, faFilter,
   faHashtag, faKey, faSitemap, faSync, faCircleDot,
   faExclamationTriangle, faCalendarAlt,
   faPlay, faCircleStop, faUser, faGear, faCode, faTable,
@@ -355,13 +355,8 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
         <!-- Scrollable results area -->
         <div class="modal-body">
 
-          <!-- Search bar -->
+          <!-- Status bar -->
           <div class="search-bar">
-            <button type="button" class="query-search-btn" (click)="search()" [disabled]="searching">
-              <fa-icon [icon]="searching ? faSpinner : faSearch"
-                       [animation]="searching ? 'spin' : undefined"></fa-icon>
-              {{ 'cockpit.modify.selectDialog.querySearch' | translate }}
-            </button>
             <span class="result-count" *ngIf="searchResults !== null && !searching">
               {{ searchResults.length }} {{ 'cockpit.modify.selectDialog.queryMatchingInstances' | translate }}
             </span>
@@ -977,20 +972,6 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       margin-bottom: 0.75rem;
       flex-wrap: wrap;
     }
-    .query-search-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      padding: 0.4rem 0.85rem;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      background: var(--bg-base);
-      color: var(--text-primary);
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-    .query-search-btn:hover:not(:disabled) { border-color: var(--color-primary, #2563eb); color: var(--color-primary, #2563eb); }
-    .query-search-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .result-count { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
     .search-error-inline { font-size: 0.8rem; color: var(--text-danger, #e74c3c); }
     /* ── Results ────────────────────────────────────────────────────────── */
@@ -1057,7 +1038,7 @@ export class SelectInstancesDialogComponent implements OnInit {
   @Output() confirmed = new EventEmitter<InstanceSelectionResult>();
   @Output() activityIdCriterionChange = new EventEmitter<string | null>();
 
-  faSpinner = faSpinner; faSearch = faSearch; faPlus = faPlus; faTimes = faTimes;
+  faSpinner = faSpinner; faPlus = faPlus; faTimes = faTimes;
   faFilter = faFilter; faHashtag = faHashtag; faKey = faKey; faSitemap = faSitemap;
   faSync = faSync; faCircleDot = faCircleDot; faExclamationTriangle = faExclamationTriangle;
   faCalendarAlt = faCalendarAlt;

@@ -1851,7 +1851,6 @@
   "cockpit.modify.selectDialog.queryStartDate": "Start Date",
   "cockpit.modify.selectDialog.queryStartedAfter": "Started after",
   "cockpit.modify.selectDialog.queryStartedBefore": "Started before",
-  "cockpit.modify.selectDialog.querySearch": "Search",
   "cockpit.modify.selectDialog.queryMatchingInstances": "matching active instance(s)",
   "cockpit.modify.selectDialog.sectionIdentifiers": "Identifiers",
   "cockpit.modify.selectDialog.queryInstanceIds": "Instance ID(s)",
