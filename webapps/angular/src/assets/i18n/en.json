@@ -1866,6 +1866,8 @@
   "cockpit.modify.selectDialog.queryIncidentIdPlaceholder": "e.g. incident-abc123",
   "cockpit.modify.selectDialog.queryIncidentType": "Incident Type",
   "cockpit.modify.selectDialog.queryIncidentTypePlaceholder": "e.g. failedJob, externalTask",
+  "cockpit.modify.selectDialog.incidentTypeFailedJob": "Failed job",
+  "cockpit.modify.selectDialog.incidentTypeFailedExternalTask": "Failed external task",
   "cockpit.modify.selectDialog.queryIncidentMessageLike": "Incident Message",
   "cockpit.modify.selectDialog.queryIncidentMessageLikePlaceholder": "Contains...",
   "cockpit.modify.selectDialog.sectionActivityDates": "Activity & Dates",

@@ -13,7 +13,7 @@ import {
   faExclamationTriangle, faCalendarAlt,
   faPlay, faCircleStop, faUser, faGear, faCode, faTable,
   faPaperPlane, faInbox, faHand, faArrowUpRightFromSquare,
-  faLayerGroup, faXmark, faSquare, faCheck
+  faLayerGroup, faXmark, faSquare, faCheck, faServer
 } from '@fortawesome/free-solid-svg-icons';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
@@ -116,6 +116,9 @@ const DATE_FIELDS: MoveField[] = ['startedAfter'];
                       [placeholder]="'cockpit.modify.selectDialog.queryInstanceIdsPlaceholder' | translate"
                       [autofocus]="true">
                     </app-multi-value-chip-input>
+                  </div>
+                  <div class="editor-body" *ngSwitchCase="'incidentType'">
+                    <ng-container *ngTemplateOutlet="incidentTypePickerTpl"></ng-container>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'startedAfter'">
                     <input type="date" [(ngModel)]="pendingDateValue" class="editor-date-input" />
@@ -322,6 +325,9 @@ const DATE_FIELDS: MoveField[] = ['startedAfter'];
                       [autofocus]="true">
                     </app-multi-value-chip-input>
                   </div>
+                  <div class="editor-body" *ngSwitchCase="'incidentType'">
+                    <ng-container *ngTemplateOutlet="incidentTypePickerTpl"></ng-container>
+                  </div>
                   <div class="editor-body" *ngSwitchCase="'startedAfter'">
                     <input type="date" [(ngModel)]="pendingDateValue" class="editor-date-input" />
                   </div>
@@ -479,6 +485,40 @@ const DATE_FIELDS: MoveField[] = ['startedAfter'];
                    (keyup.enter)="confirmEdit()"
                    autofocus />
           </ng-template>
+        </ng-template>
+
+        <!-- Incident type picker shared template -->
+        <ng-template #incidentTypePickerTpl>
+          <div class="activity-picker-list">
+            <button type="button"
+                    class="activity-picker-item"
+                    [class.activity-picker-item--selected]="pendingTextValue === 'failedJob'"
+                    (click)="pendingTextValue = 'failedJob'"
+                    (mouseenter)="hoveredId = 'failedJob'"
+                    (mouseleave)="hoveredId = null">
+              <fa-icon [icon]="faGear"
+                       class="activity-picker-item__type-icon"
+                       [style.color]="hoveredId === 'failedJob' ? 'var(--color-primary)' : 'var(--color-danger, #dc2626)'">
+              </fa-icon>
+              <span class="activity-picker-item__name">{{ 'cockpit.modify.selectDialog.incidentTypeFailedJob' | translate }}</span>
+              <fa-icon [icon]="faCheck" class="activity-picker-item__check"
+                       *ngIf="pendingTextValue === 'failedJob'"></fa-icon>
+            </button>
+            <button type="button"
+                    class="activity-picker-item"
+                    [class.activity-picker-item--selected]="pendingTextValue === 'failedExternalTask'"
+                    (click)="pendingTextValue = 'failedExternalTask'"
+                    (mouseenter)="hoveredId = 'failedExternalTask'"
+                    (mouseleave)="hoveredId = null">
+              <fa-icon [icon]="faServer"
+                       class="activity-picker-item__type-icon"
+                       [style.color]="hoveredId === 'failedExternalTask' ? 'var(--color-primary)' : 'var(--color-danger, #dc2626)'">
+              </fa-icon>
+              <span class="activity-picker-item__name">{{ 'cockpit.modify.selectDialog.incidentTypeFailedExternalTask' | translate }}</span>
+              <fa-icon [icon]="faCheck" class="activity-picker-item__check"
+                       *ngIf="pendingTextValue === 'failedExternalTask'"></fa-icon>
+            </button>
+          </div>
         </ng-template>
 
         <!-- Footer -->
@@ -1039,7 +1079,9 @@ export class SelectInstancesDialogComponent implements OnInit {
   faSync = faSync; faCircleDot = faCircleDot; faExclamationTriangle = faExclamationTriangle;
   faCalendarAlt = faCalendarAlt;
   faCode = faCode;
+  faGear = faGear;
   faCheck = faCheck;
+  faServer = faServer;
 
   private readonly ACTIVITY_ICON_MAP: Record<string, { icon: any; color: string }> = {
     'bpmn:StartEvent':                { icon: faPlay,                   color: 'var(--color-success)' },
@@ -1180,7 +1222,13 @@ export class SelectInstancesDialogComponent implements OnInit {
       case 'suspended':              return t('querySuspended');
       case 'withIncidents':          return t('queryWithIncidents');
       case 'incidentId':             return `${t('queryIncidentId')}: ${v}`;
-      case 'incidentType':           return `${t('queryIncidentType')}: ${v}`;
+      case 'incidentType': {
+        const typeLabel: Record<string, string> = {
+          failedJob: t('incidentTypeFailedJob'),
+          failedExternalTask: t('incidentTypeFailedExternalTask'),
+        };
+        return `${t('queryIncidentType')}: ${typeLabel[v] ?? v}`;
+      }
       case 'incidentMessageLike':    return `${t('queryIncidentMessageLike')}: ${v}`;
       case 'activityId':             return `${t('queryActivityId')}: ${v}`;
       case 'startedAfter':           return `${t('queryStartDate')}: ${this.formatDisplayDate(v)}`;
