@@ -21,6 +21,24 @@
 
   <dependencyManagement>
     <dependencies>
+      <!-- SECURITY override: Spring Boot ${version.spring-boot} manages httpclient5 5.6.1 /
+           httpcore5 5.4.2, which are below the fix for CVE-2026-64607. Declared BEFORE the
+           Spring Boot BOM import so that it wins over the imported management for transitives. -->
+      <dependency>
+        <groupId>org.apache.httpcomponents.client5</groupId>
+        <artifactId>httpclient5</artifactId>
+        <version>${version.httpclient5}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents.core5</groupId>
+        <artifactId>httpcore5</artifactId>
+        <version>${version.httpcore5}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.httpcomponents.core5</groupId>
+        <artifactId>httpcore5-h2</artifactId>
+        <version>${version.httpcore5}</version>
+      </dependency>
       <dependency>
         <!-- Import dependency management from Spring Boot -->
         <groupId>org.springframework.boot</groupId>
