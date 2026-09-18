@@ -1849,6 +1849,8 @@
   "cockpit.modify.selectDialog.queryActivityId": "Activity ID",
   "cockpit.modify.selectDialog.queryActivityIdPlaceholder": "e.g. UserTask_1",
   "cockpit.modify.selectDialog.queryStartDate": "Start Date",
+  "cockpit.modify.selectDialog.queryStartedAfter": "Started after",
+  "cockpit.modify.selectDialog.queryStartedBefore": "Started before",
   "cockpit.modify.selectDialog.querySearch": "Search",
   "cockpit.modify.selectDialog.queryMatchingInstances": "matching active instance(s)",
   "cockpit.modify.selectDialog.sectionIdentifiers": "Identifiers",

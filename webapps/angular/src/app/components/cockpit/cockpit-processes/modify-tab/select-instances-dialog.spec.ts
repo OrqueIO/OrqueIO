@@ -311,3 +311,45 @@ describe('SelectInstancesDialogComponent — instance ID link navigation', () =>
     expect(component.selectedIds.has('inst-abc-123')).toBe(false);
   });
 });
+
+
+
+describe('SelectInstancesDialogComponent — criteria dropdown completeness', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('Add criteria dropdown contains all 14 expected criteria', async () => {
+    const { component, fixture } = await createComponent();
+
+    component.toggleCriteriaDropdown(new MouseEvent('click'));
+    fixture.detectChanges();
+
+    const dropdownEl = fixture.debugElement.query(By.css('.criteria-dropdown'));
+    const buttons = dropdownEl.queryAll(By.css('.criteria-option'));
+    const labels = buttons.map(b => b.nativeElement.textContent.trim());
+
+    const expected = [
+      'cockpit.modify.selectDialog.queryInstanceIds',
+      'cockpit.modify.selectDialog.queryBusinessKey',
+      'cockpit.modify.selectDialog.querySuperProcessInstanceId',
+      'cockpit.modify.selectDialog.querySubProcessInstanceId',
+      'cockpit.modify.selectDialog.queryActive',
+      'cockpit.modify.selectDialog.querySuspended',
+      'cockpit.modify.selectDialog.queryWithJobsRetrying',
+      'cockpit.modify.selectDialog.queryWithIncidents',
+      'cockpit.modify.selectDialog.queryIncidentId',
+      'cockpit.modify.selectDialog.queryIncidentType',
+      'cockpit.modify.selectDialog.queryIncidentMessageLike',
+      'cockpit.modify.selectDialog.queryActivityId',
+      'cockpit.modify.selectDialog.queryStartedAfter',
+      'cockpit.modify.selectDialog.queryStartedBefore',
+    ];
+
+    expect(buttons.length, `Expected 14 criteria buttons but got ${buttons.length}. Labels: ${JSON.stringify(labels)}`).toBe(14);
+
+    for (const key of expected) {
+      const found = labels.some(l => l.includes(key));
+      expect(found, `Criterion "${key}" not found in dropdown. Present: ${JSON.stringify(labels)}`).toBe(true);
+    }
+  });
+});
+

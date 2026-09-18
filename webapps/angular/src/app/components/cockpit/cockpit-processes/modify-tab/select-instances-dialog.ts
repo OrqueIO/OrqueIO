@@ -33,7 +33,7 @@ type MoveField =
   | 'instanceId' | 'businessKey' | 'superProcessInstanceId' | 'subProcessInstanceId'
   | 'withJobsRetrying' | 'active' | 'suspended' | 'withIncidents'
   | 'incidentId' | 'incidentType' | 'incidentMessageLike' | 'activityId'
-  | 'startedAfter' | 'variable';
+  | 'startedAfter' | 'startedBefore';
 
 interface MovePill {
   field: MoveField;
@@ -42,7 +42,7 @@ interface MovePill {
 
 const BOOLEAN_FIELDS: MoveField[] = ['active', 'suspended', 'withJobsRetrying', 'withIncidents'];
 const CHIP_FIELDS: MoveField[] = ['instanceId'];
-const DATE_FIELDS: MoveField[] = ['startedAfter'];
+const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
 
 @Component({
   selector: 'app-select-instances-dialog',
@@ -123,18 +123,11 @@ const DATE_FIELDS: MoveField[] = ['startedAfter'];
                   <div class="editor-body" *ngSwitchCase="'startedAfter'">
                     <input type="date" [(ngModel)]="pendingDateValue" class="editor-date-input" />
                   </div>
+                  <div class="editor-body" *ngSwitchCase="'startedBefore'">
+                    <input type="date" [(ngModel)]="pendingDateValue" class="editor-date-input" />
+                  </div>
                   <div class="editor-body" *ngSwitchCase="'activityId'">
                     <ng-container *ngTemplateOutlet="activityPickerTpl"></ng-container>
-                  </div>
-                  <div class="editor-body" *ngSwitchCase="'variable'">
-                    <input type="text" [(ngModel)]="pendingVariableName"
-                           placeholder="{{ 'cockpit.modify.selectDialog.queryVariableNamePlaceholder' | translate }}"
-                           class="editor-text-input"
-                           autofocus />
-                    <input type="text" [(ngModel)]="pendingTextValue"
-                           placeholder="{{ 'cockpit.modify.selectDialog.queryVariableValuePlaceholder' | translate }}"
-                           class="editor-text-input editor-text-input--mt"
-                           (keyup.enter)="confirmEdit()" />
                   </div>
                   <div class="editor-body" *ngSwitchDefault>
                     <input type="text" [(ngModel)]="pendingTextValue"
@@ -289,24 +282,21 @@ const DATE_FIELDS: MoveField[] = ['startedAfter'];
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('startedAfter')"
                           (click)="selectCriterion('startedAfter', $event)" type="button" role="menuitem">
                     <span class="criteria-icon-wrap criteria-icon-wrap--teal"><fa-icon [icon]="faCalendarAlt"></fa-icon></span>
-                    <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryStartDate' | translate }}</span>
-                  </button>
-                </div>
-
-                <div class="criteria-separator"></div>
-
-                <!-- Variables -->
-                <div class="criteria-group">
-                  <div class="criteria-group-label">{{ 'cockpit.modify.selectDialog.sectionVariables' | translate }}</div>
-                  <button class="criteria-option" [class.criteria-option--active]="isPillActive('variable')"
-                          (click)="selectCriterion('variable', $event)" type="button" role="menuitem">
-                    <span class="criteria-icon-wrap criteria-icon-wrap--indigo"><fa-icon [icon]="faCode"></fa-icon></span>
                     <span class="criteria-option-body">
-                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryVariable' | translate }}</span>
-                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.variable' | translate }}</span>
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryStartedAfter' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.startedAfter' | translate }}</span>
+                    </span>
+                  </button>
+                  <button class="criteria-option" [class.criteria-option--active]="isPillActive('startedBefore')"
+                          (click)="selectCriterion('startedBefore', $event)" type="button" role="menuitem">
+                    <span class="criteria-icon-wrap criteria-icon-wrap--teal"><fa-icon [icon]="faCalendarAlt"></fa-icon></span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryStartedBefore' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.startedBefore' | translate }}</span>
                     </span>
                   </button>
                 </div>
+
               </div>
 
               <!-- New-pill editor anchored below "Add criteria" button -->
@@ -331,18 +321,11 @@ const DATE_FIELDS: MoveField[] = ['startedAfter'];
                   <div class="editor-body" *ngSwitchCase="'startedAfter'">
                     <input type="date" [(ngModel)]="pendingDateValue" class="editor-date-input" />
                   </div>
+                  <div class="editor-body" *ngSwitchCase="'startedBefore'">
+                    <input type="date" [(ngModel)]="pendingDateValue" class="editor-date-input" />
+                  </div>
                   <div class="editor-body" *ngSwitchCase="'activityId'">
                     <ng-container *ngTemplateOutlet="activityPickerTpl"></ng-container>
-                  </div>
-                  <div class="editor-body" *ngSwitchCase="'variable'">
-                    <input type="text" [(ngModel)]="pendingVariableName"
-                           placeholder="{{ 'cockpit.modify.selectDialog.queryVariableNamePlaceholder' | translate }}"
-                           class="editor-text-input"
-                           autofocus />
-                    <input type="text" [(ngModel)]="pendingTextValue"
-                           placeholder="{{ 'cockpit.modify.selectDialog.queryVariableValuePlaceholder' | translate }}"
-                           class="editor-text-input editor-text-input--mt"
-                           (keyup.enter)="confirmEdit()" />
                   </div>
                   <div class="editor-body" *ngSwitchDefault>
                     <input type="text" [(ngModel)]="pendingTextValue"
@@ -1124,7 +1107,6 @@ export class SelectInstancesDialogComponent implements OnInit {
   pendingTextValue = '';
   pendingChipValues: string[] = [];
   pendingDateValue = '';
-  pendingVariableName = '';
   hoveredId: string | null = null;
 
   get safeEditorType(): MoveField {
@@ -1203,8 +1185,8 @@ export class SelectInstancesDialogComponent implements OnInit {
       case 'incidentId':
       case 'incidentType':
       case 'incidentMessageLike':   return this.faExclamationTriangle;
-      case 'startedAfter':           return this.faCalendarAlt;
-      case 'variable':              return this.faCode;
+      case 'startedAfter':
+      case 'startedBefore':          return this.faCalendarAlt;
       default:                      return this.faFilter;
     }
   }
@@ -1231,8 +1213,8 @@ export class SelectInstancesDialogComponent implements OnInit {
       }
       case 'incidentMessageLike':    return `${t('queryIncidentMessageLike')}: ${v}`;
       case 'activityId':             return `${t('queryActivityId')}: ${v}`;
-      case 'startedAfter':           return `${t('queryStartDate')}: ${this.formatDisplayDate(v)}`;
-      case 'variable':               return `${pill.values[0] ?? ''} = ${pill.values[1] ?? ''}`;
+      case 'startedAfter':           return `${t('queryStartedAfter')}: ${this.formatDisplayDate(v)}`;
+      case 'startedBefore':          return `${t('queryStartedBefore')}: ${this.formatDisplayDate(v)}`;
       default:                       return pill.field;
     }
   }
@@ -1247,8 +1229,8 @@ export class SelectInstancesDialogComponent implements OnInit {
       incidentType: 'queryIncidentType',
       incidentMessageLike: 'queryIncidentMessageLike',
       activityId: 'queryActivityId',
-      startedAfter: 'queryStartDate',
-      variable: 'queryVariable',
+      startedAfter: 'queryStartedAfter',
+      startedBefore: 'queryStartedBefore',
     };
     const key = keyMap[field];
     return key
@@ -1262,7 +1244,6 @@ export class SelectInstancesDialogComponent implements OnInit {
       incidentId: 'queryIncidentIdPlaceholder',
       incidentType: 'queryIncidentTypePlaceholder',
       incidentMessageLike: 'queryIncidentMessageLikePlaceholder',
-      variable: 'queryVariableValuePlaceholder',
     };
     const key = keyMap[field];
     return key
@@ -1320,14 +1301,10 @@ export class SelectInstancesDialogComponent implements OnInit {
     this.pendingTextValue = '';
     this.pendingChipValues = [];
     this.pendingDateValue = '';
-    this.pendingVariableName = '';
     if (this.isChipField(pill.field)) {
       this.pendingChipValues = [...pill.values];
     } else if (this.isDateField(pill.field)) {
       this.pendingDateValue = pill.values[0] || '';
-    } else if (pill.field === 'variable') {
-      this.pendingVariableName = pill.values[0] || '';
-      this.pendingTextValue = pill.values[1] || '';
     } else {
       this.pendingTextValue = pill.values[0] || '';
     }
@@ -1342,10 +1319,6 @@ export class SelectInstancesDialogComponent implements OnInit {
       values = [...this.pendingChipValues];
     } else if (this.isDateField(field)) {
       values = this.pendingDateValue ? [this.pendingDateValue] : [];
-    } else if (field === 'variable') {
-      values = (this.pendingVariableName.trim() && this.pendingTextValue.trim())
-        ? [this.pendingVariableName.trim(), this.pendingTextValue.trim()]
-        : [];
     } else {
       values = this.pendingTextValue.trim() ? [this.pendingTextValue.trim()] : [];
     }
@@ -1372,7 +1345,6 @@ export class SelectInstancesDialogComponent implements OnInit {
     this.pendingTextValue = '';
     this.pendingChipValues = [];
     this.pendingDateValue = '';
-    this.pendingVariableName = '';
     this.cdr.markForCheck();
     this.search();
   }
@@ -1388,7 +1360,6 @@ export class SelectInstancesDialogComponent implements OnInit {
     this.pendingTextValue = '';
     this.pendingChipValues = [];
     this.pendingDateValue = '';
-    this.pendingVariableName = '';
     this.cdr.markForCheck();
   }
 
@@ -1493,16 +1464,28 @@ export class SelectInstancesDialogComponent implements OnInit {
         case 'activityId':
           if (pill.values.length) body['activeActivityIdIn'] = pill.values;
           break;
-        case 'variable':
-          if (pill.values[0] && pill.values[1] !== undefined) {
-            body['variables'] = [{ name: pill.values[0], operator: 'eq', value: pill.values[1] }];
+        case 'startedAfter':
+        case 'startedBefore': {
+          if (pill.values[0]) {
+            const dateStr = pill.values[0];
+            const endOfDay = pill.field === 'startedBefore';
+            const withTime = dateStr.length === 10 ? `${dateStr}${endOfDay ? 'T23:59:59' : 'T00:00:00'}` : dateStr;
+            const d = new Date(withTime);
+            if (!isNaN(d.getTime())) {
+              const offset = -d.getTimezoneOffset();
+              const sign = offset >= 0 ? '+' : '-';
+              const absOff = Math.abs(offset);
+              const hh = String(Math.floor(absOff / 60)).padStart(2, '0');
+              const mm = String(absOff % 60).padStart(2, '0');
+              const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}.000${sign}${hh}${mm}`;
+              body[pill.field] = iso;
+            }
           }
           break;
-        case 'startedAfter':
-          if (pill.values[0]) body['startedAfter'] = new Date(pill.values[0]).toISOString();
-          break;
+        }
       }
     }
+
     return body;
   }
 
