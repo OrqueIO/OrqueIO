@@ -153,7 +153,8 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
               </button>
 
               <!-- Criteria dropdown menu -->
-              <div class="criteria-dropdown" *ngIf="showCriteriaDropdown" role="menu">
+              <div class="criteria-dropdown" *ngIf="showCriteriaDropdown" role="menu"
+                   [style.max-height]="dropdownMaxHeight">
                 <div class="criteria-dropdown-header">
                   <fa-icon [icon]="faFilter" class="criteria-dropdown-header-icon"></fa-icon>
                   <span class="criteria-dropdown-header-title">{{ 'cockpit.modify.selectDialog.dropdownTitle' | translate }}</span>
@@ -538,6 +539,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       width: 92vw;
       max-width: 900px;
       max-height: 90vh;
+      overflow: visible;
       display: flex;
       flex-direction: column;
     }
@@ -671,7 +673,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
     /* ── Activity picker ────────────────────────────────────────────────── */
     .activity-picker { width: 100%; }
     .activity-picker-list {
-      max-height: 200px;
+      max-height: 280px;
       overflow-y: auto;
       border: 1px solid var(--border-color);
       border-radius: 6px;
@@ -779,7 +781,6 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
         0 2px 8px rgba(0, 0, 0, 0.08);
       min-width: 195px;
       max-width: 240px;
-      max-height: 340px;
       overflow-y: auto;
       overflow-x: hidden;
       animation: criteriaDropdownIn 180ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -980,7 +981,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
     .results-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
     .instance-count { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
     .instances-table-wrapper {
-      max-height: 280px;
+      max-height: 420px;
       overflow-y: auto;
       border: 1px solid var(--border-color);
       border-radius: 6px;
@@ -1232,10 +1233,22 @@ export class SelectInstancesDialogComponent implements OnInit {
       : '';
   }
 
+  dropdownMaxHeight = '340px';
+
   toggleCriteriaDropdown(event: Event): void {
     event.stopPropagation();
     if (this.activeEditorType !== null) this.cancelEdit();
     this.showCriteriaDropdown = !this.showCriteriaDropdown;
+    if (this.showCriteriaDropdown) {
+      const btn = event.currentTarget as HTMLElement;
+      const modal = btn.closest('.modal-container') as HTMLElement | null;
+      if (modal) {
+        const btnRect = btn.getBoundingClientRect();
+        const modalRect = modal.getBoundingClientRect();
+        const available = modalRect.bottom - btnRect.bottom - 6 - 8;
+        this.dropdownMaxHeight = Math.min(340, Math.max(80, available)) + 'px';
+      }
+    }
     this.cdr.markForCheck();
   }
 
