@@ -18,7 +18,7 @@ import {
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
-import { CockpitService, ProcessInstance, VariableLine } from '../../../../services/cockpit.service';
+import { CockpitService, ProcessInstance, VariableLine, parseVariableValue } from '../../../../services/cockpit.service';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 
@@ -35,6 +35,12 @@ interface PendingVariableLine {
   name: string;
   operator: VariableOperator;
   values: string[];
+}
+
+interface VariableConflictInfo {
+  name: string;
+  type: 'generic' | 'impossible';
+  detail: string;
 }
 
 type MoveField =
@@ -176,10 +182,37 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                             <fa-icon [icon]="faTimes"></fa-icon>
                           </button>
                         </div>
+                        <p class="variable-like-hint" *ngIf="line.operator === 'like'">
+                          {{ 'cockpit.processes.globalSearch.likeHint' | translate }}
+                        </p>
+                        <p class="variable-value-error" *ngIf="isComparisonValueInvalid(line)">
+                          {{ 'cockpit.processes.globalSearch.comparisonValueError' | translate }}
+                        </p>
                       </ng-container>
                     </div>
-                    <div *ngIf="hasInvalidVariableValues" class="var-value-error">
-                      {{ 'cockpit.processes.globalSearch.comparisonValueError' | translate }}
+                    <div *ngFor="let conflict of variableConflicts"
+                         class="variable-conflict-warning"
+                         [class.variable-conflict-warning--impossible]="conflict.type === 'impossible'">
+                      <fa-icon [icon]="faExclamationTriangle" class="variable-conflict-icon"></fa-icon>
+                      <span *ngIf="conflict.type === 'impossible'">
+                        <strong>{{ conflict.name }}</strong>
+                        {{ 'cockpit.processes.globalSearch.conflictImpossible' | translate }}: {{ conflict.detail }}
+                      </span>
+                      <span *ngIf="conflict.type === 'generic'">
+                        <strong>{{ conflict.name }}</strong>
+                        {{ 'cockpit.processes.globalSearch.conflictGeneric' | translate }}
+                      </span>
+                    </div>
+                    <div class="case-options" *ngIf="pendingVariableLines.length > 0">
+                      <span class="case-options-label">{{ 'cockpit.processes.globalSearch.ignoreCase.label' | translate }}</span>
+                      <label class="case-option">
+                        <input type="checkbox" [(ngModel)]="variableNamesIgnoreCase" />
+                        {{ 'cockpit.processes.globalSearch.ignoreCase.name' | translate }}
+                      </label>
+                      <label class="case-option">
+                        <input type="checkbox" [(ngModel)]="variableValuesIgnoreCase" />
+                        {{ 'cockpit.processes.globalSearch.ignoreCase.value' | translate }}
+                      </label>
                     </div>
                   </div>
                   <div class="editor-body" *ngSwitchDefault>
@@ -434,10 +467,37 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                             <fa-icon [icon]="faTimes"></fa-icon>
                           </button>
                         </div>
+                        <p class="variable-like-hint" *ngIf="line.operator === 'like'">
+                          {{ 'cockpit.processes.globalSearch.likeHint' | translate }}
+                        </p>
+                        <p class="variable-value-error" *ngIf="isComparisonValueInvalid(line)">
+                          {{ 'cockpit.processes.globalSearch.comparisonValueError' | translate }}
+                        </p>
                       </ng-container>
                     </div>
-                    <div *ngIf="hasInvalidVariableValues" class="var-value-error">
-                      {{ 'cockpit.processes.globalSearch.comparisonValueError' | translate }}
+                    <div *ngFor="let conflict of variableConflicts"
+                         class="variable-conflict-warning"
+                         [class.variable-conflict-warning--impossible]="conflict.type === 'impossible'">
+                      <fa-icon [icon]="faExclamationTriangle" class="variable-conflict-icon"></fa-icon>
+                      <span *ngIf="conflict.type === 'impossible'">
+                        <strong>{{ conflict.name }}</strong>
+                        {{ 'cockpit.processes.globalSearch.conflictImpossible' | translate }}: {{ conflict.detail }}
+                      </span>
+                      <span *ngIf="conflict.type === 'generic'">
+                        <strong>{{ conflict.name }}</strong>
+                        {{ 'cockpit.processes.globalSearch.conflictGeneric' | translate }}
+                      </span>
+                    </div>
+                    <div class="case-options" *ngIf="pendingVariableLines.length > 0">
+                      <span class="case-options-label">{{ 'cockpit.processes.globalSearch.ignoreCase.label' | translate }}</span>
+                      <label class="case-option">
+                        <input type="checkbox" [(ngModel)]="variableNamesIgnoreCase" />
+                        {{ 'cockpit.processes.globalSearch.ignoreCase.name' | translate }}
+                      </label>
+                      <label class="case-option">
+                        <input type="checkbox" [(ngModel)]="variableValuesIgnoreCase" />
+                        {{ 'cockpit.processes.globalSearch.ignoreCase.value' | translate }}
+                      </label>
                     </div>
                   </div>
                   <div class="editor-body" *ngSwitchDefault>
@@ -1172,7 +1232,9 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       padding: var(--space-2, 8px) var(--space-3, 12px);
       overflow: hidden;
     }
-    .variable-line + .variable-line { border-top: 0.5px solid var(--border-color); }
+    .variable-line + .variable-line,
+    .variable-like-hint + .variable-line,
+    .variable-value-error + .variable-line { border-top: 0.5px solid var(--border-color); }
     .editor-input {
       flex: 1; min-width: 0;
       padding: var(--space-2, 6px) var(--space-3, 10px);
@@ -1194,11 +1256,37 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       transition: background 0.15s, color 0.15s;
     }
     .btn-remove-line:hover { background: rgba(220,38,38,0.08); color: var(--color-error, #dc2626); }
-    .var-value-error {
-      margin: 0; padding: 2px var(--space-3, 12px) var(--space-2, 8px);
-      font-size: 0.68rem; color: var(--color-error, #dc2626);
-      background: var(--bg-card, #fff);
+    .variable-like-hint {
+      margin: 0; padding: var(--space-1, 4px) var(--space-3, 12px) var(--space-2, 8px);
+      font-size: 0.68rem; font-style: italic; color: var(--text-muted); text-align: center;
     }
+    .variable-value-error {
+      margin: 0; padding: 2px var(--space-3, 12px) var(--space-2, 8px) calc(var(--space-3, 12px) + 72px + var(--space-2, 8px));
+      font-size: 0.68rem; color: var(--color-error, #dc2626); background: var(--bg-card, #fff);
+    }
+    .variable-conflict-warning {
+      display: flex; align-items: flex-start; gap: var(--space-2, 6px);
+      padding: var(--space-2, 8px) var(--space-3, 12px);
+      border-top: 1px solid var(--color-warning-border, #f59e0b);
+      background: var(--color-warning-bg, rgba(245,158,11,0.08));
+      font-size: 0.72rem; color: var(--color-warning-text, #92400e); line-height: 1.4;
+    }
+    .variable-conflict-icon { flex-shrink: 0; margin-top: 1px; color: var(--color-warning, #f59e0b); }
+    .variable-conflict-warning--impossible {
+      border-top-color: var(--color-error-border, #ef4444);
+      background: var(--color-error-bg, rgba(239,68,68,0.08));
+      color: var(--color-error-text, #7f1d1d);
+    }
+    .variable-conflict-warning--impossible .variable-conflict-icon { color: var(--color-error, #ef4444); }
+    .case-options {
+      display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-4, 16px);
+      padding: var(--space-2, 8px) var(--space-3, 12px);
+      border-top: 1px solid var(--border-color);
+      font-size: var(--font-size-sm, 0.875rem); color: var(--text-secondary, #64748b);
+    }
+    .case-options-label { font-weight: var(--font-weight-medium, 500); }
+    .case-option { display: inline-flex; align-items: center; gap: var(--space-2, 8px); cursor: pointer; }
+    .case-option input[type="checkbox"] { cursor: pointer; }
     /* ── Operator dropdown ──────────────────────────────────────────────── */
     .op-dropdown-wrapper { position: relative; flex-shrink: 0; }
     .op-trigger {
@@ -1308,6 +1396,8 @@ export class SelectInstancesDialogComponent implements OnInit {
   pendingVariableLines: PendingVariableLine[] = [];
   openOperatorMenuIndex: number | null = null;
   opMenuPosition: { top: number; left: number; minWidth: number } | null = null;
+  variableNamesIgnoreCase = false;
+  variableValuesIgnoreCase = false;
   hoveredId: string | null = null;
 
   get safeEditorType(): MoveField {
@@ -1759,10 +1849,10 @@ export class SelectInstancesDialogComponent implements OnInit {
         }
         case 'variables': {
           if (pill.variableLines?.length) {
-            const conditions: Array<{ name: string; operator: string; value: string }> = [];
+            const conditions: Array<{ name: string; operator: string; value: any }> = [];
             for (const line of pill.variableLines) {
               for (const v of line.values) {
-                conditions.push({ name: line.variableName, operator: line.variableOperator, value: v });
+                conditions.push({ name: line.variableName, operator: line.variableOperator, value: parseVariableValue(v, line.variableOperator) });
               }
             }
             if (conditions.length > 0) body['variables'] = conditions;
@@ -1771,6 +1861,9 @@ export class SelectInstancesDialogComponent implements OnInit {
         }
       }
     }
+
+    if (this.variableNamesIgnoreCase) body['variableNamesIgnoreCase'] = true;
+    if (this.variableValuesIgnoreCase) body['variableValuesIgnoreCase'] = true;
 
     return body;
   }
@@ -1806,6 +1899,63 @@ export class SelectInstancesDialogComponent implements OnInit {
 
   get hasInvalidVariableValues(): boolean {
     return this.pendingVariableLines.some(l => this.isComparisonValueInvalid(l));
+  }
+
+  get variableConflicts(): VariableConflictInfo[] {
+    const nameLines = new Map<string, PendingVariableLine[]>();
+    for (const line of this.pendingVariableLines) {
+      const name = line.name.trim().toLowerCase();
+      if (!name) continue;
+      if (!nameLines.has(name)) nameLines.set(name, []);
+      nameLines.get(name)!.push(line);
+    }
+    const conflicts: VariableConflictInfo[] = [];
+    for (const [name, lines] of nameLines) {
+      const ops = new Set(lines.map(l => l.operator));
+      if (ops.size <= 1) continue;
+      const numericOps = new Set<VariableOperator>(['eq', 'neq', 'gt', 'gteq', 'lt', 'lteq']);
+      const allNumericOps = lines.every(l => numericOps.has(l.operator));
+      const allNumericValues = lines.every(l => {
+        if (l.values.length !== 1) return false;
+        const n = Number(l.values[0].trim());
+        return l.values[0].trim() !== '' && !isNaN(n);
+      });
+      if (allNumericOps && allNumericValues) {
+        const conditions = lines.map(l => ({ op: l.operator, val: Number(l.values[0].trim()) }));
+        if (!this.conditionsIntersect(conditions)) {
+          const detail = conditions.map(c => `${this.getOperatorLabel(c.op as VariableOperator)} ${c.val}`).join(' and ');
+          conflicts.push({ name, type: 'impossible', detail });
+        }
+      } else {
+        conflicts.push({ name, type: 'generic', detail: '' });
+      }
+    }
+    return conflicts;
+  }
+
+  private conditionsIntersect(conditions: Array<{ op: string; val: number }>): boolean {
+    let lo = -Infinity, hi = Infinity;
+    let loStrict = false, hiStrict = false;
+    const eqs: number[] = [], neqs: number[] = [];
+    for (const { op, val } of conditions) {
+      if (op === 'gt')        { if (val > lo || (val === lo && !loStrict)) { lo = val; loStrict = true; } }
+      else if (op === 'gteq') { if (val > lo) { lo = val; loStrict = false; } }
+      else if (op === 'lt')   { if (val < hi || (val === hi && !hiStrict)) { hi = val; hiStrict = true; } }
+      else if (op === 'lteq') { if (val < hi) { hi = val; hiStrict = false; } }
+      else if (op === 'eq')   { eqs.push(val); }
+      else if (op === 'neq')  { neqs.push(val); }
+    }
+    if (lo > hi) return false;
+    if (lo === hi && (loStrict || hiStrict)) return false;
+    if (eqs.length > 0) {
+      const firstEq = eqs[0];
+      if (eqs.some(v => v !== firstEq)) return false;
+      if (firstEq < lo || (firstEq === lo && loStrict)) return false;
+      if (firstEq > hi || (firstEq === hi && hiStrict)) return false;
+      if (neqs.includes(firstEq)) return false;
+    }
+    if (lo === hi && !loStrict && !hiStrict && neqs.includes(lo)) return false;
+    return true;
   }
 
   toggleOperatorMenu(index: number, trigger: HTMLElement): void {

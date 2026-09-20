@@ -394,7 +394,7 @@ describe('SelectInstancesDialogComponent — Variables criterion', () => {
     expect(component.getPillLabel(pill)).toContain('2');
   });
 
-  it('buildQueryBody maps each variableLine×value to a Camunda variables condition', async () => {
+  it('buildQueryBody maps each variableLine×value to a Camunda variables condition, applying parseVariableValue', async () => {
     const { component } = await createComponent();
     component.activePills = [
       { field: 'activityId', values: ['UserTask_1'] },
@@ -407,9 +407,10 @@ describe('SelectInstancesDialogComponent — Variables criterion', () => {
       } as any
     ];
     const body = component.buildQueryBody();
-    const vars = body['variables'] as Array<{ name: string; operator: string; value: string }>;
+    const vars = body['variables'] as Array<{ name: string; operator: string; value: any }>;
     expect(vars).toHaveLength(3);
-    expect(vars[0]).toEqual({ name: 'amount', operator: 'gt', value: '100' });
+    // parseVariableValue converts '100' → 100 (number), non-numeric strings stay as strings
+    expect(vars[0]).toEqual({ name: 'amount', operator: 'gt', value: 100 });
     expect(vars[1]).toEqual({ name: 'status', operator: 'eq', value: 'active' });
     expect(vars[2]).toEqual({ name: 'status', operator: 'eq', value: 'pending' });
   });
