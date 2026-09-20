@@ -13,12 +13,12 @@ import {
   faExclamationTriangle, faCalendarAlt,
   faPlay, faCircleStop, faUser, faGear, faCode, faTable,
   faPaperPlane, faInbox, faHand, faArrowUpRightFromSquare,
-  faLayerGroup, faXmark, faSquare, faCheck, faServer
+  faLayerGroup, faXmark, faSquare, faCheck, faServer, faChevronDown
 } from '@fortawesome/free-solid-svg-icons';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
-import { CockpitService, ProcessInstance } from '../../../../services/cockpit.service';
+import { CockpitService, ProcessInstance, VariableLine } from '../../../../services/cockpit.service';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 
@@ -29,15 +29,24 @@ export interface InstanceSelectionResult {
   count: number;
 }
 
+type VariableOperator = 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
+
+interface PendingVariableLine {
+  name: string;
+  operator: VariableOperator;
+  values: string[];
+}
+
 type MoveField =
   | 'instanceId' | 'businessKey' | 'superProcessInstanceId' | 'subProcessInstanceId'
   | 'withJobsRetrying' | 'active' | 'suspended' | 'withIncidents'
   | 'incidentId' | 'incidentType' | 'incidentMessageLike' | 'activityId'
-  | 'startedAfter' | 'startedBefore';
+  | 'startedAfter' | 'startedBefore' | 'variables';
 
 interface MovePill {
   field: MoveField;
   values: string[];
+  variableLines?: VariableLine[];
 }
 
 const BOOLEAN_FIELDS: MoveField[] = ['active', 'suspended', 'withJobsRetrying', 'withIncidents'];
@@ -103,6 +112,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
 
               <!-- Inline editor for existing pill -->
               <div class="criterion-editor-popover"
+                   [class.criterion-editor-popover--variables]="activeEditorType === 'variables'"
                    *ngIf="editingPillIndex === i"
                    (click)="$event.stopPropagation()">
                 <div class="editor-header">
@@ -128,6 +138,49 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   </div>
                   <div class="editor-body" *ngSwitchCase="'activityId'">
                     <ng-container *ngTemplateOutlet="activityPickerTpl"></ng-container>
+                  </div>
+                  <div class="editor-body editor-body--vars" *ngSwitchCase="'variables'">
+                    <div class="vars-header">
+                      <span class="vars-title">{{ 'cockpit.processes.filters.variable' | translate }}</span>
+                      <button class="btn-add-var-line" (click)="addVariableLine()" type="button">
+                        <fa-icon [icon]="faPlus"></fa-icon>
+                        {{ 'cockpit.processes.filters.addVariable' | translate }}
+                      </button>
+                    </div>
+                    <div class="variable-lines-list">
+                      <ng-container *ngFor="let line of pendingVariableLines; let i = index; trackBy: trackVariableLine">
+                        <div class="variable-line">
+                          <input type="text" class="editor-input editor-input--name" [(ngModel)]="line.name"
+                                 [placeholder]="'cockpit.processes.filters.variableName' | translate" />
+                          <div class="op-dropdown-wrapper">
+                            <button class="op-trigger" #opTriggerA
+                                    (click)="toggleOperatorMenu(i, opTriggerA)" type="button"
+                                    [class.op-trigger--open]="openOperatorMenuIndex === i">
+                              {{ getOperatorLabel(line.operator) }}
+                              <fa-icon [icon]="faChevronDown" class="op-trigger-caret"></fa-icon>
+                            </button>
+                          </div>
+                          <div class="editor-values-col">
+                            <app-multi-value-chip-input *ngIf="isMultiValueOperator(line.operator)"
+                              [values]="line.values" (valuesChange)="onVariableLineValuesChange(i, $event)"
+                              [placeholder]="'cockpit.processes.filters.variableValue' | translate">
+                            </app-multi-value-chip-input>
+                            <input *ngIf="!isMultiValueOperator(line.operator)" type="text"
+                                   class="editor-input editor-input--value-single"
+                                   [class.editor-input--error]="isComparisonValueInvalid(line)"
+                                   [value]="line.values.at(0) ?? ''"
+                                   (input)="onVariableLineSingleValueChange(i, $event)"
+                                   [placeholder]="'cockpit.processes.filters.variableValue' | translate" />
+                          </div>
+                          <button class="btn-remove-line" (click)="removeVariableLine(i)" type="button">
+                            <fa-icon [icon]="faTimes"></fa-icon>
+                          </button>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <div *ngIf="hasInvalidVariableValues" class="var-value-error">
+                      {{ 'cockpit.processes.globalSearch.comparisonValueError' | translate }}
+                    </div>
                   </div>
                   <div class="editor-body" *ngSwitchDefault>
                     <input type="text" [(ngModel)]="pendingTextValue"
@@ -298,10 +351,26 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   </button>
                 </div>
 
+                <div class="criteria-separator"></div>
+
+                <!-- Variables -->
+                <div class="criteria-group">
+                  <div class="criteria-group-label">{{ 'cockpit.processes.filters.variable' | translate }}</div>
+                  <button class="criteria-option" [class.criteria-option--active]="isPillActive('variables')"
+                          (click)="selectCriterion('variables', $event)" type="button" role="menuitem">
+                    <span class="criteria-icon-wrap criteria-icon-wrap--indigo"><fa-icon [icon]="faCode"></fa-icon></span>
+                    <span class="criteria-option-body">
+                      <span class="criteria-option-name">{{ 'cockpit.processes.filters.variable' | translate }}</span>
+                      <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.variables' | translate }}</span>
+                    </span>
+                  </button>
+                </div>
+
               </div>
 
               <!-- New-pill editor anchored below "Add criteria" button -->
               <div class="criterion-editor-popover"
+                   [class.criterion-editor-popover--variables]="activeEditorType === 'variables'"
                    *ngIf="safeEditorType && editingPillIndex === null"
                    (click)="$event.stopPropagation()">
                 <div class="editor-header">
@@ -327,6 +396,49 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   </div>
                   <div class="editor-body" *ngSwitchCase="'activityId'">
                     <ng-container *ngTemplateOutlet="activityPickerTpl"></ng-container>
+                  </div>
+                  <div class="editor-body editor-body--vars" *ngSwitchCase="'variables'">
+                    <div class="vars-header">
+                      <span class="vars-title">{{ 'cockpit.processes.filters.variable' | translate }}</span>
+                      <button class="btn-add-var-line" (click)="addVariableLine()" type="button">
+                        <fa-icon [icon]="faPlus"></fa-icon>
+                        {{ 'cockpit.processes.filters.addVariable' | translate }}
+                      </button>
+                    </div>
+                    <div class="variable-lines-list">
+                      <ng-container *ngFor="let line of pendingVariableLines; let i = index; trackBy: trackVariableLine">
+                        <div class="variable-line">
+                          <input type="text" class="editor-input editor-input--name" [(ngModel)]="line.name"
+                                 [placeholder]="'cockpit.processes.filters.variableName' | translate" />
+                          <div class="op-dropdown-wrapper">
+                            <button class="op-trigger" #opTriggerB
+                                    (click)="toggleOperatorMenu(i, opTriggerB)" type="button"
+                                    [class.op-trigger--open]="openOperatorMenuIndex === i">
+                              {{ getOperatorLabel(line.operator) }}
+                              <fa-icon [icon]="faChevronDown" class="op-trigger-caret"></fa-icon>
+                            </button>
+                          </div>
+                          <div class="editor-values-col">
+                            <app-multi-value-chip-input *ngIf="isMultiValueOperator(line.operator)"
+                              [values]="line.values" (valuesChange)="onVariableLineValuesChange(i, $event)"
+                              [placeholder]="'cockpit.processes.filters.variableValue' | translate">
+                            </app-multi-value-chip-input>
+                            <input *ngIf="!isMultiValueOperator(line.operator)" type="text"
+                                   class="editor-input editor-input--value-single"
+                                   [class.editor-input--error]="isComparisonValueInvalid(line)"
+                                   [value]="line.values.at(0) ?? ''"
+                                   (input)="onVariableLineSingleValueChange(i, $event)"
+                                   [placeholder]="'cockpit.processes.filters.variableValue' | translate" />
+                          </div>
+                          <button class="btn-remove-line" (click)="removeVariableLine(i)" type="button">
+                            <fa-icon [icon]="faTimes"></fa-icon>
+                          </button>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <div *ngIf="hasInvalidVariableValues" class="var-value-error">
+                      {{ 'cockpit.processes.globalSearch.comparisonValueError' | translate }}
+                    </div>
                   </div>
                   <div class="editor-body" *ngSwitchDefault>
                     <input type="text" [(ngModel)]="pendingTextValue"
@@ -518,6 +630,19 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
           </button>
         </div>
 
+      </div>
+
+      <!-- Floating operator-selector menu for variable criteria -->
+      <div class="op-menu" *ngIf="openOperatorMenuIndex !== null && opMenuPosition"
+           [style.top.px]="opMenuPosition!.top"
+           [style.left.px]="opMenuPosition!.left"
+           [style.min-width.px]="opMenuPosition!.minWidth">
+        <button *ngFor="let op of variableOperators" class="op-menu-row"
+                [class.op-menu-row--selected]="pendingVariableLines[openOperatorMenuIndex!]?.operator === op.value"
+                (click)="selectOperator(openOperatorMenuIndex!, op.value)" type="button">
+          <span class="op-menu-symbol">{{ op.label }}</span>
+          <span class="op-menu-name">{{ op.name }}</span>
+        </button>
       </div>
     </div>
   `,
@@ -1021,6 +1146,86 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       font-size: 0.9rem;
     }
     .query-count-badge { font-size: 1.15rem; font-weight: 700; color: var(--color-primary, #2563eb); }
+    /* ── Variables criterion editor ────────────────────────────────────── */
+    .criterion-editor-popover--variables { min-width: 420px; max-width: 480px; max-width: min(480px, calc(100vw - 20px)); padding: 0; }
+    .criterion-editor-popover--variables .editor-header { padding: 0.65rem 0.75rem 0; }
+    .criterion-editor-popover--variables .editor-actions { padding: 0 0.75rem 0.6rem; }
+    .editor-body--vars { margin-bottom: 0; }
+    .vars-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.35rem 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-base, #f9fafb);
+    }
+    .vars-title { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+    .btn-add-var-line {
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      padding: 2px 7px; border: 1px solid #6366f1; border-radius: 4px;
+      background: transparent; color: #6366f1; font-size: 0.73rem; cursor: pointer;
+    }
+    .btn-add-var-line:hover { background: rgba(99,102,241,0.08); }
+    .variable-lines-list { display: flex; flex-direction: column; max-height: 280px; overflow-y: auto; overflow-x: hidden; }
+    .variable-line {
+      display: flex; align-items: flex-start; gap: var(--space-2, 8px);
+      padding: var(--space-2, 8px) var(--space-3, 12px);
+      overflow: hidden;
+    }
+    .variable-line + .variable-line { border-top: 0.5px solid var(--border-color); }
+    .editor-input {
+      flex: 1; min-width: 0;
+      padding: var(--space-2, 6px) var(--space-3, 10px);
+      border: 1px solid var(--border-color); border-radius: var(--radius-md, 6px);
+      font-family: var(--font-family-base, inherit); font-size: var(--font-size-sm, 0.875rem);
+      color: var(--text-primary); background: var(--bg-card, #fff);
+      transition: border-color var(--transition-fast, 0.15s);
+    }
+    .editor-input:focus { outline: none; border-color: var(--color-primary, #2563eb); box-shadow: var(--shadow-focus, 0 0 0 3px rgba(37,99,235,0.15)); }
+    .editor-input--name { flex: 1.2; min-width: 0; max-width: none; }
+    .editor-values-col { flex: 1.6; min-width: 0; overflow: hidden; display: flex; flex-direction: column; gap: var(--space-2, 8px); }
+    .editor-input--value-single { width: 100%; min-width: 0; }
+    .editor-input--error { border-color: var(--color-error, #dc2626) !important; }
+    .editor-input--error:focus { box-shadow: 0 0 0 2px rgba(220,38,38,0.2); }
+    .btn-remove-line {
+      flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+      width: 22px; height: 22px; padding: 0; border: none; background: transparent;
+      color: var(--text-muted); cursor: pointer; border-radius: var(--radius-sm, 4px); font-size: 0.65rem;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-remove-line:hover { background: rgba(220,38,38,0.08); color: var(--color-error, #dc2626); }
+    .var-value-error {
+      margin: 0; padding: 2px var(--space-3, 12px) var(--space-2, 8px);
+      font-size: 0.68rem; color: var(--color-error, #dc2626);
+      background: var(--bg-card, #fff);
+    }
+    /* ── Operator dropdown ──────────────────────────────────────────────── */
+    .op-dropdown-wrapper { position: relative; flex-shrink: 0; }
+    .op-trigger {
+      display: inline-flex; align-items: center; gap: 4px; width: 72px;
+      padding: var(--space-1, 4px) var(--space-2, 8px);
+      border: 1px solid var(--border-color); border-radius: var(--radius-md, 6px);
+      background: var(--bg-card, #fff); color: var(--text-primary);
+      font-size: var(--font-size-sm, 0.875rem); font-family: var(--font-mono, monospace);
+      cursor: pointer; white-space: nowrap; transition: border-color 0.15s, background 0.15s;
+    }
+    .op-trigger:hover, .op-trigger--open { border-color: var(--color-primary, #2563eb); background: var(--color-gray-50, #f9fafb); }
+    .op-trigger-caret { font-size: 0.6rem; color: var(--text-muted); transition: transform 0.15s; }
+    .op-trigger--open .op-trigger-caret { transform: rotate(180deg); }
+    .op-menu {
+      position: fixed; z-index: 1100; min-width: 170px; background: var(--bg-card, #fff);
+      border: 1px solid var(--border-color); border-radius: var(--radius-md, 6px);
+      box-shadow: var(--shadow-md, 0 4px 12px rgba(0,0,0,0.12)); padding: var(--space-1, 4px);
+    }
+    .op-menu-row {
+      display: flex; align-items: center; gap: var(--space-3, 12px); width: 100%;
+      padding: 6px var(--space-3, 12px); border: none; border-radius: var(--radius-sm, 4px);
+      background: transparent; cursor: pointer; text-align: left; transition: background 0.12s;
+    }
+    .op-menu-row:hover, .op-menu-row--selected { background: var(--color-gray-50, #f9fafb); }
+    .op-menu-symbol { font-family: var(--font-mono, monospace); font-size: var(--font-size-sm, 0.875rem); font-weight: 600; color: var(--color-primary, #2563eb); width: 16px; text-align: center; flex-shrink: 0; }
+    .op-menu-name { flex: 1; font-size: var(--font-size-sm, 0.875rem); color: var(--text-secondary, #6b7280); }
+    .op-menu-row--selected .op-menu-name { color: var(--text-primary); }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -1047,6 +1252,17 @@ export class SelectInstancesDialogComponent implements OnInit {
   faGear = faGear;
   faCheck = faCheck;
   faServer = faServer;
+  faChevronDown = faChevronDown;
+
+  readonly variableOperators = [
+    { value: 'eq'   as VariableOperator, label: '=',  name: 'equals' },
+    { value: 'neq'  as VariableOperator, label: '≠',  name: 'not equals' },
+    { value: 'gt'   as VariableOperator, label: '>',  name: 'greater than' },
+    { value: 'gteq' as VariableOperator, label: '≥',  name: 'greater or equal' },
+    { value: 'lt'   as VariableOperator, label: '<',  name: 'less than' },
+    { value: 'lteq' as VariableOperator, label: '≤',  name: 'less or equal' },
+    { value: 'like' as VariableOperator, label: '~',  name: 'like' },
+  ];
 
   private readonly ACTIVITY_ICON_MAP: Record<string, { icon: any; color: string }> = {
     'bpmn:StartEvent':                { icon: faPlay,                   color: 'var(--color-success)' },
@@ -1089,6 +1305,9 @@ export class SelectInstancesDialogComponent implements OnInit {
   pendingTextValue = '';
   pendingChipValues: string[] = [];
   pendingDateValue = '';
+  pendingVariableLines: PendingVariableLine[] = [];
+  openOperatorMenuIndex: number | null = null;
+  opMenuPosition: { top: number; left: number; minWidth: number } | null = null;
   hoveredId: string | null = null;
 
   get safeEditorType(): MoveField {
@@ -1098,6 +1317,13 @@ export class SelectInstancesDialogComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
+    const inOpMenu = !!target.closest('.op-menu');
+    if (inOpMenu) return;
+    if (this.openOperatorMenuIndex !== null) {
+      this.openOperatorMenuIndex = null;
+      this.opMenuPosition = null;
+      this.cdr.markForCheck();
+    }
     const inDropdown = !!target.closest('.criteria-dropdown-wrapper');
     const inPill = !!target.closest('.pill-wrapper');
     if (!inDropdown && !inPill) {
@@ -1117,7 +1343,11 @@ export class SelectInstancesDialogComponent implements OnInit {
 
   @HostListener('document:keydown.escape')
   onEscape(): void {
-    if (this.activeEditorType !== null) {
+    if (this.openOperatorMenuIndex !== null) {
+      this.openOperatorMenuIndex = null;
+      this.opMenuPosition = null;
+      this.cdr.markForCheck();
+    } else if (this.activeEditorType !== null) {
       this.cancelEdit();
     } else if (this.showCriteriaDropdown) {
       this.showCriteriaDropdown = false;
@@ -1169,6 +1399,7 @@ export class SelectInstancesDialogComponent implements OnInit {
       case 'incidentMessageLike':   return this.faExclamationTriangle;
       case 'startedAfter':
       case 'startedBefore':          return this.faCalendarAlt;
+      case 'variables':              return this.faCode;
       default:                      return this.faFilter;
     }
   }
@@ -1197,11 +1428,18 @@ export class SelectInstancesDialogComponent implements OnInit {
       case 'activityId':             return `${t('queryActivityId')}: ${v}`;
       case 'startedAfter':           return `${t('queryStartedAfter')}: ${this.formatDisplayDate(v)}`;
       case 'startedBefore':          return `${t('queryStartedBefore')}: ${this.formatDisplayDate(v)}`;
+      case 'variables': {
+        const count = pill.variableLines?.length ?? 0;
+        return `${this.translateService.instant('cockpit.processes.globalSearch.pill.variables')} (${count})`;
+      }
       default:                       return pill.field;
     }
   }
 
   getFieldLabel(field: MoveField): string {
+    if (field === 'variables') {
+      return this.translateService.instant('cockpit.processes.filters.variable');
+    }
     const keyMap: Partial<Record<MoveField, string>> = {
       instanceId: 'queryInstanceIds',
       businessKey: 'queryBusinessKey',
@@ -1240,9 +1478,9 @@ export class SelectInstancesDialogComponent implements OnInit {
     if (this.activeEditorType !== null) this.cancelEdit();
     this.showCriteriaDropdown = !this.showCriteriaDropdown;
     if (this.showCriteriaDropdown) {
-      const btn = event.currentTarget as HTMLElement;
-      const modal = btn.closest('.modal-container') as HTMLElement | null;
-      if (modal) {
+      const btn = event.currentTarget as HTMLElement | null;
+      const modal = btn?.closest('.modal-container') as HTMLElement | null;
+      if (btn && modal) {
         const btnRect = btn.getBoundingClientRect();
         const modalRect = modal.getBoundingClientRect();
         const available = modalRect.bottom - btnRect.bottom - 6 - 8;
@@ -1295,6 +1533,17 @@ export class SelectInstancesDialogComponent implements OnInit {
     this.pendingTextValue = '';
     this.pendingChipValues = [];
     this.pendingDateValue = '';
+    this.pendingVariableLines = [];
+    if (pill.field === 'variables') {
+      this.pendingVariableLines = (pill.variableLines && pill.variableLines.length > 0)
+        ? pill.variableLines.map(l => ({
+            name: l.variableName,
+            operator: (l.variableOperator || 'eq') as VariableOperator,
+            values: [...l.values]
+          }))
+        : [{ name: '', operator: 'eq' as VariableOperator, values: [] }];
+      return;
+    }
     if (this.isChipField(pill.field)) {
       this.pendingChipValues = [...pill.values];
     } else if (this.isDateField(pill.field)) {
@@ -1307,6 +1556,34 @@ export class SelectInstancesDialogComponent implements OnInit {
   confirmEdit(): void {
     if (!this.activeEditorType) return;
     const field = this.activeEditorType;
+
+    if (field === 'variables') {
+      if (!this.hasInvalidVariableValues) {
+        const validLines: VariableLine[] = this.pendingVariableLines
+          .filter(l => l.name.trim() && l.values.length > 0)
+          .map(l => ({ variableName: l.name.trim(), variableOperator: l.operator, values: [...l.values] }));
+        if (validLines.length === 0) {
+          if (this.editingPillIndex !== null) {
+            this.activePills = this.activePills.filter((_, i) => i !== this.editingPillIndex);
+          }
+        } else {
+          const pill: MovePill = { field: 'variables', values: [], variableLines: validLines };
+          if (this.editingPillIndex !== null) {
+            this.activePills = this.activePills.map((p, i) => i === this.editingPillIndex ? pill : p);
+          } else {
+            this.activePills = [...this.activePills, pill];
+          }
+        }
+        this.activeEditorType = null;
+        this.editingPillIndex = null;
+        this.pendingVariableLines = [];
+        this.openOperatorMenuIndex = null;
+        this.opMenuPosition = null;
+        this.cdr.markForCheck();
+        this.search();
+      }
+      return;
+    }
 
     let values: string[];
     if (this.isChipField(field)) {
@@ -1354,6 +1631,9 @@ export class SelectInstancesDialogComponent implements OnInit {
     this.pendingTextValue = '';
     this.pendingChipValues = [];
     this.pendingDateValue = '';
+    this.pendingVariableLines = [];
+    this.openOperatorMenuIndex = null;
+    this.opMenuPosition = null;
     this.cdr.markForCheck();
   }
 
@@ -1477,10 +1757,97 @@ export class SelectInstancesDialogComponent implements OnInit {
           }
           break;
         }
+        case 'variables': {
+          if (pill.variableLines?.length) {
+            const conditions: Array<{ name: string; operator: string; value: string }> = [];
+            for (const line of pill.variableLines) {
+              for (const v of line.values) {
+                conditions.push({ name: line.variableName, operator: line.variableOperator, value: v });
+              }
+            }
+            if (conditions.length > 0) body['variables'] = conditions;
+          }
+          break;
+        }
       }
     }
 
     return body;
+  }
+
+  addVariableLine(): void {
+    this.pendingVariableLines = [...this.pendingVariableLines, { name: '', operator: 'eq', values: [] }];
+    this.cdr.markForCheck();
+  }
+
+  removeVariableLine(index: number): void {
+    this.pendingVariableLines = this.pendingVariableLines.filter((_, i) => i !== index);
+    this.cdr.markForCheck();
+  }
+
+  onVariableLineValuesChange(index: number, values: string[]): void {
+    this.pendingVariableLines[index].values = values;
+    this.cdr.markForCheck();
+  }
+
+  trackVariableLine(index: number): number {
+    return index;
+  }
+
+  isMultiValueOperator(op: VariableOperator): boolean {
+    return op === 'eq' || op === 'neq' || op === 'like';
+  }
+
+  isComparisonValueInvalid(line: PendingVariableLine): boolean {
+    if (this.isMultiValueOperator(line.operator)) return false;
+    if (line.values.length === 0 || line.values[0].trim() === '') return false;
+    return isNaN(Number(line.values[0].trim()));
+  }
+
+  get hasInvalidVariableValues(): boolean {
+    return this.pendingVariableLines.some(l => this.isComparisonValueInvalid(l));
+  }
+
+  toggleOperatorMenu(index: number, trigger: HTMLElement): void {
+    if (this.openOperatorMenuIndex === index) {
+      this.openOperatorMenuIndex = null;
+      this.opMenuPosition = null;
+      this.cdr.markForCheck();
+      return;
+    }
+    const rect = trigger.getBoundingClientRect();
+    const estimatedMenuHeight = 7 * 34 + 12;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const top = spaceBelow >= estimatedMenuHeight
+      ? rect.bottom + 4
+      : Math.max(4, rect.top - estimatedMenuHeight - 4);
+    this.opMenuPosition = { top, left: rect.left, minWidth: Math.max(rect.width, 170) };
+    this.openOperatorMenuIndex = index;
+    this.cdr.markForCheck();
+  }
+
+  selectOperator(index: number, op: VariableOperator): void {
+    const line = this.pendingVariableLines[index];
+    const wasMulti = this.isMultiValueOperator(line.operator);
+    const willBeMulti = this.isMultiValueOperator(op);
+    const values = (wasMulti && !willBeMulti && line.values.length > 1) ? [line.values[0]] : line.values;
+    this.pendingVariableLines[index] = { ...line, operator: op, values };
+    this.openOperatorMenuIndex = null;
+    this.opMenuPosition = null;
+    this.cdr.markForCheck();
+  }
+
+  onVariableLineSingleValueChange(index: number, event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.pendingVariableLines[index].values = value.trim() ? [value] : [];
+    this.cdr.markForCheck();
+  }
+
+  getOperatorLabel(op: VariableOperator): string {
+    const ops: Record<VariableOperator, string> = {
+      eq: '=', neq: '≠', gt: '>', gteq: '≥', lt: '<', lteq: '≤', like: '~'
+    };
+    return ops[op] ?? op;
   }
 
   search(): void {

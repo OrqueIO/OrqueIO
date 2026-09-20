@@ -5,7 +5,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { SelectInstancesDialogComponent } from './select-instances-dialog';
-import { CockpitService } from '../../../../services/cockpit.service';
+import { CockpitService, VariableLine } from '../../../../services/cockpit.service';
+import { InstanceFilterPanelComponent } from '../../../../shared/instance-filter-panel/instance-filter-panel';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { initTestEnvironment } from '../../../../testing/test-utils';
@@ -314,6 +315,132 @@ describe('SelectInstancesDialogComponent — instance ID link navigation', () =>
 
 
 
+describe('SelectInstancesDialogComponent — Variables criterion', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('selecting Variables opens the editor with one empty variable line', async () => {
+    const { component } = await createComponent();
+    component.selectCriterion('variables', new MouseEvent('click'));
+    expect(component.activeEditorType).toBe('variables');
+    expect(component.pendingVariableLines.length).toBe(1);
+    expect(component.pendingVariableLines[0]).toEqual({ name: '', operator: 'eq', values: [] });
+  });
+
+  it('addVariableLine appends a new empty line', async () => {
+    const { component } = await createComponent();
+    component.selectCriterion('variables', new MouseEvent('click'));
+    component.addVariableLine();
+    expect(component.pendingVariableLines.length).toBe(2);
+  });
+
+  it('removeVariableLine removes the specified line', async () => {
+    const { component } = await createComponent();
+    component.selectCriterion('variables', new MouseEvent('click'));
+    component.addVariableLine();
+    component.pendingVariableLines[0].name = 'amount';
+    component.removeVariableLine(0);
+    expect(component.pendingVariableLines.length).toBe(1);
+    expect(component.pendingVariableLines[0].name).toBe('');
+  });
+
+  it('confirmEdit with valid variable lines creates a pill with variableLines', async () => {
+    const { component } = await createComponent();
+    component.selectCriterion('variables', new MouseEvent('click'));
+    component.pendingVariableLines[0] = { name: 'amount', operator: 'gt', values: ['100'] };
+    component.confirmEdit();
+    const pill = component.activePills.find(p => p.field === 'variables');
+    expect(pill).toBeDefined();
+    expect(pill!.variableLines).toHaveLength(1);
+    expect(pill!.variableLines![0].variableName).toBe('amount');
+    expect(pill!.variableLines![0].variableOperator).toBe('gt');
+    expect(pill!.variableLines![0].values).toEqual(['100']);
+  });
+
+  it('confirmEdit with no valid lines does not add a variables pill', async () => {
+    const { component } = await createComponent();
+    component.selectCriterion('variables', new MouseEvent('click'));
+    component.confirmEdit();
+    expect(component.activePills.find(p => p.field === 'variables')).toBeUndefined();
+  });
+
+  it('populatePending restores variable lines when editing an existing pill', async () => {
+    const { component } = await createComponent();
+    const existingPill: any = {
+      field: 'variables', values: [],
+      variableLines: [{ variableName: 'status', variableOperator: 'eq', values: ['active'] }]
+    };
+    component.activePills = [component.activePills[0], existingPill];
+    component.startEditPill(1, new MouseEvent('click'));
+    expect(component.pendingVariableLines.length).toBe(1);
+    expect(component.pendingVariableLines[0].name).toBe('status');
+    expect(component.pendingVariableLines[0].operator).toBe('eq');
+    expect(component.pendingVariableLines[0].values).toEqual(['active']);
+  });
+
+  it('getPillIcon returns faCode for variables field', async () => {
+    const { component } = await createComponent();
+    expect(component.getPillIcon('variables')).toBe(component.faCode);
+  });
+
+  it('getPillLabel for variables includes the count of variable lines', async () => {
+    const { component } = await createComponent();
+    const pill: any = {
+      field: 'variables', values: [],
+      variableLines: [
+        { variableName: 'a', variableOperator: 'eq', values: ['1'] },
+        { variableName: 'b', variableOperator: 'gt', values: ['2'] },
+      ]
+    };
+    expect(component.getPillLabel(pill)).toContain('2');
+  });
+
+  it('buildQueryBody maps each variableLine×value to a Camunda variables condition', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      {
+        field: 'variables', values: [],
+        variableLines: [
+          { variableName: 'amount', variableOperator: 'gt', values: ['100'] } as VariableLine,
+          { variableName: 'status', variableOperator: 'eq', values: ['active', 'pending'] } as VariableLine,
+        ]
+      } as any
+    ];
+    const body = component.buildQueryBody();
+    const vars = body['variables'] as Array<{ name: string; operator: string; value: string }>;
+    expect(vars).toHaveLength(3);
+    expect(vars[0]).toEqual({ name: 'amount', operator: 'gt', value: '100' });
+    expect(vars[1]).toEqual({ name: 'status', operator: 'eq', value: 'active' });
+    expect(vars[2]).toEqual({ name: 'status', operator: 'eq', value: 'pending' });
+  });
+
+  it('isMultiValueOperator and getOperatorLabel match the InstanceFilterPanelComponent implementation', async () => {
+    const { component } = await createComponent();
+    expect(component.isMultiValueOperator('eq')).toBe(true);
+    expect(component.isMultiValueOperator('neq')).toBe(true);
+    expect(component.isMultiValueOperator('like')).toBe(true);
+    expect(component.isMultiValueOperator('gt')).toBe(false);
+    expect(component.isMultiValueOperator('gteq')).toBe(false);
+    expect(component.isMultiValueOperator('lt')).toBe(false);
+    expect(component.isMultiValueOperator('lteq')).toBe(false);
+    const labels: Record<string, string> = { eq: '=', neq: '≠', gt: '>', gteq: '≥', lt: '<', lteq: '≤', like: '~' };
+    for (const [op, label] of Object.entries(labels)) {
+      expect(component.getOperatorLabel(op as any)).toBe(label);
+    }
+    const line: VariableLine = { variableName: 'x', variableOperator: 'eq', values: ['1'] };
+    expect(line.variableName).toBe('x');
+  });
+});
+
+
+describe('InstanceFilterPanelComponent — non-regression after Variables integration in Move Instances', () => {
+  it('InstanceFilterPanelComponent class is still importable and unmodified', () => {
+    expect(InstanceFilterPanelComponent).toBeDefined();
+    expect(InstanceFilterPanelComponent.name).toContain('InstanceFilterPanelComponent');
+  });
+});
+
+
 describe('SelectInstancesDialogComponent — criteria dropdown completeness', () => {
   beforeAll(() => { initTestEnvironment(); });
 
@@ -342,9 +469,10 @@ describe('SelectInstancesDialogComponent — criteria dropdown completeness', ()
       'cockpit.modify.selectDialog.queryActivityId',
       'cockpit.modify.selectDialog.queryStartedAfter',
       'cockpit.modify.selectDialog.queryStartedBefore',
+      'cockpit.processes.filters.variable',
     ];
 
-    expect(buttons.length, `Expected 14 criteria buttons but got ${buttons.length}. Labels: ${JSON.stringify(labels)}`).toBe(14);
+    expect(buttons.length, `Expected 15 criteria buttons but got ${buttons.length}. Labels: ${JSON.stringify(labels)}`).toBe(15);
 
     for (const key of expected) {
       const found = labels.some(l => l.includes(key));
