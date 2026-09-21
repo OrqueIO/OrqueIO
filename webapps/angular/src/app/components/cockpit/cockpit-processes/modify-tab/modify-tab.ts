@@ -47,6 +47,8 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
   @Input() processDefinitionId: string | null = null;
   @Input() bpmnXml: string | null = null;
 
+  bpmnActivities: BpmnElement[] = [];
+
   @Output() overlaysChanged = new EventEmitter<ModifyOverlay[]>();
   @Output() refreshRequested = new EventEmitter<void>();
 
@@ -73,6 +75,7 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
   showSelectDialog = false;
   showConfirmDialog = false;
   selectedInstanceIds: string[] = [];
+  selectedQuery: Record<string, unknown> | null = null;
   selectionCount = 0;
   selectionIsQuery = false;
 
@@ -93,6 +96,9 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['processDefinitionId']) {
       this.reset();
+    }
+    if (changes['bpmnXml'] && this.bpmnXml) {
+      this.bpmnActivities = this.parseBpmnActivities(this.bpmnXml);
     }
   }
 
@@ -182,6 +188,7 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
     this.sourceActivity = null;
     this.targetActivity = null;
     this.selectedInstanceIds = [];
+    this.selectedQuery = null;
     this.selectionCount = 0;
     this.selectionIsQuery = false;
     this.selectionMode = 'source';
@@ -199,9 +206,22 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
   onInstancesSelected(result: InstanceSelectionResult): void {
     this.selectionIsQuery = result.mode === 'query';
     this.selectedInstanceIds = result.instanceIds;
+    this.selectedQuery = result.query;
     this.selectionCount = result.count;
     this.showSelectDialog = false;
     this.showConfirmDialog = true;
+    this.cdr.markForCheck();
+  }
+
+  onActivityIdCriterionChange(id: string | null): void {
+    if (id === null) {
+      this.sourceActivity = null;
+    } else if (this.sourceActivity) {
+      this.sourceActivity = { ...this.sourceActivity, id };
+    } else {
+      this.sourceActivity = { id, type: 'bpmn:FlowNode' };
+    }
+    this.emitOverlays();
     this.cdr.markForCheck();
   }
 
@@ -239,7 +259,11 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
       annotation: options.annotation || undefined
     };
 
-    dto.processInstanceIds = this.selectedInstanceIds;
+    if (this.selectionIsQuery && this.selectedQuery) {
+      dto.processInstanceQuery = this.selectedQuery;
+    } else {
+      dto.processInstanceIds = this.selectedInstanceIds;
+    }
 
     this.step = 'submitting';
     this.cdr.markForCheck();
@@ -337,6 +361,46 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
     this.eventSubprocessWarning = false;
     this.multiInstanceWarning = false;
     this.emitOverlays();
+  }
+
+  private parseBpmnActivities(xml: string): BpmnElement[] {
+    // Allowlist: only selectable BPMN flow node types.
+    // We restrict to descendants of <process> to skip the entire bpmndi:BPMNDiagram
+    // section (which contains _di shape/edge elements that also carry id attributes).
+    const FLOW_NODE_TYPES = new Set([
+      'task', 'userTask', 'serviceTask', 'manualTask', 'businessRuleTask',
+      'scriptTask', 'sendTask', 'receiveTask', 'callActivity',
+      'subProcess', 'transaction', 'adHocSubProcess',
+      'startEvent', 'endEvent',
+      'intermediateThrowEvent', 'intermediateCatchEvent', 'boundaryEvent',
+      'exclusiveGateway', 'inclusiveGateway', 'parallelGateway',
+      'eventBasedGateway', 'complexGateway'
+    ]);
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xml, 'text/xml');
+      const result: BpmnElement[] = [];
+      const processElements = Array.from(doc.getElementsByTagName('*'))
+        .filter(el => el.localName === 'process');
+      for (const processEl of processElements) {
+        const walker = doc.createTreeWalker(processEl, NodeFilter.SHOW_ELEMENT);
+        let node: Node | null = walker.nextNode();
+        while (node) {
+          const el = node as Element;
+          if (FLOW_NODE_TYPES.has(el.localName)) {
+            const id = el.getAttribute('id');
+            if (id) {
+              const pascal = el.localName.charAt(0).toUpperCase() + el.localName.slice(1);
+              result.push({ id, type: `bpmn:${pascal}`, name: el.getAttribute('name') || undefined });
+            }
+          }
+          node = walker.nextNode();
+        }
+      }
+      return result;
+    } catch {
+      return [];
+    }
   }
 
   private emitOverlays(): void {

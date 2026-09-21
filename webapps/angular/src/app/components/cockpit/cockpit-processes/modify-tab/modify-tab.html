@@ -162,6 +162,9 @@
   *ngIf="showSelectDialog"
   [processDefinitionId]="processDefinitionId!"
   [sourceActivityId]="sourceActivity?.id || null"
+  [availableActivities]="bpmnActivities"
+  [targetActivityId]="targetActivity?.id || null"
+  (activityIdCriterionChange)="onActivityIdCriterionChange($event)"
   (cancelled)="onSelectDialogCancelled()"
   (confirmed)="onInstancesSelected($event)"
 ></app-select-instances-dialog>
