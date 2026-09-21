@@ -666,7 +666,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         base['dueDate'] = formatDueDateForApi(this.retriesDueDate);
       }
       if (this.mode === 'instances') {
-        return JSON.stringify({ ...base, jobQuery: { processInstanceIds: [...this.selectedIds] } }, null, 2);
+        return JSON.stringify({ ...base, processInstances: [...this.selectedIds] }, null, 2);
       }
       return JSON.stringify({ ...base, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() }, null, 2);
     }
@@ -715,9 +715,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       return `POST ${environment.engineUrl}/default/process-instance/variables-async`;
     }
     if (this.selectedOperationId === 'set-retries-jobs') {
-      return this.mode === 'instances'
-        ? `POST ${environment.engineUrl}/default/job/retries`
-        : `POST ${environment.engineUrl}/default/process-instance/job-retries-historic-query-based`;
+      return `POST ${environment.engineUrl}/default/process-instance/job-retries-historic-query-based`;
     }
     if (this.selectedOperationId === 'set-retries-external') {
       return `POST ${environment.engineUrl}/default/external-task/retries-async`;
