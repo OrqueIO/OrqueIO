@@ -553,17 +553,15 @@ export class ProcessInstanceService {
     processInstances?: string[];
     historicProcessInstanceQuery?: Record<string, unknown>;
   }): Observable<{ id: string }> {
-    if (payload.historicProcessInstanceQuery) {
-      const body: Record<string, unknown> = { retries: payload.retries, historicProcessInstanceQuery: payload.historicProcessInstanceQuery };
-      if (payload.dueDate) body['dueDate'] = payload.dueDate;
-      return this.http.post<{ id: string }>(`${this.baseUrl}/process-instance/job-retries-historic-query-based`, body);
-    }
     const body: Record<string, unknown> = { retries: payload.retries };
     if (payload.dueDate) body['dueDate'] = payload.dueDate;
     if (payload.processInstances?.length) {
-      body['jobQuery'] = { processInstanceIds: payload.processInstances };
+      body['processInstances'] = payload.processInstances;
     }
-    return this.http.post<{ id: string }>(`${this.baseUrl}/job/retries`, body);
+    if (payload.historicProcessInstanceQuery) {
+      body['historicProcessInstanceQuery'] = payload.historicProcessInstanceQuery;
+    }
+    return this.http.post<{ id: string }>(`${this.baseUrl}/process-instance/job-retries-historic-query-based`, body);
   }
 
   setExternalTaskRetriesAsync(payload: {
@@ -877,4 +875,5 @@ export class ProcessInstanceService {
       catchError(() => of(null))
     );
   }
+
 }

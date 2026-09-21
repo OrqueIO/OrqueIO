@@ -390,6 +390,40 @@ describe('ProcessInstanceService', () => {
     });
   });
 
+  describe('setJobRetriesAsync', () => {
+    const historicUrl = `${baseUrl}/process-instance/job-retries-historic-query-based`;
+
+    it('uses the process-based endpoint for instances mode with processInstances in body', () => {
+      service.setJobRetriesAsync({ retries: 3, processInstances: ['pi-1', 'pi-2'] }).subscribe();
+
+      const req = httpMock.expectOne(historicUrl);
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body['retries']).toBe(3);
+      expect(req.request.body['processInstances']).toEqual(['pi-1', 'pi-2']);
+      expect(req.request.body['jobQuery']).toBeUndefined();
+      req.flush({ id: 'batch-1' });
+    });
+
+    it('uses the process-based endpoint for query mode with historicProcessInstanceQuery in body', () => {
+      const query = { unfinished: true, processDefinitionKeyIn: ['myProcess'] };
+      service.setJobRetriesAsync({ retries: 2, historicProcessInstanceQuery: query }).subscribe();
+
+      const req = httpMock.expectOne(historicUrl);
+      expect(req.request.body['retries']).toBe(2);
+      expect(req.request.body['historicProcessInstanceQuery']).toEqual(query);
+      expect(req.request.body['processInstances']).toBeUndefined();
+      req.flush({ id: 'batch-2' });
+    });
+
+    it('includes dueDate in body when provided', () => {
+      service.setJobRetriesAsync({ retries: 1, processInstances: ['pi-1'], dueDate: '2026-01-01T00:00:00.000Z' }).subscribe();
+
+      const req = httpMock.expectOne(historicUrl);
+      expect(req.request.body['dueDate']).toBe('2026-01-01T00:00:00.000Z');
+      req.flush({ id: 'batch-3' });
+    });
+  });
+
   // =============================================
   // External Tasks
   // =============================================
