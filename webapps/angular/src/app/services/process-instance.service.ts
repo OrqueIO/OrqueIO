@@ -362,6 +362,17 @@ export class ProcessInstanceService {
     );
   }
 
+  loadDistinctVariableSuggestions(instanceIds: string[]): Observable<{ name: string; type: string; value: any; valuesConflict: boolean }[]> {
+    const params: Record<string, string> = { maxResults: '500' };
+    if (instanceIds.length) {
+      params['processInstanceIdIn'] = instanceIds.join(',');
+    }
+    return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, { params }).pipe(
+      map(vars => this.deduplicateVariables(vars)),
+      catchError(() => of([]))
+    );
+  }
+
   private deduplicateVariables(vars: Variable[]): { name: string; type: string; value: any; valuesConflict: boolean }[] {
     const perInstance = new Map<string, Variable>();
     for (const v of vars) {

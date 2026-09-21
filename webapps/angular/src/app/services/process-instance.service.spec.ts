@@ -591,4 +591,66 @@ describe('ProcessInstanceService', () => {
       req.flush(subInstances);
     });
   });
+
+  describe('loadDistinctVariableSuggestions', () => {
+    const makeVar = (name: string, type: string, value: any, processInstanceId: string, executionId?: string): Variable => ({
+      name, type, value, processInstanceId, executionId: executionId ?? processInstanceId
+    });
+
+    it('calls the standard variable-instance endpoint with maxResults=500 and deduplicates', () => {
+      const rawVars: Variable[] = [
+        makeVar('amount', 'Integer', 100, 'pi-1'),
+        makeVar('amount', 'Integer', 200, 'pi-2'),
+        makeVar('status', 'String', 'active', 'pi-1'),
+      ];
+      let result: any[] = [];
+      service.loadDistinctVariableSuggestions([]).subscribe(r => { result = r; });
+
+      const req = httpMock.expectOne(
+        (r) => r.url === `${historyUrl}/variable-instance` && r.params.get('maxResults') === '500'
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(rawVars);
+
+      expect(result.length).toBe(2);
+      const amount = result.find((r: any) => r.name === 'amount');
+      const status = result.find((r: any) => r.name === 'status');
+      expect(amount?.valuesConflict).toBe(true);
+      expect(status?.valuesConflict).toBe(false);
+    });
+
+    it('passes processInstanceIdIn when instance IDs are provided', () => {
+      service.loadDistinctVariableSuggestions(['inst1', 'inst2']).subscribe();
+
+      const req = httpMock.expectOne(
+        (r) => r.url === `${historyUrl}/variable-instance`
+      );
+      expect(req.request.params.get('processInstanceIdIn')).toBe('inst1,inst2');
+      expect(req.request.params.get('maxResults')).toBe('500');
+      req.flush([]);
+    });
+
+    it('does not send processInstanceIdIn when IDs array is empty (global search)', () => {
+      service.loadDistinctVariableSuggestions([]).subscribe();
+
+      const req = httpMock.expectOne(
+        (r) => r.url === `${historyUrl}/variable-instance`
+      );
+      expect(req.request.params.has('processInstanceIdIn')).toBe(false);
+      expect(req.request.params.get('maxResults')).toBe('500');
+      req.flush([]);
+    });
+
+    it('returns empty array on error', () => {
+      let result: any[] = [{ sentinel: true }];
+      service.loadDistinctVariableSuggestions([]).subscribe(r => { result = r; });
+
+      const req = httpMock.expectOne(
+        (r) => r.url === `${historyUrl}/variable-instance`
+      );
+      req.error(new ProgressEvent('Network error'));
+
+      expect(result).toEqual([]);
+    });
+  });
 });
