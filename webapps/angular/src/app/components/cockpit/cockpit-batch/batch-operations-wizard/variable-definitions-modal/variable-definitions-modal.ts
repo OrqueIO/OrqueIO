@@ -1,5 +1,5 @@
 import {
-  Component, Input, Output, EventEmitter, OnInit, OnDestroy,
+  Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges,
   ChangeDetectionStrategy, ChangeDetectorRef, inject, HostListener,
   ViewChild, ElementRef
 } from '@angular/core';
@@ -33,7 +33,7 @@ const INTEGER_RE = /^-?\d+$/;
   styleUrls: ['./variable-definitions-modal.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
+export class VariableDefinitionsModalComponent implements OnInit, OnDestroy, OnChanges {
   private cdr = inject(ChangeDetectorRef);
   private processInstanceService = inject(ProcessInstanceService);
 
@@ -48,9 +48,8 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
   rows: VariableDef[] = [];
   rowValueConflicts: boolean[] = [];
 
-  suggestions: VarSuggestion[] = [];
-  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
-  private pendingSearch: { unsubscribe: () => void } | null = null;
+  allSuggestions: VarSuggestion[] = [];
+  private scopeLoad: { unsubscribe: () => void } | null = null;
   activeSuggestionRow: number | null = null;
   keyboardHighlightIndex: number | null = null;
   dropdownStyle: { top: string; left: string; width: string } = { top: '0', left: '0', width: '0' };
@@ -60,6 +59,32 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
       ? this.initialVariables.map(v => ({ ...v }))
       : [{ name: '', type: 'String', value: '' }];
     this.rowValueConflicts = this.rows.map(() => false);
+    this.loadScope();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const idsChange = changes['targetInstanceIds'];
+    const filterChange = changes['queryFilter'];
+
+    const idsContentChanged = idsChange !== undefined
+      && !idsChange.isFirstChange()
+      && !this.sameIds(idsChange.previousValue, idsChange.currentValue);
+
+    const filterContentChanged = filterChange !== undefined
+      && !filterChange.isFirstChange()
+      && JSON.stringify(filterChange.previousValue) !== JSON.stringify(filterChange.currentValue);
+
+    if (idsContentChanged || filterContentChanged) {
+      this.allSuggestions = [];
+      this.loadScope();
+    }
+  }
+
+  private sameIds(a: string[] | null, b: string[] | null): boolean {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+    return [...a].sort().join('\0') === [...b].sort().join('\0');
   }
 
   isIntegerType(type: string): boolean {
@@ -199,9 +224,9 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
   }
 
   getFilteredSuggestions(nameValue: string): VarSuggestion[] {
-    if (!nameValue) return this.suggestions;
+    if (!nameValue) return this.allSuggestions;
     const q = nameValue.toLowerCase();
-    return this.suggestions.filter(s => s.name.toLowerCase().includes(q));
+    return this.allSuggestions.filter(s => s.name.toLowerCase().includes(q));
   }
 
   getHighlightParts(name: string, query: string): { text: string; bold: boolean }[] {
@@ -226,37 +251,18 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
     }
     this.activeSuggestionRow = index;
     this.keyboardHighlightIndex = null;
-    const currentQuery = this.rows[index]?.name ?? '';
-    if (currentQuery.trim()) {
-      this.searchNow(index, currentQuery);
-    } else {
-      this.cancelPendingSearch();
-      this.suggestions = [];
-    }
     this.cdr.markForCheck();
   }
 
   onNameBlur(): void {
-    this.cancelPendingSearch();
     this.activeSuggestionRow = null;
     this.keyboardHighlightIndex = null;
-    this.suggestions = [];
     this.cdr.markForCheck();
   }
 
   onNameInput(index: number, query: string): void {
     this.activeSuggestionRow = index;
     this.keyboardHighlightIndex = null;
-    this.cancelPendingSearch();
-    if (!query.trim()) {
-      this.suggestions = [];
-      this.cdr.markForCheck();
-      return;
-    }
-    this.debounceTimer = setTimeout(() => {
-      this.debounceTimer = null;
-      this.searchNow(index, query);
-    }, 250);
     this.cdr.markForCheck();
   }
 
@@ -308,7 +314,6 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
           event.stopPropagation();
           this.activeSuggestionRow = null;
           this.keyboardHighlightIndex = null;
-          this.suggestions = [];
           this.cdr.markForCheck();
         }
         return;
@@ -317,73 +322,62 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.cancelPendingSearch();
+    this.cancelScopeLoad();
   }
 
-  private searchNow(index: number, query: string): void {
-    // null = mode Query (global search); [] = mode Instances, no selection → block
+  private loadScope(): void {
     if (this.targetInstanceIds !== null && this.targetInstanceIds.length === 0) return;
-    this.cancelPendingSearch();
+
+    this.cancelScopeLoad();
 
     if (this.targetInstanceIds !== null) {
-      this.pendingSearch = this.processInstanceService
-        .searchVariableSuggestions(query, this.targetInstanceIds)
+      this.scopeLoad = this.processInstanceService
+        .loadDistinctVariableSuggestions(this.targetInstanceIds)
         .subscribe(results => {
-          this.pendingSearch = null;
-          if (this.activeSuggestionRow === index) {
-            this.suggestions = results;
-            this.cdr.markForCheck();
-          }
+          this.scopeLoad = null;
+          this.allSuggestions = results;
+          this.cdr.markForCheck();
         });
       return;
     }
 
     if (this.queryFilter !== null) {
       const filter = this.queryFilter;
-      this.pendingSearch = this.processInstanceService
+      this.scopeLoad = this.processInstanceService
         .queryProcessInstances(filter, 0, 100)
         .subscribe(instances => {
           const ids = instances.map(i => i.id);
           if (!ids.length) {
-            this.pendingSearch = null;
-            if (this.activeSuggestionRow === index) {
-              this.suggestions = [];
-              this.cdr.markForCheck();
-            }
+            this.scopeLoad = null;
+            this.allSuggestions = [];
+            this.cdr.markForCheck();
             return;
           }
-          this.pendingSearch = this.processInstanceService
-            .searchVariableSuggestions(query, ids)
+          this.scopeLoad = this.processInstanceService
+            .loadDistinctVariableSuggestions(ids)
             .subscribe(results => {
-              this.pendingSearch = null;
-              if (this.activeSuggestionRow === index) {
-                this.suggestions = results;
-                this.cdr.markForCheck();
-              }
+              this.scopeLoad = null;
+              this.allSuggestions = results;
+              this.cdr.markForCheck();
             });
         });
       return;
     }
 
-    this.pendingSearch = this.processInstanceService
-      .searchVariableSuggestions(query, [])
+    // Mode Global (both null)
+    this.scopeLoad = this.processInstanceService
+      .loadDistinctVariableSuggestions([])
       .subscribe(results => {
-        this.pendingSearch = null;
-        if (this.activeSuggestionRow === index) {
-          this.suggestions = results;
-          this.cdr.markForCheck();
-        }
+        this.scopeLoad = null;
+        this.allSuggestions = results;
+        this.cdr.markForCheck();
       });
   }
 
-  private cancelPendingSearch(): void {
-    if (this.debounceTimer !== null) {
-      clearTimeout(this.debounceTimer);
-      this.debounceTimer = null;
-    }
-    if (this.pendingSearch) {
-      this.pendingSearch.unsubscribe();
-      this.pendingSearch = null;
+  private cancelScopeLoad(): void {
+    if (this.scopeLoad) {
+      this.scopeLoad.unsubscribe();
+      this.scopeLoad = null;
     }
   }
 

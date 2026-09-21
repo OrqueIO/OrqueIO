@@ -6,9 +6,11 @@ function make(rows: VariableDef[]): VariableDefinitionsModalComponent {
   (inst as any).rows = rows;
   (inst as any).rowValueConflicts = rows.map(() => false);
   (inst as any).cdr = { markForCheck: () => {} };
-  (inst as any).targetInstanceIds = null; // null = mode Query (global search allowed)
+  (inst as any).targetInstanceIds = null;
   (inst as any).initialVariables = [];
-  (inst as any).queryFilter = null; // null = no criteria → global search (override for criteria tests)
+  (inst as any).queryFilter = null;
+  (inst as any).allSuggestions = [];
+  (inst as any).scopeLoad = null;
   return inst;
 }
 
@@ -599,17 +601,20 @@ describe('VariableDefinitionsModalComponent', () => {
 
     function makeWithSuggestions(suggestions: VarSuggestion[]): VariableDefinitionsModalComponent {
       const inst = make([row('', 'String', '')]);
-      (inst as any).suggestions = suggestions;
+      (inst as any).allSuggestions = suggestions;
       return inst;
     }
 
     function mockService(inst: VariableDefinitionsModalComponent, results: VarSuggestion[] = []) {
       (inst as any).processInstanceService = {
-        searchVariableSuggestions: (_query: string, _ids: string[]) => ({
+        loadDistinctVariableSuggestions: (_ids: string[]) => ({
           subscribe: (fn: (v: VarSuggestion[]) => void) => {
             fn(results);
             return { unsubscribe: () => {} };
           }
+        }),
+        queryProcessInstances: () => ({
+          subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; }
         })
       };
     }
@@ -679,14 +684,12 @@ describe('VariableDefinitionsModalComponent', () => {
     describe('onNameFocus', () => {
       it('sets activeSuggestionRow to the focused row index (non-regression: first open)', () => {
         const inst = makeWithSuggestions(SUGGESTIONS);
-        mockService(inst);
         inst.onNameFocus(0);
         expect(inst.activeSuggestionRow).toBe(0);
       });
 
       it('reopens the dropdown when called again after a suggestion was selected (simulates re-click while already focused)', () => {
         const inst = makeWithSuggestions(SUGGESTIONS);
-        mockService(inst);
         // First selection: pick 'amount'
         inst.onNameFocus(0);
         inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
@@ -698,7 +701,6 @@ describe('VariableDefinitionsModalComponent', () => {
 
       it('second suggestion selection fully replaces Name/Type/Value from the first — no residue', () => {
         const inst = makeWithSuggestions(SUGGESTIONS);
-        mockService(inst);
         // First selection
         inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
         // Re-open and pick a different suggestion
@@ -710,68 +712,50 @@ describe('VariableDefinitionsModalComponent', () => {
       });
 
       it('reopens dropdown automatically when user types after a selection (simulates (input) event binding)', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = makeWithSuggestions(SUGGESTIONS);
-          mockService(inst, SUGGESTIONS);
-          inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
-          expect(inst.activeSuggestionRow).toBeNull();
-          // User edits the name field: [(ngModel)] updates the name, then (input) fires onNameInput(i, value)
-          inst.rows[0].name = 'am';
-          inst.onNameInput(0, 'am');
-          expect(inst.activeSuggestionRow).toBe(0);
-          vi.advanceTimersByTime(250);
-          // Template would render the dropdown: mock returns SUGGESTIONS, 'am' client-filters to 'amount'
-          expect(inst.getFilteredSuggestions('am').length).toBeGreaterThan(0);
-        } finally {
-          vi.useRealTimers();
-        }
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
+        expect(inst.activeSuggestionRow).toBeNull();
+        // User edits the name field: [(ngModel)] updates the name, then (input) fires onNameInput(i, value)
+        inst.rows[0].name = 'am';
+        inst.onNameInput(0, 'am');
+        expect(inst.activeSuggestionRow).toBe(0);
+        // allSuggestions is SUGGESTIONS, 'am' client-filters to 'amount'
+        expect(inst.getFilteredSuggestions('am').length).toBeGreaterThan(0);
       });
 
-      it('keeps activeSuggestionRow set and suggestions empty when typed text matches nothing', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          mockService(inst, []);
-          inst.onNameFocus(0);
-          inst.rows[0].name = 'xyz_nomatch';
-          inst.onNameInput(0, 'xyz_nomatch');
-          vi.advanceTimersByTime(250);
-          expect(inst.activeSuggestionRow).toBe(0);
-          // Server returned nothing → no dropdown
-          expect(inst.getFilteredSuggestions('xyz_nomatch')).toHaveLength(0);
-        } finally {
-          vi.useRealTimers();
-        }
+      it('keeps activeSuggestionRow set and filtered list empty when typed text matches nothing in allSuggestions', () => {
+        const inst = make([row('', 'String', '')]);
+        // allSuggestions is [] by default — nothing to match
+        inst.onNameFocus(0);
+        inst.rows[0].name = 'xyz_nomatch';
+        inst.onNameInput(0, 'xyz_nomatch');
+        expect(inst.activeSuggestionRow).toBe(0);
+        expect(inst.getFilteredSuggestions('xyz_nomatch')).toHaveLength(0);
       });
 
       it('non-regression: first-open flow (focus → type → see suggestions → select) still works end-to-end', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          mockService(inst, SUGGESTIONS);
-          // Focus on empty field: hint shown, no suggestions yet
-          inst.onNameFocus(0);
-          expect(inst.activeSuggestionRow).toBe(0);
-          expect(inst.getFilteredSuggestions('').length).toBe(0);
-          // User types: debounce fires → mock returns SUGGESTIONS
-          inst.onNameInput(0, 'a');
-          vi.advanceTimersByTime(250);
-          expect(inst.suggestions.length).toBe(SUGGESTIONS.length);
-          // Selection
-          inst.onSuggestionClick(0, SUGGESTIONS[0]);
-          expect(inst.rows[0].name).toBe(SUGGESTIONS[0].name);
-          expect(inst.activeSuggestionRow).toBeNull();
-        } finally {
-          vi.useRealTimers();
-        }
+        // Scope already loaded (makeWithSuggestions sets allSuggestions = SUGGESTIONS)
+        const inst = makeWithSuggestions(SUGGESTIONS);
+        // Focus on field
+        inst.onNameFocus(0);
+        expect(inst.activeSuggestionRow).toBe(0);
+        // allSuggestions already loaded — full list visible on empty field
+        expect((inst as any).allSuggestions.length).toBe(SUGGESTIONS.length);
+        // User types — local filter applied
+        inst.rows[0].name = 'a';
+        inst.onNameInput(0, 'a');
+        expect(inst.activeSuggestionRow).toBe(0);
+        expect(inst.getFilteredSuggestions('a').length).toBeGreaterThan(0);
+        // Selection
+        inst.onSuggestionClick(0, SUGGESTIONS[0]);
+        expect(inst.rows[0].name).toBe(SUGGESTIONS[0].name);
+        expect(inst.activeSuggestionRow).toBeNull();
       });
     });
 
     describe('onNameBlur', () => {
       it('hides the dropdown by setting activeSuggestionRow to null', () => {
         const inst = makeWithSuggestions(SUGGESTIONS);
-        mockService(inst);
         inst.onNameFocus(0);
         inst.onNameBlur();
         expect(inst.activeSuggestionRow).toBeNull();
@@ -846,7 +830,6 @@ describe('VariableDefinitionsModalComponent', () => {
 
       it('closes the dropdown after selection', () => {
         const inst = makeWithSuggestions(SUGGESTIONS);
-        mockService(inst);
         inst.onNameFocus(0);
         inst.onSuggestionClick(0, { name: 'amount', type: 'Integer', value: 42, valuesConflict: false });
         expect(inst.activeSuggestionRow).toBeNull();
@@ -953,260 +936,246 @@ describe('VariableDefinitionsModalComponent', () => {
       });
     });
 
-    describe('progressive server-side search (variableNameLike)', () => {
-      it('sends no HTTP request when name field is empty and user focuses the field', () => {
+    describe('scope-based loading (one request per scope change, local filtering on keystrokes)', () => {
+      function makeSvc(capturedIds?: string[], results: VarSuggestion[] = []) {
+        return {
+          loadDistinctVariableSuggestions: (ids: string[]) => {
+            if (capturedIds) capturedIds.splice(0, capturedIds.length, ...ids);
+            return { subscribe: (fn: Function) => { fn(results); return { unsubscribe: () => {} }; } };
+          },
+          queryProcessInstances: () => ({
+            subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; }
+          })
+        };
+      }
+
+      it('scope loads on init — mode Instances: calls loadDistinctVariableSuggestions with the IDs', () => {
+        const inst = make([row('', 'String', '')]);
+        const capturedIds: string[] = [];
+        (inst as any).targetInstanceIds = ['inst1', 'inst2'];
+        (inst as any).queryFilter = null;
+        (inst as any).processInstanceService = makeSvc(capturedIds);
+        (inst as any).loadScope();
+        expect(capturedIds).toEqual(['inst1', 'inst2']);
+      });
+
+      it('scope loads on init — mode Global (both null): calls loadDistinctVariableSuggestions with []', () => {
+        const inst = make([row('', 'String', '')]);
+        const capturedIds: string[] = ['sentinel'];
+        (inst as any).targetInstanceIds = null;
+        (inst as any).queryFilter = null;
+        (inst as any).processInstanceService = makeSvc(capturedIds);
+        (inst as any).loadScope();
+        expect(capturedIds).toEqual([]);
+      });
+
+      it('scope does NOT load when targetInstanceIds is [] (mode Instances, nothing selected)', () => {
         const inst = make([row('', 'String', '')]);
         let called = false;
+        (inst as any).targetInstanceIds = [];
         (inst as any).processInstanceService = {
-          searchVariableSuggestions: () => {
-            called = true;
-            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-          }
+          loadDistinctVariableSuggestions: () => { called = true; return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } }; }
         };
-        (inst as any).targetInstanceIds = ['inst1'];
-        inst.onNameFocus(0);
+        (inst as any).loadScope();
         expect(called).toBe(false);
       });
 
-      it('triggers searchVariableSuggestions with the typed query after 250ms debounce', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          let capturedQuery = '';
-          (inst as any).processInstanceService = {
-            searchVariableSuggestions: (query: string) => {
-              capturedQuery = query;
-              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-            }
-          };
-          (inst as any).targetInstanceIds = null; // null = mode Query: global search allowed
-          inst.onNameInput(0, 'am');
-          expect(capturedQuery).toBe('');
-          vi.advanceTimersByTime(250);
-          expect(capturedQuery).toBe('am');
-        } finally {
-          vi.useRealTimers();
-        }
+      it('scope loads on init — mode Query with criteria: resolves IDs then calls loadDistinctVariableSuggestions', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).targetInstanceIds = null;
+        (inst as any).queryFilter = { unfinished: true };
+        const capturedIds: string[] = [];
+        (inst as any).processInstanceService = {
+          queryProcessInstances: () => ({
+            subscribe: (fn: Function) => { fn([{ id: 'inst-a' }, { id: 'inst-b' }]); return { unsubscribe: () => {} }; }
+          }),
+          loadDistinctVariableSuggestions: (ids: string[]) => {
+            capturedIds.push(...ids);
+            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+          }
+        };
+        (inst as any).loadScope();
+        expect(capturedIds).toEqual(['inst-a', 'inst-b']);
       });
 
-      it('cancels the previous debounce and sends only one request when user types rapidly', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          let callCount = 0;
-          (inst as any).processInstanceService = {
-            searchVariableSuggestions: () => {
-              callCount++;
-              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-            }
-          };
-          (inst as any).targetInstanceIds = null; // null = mode Query: global search allowed
-          inst.onNameInput(0, 'a');
-          vi.advanceTimersByTime(100);
-          inst.onNameInput(0, 'am');
-          vi.advanceTimersByTime(100);
-          expect(callCount).toBe(0);
-          vi.advanceTimersByTime(150);
-          expect(callCount).toBe(1);
-        } finally {
-          vi.useRealTimers();
-        }
+      it('typing multiple characters triggers zero additional HTTP requests (local filtering only)', () => {
+        const fakeResults: VarSuggestion[] = [
+          { name: 'amount', type: 'Integer', value: undefined, valuesConflict: false },
+          { name: 'label', type: 'String', value: undefined, valuesConflict: false }
+        ];
+        const inst = makeWithSuggestions(fakeResults);
+        let httpCallCount = 0;
+        (inst as any).processInstanceService = {
+          loadDistinctVariableSuggestions: () => { httpCallCount++; return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } }; }
+        };
+        // Simulate typing 5 characters — no HTTP call expected
+        inst.onNameInput(0, 'a');
+        inst.onNameInput(0, 'am');
+        inst.onNameInput(0, 'amo');
+        inst.onNameInput(0, 'amou');
+        inst.onNameInput(0, 'amoun');
+        expect(httpCallCount).toBe(0);
+        // Filtering is done locally from allSuggestions
+        expect(inst.getFilteredSuggestions('amoun')).toHaveLength(1);
+        expect(inst.getFilteredSuggestions('amoun')[0].name).toBe('amount');
       });
 
-      it('passes processInstanceIdIn when targetInstanceIds are provided (mode Instances)', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          let capturedIds: string[] = [];
-          (inst as any).processInstanceService = {
-            searchVariableSuggestions: (_query: string, ids: string[]) => {
-              capturedIds = ids;
-              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-            }
-          };
-          (inst as any).targetInstanceIds = ['inst1', 'inst2', 'inst3'];
-          inst.onNameInput(0, 'amount');
-          vi.advanceTimersByTime(250);
-          expect(capturedIds).toEqual(['inst1', 'inst2', 'inst3']);
-        } finally {
-          vi.useRealTimers();
-        }
-      });
-
-      it('passes empty instanceIds to service for global search when targetInstanceIds is null (mode Query)', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          let capturedIds: string[] | null = null;
-          (inst as any).processInstanceService = {
-            searchVariableSuggestions: (_query: string, ids: string[]) => {
-              capturedIds = ids;
-              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-            }
-          };
-          (inst as any).targetInstanceIds = null; // null = mode Query: no instance filter
-          inst.onNameInput(0, 'amount');
-          vi.advanceTimersByTime(250);
-          expect(capturedIds).toEqual([]);
-        } finally {
-          vi.useRealTimers();
-        }
-      });
-
-      it('blocks search when targetInstanceIds is [] (mode Instances, nothing selected)', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          let called = false;
-          (inst as any).processInstanceService = {
-            searchVariableSuggestions: () => {
-              called = true;
-              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-            }
-          };
-          (inst as any).targetInstanceIds = []; // [] = mode Instances, nothing selected
-          inst.onNameInput(0, 'amount');
-          vi.advanceTimersByTime(250);
-          expect(called).toBe(false);
-        } finally {
-          vi.useRealTimers();
-        }
-      });
-
-      it('blocks search on focus with non-empty field when targetInstanceIds is [] (mode Instances, nothing selected)', () => {
+      it('focus triggers no HTTP request', () => {
         const inst = make([row('amount', 'String', '')]);
         let called = false;
+        (inst as any).targetInstanceIds = ['inst1'];
         (inst as any).processInstanceService = {
-          searchVariableSuggestions: () => {
-            called = true;
-            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-          }
+          loadDistinctVariableSuggestions: () => { called = true; return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } }; }
         };
-        (inst as any).targetInstanceIds = []; // [] = mode Instances, nothing selected
         inst.onNameFocus(0);
         expect(called).toBe(false);
       });
-    });
 
-    describe('searchNow — mode Query with active criteria (two-step ID resolve)', () => {
-      it('resolves instance IDs from queryFilter then passes them to searchVariableSuggestions', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          (inst as any).targetInstanceIds = null;
-          (inst as any).queryFilter = { unfinished: true, processInstanceBusinessKeyLike: 'ORDER' };
-          let capturedIds: string[] = [];
-          (inst as any).processInstanceService = {
-            queryProcessInstances: () => ({
-              subscribe: (fn: Function) => { fn([{ id: 'inst-a' }, { id: 'inst-b' }]); return { unsubscribe: () => {} }; }
-            }),
-            searchVariableSuggestions: (q: string, ids: string[]) => {
-              capturedIds = ids;
-              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-            }
-          };
-          inst.onNameInput(0, 'amount');
-          vi.advanceTimersByTime(250);
-          expect(capturedIds).toEqual(['inst-a', 'inst-b']);
-        } finally {
-          vi.useRealTimers();
-        }
+      it('scope reloads when targetInstanceIds changes — allSuggestions refreshed', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).targetInstanceIds = ['inst1'];
+        (inst as any).queryFilter = null;
+        let capturedIds: string[] = [];
+        (inst as any).processInstanceService = makeSvc(capturedIds,
+          [{ name: 'newVar', type: 'String', value: undefined, valuesConflict: false }]
+        );
+        // Simulate ngOnChanges triggering loadScope with new IDs
+        (inst as any).targetInstanceIds = ['inst2', 'inst3'];
+        (inst as any).allSuggestions = [];
+        (inst as any).loadScope();
+        expect(capturedIds).toEqual(['inst2', 'inst3']);
+        expect((inst as any).allSuggestions[0].name).toBe('newVar');
       });
 
-      it('returns empty suggestions when queryFilter matches no instances (does not call searchVariableSuggestions)', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          (inst as any).targetInstanceIds = null;
-          (inst as any).queryFilter = { unfinished: true, processInstanceBusinessKeyLike: 'NOMATCH' };
-          let searchCalled = false;
-          (inst as any).processInstanceService = {
-            queryProcessInstances: () => ({
-              subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; }
-            }),
-            searchVariableSuggestions: () => {
-              searchCalled = true;
-              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-            }
-          };
-          inst.onNameInput(0, 'amount');
-          vi.advanceTimersByTime(250);
-          expect(searchCalled).toBe(false);
-          expect(inst.suggestions).toEqual([]);
-        } finally {
-          vi.useRealTimers();
-        }
+      it('mode Query: empty queryFilter result leaves allSuggestions empty without calling loadDistinctVariableSuggestions', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).targetInstanceIds = null;
+        (inst as any).queryFilter = { processInstanceBusinessKeyLike: 'NOMATCH' };
+        let loadCalled = false;
+        (inst as any).processInstanceService = {
+          queryProcessInstances: () => ({
+            subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; }
+          }),
+          loadDistinctVariableSuggestions: () => {
+            loadCalled = true;
+            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+          }
+        };
+        (inst as any).loadScope();
+        expect(loadCalled).toBe(false);
+        expect((inst as any).allSuggestions).toEqual([]);
       });
 
-      it('non-regression: queryFilter null (no criteria) still does an unrestricted global search', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          (inst as any).targetInstanceIds = null;
-          let capturedIds: string[] = ['sentinel'];
-          (inst as any).processInstanceService = {
-            searchVariableSuggestions: (q: string, ids: string[]) => {
-              capturedIds = ids;
-              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-            }
-          };
-          inst.onNameInput(0, 'amount');
-          vi.advanceTimersByTime(250);
-          expect(capturedIds).toEqual([]);
-        } finally {
-          vi.useRealTimers();
-        }
+      it('mode Global: allSuggestions populated from loadDistinctVariableSuggestions result', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).targetInstanceIds = null;
+        (inst as any).queryFilter = null;
+        const fakeResults: VarSuggestion[] = [
+          { name: 'amount', type: 'Double', value: undefined, valuesConflict: false },
+          { name: 'status', type: 'String', value: undefined, valuesConflict: false }
+        ];
+        (inst as any).processInstanceService = {
+          loadDistinctVariableSuggestions: (_ids: string[]) => ({
+            subscribe: (fn: Function) => { fn(fakeResults); return { unsubscribe: () => {} }; }
+          })
+        };
+        (inst as any).loadScope();
+        expect((inst as any).allSuggestions).toEqual(fakeResults);
       });
 
-      it('mode Query + no criteria: suggestions array is populated from global search results', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          (inst as any).targetInstanceIds = null;
-          (inst as any).queryFilter = null;
-          (inst as any).activeSuggestionRow = 0;
-          const fakeResults = [
-            { name: 'amount', type: 'Double', value: 42, valuesConflict: false },
-            { name: 'amount', type: 'Long', value: 99, valuesConflict: true },
-          ];
-          (inst as any).processInstanceService = {
-            searchVariableSuggestions: (_q: string, _ids: string[]) => ({
-              subscribe: (fn: Function) => { fn(fakeResults); return { unsubscribe: () => {} }; }
-            })
-          };
-          inst.onNameInput(0, 'amount');
-          vi.advanceTimersByTime(250);
-          expect((inst as any).suggestions).toEqual(fakeResults);
-        } finally {
-          vi.useRealTimers();
-        }
+      it('ngOnChanges with same-content array reference does NOT trigger a new scope load (prevents getter-driven infinite loop)', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).targetInstanceIds = ['inst1', 'inst2'];
+        let loadCount = 0;
+        (inst as any).processInstanceService = {
+          loadDistinctVariableSuggestions: () => {
+            loadCount++;
+            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+          }
+        };
+
+        // Simulate what Angular does when the parent getter returns [...selectedIds] each CD cycle:
+        // same content, new reference — isFirstChange false (already initialized)
+        inst.ngOnChanges({
+          targetInstanceIds: {
+            previousValue: ['inst1', 'inst2'],
+            currentValue: ['inst1', 'inst2'], // different reference, same content
+            firstChange: false,
+            isFirstChange: () => false
+          }
+        } as any);
+
+        expect(loadCount).toBe(0); // no new request fired
       });
 
-      it('non-regression: mode Instances uses IDs directly — queryProcessInstances is never called', () => {
-        vi.useFakeTimers();
-        try {
-          const inst = make([row('', 'String', '')]);
-          (inst as any).targetInstanceIds = ['inst-1', 'inst-2'];
-          (inst as any).queryFilter = { unfinished: true };
-          let queryCalled = false;
-          let capturedIds: string[] = [];
-          (inst as any).processInstanceService = {
-            queryProcessInstances: () => {
-              queryCalled = true;
-              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-            },
-            searchVariableSuggestions: (q: string, ids: string[]) => {
-              capturedIds = ids;
-              return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
-            }
-          };
-          inst.onNameInput(0, 'amount');
-          vi.advanceTimersByTime(250);
-          expect(queryCalled).toBe(false);
-          expect(capturedIds).toEqual(['inst-1', 'inst-2']);
-        } finally {
-          vi.useRealTimers();
-        }
+      it('ngOnChanges with actually different IDs triggers a scope reload', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).targetInstanceIds = ['inst1'];
+        let loadCount = 0;
+        (inst as any).processInstanceService = {
+          loadDistinctVariableSuggestions: () => {
+            loadCount++;
+            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+          }
+        };
+
+        inst.ngOnChanges({
+          targetInstanceIds: {
+            previousValue: ['inst1'],
+            currentValue: ['inst1', 'inst2'],
+            firstChange: false,
+            isFirstChange: () => false
+          }
+        } as any);
+
+        expect(loadCount).toBe(1);
+      });
+
+      it('ngOnChanges with same-content queryFilter object does NOT trigger a reload', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).targetInstanceIds = null;
+        (inst as any).queryFilter = { unfinished: true };
+        let loadCount = 0;
+        (inst as any).processInstanceService = {
+          loadDistinctVariableSuggestions: () => {
+            loadCount++;
+            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+          },
+          queryProcessInstances: () => ({ subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } })
+        };
+
+        // Same content, new object reference (as buildHistoricQueryForBatch() would do each cycle)
+        inst.ngOnChanges({
+          queryFilter: {
+            previousValue: { unfinished: true },
+            currentValue: { unfinished: true }, // different reference, same content
+            firstChange: false,
+            isFirstChange: () => false
+          }
+        } as any);
+
+        expect(loadCount).toBe(0);
+      });
+
+      it('mode Instances uses IDs directly — queryProcessInstances is never called', () => {
+        const inst = make([row('', 'String', '')]);
+        (inst as any).targetInstanceIds = ['inst-1', 'inst-2'];
+        (inst as any).queryFilter = { unfinished: true };
+        let queryCalled = false;
+        const capturedIds: string[] = [];
+        (inst as any).processInstanceService = {
+          queryProcessInstances: () => {
+            queryCalled = true;
+            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+          },
+          loadDistinctVariableSuggestions: (ids: string[]) => {
+            capturedIds.push(...ids);
+            return { subscribe: (fn: Function) => { fn([]); return { unsubscribe: () => {} }; } };
+          }
+        };
+        (inst as any).loadScope();
+        expect(queryCalled).toBe(false);
+        expect(capturedIds).toEqual(['inst-1', 'inst-2']);
       });
     });
 
@@ -1289,7 +1258,7 @@ describe('VariableDefinitionsModalComponent', () => {
     function makeKbd(name = ''): VariableDefinitionsModalComponent {
       const inst = make([row(name, 'String', '')]);
       (inst as any).activeSuggestionRow = 0;
-      (inst as any).suggestions = KBD_SUGGESTIONS;
+      (inst as any).allSuggestions = KBD_SUGGESTIONS;
       (inst as any).dialogEl = { nativeElement: { focus: () => {} } };
       return inst;
     }
