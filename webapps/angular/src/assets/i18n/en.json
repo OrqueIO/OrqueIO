@@ -1845,7 +1845,7 @@
   "cockpit.modify.selectDialog.loadError": "Failed to load process instances.",
   "cockpit.modify.selectDialog.confirmQuery": "Modify Matching Instances",
   "cockpit.modify.selectDialog.queryBusinessKey": "Business Key",
-  "cockpit.modify.selectDialog.queryBusinessKeyPlaceholder": "Filter by business key (contains)",
+  "cockpit.modify.selectDialog.queryBusinessKeyPlaceholder": "Filter by business key (exact match)",
   "cockpit.modify.selectDialog.queryActivityId": "Activity ID",
   "cockpit.modify.selectDialog.queryActivityIdPlaceholder": "e.g. UserTask_1",
   "cockpit.modify.selectDialog.queryStartDate": "Start Date",

@@ -1827,7 +1827,7 @@
   "cockpit.modify.selectDialog.loadError": "Échec du chargement des instances de processus.",
   "cockpit.modify.selectDialog.confirmQuery": "Modifier les instances correspondantes",
   "cockpit.modify.selectDialog.queryBusinessKey": "Clé métier",
-  "cockpit.modify.selectDialog.queryBusinessKeyPlaceholder": "Filtrer par clé métier (contient)",
+  "cockpit.modify.selectDialog.queryBusinessKeyPlaceholder": "Filtrer par clé métier (correspondance exacte)",
   "cockpit.modify.selectDialog.queryActivityId": "ID d'activité",
   "cockpit.modify.selectDialog.queryActivityIdPlaceholder": "ex. UserTask_1",
   "cockpit.modify.selectDialog.queryStartDate": "Date de démarrage",

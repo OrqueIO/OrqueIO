@@ -382,8 +382,9 @@ describe('SelectInstancesDialogComponent — Variables criterion', () => {
     expect(component.getPillIcon('variables')).toBe(component.faCode);
   });
 
-  it('getPillLabel for variables includes the count of variable lines', async () => {
+  it('getPillLabel for variables calls instant with the variable-line count as a string param', async () => {
     const { component } = await createComponent();
+    const spy = vi.spyOn((component as any)['translateService'], 'instant');
     const pill: any = {
       field: 'variables', values: [],
       variableLines: [
@@ -391,10 +392,11 @@ describe('SelectInstancesDialogComponent — Variables criterion', () => {
         { variableName: 'b', variableOperator: 'gt', values: ['2'] },
       ]
     };
-    expect(component.getPillLabel(pill)).toContain('2');
+    component.getPillLabel(pill);
+    expect(spy).toHaveBeenCalledWith('cockpit.processes.globalSearch.pill.variables', { count: '2' });
   });
 
-  it('buildQueryBody maps each variableLine×value to a Camunda variables condition, applying parseVariableValue', async () => {
+  it('[S1] buildQueryBody: all single-value variable lines → flat variables[], no orQueries', async () => {
     const { component } = await createComponent();
     component.activePills = [
       { field: 'activityId', values: ['UserTask_1'] },
@@ -402,35 +404,98 @@ describe('SelectInstancesDialogComponent — Variables criterion', () => {
         field: 'variables', values: [],
         variableLines: [
           { variableName: 'amount', variableOperator: 'gt', values: ['100'] } as VariableLine,
-          { variableName: 'status', variableOperator: 'eq', values: ['active', 'pending'] } as VariableLine,
+          { variableName: 'status', variableOperator: 'eq', values: ['active'] } as VariableLine,
         ]
       } as any
     ];
     const body = component.buildQueryBody();
     const vars = body['variables'] as Array<{ name: string; operator: string; value: any }>;
-    expect(vars).toHaveLength(3);
-    // parseVariableValue converts '100' → 100 (number), non-numeric strings stay as strings
+    expect(vars).toHaveLength(2);
     expect(vars[0]).toEqual({ name: 'amount', operator: 'gt', value: 100 });
     expect(vars[1]).toEqual({ name: 'status', operator: 'eq', value: 'active' });
-    expect(vars[2]).toEqual({ name: 'status', operator: 'eq', value: 'pending' });
+    expect(body['orQueries']).toBeUndefined();
   });
 
-  // ── Scenario 5: businessKey single value → flat processInstanceBusinessKeyLike (non-regression) ──
-  it('[S5] buildQueryBody: single businessKey value → processInstanceBusinessKeyLike, no processInstanceBusinessKeyIn', async () => {
+  it('[S2] buildQueryBody: multi-value for same variable → one orQuery entry, both values inside variables[]', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      {
+        field: 'variables', values: [],
+        variableLines: [
+          { variableName: 'varName', variableOperator: 'eq', values: ['v1', 'v2'] } as VariableLine,
+        ]
+      } as any
+    ];
+    const body = component.buildQueryBody();
+    expect(body['variables']).toBeUndefined();
+    const orQ = body['orQueries'] as Array<{ variables: Array<{ name: string; operator: string; value: any }> }>;
+    expect(orQ).toHaveLength(1);
+    expect(orQ[0].variables).toHaveLength(2);
+    expect(orQ[0].variables).toContainEqual({ name: 'varName', operator: 'eq', value: 'v1' });
+    expect(orQ[0].variables).toContainEqual({ name: 'varName', operator: 'eq', value: 'v2' });
+  });
+
+  it('[S3] buildQueryBody: multi-value variable + single-value variable → one orQuery entry per variable (AND between, OR within)', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      {
+        field: 'variables', values: [],
+        variableLines: [
+          { variableName: 'status', variableOperator: 'eq', values: ['active', 'pending'] } as VariableLine,
+          { variableName: 'amount', variableOperator: 'gt', values: ['100'] } as VariableLine,
+        ]
+      } as any
+    ];
+    const body = component.buildQueryBody();
+    expect(body['variables']).toBeUndefined();
+    const orQ = body['orQueries'] as Array<{ variables: Array<{ name: string; operator: string; value: any }> }>;
+    expect(orQ).toHaveLength(2);
+    expect(orQ[0].variables).toHaveLength(2);
+    expect(orQ[0].variables).toContainEqual({ name: 'status', operator: 'eq', value: 'active' });
+    expect(orQ[0].variables).toContainEqual({ name: 'status', operator: 'eq', value: 'pending' });
+    expect(orQ[1].variables).toHaveLength(1);
+    expect(orQ[1].variables).toContainEqual({ name: 'amount', operator: 'gt', value: 100 });
+  });
+
+  it('[S4] buildQueryBody: like operator + two values → one orQuery entry with % wrapped values', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      {
+        field: 'variables', values: [],
+        variableLines: [
+          { variableName: 'varName', variableOperator: 'like', values: ['user', 'my'] } as VariableLine,
+        ]
+      } as any
+    ];
+    const body = component.buildQueryBody();
+    expect(body['variables']).toBeUndefined();
+    const orQ = body['orQueries'] as Array<{ variables: Array<{ name: string; operator: string; value: any }> }>;
+    expect(orQ).toHaveLength(1);
+    expect(orQ[0].variables).toHaveLength(2);
+    expect(orQ[0].variables).toContainEqual({ name: 'varName', operator: 'like', value: '%user%' });
+    expect(orQ[0].variables).toContainEqual({ name: 'varName', operator: 'like', value: '%my%' });
+  });
+
+
+  it('[S5] buildQueryBody: businessKey pill always excluded — search() applies processInstanceBusinessKeyLike', async () => {
     const { component } = await createComponent();
     component.activePills = [
       { field: 'activityId', values: ['UserTask_1'] },
       { field: 'businessKey', values: ['ORDER-001'] },
     ];
     const body = component.buildQueryBody();
-    expect(body['processInstanceBusinessKeyLike']).toBe('%ORDER-001%');
+    expect(body['processInstanceBusinessKeyLike']).toBeUndefined();
     expect(body['processInstanceBusinessKeyIn']).toBeUndefined();
     expect(body['orQueries']).toBeUndefined();
+    expect(body['processDefinitionId']).toBe('process:1');
+    expect(body['unfinished']).toBe(true);
+    expect(body['activeActivityIdIn']).toEqual(['UserTask_1']);
   });
 
-  // ── Scenario 6: businessKey two values → processInstanceBusinessKeyIn (OR via native Camunda array) ──
-  // Mirrors instanceId → processInstanceIds pattern: native array field, single request, OR semantics.
-  it('[S6] buildQueryBody: two businessKey values → processInstanceBusinessKeyIn array, no LIKE', async () => {
+  it('[S6] buildQueryBody: two businessKey values → no businessKey field (search() runs parallel LIKE calls)', async () => {
     const { component } = await createComponent();
     component.activePills = [
       { field: 'activityId', values: ['UserTask_1'] },
@@ -438,8 +503,11 @@ describe('SelectInstancesDialogComponent — Variables criterion', () => {
     ];
     const body = component.buildQueryBody();
     expect(body['processInstanceBusinessKeyLike']).toBeUndefined();
-    expect(body['processInstanceBusinessKeyIn']).toEqual(['ORDER-001', 'ORDER-NOMATCH-999']);
+    expect(body['processInstanceBusinessKeyIn']).toBeUndefined();
     expect(body['orQueries']).toBeUndefined();
+    expect(body['processDefinitionId']).toBe('process:1');
+    expect(body['unfinished']).toBe(true);
+    expect(body['activeActivityIdIn']).toEqual(['UserTask_1']);
   });
 
   it('isMultiValueOperator and getOperatorLabel match the InstanceFilterPanelComponent implementation', async () => {
@@ -457,6 +525,79 @@ describe('SelectInstancesDialogComponent — Variables criterion', () => {
     }
     const line: VariableLine = { variableName: 'x', variableOperator: 'eq', values: ['1'] };
     expect(line.variableName).toBe('x');
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — Business Key criterion (end-to-end)', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(() => {
+    mockCockpitService.queryProcessInstances.mockClear();
+  });
+
+  it('[BK-E2E-S1] single businessKey chip → search uses processInstanceBusinessKeyLike (contains) + mandatory filters', async () => {
+    const matchingInstance = { id: 'inst-ORDER-001', businessKey: 'ORDER-001', startTime: '2026-01-01T00:00:00.000Z' };
+
+    // First call: initial search (ngOnInit). Second call: after businessKey pill applied.
+    mockCockpitService.queryProcessInstances
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([matchingInstance]));
+
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    component.selectCriterion('businessKey', new MouseEvent('click'));
+    component.pendingChipValues = ['ORDER-001'];
+    component.confirmEdit();
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    const bkCall = calls.find(call => call[0].processInstanceBusinessKeyLike != null);
+    expect(bkCall).toBeDefined();
+    const body = bkCall[0];
+    expect(body.processInstanceBusinessKeyLike).toBe('%ORDER-001%');
+    expect(body.processInstanceBusinessKeyIn).toBeUndefined();
+    expect(body.processDefinitionId).toBe('process:1');
+    expect(body.unfinished).toBe(true);
+    expect(body.activeActivityIdIn).toEqual(['UserTask_1']);
+    expect(component.searchResults).toEqual([matchingInstance]);
+  });
+
+  it('[BK-E2E-S2] two businessKey values → two parallel LIKE calls, only matching instance appears', async () => {
+    const existingInstance = { id: 'inst-ORDER-001', businessKey: 'ORDER-001', startTime: '2026-01-01T00:00:00.000Z' };
+
+    // Call 1: initial search (ngOnInit)
+    // Call 2: LIKE '%ORDER-001%'  → returns the existing instance
+    // Call 3: LIKE '%ORDER-NOMATCH-999%' → returns nothing
+    mockCockpitService.queryProcessInstances
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([existingInstance]))
+      .mockReturnValueOnce(of([]));
+
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    component.selectCriterion('businessKey', new MouseEvent('click'));
+    component.pendingChipValues = ['ORDER-001', 'ORDER-NOMATCH-999'];
+    component.confirmEdit();
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    const bkCalls = calls.filter(call => call[0].processInstanceBusinessKeyLike != null);
+
+    // Two separate LIKE calls — one per value
+    expect(bkCalls.length).toBe(2);
+    expect(bkCalls[0][0].processInstanceBusinessKeyLike).toBe('%ORDER-001%');
+    expect(bkCalls[1][0].processInstanceBusinessKeyLike).toBe('%ORDER-NOMATCH-999%');
+
+    // Each call carries the mandatory filters
+    for (const call of bkCalls) {
+      expect(call[0].processInstanceBusinessKeyIn).toBeUndefined();
+      expect(call[0].processDefinitionId).toBe('process:1');
+      expect(call[0].unfinished).toBe(true);
+      expect(call[0].activeActivityIdIn).toEqual(['UserTask_1']);
+    }
+
+    // Only the existing instance appears — the non-matching key yields nothing
+    expect(component.searchResults).toEqual([existingInstance]);
+    expect(component.searchResults!.length).toBe(1);
   });
 });
 

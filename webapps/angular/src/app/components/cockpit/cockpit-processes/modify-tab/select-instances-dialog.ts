@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { forkJoin, map, Observable } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faSpinner, faPlus, faTimes, faFilter,
@@ -1818,11 +1819,7 @@ export class SelectInstancesDialogComponent implements OnInit {
           if (pill.values.length) body['processInstanceIds'] = pill.values;
           break;
         case 'businessKey':
-          if (pill.values.length === 1 && pill.values[0]) {
-            body['processInstanceBusinessKeyLike'] = `%${pill.values[0]}%`;
-          } else if (pill.values.length > 1) {
-            body['processInstanceBusinessKeyIn'] = pill.values;
-          }
+          // Handled exclusively in search() via processInstanceBusinessKeyLike — never in body here
           break;
         case 'superProcessInstanceId':
           if (pill.values[0]) body['superProcessInstanceId'] = pill.values[0];
@@ -1868,14 +1865,24 @@ export class SelectInstancesDialogComponent implements OnInit {
           break;
         }
         case 'variables': {
-          if (pill.variableLines?.length) {
-            const conditions: Array<{ name: string; operator: string; value: any }> = [];
-            for (const line of pill.variableLines) {
-              for (const v of line.values) {
-                conditions.push({ name: line.variableName, operator: line.variableOperator, value: parseVariableValue(v, line.variableOperator) });
-              }
+          const validLines = pill.variableLines?.filter(l => l.variableName.trim() && l.values.length > 0) ?? [];
+          if (validLines.length > 0) {
+            const hasMultiValue = validLines.some(l => l.values.length > 1);
+            if (!hasMultiValue) {
+              // All single-value: flat variables[] (AND semantics across variable lines)
+              body['variables'] = validLines.map(l => ({
+                name: l.variableName, operator: l.variableOperator,
+                value: parseVariableValue(l.values[0], l.variableOperator)
+              }));
+            } else {
+              // At least one multi-value: orQueries (OR within same variable, AND between variables)
+              body['orQueries'] = validLines.map(l => ({
+                variables: l.values.map(v => ({
+                  name: l.variableName, operator: l.variableOperator,
+                  value: parseVariableValue(v, l.variableOperator)
+                }))
+              }));
             }
-            if (conditions.length > 0) body['variables'] = conditions;
           }
           break;
         }
@@ -2026,9 +2033,45 @@ export class SelectInstancesDialogComponent implements OnInit {
     this.selectedIds.clear();
     this.cdr.markForCheck();
 
-    const body = { ...this.buildQueryBody(), sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }] };
+    const sorting = [{ sortBy: 'startTime', sortOrder: 'desc' }];
+    const bkPill = this.activePills.find(p => p.field === 'businessKey');
+    const bkValues: string[] = bkPill?.values ?? [];
+    const baseBody = { ...this.buildQueryBody(), sorting };
 
-    this.cockpitService.queryProcessInstances(body, 0, 1000)
+    let search$: Observable<ProcessInstance[]>;
+
+    if (bkValues.length === 0) {
+      search$ = this.cockpitService.queryProcessInstances(baseBody, 0, 1000);
+    } else if (bkValues.length === 1) {
+      const body = { ...baseBody, processInstanceBusinessKeyLike: `%${bkValues[0]}%` };
+      search$ = this.cockpitService.queryProcessInstances(body, 0, 1000);
+    } else {
+      const bodies = bkValues.map(val => ({
+        ...baseBody,
+        processInstanceBusinessKeyLike: `%${val}%`
+      }));
+      search$ = forkJoin(
+        bodies.map(body => this.cockpitService.queryProcessInstances(body, 0, 1000))
+      ).pipe(
+        map(results => {
+          const seen = new Set<string>();
+          const merged: ProcessInstance[] = [];
+          for (const arr of results) {
+            for (const inst of arr) {
+              if (!seen.has(inst.id)) {
+                seen.add(inst.id);
+                merged.push(inst);
+              }
+            }
+          }
+          return merged.sort((a, b) =>
+            new Date((b as any).startTime).getTime() - new Date((a as any).startTime).getTime()
+          );
+        })
+      );
+    }
+
+    search$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (instances) => {
