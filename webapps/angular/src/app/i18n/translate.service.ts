@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 
-export type Language = 'fr' | 'en';
+export type Language = 'fr' | 'en' | 'zh-CN' | 'zh-TW';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TranslateService {
   private readonly STORAGE_KEY = 'orqueio_language';
+  private readonly SUPPORTED_LANGUAGES: Language[] = ['fr', 'en', 'zh-CN', 'zh-TW'];
   private translations: { [lang: string]: { [key: string]: string } } = {};
   private loadedLanguages: Set<Language> = new Set();
 
@@ -25,13 +26,39 @@ export class TranslateService {
   }
 
   private getSavedLanguage(): Language {
-    const saved = localStorage.getItem(this.STORAGE_KEY);
-    if (saved === 'fr' || saved === 'en') {
+    const saved = localStorage.getItem(this.STORAGE_KEY) as Language | null;
+    if (saved && this.SUPPORTED_LANGUAGES.includes(saved)) {
       return saved;
     }
-    // Detect browser language
-    const browserLang = navigator.language.split('-')[0];
-    return browserLang === 'fr' ? 'fr' : 'en';
+    return this.detectBrowserLanguage();
+  }
+
+  private detectBrowserLanguage(): Language {
+    const browserLang = (navigator.language || (navigator as any).userLanguage || '').toLowerCase();
+
+    // Simplified Chinese：zh-CN, zh-SG, zh-Hans, zh-Hans-CN ...
+    if (/^zh-(cn|sg|hans)/.test(browserLang)) {
+      return 'zh-CN';
+    }
+
+    // Traditional Chinese：zh-TW, zh-HK, zh-MO, zh-Hant, zh-Hant-TW ...
+    if (/^zh-(tw|hk|mo|hant)/.test(browserLang)) {
+      return 'zh-TW';
+    }
+
+    // When the general Chinese language cannot distinguish between simplified and traditional characters,
+    // simplified Chinese is used by default
+    if (browserLang === 'zh' || browserLang.startsWith('zh-')) {
+      return 'zh-CN';
+    }
+
+    // Français
+    if (browserLang.startsWith('fr')) {
+      return 'fr';
+    }
+
+    // English
+    return 'en';
   }
 
   get currentLang(): Language {
@@ -85,7 +112,7 @@ export class TranslateService {
    * Get all available languages
    */
   getAvailableLanguages(): Language[] {
-    return ['fr', 'en'];
+    return this.SUPPORTED_LANGUAGES;
   }
 
   /**
