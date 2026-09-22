@@ -1522,7 +1522,7 @@ export class SelectInstancesDialogComponent implements OnInit {
       case 'startedBefore':          return `${t('queryStartedBefore')}: ${this.formatDisplayDate(v)}`;
       case 'variables': {
         const count = pill.variableLines?.length ?? 0;
-        return `${this.translateService.instant('cockpit.processes.globalSearch.pill.variables')} (${count})`;
+        return this.translateService.instant('cockpit.processes.globalSearch.pill.variables', { count: String(count) });
       }
       default:                       return pill.field;
     }
