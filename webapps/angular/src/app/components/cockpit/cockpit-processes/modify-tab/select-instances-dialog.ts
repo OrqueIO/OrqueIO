@@ -1228,11 +1228,11 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       background: transparent; color: #6366f1; font-size: 0.73rem; cursor: pointer;
     }
     .btn-add-var-line:hover { background: rgba(99,102,241,0.08); }
-    .variable-lines-list { display: flex; flex-direction: column; max-height: 280px; overflow-y: auto; overflow-x: hidden; }
+    .variable-lines-list { display: flex; flex-direction: column; max-height: 161px; overflow-y: auto; overflow-x: hidden; }
     .variable-line {
       display: flex; align-items: flex-start; gap: var(--space-2, 8px);
       padding: var(--space-2, 8px) var(--space-3, 12px);
-      overflow: hidden;
+      overflow: hidden; flex-shrink: 0;
     }
     .variable-line + .variable-line,
     .variable-like-hint + .variable-line,
