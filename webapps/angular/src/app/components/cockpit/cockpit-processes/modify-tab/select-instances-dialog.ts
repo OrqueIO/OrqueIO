@@ -56,7 +56,7 @@ interface MovePill {
 }
 
 const BOOLEAN_FIELDS: MoveField[] = ['active', 'suspended', 'withJobsRetrying', 'withIncidents'];
-const CHIP_FIELDS: MoveField[] = ['instanceId'];
+const CHIP_FIELDS: MoveField[] = ['instanceId', 'businessKey'];
 const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
 
 @Component({
@@ -130,6 +130,13 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                     <app-multi-value-chip-input [values]="pendingChipValues"
                       (valuesChange)="pendingChipValues = $event"
                       [placeholder]="'cockpit.modify.selectDialog.queryInstanceIdsPlaceholder' | translate"
+                      [autofocus]="true" [hideHint]="true">
+                    </app-multi-value-chip-input>
+                  </div>
+                  <div class="editor-body" *ngSwitchCase="'businessKey'">
+                    <app-multi-value-chip-input [values]="pendingChipValues"
+                      (valuesChange)="pendingChipValues = $event"
+                      [placeholder]="'cockpit.modify.selectDialog.queryBusinessKeyPlaceholder' | translate"
                       [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
                   </div>
@@ -416,6 +423,13 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                     <app-multi-value-chip-input [values]="pendingChipValues"
                       (valuesChange)="pendingChipValues = $event"
                       [placeholder]="'cockpit.modify.selectDialog.queryInstanceIdsPlaceholder' | translate"
+                      [autofocus]="true" [hideHint]="true">
+                    </app-multi-value-chip-input>
+                  </div>
+                  <div class="editor-body" *ngSwitchCase="'businessKey'">
+                    <app-multi-value-chip-input [values]="pendingChipValues"
+                      (valuesChange)="pendingChipValues = $event"
+                      [placeholder]="'cockpit.modify.selectDialog.queryBusinessKeyPlaceholder' | translate"
                       [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
                   </div>
@@ -1804,7 +1818,11 @@ export class SelectInstancesDialogComponent implements OnInit {
           if (pill.values.length) body['processInstanceIds'] = pill.values;
           break;
         case 'businessKey':
-          if (pill.values[0]) body['processInstanceBusinessKeyLike'] = `%${pill.values[0]}%`;
+          if (pill.values.length === 1 && pill.values[0]) {
+            body['processInstanceBusinessKeyLike'] = `%${pill.values[0]}%`;
+          } else if (pill.values.length > 1) {
+            body['processInstanceBusinessKeyIn'] = pill.values;
+          }
           break;
         case 'superProcessInstanceId':
           if (pill.values[0]) body['superProcessInstanceId'] = pill.values[0];

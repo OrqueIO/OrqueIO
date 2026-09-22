@@ -415,6 +415,33 @@ describe('SelectInstancesDialogComponent — Variables criterion', () => {
     expect(vars[2]).toEqual({ name: 'status', operator: 'eq', value: 'pending' });
   });
 
+  // ── Scenario 5: businessKey single value → flat processInstanceBusinessKeyLike (non-regression) ──
+  it('[S5] buildQueryBody: single businessKey value → processInstanceBusinessKeyLike, no processInstanceBusinessKeyIn', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      { field: 'businessKey', values: ['ORDER-001'] },
+    ];
+    const body = component.buildQueryBody();
+    expect(body['processInstanceBusinessKeyLike']).toBe('%ORDER-001%');
+    expect(body['processInstanceBusinessKeyIn']).toBeUndefined();
+    expect(body['orQueries']).toBeUndefined();
+  });
+
+  // ── Scenario 6: businessKey two values → processInstanceBusinessKeyIn (OR via native Camunda array) ──
+  // Mirrors instanceId → processInstanceIds pattern: native array field, single request, OR semantics.
+  it('[S6] buildQueryBody: two businessKey values → processInstanceBusinessKeyIn array, no LIKE', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      { field: 'businessKey', values: ['ORDER-001', 'ORDER-NOMATCH-999'] },
+    ];
+    const body = component.buildQueryBody();
+    expect(body['processInstanceBusinessKeyLike']).toBeUndefined();
+    expect(body['processInstanceBusinessKeyIn']).toEqual(['ORDER-001', 'ORDER-NOMATCH-999']);
+    expect(body['orQueries']).toBeUndefined();
+  });
+
   it('isMultiValueOperator and getOperatorLabel match the InstanceFilterPanelComponent implementation', async () => {
     const { component } = await createComponent();
     expect(component.isMultiValueOperator('eq')).toBe(true);
