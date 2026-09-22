@@ -130,7 +130,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                     <app-multi-value-chip-input [values]="pendingChipValues"
                       (valuesChange)="pendingChipValues = $event"
                       [placeholder]="'cockpit.modify.selectDialog.queryInstanceIdsPlaceholder' | translate"
-                      [autofocus]="true">
+                      [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'incidentType'">
@@ -169,7 +169,8 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                           <div class="editor-values-col">
                             <app-multi-value-chip-input *ngIf="isMultiValueOperator(line.operator)"
                               [values]="line.values" (valuesChange)="onVariableLineValuesChange(i, $event)"
-                              [placeholder]="'cockpit.processes.filters.variableValue' | translate">
+                              [placeholder]="'cockpit.processes.filters.variableValue' | translate"
+                              [hideHint]="true">
                             </app-multi-value-chip-input>
                             <input *ngIf="!isMultiValueOperator(line.operator)" type="text"
                                    class="editor-input editor-input--value-single"
@@ -415,7 +416,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                     <app-multi-value-chip-input [values]="pendingChipValues"
                       (valuesChange)="pendingChipValues = $event"
                       [placeholder]="'cockpit.modify.selectDialog.queryInstanceIdsPlaceholder' | translate"
-                      [autofocus]="true">
+                      [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'incidentType'">
@@ -454,7 +455,8 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                           <div class="editor-values-col">
                             <app-multi-value-chip-input *ngIf="isMultiValueOperator(line.operator)"
                               [values]="line.values" (valuesChange)="onVariableLineValuesChange(i, $event)"
-                              [placeholder]="'cockpit.processes.filters.variableValue' | translate">
+                              [placeholder]="'cockpit.processes.filters.variableValue' | translate"
+                              [hideHint]="true">
                             </app-multi-value-chip-input>
                             <input *ngIf="!isMultiValueOperator(line.operator)" type="text"
                                    class="editor-input editor-input--value-single"
