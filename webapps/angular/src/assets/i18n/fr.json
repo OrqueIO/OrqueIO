@@ -1853,6 +1853,7 @@
   "cockpit.modify.selectDialog.incidentTypeFailedExternalTask": "Tâche externe échouée",
   "cockpit.modify.selectDialog.queryIncidentMessageLike": "Message d'incident",
   "cockpit.modify.selectDialog.queryIncidentMessageLikePlaceholder": "Contient...",
+  "cockpit.modify.selectDialog.enterValue": "Entrer une valeur...",
   "cockpit.modify.selectDialog.sectionActivityDates": "Activité & Dates",
   "cockpit.modify.selectDialog.processLabel": "Processus :",
   "cockpit.modify.selectDialog.selectedCount": "sélectionnée(s)",

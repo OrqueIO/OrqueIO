@@ -130,14 +130,14 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   <div class="editor-body" *ngSwitchCase="'instanceId'">
                     <app-multi-value-chip-input [values]="pendingChipValues"
                       (valuesChange)="pendingChipValues = $event"
-                      [placeholder]="'cockpit.modify.selectDialog.queryInstanceIdsPlaceholder' | translate"
+                      [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
                       [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'businessKey'">
                     <app-multi-value-chip-input [values]="pendingChipValues"
                       (valuesChange)="pendingChipValues = $event"
-                      [placeholder]="'cockpit.modify.selectDialog.queryBusinessKeyPlaceholder' | translate"
+                      [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
                       [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
                   </div>
@@ -423,14 +423,14 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   <div class="editor-body" *ngSwitchCase="'instanceId'">
                     <app-multi-value-chip-input [values]="pendingChipValues"
                       (valuesChange)="pendingChipValues = $event"
-                      [placeholder]="'cockpit.modify.selectDialog.queryInstanceIdsPlaceholder' | translate"
+                      [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
                       [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'businessKey'">
                     <app-multi-value-chip-input [values]="pendingChipValues"
                       (valuesChange)="pendingChipValues = $event"
-                      [placeholder]="'cockpit.modify.selectDialog.queryBusinessKeyPlaceholder' | translate"
+                      [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
                       [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
                   </div>
@@ -1565,17 +1565,8 @@ export class SelectInstancesDialogComponent implements OnInit {
       : field;
   }
 
-  getFieldPlaceholder(field: MoveField): string {
-    const keyMap: Partial<Record<MoveField, string>> = {
-      businessKey: 'queryBusinessKeyPlaceholder',
-      incidentId: 'queryIncidentIdPlaceholder',
-      incidentType: 'queryIncidentTypePlaceholder',
-      incidentMessageLike: 'queryIncidentMessageLikePlaceholder',
-    };
-    const key = keyMap[field];
-    return key
-      ? this.translateService.instant(`cockpit.modify.selectDialog.${key}`)
-      : '';
+  getFieldPlaceholder(_field: MoveField): string {
+    return this.translateService.instant('cockpit.modify.selectDialog.enterValue');
   }
 
   dropdownMaxHeight = '340px';
