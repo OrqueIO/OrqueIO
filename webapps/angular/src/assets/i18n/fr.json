@@ -1835,7 +1835,7 @@
   "cockpit.modify.selectDialog.queryStartedBefore": "Commencé avant",
   "cockpit.modify.selectDialog.queryMatchingInstances": "instance(s) active(s) correspondante(s)",
   "cockpit.modify.selectDialog.sectionIdentifiers": "Identifiants",
-  "cockpit.modify.selectDialog.queryInstanceIds": "ID(s) d'instance",
+  "cockpit.modify.selectDialog.queryInstanceIds": "ID d'instance",
   "cockpit.modify.selectDialog.queryInstanceIdsPlaceholder": "id1, id2, ...",
   "cockpit.modify.selectDialog.querySuperProcessInstanceId": "ID de l'instance parente",
   "cockpit.modify.selectDialog.querySubProcessInstanceId": "ID de la sous-instance",

@@ -133,6 +133,10 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                       [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
                       [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
+                    <div class="chip-input-hint-block">
+                      <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
+                      <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
+                    </div>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'businessKey'">
                     <app-multi-value-chip-input [values]="pendingChipValues"
@@ -140,6 +144,10 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                       [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
                       [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
+                    <div class="chip-input-hint-block">
+                      <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
+                      <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
+                    </div>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'incidentType'">
                     <ng-container *ngTemplateOutlet="incidentTypePickerTpl"></ng-container>
@@ -426,6 +434,10 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                       [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
                       [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
+                    <div class="chip-input-hint-block">
+                      <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
+                      <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
+                    </div>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'businessKey'">
                     <app-multi-value-chip-input [values]="pendingChipValues"
@@ -433,6 +445,10 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                       [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
                       [autofocus]="true" [hideHint]="true">
                     </app-multi-value-chip-input>
+                    <div class="chip-input-hint-block">
+                      <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
+                      <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
+                    </div>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'incidentType'">
                     <ng-container *ngTemplateOutlet="incidentTypePickerTpl"></ng-container>
@@ -1331,6 +1347,10 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
     .op-menu-symbol { font-family: var(--font-mono, monospace); font-size: var(--font-size-sm, 0.875rem); font-weight: 600; color: var(--color-primary, #2563eb); width: 16px; text-align: center; flex-shrink: 0; }
     .op-menu-name { flex: 1; font-size: var(--font-size-sm, 0.875rem); color: var(--text-secondary, #6b7280); }
     .op-menu-row--selected .op-menu-name { color: var(--text-primary); }
+    /* ── Chip input hint block (Instance ID & Business Key) ────────────────── */
+    .chip-input-hint-block { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+    .chip-hint-main { margin: 0; font-size: 0.75rem; font-weight: 500; color: var(--text-secondary, #4b5563); }
+    .chip-hint-tip { margin: 0; font-size: 0.65rem; color: var(--text-muted, #6b7280); }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
