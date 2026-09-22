@@ -6,6 +6,7 @@ import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { SelectInstancesDialogComponent } from './select-instances-dialog';
 import { CockpitService, VariableLine } from '../../../../services/cockpit.service';
+import { ProcessInstanceService } from '../../../../services/process-instance.service';
 import { InstanceFilterPanelComponent } from '../../../../shared/instance-filter-panel/instance-filter-panel';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
@@ -20,6 +21,10 @@ const SAMPLE_ACTIVITIES: BpmnElement[] = [
 
 const mockCockpitService = {
   queryProcessInstances: vi.fn().mockReturnValue(of([]))
+};
+
+const mockProcessInstanceService = {
+  getRuntimeInstanceIdsByActivity: vi.fn().mockReturnValue(of(['inst-runtime-1']))
 };
 
 const mockTranslateService = {
@@ -38,6 +43,7 @@ async function createComponent(opts: {
     providers: [
       provideRouter([]),
       { provide: CockpitService, useValue: mockCockpitService },
+      { provide: ProcessInstanceService, useValue: mockProcessInstanceService },
       { provide: TranslateService, useValue: mockTranslateService }
     ]
   }).compileComponents();
@@ -534,6 +540,8 @@ describe('SelectInstancesDialogComponent — Business Key criterion (end-to-end)
 
   beforeEach(() => {
     mockCockpitService.queryProcessInstances.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of(['inst-runtime-1']));
   });
 
   it('[BK-E2E-S1] single businessKey chip → search uses processInstanceBusinessKeyLike (contains) + mandatory filters', async () => {
@@ -558,7 +566,8 @@ describe('SelectInstancesDialogComponent — Business Key criterion (end-to-end)
     expect(body.processInstanceBusinessKeyIn).toBeUndefined();
     expect(body.processDefinitionId).toBe('process:1');
     expect(body.unfinished).toBe(true);
-    expect(body.activeActivityIdIn).toEqual(['UserTask_1']);
+    expect(body.processInstanceIds).toEqual(['inst-runtime-1']);
+    expect(body.activeActivityIdIn).toBeUndefined();
     expect(component.searchResults).toEqual([matchingInstance]);
   });
 
@@ -592,7 +601,8 @@ describe('SelectInstancesDialogComponent — Business Key criterion (end-to-end)
       expect(call[0].processInstanceBusinessKeyIn).toBeUndefined();
       expect(call[0].processDefinitionId).toBe('process:1');
       expect(call[0].unfinished).toBe(true);
-      expect(call[0].activeActivityIdIn).toEqual(['UserTask_1']);
+      expect(call[0].processInstanceIds).toEqual(['inst-runtime-1']);
+      expect(call[0].activeActivityIdIn).toBeUndefined();
     }
 
     // Only the existing instance appears — the non-matching key yields nothing
@@ -606,6 +616,71 @@ describe('InstanceFilterPanelComponent — non-regression after Variables integr
   it('InstanceFilterPanelComponent class is still importable and unmodified', () => {
     expect(InstanceFilterPanelComponent).toBeDefined();
     expect(InstanceFilterPanelComponent.name).toContain('InstanceFilterPanelComponent');
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — Activity ID: two-step runtime lookup', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(() => {
+    mockCockpitService.queryProcessInstances.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockClear();
+  });
+
+  it('[AID-1] runtime returns IDs → body uses processInstanceIds (not activeActivityIdIn), non-regression for sync tasks', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity
+      .mockReturnValue(of(['inst-A', 'inst-B']));
+    mockCockpitService.queryProcessInstances
+      .mockReturnValue(of([{ id: 'inst-A', businessKey: null }]));
+
+    const { component } = await createComponent({ sourceActivityId: 'ServiceTask_1' });
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    expect(calls.length).toBeGreaterThan(0);
+    const body = calls[0][0];
+    expect(body.processInstanceIds).toEqual(['inst-A', 'inst-B']);
+    expect(body.activeActivityIdIn).toBeUndefined();
+    expect(body.processDefinitionId).toBe('process:1');
+    expect(body.unfinished).toBe(true);
+
+    const runtimeCalls = mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mock.calls as any[][];
+    expect(runtimeCalls[0][0].activityIdIn).toEqual(['ServiceTask_1']);
+    expect(runtimeCalls[0][0].processDefinitionId).toBe('process:1');
+  });
+
+  it('[AID-2] runtime returns empty → searchResults is empty and no history query is sent', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity
+      .mockReturnValue(of([]));
+    mockCockpitService.queryProcessInstances
+      .mockReturnValue(of([{ id: 'should-not-appear', businessKey: null }]));
+
+    const { component } = await createComponent({ sourceActivityId: 'ServiceTask_1' });
+
+    expect(mockCockpitService.queryProcessInstances).not.toHaveBeenCalled();
+    expect(component.searchResults).toEqual([]);
+  });
+
+  it('[AID-3] activityId + businessKey combined → processInstanceIds AND processInstanceBusinessKeyLike both in body', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity
+      .mockReturnValue(of(['inst-A']));
+    mockCockpitService.queryProcessInstances
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([{ id: 'inst-A', businessKey: 'BK-001' }]));
+
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    component.selectCriterion('businessKey', new MouseEvent('click'));
+    component.pendingChipValues = ['BK-001'];
+    component.confirmEdit();
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    const bkCall = calls.find(call => call[0].processInstanceBusinessKeyLike != null);
+    expect(bkCall).toBeDefined();
+    expect(bkCall![0].processInstanceBusinessKeyLike).toBe('%BK-001%');
+    expect(bkCall![0].processInstanceIds).toEqual(['inst-A']);
+    expect(bkCall![0].activeActivityIdIn).toBeUndefined();
+    expect(component.searchResults).toEqual([{ id: 'inst-A', businessKey: 'BK-001' }]);
   });
 });
 

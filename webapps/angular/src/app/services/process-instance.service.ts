@@ -297,6 +297,22 @@ export class ProcessInstanceService {
       .pipe(catchError(() => of(null)));
   }
 
+  getRuntimeInstanceIdsByActivity(params: {
+    activityIdIn: string[];
+    processDefinitionId?: string;
+  }): Observable<string[]> {
+    if (!params.activityIdIn.length) return of([]);
+    let httpParams = new HttpParams()
+      .set('activityIdIn', params.activityIdIn.join(','))
+      .set('maxResults', '2000');
+    if (params.processDefinitionId) {
+      httpParams = httpParams.set('processDefinitionId', params.processDefinitionId);
+    }
+    return this.http.get<{ id: string }[]>(`${this.baseUrl}/process-instance`, { params: httpParams }).pipe(
+      map(instances => instances.map(i => i.id))
+    );
+  }
+
   /**
    * Query process instances with POST (supports complex filters)
    */

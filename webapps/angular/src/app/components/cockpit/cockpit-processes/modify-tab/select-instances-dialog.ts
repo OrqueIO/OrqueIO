@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { forkJoin, map, Observable } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faSpinner, faPlus, faTimes, faFilter,
@@ -20,6 +20,7 @@ import {
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { CockpitService, ProcessInstance, VariableLine, parseVariableValue } from '../../../../services/cockpit.service';
+import { ProcessInstanceService } from '../../../../services/process-instance.service';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 
@@ -1356,6 +1357,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
 })
 export class SelectInstancesDialogComponent implements OnInit {
   private cockpitService = inject(CockpitService);
+  private processInstanceService = inject(ProcessInstanceService);
   private translateService = inject(TranslateService);
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
@@ -2047,55 +2049,76 @@ export class SelectInstancesDialogComponent implements OnInit {
     const sorting = [{ sortBy: 'startTime', sortOrder: 'desc' }];
     const bkPill = this.activePills.find(p => p.field === 'businessKey');
     const bkValues: string[] = bkPill?.values ?? [];
-    const baseBody = { ...this.buildQueryBody(), sorting };
+    const baseBody = { ...this.buildQueryBody(), sorting } as Record<string, unknown>;
 
-    let search$: Observable<ProcessInstance[]>;
+    const activityIds = baseBody['activeActivityIdIn'] as string[] | undefined;
 
-    if (bkValues.length === 0) {
-      search$ = this.cockpitService.queryProcessInstances(baseBody, 0, 1000);
-    } else if (bkValues.length === 1) {
-      const body = { ...baseBody, processInstanceBusinessKeyLike: `%${bkValues[0]}%` };
-      search$ = this.cockpitService.queryProcessInstances(body, 0, 1000);
-    } else {
-      const bodies = bkValues.map(val => ({
-        ...baseBody,
-        processInstanceBusinessKeyLike: `%${val}%`
-      }));
-      search$ = forkJoin(
-        bodies.map(body => this.cockpitService.queryProcessInstances(body, 0, 1000))
-      ).pipe(
-        map(results => {
-          const seen = new Set<string>();
-          const merged: ProcessInstance[] = [];
-          for (const arr of results) {
-            for (const inst of arr) {
-              if (!seen.has(inst.id)) {
-                seen.add(inst.id);
-                merged.push(inst);
+    const resolveBody$: Observable<Record<string, unknown> | null> = activityIds?.length
+      ? this.processInstanceService.getRuntimeInstanceIdsByActivity({
+          activityIdIn: activityIds,
+          processDefinitionId: this.processDefinitionId
+        }).pipe(
+          map(runtimeIds => {
+            if (runtimeIds.length === 0) return null;
+            const body = { ...baseBody };
+            delete body['activeActivityIdIn'];
+            const existingIds = body['processInstanceIds'] as string[] | undefined;
+            if (existingIds?.length) {
+              const existingSet = new Set(existingIds);
+              const intersected = runtimeIds.filter(id => existingSet.has(id));
+              if (intersected.length === 0) return null;
+              body['processInstanceIds'] = intersected;
+            } else {
+              body['processInstanceIds'] = runtimeIds;
+            }
+            return body;
+          })
+        )
+      : of(baseBody);
+
+    resolveBody$.pipe(
+      switchMap((body): Observable<ProcessInstance[]> => {
+        if (body === null) return of([]);
+        if (bkValues.length === 0) {
+          return this.cockpitService.queryProcessInstances(body, 0, 1000);
+        }
+        if (bkValues.length === 1) {
+          return this.cockpitService.queryProcessInstances(
+            { ...body, processInstanceBusinessKeyLike: `%${bkValues[0]}%` }, 0, 1000
+          );
+        }
+        return forkJoin(
+          bkValues.map(val => this.cockpitService.queryProcessInstances(
+            { ...body, processInstanceBusinessKeyLike: `%${val}%` }, 0, 1000
+          ))
+        ).pipe(
+          map(results => {
+            const seen = new Set<string>();
+            const merged: ProcessInstance[] = [];
+            for (const arr of results) {
+              for (const inst of arr) {
+                if (!seen.has(inst.id)) { seen.add(inst.id); merged.push(inst); }
               }
             }
-          }
-          return merged.sort((a, b) =>
-            new Date((b as any).startTime).getTime() - new Date((a as any).startTime).getTime()
-          );
-        })
-      );
-    }
-
-    search$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (instances) => {
-          this.searchResults = instances;
-          this.searching = false;
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.searchError = true;
-          this.searching = false;
-          this.cdr.detectChanges();
-        }
-      });
+            return merged.sort((a, b) =>
+              new Date((b as any).startTime).getTime() - new Date((a as any).startTime).getTime()
+            );
+          })
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: instances => {
+        this.searchResults = instances;
+        this.searching = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.searchError = true;
+        this.searching = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   onConfirm(): void {
