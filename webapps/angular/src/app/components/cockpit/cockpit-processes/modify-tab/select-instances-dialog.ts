@@ -2052,25 +2052,48 @@ export class SelectInstancesDialogComponent implements OnInit {
     const baseBody = { ...this.buildQueryBody(), sorting } as Record<string, unknown>;
 
     const activityIds = baseBody['activeActivityIdIn'] as string[] | undefined;
+    const incidentId = baseBody['incidentId'] as string | undefined;
 
-    const resolveBody$: Observable<Record<string, unknown> | null> = activityIds?.length
-      ? this.processInstanceService.getRuntimeInstanceIdsByActivity({
-          activityIdIn: activityIds,
-          processDefinitionId: this.processDefinitionId
+    const needsResolution = !!(activityIds?.length || incidentId);
+
+    const resolveBody$: Observable<Record<string, unknown> | null> = needsResolution
+      ? forkJoin({
+          runtimeIds: activityIds?.length
+            ? this.processInstanceService.getRuntimeInstanceIdsByActivity({
+                activityIdIn: activityIds,
+                processDefinitionId: this.processDefinitionId
+              })
+            : of([] as string[]),
+          incidentProcId: incidentId
+            ? this.processInstanceService.getProcessInstanceIdByIncident(incidentId)
+            : of(null as string | null)
         }).pipe(
-          map(runtimeIds => {
-            if (runtimeIds.length === 0) return null;
+          map(({ runtimeIds, incidentProcId }) => {
             const body = { ...baseBody };
             delete body['activeActivityIdIn'];
+            delete body['incidentId'];
+
             const existingIds = body['processInstanceIds'] as string[] | undefined;
-            if (existingIds?.length) {
-              const existingSet = new Set(existingIds);
-              const intersected = runtimeIds.filter(id => existingSet.has(id));
-              if (intersected.length === 0) return null;
-              body['processInstanceIds'] = intersected;
-            } else {
-              body['processInstanceIds'] = runtimeIds;
+            delete body['processInstanceIds'];
+            let ids: string[] | null = existingIds?.slice() ?? null;
+
+            if (activityIds?.length) {
+              if (!runtimeIds.length) return null;
+              ids = ids !== null
+                ? runtimeIds.filter(id => (ids as string[]).includes(id))
+                : runtimeIds.slice();
+              if (!ids.length) return null;
             }
+
+            if (incidentId) {
+              if (!incidentProcId) return null;
+              ids = ids !== null
+                ? ids.filter(id => id === incidentProcId)
+                : [incidentProcId];
+              if (!ids.length) return null;
+            }
+
+            if (ids !== null) body['processInstanceIds'] = ids;
             return body;
           })
         )

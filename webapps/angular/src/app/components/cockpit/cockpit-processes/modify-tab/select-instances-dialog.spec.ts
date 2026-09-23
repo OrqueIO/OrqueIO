@@ -24,7 +24,8 @@ const mockCockpitService = {
 };
 
 const mockProcessInstanceService = {
-  getRuntimeInstanceIdsByActivity: vi.fn().mockReturnValue(of(['inst-runtime-1']))
+  getRuntimeInstanceIdsByActivity: vi.fn().mockReturnValue(of(['inst-runtime-1'])),
+  getProcessInstanceIdByIncident: vi.fn().mockReturnValue(of(null))
 };
 
 const mockTranslateService = {
@@ -542,6 +543,8 @@ describe('SelectInstancesDialogComponent — Business Key criterion (end-to-end)
     mockCockpitService.queryProcessInstances.mockClear();
     mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockClear();
     mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of(['inst-runtime-1']));
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockClear();
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockReturnValue(of(null));
   });
 
   it('[BK-E2E-S1] single businessKey chip → search uses processInstanceBusinessKeyLike (contains) + mandatory filters', async () => {
@@ -626,6 +629,8 @@ describe('SelectInstancesDialogComponent — Activity ID: two-step runtime looku
   beforeEach(() => {
     mockCockpitService.queryProcessInstances.mockClear();
     mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockClear();
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockClear();
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockReturnValue(of(null));
   });
 
   it('[AID-1] runtime returns IDs → body uses processInstanceIds (not activeActivityIdIn), non-regression for sync tasks', async () => {
@@ -681,6 +686,88 @@ describe('SelectInstancesDialogComponent — Activity ID: two-step runtime looku
     expect(bkCall![0].processInstanceIds).toEqual(['inst-A']);
     expect(bkCall![0].activeActivityIdIn).toBeUndefined();
     expect(component.searchResults).toEqual([{ id: 'inst-A', businessKey: 'BK-001' }]);
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — Incident ID: two-step history lookup', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(() => {
+    mockCockpitService.queryProcessInstances.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of(['inst-runtime-1']));
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockClear();
+  });
+
+  it('[IID-1] incidentId alone → body uses processInstanceIds with incident processInstanceId, incidentId absent', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of(['inst-runtime-1']));
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockReturnValue(of('incident-owner-proc-id'));
+
+    const { component } = await createComponent();
+
+    // Remove the auto-populated activity pill and clear ngOnInit calls
+    component.activePills = [];
+    mockCockpitService.queryProcessInstances.mockClear();
+    mockCockpitService.queryProcessInstances.mockReturnValue(
+      of([{ id: 'incident-owner-proc-id', businessKey: null }])
+    );
+
+    component.selectCriterion('incidentId', new MouseEvent('click'));
+    component.pendingTextValue = 'db6acfdd-b682-11f1-82c1-48ea62940dbf';
+    component.confirmEdit();
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    expect(calls.length).toBeGreaterThan(0);
+    const body = calls[0][0];
+    expect(body.processInstanceIds).toEqual(['incident-owner-proc-id']);
+    expect(body.incidentId).toBeUndefined();
+    expect(body.processDefinitionId).toBe('process:1');
+
+    expect(mockProcessInstanceService.getProcessInstanceIdByIncident).toHaveBeenCalledWith(
+      'db6acfdd-b682-11f1-82c1-48ea62940dbf'
+    );
+  });
+
+  it('[IID-2] incidentId lookup returns null (not found) → searchResults is empty, no history query', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of(['inst-runtime-1']));
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockReturnValue(of(null));
+
+    const { component } = await createComponent();
+
+    // Remove the auto-populated activity pill and clear ngOnInit calls
+    component.activePills = [];
+    mockCockpitService.queryProcessInstances.mockClear();
+
+    component.selectCriterion('incidentId', new MouseEvent('click'));
+    component.pendingTextValue = 'non-existent-incident-id';
+    component.confirmEdit();
+
+    expect(mockCockpitService.queryProcessInstances).not.toHaveBeenCalled();
+    expect(component.searchResults).toEqual([]);
+  });
+
+  it('[IID-3] incidentId + activityId combined → intersection: only instance matching both in body', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of(['inst-A', 'inst-B', 'inst-C']));
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockReturnValue(of('inst-B'));
+
+    const { component } = await createComponent({ sourceActivityId: 'ServiceTask_1' });
+
+    // Clear ngOnInit calls, set up mock for the combined search
+    mockCockpitService.queryProcessInstances.mockClear();
+    mockCockpitService.queryProcessInstances.mockReturnValue(of([{ id: 'inst-B', businessKey: null }]));
+
+    component.selectCriterion('incidentId', new MouseEvent('click'));
+    component.pendingTextValue = 'some-incident-id';
+    component.confirmEdit();
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    expect(calls.length).toBe(1);
+    const body = calls[0][0];
+    expect(body.processInstanceIds).toEqual(['inst-B']);
+    expect(body.activeActivityIdIn).toBeUndefined();
+    expect(body.incidentId).toBeUndefined();
+    expect(component.searchResults).toEqual([{ id: 'inst-B', businessKey: null }]);
   });
 });
 

@@ -313,6 +313,15 @@ export class ProcessInstanceService {
     );
   }
 
+  getProcessInstanceIdByIncident(incidentId: string): Observable<string | null> {
+    return this.http.get<{ id: string; processInstanceId: string }[]>(
+      `${this.historyUrl}/incident`,
+      { params: { incidentId, maxResults: '1' } }
+    ).pipe(
+      map(incidents => incidents[0]?.processInstanceId ?? null)
+    );
+  }
+
   /**
    * Query process instances with POST (supports complex filters)
    */
