@@ -3,17 +3,13 @@ import 'zone.js/testing';
 import { vi, describe, it, expect, beforeAll } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { ModifyTabComponent } from './modify-tab';
+import { MOVE_INSTANCES_DIALOG_SESSION_KEY } from './select-instances-dialog';
 import { ProcessInstanceService } from '../../../../services/process-instance.service';
 import { BatchService } from '../../../../services/batch.service';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { initTestEnvironment } from '../../../../testing/test-utils';
 import { of } from 'rxjs';
 
-// Minimal BPMN XML that mirrors a real Camunda-exported file:
-// - has bpmn2: namespace prefix
-// - has a bpmndi:BPMNDiagram section with _di shape/edge elements (IDs ending in _di)
-// - has sequenceFlow elements (connections, not activities)
-// - has real flow nodes: startEvent, userTask, callActivity, endEvent
 const BPMN_WITH_DI = `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn2:definitions
   xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
@@ -79,6 +75,88 @@ async function createModifyTab() {
   component.processDefinitionId = 'MyProcess:1:abc';
   return { fixture, component };
 }
+
+describe('ModifyTabComponent — session storage auto-restore', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('[SS-1] showSelectDialog is set to true automatically when processDefinitionId matches saved state', async () => {
+    const savedState = {
+      processDefinitionId: 'MyProcess:1:abc',
+      activePills: [{ field: 'businessKey', values: ['BK-001'] }],
+      selectionMode: 'instance',
+      selectedIds: ['inst-1', 'inst-2'],
+      variableNamesIgnoreCase: false,
+      variableValuesIgnoreCase: false,
+      sourceActivity: { id: 'UserTask_1', type: 'bpmn:UserTask', name: 'User Task' },
+      targetActivity: { id: 'EndEvent_1', type: 'bpmn:EndEvent', name: 'End' },
+    };
+    sessionStorage.setItem(MOVE_INSTANCES_DIALOG_SESSION_KEY, JSON.stringify(savedState));
+
+    const { component } = await createModifyTab();
+
+    expect(component.showSelectDialog).toBe(false);
+
+    component.ngOnChanges({
+      processDefinitionId: {
+        currentValue: 'MyProcess:1:abc',
+        previousValue: null,
+        firstChange: false,
+        isFirstChange: () => false
+      }
+    });
+
+    expect(component.showSelectDialog).toBe(true);
+    expect(component.sourceActivity?.id).toBe('UserTask_1');
+    expect(component.targetActivity?.id).toBe('EndEvent_1');
+
+    sessionStorage.removeItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+  });
+
+  it('[SS-2] showSelectDialog stays false when no session state exists', async () => {
+    sessionStorage.removeItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+
+    const { component } = await createModifyTab();
+
+    component.ngOnChanges({
+      processDefinitionId: {
+        currentValue: 'MyProcess:1:abc',
+        previousValue: null,
+        firstChange: false,
+        isFirstChange: () => false
+      }
+    });
+
+    expect(component.showSelectDialog).toBe(false);
+  });
+
+  it('[SS-3] showSelectDialog stays false and stale session state is cleared when processDefinitionId does not match', async () => {
+    const savedState = {
+      processDefinitionId: 'OtherProcess:1:xyz',
+      activePills: [],
+      selectionMode: 'instance',
+      selectedIds: [],
+      variableNamesIgnoreCase: false,
+      variableValuesIgnoreCase: false,
+      sourceActivity: null,
+      targetActivity: null,
+    };
+    sessionStorage.setItem(MOVE_INSTANCES_DIALOG_SESSION_KEY, JSON.stringify(savedState));
+
+    const { component } = await createModifyTab();
+
+    component.ngOnChanges({
+      processDefinitionId: {
+        currentValue: 'MyProcess:1:abc',
+        previousValue: null,
+        firstChange: false,
+        isFirstChange: () => false
+      }
+    });
+
+    expect(component.showSelectDialog).toBe(false);
+    expect(sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY)).toBeNull();
+  });
+});
 
 describe('ModifyTabComponent — parseBpmnActivities', () => {
   beforeAll(() => { initTestEnvironment(); });

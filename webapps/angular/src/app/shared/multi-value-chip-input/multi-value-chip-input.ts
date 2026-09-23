@@ -20,6 +20,7 @@ export class MultiValueChipInputComponent implements AfterViewInit {
   @Input() values: string[] = [];
   @Input() placeholder = '';
   @Input() autofocus = false;
+  @Input() hideHint = false;
   @Output() valuesChange = new EventEmitter<string[]>();
   @Output() emptyEnter = new EventEmitter<void>();
 

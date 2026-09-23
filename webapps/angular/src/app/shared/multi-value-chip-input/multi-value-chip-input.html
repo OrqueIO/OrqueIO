@@ -34,4 +34,4 @@
   />
 </div>
 <span class="chip-input-error" *ngIf="editingError">{{ editingError | translate }}</span>
-<span class="chip-input-hint" *ngIf="!editingError">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</span>
+<span class="chip-input-hint" *ngIf="!editingError && !hideHint">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</span>

@@ -1,11 +1,12 @@
 import {
   Component, Input, Output, EventEmitter, ChangeDetectionStrategy,
-  ChangeDetectorRef, inject, DestroyRef, OnInit, HostListener
+  ChangeDetectorRef, inject, DestroyRef, OnInit, OnDestroy, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faSpinner, faPlus, faTimes, faFilter,
@@ -19,8 +20,22 @@ import {
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { CockpitService, ProcessInstance, VariableLine, parseVariableValue } from '../../../../services/cockpit.service';
+import { ProcessInstanceService } from '../../../../services/process-instance.service';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+
+export const MOVE_INSTANCES_DIALOG_SESSION_KEY = 'moveInstancesDialogState';
+
+interface DialogPersistedState {
+  processDefinitionId: string;
+  activePills: MovePill[];
+  selectionMode: 'instance' | 'query';
+  selectedIds: string[];
+  variableNamesIgnoreCase: boolean;
+  variableValuesIgnoreCase: boolean;
+  sourceActivity: BpmnElement | null;
+  targetActivity: BpmnElement | null;
+}
 
 export interface InstanceSelectionResult {
   mode: 'instance' | 'query';
@@ -56,7 +71,7 @@ interface MovePill {
 }
 
 const BOOLEAN_FIELDS: MoveField[] = ['active', 'suspended', 'withJobsRetrying', 'withIncidents'];
-const CHIP_FIELDS: MoveField[] = ['instanceId'];
+const CHIP_FIELDS: MoveField[] = ['instanceId', 'businessKey'];
 const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
 
 @Component({
@@ -127,11 +142,28 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                 </div>
                 <ng-container [ngSwitch]="pill.field">
                   <div class="editor-body" *ngSwitchCase="'instanceId'">
-                    <app-multi-value-chip-input [values]="pendingChipValues"
-                      (valuesChange)="pendingChipValues = $event"
-                      [placeholder]="'cockpit.modify.selectDialog.queryInstanceIdsPlaceholder' | translate"
-                      [autofocus]="true">
+                    <app-multi-value-chip-input [(values)]="pendingChipValues"
+                      [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
+                      [autofocus]="true" [hideHint]="true"
+                      (emptyEnter)="confirmEdit()"
+                      (keydown.enter)="$event.stopPropagation()">
                     </app-multi-value-chip-input>
+                    <div class="chip-input-hint-block">
+                      <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
+                      <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
+                    </div>
+                  </div>
+                  <div class="editor-body" *ngSwitchCase="'businessKey'">
+                    <app-multi-value-chip-input [(values)]="pendingChipValues"
+                      [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
+                      [autofocus]="true" [hideHint]="true"
+                      (emptyEnter)="confirmEdit()"
+                      (keydown.enter)="$event.stopPropagation()">
+                    </app-multi-value-chip-input>
+                    <div class="chip-input-hint-block">
+                      <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
+                      <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
+                    </div>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'incidentType'">
                     <ng-container *ngTemplateOutlet="incidentTypePickerTpl"></ng-container>
@@ -169,7 +201,8 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                           <div class="editor-values-col">
                             <app-multi-value-chip-input *ngIf="isMultiValueOperator(line.operator)"
                               [values]="line.values" (valuesChange)="onVariableLineValuesChange(i, $event)"
-                              [placeholder]="'cockpit.processes.filters.variableValue' | translate">
+                              [placeholder]="'cockpit.processes.filters.variableValue' | translate"
+                              [hideHint]="true">
                             </app-multi-value-chip-input>
                             <input *ngIf="!isMultiValueOperator(line.operator)" type="text"
                                    class="editor-input editor-input--value-single"
@@ -412,11 +445,28 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                 </div>
                 <ng-container [ngSwitch]="safeEditorType">
                   <div class="editor-body" *ngSwitchCase="'instanceId'">
-                    <app-multi-value-chip-input [values]="pendingChipValues"
-                      (valuesChange)="pendingChipValues = $event"
-                      [placeholder]="'cockpit.modify.selectDialog.queryInstanceIdsPlaceholder' | translate"
-                      [autofocus]="true">
+                    <app-multi-value-chip-input [(values)]="pendingChipValues"
+                      [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
+                      [autofocus]="true" [hideHint]="true"
+                      (emptyEnter)="confirmEdit()"
+                      (keydown.enter)="$event.stopPropagation()">
                     </app-multi-value-chip-input>
+                    <div class="chip-input-hint-block">
+                      <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
+                      <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
+                    </div>
+                  </div>
+                  <div class="editor-body" *ngSwitchCase="'businessKey'">
+                    <app-multi-value-chip-input [(values)]="pendingChipValues"
+                      [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
+                      [autofocus]="true" [hideHint]="true"
+                      (emptyEnter)="confirmEdit()"
+                      (keydown.enter)="$event.stopPropagation()">
+                    </app-multi-value-chip-input>
+                    <div class="chip-input-hint-block">
+                      <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
+                      <p class="chip-hint-tip">{{ 'cockpit.processes.globalSearch.chipInputHintTip' | translate }}</p>
+                    </div>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'incidentType'">
                     <ng-container *ngTemplateOutlet="incidentTypePickerTpl"></ng-container>
@@ -454,7 +504,8 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                           <div class="editor-values-col">
                             <app-multi-value-chip-input *ngIf="isMultiValueOperator(line.operator)"
                               [values]="line.values" (valuesChange)="onVariableLineValuesChange(i, $event)"
-                              [placeholder]="'cockpit.processes.filters.variableValue' | translate">
+                              [placeholder]="'cockpit.processes.filters.variableValue' | translate"
+                              [hideHint]="true">
                             </app-multi-value-chip-input>
                             <input *ngIf="!isMultiValueOperator(line.operator)" type="text"
                                    class="editor-input editor-input--value-single"
@@ -1226,11 +1277,11 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       background: transparent; color: #6366f1; font-size: 0.73rem; cursor: pointer;
     }
     .btn-add-var-line:hover { background: rgba(99,102,241,0.08); }
-    .variable-lines-list { display: flex; flex-direction: column; max-height: 280px; overflow-y: auto; overflow-x: hidden; }
+    .variable-lines-list { display: flex; flex-direction: column; max-height: 161px; overflow-y: auto; overflow-x: hidden; }
     .variable-line {
       display: flex; align-items: flex-start; gap: var(--space-2, 8px);
       padding: var(--space-2, 8px) var(--space-3, 12px);
-      overflow: hidden;
+      overflow: hidden; flex-shrink: 0;
     }
     .variable-line + .variable-line,
     .variable-like-hint + .variable-line,
@@ -1314,14 +1365,22 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
     .op-menu-symbol { font-family: var(--font-mono, monospace); font-size: var(--font-size-sm, 0.875rem); font-weight: 600; color: var(--color-primary, #2563eb); width: 16px; text-align: center; flex-shrink: 0; }
     .op-menu-name { flex: 1; font-size: var(--font-size-sm, 0.875rem); color: var(--text-secondary, #6b7280); }
     .op-menu-row--selected .op-menu-name { color: var(--text-primary); }
+    /* ── Chip input hint block (Instance ID & Business Key) ────────────────── */
+    .chip-input-hint-block { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+    .chip-hint-main { margin: 0; font-size: 0.75rem; font-weight: 500; color: var(--text-secondary, #4b5563); }
+    .chip-hint-tip { margin: 0; font-size: 0.65rem; color: var(--text-muted, #6b7280); }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelectInstancesDialogComponent implements OnInit {
+export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
   private cockpitService = inject(CockpitService);
+  private processInstanceService = inject(ProcessInstanceService);
   private translateService = inject(TranslateService);
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
+
+  private _discardStateOnDestroy = false;
+  private _pendingRestoredIds: string[] | null = null;
 
   @Input() processDefinitionId!: string;
   @Input() sourceActivityId: string | null = null;
@@ -1445,8 +1504,58 @@ export class SelectInstancesDialogComponent implements OnInit {
     }
   }
 
+  private saveToSessionStorage(): void {
+    try {
+      const sourceActivity = this.sourceActivityId
+        ? (this.availableActivities.find(a => a.id === this.sourceActivityId) ?? { id: this.sourceActivityId, type: 'bpmn:FlowNode' })
+        : null;
+      const targetActivity = this.targetActivityId
+        ? (this.availableActivities.find(a => a.id === this.targetActivityId) ?? { id: this.targetActivityId, type: 'bpmn:FlowNode' })
+        : null;
+      const state: DialogPersistedState = {
+        processDefinitionId: this.processDefinitionId,
+        activePills: this.activePills,
+        selectionMode: this.selectionMode,
+        selectedIds: [...this.selectedIds],
+        variableNamesIgnoreCase: this.variableNamesIgnoreCase,
+        variableValuesIgnoreCase: this.variableValuesIgnoreCase,
+        sourceActivity,
+        targetActivity,
+      };
+      sessionStorage.setItem(MOVE_INSTANCES_DIALOG_SESSION_KEY, JSON.stringify(state));
+    } catch { }
+  }
+
+  private loadFromSessionStorage(): boolean {
+    try {
+      const raw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+      if (!raw) return false;
+      const state: DialogPersistedState = JSON.parse(raw);
+      if (state?.processDefinitionId !== this.processDefinitionId) return false;
+      this.activePills = state.activePills ?? [];
+      this.selectionMode = state.selectionMode ?? 'instance';
+      this.variableNamesIgnoreCase = state.variableNamesIgnoreCase ?? false;
+      this.variableValuesIgnoreCase = state.variableValuesIgnoreCase ?? false;
+      if (state.selectedIds?.length) {
+        this._pendingRestoredIds = state.selectedIds;
+      }
+      return true;
+    } catch { return false; }
+  }
+
+  private clearSessionStorage(): void {
+    try { sessionStorage.removeItem(MOVE_INSTANCES_DIALOG_SESSION_KEY); } catch { }
+  }
+
+  ngOnDestroy(): void {
+    if (!this._discardStateOnDestroy) {
+      this.saveToSessionStorage();
+    }
+  }
+
   ngOnInit(): void {
-    if (this.sourceActivityId) {
+    const restored = this.loadFromSessionStorage();
+    if (!restored && this.sourceActivityId) {
       this.activePills = [{ field: 'activityId', values: [this.sourceActivityId] }];
     }
     this.search();
@@ -1520,7 +1629,7 @@ export class SelectInstancesDialogComponent implements OnInit {
       case 'startedBefore':          return `${t('queryStartedBefore')}: ${this.formatDisplayDate(v)}`;
       case 'variables': {
         const count = pill.variableLines?.length ?? 0;
-        return `${this.translateService.instant('cockpit.processes.globalSearch.pill.variables')} (${count})`;
+        return this.translateService.instant('cockpit.processes.globalSearch.pill.variables', { count: String(count) });
       }
       default:                       return pill.field;
     }
@@ -1548,17 +1657,8 @@ export class SelectInstancesDialogComponent implements OnInit {
       : field;
   }
 
-  getFieldPlaceholder(field: MoveField): string {
-    const keyMap: Partial<Record<MoveField, string>> = {
-      businessKey: 'queryBusinessKeyPlaceholder',
-      incidentId: 'queryIncidentIdPlaceholder',
-      incidentType: 'queryIncidentTypePlaceholder',
-      incidentMessageLike: 'queryIncidentMessageLikePlaceholder',
-    };
-    const key = keyMap[field];
-    return key
-      ? this.translateService.instant(`cockpit.modify.selectDialog.${key}`)
-      : '';
+  getFieldPlaceholder(_field: MoveField): string {
+    return this.translateService.instant('cockpit.modify.selectDialog.enterValue');
   }
 
   dropdownMaxHeight = '340px';
@@ -1802,7 +1902,7 @@ export class SelectInstancesDialogComponent implements OnInit {
           if (pill.values.length) body['processInstanceIds'] = pill.values;
           break;
         case 'businessKey':
-          if (pill.values[0]) body['processInstanceBusinessKeyLike'] = `%${pill.values[0]}%`;
+          // Handled exclusively in search() via processInstanceBusinessKeyLike — never in body here
           break;
         case 'superProcessInstanceId':
           if (pill.values[0]) body['superProcessInstanceId'] = pill.values[0];
@@ -1848,14 +1948,24 @@ export class SelectInstancesDialogComponent implements OnInit {
           break;
         }
         case 'variables': {
-          if (pill.variableLines?.length) {
-            const conditions: Array<{ name: string; operator: string; value: any }> = [];
-            for (const line of pill.variableLines) {
-              for (const v of line.values) {
-                conditions.push({ name: line.variableName, operator: line.variableOperator, value: parseVariableValue(v, line.variableOperator) });
-              }
+          const validLines = pill.variableLines?.filter(l => l.variableName.trim() && l.values.length > 0) ?? [];
+          if (validLines.length > 0) {
+            const hasMultiValue = validLines.some(l => l.values.length > 1);
+            if (!hasMultiValue) {
+              // All single-value: flat variables[] (AND semantics across variable lines)
+              body['variables'] = validLines.map(l => ({
+                name: l.variableName, operator: l.variableOperator,
+                value: parseVariableValue(l.values[0], l.variableOperator)
+              }));
+            } else {
+              // At least one multi-value: orQueries (OR within same variable, AND between variables)
+              body['orQueries'] = validLines.map(l => ({
+                variables: l.values.map(v => ({
+                  name: l.variableName, operator: l.variableOperator,
+                  value: parseVariableValue(v, l.variableOperator)
+                }))
+              }));
             }
-            if (conditions.length > 0) body['variables'] = conditions;
           }
           break;
         }
@@ -2006,25 +2116,114 @@ export class SelectInstancesDialogComponent implements OnInit {
     this.selectedIds.clear();
     this.cdr.markForCheck();
 
-    const body = { ...this.buildQueryBody(), sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }] };
+    const sorting = [{ sortBy: 'startTime', sortOrder: 'desc' }];
+    const bkPill = this.activePills.find(p => p.field === 'businessKey');
+    const bkValues: string[] = bkPill?.values ?? [];
+    const baseBody = { ...this.buildQueryBody(), sorting } as Record<string, unknown>;
 
-    this.cockpitService.queryProcessInstances(body, 0, 1000)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (instances) => {
-          this.searchResults = instances;
-          this.searching = false;
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.searchError = true;
-          this.searching = false;
-          this.cdr.detectChanges();
+    const activityIds = baseBody['activeActivityIdIn'] as string[] | undefined;
+    const incidentId = baseBody['incidentId'] as string | undefined;
+
+    const needsResolution = !!(activityIds?.length || incidentId);
+
+    const resolveBody$: Observable<Record<string, unknown> | null> = needsResolution
+      ? forkJoin({
+          runtimeIds: activityIds?.length
+            ? this.processInstanceService.getRuntimeInstanceIdsByActivity({
+                activityIdIn: activityIds,
+                processDefinitionId: this.processDefinitionId
+              })
+            : of([] as string[]),
+          incidentProcId: incidentId
+            ? this.processInstanceService.getProcessInstanceIdByIncident(incidentId)
+            : of(null as string | null)
+        }).pipe(
+          map(({ runtimeIds, incidentProcId }) => {
+            const body = { ...baseBody };
+            delete body['activeActivityIdIn'];
+            delete body['incidentId'];
+
+            const existingIds = body['processInstanceIds'] as string[] | undefined;
+            delete body['processInstanceIds'];
+            let ids: string[] | null = existingIds?.slice() ?? null;
+
+            if (activityIds?.length) {
+              if (!runtimeIds.length) return null;
+              ids = ids !== null
+                ? runtimeIds.filter(id => (ids as string[]).includes(id))
+                : runtimeIds.slice();
+              if (!ids.length) return null;
+            }
+
+            if (incidentId) {
+              if (!incidentProcId) return null;
+              ids = ids !== null
+                ? ids.filter(id => id === incidentProcId)
+                : [incidentProcId];
+              if (!ids.length) return null;
+            }
+
+            if (ids !== null) body['processInstanceIds'] = ids;
+            return body;
+          })
+        )
+      : of(baseBody);
+
+    resolveBody$.pipe(
+      switchMap((body): Observable<ProcessInstance[]> => {
+        if (body === null) return of([]);
+        if (bkValues.length === 0) {
+          return this.cockpitService.queryProcessInstances(body, 0, 1000);
         }
-      });
+        if (bkValues.length === 1) {
+          return this.cockpitService.queryProcessInstances(
+            { ...body, processInstanceBusinessKeyLike: `%${bkValues[0]}%` }, 0, 1000
+          );
+        }
+        return forkJoin(
+          bkValues.map(val => this.cockpitService.queryProcessInstances(
+            { ...body, processInstanceBusinessKeyLike: `%${val}%` }, 0, 1000
+          ))
+        ).pipe(
+          map(results => {
+            const seen = new Set<string>();
+            const merged: ProcessInstance[] = [];
+            for (const arr of results) {
+              for (const inst of arr) {
+                if (!seen.has(inst.id)) { seen.add(inst.id); merged.push(inst); }
+              }
+            }
+            return merged.sort((a, b) =>
+              new Date((b as any).startTime).getTime() - new Date((a as any).startTime).getTime()
+            );
+          })
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: instances => {
+        this.searchResults = instances;
+        if (this._pendingRestoredIds) {
+          const validIds = new Set(instances.map(i => i.id));
+          for (const id of this._pendingRestoredIds) {
+            if (validIds.has(id)) this.selectedIds.add(id);
+          }
+          this._pendingRestoredIds = null;
+        }
+        this.searching = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.searchError = true;
+        this.searching = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   onConfirm(): void {
+    this._discardStateOnDestroy = true;
+    this.clearSessionStorage();
     if (this.selectionMode === 'instance') {
       this.confirmed.emit({
         mode: 'instance',
@@ -2043,11 +2242,15 @@ export class SelectInstancesDialogComponent implements OnInit {
   }
 
   onCancel(): void {
+    this._discardStateOnDestroy = true;
+    this.clearSessionStorage();
     this.cancelled.emit();
   }
 
   onBackdropClick(event: MouseEvent): void {
     if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
+      this._discardStateOnDestroy = true;
+      this.clearSessionStorage();
       this.cancelled.emit();
     }
   }
