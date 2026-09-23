@@ -102,7 +102,9 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
           if (raw) {
             const state = JSON.parse(raw);
             if (state?.processDefinitionId === this.processDefinitionId) {
-              this.showSelectDialog = true;
+              if (state.sourceActivity || state.targetActivity) {
+                this.showSelectDialog = true;
+              }
               if (state.sourceActivity) this.sourceActivity = state.sourceActivity;
               if (state.targetActivity) this.targetActivity = state.targetActivity;
               this.emitOverlays();
