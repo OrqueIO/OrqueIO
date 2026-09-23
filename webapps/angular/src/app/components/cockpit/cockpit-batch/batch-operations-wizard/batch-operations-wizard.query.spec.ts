@@ -1493,55 +1493,25 @@ describe('BatchOperationsWizardComponent — move-instances: onMoveInstancesRowC
   const v1 = { id: 'orderProcess:1:aaa', key: 'orderProcess', name: 'Order', version: 1, deploymentId: '', suspended: false };
   const v2 = { id: 'orderProcess:2:bbb', key: 'orderProcess', name: 'Order', version: 2, deploymentId: '', suspended: false };
 
-  function makeStub(versions: typeof v1[], expandedKey: string | null = null) {
-    const byKey = new Map([[versions[0].key, versions]]);
+  function makeStub() {
     const navigateCalls: Array<unknown[]> = [];
     const stub: Record<string, unknown> = {
-      moveInstancesByKey: byKey,
-      moveInstancesExpandedKey: expandedKey,
-      cdr: { markForCheck: () => {} },
       doNavigateToModifyTab: (...args: unknown[]) => { navigateCalls.push(args); }
     };
     return { stub, navigateCalls };
   }
 
-  it('navigates directly when process has exactly one version', () => {
-    const { stub, navigateCalls } = makeStub([v1]);
+  it('navigates directly using proc.key and proc.id (single version)', () => {
+    const { stub, navigateCalls } = makeStub();
     BatchOperationsWizardComponent.prototype.onMoveInstancesRowClick.call(stub, v1);
     expect(navigateCalls).toHaveLength(1);
     expect(navigateCalls[0]).toEqual(['orderProcess', 'orderProcess:1:aaa']);
   });
 
-  it('expands version list when process has multiple versions (collapsed → expanded)', () => {
-    const { stub } = makeStub([v2, v1]);
+  it('navigates directly using proc.key and proc.id (latest of multiple versions)', () => {
+    const { stub, navigateCalls } = makeStub();
+    // proc is the latest version representative (arr[0] after desc sort)
     BatchOperationsWizardComponent.prototype.onMoveInstancesRowClick.call(stub, v2);
-    expect(stub['moveInstancesExpandedKey']).toBe('orderProcess');
-  });
-
-  it('collapses version list when the same process is clicked again', () => {
-    const { stub } = makeStub([v2, v1], 'orderProcess');
-    BatchOperationsWizardComponent.prototype.onMoveInstancesRowClick.call(stub, v2);
-    expect(stub['moveInstancesExpandedKey']).toBeNull();
-  });
-
-  it('does not navigate when expanding', () => {
-    const { stub, navigateCalls } = makeStub([v2, v1]);
-    BatchOperationsWizardComponent.prototype.onMoveInstancesRowClick.call(stub, v2);
-    expect(navigateCalls).toHaveLength(0);
-  });
-
-});
-
-
-describe('BatchOperationsWizardComponent — move-instances: onMoveInstancesVersionClick', () => {
-
-  it('navigates to the selected version', () => {
-    const version = { id: 'orderProcess:2:bbb', key: 'orderProcess', name: 'Order', version: 2, deploymentId: '', suspended: false };
-    const navigateCalls: Array<unknown[]> = [];
-    const stub = {
-      doNavigateToModifyTab: (...args: unknown[]) => { navigateCalls.push(args); }
-    };
-    BatchOperationsWizardComponent.prototype.onMoveInstancesVersionClick.call(stub, version);
     expect(navigateCalls).toHaveLength(1);
     expect(navigateCalls[0]).toEqual(['orderProcess', 'orderProcess:2:bbb']);
   });

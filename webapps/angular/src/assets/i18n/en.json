@@ -1775,7 +1775,6 @@
   "cockpit.batchOps.moveInstances.processNote": "Select the process definition to open in the Modify tab.",
   "cockpit.batchOps.moveInstances.searchPlaceholder": "Search by name or key…",
   "cockpit.batchOps.moveInstances.noProcesses": "No process definitions found",
-  "cockpit.batchOps.moveInstances.versionCount": "{{count}} version(s)",
   "cockpit.batchOps.removalTimeBatch.label": "Set removal time (batches)",
   "cockpit.batchOps.removalTimeBatch.desc": "Configure when historic batch data is removed",
   "cockpit.batchOps.multiStateBrowseCap": "Only the first {{count}} results are browsable (Camunda engine limit per multi-state query). Refine your search criteria to access specific instances beyond this range.",

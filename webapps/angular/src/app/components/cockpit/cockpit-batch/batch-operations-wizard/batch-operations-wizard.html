@@ -541,37 +541,13 @@
         <!-- Process directory -->
         <div *ngIf="!moveInstancesProcessesLoading" class="proc-dir">
 
-          <ng-container *ngFor="let proc of filteredMoveInstancesProcesses; trackBy: trackByProcKey">
-
-            <!-- Process row -->
-            <div class="proc-dir__row"
-                 [class.proc-dir__row--expanded]="moveInstancesExpandedKey === proc.key"
-                 (click)="onMoveInstancesRowClick(proc)">
-              <fa-icon class="proc-dir__icon" [icon]="faCodeBranch"></fa-icon>
-              <div class="proc-dir__info">
-                <span class="proc-dir__name">{{ proc.name || proc.key }}</span>
-                <span class="proc-dir__meta">
-                  {{ 'cockpit.batchOps.moveInstances.versionCount' | translate: { count: getVersionCount(proc.key).toString() } }}
-                </span>
-              </div>
-              <fa-icon class="proc-dir__chevron"
-                       [icon]="moveInstancesExpandedKey === proc.key ? faChevronDown : faChevronRight">
-              </fa-icon>
-            </div>
-
-            <!-- Expanded: version list -->
-            <div *ngIf="moveInstancesExpandedKey === proc.key" class="proc-dir__versions">
-              <div *ngFor="let v of getVersionsByKey(proc.key)"
-                   class="proc-dir__version-row"
-                   (click)="onMoveInstancesVersionClick(v)">
-                <span class="proc-dir__version-label">
-                  v{{ v.version }}{{ v.versionTag ? ' — ' + v.versionTag : '' }}
-                </span>
-                <fa-icon class="proc-dir__version-chevron" [icon]="faChevronRight"></fa-icon>
-              </div>
-            </div>
-
-          </ng-container>
+          <div *ngFor="let proc of filteredMoveInstancesProcesses; trackBy: trackByProcKey"
+               class="proc-dir__row"
+               (click)="onMoveInstancesRowClick(proc)">
+            <fa-icon class="proc-dir__icon" [icon]="faCodeBranch"></fa-icon>
+            <span class="proc-dir__name">{{ proc.name || proc.key }}</span>
+            <fa-icon class="proc-dir__chevron" [icon]="faChevronRight"></fa-icon>
+          </div>
 
           <p *ngIf="filteredMoveInstancesProcesses.length === 0" class="empty-state">
             {{ 'cockpit.batchOps.moveInstances.noProcesses' | translate }}

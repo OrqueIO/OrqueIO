@@ -1757,7 +1757,6 @@
   "cockpit.batchOps.moveInstances.processNote": "Sélectionnez la définition de processus à ouvrir dans l'onglet Modifier.",
   "cockpit.batchOps.moveInstances.searchPlaceholder": "Rechercher par nom ou clé…",
   "cockpit.batchOps.moveInstances.noProcesses": "Aucune définition de processus trouvée",
-  "cockpit.batchOps.moveInstances.versionCount": "{{count}} version(s)",
   "cockpit.batchOps.removalTimeBatch.label": "Définir le délai de suppression (lots)",
   "cockpit.batchOps.removalTimeBatch.desc": "Configurer quand les données historiques de lot sont supprimées",
   "cockpit.batchOps.multiStateBrowseCap": "Seuls les {{count}} premiers résultats sont navigables (limite du moteur Camunda par requête multi-état). Affinez vos critères de recherche pour accéder à des instances spécifiques au-delà de cette plage.",

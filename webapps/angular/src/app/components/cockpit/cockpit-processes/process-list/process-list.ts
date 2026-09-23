@@ -286,8 +286,16 @@ export class ProcessListComponent implements OnInit, OnDestroy {
             this.selectedVersion = definition.id;
             try {
               const batchSignal = sessionStorage.getItem(BATCH_OPS_MODIFY_SIGNAL_KEY);
-              if (batchSignal && batchSignal === definition.id) {
+              const isForThisProcess = batchSignal && (
+                batchSignal === definition.id ||
+                batchSignal.startsWith(this.processDefinitionKey + ':')
+              );
+              if (isForThisProcess) {
                 sessionStorage.removeItem(BATCH_OPS_MODIFY_SIGNAL_KEY);
+                if (batchSignal !== definition.id) {
+                  this.selectedVersion = batchSignal;
+                  this.onVersionChange();
+                }
                 this.switchTab('modify');
               } else {
                 const raw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);

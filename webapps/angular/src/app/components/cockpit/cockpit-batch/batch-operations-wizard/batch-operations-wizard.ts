@@ -299,7 +299,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   moveInstancesSearchText = '';
   moveInstancesUniqueProcesses: ProcessDefinition[] = [];
   moveInstancesByKey = new Map<string, ProcessDefinition[]>();
-  moveInstancesExpandedKey: string | null = null;
 
   get filteredMoveInstancesProcesses(): ProcessDefinition[] {
     const q = this.moveInstancesSearchText.toLowerCase().trim();
@@ -307,14 +306,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     return this.moveInstancesUniqueProcesses.filter(p =>
       (p.name || '').toLowerCase().includes(q) || p.key.toLowerCase().includes(q)
     );
-  }
-
-  getVersionCount(key: string): number {
-    return this.moveInstancesByKey.get(key)?.length ?? 0;
-  }
-
-  getVersionsByKey(key: string): ProcessDefinition[] {
-    return this.moveInstancesByKey.get(key) ?? [];
   }
 
   trackByProcKey(_: number, proc: ProcessDefinition): string {
@@ -481,7 +472,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.selectedDecisionIds = new Set();
     this.moveInstancesUniqueProcesses = [];
     this.moveInstancesByKey = new Map();
-    this.moveInstancesExpandedKey = null;
     this.moveInstancesProcessesLoading = false;
     this.moveInstancesSearchText = '';
   }
@@ -555,18 +545,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   onMoveInstancesRowClick(proc: ProcessDefinition): void {
-    const versions = this.moveInstancesByKey.get(proc.key);
-    if (!versions?.length) return;
-    if (versions.length === 1) {
-      this.doNavigateToModifyTab(proc.key, versions[0].id);
-    } else {
-      this.moveInstancesExpandedKey = this.moveInstancesExpandedKey === proc.key ? null : proc.key;
-      this.cdr.markForCheck();
-    }
-  }
-
-  onMoveInstancesVersionClick(version: ProcessDefinition): void {
-    this.doNavigateToModifyTab(version.key, version.id);
+    this.doNavigateToModifyTab(proc.key, proc.id);
   }
 
   private doNavigateToModifyTab(key: string, versionId: string): void {

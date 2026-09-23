@@ -79,7 +79,6 @@ const STEP1_KEYS = [
   'cockpit.batchOps.moveInstances.processNote',
   'cockpit.batchOps.moveInstances.searchPlaceholder',
   'cockpit.batchOps.moveInstances.noProcesses',
-  'cockpit.batchOps.moveInstances.versionCount',
 ];
 
 const STEP2_KEYS = [
