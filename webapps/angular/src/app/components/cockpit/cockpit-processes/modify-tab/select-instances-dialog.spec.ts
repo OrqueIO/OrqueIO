@@ -885,3 +885,144 @@ describe('SelectInstancesDialogComponent — chip auto-search', () => {
   });
 });
 
+
+describe('SelectInstancesDialogComponent — Activity picker keyboard navigation', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('ArrowDown moves highlight from null to first enabled activity, then to the next', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+      targetActivityId: null,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.activityHighlightIndex).toBeNull();
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(0);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(1);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(2);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(2);
+  });
+
+  it('ArrowUp moves highlight back and stops at the first item', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+      targetActivityId: null,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(2);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    expect(component.activityHighlightIndex).toBe(1);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    expect(component.activityHighlightIndex).toBe(0);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    expect(component.activityHighlightIndex).toBe(0);
+  });
+
+  it('ArrowDown skips the disabled (target) activity', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+      targetActivityId: 'ServiceTask_1',
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(0);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(2);
+  });
+
+  it('Enter selects the highlighted activity and triggers Apply (confirmEdit)', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+      targetActivityId: null,
+    });
+
+    const emitted: (string | null)[] = [];
+    component.activityIdCriterionChange.subscribe((v: string | null) => emitted.push(v));
+
+    component.startEditPill(0, new MouseEvent('click'));
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(1);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.activeEditorType).toBeNull();
+    const pill = component.activePills.find(p => p.field === 'activityId');
+    expect(pill?.values[0]).toBe('ServiceTask_1');
+    expect(emitted).toEqual(['ServiceTask_1']);
+    expect(component.activityHighlightIndex).toBeNull();
+  });
+
+  it('Enter with no highlight does nothing', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.activityHighlightIndex).toBeNull();
+
+    const emitted: (string | null)[] = [];
+    component.activityIdCriterionChange.subscribe((v: string | null) => emitted.push(v));
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.activeEditorType).toBe('activityId');
+    expect(emitted).toEqual([]);
+  });
+
+  it('activityHighlightIndex resets to null when the editor is closed via Escape', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(0);
+
+    component.cancelEdit();
+
+    expect(component.activityHighlightIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('activityHighlightIndex resets when a different editor is reopened', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(0);
+
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.activityHighlightIndex).toBeNull();
+  });
+});
+
