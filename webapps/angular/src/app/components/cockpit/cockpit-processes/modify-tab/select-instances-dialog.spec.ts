@@ -814,3 +814,74 @@ describe('SelectInstancesDialogComponent — criteria dropdown completeness', ()
   });
 });
 
+describe('SelectInstancesDialogComponent — chip auto-search', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(() => {
+    mockCockpitService.queryProcessInstances.mockClear();
+    mockCockpitService.queryProcessInstances.mockReturnValue(of([]));
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of([]));
+  });
+
+  it('[CAS-1] adding instanceId chips accumulates in pending only — no search, editor stays open, no pill committed', async () => {
+    const { component } = await createComponent();
+    component.activePills = [];
+    mockCockpitService.queryProcessInstances.mockClear();
+
+    component.selectCriterion('instanceId', new MouseEvent('click'));
+    component.pendingChipValues = ['inst-001'];
+
+    expect(mockCockpitService.queryProcessInstances).not.toHaveBeenCalled();
+    expect(component.activeEditorType).toBe('instanceId');
+    expect(component.activePills.find(p => p.field === 'instanceId')).toBeUndefined();
+  });
+
+  it('[CAS-2] confirmEdit (emptyEnter / Apply) commits pill and triggers search', async () => {
+    const { component } = await createComponent();
+    component.activePills = [];
+    component.selectCriterion('instanceId', new MouseEvent('click'));
+    component.pendingChipValues = ['inst-001', 'inst-002'];
+    mockCockpitService.queryProcessInstances.mockClear();
+
+    component.confirmEdit();
+
+    expect(mockCockpitService.queryProcessInstances).toHaveBeenCalledTimes(1);
+    const pills = component.activePills.filter(p => p.field === 'instanceId');
+    expect(pills.length).toBe(1);
+    expect(pills[0].values).toEqual(['inst-001', 'inst-002']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('[CAS-3] adding businessKey chips accumulates in pending only — no search, editor stays open', async () => {
+    const { component } = await createComponent();
+    component.activePills = [];
+    mockCockpitService.queryProcessInstances.mockClear();
+
+    component.selectCriterion('businessKey', new MouseEvent('click'));
+    component.pendingChipValues = ['ORDER-001'];
+
+    expect(mockCockpitService.queryProcessInstances).not.toHaveBeenCalled();
+    expect(component.activeEditorType).toBe('businessKey');
+    expect(component.activePills.find(p => p.field === 'businessKey')).toBeUndefined();
+  });
+
+  it('[CAS-4] confirmEdit with empty chips removes the pill and re-searches', async () => {
+    const { component } = await createComponent();
+    component.activePills = [];
+    component.selectCriterion('instanceId', new MouseEvent('click'));
+    component.pendingChipValues = ['inst-001', 'inst-002'];
+    component.confirmEdit();
+
+    const pillIdx = component.activePills.findIndex(p => p.field === 'instanceId');
+    component.startEditPill(pillIdx, new MouseEvent('click'));
+    component.pendingChipValues = [];
+    mockCockpitService.queryProcessInstances.mockClear();
+
+    component.confirmEdit();
+
+    expect(mockCockpitService.queryProcessInstances).toHaveBeenCalledTimes(1);
+    expect(component.activePills.find(p => p.field === 'instanceId')).toBeUndefined();
+  });
+});
+

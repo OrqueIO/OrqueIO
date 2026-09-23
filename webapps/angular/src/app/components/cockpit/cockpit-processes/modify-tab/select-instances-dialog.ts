@@ -142,10 +142,11 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                 </div>
                 <ng-container [ngSwitch]="pill.field">
                   <div class="editor-body" *ngSwitchCase="'instanceId'">
-                    <app-multi-value-chip-input [values]="pendingChipValues"
-                      (valuesChange)="pendingChipValues = $event"
+                    <app-multi-value-chip-input [(values)]="pendingChipValues"
                       [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
-                      [autofocus]="true" [hideHint]="true">
+                      [autofocus]="true" [hideHint]="true"
+                      (emptyEnter)="confirmEdit()"
+                      (keydown.enter)="$event.stopPropagation()">
                     </app-multi-value-chip-input>
                     <div class="chip-input-hint-block">
                       <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
@@ -153,10 +154,11 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                     </div>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'businessKey'">
-                    <app-multi-value-chip-input [values]="pendingChipValues"
-                      (valuesChange)="pendingChipValues = $event"
+                    <app-multi-value-chip-input [(values)]="pendingChipValues"
                       [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
-                      [autofocus]="true" [hideHint]="true">
+                      [autofocus]="true" [hideHint]="true"
+                      (emptyEnter)="confirmEdit()"
+                      (keydown.enter)="$event.stopPropagation()">
                     </app-multi-value-chip-input>
                     <div class="chip-input-hint-block">
                       <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
@@ -443,10 +445,11 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                 </div>
                 <ng-container [ngSwitch]="safeEditorType">
                   <div class="editor-body" *ngSwitchCase="'instanceId'">
-                    <app-multi-value-chip-input [values]="pendingChipValues"
-                      (valuesChange)="pendingChipValues = $event"
+                    <app-multi-value-chip-input [(values)]="pendingChipValues"
                       [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
-                      [autofocus]="true" [hideHint]="true">
+                      [autofocus]="true" [hideHint]="true"
+                      (emptyEnter)="confirmEdit()"
+                      (keydown.enter)="$event.stopPropagation()">
                     </app-multi-value-chip-input>
                     <div class="chip-input-hint-block">
                       <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
@@ -454,10 +457,11 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                     </div>
                   </div>
                   <div class="editor-body" *ngSwitchCase="'businessKey'">
-                    <app-multi-value-chip-input [values]="pendingChipValues"
-                      (valuesChange)="pendingChipValues = $event"
+                    <app-multi-value-chip-input [(values)]="pendingChipValues"
                       [placeholder]="'cockpit.modify.selectDialog.enterValue' | translate"
-                      [autofocus]="true" [hideHint]="true">
+                      [autofocus]="true" [hideHint]="true"
+                      (emptyEnter)="confirmEdit()"
+                      (keydown.enter)="$event.stopPropagation()">
                     </app-multi-value-chip-input>
                     <div class="chip-input-hint-block">
                       <p class="chip-hint-main">{{ 'cockpit.processes.globalSearch.chipInputHint' | translate }}</p>
