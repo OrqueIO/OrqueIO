@@ -44,6 +44,7 @@ import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { ModifyTabComponent, ModifyOverlay } from '../modify-tab/modify-tab';
+import { MOVE_INSTANCES_DIALOG_SESSION_KEY } from '../modify-tab/select-instances-dialog';
 
 interface SortConfig {
   column: string;
@@ -210,16 +211,9 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSavedPreferences();
 
-    // route.params emits only when THIS component's route params change — it never
-    // fires for navigations to unrelated routes (instance view, process list, etc.),
-    // which prevents stale-snapshot processing. snapshot.queryParams is atomically
-    // updated before params fires, so reading it here always gives current values.
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
-        // Restore expand state on every navigation — must be here, not ngOnInit,
-        // because Angular reuses the same component instance for the same route
-        // and ngOnInit only runs once.
         this.diagramMaximized = (window.history.state as any)?.[EXPAND_DIAGRAM_STATE_KEY] === true;
         const newKey = params['key'];
         if (!newKey) return;
@@ -262,7 +256,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       try {
         const prefs = JSON.parse(saved);
         if (prefs.pageSize) this.pageSize = prefs.pageSize;
-        // Validate sortConfig before applying - only accept valid Camunda sort columns
         if (prefs.sortConfig?.column && prefs.sortConfig?.direction) {
           const validColumns = ['startTime', 'endTime', 'businessKey'];
           if (validColumns.includes(prefs.sortConfig.column)) {
@@ -270,7 +263,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           }
         }
       } catch (e) {
-        // Ignore invalid saved preferences
       }
     }
   }
@@ -290,9 +282,17 @@ export class ProcessListComponent implements OnInit, OnDestroy {
         next: (definition) => {
           if (requestedForKey !== this.processDefinitionKey) return;
           this.processDefinition = definition;
-          // Initialize selectedVersion to the latest version (current definition ID)
           if (definition?.id) {
             this.selectedVersion = definition.id;
+            try {
+              const raw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+              if (raw) {
+                const state = JSON.parse(raw);
+                if (state?.processDefinitionId === definition.id) {
+                  this.switchTab('modify');
+                }
+              }
+            } catch { }
           }
           this.buildBreadcrumbs();
           this.cdr.markForCheck();

@@ -21,7 +21,7 @@ import { ProcessInstanceService } from '../../../../services/process-instance.se
 import { BatchService } from '../../../../services/batch.service';
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { ModificationDto, ModificationInstruction } from '../../../../models/cockpit/modification.model';
-import { SelectInstancesDialogComponent, InstanceSelectionResult } from './select-instances-dialog';
+import { SelectInstancesDialogComponent, InstanceSelectionResult, MOVE_INSTANCES_DIALOG_SESSION_KEY } from './select-instances-dialog';
 import { ConfirmModificationDialogComponent } from './confirm-modification-dialog';
 
 export type ModifyOverlay = { activityId: string; role: 'source' | 'target' };
@@ -96,6 +96,23 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['processDefinitionId']) {
       this.reset();
+      if (this.processDefinitionId) {
+        try {
+          const raw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+          if (raw) {
+            const state = JSON.parse(raw);
+            if (state?.processDefinitionId === this.processDefinitionId) {
+              this.showSelectDialog = true;
+              if (state.sourceActivity) this.sourceActivity = state.sourceActivity;
+              if (state.targetActivity) this.targetActivity = state.targetActivity;
+              this.emitOverlays();
+              this.cdr.markForCheck();
+            } else {
+              sessionStorage.removeItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+            }
+          }
+        } catch { }
+      }
     }
     if (changes['bpmnXml'] && this.bpmnXml) {
       this.bpmnActivities = this.parseBpmnActivities(this.bpmnXml);
