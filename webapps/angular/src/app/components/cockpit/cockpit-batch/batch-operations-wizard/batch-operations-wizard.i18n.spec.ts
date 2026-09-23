@@ -42,10 +42,10 @@ const OPERATIONS_KEYS = [
   'cockpit.batchOps.setRetriesExternal.desc',
   'cockpit.batchOps.setVariables.label',
   'cockpit.batchOps.setVariables.desc',
+  'cockpit.batchOps.moveInstances.label',
+  'cockpit.batchOps.moveInstances.desc',
   'cockpit.batchOps.correlate.label',
   'cockpit.batchOps.correlate.desc',
-  'cockpit.batchOps.migrate.label',
-  'cockpit.batchOps.migrate.desc',
   'cockpit.batchOps.removalTimeProcess.label',
   'cockpit.batchOps.removalTimeProcess.desc',
   'cockpit.batchOps.removalTimeDecision.label',
@@ -76,6 +76,10 @@ const STEP1_KEYS = [
   'cockpit.batchOps.setRetriesExternal.retriesHint',
   'cockpit.batchOps.setRetriesExternal.actionBtn',
   'cockpit.batchOps.setRetriesExternal.actionBtnQuery',
+  'cockpit.batchOps.moveInstances.processNote',
+  'cockpit.batchOps.moveInstances.searchPlaceholder',
+  'cockpit.batchOps.moveInstances.noProcesses',
+  'cockpit.batchOps.moveInstances.versionCount',
 ];
 
 const STEP2_KEYS = [
@@ -213,8 +217,8 @@ describe('batch-operations-wizard: behavioral contracts', () => {
   it('test 5 – all 13 operations are exposed directly (no show-more truncation)', () => {
     const EXPECTED_IDS = [
       'suspend', 'activate', 'delete-running', 'delete-finished', 'delete-decision',
-      'set-retries-jobs', 'set-retries-external', 'set-variables', 'correlate',
-      'migrate', 'removal-time-process', 'removal-time-decision', 'removal-time-batch',
+      'set-retries-jobs', 'set-retries-external', 'set-variables', 'move-instances',
+      'correlate', 'removal-time-process', 'removal-time-decision', 'removal-time-batch',
     ];
     // Simulate the component: no slicing, all operations returned as-is
     const operations = EXPECTED_IDS.map(id => ({ id, available: id === 'suspend' }));

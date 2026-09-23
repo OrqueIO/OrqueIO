@@ -1,7 +1,7 @@
 import { Component, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { tap, switchMap, of, distinctUntilChanged, filter } from 'rxjs';
+import { switchMap, of, distinctUntilChanged } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faSpinner,
@@ -65,11 +65,8 @@ export class BatchDetailComponent {
   annotation$ = this.batch$.pipe(
     distinctUntilChanged((a, b) => a?.id === b?.id),
     switchMap(batch => {
-      console.log('[BatchDetail] batch:', batch?.id, 'type:', batch?.type);
       if (!batch?.id || batch.type !== 'instance-modification') return of(null);
-      return this.batchService.getOperationAnnotation(batch.id).pipe(
-        tap(annotation => console.log('[BatchDetail] annotation response:', annotation))
-      );
+      return this.batchService.getOperationAnnotation(batch.id);
     })
   );
 

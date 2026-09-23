@@ -4,7 +4,7 @@ import {
   DestroyRef, inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { forkJoin, Subject, switchMap, catchError, EMPTY } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -12,16 +12,17 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faPauseCircle, faPlayCircle, faTrash, faSpinner,
   faCheckCircle, faTimesCircle, faExclamationTriangle,
-  faChevronDown, faChevronUp, faInfoCircle, faEye,
+  faChevronDown, faChevronUp, faChevronRight, faInfoCircle, faEye,
   faDatabase, faSyncAlt, faCodeBranch, faClock, faTag, faEnvelope,
-  faCirclePlus
+  faCirclePlus, faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { ProcessInstanceService, ProcessInstance } from '../../../../services/process-instance.service';
-import { CockpitService, MultiValueFilter } from '../../../../services/cockpit.service';
+import { CockpitService, MultiValueFilter, ProcessDefinition } from '../../../../services/cockpit.service';
+import { MOVE_INSTANCES_DIALOG_SESSION_KEY } from '../../cockpit-processes/modify-tab/select-instances-dialog';
 import { DecisionService, DecisionInstance } from '../../../../services/decision.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
@@ -148,19 +149,19 @@ const BATCH_OPERATIONS: BatchOperationDef[] = [
     actionBtnQueryKey: 'cockpit.batchOps.setVariables.actionBtnQuery'
   },
   {
+    id: 'move-instances',
+    labelKey: 'cockpit.batchOps.moveInstances.label',
+    descKey: 'cockpit.batchOps.moveInstances.desc',
+    icon: faArrowRight,
+    badgeClass: 'badge--blue',
+    available: true
+  },
+  {
     id: 'correlate',
     labelKey: 'cockpit.batchOps.correlate.label',
     descKey: 'cockpit.batchOps.correlate.desc',
     icon: faEnvelope,
     badgeClass: 'badge--blue',
-    available: false
-  },
-  {
-    id: 'migrate',
-    labelKey: 'cockpit.batchOps.migrate.label',
-    descKey: 'cockpit.batchOps.migrate.desc',
-    icon: faCodeBranch,
-    badgeClass: 'badge--purple',
     available: false
   },
   {
@@ -206,6 +207,7 @@ interface WizardPersistedState {
   setDueDate?: boolean;
   retriesDueDate?: string;
   variableDefinitions?: { name: string; type: string; value: string }[];
+  moveInstancesSearchText?: string;
 }
 
 @Component({
@@ -237,6 +239,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
   private translateService = inject(TranslateService);
+  private router = inject(Router);
 
   faSpinner = faSpinner;
   faCheckCircle = faCheckCircle;
@@ -250,6 +253,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   faPauseCircle = faPauseCircle;
   faCodeBranch = faCodeBranch;
   faCirclePlus = faCirclePlus;
+  faArrowRight = faArrowRight;
+  faChevronRight = faChevronRight;
 
   breadcrumbs: BreadcrumbItem[] = [
     { translateKey: 'cockpit.menu.batchOperations' }
@@ -289,6 +294,32 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   setDueDate = false;
   retriesDueDate = '';
   variableDefinitions: VariableDef[] = [];
+
+  moveInstancesProcessesLoading = false;
+  moveInstancesSearchText = '';
+  moveInstancesUniqueProcesses: ProcessDefinition[] = [];
+  moveInstancesByKey = new Map<string, ProcessDefinition[]>();
+  moveInstancesExpandedKey: string | null = null;
+
+  get filteredMoveInstancesProcesses(): ProcessDefinition[] {
+    const q = this.moveInstancesSearchText.toLowerCase().trim();
+    if (!q) return this.moveInstancesUniqueProcesses;
+    return this.moveInstancesUniqueProcesses.filter(p =>
+      (p.name || '').toLowerCase().includes(q) || p.key.toLowerCase().includes(q)
+    );
+  }
+
+  getVersionCount(key: string): number {
+    return this.moveInstancesByKey.get(key)?.length ?? 0;
+  }
+
+  getVersionsByKey(key: string): ProcessDefinition[] {
+    return this.moveInstancesByKey.get(key) ?? [];
+  }
+
+  trackByProcKey(_: number, proc: ProcessDefinition): string {
+    return proc.key;
+  }
 
   decisionFilterCriteria: MultiValueFilter[] = [];
   decisionHasActiveCriteria = false;
@@ -401,6 +432,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.loadInstances();
     } else if (id === 'delete-decision') {
       this.loadDecisionInstances();
+    } else if (id === 'move-instances') {
+      this.loadMoveInstancesProcesses();
     }
     this.cdr.markForCheck();
     this.saveToSessionStorage();
@@ -446,6 +479,11 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.decisionInstancesTotal = 0;
     this.decisionInstancesPage = 1;
     this.selectedDecisionIds = new Set();
+    this.moveInstancesUniqueProcesses = [];
+    this.moveInstancesByKey = new Map();
+    this.moveInstancesExpandedKey = null;
+    this.moveInstancesProcessesLoading = false;
+    this.moveInstancesSearchText = '';
   }
 
   onRowClick(id: string): void {
@@ -482,6 +520,64 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.decisionInstancesLoading = true;
     this.cdr.markForCheck();
     this.decisionInstanceLoad$.next();
+  }
+
+  private loadMoveInstancesProcesses(): void {
+    this.moveInstancesProcessesLoading = true;
+    this.cdr.markForCheck();
+    this.cockpitService.getProcessDefinitions(1000, false)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (procs) => {
+          const byKey = new Map<string, ProcessDefinition[]>();
+          for (const p of procs) {
+            const arr = byKey.get(p.key) ?? [];
+            arr.push(p);
+            byKey.set(p.key, arr);
+          }
+          for (const arr of byKey.values()) {
+            arr.sort((a, b) => b.version - a.version);
+          }
+          this.moveInstancesByKey = byKey;
+          const unique = [...byKey.values()].map(arr => arr[0]);
+          unique.sort((a, b) => (a.name || a.key).localeCompare(b.name || b.key));
+          this.moveInstancesUniqueProcesses = unique;
+          this.moveInstancesProcessesLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.moveInstancesByKey = new Map();
+          this.moveInstancesUniqueProcesses = [];
+          this.moveInstancesProcessesLoading = false;
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+  onMoveInstancesRowClick(proc: ProcessDefinition): void {
+    const versions = this.moveInstancesByKey.get(proc.key);
+    if (!versions?.length) return;
+    if (versions.length === 1) {
+      this.doNavigateToModifyTab(proc.key, versions[0].id);
+    } else {
+      this.moveInstancesExpandedKey = this.moveInstancesExpandedKey === proc.key ? null : proc.key;
+      this.cdr.markForCheck();
+    }
+  }
+
+  onMoveInstancesVersionClick(version: ProcessDefinition): void {
+    this.doNavigateToModifyTab(version.key, version.id);
+  }
+
+  private doNavigateToModifyTab(key: string, versionId: string): void {
+    try {
+      sessionStorage.setItem(
+        MOVE_INSTANCES_DIALOG_SESSION_KEY,
+        JSON.stringify({ processDefinitionId: versionId })
+      );
+    } catch { }
+    this.clearSessionStorage();
+    this.router.navigate(['/cockpit/processes', key, 'instances']);
   }
 
   private buildDecisionInstanceQueryParams(countOnly = false): import('../../../../services/decision.service').DecisionInstanceQueryParams {
@@ -1093,7 +1189,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         retries: this.retries,
         setDueDate: this.setDueDate,
         retriesDueDate: this.retriesDueDate,
-        variableDefinitions: this.variableDefinitions
+        variableDefinitions: this.variableDefinitions,
+        moveInstancesSearchText: this.moveInstancesSearchText
       };
       sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(state));
     } catch {
@@ -1140,6 +1237,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         this.loadInstances();
       } else if (this.currentStep === 1 && this.selectedOperationId === 'delete-decision') {
         this.loadDecisionInstances();
+      } else if (this.currentStep === 1 && this.selectedOperationId === 'move-instances') {
+        this.moveInstancesSearchText = state.moveInstancesSearchText ?? '';
+        this.loadMoveInstancesProcesses();
       }
       this.cdr.markForCheck();
     } catch {
