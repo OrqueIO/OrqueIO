@@ -1,6 +1,6 @@
 import {
   Component, Input, Output, EventEmitter, ChangeDetectionStrategy,
-  ChangeDetectorRef, inject, DestroyRef, OnInit, HostListener
+  ChangeDetectorRef, inject, DestroyRef, OnInit, OnDestroy, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -23,6 +23,19 @@ import { CockpitService, ProcessInstance, VariableLine, parseVariableValue } fro
 import { ProcessInstanceService } from '../../../../services/process-instance.service';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+
+export const MOVE_INSTANCES_DIALOG_SESSION_KEY = 'moveInstancesDialogState';
+
+interface DialogPersistedState {
+  processDefinitionId: string;
+  activePills: MovePill[];
+  selectionMode: 'instance' | 'query';
+  selectedIds: string[];
+  variableNamesIgnoreCase: boolean;
+  variableValuesIgnoreCase: boolean;
+  sourceActivity: BpmnElement | null;
+  targetActivity: BpmnElement | null;
+}
 
 export interface InstanceSelectionResult {
   mode: 'instance' | 'query';
@@ -1355,12 +1368,15 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelectInstancesDialogComponent implements OnInit {
+export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
   private cockpitService = inject(CockpitService);
   private processInstanceService = inject(ProcessInstanceService);
   private translateService = inject(TranslateService);
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
+
+  private _discardStateOnDestroy = false;
+  private _pendingRestoredIds: string[] | null = null;
 
   @Input() processDefinitionId!: string;
   @Input() sourceActivityId: string | null = null;
@@ -1484,8 +1500,58 @@ export class SelectInstancesDialogComponent implements OnInit {
     }
   }
 
+  private saveToSessionStorage(): void {
+    try {
+      const sourceActivity = this.sourceActivityId
+        ? (this.availableActivities.find(a => a.id === this.sourceActivityId) ?? { id: this.sourceActivityId, type: 'bpmn:FlowNode' })
+        : null;
+      const targetActivity = this.targetActivityId
+        ? (this.availableActivities.find(a => a.id === this.targetActivityId) ?? { id: this.targetActivityId, type: 'bpmn:FlowNode' })
+        : null;
+      const state: DialogPersistedState = {
+        processDefinitionId: this.processDefinitionId,
+        activePills: this.activePills,
+        selectionMode: this.selectionMode,
+        selectedIds: [...this.selectedIds],
+        variableNamesIgnoreCase: this.variableNamesIgnoreCase,
+        variableValuesIgnoreCase: this.variableValuesIgnoreCase,
+        sourceActivity,
+        targetActivity,
+      };
+      sessionStorage.setItem(MOVE_INSTANCES_DIALOG_SESSION_KEY, JSON.stringify(state));
+    } catch { }
+  }
+
+  private loadFromSessionStorage(): boolean {
+    try {
+      const raw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+      if (!raw) return false;
+      const state: DialogPersistedState = JSON.parse(raw);
+      if (state?.processDefinitionId !== this.processDefinitionId) return false;
+      this.activePills = state.activePills ?? [];
+      this.selectionMode = state.selectionMode ?? 'instance';
+      this.variableNamesIgnoreCase = state.variableNamesIgnoreCase ?? false;
+      this.variableValuesIgnoreCase = state.variableValuesIgnoreCase ?? false;
+      if (state.selectedIds?.length) {
+        this._pendingRestoredIds = state.selectedIds;
+      }
+      return true;
+    } catch { return false; }
+  }
+
+  private clearSessionStorage(): void {
+    try { sessionStorage.removeItem(MOVE_INSTANCES_DIALOG_SESSION_KEY); } catch { }
+  }
+
+  ngOnDestroy(): void {
+    if (!this._discardStateOnDestroy) {
+      this.saveToSessionStorage();
+    }
+  }
+
   ngOnInit(): void {
-    if (this.sourceActivityId) {
+    const restored = this.loadFromSessionStorage();
+    if (!restored && this.sourceActivityId) {
       this.activePills = [{ field: 'activityId', values: [this.sourceActivityId] }];
     }
     this.search();
@@ -2133,6 +2199,13 @@ export class SelectInstancesDialogComponent implements OnInit {
     ).subscribe({
       next: instances => {
         this.searchResults = instances;
+        if (this._pendingRestoredIds) {
+          const validIds = new Set(instances.map(i => i.id));
+          for (const id of this._pendingRestoredIds) {
+            if (validIds.has(id)) this.selectedIds.add(id);
+          }
+          this._pendingRestoredIds = null;
+        }
         this.searching = false;
         this.cdr.detectChanges();
       },
@@ -2145,6 +2218,8 @@ export class SelectInstancesDialogComponent implements OnInit {
   }
 
   onConfirm(): void {
+    this._discardStateOnDestroy = true;
+    this.clearSessionStorage();
     if (this.selectionMode === 'instance') {
       this.confirmed.emit({
         mode: 'instance',
@@ -2163,11 +2238,15 @@ export class SelectInstancesDialogComponent implements OnInit {
   }
 
   onCancel(): void {
+    this._discardStateOnDestroy = true;
+    this.clearSessionStorage();
     this.cancelled.emit();
   }
 
   onBackdropClick(event: MouseEvent): void {
     if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
+      this._discardStateOnDestroy = true;
+      this.clearSessionStorage();
       this.cancelled.emit();
     }
   }

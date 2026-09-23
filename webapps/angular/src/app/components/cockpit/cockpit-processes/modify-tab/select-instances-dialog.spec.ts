@@ -4,7 +4,7 @@ import { vi, describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { SelectInstancesDialogComponent } from './select-instances-dialog';
+import { SelectInstancesDialogComponent, MOVE_INSTANCES_DIALOG_SESSION_KEY } from './select-instances-dialog';
 import { CockpitService, VariableLine } from '../../../../services/cockpit.service';
 import { ProcessInstanceService } from '../../../../services/process-instance.service';
 import { InstanceFilterPanelComponent } from '../../../../shared/instance-filter-panel/instance-filter-panel';
@@ -48,6 +48,8 @@ async function createComponent(opts: {
       { provide: TranslateService, useValue: mockTranslateService }
     ]
   }).compileComponents();
+
+  sessionStorage.removeItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
 
   const fixture: ComponentFixture<SelectInstancesDialogComponent> =
     TestBed.createComponent(SelectInstancesDialogComponent);
