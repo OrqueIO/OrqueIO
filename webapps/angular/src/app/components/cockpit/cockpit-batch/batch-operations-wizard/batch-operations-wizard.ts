@@ -22,7 +22,7 @@ import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { ProcessInstanceService, ProcessInstance } from '../../../../services/process-instance.service';
 import { CockpitService, MultiValueFilter, ProcessDefinition } from '../../../../services/cockpit.service';
-import { MOVE_INSTANCES_DIALOG_SESSION_KEY } from '../../cockpit-processes/modify-tab/select-instances-dialog';
+import { BATCH_OPS_MODIFY_SIGNAL_KEY } from '../../cockpit-processes/modify-tab/select-instances-dialog';
 import { DecisionService, DecisionInstance } from '../../../../services/decision.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
@@ -571,12 +571,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   private doNavigateToModifyTab(key: string, versionId: string): void {
     try {
-      sessionStorage.setItem(
-        MOVE_INSTANCES_DIALOG_SESSION_KEY,
-        JSON.stringify({ processDefinitionId: versionId })
-      );
+      sessionStorage.setItem(BATCH_OPS_MODIFY_SIGNAL_KEY, versionId);
     } catch { }
-    this.clearSessionStorage();
+    this.saveToSessionStorage();
     this.router.navigate(['/cockpit/processes', key, 'instances']);
   }
 

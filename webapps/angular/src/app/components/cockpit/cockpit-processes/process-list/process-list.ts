@@ -44,7 +44,7 @@ import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { ModifyTabComponent, ModifyOverlay } from '../modify-tab/modify-tab';
-import { MOVE_INSTANCES_DIALOG_SESSION_KEY } from '../modify-tab/select-instances-dialog';
+import { MOVE_INSTANCES_DIALOG_SESSION_KEY, BATCH_OPS_MODIFY_SIGNAL_KEY } from '../modify-tab/select-instances-dialog';
 
 interface SortConfig {
   column: string;
@@ -285,11 +285,17 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           if (definition?.id) {
             this.selectedVersion = definition.id;
             try {
-              const raw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
-              if (raw) {
-                const state = JSON.parse(raw);
-                if (state?.processDefinitionId === definition.id) {
-                  this.switchTab('modify');
+              const batchSignal = sessionStorage.getItem(BATCH_OPS_MODIFY_SIGNAL_KEY);
+              if (batchSignal && batchSignal === definition.id) {
+                sessionStorage.removeItem(BATCH_OPS_MODIFY_SIGNAL_KEY);
+                this.switchTab('modify');
+              } else {
+                const raw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+                if (raw) {
+                  const state = JSON.parse(raw);
+                  if (state?.processDefinitionId === definition.id) {
+                    this.switchTab('modify');
+                  }
                 }
               }
             } catch { }

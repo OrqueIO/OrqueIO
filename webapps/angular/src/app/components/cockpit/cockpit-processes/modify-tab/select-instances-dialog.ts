@@ -25,6 +25,7 @@ import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chi
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 
 export const MOVE_INSTANCES_DIALOG_SESSION_KEY = 'moveInstancesDialogState';
+export const BATCH_OPS_MODIFY_SIGNAL_KEY = 'batchOpsModifySignal';
 
 interface DialogPersistedState {
   processDefinitionId: string;
