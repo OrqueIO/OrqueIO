@@ -106,7 +106,9 @@ export class CamDatePipe implements PipeTransform, OnDestroy {
       'es': 'es-ES',
       'it': 'it-IT',
       'pt': 'pt-PT',
-      'nl': 'nl-NL'
+      'nl': 'nl-NL',
+      'zh-CN': 'zh-CN',
+      'zh-TW': 'zh-TW'
     };
     return localeMap[lang] || 'en-US';
   }

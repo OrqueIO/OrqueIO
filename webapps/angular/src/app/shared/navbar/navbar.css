@@ -259,10 +259,16 @@
   }
 }
 
+/* ===== Language Dropdown ===== */
+.language-dropdown {
+  position: relative;
+}
+
 .lang-toggle {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.4rem;
   height: 38px;
   background: #f9fafb;
   border: 1px solid #e5e7eb;
@@ -280,17 +286,118 @@
   border-color: #d1d5db;
 }
 
-.lang-toggle .flag {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-width: 48px;
-  justify-content: center;
+.lang-toggle.open {
+  background: #f3f4f6;
+  border-color: #d1d5db;
 }
 
-.lang-toggle .flag svg {
+.lang-toggle .lang-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 14px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.lang-toggle .lang-flag svg {
+  display: block;
   border-radius: 2px;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.lang-toggle .lang-label {
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.lang-toggle .lang-caret {
+  font-size: 0.625rem;
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.lang-toggle .lang-caret.rotated {
+  transform: rotate(180deg);
+}
+
+.language-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 170px;
+  margin: 0;
+  padding: 0.375rem;
+  list-style: none;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.language-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #4b5563;
+  font-weight: 500;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.language-menu-item:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.language-menu-item:focus-visible,
+.lang-toggle:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 1px;
+}
+
+.language-menu-item.active {
+  background: #eff6ff;
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.language-menu-item .lang-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 14px;
+  border-radius: 2px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.language-menu-item .lang-flag svg {
+  display: block;
+  border-radius: 2px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
+}
+
+.language-menu-item .lang-name {
+  flex: 1;
+  white-space: nowrap;
+}
+
+.language-menu-item .lang-check {
+  font-size: 0.75rem;
+  color: #3b82f6;
 }
 
 .nav-link {
@@ -378,7 +485,12 @@
   color: #374151;
 }
 
-.navbar.transparent .lang-toggle:hover {
+.navbar.transparent .lang-toggle:hover,
+.navbar.transparent .lang-toggle.open {
+  background: #ffffff;
+}
+
+.navbar.transparent .language-menu {
   background: #ffffff;
 }
 
@@ -468,5 +580,14 @@
 
   .navbar-actions {
     gap: 0.5rem;
+  }
+
+  /* On small screens, the language trigger only shows the flag and the caret */
+  .lang-toggle .lang-label {
+    display: none;
+  }
+
+  .lang-toggle {
+    padding: 0 0.5rem;
   }
 }

@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of, throwError, Subject } from 'rxjs';
 import { map, catchError, switchMap, tap, shareReplay, finalize, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { CsrfTokenService } from './csrf-token.service';
+import { TranslateService } from '../i18n/translate.service';
 import { environment } from '../../environments/environment';
 
 // Authentication event types 
@@ -64,6 +65,7 @@ export class AuthService {
   private readonly engine = 'default';
 
   private csrfService = inject(CsrfTokenService);
+  private translateService = inject(TranslateService);
 
   constructor(
     private http: HttpClient,
@@ -436,13 +438,13 @@ export class AuthService {
     let message: string;
 
     if (error.status === 401 || error.status === 403) {
-      message = 'Wrong credentials, locked user or missing access rights to application.';
+      message = this.translateService.instant('PAGE_LOGIN_ERROR_MSG');
     } else if (error.status === 0) {
-      message = 'Unable to connect to the server. Please check your connection.';
+      message = this.translateService.instant('ERROR_CONNECTION');
     } else if (error.status === 500) {
-      message = 'Internal server error. Please try again later.';
+      message = this.translateService.instant('ERROR_SERVER');
     } else {
-      message = error.error?.message || 'An error occurred during login.';
+      message = error.error?.message || this.translateService.instant('ERROR_GENERIC');
     }
 
     return message;
