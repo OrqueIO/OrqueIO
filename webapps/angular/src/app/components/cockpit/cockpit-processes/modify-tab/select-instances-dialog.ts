@@ -25,6 +25,7 @@ import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chi
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 
 export const MOVE_INSTANCES_DIALOG_SESSION_KEY = 'moveInstancesDialogState';
+export const BATCH_OPS_MODIFY_SIGNAL_KEY = 'batchOpsModifySignal';
 
 interface DialogPersistedState {
   processDefinitionId: string;
@@ -653,10 +654,11 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
         <ng-template #activityPickerTpl>
           <div class="activity-picker" *ngIf="availableActivities.length > 0; else activityFreeText">
             <div class="activity-picker-list">
-              <button *ngFor="let act of availableActivities"
+              <button *ngFor="let act of availableActivities; let i = index"
                       type="button"
                       class="activity-picker-item"
                       [class.activity-picker-item--selected]="pendingTextValue === act.id"
+                      [class.activity-picker-item--active]="activityHighlightIndex === i"
                       [class.activity-picker-item--disabled]="act.id === targetActivityId"
                       [disabled]="act.id === targetActivityId"
                       [title]="act.id === targetActivityId
@@ -940,6 +942,11 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       background: rgba(37,99,235,0.08);
       color: var(--color-primary, #2563eb);
       font-weight: 500;
+    }
+    .activity-picker-item--active {
+      background: var(--color-primary-bg);
+      color: var(--color-primary);
+      outline: none;
     }
     .activity-picker-item--disabled {
       opacity: 0.45;
@@ -1458,6 +1465,7 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
   variableNamesIgnoreCase = false;
   variableValuesIgnoreCase = false;
   hoveredId: string | null = null;
+  activityHighlightIndex: number | null = null;
 
   get safeEditorType(): MoveField {
     return this.activeEditorType!;
@@ -1501,6 +1509,40 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
     } else if (this.showCriteriaDropdown) {
       this.showCriteriaDropdown = false;
       this.cdr.markForCheck();
+    }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onActivityPickerKeydown(event: KeyboardEvent): void {
+    if (this.activeEditorType !== 'activityId' || this.availableActivities.length === 0) return;
+    const enabled = this.availableActivities
+      .map((act, i) => ({ act, i }))
+      .filter(({ act }) => act.id !== this.targetActivityId);
+    if (!enabled.length) return;
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (this.activityHighlightIndex === null) {
+        this.activityHighlightIndex = enabled[0].i;
+      } else {
+        const pos = enabled.findIndex(e => e.i === this.activityHighlightIndex);
+        if (pos < enabled.length - 1) this.activityHighlightIndex = enabled[pos + 1].i;
+      }
+      this.cdr.markForCheck();
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (this.activityHighlightIndex !== null) {
+        const pos = enabled.findIndex(e => e.i === this.activityHighlightIndex);
+        if (pos > 0) this.activityHighlightIndex = enabled[pos - 1].i;
+      }
+      this.cdr.markForCheck();
+    } else if (event.key === 'Enter' && this.activityHighlightIndex !== null) {
+      event.preventDefault();
+      const act = this.availableActivities[this.activityHighlightIndex];
+      if (act) {
+        this.selectActivity(act.id);
+        this.confirmEdit();
+      }
     }
   }
 
@@ -1724,6 +1766,7 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
     this.pendingChipValues = [];
     this.pendingDateValue = '';
     this.pendingVariableLines = [];
+    this.activityHighlightIndex = null;
     if (pill.field === 'variables') {
       this.pendingVariableLines = (pill.variableLines && pill.variableLines.length > 0)
         ? pill.variableLines.map(l => ({
@@ -1806,6 +1849,7 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
     this.pendingTextValue = '';
     this.pendingChipValues = [];
     this.pendingDateValue = '';
+    this.activityHighlightIndex = null;
     this.cdr.markForCheck();
     this.search();
   }
@@ -1824,6 +1868,7 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
     this.pendingVariableLines = [];
     this.openOperatorMenuIndex = null;
     this.opMenuPosition = null;
+    this.activityHighlightIndex = null;
     this.cdr.markForCheck();
   }
 
@@ -2222,8 +2267,6 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
   }
 
   onConfirm(): void {
-    this._discardStateOnDestroy = true;
-    this.clearSessionStorage();
     if (this.selectionMode === 'instance') {
       this.confirmed.emit({
         mode: 'instance',

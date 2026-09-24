@@ -102,7 +102,9 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
           if (raw) {
             const state = JSON.parse(raw);
             if (state?.processDefinitionId === this.processDefinitionId) {
-              this.showSelectDialog = true;
+              if (state.sourceActivity || state.targetActivity) {
+                this.showSelectDialog = true;
+              }
               if (state.sourceActivity) this.sourceActivity = state.sourceActivity;
               if (state.targetActivity) this.targetActivity = state.targetActivity;
               this.emitOverlays();
@@ -265,6 +267,7 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
     annotation: string;
   }): void {
     this.showConfirmDialog = false;
+    try { sessionStorage.removeItem(MOVE_INSTANCES_DIALOG_SESSION_KEY); } catch { }
     if (!this.processDefinitionId) return;
 
     const instructions = this.buildInstructions(options.cancelCurrentActive);
@@ -307,6 +310,7 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
   }
 
   startNewModification(): void {
+    try { sessionStorage.removeItem(MOVE_INSTANCES_DIALOG_SESSION_KEY); } catch { }
     this.reset();
     this.cdr.markForCheck();
   }

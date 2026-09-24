@@ -513,6 +513,54 @@
     </div>
     <!-- /delete-decision form -->
 
+    <!-- ─── Move Instances: process directory ────────────────────────────── -->
+    <div *ngIf="selectedOperationId === 'move-instances'" class="operation-steps">
+
+      <div class="operation-card">
+
+        <!-- Info note -->
+        <div class="info-note">
+          <fa-icon [icon]="faInfoCircle"></fa-icon>
+          <span>{{ 'cockpit.batchOps.moveInstances.processNote' | translate }}</span>
+        </div>
+
+        <!-- Search -->
+        <div class="proc-search">
+          <input type="text"
+                 class="proc-search__input"
+                 [(ngModel)]="moveInstancesSearchText"
+                 [placeholder]="'cockpit.batchOps.moveInstances.searchPlaceholder' | translate">
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="moveInstancesProcessesLoading" class="loading-state">
+          <fa-icon [icon]="faSpinner" [animation]="'spin'"></fa-icon>
+          <span>{{ 'common.loading' | translate }}</span>
+        </div>
+
+        <!-- Process directory -->
+        <div *ngIf="!moveInstancesProcessesLoading" class="proc-dir">
+
+          <div *ngFor="let proc of filteredMoveInstancesProcesses; trackBy: trackByProcKey"
+               class="proc-dir__row"
+               (click)="onMoveInstancesRowClick(proc)">
+            <fa-icon class="proc-dir__icon" [icon]="faCodeBranch"></fa-icon>
+            <span class="proc-dir__name">{{ proc.name || proc.key }}</span>
+            <fa-icon class="proc-dir__chevron" [icon]="faChevronRight"></fa-icon>
+          </div>
+
+          <p *ngIf="filteredMoveInstancesProcesses.length === 0" class="empty-state">
+            {{ 'cockpit.batchOps.moveInstances.noProcesses' | translate }}
+          </p>
+
+        </div>
+
+      </div>
+      <!-- No step-footer: clicking a row or version navigates directly -->
+
+    </div>
+    <!-- /move-instances -->
+
   </div>
   <!-- /step 1 -->
 
