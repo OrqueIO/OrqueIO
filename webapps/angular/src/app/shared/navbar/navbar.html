@@ -65,35 +65,53 @@
       <!-- Language Dropdown -->
       <div class="language-dropdown">
         <button
+          #langToggle
           type="button"
+          id="language-toggle"
           class="lang-toggle"
           [class.open]="languageMenuOpen"
           (click)="toggleLanguageMenu($event)"
+          (keydown)="onLanguageToggleKeydown($event)"
           [attr.aria-expanded]="languageMenuOpen"
-          aria-haspopup="listbox"
-          [title]="getCurrentLanguageOption().label"
+          aria-haspopup="menu"
+          aria-controls="language-menu"
+          [attr.aria-label]="currentLanguageOption.label"
+          [title]="currentLanguageOption.label"
         >
-          <span class="lang-flag" [innerHTML]="sanitizeSvg(getCurrentLanguageOption().flag)"></span>
-          <span class="lang-label">{{ getCurrentLanguageOption().shortLabel }}</span>
-          <fa-icon [icon]="faChevronDown" class="lang-caret" [class.rotated]="languageMenuOpen"></fa-icon>
+          <span class="lang-flag" aria-hidden="true" [innerHTML]="languageFlags[currentLanguageOption.value]"></span>
+          <span class="lang-label" aria-hidden="true">{{ currentLanguageOption.shortLabel }}</span>
+          <fa-icon [icon]="faChevronDown" class="lang-caret" [class.rotated]="languageMenuOpen" aria-hidden="true"></fa-icon>
         </button>
 
-        <ul class="language-menu" *ngIf="languageMenuOpen" role="listbox">
-          <li
-            *ngFor="let lang of languageOptions"
-            role="option"
-            [attr.aria-selected]="lang.value === currentLang"
-            class="language-menu-item"
-            [class.active]="lang.value === currentLang"
-            (click)="selectLanguage(lang.value, $event)"
-          >
-            <span class="lang-flag" [innerHTML]="sanitizeSvg(lang.flag)"></span>
-            <span class="lang-name">{{ lang.label }}</span>
-            <fa-icon
-              *ngIf="lang.value === currentLang"
-              [icon]="faCheck"
-              class="lang-check"
-            ></fa-icon>
+        <ul
+          class="language-menu"
+          *ngIf="languageMenuOpen"
+          id="language-menu"
+          role="menu"
+          aria-labelledby="language-toggle"
+          (keydown)="onLanguageMenuKeydown($event)"
+        >
+          <li *ngFor="let lang of languageOptions" role="none">
+            <button
+              #langItem
+              type="button"
+              role="menuitemradio"
+              class="language-menu-item"
+              [class.active]="lang.value === currentLang"
+              [attr.aria-checked]="lang.value === currentLang"
+              [attr.lang]="lang.value"
+              [tabindex]="lang.value === currentLang ? 0 : -1"
+              (click)="selectLanguage(lang.value, $event)"
+            >
+              <span class="lang-flag" aria-hidden="true" [innerHTML]="languageFlags[lang.value]"></span>
+              <span class="lang-name">{{ lang.label }}</span>
+              <fa-icon
+                *ngIf="lang.value === currentLang"
+                [icon]="faCheck"
+                class="lang-check"
+                aria-hidden="true"
+              ></fa-icon>
+            </button>
           </li>
         </ul>
       </div>
