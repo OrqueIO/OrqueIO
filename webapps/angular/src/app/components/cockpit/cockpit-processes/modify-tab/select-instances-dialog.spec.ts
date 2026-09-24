@@ -1026,3 +1026,60 @@ describe('SelectInstancesDialogComponent — Activity picker keyboard navigation
   });
 });
 
+describe('SelectInstancesDialogComponent — state preserved on Back from Confirm Modification', () => {
+
+  it('onConfirm does not clear sessionStorage — state survives for Back-button recreation', async () => {
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      { field: 'businessKey', values: ['bk-42'] },
+    ];
+    component.selectedIds = new Set(['inst-a', 'inst-b']);
+    component.onConfirm();
+    component.ngOnDestroy();
+
+    const raw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+    expect(raw).not.toBeNull();
+    const saved = JSON.parse(raw!);
+    expect(saved.activePills).toHaveLength(2);
+    expect(saved.selectedIds).toContain('inst-a');
+    expect(saved.selectedIds).toContain('inst-b');
+  });
+
+  it('ngOnInit restores pills and selected IDs when dialog is recreated after Back', async () => {
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    const persistedState = {
+      processDefinitionId: 'process:1',
+      activePills: [
+        { field: 'activityId', values: ['UserTask_1'] },
+        { field: 'businessKey', values: ['bk-42'] },
+      ],
+      selectionMode: 'instance',
+      selectedIds: ['inst-a', 'inst-b'],
+      variableNamesIgnoreCase: false,
+      variableValuesIgnoreCase: false,
+      sourceActivity: null,
+      targetActivity: null,
+    };
+    sessionStorage.setItem(MOVE_INSTANCES_DIALOG_SESSION_KEY, JSON.stringify(persistedState));
+
+    component.ngOnInit();
+
+    expect(component.activePills).toHaveLength(2);
+    expect(component.activePills.find(p => p.field === 'businessKey')?.values[0]).toBe('bk-42');
+    expect(component.selectionMode).toBe('instance');
+  });
+
+  it('onCancel still clears sessionStorage — cancel discards state as before', async () => {
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    sessionStorage.setItem(MOVE_INSTANCES_DIALOG_SESSION_KEY, '{"processDefinitionId":"process:1"}');
+
+    component.onCancel();
+
+    expect(sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY)).toBeNull();
+  });
+
+});
+

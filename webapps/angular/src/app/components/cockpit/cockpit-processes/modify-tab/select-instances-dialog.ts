@@ -2267,8 +2267,6 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
   }
 
   onConfirm(): void {
-    this._discardStateOnDestroy = true;
-    this.clearSessionStorage();
     if (this.selectionMode === 'instance') {
       this.confirmed.emit({
         mode: 'instance',

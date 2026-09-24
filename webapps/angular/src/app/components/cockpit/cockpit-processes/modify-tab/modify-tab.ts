@@ -267,6 +267,7 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
     annotation: string;
   }): void {
     this.showConfirmDialog = false;
+    try { sessionStorage.removeItem(MOVE_INSTANCES_DIALOG_SESSION_KEY); } catch { }
     if (!this.processDefinitionId) return;
 
     const instructions = this.buildInstructions(options.cancelCurrentActive);
@@ -309,6 +310,7 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
   }
 
   startNewModification(): void {
+    try { sessionStorage.removeItem(MOVE_INSTANCES_DIALOG_SESSION_KEY); } catch { }
     this.reset();
     this.cdr.markForCheck();
   }
