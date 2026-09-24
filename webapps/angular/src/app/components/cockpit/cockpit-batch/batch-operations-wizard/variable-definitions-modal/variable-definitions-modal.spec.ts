@@ -853,7 +853,7 @@ describe('VariableDefinitionsModalComponent', () => {
       });
     });
 
-    describe('disabled suggestions for unsupported types (Object / File)', () => {
+    describe('disabled suggestions — whitelist logic (only String/Integer/Long/Short/Double/Boolean/Date enabled)', () => {
       it('Object suggestion is visible in filtered list — not hidden', () => {
         const inst = makeWithSuggestions([
           { name: 'myObj', type: 'Object', value: null, valuesConflict: false }
@@ -870,11 +870,12 @@ describe('VariableDefinitionsModalComponent', () => {
         expect(inst.getFilteredSuggestions('')[0].type).toBe('File');
       });
 
-      it('isUnsupportedSuggestionType returns true for Object, File and Bytes', () => {
+      it('isUnsupportedSuggestionType returns true for Object, File, Bytes and any unknown type', () => {
         const inst = make([row('', 'String', '')]);
         expect(inst.isUnsupportedSuggestionType('Object')).toBe(true);
         expect(inst.isUnsupportedSuggestionType('File')).toBe(true);
         expect(inst.isUnsupportedSuggestionType('Bytes')).toBe(true);
+        expect(inst.isUnsupportedSuggestionType('CustomType')).toBe(true);
       });
 
       it('isUnsupportedSuggestionType returns false for all supported types', () => {
@@ -925,6 +926,21 @@ describe('VariableDefinitionsModalComponent', () => {
         (inst as any).activeSuggestionRow = 0;
         inst.onSuggestionClick(0, { name: 'myBytes', type: 'Bytes', value: null, valuesConflict: false });
         expect(inst.activeSuggestionRow).toBe(0);
+      });
+
+      it('CustomType suggestion is visible in filtered list — not hidden', () => {
+        const inst = makeWithSuggestions([
+          { name: 'myCustom', type: 'CustomType', value: null, valuesConflict: false }
+        ]);
+        expect(inst.getFilteredSuggestions('').length).toBe(1);
+        expect(inst.getFilteredSuggestions('')[0].type).toBe('CustomType');
+      });
+
+      it('clicking a CustomType suggestion does not pre-fill name or type (whitelist guards unknown types)', () => {
+        const inst = make([row('', 'String', '')]);
+        inst.onSuggestionClick(0, { name: 'myCustom', type: 'CustomType', value: null, valuesConflict: false });
+        expect(inst.rows[0].name).toBe('');
+        expect(inst.rows[0].type).toBe('String');
       });
 
       it('non-regression: clicking a String suggestion still pre-fills name, type and value', () => {

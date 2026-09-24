@@ -385,8 +385,12 @@ export class VariableDefinitionsModalComponent implements OnInit, OnDestroy, OnC
     return this.targetInstanceIds !== null && this.targetInstanceIds.length === 0;
   }
 
+  private static readonly SUPPORTED_SUGGESTION_TYPES = new Set([
+    'String', 'Integer', 'Long', 'Short', 'Double', 'Boolean', 'Date'
+  ]);
+
   isUnsupportedSuggestionType(type: string): boolean {
-    return type === 'Object' || type === 'File' || type === 'Bytes';
+    return !VariableDefinitionsModalComponent.SUPPORTED_SUGGESTION_TYPES.has(type);
   }
 
   onSuggestionClick(rowIndex: number, suggestion: VarSuggestion): void {
