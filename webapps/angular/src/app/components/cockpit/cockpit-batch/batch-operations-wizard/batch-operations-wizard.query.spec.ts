@@ -1438,3 +1438,82 @@ describe('BatchOperationsWizardComponent — modalTargetInstanceIds', () => {
   });
 
 });
+
+
+
+function getFilteredProcesses(stub: Record<string, unknown>): unknown[] {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'filteredMoveInstancesProcesses');
+  return (desc?.get?.call(stub) ?? []) as unknown[];
+}
+
+describe('BatchOperationsWizardComponent — move-instances: filteredMoveInstancesProcesses', () => {
+
+  const procs = [
+    { id: 'p1', key: 'invoice-process', name: 'Invoice Process', version: 1, deploymentId: '', suspended: false },
+    { id: 'p2', key: 'order-process', name: 'Order Process', version: 1, deploymentId: '', suspended: false },
+    { id: 'p3', key: 'payment-svc', name: '', version: 1, deploymentId: '', suspended: false }
+  ];
+
+  it('returns all processes when search text is empty', () => {
+    const stub = { moveInstancesUniqueProcesses: procs, moveInstancesSearchText: '' };
+    expect(getFilteredProcesses(stub)).toHaveLength(3);
+  });
+
+  it('filters by name (case-insensitive)', () => {
+    const stub = { moveInstancesUniqueProcesses: procs, moveInstancesSearchText: 'invoice' };
+    const result = getFilteredProcesses(stub) as any[];
+    expect(result).toHaveLength(1);
+    expect(result[0].key).toBe('invoice-process');
+  });
+
+  it('filters by key when name is empty', () => {
+    const stub = { moveInstancesUniqueProcesses: procs, moveInstancesSearchText: 'payment' };
+    const result = getFilteredProcesses(stub) as any[];
+    expect(result).toHaveLength(1);
+    expect(result[0].key).toBe('payment-svc');
+  });
+
+  it('returns empty array when no process matches', () => {
+    const stub = { moveInstancesUniqueProcesses: procs, moveInstancesSearchText: 'zzz-no-match' };
+    expect(getFilteredProcesses(stub)).toHaveLength(0);
+  });
+
+  it('search is case-insensitive for both name and key', () => {
+    const stub = { moveInstancesUniqueProcesses: procs, moveInstancesSearchText: 'ORDER' };
+    const result = getFilteredProcesses(stub) as any[];
+    expect(result).toHaveLength(1);
+    expect(result[0].key).toBe('order-process');
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — move-instances: onMoveInstancesRowClick', () => {
+
+  const v1 = { id: 'orderProcess:1:aaa', key: 'orderProcess', name: 'Order', version: 1, deploymentId: '', suspended: false };
+  const v2 = { id: 'orderProcess:2:bbb', key: 'orderProcess', name: 'Order', version: 2, deploymentId: '', suspended: false };
+
+  function makeStub() {
+    const navigateCalls: Array<unknown[]> = [];
+    const stub: Record<string, unknown> = {
+      doNavigateToModifyTab: (...args: unknown[]) => { navigateCalls.push(args); }
+    };
+    return { stub, navigateCalls };
+  }
+
+  it('navigates directly using proc.key and proc.id (single version)', () => {
+    const { stub, navigateCalls } = makeStub();
+    BatchOperationsWizardComponent.prototype.onMoveInstancesRowClick.call(stub, v1);
+    expect(navigateCalls).toHaveLength(1);
+    expect(navigateCalls[0]).toEqual(['orderProcess', 'orderProcess:1:aaa']);
+  });
+
+  it('navigates directly using proc.key and proc.id (latest of multiple versions)', () => {
+    const { stub, navigateCalls } = makeStub();
+    // proc is the latest version representative (arr[0] after desc sort)
+    BatchOperationsWizardComponent.prototype.onMoveInstancesRowClick.call(stub, v2);
+    expect(navigateCalls).toHaveLength(1);
+    expect(navigateCalls[0]).toEqual(['orderProcess', 'orderProcess:2:bbb']);
+  });
+
+});
