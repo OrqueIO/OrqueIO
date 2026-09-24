@@ -267,6 +267,7 @@
 .criteria-icon-wrap--slate  { background: rgba(100, 116, 139, 0.10); color: #475569; }
 .criteria-icon-wrap--indigo { background: rgba(99,  102, 241, 0.10); color: #6366f1; }
 .criteria-icon-wrap--orange { background: rgba(234, 88,  12,  0.10); color: #ea580c; }
+.criteria-icon-wrap--red    { background: rgba(220, 38,  38,  0.10); color: #dc2626; }
 
 .criteria-option-body {
   display: flex;

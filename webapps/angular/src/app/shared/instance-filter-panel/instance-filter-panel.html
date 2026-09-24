@@ -47,19 +47,9 @@
           <!-- ── Process criteria (default) ───────────────────────────── -->
           <ng-container *ngIf="criteriaSet === 'process'">
 
-            <!-- Group: Instance -->
+            <!-- Group: Instance (identifiers) -->
             <div class="criteria-group">
               <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupInstance' | translate }}</div>
-
-              <button class="criteria-option" (click)="selectCriteriaType('businessKey')" type="button" role="menuitem">
-                <span class="criteria-icon-wrap criteria-icon-wrap--blue">
-                  <fa-icon [icon]="faKey"></fa-icon>
-                </span>
-                <span class="criteria-option-body">
-                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.businessKey' | translate }}</span>
-                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.businessKey' | translate }}</span>
-                </span>
-              </button>
 
               <button class="criteria-option" (click)="selectCriteriaType('instanceId')" type="button" role="menuitem">
                 <span class="criteria-icon-wrap criteria-icon-wrap--violet">
@@ -71,14 +61,33 @@
                 </span>
               </button>
 
-              <!-- State: hidden when a state is locked externally -->
-              <button *ngIf="!lockedState" class="criteria-option" (click)="selectCriteriaType('state')" type="button" role="menuitem">
-                <span class="criteria-icon-wrap criteria-icon-wrap--emerald">
-                  <fa-icon [icon]="faCircleDot"></fa-icon>
+              <button class="criteria-option" (click)="selectCriteriaType('businessKey')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--blue">
+                  <fa-icon [icon]="faKey"></fa-icon>
                 </span>
                 <span class="criteria-option-body">
-                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.state' | translate }}</span>
-                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.state' | translate }}</span>
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.businessKey' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.businessKey' | translate }}</span>
+                </span>
+              </button>
+
+              <button *ngIf="showExtendedCriteria" class="criteria-option" (click)="selectCriteriaType('superProcessInstanceId')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--orange">
+                  <fa-icon [icon]="faSitemap"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.superProcessInstanceId' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.superProcessInstanceId' | translate }}</span>
+                </span>
+              </button>
+
+              <button *ngIf="showExtendedCriteria" class="criteria-option" (click)="selectCriteriaType('subProcessInstanceId')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--orange">
+                  <fa-icon [icon]="faSitemap"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.subProcessInstanceId' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.subProcessInstanceId' | translate }}</span>
                 </span>
               </button>
 
@@ -91,9 +100,27 @@
                   <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.processDefinition' | translate }}</span>
                 </span>
               </button>
+            </div>
+
+            <div class="criteria-separator"></div>
+
+            <!-- Group: Status -->
+            <div class="criteria-group">
+              <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupState' | translate }}</div>
+
+              <!-- State: hidden when a state is locked externally -->
+              <button *ngIf="!lockedState" class="criteria-option" (click)="selectCriteriaType('state')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--emerald">
+                  <fa-icon [icon]="faCircleDot"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.state' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.state' | translate }}</span>
+                </span>
+              </button>
 
               <button class="criteria-option" (click)="selectCriteriaType('withIncidents')" type="button" role="menuitem">
-                <span class="criteria-icon-wrap criteria-icon-wrap--amber">
+                <span class="criteria-icon-wrap criteria-icon-wrap--red">
                   <fa-icon [icon]="faExclamationTriangle"></fa-icon>
                 </span>
                 <span class="criteria-option-body">
@@ -105,9 +132,58 @@
 
             <div class="criteria-separator"></div>
 
-            <!-- Group: Dates -->
+            <!-- Group: Incidents (extended criteria only) -->
+            <ng-container *ngIf="showExtendedCriteria">
+              <div class="criteria-group">
+                <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupIncidents' | translate }}</div>
+
+                <button class="criteria-option" (click)="selectCriteriaType('incidentId')" type="button" role="menuitem">
+                  <span class="criteria-icon-wrap criteria-icon-wrap--amber">
+                    <fa-icon [icon]="faHashtag"></fa-icon>
+                  </span>
+                  <span class="criteria-option-body">
+                    <span class="criteria-option-name">{{ 'cockpit.processes.filters.incidentId' | translate }}</span>
+                    <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.incidentId' | translate }}</span>
+                  </span>
+                </button>
+
+                <button class="criteria-option" (click)="selectCriteriaType('incidentType')" type="button" role="menuitem">
+                  <span class="criteria-icon-wrap criteria-icon-wrap--red">
+                    <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                  </span>
+                  <span class="criteria-option-body">
+                    <span class="criteria-option-name">{{ 'cockpit.processes.filters.incidentType' | translate }}</span>
+                    <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.incidentType' | translate }}</span>
+                  </span>
+                </button>
+
+                <button class="criteria-option" (click)="selectCriteriaType('incidentMessage')" type="button" role="menuitem">
+                  <span class="criteria-icon-wrap criteria-icon-wrap--amber">
+                    <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                  </span>
+                  <span class="criteria-option-body">
+                    <span class="criteria-option-name">{{ 'cockpit.processes.filters.incidentMessage' | translate }}</span>
+                    <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.incidentMessage' | translate }}</span>
+                  </span>
+                </button>
+              </div>
+
+              <div class="criteria-separator"></div>
+            </ng-container>
+
+            <!-- Group: Dates (+ activityId when extended) -->
             <div class="criteria-group">
               <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupDates' | translate }}</div>
+
+              <button *ngIf="showExtendedCriteria" class="criteria-option" (click)="selectCriteriaType('activityId')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--violet">
+                  <fa-icon [icon]="faHashtag"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.activityId' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.activityId' | translate }}</span>
+                </span>
+              </button>
 
               <button class="criteria-option" (click)="selectCriteriaType('startedAfter')" type="button" role="menuitem">
                 <span class="criteria-icon-wrap criteria-icon-wrap--teal">
@@ -166,75 +242,6 @@
                 </span>
               </button>
             </div>
-
-            <!-- Group: Advanced (extended criteria — shown for batch ops that need them) -->
-            <ng-container *ngIf="showExtendedCriteria">
-              <div class="criteria-separator"></div>
-
-              <div class="criteria-group">
-                <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupAdvanced' | translate }}</div>
-
-                <button class="criteria-option" (click)="selectCriteriaType('superProcessInstanceId')" type="button" role="menuitem">
-                  <span class="criteria-icon-wrap criteria-icon-wrap--slate">
-                    <fa-icon [icon]="faCodeBranch"></fa-icon>
-                  </span>
-                  <span class="criteria-option-body">
-                    <span class="criteria-option-name">{{ 'cockpit.processes.filters.superProcessInstanceId' | translate }}</span>
-                    <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.superProcessInstanceId' | translate }}</span>
-                  </span>
-                </button>
-
-                <button class="criteria-option" (click)="selectCriteriaType('subProcessInstanceId')" type="button" role="menuitem">
-                  <span class="criteria-icon-wrap criteria-icon-wrap--slate">
-                    <fa-icon [icon]="faCodeBranch"></fa-icon>
-                  </span>
-                  <span class="criteria-option-body">
-                    <span class="criteria-option-name">{{ 'cockpit.processes.filters.subProcessInstanceId' | translate }}</span>
-                    <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.subProcessInstanceId' | translate }}</span>
-                  </span>
-                </button>
-
-                <button class="criteria-option" (click)="selectCriteriaType('incidentId')" type="button" role="menuitem">
-                  <span class="criteria-icon-wrap criteria-icon-wrap--amber">
-                    <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-                  </span>
-                  <span class="criteria-option-body">
-                    <span class="criteria-option-name">{{ 'cockpit.processes.filters.incidentId' | translate }}</span>
-                    <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.incidentId' | translate }}</span>
-                  </span>
-                </button>
-
-                <button class="criteria-option" (click)="selectCriteriaType('incidentType')" type="button" role="menuitem">
-                  <span class="criteria-icon-wrap criteria-icon-wrap--amber">
-                    <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-                  </span>
-                  <span class="criteria-option-body">
-                    <span class="criteria-option-name">{{ 'cockpit.processes.filters.incidentType' | translate }}</span>
-                    <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.incidentType' | translate }}</span>
-                  </span>
-                </button>
-
-                <button class="criteria-option" (click)="selectCriteriaType('incidentMessage')" type="button" role="menuitem">
-                  <span class="criteria-icon-wrap criteria-icon-wrap--amber">
-                    <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-                  </span>
-                  <span class="criteria-option-body">
-                    <span class="criteria-option-name">{{ 'cockpit.processes.filters.incidentMessage' | translate }}</span>
-                    <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.incidentMessage' | translate }}</span>
-                  </span>
-                </button>
-
-                <button class="criteria-option" (click)="selectCriteriaType('activityId')" type="button" role="menuitem">
-                  <span class="criteria-icon-wrap criteria-icon-wrap--emerald">
-                    <fa-icon [icon]="faCircleDot"></fa-icon>
-                  </span>
-                  <span class="criteria-option-body">
-                    <span class="criteria-option-name">{{ 'cockpit.processes.filters.activityId' | translate }}</span>
-                    <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.activityId' | translate }}</span>
-                  </span>
-                </button>
-              </div>
-            </ng-container>
 
           </ng-container>
 
