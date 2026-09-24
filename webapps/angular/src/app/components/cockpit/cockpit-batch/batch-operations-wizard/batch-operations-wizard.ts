@@ -6,7 +6,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { forkJoin, Subject, switchMap, catchError, EMPTY } from 'rxjs';
+import { forkJoin, Subject, switchMap, catchError, EMPTY, Observable, of, map } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
@@ -21,7 +21,9 @@ import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockp
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { ProcessInstanceService, ProcessInstance } from '../../../../services/process-instance.service';
-import { CockpitService, MultiValueFilter, ProcessDefinition } from '../../../../services/cockpit.service';
+import { CockpitService, MultiValueFilter, GlobalSearchField, ProcessDefinition } from '../../../../services/cockpit.service';
+import { ProcessDefinitionService } from '../../../../services/process-definition.service';
+import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { BATCH_OPS_MODIFY_SIGNAL_KEY } from '../../cockpit-processes/modify-tab/select-instances-dialog';
 import { DecisionService, DecisionInstance } from '../../../../services/decision.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
@@ -234,6 +236,7 @@ interface WizardPersistedState {
 export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   private navMenuService = inject(NavMenuService);
   private processInstanceService = inject(ProcessInstanceService);
+  private processDefinitionService = inject(ProcessDefinitionService);
   private cockpitService = inject(CockpitService);
   private decisionService = inject(DecisionService);
   private cdr = inject(ChangeDetectorRef);
@@ -325,11 +328,16 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   private readonly instanceLoad$ = new Subject<void>();
   private readonly decisionInstanceLoad$ = new Subject<void>();
+  private readonly activityLoad$ = new Subject<string | null>();
 
   selectedIds = new Set<string>();
 
   showTechnicalDetails = false;
   showVariablesModal = false;
+
+  availableActivities: BpmnElement[] = [];
+  resolvingQuery = false;
+  resolvedBatchQuery: Record<string, unknown> | null = null;
 
   executing = false;
   batchId: string | null = null;
@@ -358,19 +366,38 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           ? [injectedStatePill, ...this.filterCriteria]
           : [...this.filterCriteria];
 
-        const firstResult = (this.instancesPage - 1) * this.instancesPageSize;
-        return forkJoin({
-          results: this.cockpitService.searchProcessInstancesGlobal(
-            criteria, this.vnIgnoreCase, this.vvIgnoreCase, firstResult, this.instancesPageSize),
-          count: this.cockpitService.searchProcessInstancesGlobalCount(
-            criteria, this.vnIgnoreCase, this.vvIgnoreCase)
-        }).pipe(
-          catchError(() => {
-            this.instances = [];
-            this.instancesTotal = 0;
-            this.instancesLoading = false;
-            this.cdr.markForCheck();
-            return EMPTY;
+        const hasAsync = this.filterCriteria.some(f => f.field === 'activityId' || f.field === 'incidentId');
+        const effectiveCriteria$: Observable<MultiValueFilter[]> = hasAsync
+          ? this.resolveAsyncFields$(this.filterCriteria).pipe(
+              map(resolvedIds => {
+                if (resolvedIds === null) return criteria;
+                const withoutAsync = criteria.filter(f => f.field !== 'activityId' && f.field !== 'incidentId');
+                if (resolvedIds.length === 0) {
+                  return [...withoutAsync, { field: 'instanceId' as GlobalSearchField, values: ['__no_match__'] }];
+                }
+                return [...withoutAsync, { field: 'instanceId' as GlobalSearchField, values: resolvedIds }];
+              }),
+              catchError(() => of(criteria))
+            )
+          : of(criteria);
+
+        return effectiveCriteria$.pipe(
+          switchMap(effectiveCriteria => {
+            const firstResult = (this.instancesPage - 1) * this.instancesPageSize;
+            return forkJoin({
+              results: this.cockpitService.searchProcessInstancesGlobal(
+                effectiveCriteria, this.vnIgnoreCase, this.vvIgnoreCase, firstResult, this.instancesPageSize),
+              count: this.cockpitService.searchProcessInstancesGlobalCount(
+                effectiveCriteria, this.vnIgnoreCase, this.vvIgnoreCase)
+            }).pipe(
+              catchError(() => {
+                this.instances = [];
+                this.instancesTotal = 0;
+                this.instancesLoading = false;
+                this.cdr.markForCheck();
+                return EMPTY;
+              })
+            );
           })
         );
       }),
@@ -405,6 +432,20 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.decisionInstances = results;
       this.decisionInstancesTotal = Math.max(count, results.length);
       this.decisionInstancesLoading = false;
+      this.cdr.markForCheck();
+    });
+
+    this.activityLoad$.pipe(
+      switchMap(versionId => {
+        if (!versionId) return of([]);
+        return this.processDefinitionService.getBpmn20Xml(versionId).pipe(
+          map(res => res ? this.parseBpmnActivities(res.bpmn20Xml) : []),
+          catchError(() => of([]))
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((activities: BpmnElement[]) => {
+      this.availableActivities = activities;
       this.cdr.markForCheck();
     });
 
@@ -474,6 +515,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.moveInstancesByKey = new Map();
     this.moveInstancesProcessesLoading = false;
     this.moveInstancesSearchText = '';
+    this.availableActivities = [];
+    this.resolvedBatchQuery = null;
   }
 
   onRowClick(id: string): void {
@@ -493,7 +536,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.hasActiveCriteria = event.criteria.length > 0;
     this.instancesPage = 1;
     this.selectedIds = new Set();
+    this.resolvedBatchQuery = null;
     this.loadInstances();
+    this.loadActivitiesFromFilter();
     this.saveToSessionStorage();
   }
 
@@ -710,6 +755,38 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   continue(): void {
     if (!this.canContinue) return;
+
+    const needsAsyncResolution = this.mode === 'query' &&
+      this.filterCriteria.some(f => f.field === 'activityId' || f.field === 'incidentId');
+
+    if (needsAsyncResolution) {
+      this.resolvingQuery = true;
+      this.cdr.markForCheck();
+      this.buildQueryBodyAsync$().pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe({
+        next: (query) => {
+          this.resolvedBatchQuery = query;
+          this.resolvingQuery = false;
+          this.currentStep = 2;
+          this.showTechnicalDetails = false;
+          window.scrollTo(0, 0);
+          this.cdr.markForCheck();
+          this.saveToSessionStorage();
+        },
+        error: () => {
+          this.resolvedBatchQuery = null;
+          this.resolvingQuery = false;
+          this.currentStep = 2;
+          this.showTechnicalDetails = false;
+          window.scrollTo(0, 0);
+          this.cdr.markForCheck();
+          this.saveToSessionStorage();
+        }
+      });
+      return;
+    }
+
     this.currentStep = 2;
     this.showTechnicalDetails = false;
     window.scrollTo(0, 0);
@@ -779,7 +856,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.mode === 'instances') {
       return JSON.stringify({ suspended, processInstanceIds: [...this.selectedIds] }, null, 2);
     }
-    return JSON.stringify({ suspended, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() }, null, 2);
+    const query = this.resolvedBatchQuery ?? this.buildHistoricQueryForBatch();
+    return JSON.stringify({ suspended, historicProcessInstanceQuery: query }, null, 2);
   }
 
   get confirmEndpoint(): string {
@@ -845,6 +923,19 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
             }));
           }
           break;
+        case 'superProcessInstanceId':
+          if (f.values[0]) query['superProcessInstanceId'] = f.values[0];
+          break;
+        case 'subProcessInstanceId':
+          if (f.values[0]) query['subProcessInstanceId'] = f.values[0];
+          break;
+        case 'incidentType':
+          if (f.values[0]) query['incidentType'] = f.values[0];
+          break;
+        case 'incidentMessage':
+          if (f.values[0]) query['incidentMessageLike'] = `%${f.values[0]}%`;
+          break;
+        // activityId and incidentId require async resolution — handled by buildQueryBodyAsync$()
       }
     }
     if (this.vnIgnoreCase) query['variableNamesIgnoreCase'] = true;
@@ -1110,25 +1201,52 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     }
 
     const suspended = this.selectedOperationId === 'suspend';
-    const payload = this.mode === 'instances'
-      ? { suspended, processInstanceIds: [...this.selectedIds] }
-      : { suspended, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() };
 
-    this.processInstanceService.suspendInstancesAsync(payload)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: batch => {
-          this.batchId = batch.id;
-          this.executing = false;
-          this.clearSessionStorage();
-          this.cdr.markForCheck();
-        },
-        error: () => {
-          this.batchError = true;
-          this.executing = false;
-          this.cdr.markForCheck();
-        }
+    if (this.mode === 'instances') {
+      this.processInstanceService.suspendInstancesAsync({ suspended, processInstanceIds: [...this.selectedIds] })
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: batch => {
+            this.batchId = batch.id;
+            this.executing = false;
+            this.clearSessionStorage();
+            this.cdr.markForCheck();
+          },
+          error: () => {
+            this.batchError = true;
+            this.executing = false;
+            this.cdr.markForCheck();
+          }
+        });
+      return;
+    }
+
+    const doSuspend = (query: Record<string, unknown>) => {
+      this.processInstanceService.suspendInstancesAsync({ suspended, historicProcessInstanceQuery: query })
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: batch => {
+            this.batchId = batch.id;
+            this.executing = false;
+            this.clearSessionStorage();
+            this.cdr.markForCheck();
+          },
+          error: () => {
+            this.batchError = true;
+            this.executing = false;
+            this.cdr.markForCheck();
+          }
+        });
+    };
+
+    if (this.resolvedBatchQuery) {
+      doSuspend(this.resolvedBatchQuery);
+    } else {
+      this.buildQueryBodyAsync$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        next: query => doSuspend(query),
+        error: () => doSuspend(this.buildHistoricQueryForBatch())
       });
+    }
   }
 
   reset(): void {
@@ -1219,6 +1337,96 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       }
       this.cdr.markForCheck();
     } catch {
+    }
+  }
+
+  private resolveAsyncFields$(criteria: MultiValueFilter[]): Observable<string[] | null> {
+    const activityPill = criteria.find(f => f.field === 'activityId');
+    const incidentPill = criteria.find(f => f.field === 'incidentId');
+    if (!activityPill && !incidentPill) return of(null);
+
+    const activityIds$ = activityPill?.values[0]
+      ? this.processInstanceService.getRuntimeInstanceIdsByActivity({ activityIdIn: [activityPill.values[0]] })
+      : of(null as string[] | null);
+
+    const incidentProcId$ = incidentPill?.values[0]
+      ? this.processInstanceService.getProcessInstanceIdByIncident(incidentPill.values[0])
+      : of(null as string | null);
+
+    return forkJoin({ activityIds: activityIds$, incidentProcId: incidentProcId$ }).pipe(
+      map(({ activityIds, incidentProcId }) => {
+        const actSet = activityIds ? new Set(activityIds) : null;
+        if (actSet && incidentProcId) {
+          return actSet.has(incidentProcId) ? [incidentProcId] : [];
+        } else if (actSet) {
+          return [...actSet];
+        } else if (incidentProcId) {
+          return [incidentProcId];
+        }
+        return [];
+      }),
+      catchError(() => of(null))
+    );
+  }
+
+  buildQueryBodyAsync$(): Observable<Record<string, unknown>> {
+    const base = this.buildHistoricQueryForBatch();
+    const hasAsync = this.filterCriteria.some(f => f.field === 'activityId' || f.field === 'incidentId');
+    if (!hasAsync) return of(base);
+
+    return this.resolveAsyncFields$(this.filterCriteria).pipe(
+      map(resolvedIds => {
+        if (resolvedIds !== null) {
+          base['processInstanceIds'] = resolvedIds;
+        }
+        return base;
+      }),
+      catchError(() => of(base))
+    );
+  }
+
+  private loadActivitiesFromFilter(): void {
+    const pdPill = this.filterCriteria.find(f => f.field === 'processDefinition');
+    const singleVersionId = pdPill?.processDefinitionIds?.length === 1
+      ? pdPill.processDefinitionIds[0]
+      : null;
+    this.activityLoad$.next(singleVersionId);
+  }
+
+  private parseBpmnActivities(xml: string): BpmnElement[] {
+    const FLOW_NODE_TYPES = new Set([
+      'task', 'userTask', 'serviceTask', 'manualTask', 'businessRuleTask',
+      'scriptTask', 'sendTask', 'receiveTask', 'callActivity',
+      'subProcess', 'transaction', 'adHocSubProcess',
+      'startEvent', 'endEvent',
+      'intermediateThrowEvent', 'intermediateCatchEvent', 'boundaryEvent',
+      'exclusiveGateway', 'inclusiveGateway', 'parallelGateway',
+      'eventBasedGateway', 'complexGateway'
+    ]);
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xml, 'text/xml');
+      const result: BpmnElement[] = [];
+      const processElements = Array.from(doc.getElementsByTagName('*'))
+        .filter(el => el.localName === 'process');
+      for (const processEl of processElements) {
+        const walker = doc.createTreeWalker(processEl, NodeFilter.SHOW_ELEMENT);
+        let node: Node | null = walker.nextNode();
+        while (node) {
+          const el = node as Element;
+          if (FLOW_NODE_TYPES.has(el.localName)) {
+            const id = el.getAttribute('id');
+            if (id) {
+              const pascal = el.localName.charAt(0).toUpperCase() + el.localName.slice(1);
+              result.push({ id, type: `bpmn:${pascal}`, name: el.getAttribute('name') || undefined });
+            }
+          }
+          node = walker.nextNode();
+        }
+      }
+      return result;
+    } catch {
+      return [];
     }
   }
 

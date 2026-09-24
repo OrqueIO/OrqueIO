@@ -1136,7 +1136,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       box-shadow: 0 8px 24px rgba(0,0,0,0.14);
       padding: 0.65rem 0.75rem 0.6rem;
       min-width: 260px;
-      max-width: 340px;
+      max-width: 420px;
     }
     .editor-header {
       display: flex;
@@ -1703,7 +1703,7 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
     return this.translateService.instant('cockpit.modify.selectDialog.enterValue');
   }
 
-  dropdownMaxHeight = '340px';
+  dropdownMaxHeight = '420px';
 
   toggleCriteriaDropdown(event: Event): void {
     event.stopPropagation();
@@ -1716,7 +1716,7 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
         const btnRect = btn.getBoundingClientRect();
         const modalRect = modal.getBoundingClientRect();
         const available = modalRect.bottom - btnRect.bottom - 6 - 8;
-        this.dropdownMaxHeight = Math.min(340, Math.max(80, available)) + 'px';
+        this.dropdownMaxHeight = Math.min(420, Math.max(80, available)) + 'px';
       }
     }
     this.cdr.markForCheck();

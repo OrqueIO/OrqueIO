@@ -1488,6 +1488,102 @@ describe('BatchOperationsWizardComponent — move-instances: filteredMoveInstanc
 });
 
 
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch: extended criteria (suspend)', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'superProcessInstanceId', values: ['parent-id-123'] }
+    ]);
+    expect(result['superProcessInstanceId']).toBe('parent-id-123');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'subProcessInstanceId', values: ['sub-id-456'] }
+    ]);
+    expect(result['subProcessInstanceId']).toBe('sub-id-456');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType → mapped to incidentType in query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'incidentType', values: ['failedJob'] }
+    ]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildQuery('suspend', [
+      { field: 'incidentMessage', values: ['Connection refused'] }
+    ]);
+    expect(result['incidentMessageLike']).toBe('%Connection refused%');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildQuery('suspend', [
+      { field: 'activityId', values: ['task-1'] }
+    ]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['activeActivityIdIn']).toBeUndefined();
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildQuery('suspend', [
+      { field: 'incidentId', values: ['inc-789'] }
+    ]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('non-regression: locked state (active + unfinished) preserved alongside activityId', () => {
+    const result = buildQuery('suspend', [
+      { field: 'activityId', values: ['task-claim'] },
+      { field: 'processDefinition', values: ['order-proc'] }
+    ]);
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['activityId']).toBeUndefined();
+  });
+
+  it('activate: superProcessInstanceId + locked suspended state', () => {
+    const result = buildQuery('activate', [
+      { field: 'superProcessInstanceId', values: ['root-proc-id'] }
+    ]);
+    expect(result['superProcessInstanceId']).toBe('root-proc-id');
+    expect(result['suspended']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('all 4 direct criteria combined in one query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'superProcessInstanceId', values: ['p-id'] },
+      { field: 'subProcessInstanceId',   values: ['s-id'] },
+      { field: 'incidentType',           values: ['failedExternalTask'] },
+      { field: 'incidentMessage',        values: ['Timeout'] },
+    ]);
+    expect(result['superProcessInstanceId']).toBe('p-id');
+    expect(result['subProcessInstanceId']).toBe('s-id');
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['incidentMessageLike']).toBe('%Timeout%');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+});
+
+
 describe('BatchOperationsWizardComponent — move-instances: onMoveInstancesRowClick', () => {
 
   const v1 = { id: 'orderProcess:1:aaa', key: 'orderProcess', name: 'Order', version: 1, deploymentId: '', suspended: false };

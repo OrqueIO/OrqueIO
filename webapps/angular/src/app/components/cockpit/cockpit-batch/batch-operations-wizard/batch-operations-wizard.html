@@ -204,6 +204,8 @@
         <app-instance-filter-panel
           [lockedState]="lockedFilterState"
           [initialPills]="filterCriteria"
+          [showExtendedCriteria]="selectedOperationId === 'suspend' || selectedOperationId === 'activate'"
+          [availableActivities]="availableActivities"
           (criteriaChange)="onFilterChange($event)">
         </app-instance-filter-panel>
 
@@ -335,8 +337,9 @@
         </button>
         <button *ngIf="mode === 'query'"
                 type="button" class="btn-primary"
-                [disabled]="!canContinue"
+                [disabled]="!canContinue || resolvingQuery"
                 (click)="continue()">
+          <fa-icon *ngIf="resolvingQuery" [icon]="faSpinner" [animation]="'spin'"></fa-icon>
           {{ (selectedOperation?.actionBtnQueryKey ?? 'cockpit.batchOps.continue') | translate }}
         </button>
       </div>

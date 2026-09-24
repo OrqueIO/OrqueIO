@@ -10,10 +10,13 @@ import {
   faPlus, faTimes, faFilter, faChevronDown, faChevronRight,
   faKey, faHashtag, faCalendarAlt, faCode,
   faExclamationTriangle, faCheck, faCircleDot,
-  faSitemap, faCodeBranch, faSquareMinus, faSquareCheck
+  faSitemap, faCodeBranch, faSquareMinus, faSquareCheck,
+  faPlay, faCircleStop, faUser, faGear, faTable, faPaperPlane,
+  faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { CockpitService, MultiValueFilter, GlobalSearchField, VariableLine } from '../../services/cockpit.service';
+import { BpmnElement } from '../bpmn-viewer/bpmn-viewer';
 import { DecisionService } from '../../services/decision.service';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 import { TranslateService } from '../../i18n/translate.service';
@@ -64,6 +67,8 @@ export class InstanceFilterPanelComponent implements OnInit {
   @Input() lockedState: string | null = null;
   @Input() criteriaSet: 'process' | 'decision' = 'process';
   @Input() initialPills: MultiValueFilter[] = [];
+  @Input() showExtendedCriteria = false;
+  @Input() availableActivities: BpmnElement[] = [];
   @Output() criteriaChange = new EventEmitter<FilterPanelChange>();
 
   private cdr = inject(ChangeDetectorRef);
@@ -89,13 +94,46 @@ export class InstanceFilterPanelComponent implements OnInit {
   faSquare = faSquare;
   faSquareMinus = faSquareMinus;
   faSquareCheck = faSquareCheck;
+  faGear = faGear;
+  faServer = faServer;
+
+  private readonly ACTIVITY_ICON_MAP: Record<string, { icon: any; color: string }> = {
+    'bpmn:StartEvent':             { icon: faPlay,                   color: 'var(--color-success)' },
+    'bpmn:EndEvent':               { icon: faCircleStop,             color: 'var(--color-danger)' },
+    'bpmn:UserTask':               { icon: faUser,                   color: 'var(--color-primary)' },
+    'bpmn:ServiceTask':            { icon: faGear,                   color: 'var(--color-primary)' },
+    'bpmn:ScriptTask':             { icon: faCode,                   color: 'var(--color-primary)' },
+    'bpmn:BusinessRuleTask':       { icon: faTable,                  color: 'var(--color-primary)' },
+    'bpmn:SendTask':               { icon: faPaperPlane,             color: 'var(--color-primary)' },
+    'bpmn:ReceiveTask':            { icon: faInbox,                  color: 'var(--color-primary)' },
+    'bpmn:ManualTask':             { icon: faHand,                   color: 'var(--color-primary)' },
+    'bpmn:CallActivity':           { icon: faArrowUpRightFromSquare, color: 'var(--color-primary)' },
+    'bpmn:SubProcess':             { icon: faLayerGroup,             color: 'var(--color-primary)' },
+    'bpmn:ExclusiveGateway':       { icon: faXmark,                  color: 'var(--color-warning)' },
+    'bpmn:ParallelGateway':        { icon: faPlus,                   color: 'var(--color-warning)' },
+    'bpmn:InclusiveGateway':       { icon: faPlus,                   color: 'var(--color-warning)' },
+    'bpmn:IntermediateCatchEvent': { icon: faCircleDot,              color: 'var(--text-secondary)' },
+    'bpmn:IntermediateThrowEvent': { icon: faCircleDot,              color: 'var(--text-secondary)' },
+    'bpmn:BoundaryEvent':          { icon: faCircleDot,              color: 'var(--text-secondary)' },
+  };
+
+  getActivityIcon(type: string): any {
+    return (this.ACTIVITY_ICON_MAP[type] ?? { icon: faCircleDot }).icon;
+  }
+
+  getActivityIconColor(type: string): string {
+    return (this.ACTIVITY_ICON_MAP[type] ?? { color: 'var(--text-muted)' }).color;
+  }
 
   showCriteriaDropdown = false;
   activeEditorType: GlobalSearchField | null = null;
   activePills: MultiValueFilter[] = [];
 
   pendingValues: string[] = [];
+  pendingTextValue = '';
   pendingStateValues: string[] = [];
+  activityHighlightIndex: number | null = null;
+  hoveredActivityId: string | null = null;
   pendingProcessDefinitionKeys: string[] = [];
   pendingProcessDefinitionIds: string[] = [];
   availableProcessDefinitionGroups: ProcessDefinitionGroup[] = [];
@@ -148,6 +186,32 @@ export class InstanceFilterPanelComponent implements OnInit {
           this.confirmCriterion();
           if (this.activeEditorType) this.cancelCriterion();
         }
+      }
+    }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent): void {
+    if (this.activeEditorType !== 'activityId' || this.availableActivities.length === 0) return;
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      this.activityHighlightIndex = this.activityHighlightIndex === null
+        ? 0
+        : Math.min(this.activityHighlightIndex + 1, this.availableActivities.length - 1);
+      this.cdr.markForCheck();
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      this.activityHighlightIndex = this.activityHighlightIndex === null
+        ? this.availableActivities.length - 1
+        : Math.max(this.activityHighlightIndex - 1, 0);
+      this.cdr.markForCheck();
+    } else if (event.key === 'Enter' && this.activityHighlightIndex !== null) {
+      event.preventDefault();
+      const activity = this.availableActivities[this.activityHighlightIndex];
+      if (activity) {
+        this.pendingTextValue = activity.id;
+        this.activityHighlightIndex = null;
+        this.cdr.markForCheck();
       }
     }
   }
@@ -240,6 +304,7 @@ export class InstanceFilterPanelComponent implements OnInit {
 
     this.activeEditorType = type;
     this.pendingValues = [];
+    this.pendingTextValue = '';
     this.pendingProcessDefinitionKeys = [];
     this.pendingProcessDefinitionIds = [];
     this.processDefinitionSearchText = '';
@@ -247,6 +312,7 @@ export class InstanceFilterPanelComponent implements OnInit {
     this.decisionDefinitionSearchText = '';
     this.pendingVariableOperator = 'eq';
     this.pendingDateValue = '';
+    this.activityHighlightIndex = null;
     this.pendingVariableLines = type === 'variables'
       ? [{ name: '', operator: 'eq', values: [] }]
       : [];
@@ -430,16 +496,26 @@ export class InstanceFilterPanelComponent implements OnInit {
 
   private populatePendingFromPill(pill: MultiValueFilter): void {
     this.pendingValues = [];
+    this.pendingTextValue = '';
     this.pendingStateValues = [];
     this.pendingProcessDefinitionKeys = [];
     this.pendingProcessDefinitionIds = [];
     this.pendingVariableLines = [];
+    this.activityHighlightIndex = null;
     switch (pill.field) {
       case 'businessKey':
       case 'instanceId':
       case 'decisionInstanceId':
       case 'processInstanceId':
         this.pendingValues = [...pill.values];
+        break;
+      case 'superProcessInstanceId':
+      case 'subProcessInstanceId':
+      case 'incidentId':
+      case 'incidentType':
+      case 'incidentMessage':
+      case 'activityId':
+        this.pendingTextValue = pill.values[0] ?? '';
         break;
       case 'state':
         this.pendingStateValues = [...pill.values];
@@ -546,6 +622,28 @@ export class InstanceFilterPanelComponent implements OnInit {
         pill = { field: 'processDefinition', values: pillValues, ...(pillIds ? { processDefinitionIds: pillIds } : {}) };
         break;
       }
+      case 'superProcessInstanceId':
+      case 'subProcessInstanceId':
+      case 'incidentId':
+      case 'incidentType':
+      case 'incidentMessage':
+      case 'activityId': {
+        const v = this.pendingTextValue.trim();
+        if (!v) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.popoverFlipped = false;
+            this.cdr.markForCheck();
+            this.emit();
+          }
+          return;
+        }
+        pill = { field: type, values: [v] };
+        break;
+      }
       case 'startedAfter':
       case 'startedBefore':
       case 'finishedAfter':
@@ -614,6 +712,7 @@ export class InstanceFilterPanelComponent implements OnInit {
   cancelCriterion(): void {
     this.activeEditorType = null;
     this.pendingValues = [];
+    this.pendingTextValue = '';
     this.pendingStateValues = [];
     this.pendingProcessDefinitionKeys = [];
     this.pendingProcessDefinitionIds = [];
@@ -621,6 +720,8 @@ export class InstanceFilterPanelComponent implements OnInit {
     this.pendingDecisionDefinitionKeys = [];
     this.decisionDefinitionSearchText = '';
     this.pendingVariableLines = [];
+    this.activityHighlightIndex = null;
+    this.hoveredActivityId = null;
     this.editingPillIndex = null;
     this.openOperatorMenuIndex = null;
     this.opMenuPosition = null;
@@ -698,6 +799,13 @@ export class InstanceFilterPanelComponent implements OnInit {
     if (this.openOperatorMenuIndex !== null) {
       this.openOperatorMenuIndex = null;
       this.opMenuPosition = null;
+      this.cdr.markForCheck();
+    }
+  }
+
+  closeActivePillEditor(): void {
+    if (this.editingPillIndex !== null) {
+      this.editingPillIndex = null;
       this.cdr.markForCheck();
     }
   }
@@ -853,6 +961,12 @@ export class InstanceFilterPanelComponent implements OnInit {
         const n = pill.variableLines?.filter(l => l.variableName).length ?? 0;
         return t('cockpit.processes.globalSearch.pill.variables', { count: String(n) });
       }
+      case 'superProcessInstanceId': return t('cockpit.processes.globalSearch.pill.superProcessInstanceId', { value: pill.values[0] ?? '' });
+      case 'subProcessInstanceId':   return t('cockpit.processes.globalSearch.pill.subProcessInstanceId',   { value: pill.values[0] ?? '' });
+      case 'incidentId':             return t('cockpit.processes.globalSearch.pill.incidentId',             { value: pill.values[0] ?? '' });
+      case 'incidentType':           return t('cockpit.processes.globalSearch.pill.incidentType',           { value: pill.values[0] ?? '' });
+      case 'incidentMessage':        return t('cockpit.processes.globalSearch.pill.incidentMessage',        { value: pill.values[0] ?? '' });
+      case 'activityId':             return t('cockpit.processes.globalSearch.pill.activityId',             { value: pill.values[0] ?? '' });
       default: return '';
     }
   }
@@ -870,6 +984,12 @@ export class InstanceFilterPanelComponent implements OnInit {
       case 'finishedAfter': case 'finishedBefore':
       case 'evaluatedAfter': case 'evaluatedBefore':         return this.faCalendarAlt;
       case 'variables': case 'variable':                     return this.faCode;
+      case 'superProcessInstanceId':
+      case 'subProcessInstanceId':                           return this.faCodeBranch;
+      case 'incidentId':
+      case 'incidentType':
+      case 'incidentMessage':                                return this.faExclamationTriangle;
+      case 'activityId':                                     return this.faCircleDot;
       default:                                               return this.faFilter;
     }
   }

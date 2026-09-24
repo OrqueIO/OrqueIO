@@ -446,7 +446,9 @@ export type GlobalSearchField =
   | 'startedAfter' | 'startedBefore' | 'finishedAfter' | 'finishedBefore'
   | 'variable' | 'variables'
   | 'decisionDefinition' | 'evaluatedAfter' | 'evaluatedBefore'
-  | 'decisionInstanceId' | 'processInstanceId';
+  | 'decisionInstanceId' | 'processInstanceId'
+  | 'superProcessInstanceId' | 'subProcessInstanceId'
+  | 'incidentId' | 'incidentType' | 'incidentMessage' | 'activityId';
 
 export interface MultiValueFilter {
   field: GlobalSearchField;
@@ -1303,6 +1305,18 @@ export class CockpitService {
           break;
         case 'finishedBefore':
           if (filter.values[0]) base.finishedBefore = filter.values[0];
+          break;
+        case 'superProcessInstanceId':
+          if (filter.values[0]) base.superProcessInstanceId = filter.values[0];
+          break;
+        case 'subProcessInstanceId':
+          if (filter.values[0]) base.subProcessInstanceId = filter.values[0];
+          break;
+        case 'incidentType':
+          if (filter.values[0]) base.incidentType = filter.values[0];
+          break;
+        case 'incidentMessage':
+          if (filter.values[0]) base.incidentMessageLike = `%${filter.values[0]}%`;
           break;
         case 'variable':
           if (filter.variableName && filter.values.length > 0) {
