@@ -328,7 +328,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   private readonly instanceLoad$ = new Subject<void>();
   private readonly decisionInstanceLoad$ = new Subject<void>();
-  private readonly activityLoad$ = new Subject<string | null>();
+  private readonly activityLoad$ = new Subject<Observable<string | null>>();
 
   selectedIds = new Set<string>();
 
@@ -436,6 +436,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     });
 
     this.activityLoad$.pipe(
+      switchMap(source$ => source$),
       switchMap(versionId => {
         if (!versionId) return of([]);
         return this.processDefinitionService.getBpmn20Xml(versionId).pipe(
@@ -1389,10 +1390,20 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   private loadActivitiesFromFilter(): void {
     const pdPill = this.filterCriteria.find(f => f.field === 'processDefinition');
-    const singleVersionId = pdPill?.processDefinitionIds?.length === 1
-      ? pdPill.processDefinitionIds[0]
-      : null;
-    this.activityLoad$.next(singleVersionId);
+    let source$: Observable<string | null>;
+
+    if (pdPill?.processDefinitionIds?.length === 1) {
+      source$ = of(pdPill.processDefinitionIds[0]);
+    } else if (pdPill?.values?.length === 1 && !pdPill.processDefinitionIds?.length) {
+      source$ = this.processDefinitionService.getProcessDefinitionByKey(pdPill.values[0]).pipe(
+        map(def => def?.id ?? null),
+        catchError(() => of(null))
+      );
+    } else {
+      source$ = of(null);
+    }
+
+    this.activityLoad$.next(source$);
   }
 
   private parseBpmnActivities(xml: string): BpmnElement[] {

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { SimpleChange } from '@angular/core';
+import { of } from 'rxjs';
 import { BatchOperationsWizardComponent } from './batch-operations-wizard';
 import { MultiValueFilter } from '../../../../services/cockpit.service';
 import { InstanceFilterPanelComponent } from '../../../../shared/instance-filter-panel/instance-filter-panel';
@@ -1706,6 +1707,128 @@ describe('BatchOperationsWizardComponent — move-instances: onMoveInstancesRowC
     BatchOperationsWizardComponent.prototype.onMoveInstancesRowClick.call(stub, v2);
     expect(navigateCalls).toHaveLength(1);
     expect(navigateCalls[0]).toEqual(['orderProcess', 'orderProcess:2:bbb']);
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — loadActivitiesFromFilter: Activity ID dropdown vs free-text', () => {
+
+  function callLoadActivities(filterCriteria: MultiValueFilter[], getProcessDefinitionByKey?: (key: string) => any) {
+    const emitted: any[] = [];
+    const stub: any = {
+      filterCriteria,
+      activityLoad$: { next: (obs$: any) => emitted.push(obs$) },
+      processDefinitionService: {
+        getProcessDefinitionByKey: getProcessDefinitionByKey ?? (() => of(null))
+      }
+    };
+    (BatchOperationsWizardComponent.prototype as any)['loadActivitiesFromFilter'].call(stub);
+    return emitted;
+  }
+
+  it('single specific version selected → emits that version ID (dropdown activated)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-order-v2'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBe('pd-order-v2');
+  });
+
+  it('single key (no version pin) → resolves latest version via service (dropdown activated)', () => {
+    const [obs$] = callLoadActivities(
+      [{ field: 'processDefinition', values: ['order-proc'], processDefinitionIds: [] }],
+      (key: string) => of({ id: `latest-for-${key}`, key })
+    );
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBe('latest-for-order-proc');
+  });
+
+  it('no processDefinition criterion → emits null (free-text mode)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'businessKey', values: ['ACME'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+  it('multiple process keys selected → emits null (free-text mode)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'processDefinition', values: ['proc-a', 'proc-b'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+  it('multiple specific versions selected → emits null (free-text mode)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v1', 'pd-v2'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+  it('single key, service returns null → emits null gracefully', () => {
+    const [obs$] = callLoadActivities(
+      [{ field: 'processDefinition', values: ['unknown-proc'] }],
+      () => of(null)
+    );
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+});
+
+
+describe('InstanceFilterPanelComponent — processDefinition change clears stale activityId', () => {
+
+  it('removing processDefinition pill also removes activityId pill', () => {
+    const stub: any = {
+      activePills: [
+        { field: 'processDefinition', values: ['proc-a'], processDefinitionIds: [] },
+        { field: 'activityId', values: ['task-1'] },
+      ],
+      cdr: { markForCheck() {} },
+      emit() {},
+    };
+    InstanceFilterPanelComponent.prototype.removePill.call(stub, 0);
+    expect(stub.activePills.find((p: any) => p.field === 'activityId')).toBeUndefined();
+    expect(stub.activePills.find((p: any) => p.field === 'processDefinition')).toBeUndefined();
+  });
+
+  it('removing a non-processDefinition pill does NOT clear activityId', () => {
+    const stub: any = {
+      activePills: [
+        { field: 'processDefinition', values: ['proc-a'] },
+        { field: 'businessKey', values: ['ACME'] },
+        { field: 'activityId', values: ['task-1'] },
+      ],
+      cdr: { markForCheck() {} },
+      emit() {},
+    };
+    InstanceFilterPanelComponent.prototype.removePill.call(stub, 1); // remove businessKey
+    expect(stub.activePills.find((p: any) => p.field === 'activityId')).toBeDefined();
+    expect(stub.activePills.find((p: any) => p.field === 'processDefinition')).toBeDefined();
+  });
+
+  it('processDefinition pill without a prior activityId pill: removePill is a no-op for activityId', () => {
+    const stub: any = {
+      activePills: [
+        { field: 'processDefinition', values: ['proc-a'] },
+        { field: 'businessKey', values: ['ACME'] },
+      ],
+      cdr: { markForCheck() {} },
+      emit() {},
+    };
+    InstanceFilterPanelComponent.prototype.removePill.call(stub, 0);
+    expect(stub.activePills).toHaveLength(1);
+    expect(stub.activePills[0].field).toBe('businessKey');
   });
 
 });

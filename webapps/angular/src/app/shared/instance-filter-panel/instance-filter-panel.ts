@@ -713,12 +713,18 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     }
 
     if (pill) {
+      const prevPdPill = type === 'processDefinition'
+        ? this.activePills.find(p => p.field === 'processDefinition')
+        : undefined;
       if (this.editingPillIndex !== null) {
         const idx = this.editingPillIndex;
         this.activePills = this.activePills.map((p, i) => i === idx ? pill! : p);
         this.editingPillIndex = null;
       } else {
         this.activePills = [...this.activePills, pill];
+      }
+      if (type === 'processDefinition' && prevPdPill && !this.samePdPill(prevPdPill, pill)) {
+        this.activePills = this.activePills.filter(p => p.field !== 'activityId');
       }
       this.activeEditorType = null;
       this.pendingValues = [];
@@ -919,9 +925,18 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   }
 
   removePill(index: number): void {
+    const removedField = this.activePills[index]?.field;
     this.activePills = this.activePills.filter((_, i) => i !== index);
+    if (removedField === 'processDefinition') {
+      this.activePills = this.activePills.filter(p => p.field !== 'activityId');
+    }
     this.cdr.markForCheck();
     this.emit();
+  }
+
+  private samePdPill(a: MultiValueFilter, b: MultiValueFilter): boolean {
+    return JSON.stringify([...(a.values ?? [])].sort()) === JSON.stringify([...(b.values ?? [])].sort())
+        && JSON.stringify([...(a.processDefinitionIds ?? [])].sort()) === JSON.stringify([...(b.processDefinitionIds ?? [])].sort());
   }
 
   onCaseOptionChange(): void {
