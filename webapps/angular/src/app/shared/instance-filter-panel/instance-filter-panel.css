@@ -268,6 +268,8 @@
 .criteria-icon-wrap--indigo { background: rgba(99,  102, 241, 0.10); color: #6366f1; }
 .criteria-icon-wrap--orange { background: rgba(234, 88,  12,  0.10); color: #ea580c; }
 .criteria-icon-wrap--red    { background: rgba(220, 38,  38,  0.10); color: #dc2626; }
+.criteria-icon-wrap--purple { background: rgba(168, 85,  247, 0.10); color: #a855f7; }
+.criteria-icon-wrap--sky    { background: rgba(14,  165, 233, 0.10); color: #0ea5e9; }
 
 .criteria-option-body {
   display: flex;

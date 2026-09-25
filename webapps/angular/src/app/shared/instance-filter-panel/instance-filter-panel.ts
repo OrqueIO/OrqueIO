@@ -12,7 +12,8 @@ import {
   faExclamationTriangle, faCheck, faCircleDot,
   faSitemap, faCodeBranch, faSquareMinus, faSquareCheck,
   faPlay, faCircleStop, faUser, faGear, faTable, faPaperPlane,
-  faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer, faSync
+  faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer, faSync,
+  faLevelUpAlt, faLevelDownAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { CockpitService, MultiValueFilter, GlobalSearchField, VariableLine } from '../../services/cockpit.service';
@@ -97,6 +98,8 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   faGear = faGear;
   faServer = faServer;
   faSync = faSync;
+  faLevelUpAlt = faLevelUpAlt;
+  faLevelDownAlt = faLevelDownAlt;
 
   private readonly ACTIVITY_ICON_MAP: Record<string, { icon: any; color: string }> = {
     'bpmn:StartEvent':             { icon: faPlay,                   color: 'var(--color-success)' },
@@ -1019,8 +1022,8 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'finishedAfter': case 'finishedBefore':
       case 'evaluatedAfter': case 'evaluatedBefore':         return this.faCalendarAlt;
       case 'variables': case 'variable':                     return this.faCode;
-      case 'superProcessInstanceId':
-      case 'subProcessInstanceId':                           return this.faCodeBranch;
+      case 'superProcessInstanceId':                         return this.faLevelUpAlt;
+      case 'subProcessInstanceId':                           return this.faLevelDownAlt;
       case 'incidentId':
       case 'incidentType':
       case 'incidentMessage':                                return this.faExclamationTriangle;
