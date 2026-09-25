@@ -1332,6 +1332,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
       if (this.currentStep === 1 && (this.selectedOperationId === 'suspend' || this.selectedOperationId === 'activate' || this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'delete-finished' || this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external' || this.selectedOperationId === 'set-variables')) {
         this.loadInstances();
+        this.loadActivitiesFromFilter();
       } else if (this.currentStep === 1 && this.selectedOperationId === 'delete-decision') {
         this.loadDecisionInstances();
       } else if (this.currentStep === 1 && this.selectedOperationId === 'move-instances') {

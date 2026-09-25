@@ -1832,3 +1832,83 @@ describe('InstanceFilterPanelComponent — processDefinition change clears stale
   });
 
 });
+
+
+describe('BatchOperationsWizardComponent — loadFromSessionStorage triggers BPMN loading on restore', () => {
+
+  const SESSION_KEY = 'batch-wizard-test-key';
+
+  function makeRestoreStub(operationId: string, filterCriteria: MultiValueFilter[], step = 1) {
+    let activitiesLoaded = false;
+    const stub: any = {
+      SESSION_KEY,
+      selectedOperationId: null,
+      mode: 'instances',
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      hasActiveCriteria: false,
+      selectedIds: new Set(),
+      deleteReason: '',
+      skipCustomListeners: false,
+      skipIoMappings: false,
+      retries: 1,
+      setDueDate: false,
+      retriesDueDate: '',
+      variableDefinitions: [],
+      selectedDecisionIds: new Set(),
+      decisionFilterCriteria: [],
+      decisionHasActiveCriteria: false,
+      currentStep: 1,
+      moveInstancesSearchText: '',
+      loadInstances() {},
+      loadDecisionInstances() {},
+      loadMoveInstancesProcesses() {},
+      loadActivitiesFromFilter() { activitiesLoaded = true; },
+      cdr: { markForCheck() {} },
+    };
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ operationId, filterCriteria, step }));
+    (BatchOperationsWizardComponent.prototype as any)['loadFromSessionStorage'].call(stub);
+    sessionStorage.removeItem(SESSION_KEY);
+    return { stub, activitiesLoaded: () => activitiesLoaded };
+  }
+
+  it('suspend with single processDefinition restored → loadActivitiesFromFilter called', () => {
+    const { activitiesLoaded } = makeRestoreStub('suspend', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v1'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('activate with single processDefinition restored → loadActivitiesFromFilter called', () => {
+    const { activitiesLoaded } = makeRestoreStub('activate', [
+      { field: 'processDefinition', values: ['order-proc'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('delete-running with processDefinition restored → loadActivitiesFromFilter called', () => {
+    const { activitiesLoaded } = makeRestoreStub('delete-running', [
+      { field: 'processDefinition', values: ['order-proc'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('restore with no processDefinition → loadActivitiesFromFilter still called (emits null internally)', () => {
+    const { activitiesLoaded } = makeRestoreStub('suspend', [
+      { field: 'businessKey', values: ['ACME'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('filterCriteria is correctly restored alongside the call', () => {
+    const criteria: MultiValueFilter[] = [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v2'] },
+      { field: 'activityId', values: ['task-check'] },
+    ];
+    const { stub } = makeRestoreStub('suspend', criteria);
+    expect(stub.filterCriteria).toEqual(criteria);
+    expect(stub.selectedOperationId).toBe('suspend');
+  });
+
+});
