@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 
-export type Language = 'fr' | 'en' | 'zh-CN' | 'zh-TW';
+export type Language = 'fr' | 'en' | 'de' | 'zh-CN' | 'zh-TW';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TranslateService {
   private readonly STORAGE_KEY = 'orqueio_language';
-  private readonly SUPPORTED_LANGUAGES: Language[] = ['fr', 'en', 'zh-CN', 'zh-TW'];
+  private readonly SUPPORTED_LANGUAGES: Language[] = ['fr', 'en', 'de', 'zh-CN', 'zh-TW'];
   // Used when a key is missing in the current language
   private readonly FALLBACK_LANGUAGE: Language = 'en';
   private translations: { [lang: string]: { [key: string]: string } } = {};
@@ -58,6 +58,11 @@ export class TranslateService {
     // Français
     if (browserLang.startsWith('fr')) {
       return 'fr';
+    }
+
+    // Deutsch: de, de-DE, de-AT, de-CH ...
+    if (browserLang.startsWith('de')) {
+      return 'de';
     }
 
     // English

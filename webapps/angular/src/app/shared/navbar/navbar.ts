@@ -78,6 +78,16 @@ export class NavbarComponent implements OnInit {
       </svg>`
     },
     {
+      value: 'de',
+      label: 'Deutsch',
+      shortLabel: 'DE',
+      flag: `<svg viewBox="0 0 5 3" width="22" height="14">
+        <rect width="5" height="1" fill="#000"/>
+        <rect width="5" height="1" y="1" fill="#DD0000"/>
+        <rect width="5" height="1" y="2" fill="#FFCE00"/>
+      </svg>`
+    },
+    {
       value: 'zh-CN',
       label: '简体中文',
       shortLabel: '简',
