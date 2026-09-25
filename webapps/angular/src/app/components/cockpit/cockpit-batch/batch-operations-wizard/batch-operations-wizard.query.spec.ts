@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
+import { SimpleChange } from '@angular/core';
 import { BatchOperationsWizardComponent } from './batch-operations-wizard';
 import { MultiValueFilter } from '../../../../services/cockpit.service';
+import { InstanceFilterPanelComponent } from '../../../../shared/instance-filter-panel/instance-filter-panel';
 import { VariableDef } from './variable-definitions-modal/variable-definitions-modal';
 
 function getLockedFilterState(selectedOperationId: string): string | null {
@@ -279,6 +281,100 @@ describe('BatchOperationsWizardComponent — lockedFilterState: State always abs
     // State is absent because the decision criteria set simply has no State criterion.
     // lockedFilterState() falls to default 'active', but this value is never bound to the decision panel.
     expect(getLockedFilterState('delete-decision')).toBe('active');
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch withJobsRetrying', () => {
+
+  it('suspend: withJobsRetrying criterion sets withJobsRetrying=true, preserves locked state', () => {
+    const result = buildQuery('suspend', [{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activate: withJobsRetrying criterion sets withJobsRetrying=true', () => {
+    const result = buildQuery('activate', [{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('delete-running: withJobsRetrying criterion sets withJobsRetrying=true', () => {
+    const result = buildQuery('delete-running', [{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('combined: withJobsRetrying + processDefinition', () => {
+    const result = buildQuery('suspend', [
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'processDefinition', values: ['order-proc'] },
+    ]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['active']).toBe(true);
+  });
+
+});
+
+describe('InstanceFilterPanelComponent — ngOnChanges resets pills on operation switch', () => {
+
+  function applyPillsChange(
+    prevPills: MultiValueFilter[],
+    nextPills: MultiValueFilter[],
+    isFirstChange = false
+  ): { activePills: MultiValueFilter[]; activeEditorType: string | null; editingPillIndex: number | null } {
+    const stub: any = {
+      activePills: [...prevPills],
+      activeEditorType: null,
+      editingPillIndex: null,
+      cancelCriterion() {
+        this.activeEditorType = null;
+        this.editingPillIndex = null;
+      },
+      cdr: { markForCheck() {} },
+    };
+    InstanceFilterPanelComponent.prototype.ngOnChanges.call(stub, {
+      initialPills: new SimpleChange(prevPills, nextPills, isFirstChange),
+    });
+    return stub;
+  }
+
+  it('clears activePills when initialPills becomes empty (operation switch)', () => {
+    const prevPills: MultiValueFilter[] = [{ field: 'withJobsRetrying', values: [] }];
+    const stub = applyPillsChange(prevPills, []);
+    expect(stub.activePills).toHaveLength(0);
+  });
+
+  it('also clears the active editor when pills are reset', () => {
+    const prevPills: MultiValueFilter[] = [{ field: 'businessKey', values: ['ACME'] }];
+    const stub: any = {
+      activePills: [...prevPills],
+      activeEditorType: 'businessKey',
+      editingPillIndex: 0,
+      cancelCriterion() { this.activeEditorType = null; this.editingPillIndex = null; },
+      cdr: { markForCheck() {} },
+    };
+    InstanceFilterPanelComponent.prototype.ngOnChanges.call(stub, {
+      initialPills: new SimpleChange(prevPills, [], false),
+    });
+    expect(stub.activePills).toHaveLength(0);
+    expect(stub.activeEditorType).toBeNull();
+    expect(stub.editingPillIndex).toBeNull();
+  });
+
+  it('does NOT clear pills on firstChange — ngOnInit handles initial population', () => {
+    const stub = applyPillsChange([], [], true);
+    expect(stub.activePills).toHaveLength(0); // unchanged, not reset by ngOnChanges
+  });
+
+  it('does NOT clear pills when initialPills becomes non-empty (parent restoring saved criteria)', () => {
+    const prev: MultiValueFilter[] = [{ field: 'withIncidents', values: [] }];
+    const next: MultiValueFilter[] = [{ field: 'withIncidents', values: [] }, { field: 'withJobsRetrying', values: [] }];
+    const stub = applyPillsChange(prev, next);
+    expect(stub.activePills).toEqual(prev); // unchanged — ngOnChanges only resets on empty
   });
 
 });

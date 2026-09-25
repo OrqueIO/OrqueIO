@@ -16,15 +16,6 @@
             <fa-icon [icon]="faTimes"></fa-icon>
           </button>
         </div>
-        <!-- Inline popover for editing an existing pill -->
-        <div class="criterion-editor-popover"
-             [class.criterion-editor-popover--variables]="activeEditorType === 'variables'"
-             [class.criterion-editor-popover--flip]="popoverFlipped"
-             *ngIf="editingPillIndex === i"
-             role="dialog" aria-modal="true"
-             (keydown.enter)="$event.stopPropagation()">
-          <ng-container *ngTemplateOutlet="editorPopoverContent"></ng-container>
-        </div>
       </div>
 
     </div>
@@ -126,6 +117,16 @@
                 <span class="criteria-option-body">
                   <span class="criteria-option-name">{{ 'cockpit.processes.filters.withIncidents' | translate }}</span>
                   <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.withIncidents' | translate }}</span>
+                </span>
+              </button>
+
+              <button class="criteria-option" (click)="selectCriteriaType('withJobsRetrying')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--teal">
+                  <fa-icon [icon]="faSync"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.processes.filters.withJobsRetrying' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.withJobsRetrying' | translate }}</span>
                 </span>
               </button>
             </div>
@@ -312,11 +313,11 @@
 
         </div>
 
-        <!-- New-criterion editor popover — anchored below "Add criteria" button -->
+        <!-- Criterion editor popover — handles both new criteria and pill editing -->
         <div class="criterion-editor-popover"
              [class.criterion-editor-popover--variables]="activeEditorType === 'variables'"
              [class.criterion-editor-popover--flip]="popoverFlipped"
-             *ngIf="activeEditorType && editingPillIndex === null"
+             *ngIf="activeEditorType"
              role="dialog" aria-modal="true"
              (keydown.enter)="$event.stopPropagation()">
           <ng-container *ngTemplateOutlet="editorPopoverContent"></ng-container>

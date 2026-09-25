@@ -935,7 +935,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         case 'incidentMessage':
           if (f.values[0]) query['incidentMessageLike'] = `%${f.values[0]}%`;
           break;
-        // activityId and incidentId require async resolution — handled by buildQueryBodyAsync$()
+        case 'withJobsRetrying':
+          query['withJobsRetrying'] = true;
+          break;
       }
     }
     if (this.vnIgnoreCase) query['variableNamesIgnoreCase'] = true;

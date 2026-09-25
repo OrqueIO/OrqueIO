@@ -442,7 +442,7 @@ export interface VariableLine {
 }
 
 export type GlobalSearchField =
-  | 'businessKey' | 'instanceId' | 'state' | 'withIncidents' | 'processDefinition'
+  | 'businessKey' | 'instanceId' | 'state' | 'withIncidents' | 'withJobsRetrying' | 'processDefinition'
   | 'startedAfter' | 'startedBefore' | 'finishedAfter' | 'finishedBefore'
   | 'variable' | 'variables'
   | 'decisionDefinition' | 'evaluatedAfter' | 'evaluatedBefore'
@@ -1289,6 +1289,9 @@ export class CockpitService {
           break;
         case 'withIncidents':
           base.withIncidents = true;
+          break;
+        case 'withJobsRetrying':
+          base.withJobsRetrying = true;
           break;
         case 'processDefinition':
           if (filter.values.length > 0) base.processDefinitionKeyIn = filter.values;

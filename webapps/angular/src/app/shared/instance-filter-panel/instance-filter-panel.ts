@@ -1,5 +1,5 @@
 import {
-  Component, Input, Output, EventEmitter, OnInit,
+  Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges,
   ChangeDetectionStrategy, ChangeDetectorRef, HostListener, inject, DestroyRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import {
   faExclamationTriangle, faCheck, faCircleDot,
   faSitemap, faCodeBranch, faSquareMinus, faSquareCheck,
   faPlay, faCircleStop, faUser, faGear, faTable, faPaperPlane,
-  faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer
+  faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer, faSync
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { CockpitService, MultiValueFilter, GlobalSearchField, VariableLine } from '../../services/cockpit.service';
@@ -63,7 +63,7 @@ interface ProcessDefinitionGroup {
   styleUrl: './instance-filter-panel.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InstanceFilterPanelComponent implements OnInit {
+export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   @Input() lockedState: string | null = null;
   @Input() criteriaSet: 'process' | 'decision' = 'process';
   @Input() initialPills: MultiValueFilter[] = [];
@@ -96,6 +96,7 @@ export class InstanceFilterPanelComponent implements OnInit {
   faSquareCheck = faSquareCheck;
   faGear = faGear;
   faServer = faServer;
+  faSync = faSync;
 
   private readonly ACTIVITY_ICON_MAP: Record<string, { icon: any; color: string }> = {
     'bpmn:StartEvent':             { icon: faPlay,                   color: 'var(--color-success)' },
@@ -271,6 +272,15 @@ export class InstanceFilterPanelComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    const pills = changes['initialPills'];
+    if (pills && !pills.firstChange && pills.currentValue?.length === 0) {
+      this.activePills = [];
+      this.cancelCriterion();
+      this.cdr.markForCheck();
+    }
+  }
+
   toggleCriteriaDropdown(event: Event): void {
     event.stopPropagation();
     if (this.activeEditorType || this.editingPillIndex !== null) {
@@ -286,6 +296,15 @@ export class InstanceFilterPanelComponent implements OnInit {
     if (type === 'withIncidents') {
       if (!this.activePills.some(p => p.field === 'withIncidents')) {
         this.activePills = [...this.activePills, { field: 'withIncidents', values: [] }];
+        this.cdr.markForCheck();
+        this.emit();
+      }
+      return;
+    }
+
+    if (type === 'withJobsRetrying') {
+      if (!this.activePills.some(p => p.field === 'withJobsRetrying')) {
+        this.activePills = [...this.activePills, { field: 'withJobsRetrying', values: [] }];
         this.cdr.markForCheck();
         this.emit();
       }
@@ -805,8 +824,7 @@ export class InstanceFilterPanelComponent implements OnInit {
 
   closeActivePillEditor(): void {
     if (this.editingPillIndex !== null) {
-      this.editingPillIndex = null;
-      this.cdr.markForCheck();
+      this.cancelCriterion();
     }
   }
 
@@ -923,7 +941,8 @@ export class InstanceFilterPanelComponent implements OnInit {
     switch (pill.field) {
       case 'businessKey':    return t('cockpit.processes.globalSearch.pill.businessKey',  { value: pill.values.join(', ') });
       case 'instanceId':     return t('cockpit.processes.globalSearch.pill.instanceId',   { value: pill.values.join(', ') });
-      case 'withIncidents':  return t('cockpit.processes.globalSearch.pill.withIncidents');
+      case 'withIncidents':     return t('cockpit.processes.globalSearch.pill.withIncidents');
+      case 'withJobsRetrying':  return t('cockpit.processes.globalSearch.pill.withJobsRetrying');
       case 'processDefinition': {
         let labels: string[];
         if (pill.processDefinitionIds?.length) {
@@ -978,6 +997,7 @@ export class InstanceFilterPanelComponent implements OnInit {
       case 'decisionInstanceId':                             return this.faHashtag;
       case 'processInstanceId':                              return this.faKey;
       case 'withIncidents':                                  return this.faExclamationTriangle;
+      case 'withJobsRetrying':                               return this.faSync;
       case 'processDefinition':
       case 'decisionDefinition':                             return this.faSitemap;
       case 'startedAfter': case 'startedBefore':
