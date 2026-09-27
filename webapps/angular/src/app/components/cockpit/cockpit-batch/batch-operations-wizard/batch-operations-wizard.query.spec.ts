@@ -1912,3 +1912,166 @@ describe('BatchOperationsWizardComponent — loadFromSessionStorage triggers BPM
   });
 
 });
+
+
+function buildDeleteRunningQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'delete-running',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — delete-running: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only (no active/suspended flags)', () => {
+    const result = buildDeleteRunningQuery([]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended pills → { unfinished: true } (both = default scope, no narrowing)', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill combined with processDefinitionKeyIn', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+  });
+
+  it('stateSuspended pill combined with processDefinitionIdIn', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v2'] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-v2']);
+  });
+
+});
+
+
+
+describe('BatchOperationsWizardComponent — delete-running: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying → mapped to withJobsRetrying:true in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType → mapped to incidentType in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildDeleteRunningQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildDeleteRunningQuery([{ field: 'activityId', values: ['task-review'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildDeleteRunningQuery([{ field: 'incidentId', values: ['inc-id-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateActive pill', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'incidentType', values: ['failedExternalTask'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['incidentType']).toBe('failedExternalTask');
+  });
+
+});
+
+
+
+describe('BatchOperationsWizardComponent — delete-running: state narrowing via filterCriteria pills', () => {
+
+  it('no state pill → active/suspended flags absent from query', () => {
+    const result = buildDeleteRunningQuery([]);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill alone → active: true in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill alone → suspended: true in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both state pills → neither active nor suspended flag (default scope)', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+});

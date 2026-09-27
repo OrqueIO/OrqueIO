@@ -204,7 +204,8 @@
         <app-instance-filter-panel
           [lockedState]="lockedFilterState"
           [initialPills]="filterCriteria"
-          [showExtendedCriteria]="selectedOperationId === 'suspend' || selectedOperationId === 'activate'"
+          [showExtendedCriteria]="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running'"
+          [showStateNarrowing]="selectedOperationId === 'delete-running'"
           [availableActivities]="availableActivities"
           (criteriaChange)="onFilterChange($event)">
         </app-instance-filter-panel>

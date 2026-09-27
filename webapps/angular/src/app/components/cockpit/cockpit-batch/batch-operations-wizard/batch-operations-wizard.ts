@@ -353,7 +353,15 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         let injectedStatePill: MultiValueFilter | null;
         if (this.selectedOperationId === 'activate') {
           injectedStatePill = { field: 'state', values: ['suspended'] };
-        } else if (this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external') {
+        } else if (this.selectedOperationId === 'delete-running') {
+          const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
+          const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
+          let stateValue: string;
+          if (hasActive && !hasSuspended) stateValue = 'active';
+          else if (hasSuspended && !hasActive) stateValue = 'suspended';
+          else stateValue = 'unfinished';
+          injectedStatePill = { field: 'state', values: [stateValue] };
+        } else if (this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external') {
           injectedStatePill = { field: 'state', values: ['unfinished'] };
         } else if (this.selectedOperationId === 'delete-finished') {
           injectedStatePill = { field: 'state', values: ['finished'] };
@@ -887,13 +895,17 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     let query: Record<string, unknown>;
     if (this.selectedOperationId === 'activate') {
       query = { suspended: true, unfinished: true };
-    } else if (this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external') {
+    } else if (this.selectedOperationId === 'delete-running') {
+      query = { unfinished: true };
+      const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
+      const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
+      if (hasActive && !hasSuspended) query['active'] = true;
+      else if (hasSuspended && !hasActive) query['suspended'] = true;
+    } else if (this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external') {
       query = { unfinished: true };
     } else if (this.selectedOperationId === 'delete-finished') {
       query = { finished: true };
     } else if (this.selectedOperationId === 'set-variables') {
-      // Engine forces .unfinished() on any historicProcessInstanceQuery in SetVariablesToProcessInstancesBatchCmd.
-      // Variables cannot be set on completed instances — their execution context no longer exists.
       query = { unfinished: true };
     } else {
       query = { active: true, unfinished: true };
