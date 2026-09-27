@@ -1055,3 +1055,10 @@
   color: var(--text-muted);
   font-style: italic;
 }
+
+.state-narrowing-hint {
+  margin: 0;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-style: italic;
+}

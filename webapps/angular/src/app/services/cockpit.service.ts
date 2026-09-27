@@ -448,7 +448,8 @@ export type GlobalSearchField =
   | 'decisionDefinition' | 'evaluatedAfter' | 'evaluatedBefore'
   | 'decisionInstanceId' | 'processInstanceId'
   | 'superProcessInstanceId' | 'subProcessInstanceId'
-  | 'incidentId' | 'incidentType' | 'incidentMessage' | 'activityId';
+  | 'incidentId' | 'incidentType' | 'incidentMessage' | 'activityId'
+  | 'stateActive' | 'stateSuspended';
 
 export interface MultiValueFilter {
   field: GlobalSearchField;
