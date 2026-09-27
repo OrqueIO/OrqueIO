@@ -22,7 +22,7 @@
     </div>
 
     <!-- Both-state hint -->
-    <p class="state-narrowing-hint" *ngIf="showStateNarrowing && bothStateNarrowingActive">
+    <p class="state-narrowing-hint" *ngIf="(showStateNarrowing && bothStateNarrowingActive) || (showFinishedNarrowing && bothFinishedNarrowingActive)">
       {{ 'cockpit.processes.globalSearch.stateNarrowingBothHint' | translate }}
     </p>
 
@@ -137,6 +137,28 @@
                 </button>
               </ng-container>
 
+              <!-- Finished narrowing — for delete-finished -->
+              <ng-container *ngIf="showFinishedNarrowing">
+                <button class="criteria-option" (click)="selectCriteriaType('stateCompleted')" type="button" role="menuitem">
+                  <span class="criteria-icon-wrap criteria-icon-wrap--emerald">
+                    <fa-icon [icon]="faCheckCircle"></fa-icon>
+                  </span>
+                  <span class="criteria-option-body">
+                    <span class="criteria-option-name">{{ 'cockpit.processes.filters.stateCompleted' | translate }}</span>
+                    <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.stateCompleted' | translate }}</span>
+                  </span>
+                </button>
+                <button class="criteria-option" (click)="selectCriteriaType('stateTerminated')" type="button" role="menuitem">
+                  <span class="criteria-icon-wrap criteria-icon-wrap--red">
+                    <fa-icon [icon]="faTimesCircle"></fa-icon>
+                  </span>
+                  <span class="criteria-option-body">
+                    <span class="criteria-option-name">{{ 'cockpit.processes.filters.stateTerminated' | translate }}</span>
+                    <span class="criteria-option-desc">{{ 'cockpit.processes.globalSearch.desc.stateTerminated' | translate }}</span>
+                  </span>
+                </button>
+              </ng-container>
+
               <button class="criteria-option" (click)="selectCriteriaType('withIncidents')" type="button" role="menuitem">
                 <span class="criteria-icon-wrap criteria-icon-wrap--red">
                   <fa-icon [icon]="faExclamationTriangle"></fa-icon>
@@ -147,7 +169,7 @@
                 </span>
               </button>
 
-              <button class="criteria-option" (click)="selectCriteriaType('withJobsRetrying')" type="button" role="menuitem">
+              <button *ngIf="!finishedScope" class="criteria-option" (click)="selectCriteriaType('withJobsRetrying')" type="button" role="menuitem">
                 <span class="criteria-icon-wrap criteria-icon-wrap--teal">
                   <fa-icon [icon]="faSync"></fa-icon>
                 </span>
@@ -203,7 +225,7 @@
             <div class="criteria-group">
               <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupDates' | translate }}</div>
 
-              <button *ngIf="showExtendedCriteria" class="criteria-option" (click)="selectCriteriaType('activityId')" type="button" role="menuitem">
+              <button *ngIf="showExtendedCriteria && !finishedScope" class="criteria-option" (click)="selectCriteriaType('activityId')" type="button" role="menuitem">
                 <span class="criteria-icon-wrap criteria-icon-wrap--violet">
                   <fa-icon [icon]="faHashtag"></fa-icon>
                 </span>

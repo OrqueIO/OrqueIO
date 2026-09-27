@@ -204,8 +204,10 @@
         <app-instance-filter-panel
           [lockedState]="lockedFilterState"
           [initialPills]="filterCriteria"
-          [showExtendedCriteria]="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running'"
+          [showExtendedCriteria]="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished'"
           [showStateNarrowing]="selectedOperationId === 'delete-running'"
+          [showFinishedNarrowing]="selectedOperationId === 'delete-finished'"
+          [finishedScope]="selectedOperationId === 'delete-finished'"
           [availableActivities]="availableActivities"
           (criteriaChange)="onFilterChange($event)">
         </app-instance-filter-panel>

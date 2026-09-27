@@ -198,10 +198,11 @@ describe('CockpitService — countPerState (via searchProcessInstancesGlobalCoun
     }
   });
 
-  it('handles "terminated" state as 1 body with orQueries (not 2 separate bodies)', async () => {
+  it('handles "terminated" state as 2 separate bodies (externallyTerminated + internallyTerminated) for multi-state count', async () => {
     const queryCount = vi.fn()
       .mockReturnValueOnce(of(5))
-      .mockReturnValueOnce(of(3));
+      .mockReturnValueOnce(of(3))
+      .mockReturnValueOnce(of(2));
     const queryInstances = vi.fn();
 
     const svc = makeService({
@@ -216,18 +217,58 @@ describe('CockpitService — countPerState (via searchProcessInstancesGlobalCoun
 
     const count = await lastValueFrom(svc.searchProcessInstancesGlobalCount(filters));
 
-    expect(count).toBe(8);
-    expect(queryCount).toHaveBeenCalledTimes(2);
+    expect(count).toBe(10);
+    expect(queryCount).toHaveBeenCalledTimes(3);
     expect(queryInstances).not.toHaveBeenCalled();
 
-    const terminatedBody = queryCount.mock.calls[1][0];
-    expect(terminatedBody).toMatchObject({
+    const extBody = queryCount.mock.calls[1][0];
+    expect(extBody).toMatchObject({
       processInstanceBusinessKeyLike: '%BK-Y%',
       finished: true,
-      orQueries: [{ externallyTerminated: true }, { internallyTerminated: true }],
+      externallyTerminated: true,
     });
-    expect(terminatedBody).not.toHaveProperty('externallyTerminated');
-    expect(terminatedBody).not.toHaveProperty('internallyTerminated');
+    expect(extBody).not.toHaveProperty('internallyTerminated');
+    expect(extBody).not.toHaveProperty('orQueries');
+
+    const intBody = queryCount.mock.calls[2][0];
+    expect(intBody).toMatchObject({
+      processInstanceBusinessKeyLike: '%BK-Y%',
+      finished: true,
+      internallyTerminated: true,
+    });
+    expect(intBody).not.toHaveProperty('externallyTerminated');
+    expect(intBody).not.toHaveProperty('orQueries');
+  });
+
+  it('single "terminated" state (no other states): makes 2 separate queries for externallyTerminated and internallyTerminated', async () => {
+    const queryInstances = vi.fn()
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([]));
+    const queryCount = vi.fn();
+
+    const svc = makeService({
+      queryProcessInstances: queryInstances,
+      queryProcessInstancesCount: queryCount,
+    });
+
+    const filters: MultiValueFilter[] = [
+      { field: 'state', values: ['terminated'] },
+    ];
+
+    await lastValueFrom(svc.searchProcessInstancesGlobal(filters));
+
+    expect(queryInstances).toHaveBeenCalledTimes(2);
+    expect(queryCount).not.toHaveBeenCalled();
+
+    const extBody = queryInstances.mock.calls[0][0];
+    expect(extBody).toMatchObject({ finished: true, externallyTerminated: true });
+    expect(extBody).not.toHaveProperty('internallyTerminated');
+    expect(extBody).not.toHaveProperty('orQueries');
+
+    const intBody = queryInstances.mock.calls[1][0];
+    expect(intBody).toMatchObject({ finished: true, internallyTerminated: true });
+    expect(intBody).not.toHaveProperty('externallyTerminated');
+    expect(intBody).not.toHaveProperty('orQueries');
   });
 
   it('issues one queryProcessInstancesCount per BK variant when state has single value', async () => {
@@ -524,9 +565,9 @@ describe('CockpitService — searchPerState incremental cache (via searchProcess
   });
 });
 
-describe('CockpitService — Fix 1: terminated uses orQueries in searchPerState', () => {
+describe('CockpitService — Fix 1: terminated uses 2 separate bodies in searchPerState', () => {
 
-  it('sends 1 body for terminated state with orQueries combining both sub-types', async () => {
+  it('sends 2 bodies for terminated state (externallyTerminated + internallyTerminated) in searchPerState', async () => {
     const queryInstances = vi.fn().mockReturnValue(of([]));
     const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
 
@@ -536,22 +577,24 @@ describe('CockpitService — Fix 1: terminated uses orQueries in searchPerState'
 
     await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
 
-    expect(queryInstances).toHaveBeenCalledTimes(2);
+    expect(queryInstances).toHaveBeenCalledTimes(3);
 
-    const activebody = queryInstances.mock.calls[0][0];
-    expect(activebody).toMatchObject({ active: true, unfinished: true });
-    expect(activebody).not.toHaveProperty('orQueries');
+    const activeBody = queryInstances.mock.calls[0][0];
+    expect(activeBody).toMatchObject({ active: true, unfinished: true });
+    expect(activeBody).not.toHaveProperty('orQueries');
 
-    const terminatedBody = queryInstances.mock.calls[1][0];
-    expect(terminatedBody).toMatchObject({
-      finished: true,
-      orQueries: [{ externallyTerminated: true }, { internallyTerminated: true }],
-    });
-    expect(terminatedBody).not.toHaveProperty('externallyTerminated');
-    expect(terminatedBody).not.toHaveProperty('internallyTerminated');
+    const extBody = queryInstances.mock.calls[1][0];
+    expect(extBody).toMatchObject({ finished: true, externallyTerminated: true });
+    expect(extBody).not.toHaveProperty('internallyTerminated');
+    expect(extBody).not.toHaveProperty('orQueries');
+
+    const intBody = queryInstances.mock.calls[2][0];
+    expect(intBody).toMatchObject({ finished: true, internallyTerminated: true });
+    expect(intBody).not.toHaveProperty('externallyTerminated');
+    expect(intBody).not.toHaveProperty('orQueries');
   });
 
-  it('places BK at root and orQueries for state sub-type when active+terminated + BK', async () => {
+  it('places BK at root and separate bodies for ext/int terminated when active+terminated + BK', async () => {
     const queryInstances = vi.fn().mockReturnValue(of([]));
     const svc = makeService({ queryProcessInstances: queryInstances, queryProcessInstancesCount: vi.fn() });
 
@@ -562,14 +605,21 @@ describe('CockpitService — Fix 1: terminated uses orQueries in searchPerState'
 
     await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, 0, 20));
 
-    expect(queryInstances).toHaveBeenCalledTimes(2);
+    expect(queryInstances).toHaveBeenCalledTimes(3);
 
-    const terminatedBody = queryInstances.mock.calls[1][0];
-    expect(terminatedBody).toHaveProperty('processInstanceBusinessKeyLike', '%BK-001%');
-    expect(terminatedBody).toHaveProperty('finished', true);
-    expect(terminatedBody).toHaveProperty('orQueries', [{ externallyTerminated: true }, { internallyTerminated: true }]);
-    expect(terminatedBody).not.toHaveProperty('externallyTerminated');
-    expect(terminatedBody).not.toHaveProperty('internallyTerminated');
+    const extBody = queryInstances.mock.calls[1][0];
+    expect(extBody).toHaveProperty('processInstanceBusinessKeyLike', '%BK-001%');
+    expect(extBody).toHaveProperty('finished', true);
+    expect(extBody).toHaveProperty('externallyTerminated', true);
+    expect(extBody).not.toHaveProperty('internallyTerminated');
+    expect(extBody).not.toHaveProperty('orQueries');
+
+    const intBody = queryInstances.mock.calls[2][0];
+    expect(intBody).toHaveProperty('processInstanceBusinessKeyLike', '%BK-001%');
+    expect(intBody).toHaveProperty('finished', true);
+    expect(intBody).toHaveProperty('internallyTerminated', true);
+    expect(intBody).not.toHaveProperty('externallyTerminated');
+    expect(intBody).not.toHaveProperty('orQueries');
   });
 });
 
@@ -1057,7 +1107,7 @@ describe('CockpitService — buildPerStateBodies: BK multi-value stays at root (
     }
   });
 
-  it('terminated + 2 BK → 2 bodies (1 state-fragment × 2 BK); orQueries contains only termination sub-types', async () => {
+  it('terminated + 2 BK → 4 bodies (2 state-fragments × 2 BK); each body has a single termination flag', async () => {
     const queryInstances = vi.fn().mockReturnValue(of([]));
     const svc = makeService({ queryProcessInstances: queryInstances });
 
@@ -1066,14 +1116,19 @@ describe('CockpitService — buildPerStateBodies: BK multi-value stays at root (
 
     await lastValueFrom(svc.searchPerStatePaged(filters, statePill, false, false, 10, null));
 
-    expect(queryInstances.mock.calls.length).toBe(2);
+    expect(queryInstances.mock.calls.length).toBe(4);
 
     for (const [body] of queryInstances.mock.calls) {
       expect(body).toHaveProperty('processInstanceBusinessKeyLike');
-      expect(body.orQueries).toEqual([{ externallyTerminated: true }, { internallyTerminated: true }]);
+      expect(body).not.toHaveProperty('orQueries');
+      const hasExt = body.externallyTerminated === true;
+      const hasInt = body.internallyTerminated === true;
+      expect(hasExt || hasInt).toBe(true);
+      expect(hasExt && hasInt).toBe(false);
     }
-    expect(queryInstances.mock.calls[0][0].processInstanceBusinessKeyLike).toBe('%alpha%');
-    expect(queryInstances.mock.calls[1][0].processInstanceBusinessKeyLike).toBe('%beta%');
+
+    const bkValues = queryInstances.mock.calls.map(([b]: [Record<string, unknown>]) => b['processInstanceBusinessKeyLike']).sort();
+    expect(bkValues).toEqual(['%alpha%', '%alpha%', '%beta%', '%beta%']);
   });
 
   it('returns matching instances when 3 states combined with multi-BK (regression: must not be empty)', async () => {

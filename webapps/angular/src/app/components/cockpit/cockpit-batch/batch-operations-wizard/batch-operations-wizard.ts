@@ -364,7 +364,13 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         } else if (this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external') {
           injectedStatePill = { field: 'state', values: ['unfinished'] };
         } else if (this.selectedOperationId === 'delete-finished') {
-          injectedStatePill = { field: 'state', values: ['finished'] };
+          const hasCompleted = this.filterCriteria.some(f => f.field === 'stateCompleted');
+          const hasTerminated = this.filterCriteria.some(f => f.field === 'stateTerminated');
+          let stateValue: string;
+          if (hasCompleted && !hasTerminated) stateValue = 'completed';
+          else if (hasTerminated && !hasCompleted) stateValue = 'terminated';
+          else stateValue = 'finished';
+          injectedStatePill = { field: 'state', values: [stateValue] };
         } else if (this.selectedOperationId === 'set-variables') {
           injectedStatePill = { field: 'state', values: ['unfinished'] };
         } else {
@@ -904,7 +910,11 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     } else if (this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external') {
       query = { unfinished: true };
     } else if (this.selectedOperationId === 'delete-finished') {
-      query = { finished: true };
+      const hasCompleted = this.filterCriteria.some(f => f.field === 'stateCompleted');
+      const hasTerminated = this.filterCriteria.some(f => f.field === 'stateTerminated');
+      if (hasCompleted && !hasTerminated) query = { completed: true };
+      else if (hasTerminated && !hasCompleted) query = { finished: true, internallyTerminated: true };
+      else query = { finished: true };
     } else if (this.selectedOperationId === 'set-variables') {
       query = { unfinished: true };
     } else {
@@ -949,7 +959,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           if (f.values[0]) query['incidentMessageLike'] = `%${f.values[0]}%`;
           break;
         case 'withJobsRetrying':
-          query['withJobsRetrying'] = true;
+          if (this.selectedOperationId !== 'delete-finished') query['withJobsRetrying'] = true;
           break;
       }
     }
@@ -1194,6 +1204,32 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
     if (this.selectedOperationId === 'delete-finished') {
       const deleteReason = this.deleteReason.trim() || undefined;
+      if (this.mode !== 'instances') {
+        const hasTerminated = this.filterCriteria.some(f => f.field === 'stateTerminated');
+        const hasCompleted = this.filterCriteria.some(f => f.field === 'stateCompleted');
+        if (hasTerminated && !hasCompleted) {
+          const intQuery = this.buildHistoricQueryForBatch();
+          const extQuery: Record<string, unknown> = { ...intQuery, externallyTerminated: true };
+          delete extQuery['internallyTerminated'];
+          forkJoin([
+            this.processInstanceService.deleteFinishedInstancesAsync({ deleteReason, historicProcessInstanceQuery: extQuery }),
+            this.processInstanceService.deleteFinishedInstancesAsync({ deleteReason, historicProcessInstanceQuery: intQuery }),
+          ]).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+            next: ([, batch]) => {
+              this.batchId = batch.id;
+              this.executing = false;
+              this.clearSessionStorage();
+              this.cdr.markForCheck();
+            },
+            error: () => {
+              this.batchError = true;
+              this.executing = false;
+              this.cdr.markForCheck();
+            }
+          });
+          return;
+        }
+      }
       const deleteFinishedPayload = this.mode === 'instances'
         ? { deleteReason, historicProcessInstanceIds: [...this.selectedIds] }
         : { deleteReason, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() };

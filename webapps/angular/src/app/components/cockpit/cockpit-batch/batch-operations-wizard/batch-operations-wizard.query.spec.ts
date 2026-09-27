@@ -2075,3 +2075,130 @@ describe('BatchOperationsWizardComponent — delete-running: state narrowing via
   });
 
 });
+
+
+function buildDeleteFinishedQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'delete-finished',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — delete-finished: base query and Completed/Terminated narrowing', () => {
+
+  it('non-regression: no narrowing → { finished: true } only', () => {
+    const result = buildDeleteFinishedQuery([]);
+    expect(result['finished']).toBe(true);
+    expect(result['completed']).toBeUndefined();
+    expect(result['externallyTerminated']).toBeUndefined();
+  });
+
+  it('stateCompleted pill only → { completed: true }', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'stateCompleted', values: [] }]);
+    expect(result['completed']).toBe(true);
+    expect(result['finished']).toBeUndefined();
+    expect(result['externallyTerminated']).toBeUndefined();
+  });
+
+  it('stateTerminated pill only → { finished: true, internallyTerminated: true }', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'stateTerminated', values: [] }]);
+    expect(result['finished']).toBe(true);
+    expect(result['internallyTerminated']).toBe(true);
+    expect(result['externallyTerminated']).toBeUndefined();
+    expect(result['orQueries']).toBeUndefined();
+    expect(result['completed']).toBeUndefined();
+  });
+
+  it('both stateCompleted + stateTerminated pills → { finished: true } (same as default)', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'stateCompleted', values: [] },
+      { field: 'stateTerminated', values: [] },
+    ]);
+    expect(result['finished']).toBe(true);
+    expect(result['completed']).toBeUndefined();
+    expect(result['externallyTerminated']).toBeUndefined();
+  });
+
+  it('stateCompleted combined with processDefinitionKeyIn', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'stateCompleted', values: [] },
+    ]);
+    expect(result['completed']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+  });
+
+  it('stateTerminated combined with superProcessInstanceId', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'superProcessInstanceId', values: ['parent-abc'] },
+      { field: 'stateTerminated', values: [] },
+    ]);
+    expect(result['finished']).toBe(true);
+    expect(result['internallyTerminated']).toBe(true);
+    expect(result['externallyTerminated']).toBeUndefined();
+    expect(result['orQueries']).toBeUndefined();
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — delete-finished: extended criteria', () => {
+
+  it('superProcessInstanceId → mapped correctly', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'superProcessInstanceId', values: ['parent-1'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped correctly', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'subProcessInstanceId', values: ['child-2'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('incidentType → mapped correctly', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['finished']).toBe(true);
+  });
+
+  it('withJobsRetrying is excluded for delete-finished — no effect on finished query', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBeUndefined();
+    expect(result['finished']).toBe(true);
+  });
+
+  it('all direct extended criteria combined with stateCompleted narrowing', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'processDefinition', values: ['invoice'] },
+      { field: 'superProcessInstanceId', values: ['parent-x'] },
+      { field: 'subProcessInstanceId', values: ['child-y'] },
+      { field: 'incidentType', values: ['failedExternalTask'] },
+      { field: 'incidentMessage', values: ['Connection refused'] },
+      { field: 'stateCompleted', values: [] },
+    ]);
+    expect(result['completed']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['invoice']);
+    expect(result['superProcessInstanceId']).toBe('parent-x');
+    expect(result['subProcessInstanceId']).toBe('child-y');
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['incidentMessageLike']).toBe('%Connection refused%');
+  });
+
+});

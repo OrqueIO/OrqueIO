@@ -11,7 +11,7 @@ import {
   faKey, faHashtag, faCalendarAlt, faCode,
   faExclamationTriangle, faCheck, faCircleDot,
   faSitemap, faCodeBranch, faSquareMinus, faSquareCheck,
-  faPlay, faPauseCircle, faCircleStop, faUser, faGear, faTable, faPaperPlane,
+  faPlay, faPauseCircle, faCircleStop, faCheckCircle, faTimesCircle, faUser, faGear, faTable, faPaperPlane,
   faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer, faSync,
   faLevelUpAlt, faLevelDownAlt
 } from '@fortawesome/free-solid-svg-icons';
@@ -70,6 +70,8 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   @Input() initialPills: MultiValueFilter[] = [];
   @Input() showExtendedCriteria = false;
   @Input() showStateNarrowing = false;
+  @Input() showFinishedNarrowing = false;
+  @Input() finishedScope = false;
   @Input() availableActivities: BpmnElement[] = [];
   @Output() criteriaChange = new EventEmitter<FilterPanelChange>();
 
@@ -101,12 +103,19 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   faSync = faSync;
   faPlay = faPlay;
   faPauseCircle = faPauseCircle;
+  faCheckCircle = faCheckCircle;
+  faTimesCircle = faTimesCircle;
   faLevelUpAlt = faLevelUpAlt;
   faLevelDownAlt = faLevelDownAlt;
 
   get bothStateNarrowingActive(): boolean {
     return this.activePills.some(p => p.field === 'stateActive') &&
            this.activePills.some(p => p.field === 'stateSuspended');
+  }
+
+  get bothFinishedNarrowingActive(): boolean {
+    return this.activePills.some(p => p.field === 'stateCompleted') &&
+           this.activePills.some(p => p.field === 'stateTerminated');
   }
 
   private readonly ACTIVITY_ICON_MAP: Record<string, { icon: any; color: string }> = {
@@ -340,6 +349,24 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       return;
     }
 
+    if (type === 'stateCompleted') {
+      if (!this.activePills.some(p => p.field === 'stateCompleted')) {
+        this.activePills = [...this.activePills, { field: 'stateCompleted', values: [] }];
+        this.cdr.markForCheck();
+        this.emit();
+      }
+      return;
+    }
+
+    if (type === 'stateTerminated') {
+      if (!this.activePills.some(p => p.field === 'stateTerminated')) {
+        this.activePills = [...this.activePills, { field: 'stateTerminated', values: [] }];
+        this.cdr.markForCheck();
+        this.emit();
+      }
+      return;
+    }
+
     const existingIndex = this.activePills.findIndex(p => p.field === type);
     if (existingIndex !== -1) {
       this.editingPillIndex = existingIndex;
@@ -372,8 +399,9 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     event.stopPropagation();
     this.showCriteriaDropdown = false;
     const field = this.activePills[index].field;
-    if (field === 'withIncidents' || field === 'withJobsRetrying' ||
-        field === 'stateActive'   || field === 'stateSuspended') {
+    if (field === 'withIncidents'  || field === 'withJobsRetrying' ||
+        field === 'stateActive'    || field === 'stateSuspended' ||
+        field === 'stateCompleted' || field === 'stateTerminated') {
       this.removePill(index);
       return;
     }
@@ -995,6 +1023,8 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'withJobsRetrying':  return t('cockpit.processes.globalSearch.pill.withJobsRetrying');
       case 'stateActive':       return t('cockpit.processes.globalSearch.pill.stateActive');
       case 'stateSuspended':    return t('cockpit.processes.globalSearch.pill.stateSuspended');
+      case 'stateCompleted':    return t('cockpit.processes.globalSearch.pill.stateCompleted');
+      case 'stateTerminated':   return t('cockpit.processes.globalSearch.pill.stateTerminated');
       case 'processDefinition': {
         let labels: string[];
         if (pill.processDefinitionIds?.length) {
@@ -1052,6 +1082,8 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'withJobsRetrying':                               return this.faSync;
       case 'stateActive':                                    return this.faPlay;
       case 'stateSuspended':                                 return this.faPauseCircle;
+      case 'stateCompleted':                                 return this.faCheckCircle;
+      case 'stateTerminated':                                return this.faTimesCircle;
       case 'processDefinition':
       case 'decisionDefinition':                             return this.faSitemap;
       case 'startedAfter': case 'startedBefore':
