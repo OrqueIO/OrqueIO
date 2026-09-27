@@ -521,7 +521,7 @@ describe('BatchOperationsWizardComponent — set-retries-jobs: canContinue valid
 
 describe('BatchOperationsWizardComponent — set-retries-jobs: confirmPayloadJson', () => {
 
-  it('instances mode — body contains retries and jobQuery.processInstanceIds array', () => {
+  it('instances mode — body contains retries and processInstances array (job-retries-historic-query-based endpoint resolves incidents)', () => {
     const stub = {
       selectedOperationId: 'set-retries-jobs',
       mode: 'instances',
@@ -536,8 +536,8 @@ describe('BatchOperationsWizardComponent — set-retries-jobs: confirmPayloadJso
     };
     const payload = JSON.parse(getConfirmPayloadJson(stub));
     expect(payload['retries']).toBe(5);
-    expect(payload['jobQuery']['processInstanceIds']).toEqual(expect.arrayContaining(['inst-a', 'inst-b']));
-    expect(payload['processInstances']).toBeUndefined();
+    expect(payload['processInstances']).toEqual(expect.arrayContaining(['inst-a', 'inst-b']));
+    expect(payload['jobQuery']).toBeUndefined();
     expect(payload['dueDate']).toBeUndefined();
     expect(payload['historicProcessInstanceQuery']).toBeUndefined();
   });
@@ -602,11 +602,9 @@ describe('BatchOperationsWizardComponent — set-retries-jobs: confirmPayloadJso
 
 describe('BatchOperationsWizardComponent — set-retries-jobs: confirmEndpoint', () => {
 
-  it('instances mode → /job/retries', () => {
+  it('instances mode → /process-instance/job-retries-historic-query-based (same endpoint as query mode — resolves incidents)', () => {
     const stub = { selectedOperationId: 'set-retries-jobs', mode: 'instances' };
-    expect(getConfirmEndpoint(stub)).toContain('/job/retries');
-    expect(getConfirmEndpoint(stub)).not.toContain('process-instance/job-retries');
-    expect(getConfirmEndpoint(stub)).not.toContain('historic-query-based');
+    expect(getConfirmEndpoint(stub)).toContain('/process-instance/job-retries-historic-query-based');
   });
 
   it('query mode → /process-instance/job-retries-historic-query-based', () => {
