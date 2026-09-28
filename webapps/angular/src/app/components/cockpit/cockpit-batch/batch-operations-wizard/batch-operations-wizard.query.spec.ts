@@ -24,7 +24,7 @@ function buildQuery(
   vnIgnoreCase = false,
   vvIgnoreCase = false
 ): Record<string, unknown> {
-  const stub = { selectedOperationId, filterCriteria, vnIgnoreCase, vvIgnoreCase };
+  const stub = { selectedOperationId, filterCriteria, vnIgnoreCase, vvIgnoreCase, lockedFilterState: getLockedFilterState(selectedOperationId) };
   return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
 }
 
@@ -2646,4 +2646,159 @@ describe('BatchOperationsWizardComponent — set-variables: modalQueryFilter use
     expect(result!['unfinished']).toBe(true);
   });
 
+});
+
+// ─── Finished-date criteria: excluded from query for in-progress operations ─
+
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch: finishedAfter/finishedBefore excluded for in-progress operations', () => {
+  const finishedAfterDate  = '2024-01-01T00:00:00.000+0100';
+  const finishedBeforeDate = '2024-12-31T23:59:59.000+0100';
+
+  const finishedCriteria: MultiValueFilter[] = [
+    { field: 'finishedAfter',  values: [finishedAfterDate] },
+    { field: 'finishedBefore', values: [finishedBeforeDate] },
+  ];
+
+  it('suspend: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('suspend', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activate: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('activate', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['suspended']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('delete-running: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('delete-running', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('set-retries-jobs: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('set-retries-jobs', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('set-retries-external: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('set-retries-external', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('set-variables: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('set-variables', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('delete-finished: finishedAfter and finishedBefore ARE included in the query', () => {
+    const result = buildQuery('delete-finished', finishedCriteria);
+    expect(result['finishedAfter']).toBe(finishedAfterDate);
+    expect(result['finishedBefore']).toBe(finishedBeforeDate);
+    expect(result['finished']).toBe(true);
+  });
+});
+
+// ─── loadFromSessionStorage: finished-date pills stripped at the source ──────
+
+describe('BatchOperationsWizardComponent — loadFromSessionStorage strips finished-date criteria for in-progress operations', () => {
+  const SESSION_KEY = 'batchOpsWizardState';
+
+  function makeStub(operationId: string): any {
+    const stub: any = {
+      SESSION_KEY,
+      selectedOperationId: operationId,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      hasActiveCriteria: false,
+      mode: 'query',
+      selectedIds: new Set(),
+      deleteReason: '',
+      skipCustomListeners: false,
+      skipIoMappings: false,
+      retries: 1,
+      setDueDate: false,
+      retriesDueDate: '',
+      variableDefinitions: [],
+      selectedDecisionIds: new Set(),
+      decisionFilterCriteria: [],
+      decisionHasActiveCriteria: false,
+      currentStep: 1,
+    };
+    Object.defineProperty(stub, 'lockedFilterState', {
+      get: () => getLockedFilterState(stub.selectedOperationId),
+    });
+    return stub;
+  }
+
+  function loadSession(operationId: string, storedCriteria: MultiValueFilter[]): any {
+    const stub = makeStub(operationId);
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ operationId, filterCriteria: storedCriteria, step: 1 }));
+    try {
+      (BatchOperationsWizardComponent.prototype as any).loadFromSessionStorage.call(stub);
+    } finally {
+      sessionStorage.removeItem(SESSION_KEY);
+    }
+    return stub;
+  }
+
+  const finishedPills: MultiValueFilter[] = [
+    { field: 'finishedAfter',  values: ['2024-01-01T00:00:00.000+0100'] },
+    { field: 'finishedBefore', values: ['2024-12-31T23:59:59.000+0100'] },
+    { field: 'businessKey',    values: ['ORDER-1'] },
+  ];
+
+  it('suspend: strips finishedAfter and finishedBefore, keeps other criteria', () => {
+    const stub = loadSession('suspend', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('activate: strips finished-date pills', () => {
+    const stub = loadSession('activate', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('delete-running: strips finished-date pills', () => {
+    const stub = loadSession('delete-running', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('set-retries-jobs: strips finished-date pills', () => {
+    const stub = loadSession('set-retries-jobs', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('set-retries-external: strips finished-date pills', () => {
+    const stub = loadSession('set-retries-external', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('set-variables: strips finished-date pills', () => {
+    const stub = loadSession('set-variables', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('delete-finished: keeps finished-date pills', () => {
+    const stub = loadSession('delete-finished', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['finishedAfter', 'finishedBefore', 'businessKey']);
+  });
+
+  it('hasActiveCriteria is false after all criteria are stripped', () => {
+    const stub = loadSession('suspend', [{ field: 'finishedAfter', values: ['2024-01-01T00:00:00.000+0100'] }]);
+    expect(stub.filterCriteria).toHaveLength(0);
+    expect(stub.hasActiveCriteria).toBe(false);
+  });
 });

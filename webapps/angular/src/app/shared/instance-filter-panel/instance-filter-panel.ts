@@ -259,7 +259,10 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     if (this.initialPills.length > 0) {
-      this.activePills = this.initialPills.map(p => ({ ...p, values: [...p.values] }));
+      const pills = this.initialPills.map(p => ({ ...p, values: [...p.values] }));
+      this.activePills = this.lockedState && this.lockedState !== 'finished'
+        ? pills.filter(p => p.field !== 'finishedAfter' && p.field !== 'finishedBefore')
+        : pills;
     }
     if (this.criteriaSet === 'decision') {
       this.decisionService.getDecisionDefinitions(1000)

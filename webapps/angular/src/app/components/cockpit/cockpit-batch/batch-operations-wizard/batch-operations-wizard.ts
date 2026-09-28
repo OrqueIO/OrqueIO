@@ -965,8 +965,12 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           break;
         case 'startedAfter':  query['startedAfter']  = f.values[0]; break;
         case 'startedBefore': query['startedBefore'] = f.values[0]; break;
-        case 'finishedAfter':  query['finishedAfter']  = f.values[0]; break;
-        case 'finishedBefore': query['finishedBefore'] = f.values[0]; break;
+        case 'finishedAfter':
+          if (this.lockedFilterState === 'finished') query['finishedAfter'] = f.values[0];
+          break;
+        case 'finishedBefore':
+          if (this.lockedFilterState === 'finished') query['finishedBefore'] = f.values[0];
+          break;
         case 'processDefinition':
           if (f.values.length > 0) query['processDefinitionKeyIn'] = f.values;
           if (f.processDefinitionIds?.length) query['processDefinitionIdIn'] = f.processDefinitionIds;
@@ -1397,6 +1401,11 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.selectedOperationId = state.operationId;
       this.mode = state.mode ?? 'instances';
       this.filterCriteria = state.filterCriteria ?? [];
+      if (this.lockedFilterState && this.lockedFilterState !== 'finished') {
+        this.filterCriteria = this.filterCriteria.filter(
+          f => f.field !== 'finishedAfter' && f.field !== 'finishedBefore'
+        );
+      }
       this.vnIgnoreCase = state.vnIgnoreCase ?? false;
       this.vvIgnoreCase = state.vvIgnoreCase ?? false;
       this.hasActiveCriteria = this.filterCriteria.length > 0;
