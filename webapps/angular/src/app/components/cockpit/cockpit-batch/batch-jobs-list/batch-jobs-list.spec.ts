@@ -1,8 +1,10 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
 import { of } from 'rxjs';
+import { TooltipDirective } from '../../../../shared/tooltip/tooltip.directive';
 
 import { initTestEnvironment } from '../../../../testing/test-utils';
 import { BatchJobsListComponent } from './batch-jobs-list';
@@ -133,8 +135,10 @@ describe('BatchJobsListComponent — DOM rendering', () => {
     const preview = el.querySelector('.exception-preview');
 
     expect(preview?.textContent?.trim(), 'full message must be rendered, not JS-truncated').toBe(longMessage);
-    expect(preview?.getAttribute('ng-reflect-app-tooltip'), 'tooltip must carry the full message').toBe(longMessage);
-    expect(preview?.getAttribute('ng-reflect-tooltip-only-if-truncated'), 'tooltip must be conditional on visual truncation').toBe('true');
+    const previewDebug = fixture.debugElement.query(By.css('.exception-preview'));
+    const previewDir = previewDebug.injector.get(TooltipDirective);
+    expect(previewDir.tooltipText, 'tooltip must carry the full message').toBe(longMessage);
+    expect(previewDir.tooltipOnlyIfTruncated, 'tooltip must be conditional on visual truncation').toBe(true);
   });
 
   it('clicking Delete opens confirmation modal without dispatching deleteJob', async () => {
