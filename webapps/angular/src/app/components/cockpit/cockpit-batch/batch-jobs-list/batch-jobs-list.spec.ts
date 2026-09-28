@@ -185,7 +185,7 @@ describe('BatchJobsListComponent — DOM rendering', () => {
     (fixture.nativeElement.querySelector('.btn-delete') as HTMLElement).click();
     fixture.detectChanges();
 
-    component.onDeleteJobConfirm();
+    (fixture.nativeElement.querySelector('.modal-btn-danger') as HTMLElement).click();
     fixture.detectChanges();
 
     expect(dispatchSpy).toHaveBeenCalledWith(
@@ -214,7 +214,7 @@ describe('BatchJobsListComponent — DOM rendering', () => {
     const dispatchSpy = vi.spyOn(store, 'dispatch');
     const component = fixture.componentInstance;
 
-    component.onDeleteJobCancel();
+    (fixture.nativeElement.querySelector('.modal-btn-secondary') as HTMLElement).click();
     fixture.detectChanges();
 
     expect(dispatchSpy).not.toHaveBeenCalled();
