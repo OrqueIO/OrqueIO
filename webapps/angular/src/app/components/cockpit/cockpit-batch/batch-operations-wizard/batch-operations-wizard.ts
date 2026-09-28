@@ -386,7 +386,13 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           else stateValue = 'finished';
           injectedStatePill = { field: 'state', values: [stateValue] };
         } else if (this.selectedOperationId === 'set-variables') {
-          injectedStatePill = { field: 'state', values: ['unfinished'] };
+          const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
+          const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
+          let stateValue: string;
+          if (hasActive && !hasSuspended) stateValue = 'active';
+          else if (hasSuspended && !hasActive) stateValue = 'suspended';
+          else stateValue = 'unfinished';
+          injectedStatePill = { field: 'state', values: [stateValue] };
         } else {
           injectedStatePill = { field: 'state', values: ['active'] };
         }
@@ -941,6 +947,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       else query = { finished: true };
     } else if (this.selectedOperationId === 'set-variables') {
       query = { unfinished: true };
+      const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
+      const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
+      if (hasActive && !hasSuspended) query['active'] = true;
+      else if (hasSuspended && !hasActive) query['suspended'] = true;
     } else {
       query = { active: true, unfinished: true };
     }
@@ -1050,7 +1060,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   get modalQueryFilter(): Record<string, unknown> | null {
     if (this.mode !== 'query' || !this.hasActiveCriteria) return null;
-    return this.buildHistoricQueryForBatch();
+    return this.resolvedBatchQuery ?? this.buildHistoricQueryForBatch();
   }
 
   openVariablesModal(): void {
@@ -1164,7 +1174,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       const variables = this.buildVariablesPayload();
       const setVarsPayload = this.mode === 'instances'
         ? { processInstanceIds: [...this.selectedIds], variables }
-        : { historicProcessInstanceQuery: this.buildHistoricQueryForBatch(), variables };
+        : { historicProcessInstanceQuery: this.resolvedBatchQuery ?? this.buildHistoricQueryForBatch(), variables };
       this.processInstanceService.setVariablesAsync(setVarsPayload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({

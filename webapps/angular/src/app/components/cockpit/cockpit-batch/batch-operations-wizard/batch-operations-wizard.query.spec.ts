@@ -2447,3 +2447,203 @@ describe('BatchOperationsWizardComponent — set-retries-external: extended crit
   });
 
 });
+
+
+
+function buildSetVariablesQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'set-variables',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — set-variables: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only (no active/suspended flags)', () => {
+    const result = buildSetVariablesQuery([]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildSetVariablesQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildSetVariablesQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended → { unfinished: true } (both = default, no narrowing)', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill combined with processDefinitionKeyIn', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+  });
+
+  it('stateSuspended pill combined with processDefinitionIdIn', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v2'] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-v2']);
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-variables: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying → mapped to withJobsRetrying:true in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedJob → mapped to incidentType in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedExternalTask → mapped to incidentType in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentType', values: ['failedExternalTask'] }]);
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildSetVariablesQuery([{ field: 'activityId', values: ['task-review'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateActive narrowing', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'subProcessInstanceId', values: ['child-2'] },
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'incidentType', values: ['failedJob'] },
+      { field: 'incidentMessage', values: ['connection'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['incidentMessageLike']).toBe('%connection%');
+  });
+
+  it('set-retries-external non-regression: withJobsRetrying still excluded for external-tasks', () => {
+    const result = buildRetriesExternalQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBeUndefined();
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-variables: modalQueryFilter uses resolvedBatchQuery', () => {
+
+  it('resolvedBatchQuery present → returned directly (async criteria like activityId included)', () => {
+    const resolved = { unfinished: true, processInstanceIds: ['inst-a', 'inst-b'] };
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: true,
+      resolvedBatchQuery: resolved,
+      filterCriteria: [{ field: 'activityId', values: ['task-review'] }],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).toBe(resolved);
+    expect((result as any)['processInstanceIds']).toEqual(['inst-a', 'inst-b']);
+  });
+
+  it('resolvedBatchQuery null → falls back to buildHistoricQueryForBatch (sync)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: true,
+      resolvedBatchQuery: null,
+      filterCriteria: [{ field: 'stateActive', values: [] }],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).not.toBeNull();
+    expect(result!['unfinished']).toBe(true);
+    expect(result!['active']).toBe(true);
+  });
+
+  it('resolvedBatchQuery undefined → falls back to buildHistoricQueryForBatch (sync)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: true,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).not.toBeNull();
+    expect(result!['unfinished']).toBe(true);
+  });
+
+});

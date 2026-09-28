@@ -368,25 +368,24 @@
         </div>
     </div>
 
-    <!-- Variable case-sensitivity options -->
-    <div class="case-options" *ngIf="hasVariableFilter()">
-      <span class="case-options-label">{{ 'cockpit.processes.globalSearch.ignoreCase.label' | translate }}</span>
-      <label class="case-option">
-        <input type="checkbox" [(ngModel)]="variableNamesIgnoreCase" (change)="onCaseOptionChange()" />
-        {{ 'cockpit.processes.globalSearch.ignoreCase.name' | translate }}
-      </label>
-      <label class="case-option">
-        <input type="checkbox" [(ngModel)]="variableValuesIgnoreCase" (change)="onCaseOptionChange()" />
-        {{ 'cockpit.processes.globalSearch.ignoreCase.value' | translate }}
-      </label>
-    </div>
-
   </div>
 
-  <!-- Both-state hint — own row in criteria-zone, outside pills-scroll -->
+  <!-- Sub-panel rows — never clipped by pills scroll, each on its own line via criteria-zone flex-column -->
   <p class="state-narrowing-hint" *ngIf="(showStateNarrowing && bothStateNarrowingActive) || (showFinishedNarrowing && bothFinishedNarrowingActive)">
     {{ 'cockpit.processes.globalSearch.stateNarrowingBothHint' | translate }}
   </p>
+
+  <div class="case-options" *ngIf="hasVariableFilter()">
+    <span class="case-options-label">{{ 'cockpit.processes.globalSearch.ignoreCase.label' | translate }}</span>
+    <label class="case-option">
+      <input type="checkbox" [(ngModel)]="variableNamesIgnoreCase" (change)="onCaseOptionChange()" />
+      {{ 'cockpit.processes.globalSearch.ignoreCase.name' | translate }}
+    </label>
+    <label class="case-option">
+      <input type="checkbox" [(ngModel)]="variableValuesIgnoreCase" (change)="onCaseOptionChange()" />
+      {{ 'cockpit.processes.globalSearch.ignoreCase.value' | translate }}
+    </label>
+  </div>
 
   <!-- Cross-criteria conflict warnings -->
   <div *ngIf="startedDateConflict" class="variable-conflict-warning variable-conflict-warning--impossible">

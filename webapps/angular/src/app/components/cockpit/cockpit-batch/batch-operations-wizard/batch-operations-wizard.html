@@ -204,8 +204,8 @@
         <app-instance-filter-panel
           [lockedState]="lockedFilterState"
           [initialPills]="filterCriteria"
-          [showExtendedCriteria]="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external'"
-          [showStateNarrowing]="selectedOperationId === 'delete-running' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external'"
+          [showExtendedCriteria]="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external' || selectedOperationId === 'set-variables'"
+          [showStateNarrowing]="selectedOperationId === 'delete-running' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external' || selectedOperationId === 'set-variables'"
           [showWithJobsRetrying]="selectedOperationId !== 'set-retries-external'"
           [showFinishedNarrowing]="selectedOperationId === 'delete-finished'"
           [finishedScope]="selectedOperationId === 'delete-finished'"
