@@ -13,6 +13,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { RouterLink, RouterLinkActive, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
+import { beforeAll } from 'vitest';
+import { initTestEnvironment } from '../../../testing/test-utils';
 
 @Component({
   selector: 'app-test-process-tabs',
@@ -44,6 +46,8 @@ function searchTab(root: Element | null): HTMLElement {
 }
 
 describe('Process tabs active state', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [
