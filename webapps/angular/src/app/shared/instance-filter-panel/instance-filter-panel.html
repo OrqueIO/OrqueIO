@@ -21,11 +21,6 @@
     </div>
     </div>
 
-    <!-- Both-state hint -->
-    <p class="state-narrowing-hint" *ngIf="(showStateNarrowing && bothStateNarrowingActive) || (showFinishedNarrowing && bothFinishedNarrowingActive)">
-      {{ 'cockpit.processes.globalSearch.stateNarrowingBothHint' | translate }}
-    </p>
-
     <!-- Add criteria button + dropdown -->
     <div class="criteria-dropdown-wrapper">
         <button class="btn-add-criteria" (click)="toggleCriteriaDropdown($event)" type="button">
@@ -387,6 +382,11 @@
     </div>
 
   </div>
+
+  <!-- Both-state hint — own row in criteria-zone, outside pills-scroll -->
+  <p class="state-narrowing-hint" *ngIf="(showStateNarrowing && bothStateNarrowingActive) || (showFinishedNarrowing && bothFinishedNarrowingActive)">
+    {{ 'cockpit.processes.globalSearch.stateNarrowingBothHint' | translate }}
+  </p>
 
   <!-- Cross-criteria conflict warnings -->
   <div *ngIf="startedDateConflict" class="variable-conflict-warning variable-conflict-warning--impossible">

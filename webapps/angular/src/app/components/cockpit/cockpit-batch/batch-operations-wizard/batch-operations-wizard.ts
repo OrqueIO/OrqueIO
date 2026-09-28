@@ -361,7 +361,15 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           else if (hasSuspended && !hasActive) stateValue = 'suspended';
           else stateValue = 'unfinished';
           injectedStatePill = { field: 'state', values: [stateValue] };
-        } else if (this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external') {
+        } else if (this.selectedOperationId === 'set-retries-jobs') {
+          const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
+          const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
+          let stateValue: string;
+          if (hasActive && !hasSuspended) stateValue = 'active';
+          else if (hasSuspended && !hasActive) stateValue = 'suspended';
+          else stateValue = 'unfinished';
+          injectedStatePill = { field: 'state', values: [stateValue] };
+        } else if (this.selectedOperationId === 'set-retries-external') {
           injectedStatePill = { field: 'state', values: ['unfinished'] };
         } else if (this.selectedOperationId === 'delete-finished') {
           const hasCompleted = this.filterCriteria.some(f => f.field === 'stateCompleted');
@@ -907,7 +915,13 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
       if (hasActive && !hasSuspended) query['active'] = true;
       else if (hasSuspended && !hasActive) query['suspended'] = true;
-    } else if (this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external') {
+    } else if (this.selectedOperationId === 'set-retries-jobs') {
+      query = { unfinished: true };
+      const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
+      const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
+      if (hasActive && !hasSuspended) query['active'] = true;
+      else if (hasSuspended && !hasActive) query['suspended'] = true;
+    } else if (this.selectedOperationId === 'set-retries-external') {
       query = { unfinished: true };
     } else if (this.selectedOperationId === 'delete-finished') {
       const hasCompleted = this.filterCriteria.some(f => f.field === 'stateCompleted');

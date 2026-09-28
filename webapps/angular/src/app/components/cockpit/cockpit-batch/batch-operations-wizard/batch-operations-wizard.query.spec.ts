@@ -2200,3 +2200,137 @@ describe('BatchOperationsWizardComponent — delete-finished: extended criteria'
   });
 
 });
+
+
+
+
+function buildRetriesJobsQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'set-retries-jobs',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only', () => {
+    const result = buildRetriesJobsQuery([]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildRetriesJobsQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildRetriesJobsQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended → { unfinished: true } (both = default, no narrowing)', () => {
+    const result = buildRetriesJobsQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying → mapped to withJobsRetrying:true in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedJob → mapped to incidentType in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedExternalTask → mapped to incidentType in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentType', values: ['failedExternalTask'] }]);
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesJobsQuery([{ field: 'activityId', values: ['task-review'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateActive narrowing', () => {
+    const result = buildRetriesJobsQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'subProcessInstanceId', values: ['child-2'] },
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'incidentType', values: ['failedJob'] },
+      { field: 'incidentMessage', values: ['connection'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['incidentMessageLike']).toBe('%connection%');
+  });
+
+  it('set-retries-external non-regression: still uses plain unfinished (no narrowing)', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-external',
+      filterCriteria: [{ field: 'stateActive', values: [] }],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+    };
+    const result = BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+});
