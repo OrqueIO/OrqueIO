@@ -958,6 +958,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         case 'incidentMessage':
           if (f.values[0]) query['incidentMessageLike'] = `%${f.values[0]}%`;
           break;
+        case 'withIncidents':
+          query['withIncidents'] = true;
+          break;
         case 'withJobsRetrying':
           if (this.selectedOperationId !== 'delete-finished') query['withJobsRetrying'] = true;
           break;
