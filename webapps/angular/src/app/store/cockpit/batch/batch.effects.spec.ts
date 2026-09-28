@@ -117,7 +117,6 @@ describe('BatchEffects.detectBatchCompletion$', () => {
   });
 });
 
-───────────────────────────────────────────────────────────────────────────
 describe('BatchEffects.loadFailedJobs$ — exhaustMap behaviour', () => {
   beforeAll(() => initTestEnvironment());
 
