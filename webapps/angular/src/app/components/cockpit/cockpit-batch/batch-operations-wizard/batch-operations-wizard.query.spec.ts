@@ -2321,16 +2321,129 @@ describe('BatchOperationsWizardComponent — set-retries-jobs: extended criteria
     expect(result['incidentMessageLike']).toBe('%connection%');
   });
 
-  it('set-retries-external non-regression: still uses plain unfinished (no narrowing)', () => {
-    const stub = {
-      selectedOperationId: 'set-retries-external',
-      filterCriteria: [{ field: 'stateActive', values: [] }],
-      vnIgnoreCase: false,
-      vvIgnoreCase: false,
-    };
-    const result = BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+});
+
+
+
+function buildRetriesExternalQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'set-retries-external',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — set-retries-external: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only', () => {
+    const result = buildRetriesExternalQuery([]);
     expect(result['unfinished']).toBe(true);
     expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildRetriesExternalQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildRetriesExternalQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended → { unfinished: true } (both = default, no narrowing)', () => {
+    const result = buildRetriesExternalQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-retries-external: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildRetriesExternalQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildRetriesExternalQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedExternalTask → mapped to incidentType in query', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentType', values: ['failedExternalTask'] }]);
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedJob → also mapped (instance-level filter, both types valid)', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentMessage', values: ['worker timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%worker timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesExternalQuery([{ field: 'activityId', values: ['ext-task-1'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying pill is excluded from query for set-retries-external (defense-in-depth)', () => {
+    const result = buildRetriesExternalQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateSuspended narrowing', () => {
+    const result = buildRetriesExternalQuery([
+      { field: 'processDefinition', values: ['payment-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'subProcessInstanceId', values: ['child-2'] },
+      { field: 'incidentType', values: ['failedExternalTask'] },
+      { field: 'incidentMessage', values: ['connection'] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['payment-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['incidentMessageLike']).toBe('%connection%');
+    expect(result['withJobsRetrying']).toBeUndefined();
+  });
+
+  it('set-retries-jobs non-regression: withJobsRetrying still included for jobs', () => {
+    const result = buildRetriesJobsQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
   });
 
 });

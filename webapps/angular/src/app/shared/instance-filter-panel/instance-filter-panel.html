@@ -164,7 +164,7 @@
                 </span>
               </button>
 
-              <button *ngIf="!finishedScope" class="criteria-option" (click)="selectCriteriaType('withJobsRetrying')" type="button" role="menuitem">
+              <button *ngIf="!finishedScope && showWithJobsRetrying" class="criteria-option" (click)="selectCriteriaType('withJobsRetrying')" type="button" role="menuitem">
                 <span class="criteria-icon-wrap criteria-icon-wrap--teal">
                   <fa-icon [icon]="faSync"></fa-icon>
                 </span>

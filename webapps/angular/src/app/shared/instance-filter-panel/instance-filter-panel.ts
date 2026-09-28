@@ -72,6 +72,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   @Input() showStateNarrowing = false;
   @Input() showFinishedNarrowing = false;
   @Input() finishedScope = false;
+  @Input() showWithJobsRetrying = true;
   @Input() availableActivities: BpmnElement[] = [];
   @Output() criteriaChange = new EventEmitter<FilterPanelChange>();
 
