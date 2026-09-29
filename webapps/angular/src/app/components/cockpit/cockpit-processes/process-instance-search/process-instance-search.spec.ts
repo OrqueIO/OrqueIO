@@ -2349,3 +2349,351 @@ describe('ProcessInstanceSearchComponent — comparison value validation', () =>
     expect(fixture.nativeElement.querySelector('.variable-value-error')).toBeNull();
   });
 });
+
+
+describe('ProcessInstanceSearchComponent — getPillLabel', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should return correct label for businessKey pill', () => {
+    const pill: MultiValueFilter = { field: 'businessKey', values: ['BK-001', 'BK-002'] };
+    expect(component.getPillLabel(pill)).toBe('Business Key: BK-001, BK-002');
+  });
+
+  it('should return correct label for withIncidents pill', () => {
+    const pill: MultiValueFilter = { field: 'withIncidents', values: [] };
+    expect(component.getPillLabel(pill)).toBe('With incidents');
+  });
+
+  it('should return correct label for variable pill', () => {
+    const pill: MultiValueFilter = {
+      field: 'variable', values: ['1', '23'],
+      variableName: 'orderId', variableOperator: 'eq'
+    };
+    expect(component.getPillLabel(pill)).toBe('orderId = 1, 23');
+  });
+
+  it('should return correct label for state pill (single value)', () => {
+    const pill: MultiValueFilter = { field: 'state', values: ['completed'] };
+    expect(component.getPillLabel(pill)).toBe('State: Completed');
+  });
+
+  it('should return correct label for state pill (multiple values)', () => {
+    const pill: MultiValueFilter = { field: 'state', values: ['active', 'suspended'] };
+    expect(component.getPillLabel(pill)).toBe('State: Active, Suspended');
+  });
+
+  it('should return correct label for instanceId pill', () => {
+    const pill: MultiValueFilter = { field: 'instanceId', values: ['inst-1'] };
+    expect(component.getPillLabel(pill)).toBe('Instance ID: inst-1');
+  });
+});
+
+describe('ProcessInstanceSearchComponent — date criteria — type="date" and time completion', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should use type="date" (not datetime-local) in the date editor popover', () => {
+    component.selectCriteriaType('startedAfter');
+    fixture.detectChanges();
+    const input = fixture.nativeElement.querySelector('input[type="date"]');
+    expect(input).not.toBeNull();
+    const datetimeInput = fixture.nativeElement.querySelector('input[type="datetime-local"]');
+    expect(datetimeInput).toBeNull();
+  });
+
+  it('should store T00:00:00 for a startedAfter date (start of day)', () => {
+    component.selectCriteriaType('startedAfter');
+    component.pendingDateValue = '2026-07-21';
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].values[0]).toContain('T00:00:00');
+  });
+
+  it('should store T23:59:59 for a finishedBefore date (end of day)', () => {
+    component.selectCriteriaType('finishedBefore');
+    component.pendingDateValue = '2026-07-20';
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].values[0]).toContain('T23:59:59');
+  });
+
+  it('should pre-fill pendingDateValue with the stored date when editing an existing date pill', () => {
+    component.selectCriteriaType('startedAfter');
+    component.pendingDateValue = '2026-07-21';
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.pendingDateValue).toBe('2026-07-21');
+  });
+});
+
+describe('ProcessInstanceSearchComponent — startedDateConflict', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should be true when startedAfter is later than startedBefore', () => {
+    component.activePills = [
+      { field: 'startedAfter',  values: ['2026-07-21T00:00:00.000+0000'] },
+      { field: 'startedBefore', values: ['2026-07-20T00:00:00.000+0000'] },
+    ];
+    expect(component.startedDateConflict).toBe(true);
+  });
+
+  it('should be false when startedAfter is earlier than startedBefore', () => {
+    component.activePills = [
+      { field: 'startedAfter',  values: ['2026-07-19T00:00:00.000+0000'] },
+      { field: 'startedBefore', values: ['2026-07-21T00:00:00.000+0000'] },
+    ];
+    expect(component.startedDateConflict).toBe(false);
+  });
+
+  it('should be false when only one of the pair is present', () => {
+    component.activePills = [{ field: 'startedAfter', values: ['2026-07-21T00:00:00.000+0000'] }];
+    expect(component.startedDateConflict).toBe(false);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — finishedDateConflict', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should be true when finishedAfter is later than finishedBefore', () => {
+    component.activePills = [
+      { field: 'finishedAfter',  values: ['2026-07-21T00:00:00.000+0000'] },
+      { field: 'finishedBefore', values: ['2026-07-20T00:00:00.000+0000'] },
+    ];
+    expect(component.finishedDateConflict).toBe(true);
+  });
+
+  it('should be false when finishedAfter is earlier than finishedBefore', () => {
+    component.activePills = [
+      { field: 'finishedAfter',  values: ['2026-07-18T00:00:00.000+0000'] },
+      { field: 'finishedBefore', values: ['2026-07-21T00:00:00.000+0000'] },
+    ];
+    expect(component.finishedDateConflict).toBe(false);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — incidentsWithTerminalStateConflict', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should be true when withIncidents + only terminal states selected', () => {
+    component.activePills = [
+      { field: 'withIncidents', values: [] },
+      { field: 'state', values: ['completed'] },
+    ];
+    expect(component.incidentsWithTerminalStateConflict).toBe(true);
+  });
+
+  it('should be true when withIncidents + completed and terminated (no active/suspended)', () => {
+    component.activePills = [
+      { field: 'withIncidents', values: [] },
+      { field: 'state', values: ['completed', 'terminated'] },
+    ];
+    expect(component.incidentsWithTerminalStateConflict).toBe(true);
+  });
+
+  it('should be false when withIncidents + state includes Active', () => {
+    component.activePills = [
+      { field: 'withIncidents', values: [] },
+      { field: 'state', values: ['active', 'completed'] },
+    ];
+    expect(component.incidentsWithTerminalStateConflict).toBe(false);
+  });
+
+  it('should be false when withIncidents + state includes Suspended', () => {
+    component.activePills = [
+      { field: 'withIncidents', values: [] },
+      { field: 'state', values: ['suspended', 'terminated'] },
+    ];
+    expect(component.incidentsWithTerminalStateConflict).toBe(false);
+  });
+
+  it('should be false when withIncidents but no State pill', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    expect(component.incidentsWithTerminalStateConflict).toBe(false);
+  });
+
+  it('should be false when State pill is terminal-only but no withIncidents pill', () => {
+    component.activePills = [{ field: 'state', values: ['completed', 'terminated'] }];
+    expect(component.incidentsWithTerminalStateConflict).toBe(false);
+  });
+});
