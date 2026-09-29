@@ -3,7 +3,7 @@ import 'zone.js/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { ActivatedRoute, Router, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
@@ -16,6 +16,8 @@ import {
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { initTestEnvironment } from '../../../../testing/test-utils';
+import { By } from '@angular/platform-browser';
+import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 
 const TEST_TRANSLATIONS: Record<string, string> = {
   'cockpit.processes.tabs.definitions': 'Definitions',
@@ -382,6 +384,13 @@ describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () 
     const [, vnIgnoreCase, vvIgnoreCase] = (cockpitService.searchProcessInstancesGlobal as ReturnType<typeof vi.fn>).mock.calls[0];
     expect(vnIgnoreCase).toBe(true);
     expect(vvIgnoreCase).toBe(true);
+  });
+
+  it('should not set ignore-case flags when vnIgnoreCase and vvIgnoreCase are absent from URL', async () => {
+    await setup([{ field: 'businessKey', values: ['BK-001'] }]);
+
+    expect(component.variableNamesIgnoreCase).toBe(false);
+    expect(component.variableValuesIgnoreCase).toBe(false);
   });
 
   it('should NOT trigger a search when URL criteria is absent', async () => {
@@ -1124,5 +1133,2086 @@ describe('ProcessInstanceSearchComponent — pdVisibleSelectedCount counts proce
 
     expect(component.pendingProcessDefinitionKeys).toContain('proc-b');
     expect(component.pendingProcessDefinitionIds).not.toContain('proc-b:1:idb');
+  });
+});
+
+
+describe('ProcessInstanceSearchComponent — pill management', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  const realSvc = Object.create(CockpitService.prototype) as CockpitService;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should start with no active pills', () => {
+    expect(component.activePills.length).toBe(0);
+  });
+
+  it('should add withIncidents pill immediately without opening an editor', () => {
+    component.selectCriteriaType('withIncidents');
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('withIncidents');
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should not add a duplicate withIncidents pill', () => {
+    component.selectCriteriaType('withIncidents');
+    component.selectCriteriaType('withIncidents');
+    expect(component.activePills.length).toBe(1);
+  });
+
+  it('should open editor for businessKey and reset pending state', () => {
+    component.selectCriteriaType('businessKey');
+    expect(component.activeEditorType).toBe('businessKey');
+    expect(component.pendingValues.length).toBe(0);
+  });
+
+  it('should open editor for variable', () => {
+    component.selectCriteriaType('variable');
+    expect(component.activeEditorType).toBe('variable');
+  });
+
+  it('should add businessKey pill with multiple values', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001', 'BK-002'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('businessKey');
+    expect(component.activePills[0].values).toEqual(['BK-001', 'BK-002']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should not add pill when pendingValues is empty', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = [];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(0);
+  });
+
+  it('should add variable pill with all fields', () => {
+    component.selectCriteriaType('variable');
+    component.pendingVariableName = 'orderId';
+    component.pendingVariableOperator = 'eq';
+    component.pendingValues = ['1', '23'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    const pill = component.activePills[0];
+    expect(pill.field).toBe('variable');
+    expect(pill.variableName).toBe('orderId');
+    expect(pill.variableOperator).toBe('eq');
+    expect(pill.values).toEqual(['1', '23']);
+  });
+
+  it('should not add variable pill when name is empty', () => {
+    component.selectCriteriaType('variable');
+    component.pendingVariableName = '';
+    component.pendingValues = ['1'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(0);
+  });
+
+  it('should remove a pill by index', () => {
+    component.activePills = [
+      { field: 'businessKey', values: ['BK-001'] },
+      { field: 'withIncidents', values: [] },
+    ];
+    component.removePill(0);
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('withIncidents');
+  });
+
+  it('should cancel the editor without adding a pill', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    component.cancelCriterion();
+    expect(component.activePills.length).toBe(0);
+    expect(component.activeEditorType).toBeNull();
+    expect(component.pendingValues.length).toBe(0);
+  });
+
+  it('should add state pill', () => {
+    component.selectCriteriaType('state');
+    component.pendingStateValues = ['completed'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('state');
+    expect(component.activePills[0].values).toEqual(['completed']);
+  });
+
+  it('should accumulate multiple different criteria as independent pills', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+
+    component.selectCriteriaType('state');
+    component.pendingStateValues = ['active'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(2);
+    expect(component.activePills[0].field).toBe('businessKey');
+    expect(component.activePills[1].field).toBe('state');
+  });
+
+  it('should accumulate withIncidents alongside other pills', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    component.confirmCriterion();
+
+    component.selectCriteriaType('withIncidents');
+
+    expect(component.activePills.length).toBe(2);
+    expect(component.activePills[0].field).toBe('businessKey');
+    expect(component.activePills[1].field).toBe('withIncidents');
+  });
+
+  it('should confirm a 3-value variable pill (values set by child via two-way binding) and produce 3 payload variants', () => {
+    component.selectCriteriaType('variable');
+    component.pendingVariableName = 'amount';
+    component.pendingVariableOperator = 'eq';
+    component.pendingValues = ['100', '200', '300'];
+    expect(component.pendingValues).toEqual(['100', '200', '300']);
+
+    component.confirmCriterion();
+
+    expect(component.activePills.length).toBe(1);
+    const pill = component.activePills[0];
+    expect(pill.values).toEqual(['100', '200', '300']);
+    expect(pill.variableName).toBe('amount');
+    expect(component.getPillLabel(pill)).toBe('amount = 100, 200, 300');
+    expect(component.activeEditorType).toBeNull();
+    expect(component.pendingValues.length).toBe(0);
+
+    const ps = realSvc.buildPayloadVariants(component.activePills);
+    expect(ps.length).toBe(3);
+    expect(ps[0].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 100 });
+    expect(ps[1].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 200 });
+    expect(ps[2].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 300 });
+  });
+
+  describe('state multi-select', () => {
+    it('should add a state pill with two selected states', () => {
+      component.selectCriteriaType('state');
+      component.pendingStateValues = ['active', 'suspended'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].values).toEqual(['active', 'suspended']);
+      expect(component.getPillLabel(component.activePills[0])).toBe('State: Active, Suspended');
+    });
+
+    it('should not add a state pill when no state is selected (add mode)', () => {
+      component.selectCriteriaType('state');
+      component.pendingStateValues = [];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(0);
+    });
+
+    it('should remove the state pill when all states deselected and confirmed in edit mode', () => {
+      component.activePills = [{ field: 'state', values: ['active'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.pendingStateValues = [];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(0);
+      expect(component.editingPillIndex).toBeNull();
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should toggle state value on and off', () => {
+      component.selectCriteriaType('state');
+      component.toggleStateValue('active');
+      expect(component.pendingStateValues).toEqual(['active']);
+      component.toggleStateValue('active');
+      expect(component.pendingStateValues).toEqual([]);
+    });
+  });
+
+  describe('no duplicate pills', () => {
+    it('should not create a duplicate State pill — redirects to existing pill editor', () => {
+      component.selectCriteriaType('state');
+      component.pendingStateValues = ['active'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+
+      component.selectCriteriaType('state');
+      expect(component.activePills.length).toBe(1);
+      expect(component.editingPillIndex).toBe(0);
+      expect(component.activeEditorType).toBe('state');
+      expect(component.pendingStateValues).toEqual(['active']);
+    });
+
+    it('should not create a duplicate Variables pill — redirects to existing pill editor', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'orderId';
+      component.pendingVariableLines[0].values = ['123'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+
+      component.selectCriteriaType('variables');
+      expect(component.activePills.length).toBe(1);
+      expect(component.editingPillIndex).toBe(0);
+      expect(component.activeEditorType).toBe('variables');
+      expect(component.pendingVariableLines.length).toBe(1);
+      expect(component.pendingVariableLines[0].name).toBe('orderId');
+    });
+  });
+});
+
+describe('ProcessInstanceSearchComponent — pill editing', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  const realSvc = Object.create(CockpitService.prototype) as CockpitService;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should open editor pre-filled with businessKey pill values on startEditPill', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-001', 'BK-002'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.activeEditorType).toBe('businessKey');
+    expect(component.editingPillIndex).toBe(0);
+    expect(component.pendingValues).toEqual(['BK-001', 'BK-002']);
+  });
+
+  it('should open editor pre-filled with state pill values on startEditPill', () => {
+    component.activePills = [{ field: 'state', values: ['active', 'completed'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.activeEditorType).toBe('state');
+    expect(component.editingPillIndex).toBe(0);
+    expect(component.pendingStateValues).toEqual(['active', 'completed']);
+  });
+
+  it('should update the pill in place on confirmCriterion when editing', () => {
+    component.activePills = [
+      { field: 'businessKey', values: ['BK-001'] },
+      { field: 'state', values: ['active'] },
+    ];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingValues = ['BK-001', 'BK-999'];
+    component.confirmCriterion();
+
+    expect(component.activePills.length).toBe(2);
+    expect(component.activePills[0].values).toEqual(['BK-001', 'BK-999']);
+    expect(component.activePills[1].field).toBe('state');
+    expect(component.editingPillIndex).toBeNull();
+  });
+
+  it('should not add a duplicate pill when editing and confirming', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-001'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingValues = ['BK-NEW'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].values).toEqual(['BK-NEW']);
+  });
+
+  it('should leave pill unchanged on cancelCriterion when editing', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-ORIG'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingValues = ['BK-MODIFIED'];
+    component.cancelCriterion();
+    expect(component.activePills[0].values).toEqual(['BK-ORIG']);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should update state pill values on confirm when editing', () => {
+    component.activePills = [{ field: 'state', values: ['active'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingStateValues = ['active', 'suspended'];
+    component.confirmCriterion();
+    expect(component.activePills[0].values).toEqual(['active', 'suspended']);
+    expect(component.getPillLabel(component.activePills[0])).toBe('State: Active, Suspended');
+    const statePill = component.activePills[0];
+    const bodies = (realSvc as any).buildPerStateBodies([statePill], statePill, false, false);
+    expect(bodies.length).toBe(2);
+    expect(bodies[0]).toEqual({ active: true, unfinished: true, sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }] });
+    expect(bodies[1]).toEqual({ suspended: true, unfinished: true, sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }] });
+  });
+});
+
+describe('ProcessInstanceSearchComponent — click outside popover', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  const outsideClick = (comp: ProcessInstanceSearchComponent) =>
+    comp.onDocumentClick({ target: document.createElement('div') } as any as Event);
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should remove a state pill when all states are deselected and user clicks outside', () => {
+    component.activePills = [{ field: 'state', values: ['active'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingStateValues = [];
+    outsideClick(component);
+    expect(component.activePills.length).toBe(0);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should confirm a new instanceId criterion when the user clicks outside with a pending value', () => {
+    component.selectCriteriaType('instanceId');
+    component.pendingValues = ['inst-abc'];
+    outsideClick(component);
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('instanceId');
+    expect(component.activePills[0].values).toEqual(['inst-abc']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should leave a pill unchanged when the user clicks ✕ (cancel stays cancel)', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-ORIG'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingValues = ['BK-MODIFIED'];
+    component.cancelCriterion();
+    expect(component.activePills[0].values).toEqual(['BK-ORIG']);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should update a pill with new values when the user clicks outside an editing popover', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-ORIG'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingValues = ['BK-UPDATED'];
+    outsideClick(component);
+    expect(component.activePills[0].values).toEqual(['BK-UPDATED']);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+});
+
+describe('ProcessInstanceSearchComponent — Enter key shortcut', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+  let cockpitService: any;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of(MOCK_INSTANCES)),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(2)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should confirm businessKey criterion via emptyEnter (chip added then Enter on empty input)', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('businessKey');
+    expect(component.activePills[0].values).toEqual(['BK-001']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should confirm state criterion when keydown Enter is dispatched on state body', () => {
+    component.selectCriteriaType('state');
+    component.toggleStateValue('active');
+    fixture.detectChanges();
+
+    const stateBody: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body--state');
+    expect(stateBody).toBeTruthy();
+    stateBody.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('state');
+    expect(component.activePills[0].values).toEqual(['active']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should also work when editing an existing state pill via Enter', () => {
+    component.activePills = [{ field: 'state', values: ['active'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.toggleStateValue('completed');
+    fixture.detectChanges();
+
+    const stateBody: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body--state');
+    expect(stateBody).toBeTruthy();
+    stateBody.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills[0].values).toEqual(['active', 'completed']);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should confirm criterion when Enter pressed on body div after focus has left the chip input (blur scenario)', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    fixture.detectChanges();
+
+    const bodyDiv: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body');
+    expect(bodyDiv).toBeTruthy();
+    bodyDiv.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('businessKey');
+    expect(component.activePills[0].values).toEqual(['BK-001']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should trigger executeSearch when Enter is pressed anywhere (no popover open)', () => {
+    component.activePills = [
+      { field: 'businessKey', values: ['BK-001'] },
+      { field: 'state', values: ['active'] },
+    ];
+    fixture.detectChanges();
+
+    document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(cockpitService.searchProcessInstancesGlobal).toHaveBeenCalled();
+  });
+
+  it('should NOT trigger executeSearch when Enter is pressed while a popover is open', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    fixture.detectChanges();
+
+    const bodyDiv: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body');
+    bodyDiv.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activeEditorType).toBeNull();
+    expect(cockpitService.searchProcessInstancesGlobal).not.toHaveBeenCalled();
+  });
+});
+
+describe('ProcessInstanceSearchComponent — Variables popover — keyboard & click-outside behavior', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  const outsideClick = (comp: ProcessInstanceSearchComponent) =>
+    comp.onDocumentClick({ target: document.createElement('div') } as any as Event);
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should create a Variables pill when clicking outside the open popover with a valid line', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'amount';
+    component.pendingVariableLines[0].operator = 'eq';
+    component.pendingVariableLines[0].values = ['100'];
+
+    outsideClick(component);
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('variables');
+    expect(component.activePills[0].variableLines).toHaveLength(1);
+    expect(component.activePills[0].variableLines![0].variableName).toBe('amount');
+    expect(component.activePills[0].variableLines![0].values).toEqual(['100']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should confirm Variables criterion when Enter is pressed in a name input (2 valid lines)', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'price';
+    component.pendingVariableLines[0].values = ['50'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'qty';
+    component.pendingVariableLines[1].values = ['10'];
+    fixture.detectChanges();
+
+    const nameInput: HTMLElement = fixture.nativeElement.querySelector('.editor-input--name');
+    nameInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('variables');
+    expect(component.activePills[0].variableLines).toHaveLength(2);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should flush chip currentInput to values when clicking outside (blur fires before click)', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'tag';
+    fixture.detectChanges();
+
+    const chipDe = fixture.debugElement.query(By.directive(MultiValueChipInputComponent));
+    const chipComp = chipDe.componentInstance as MultiValueChipInputComponent;
+    chipComp.currentInput = 'pending-value';
+
+    chipComp.onBlur();
+
+    outsideClick(component);
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].variableLines![0].values).toContain('pending-value');
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should not modify an existing Variables pill when ✕ is clicked after editing', () => {
+    component.activePills = [{
+      field: 'variables',
+      values: [],
+      variableLines: [{ variableName: 'amount', variableOperator: 'eq', values: ['500'] }]
+    }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingVariableLines[0].values = ['999'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'qty';
+    component.pendingVariableLines[1].values = ['5'];
+
+    component.cancelCriterion();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].variableLines).toHaveLength(1);
+    expect(component.activePills[0].variableLines![0].values).toEqual(['500']);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+});
+
+describe('ProcessInstanceSearchComponent — Variables popover — Enter key edge cases', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should create a chip and keep the popover open when Enter is pressed in a chip input with text', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'amount';
+    fixture.detectChanges();
+
+    const chipDe = fixture.debugElement.query(By.directive(MultiValueChipInputComponent));
+    const chipComp = chipDe.componentInstance as MultiValueChipInputComponent;
+    chipComp.currentInput = 'hello';
+
+    chipComp.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.activeEditorType).toBe('variables');
+    expect(chipComp.values).toContain('hello');
+    expect(component.activePills.length).toBe(0);
+  });
+
+  it('should confirm criterion when Enter is pressed with focus outside the Variables popover (empty area click)', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'amount';
+    component.pendingVariableLines[0].values = ['100'];
+    fixture.detectChanges();
+
+    document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('variables');
+    expect(component.activeEditorType).toBeNull();
+  });
+});
+
+describe('ProcessInstanceSearchComponent — grouped variables criterion', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should create a single Variables (2) pill when 2 variables are added in the same popover', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'orderId';
+    component.pendingVariableLines[0].values = ['123'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'status';
+    component.pendingVariableLines[1].values = ['active'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('variables');
+    expect(component.getPillLabel(component.activePills[0])).toBe('Variables (2)');
+  });
+
+  it('should add new empty lines without closing the popover when addVariableLine is called twice', () => {
+    component.selectCriteriaType('variables');
+    expect(component.pendingVariableLines.length).toBe(1);
+    component.addVariableLine();
+    component.addVariableLine();
+    expect(component.pendingVariableLines.length).toBe(3);
+    expect(component.pendingVariableLines[1].name).toBe('');
+    expect(component.pendingVariableLines[2].name).toBe('');
+    expect(component.activeEditorType).toBe('variables');
+  });
+
+  it('should remove only the targeted line when removeVariableLine is called', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'orderId';
+    component.pendingVariableLines[0].values = ['123'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'status';
+    component.pendingVariableLines[1].values = ['active'];
+    component.addVariableLine();
+    component.pendingVariableLines[2].name = 'amount';
+    component.pendingVariableLines[2].values = ['42'];
+    component.removeVariableLine(1);
+    expect(component.pendingVariableLines.length).toBe(2);
+    expect(component.pendingVariableLines[0].name).toBe('orderId');
+    expect(component.pendingVariableLines[1].name).toBe('amount');
+  });
+
+  it('should ignore empty lines when confirming — only valid lines are stored', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'orderId';
+    component.pendingVariableLines[0].values = ['123'];
+    component.addVariableLine();
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].variableLines?.length).toBe(1);
+    expect(component.activePills[0].variableLines?.[0].variableName).toBe('orderId');
+  });
+
+  it('should remove the Variables pill entirely when all lines are cleared then confirmed', () => {
+    component.activePills = [{
+      field: 'variables', values: [],
+      variableLines: [{ variableName: 'orderId', variableOperator: 'eq', values: ['123'] }]
+    }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingVariableLines = [];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(0);
+    expect(component.editingPillIndex).toBeNull();
+  });
+
+  it('should reopen pre-filled with all variable lines when an existing Variables pill is clicked', () => {
+    component.activePills = [{
+      field: 'variables', values: [],
+      variableLines: [
+        { variableName: 'orderId', variableOperator: 'eq', values: ['123'] },
+        { variableName: 'status', variableOperator: 'like', values: ['act'] }
+      ]
+    }];
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.editingPillIndex).toBe(0);
+    expect(component.activeEditorType).toBe('variables');
+    expect(component.pendingVariableLines.length).toBe(2);
+    expect(component.pendingVariableLines[0].name).toBe('orderId');
+    expect(component.pendingVariableLines[0].values).toEqual(['123']);
+    expect(component.pendingVariableLines[1].name).toBe('status');
+    expect(component.pendingVariableLines[1].operator).toBe('like');
+    component.pendingVariableLines[0].values = ['456'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].variableLines?.[0].values).toEqual(['456']);
+  });
+
+  it('should apply criterion-editor-popover--variables class to the popover when variables editor is open', () => {
+    fixture.detectChanges();
+    component.selectCriteriaType('variables');
+    fixture.detectChanges();
+    const popoverEl = fixture.nativeElement.querySelector('.criterion-editor-popover');
+    expect(popoverEl).toBeTruthy();
+    expect(popoverEl.classList.contains('criterion-editor-popover--variables')).toBe(true);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — variableConflicts getter', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should return no conflict when valid range: gteq 2 and lt 100', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'amount';
+    component.pendingVariableLines[0].operator = 'gteq';
+    component.pendingVariableLines[0].values = ['2'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'amount';
+    component.pendingVariableLines[1].operator = 'lt';
+    component.pendingVariableLines[1].values = ['100'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(0);
+  });
+
+  it('should return no conflicts when two lines share the same name AND same operator', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'orderId';
+    component.pendingVariableLines[0].operator = 'eq';
+    component.pendingVariableLines[0].values = ['1'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'orderId';
+    component.pendingVariableLines[1].operator = 'eq';
+    component.pendingVariableLines[1].values = ['2'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(0);
+  });
+
+  it('should return impossible conflict when gteq 10 and lteq 5', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'score';
+    component.pendingVariableLines[0].operator = 'gteq';
+    component.pendingVariableLines[0].values = ['10'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'score';
+    component.pendingVariableLines[1].operator = 'lteq';
+    component.pendingVariableLines[1].values = ['5'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(1);
+    expect(conflicts[0].name).toBe('score');
+    expect(conflicts[0].type).toBe('impossible');
+    expect(conflicts[0].detail).toContain('≥ 10');
+    expect(conflicts[0].detail).toContain('≤ 5');
+  });
+
+  it('should return impossible conflict when gt 5 and lt 5 (strict bounds exclude each other)', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'qty';
+    component.pendingVariableLines[0].operator = 'gt';
+    component.pendingVariableLines[0].values = ['5'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'qty';
+    component.pendingVariableLines[1].operator = 'lt';
+    component.pendingVariableLines[1].values = ['5'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(1);
+    expect(conflicts[0].type).toBe('impossible');
+  });
+
+  it('should return generic conflict when like operator is involved', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'label';
+    component.pendingVariableLines[0].operator = 'like';
+    component.pendingVariableLines[0].values = ['foo'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'label';
+    component.pendingVariableLines[1].operator = 'eq';
+    component.pendingVariableLines[1].values = ['bar'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(1);
+    expect(conflicts[0].name).toBe('label');
+    expect(conflicts[0].type).toBe('generic');
+  });
+
+  it('should return generic conflict when value is non-numeric for a comparison operator', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'invoiceNumber';
+    component.pendingVariableLines[0].operator = 'gteq';
+    component.pendingVariableLines[0].values = ['tg'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'invoiceNumber';
+    component.pendingVariableLines[1].operator = 'lt';
+    component.pendingVariableLines[1].values = ['100'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(1);
+    expect(conflicts[0].type).toBe('generic');
+  });
+});
+
+describe('ProcessInstanceSearchComponent — operator dropdown — custom single-select', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('isMultiValueOperator returns false for comparison operators (>, ≥, <, ≤)', () => {
+    expect(component.isMultiValueOperator('gt')).toBe(false);
+    expect(component.isMultiValueOperator('gteq')).toBe(false);
+    expect(component.isMultiValueOperator('lt')).toBe(false);
+    expect(component.isMultiValueOperator('lteq')).toBe(false);
+  });
+
+  it('isMultiValueOperator returns true for eq, neq, like', () => {
+    expect(component.isMultiValueOperator('eq')).toBe(true);
+    expect(component.isMultiValueOperator('neq')).toBe(true);
+    expect(component.isMultiValueOperator('like')).toBe(true);
+  });
+
+  it('switching eq→gt with 2 chips keeps only the first value', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].operator = 'eq';
+    component.pendingVariableLines[0].values = ['alpha', 'beta'];
+    component.selectOperator(0, 'gt');
+    expect(component.pendingVariableLines[0].operator).toBe('gt');
+    expect(component.pendingVariableLines[0].values).toEqual(['alpha']);
+  });
+
+  it('switching gt→eq with a single value preserves the value as a chip', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].operator = 'gt';
+    component.pendingVariableLines[0].values = ['42'];
+    component.selectOperator(0, 'eq');
+    expect(component.pendingVariableLines[0].operator).toBe('eq');
+    expect(component.pendingVariableLines[0].values).toEqual(['42']);
+  });
+
+  it('variable-like-hint appears when operator is like and disappears when changed', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'like');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.variable-like-hint')).toBeTruthy();
+
+    component.selectOperator(0, 'eq');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.variable-like-hint')).toBeNull();
+  });
+
+  it('opening the operator menu renders all 7 operator rows (none clipped by overflow)', () => {
+    component.selectCriteriaType('variables');
+    fixture.detectChanges();
+    const stubTrigger = document.createElement('button');
+    component.toggleOperatorMenu(0, stubTrigger);
+    fixture.detectChanges();
+    const rows = fixture.nativeElement.querySelectorAll('.op-menu-row');
+    expect(rows.length).toBe(7);
+    const symbols = Array.from(rows as NodeListOf<HTMLElement>).map(
+      r => r.querySelector('.op-menu-symbol')?.textContent?.trim()
+    );
+    expect(symbols).toEqual(['=', '≠', '>', '≥', '<', '≤', '~']);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — comparison value validation', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('isComparisonValueInvalid returns true for gteq with non-numeric value', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gteq');
+    component.pendingVariableLines[0].values = ['tg'];
+    expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(true);
+  });
+
+  it('isComparisonValueInvalid returns false for gteq with a valid number', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gteq');
+    component.pendingVariableLines[0].values = ['42'];
+    expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(false);
+  });
+
+  it('isComparisonValueInvalid returns false for eq with non-numeric value (multi-value op)', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].operator = 'eq';
+    component.pendingVariableLines[0].values = ['tg'];
+    expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(false);
+  });
+
+  it('isComparisonValueInvalid returns false when value is empty (not yet entered)', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gt');
+    component.pendingVariableLines[0].values = [];
+    expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(false);
+  });
+
+  it('hasInvalidVariableValues is true when any comparison line has non-numeric value', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gteq');
+    component.pendingVariableLines[0].name = 'invoiceNumber';
+    component.pendingVariableLines[0].values = ['tg'];
+    expect(component.hasInvalidVariableValues).toBe(true);
+  });
+
+  it('confirm button is disabled when a comparison line has a non-numeric value', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gteq');
+    component.pendingVariableLines[0].name = 'invoiceNumber';
+    component.pendingVariableLines[0].values = ['tg'];
+    fixture.detectChanges();
+    const confirmBtn = fixture.nativeElement.querySelector('.btn-editor-confirm-icon');
+    expect(confirmBtn.disabled).toBe(true);
+  });
+
+  it('variable-value-error message is shown in the DOM when value is non-numeric for comparison op', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gt');
+    component.pendingVariableLines[0].name = 'amount';
+    component.pendingVariableLines[0].values = ['abc'];
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.variable-value-error')).toBeTruthy();
+  });
+
+  it('variable-value-error message disappears when value is corrected to a number', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gt');
+    component.pendingVariableLines[0].name = 'amount';
+    component.pendingVariableLines[0].values = ['abc'];
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.variable-value-error')).toBeTruthy();
+
+    const fakeEvt = { target: { value: '100' } } as unknown as Event;
+    component.onVariableLineSingleValueChange(0, fakeEvt);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.variable-value-error')).toBeNull();
+  });
+});
+
+
+describe('ProcessInstanceSearchComponent — getPillLabel', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should return correct label for businessKey pill', () => {
+    const pill: MultiValueFilter = { field: 'businessKey', values: ['BK-001', 'BK-002'] };
+    expect(component.getPillLabel(pill)).toBe('Business Key: BK-001, BK-002');
+  });
+
+  it('should return correct label for withIncidents pill', () => {
+    const pill: MultiValueFilter = { field: 'withIncidents', values: [] };
+    expect(component.getPillLabel(pill)).toBe('With incidents');
+  });
+
+  it('should return correct label for variable pill', () => {
+    const pill: MultiValueFilter = {
+      field: 'variable', values: ['1', '23'],
+      variableName: 'orderId', variableOperator: 'eq'
+    };
+    expect(component.getPillLabel(pill)).toBe('orderId = 1, 23');
+  });
+
+  it('should return correct label for state pill (single value)', () => {
+    const pill: MultiValueFilter = { field: 'state', values: ['completed'] };
+    expect(component.getPillLabel(pill)).toBe('State: Completed');
+  });
+
+  it('should return correct label for state pill (multiple values)', () => {
+    const pill: MultiValueFilter = { field: 'state', values: ['active', 'suspended'] };
+    expect(component.getPillLabel(pill)).toBe('State: Active, Suspended');
+  });
+
+  it('should return correct label for instanceId pill', () => {
+    const pill: MultiValueFilter = { field: 'instanceId', values: ['inst-1'] };
+    expect(component.getPillLabel(pill)).toBe('Instance ID: inst-1');
+  });
+});
+
+describe('ProcessInstanceSearchComponent — date criteria — type="date" and time completion', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should use type="date" (not datetime-local) in the date editor popover', () => {
+    component.selectCriteriaType('startedAfter');
+    fixture.detectChanges();
+    const input = fixture.nativeElement.querySelector('input[type="date"]');
+    expect(input).not.toBeNull();
+    const datetimeInput = fixture.nativeElement.querySelector('input[type="datetime-local"]');
+    expect(datetimeInput).toBeNull();
+  });
+
+  it('should store T00:00:00 for a startedAfter date (start of day)', () => {
+    component.selectCriteriaType('startedAfter');
+    component.pendingDateValue = '2026-07-21';
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].values[0]).toContain('T00:00:00');
+  });
+
+  it('should store T23:59:59 for a finishedBefore date (end of day)', () => {
+    component.selectCriteriaType('finishedBefore');
+    component.pendingDateValue = '2026-07-20';
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].values[0]).toContain('T23:59:59');
+  });
+
+  it('should pre-fill pendingDateValue with the stored date when editing an existing date pill', () => {
+    component.selectCriteriaType('startedAfter');
+    component.pendingDateValue = '2026-07-21';
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.pendingDateValue).toBe('2026-07-21');
+  });
+});
+
+describe('ProcessInstanceSearchComponent — startedDateConflict', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should be true when startedAfter is later than startedBefore', () => {
+    component.activePills = [
+      { field: 'startedAfter',  values: ['2026-07-21T00:00:00.000+0000'] },
+      { field: 'startedBefore', values: ['2026-07-20T00:00:00.000+0000'] },
+    ];
+    expect(component.startedDateConflict).toBe(true);
+  });
+
+  it('should be false when startedAfter is earlier than startedBefore', () => {
+    component.activePills = [
+      { field: 'startedAfter',  values: ['2026-07-19T00:00:00.000+0000'] },
+      { field: 'startedBefore', values: ['2026-07-21T00:00:00.000+0000'] },
+    ];
+    expect(component.startedDateConflict).toBe(false);
+  });
+
+  it('should be false when only one of the pair is present', () => {
+    component.activePills = [{ field: 'startedAfter', values: ['2026-07-21T00:00:00.000+0000'] }];
+    expect(component.startedDateConflict).toBe(false);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — finishedDateConflict', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should be true when finishedAfter is later than finishedBefore', () => {
+    component.activePills = [
+      { field: 'finishedAfter',  values: ['2026-07-21T00:00:00.000+0000'] },
+      { field: 'finishedBefore', values: ['2026-07-20T00:00:00.000+0000'] },
+    ];
+    expect(component.finishedDateConflict).toBe(true);
+  });
+
+  it('should be false when finishedAfter is earlier than finishedBefore', () => {
+    component.activePills = [
+      { field: 'finishedAfter',  values: ['2026-07-18T00:00:00.000+0000'] },
+      { field: 'finishedBefore', values: ['2026-07-21T00:00:00.000+0000'] },
+    ];
+    expect(component.finishedDateConflict).toBe(false);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — incidentsWithTerminalStateConflict', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should be true when withIncidents + only terminal states selected', () => {
+    component.activePills = [
+      { field: 'withIncidents', values: [] },
+      { field: 'state', values: ['completed'] },
+    ];
+    expect(component.incidentsWithTerminalStateConflict).toBe(true);
+  });
+
+  it('should be true when withIncidents + completed and terminated (no active/suspended)', () => {
+    component.activePills = [
+      { field: 'withIncidents', values: [] },
+      { field: 'state', values: ['completed', 'terminated'] },
+    ];
+    expect(component.incidentsWithTerminalStateConflict).toBe(true);
+  });
+
+  it('should be false when withIncidents + state includes Active', () => {
+    component.activePills = [
+      { field: 'withIncidents', values: [] },
+      { field: 'state', values: ['active', 'completed'] },
+    ];
+    expect(component.incidentsWithTerminalStateConflict).toBe(false);
+  });
+
+  it('should be false when withIncidents + state includes Suspended', () => {
+    component.activePills = [
+      { field: 'withIncidents', values: [] },
+      { field: 'state', values: ['suspended', 'terminated'] },
+    ];
+    expect(component.incidentsWithTerminalStateConflict).toBe(false);
+  });
+
+  it('should be false when withIncidents but no State pill', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    expect(component.incidentsWithTerminalStateConflict).toBe(false);
+  });
+
+  it('should be false when State pill is terminal-only but no withIncidents pill', () => {
+    component.activePills = [{ field: 'state', values: ['completed', 'terminated'] }];
+    expect(component.incidentsWithTerminalStateConflict).toBe(false);
+  });
+});
+
+
+describe('ProcessInstanceSearchComponent — search loading state', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of(MOCK_INSTANCES)),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(2)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should set searchLoading to false and show results after executeSearch resolves, without extra user interaction', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    fixture.detectChanges();
+
+    component.executeSearch();
+    fixture.detectChanges();
+
+    expect(component.searchLoading).toBe(false);
+    expect(component.searchResults.length).toBeGreaterThan(0);
+
+    const loadingEl: HTMLElement | null = fixture.nativeElement.querySelector('.loading-state');
+    expect(loadingEl).toBeNull();
+  });
+});
+
+describe('ProcessInstanceSearchComponent — executeSearch (category B)', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+  let cockpitService: any;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of(MOCK_INSTANCES)),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(2)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should not execute search when there are no active pills', () => {
+    component.activePills = [];
+    component.executeSearch();
+    expect(cockpitService.searchProcessInstancesGlobal).not.toHaveBeenCalled();
+    expect(component.searchExecuted).toBe(false);
+  });
+
+  it('should mark searchExecuted=true and call the service', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    component.executeSearch();
+    expect(component.searchExecuted).toBe(true);
+    expect(cockpitService.searchProcessInstancesGlobal).toHaveBeenCalled();
+    expect(cockpitService.searchProcessInstancesGlobalCount).toHaveBeenCalled();
+  });
+
+  it('should populate searchResults and searchResultsCount after success', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    component.executeSearch();
+    expect(component.searchResults.length).toBe(2);
+    expect(component.searchResultsCount).toBe(2);
+    expect(component.searchLoading).toBe(false);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — clearSearch', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should reset all search state', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-001'] }];
+    component.searchResults = [...MOCK_INSTANCES];
+    component.searchResultsCount = 2;
+    component.searchExecuted = true;
+    component.variableNamesIgnoreCase = true;
+    component.variableValuesIgnoreCase = true;
+    component.clearSearch();
+    expect(component.activePills.length).toBe(0);
+    expect(component.searchResults.length).toBe(0);
+    expect(component.searchResultsCount).toBe(0);
+    expect(component.searchExecuted).toBe(false);
+    expect(component.variableNamesIgnoreCase).toBe(false);
+    expect(component.variableValuesIgnoreCase).toBe(false);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — hasVariableFilter', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should return false when no variable pill exists', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-001'] }];
+    expect(component.hasVariableFilter()).toBe(false);
+  });
+
+  it('should return true when at least one variable pill exists', () => {
+    component.activePills = [{ field: 'variable', values: ['1'], variableName: 'x', variableOperator: 'eq' }];
+    expect(component.hasVariableFilter()).toBe(true);
+  });
+
+  it('should return true when a grouped variables pill exists', () => {
+    component.activePills = [{ field: 'variables', values: [], variableLines: [{ variableName: 'x', variableOperator: 'eq', values: ['v'] }] }];
+    expect(component.hasVariableFilter()).toBe(true);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — checkPopoverPosition', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should set popoverFlipped=true when popover right edge exceeds viewport width', () => {
+    component.popoverFlipped = false;
+    const fakeEl = { getBoundingClientRect: () => ({ right: 1100 } as DOMRect) } as HTMLElement;
+    Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true, writable: true });
+    component.checkPopoverPosition(fakeEl);
+    expect(component.popoverFlipped).toBe(true);
+  });
+
+  it('should set popoverFlipped=false when popover fits within viewport', () => {
+    component.popoverFlipped = true;
+    const fakeEl = { getBoundingClientRect: () => ({ right: 700 } as DOMRect) } as HTMLElement;
+    Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true, writable: true });
+    component.checkPopoverPosition(fakeEl);
+    expect(component.popoverFlipped).toBe(false);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — getInstanceStateClass', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should return state-active for ACTIVE state', () => {
+    expect(component.getInstanceStateClass(MOCK_INSTANCES[0])).toBe('state-active');
+  });
+
+  it('should return state-completed for COMPLETED state', () => {
+    const inst: ProcessInstance = { ...MOCK_INSTANCES[0], state: 'COMPLETED' };
+    expect(component.getInstanceStateClass(inst)).toBe('state-completed');
+  });
+
+  it('should return state-suspended for SUSPENDED state', () => {
+    const inst: ProcessInstance = { ...MOCK_INSTANCES[0], state: 'SUSPENDED' };
+    expect(component.getInstanceStateClass(inst)).toBe('state-suspended');
+  });
+
+  it('should return state-terminated for EXTERNALLY_TERMINATED state', () => {
+    const inst: ProcessInstance = { ...MOCK_INSTANCES[0], state: 'EXTERNALLY_TERMINATED' };
+    expect(component.getInstanceStateClass(inst)).toBe('state-terminated');
+  });
+
+  it('should return state-terminated for INTERNALLY_TERMINATED state', () => {
+    const inst: ProcessInstance = { ...MOCK_INSTANCES[0], state: 'INTERNALLY_TERMINATED' };
+    expect(component.getInstanceStateClass(inst)).toBe('state-terminated');
+  });
+});
+
+describe('ProcessInstanceSearchComponent — extractVersionNumber', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should extract version number from Camunda 7 definition ID', () => {
+    expect(component.extractVersionNumber('invoice:2:abc123')).toBe(2);
+  });
+
+  it('should return null for IDs without colon-delimited format', () => {
+    expect(component.extractVersionNumber('abc123')).toBeNull();
+  });
+
+  it('should return null for empty string', () => {
+    expect(component.extractVersionNumber('')).toBeNull();
+  });
+
+  it('should return null for non-numeric version segment', () => {
+    expect(component.extractVersionNumber('key:notANumber:id')).toBeNull();
+  });
+});
+
+
+describe('ProcessInstanceSearchComponent — URL and localStorage persistence', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+  let router: Router;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+    router = TestBed.inject(Router);
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(router, 'navigate').mockResolvedValue(true);
+    localStorage.removeItem('globalSearchPreferences');
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should write pills as JSON criteria query param when a criterion is confirmed', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001', 'BK-002'];
+    component.confirmCriterion();
+
+    component.selectCriteriaType('state');
+    component.toggleStateValue('active');
+    component.toggleStateValue('completed');
+    component.confirmCriterion();
+
+    const calls = (router.navigate as ReturnType<typeof vi.spyOn>).mock.calls;
+    const lastArgs = calls[calls.length - 1];
+    const pills = JSON.parse(lastArgs[1].queryParams.criteria);
+    expect(pills).toHaveLength(2);
+    expect(pills[0]).toMatchObject({ field: 'businessKey', values: ['BK-001', 'BK-002'] });
+    expect(pills[1]).toMatchObject({ field: 'state', values: ['active', 'completed'] });
+    expect(lastArgs[1].replaceUrl).toBe(true);
+    expect(lastArgs[1].queryParamsHandling).toBe('merge');
+  });
+
+  it('should set criteria to null in URL when clearSearch is called', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    component.clearSearch();
+
+    const calls = (router.navigate as ReturnType<typeof vi.spyOn>).mock.calls;
+    const lastArgs = calls[calls.length - 1];
+    expect(lastArgs[1].queryParams.criteria).toBeNull();
+  });
+
+  it('should remove a pill from the URL when removePill is called', () => {
+    component.activePills = [
+      { field: 'businessKey', values: ['BK-001'] },
+      { field: 'state', values: ['active'] },
+    ];
+    component.removePill(0);
+
+    const calls = (router.navigate as ReturnType<typeof vi.spyOn>).mock.calls;
+    const lastArgs = calls[calls.length - 1];
+    const pills = JSON.parse(lastArgs[1].queryParams.criteria);
+    expect(pills).toHaveLength(1);
+    expect(pills[0].field).toBe('state');
+  });
+
+  it('should persist page size in localStorage when onSearchPageSizeChange is called', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    component.searchPageSize = 50;
+    component.onSearchPageSizeChange();
+
+    const saved = JSON.parse(localStorage.getItem('globalSearchPreferences')!);
+    expect(saved.pageSize).toBe(50);
+  });
+
+  it('should restore page size from localStorage when a new component instance is created', () => {
+    localStorage.setItem('globalSearchPreferences', JSON.stringify({ pageSize: 100 }));
+
+    const fixture2 = TestBed.createComponent(ProcessInstanceSearchComponent);
+    fixture2.detectChanges();
+
+    expect(fixture2.componentInstance.searchPageSize).toBe(100);
+    fixture2.destroy();
   });
 });
