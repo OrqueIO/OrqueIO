@@ -137,19 +137,40 @@ describe('InstanceFilterPanelComponent — State criterion visibility based on l
     expect(fixture.debugElement.query(By.css('.criteria-icon-wrap--emerald'))).not.toBeNull();
   });
 
-  it('should expose exactly 9 criteria options when locked (State excluded) and 10 when unlocked', () => {
-    const fakeEvent = { stopPropagation: vi.fn() } as unknown as Event;
+  it('exposes 8 options with lockedState="unfinished" (State + finishedAfter + finishedBefore hidden) and 11 when unlocked', async () => {
+    // Note: this test creates fresh fixtures to guarantee correct ngIf evaluation with OnPush.
+    // Reusing a fixture that transitions through multiple lockedState values produces unreliable
+    // counts because Angular OnPush caches embedded views across dropdown open/close cycles.
+    //
+    // 11 total process criteria (superProcessInstanceId, subProcessInstanceId, activityId,
+    // incidentId, incidentType, incidentMessage hidden by showExtendedCriteria=false) minus:
+    //   lockedState='unfinished': -State -finishedAfter -finishedBefore → 8
+    //   lockedState=null:         no extra hidden → 11
+    const cockpitServiceMock = { getProcessDefinitions: vi.fn().mockReturnValue(of([])) } as any;
 
-    component.lockedState = 'unfinished';
-    component.toggleCriteriaDropdown(fakeEvent);
-    fixture.detectChanges();
-    expect(fixture.debugElement.queryAll(By.css('.criteria-option')).length).toBe(9);
+    async function countOptions(lockedState: string | null): Promise<number> {
+      initTestEnvironment();
+      TestBed.resetTestingModule();
+      await TestBed.configureTestingModule({
+        imports: [InstanceFilterPanelComponent],
+        providers: [
+          provideHttpClient(),
+          provideHttpClientTesting(),
+          { provide: CockpitService, useValue: cockpitServiceMock },
+        ],
+      }).compileComponents();
+      const f = TestBed.createComponent(InstanceFilterPanelComponent);
+      f.componentInstance.lockedState = lockedState;
+      (TestBed.inject(TranslateService) as any).translations = { en: {} };
+      f.detectChanges();
+      const ev = { stopPropagation: vi.fn() } as unknown as Event;
+      f.componentInstance.toggleCriteriaDropdown(ev);
+      f.detectChanges();
+      return f.debugElement.queryAll(By.css('.criteria-option')).length;
+    }
 
-    component.toggleCriteriaDropdown(fakeEvent);
-    component.lockedState = null;
-    component.toggleCriteriaDropdown(fakeEvent);
-    fixture.detectChanges();
-    expect(fixture.debugElement.queryAll(By.css('.criteria-option')).length).toBe(10);
+    expect(await countOptions('unfinished')).toBe(8);
+    expect(await countOptions(null)).toBe(11);
   });
 });
 
@@ -601,5 +622,161 @@ describe('InstanceFilterPanelComponent — Process Definition version filter', (
     const groupA = component.availableProcessDefinitionGroups.find(g => g.key === 'proc-a')!;
 
     expect(component.isProcessGroupSelected(groupA)).toBe(false);
+  });
+});
+
+// ─── Finished-date criteria: menu visibility ────────────────────────────────
+
+describe('InstanceFilterPanelComponent — Finished-date criteria hidden for in-progress locked scope', () => {
+  async function createWithLockedState(lockedState: string | null): Promise<ComponentFixture<InstanceFilterPanelComponent>> {
+    initTestEnvironment();
+
+    const cockpitService = { getProcessDefinitions: vi.fn().mockReturnValue(of([])) } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [InstanceFilterPanelComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: CockpitService, useValue: cockpitService },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(InstanceFilterPanelComponent);
+    fixture.componentInstance.lockedState = lockedState;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: {} };
+
+    fixture.detectChanges();
+    return fixture;
+  }
+
+  it('hides finishedAfter / finishedBefore when lockedState is "active" (Suspend)', async () => {
+    const fixture = await createWithLockedState('active');
+    const fakeEvent = { stopPropagation: vi.fn() } as unknown as Event;
+    fixture.componentInstance.toggleCriteriaDropdown(fakeEvent);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.queryAll(By.css('.criteria-icon-wrap--slate')).length).toBe(0);
+  });
+
+  it('hides finishedAfter / finishedBefore when lockedState is "suspended" (Activate)', async () => {
+    const fixture = await createWithLockedState('suspended');
+    const fakeEvent = { stopPropagation: vi.fn() } as unknown as Event;
+    fixture.componentInstance.toggleCriteriaDropdown(fakeEvent);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.queryAll(By.css('.criteria-icon-wrap--slate')).length).toBe(0);
+  });
+
+  it('hides finishedAfter / finishedBefore when lockedState is "unfinished" (Delete Running / Set Retries / Set Variables)', async () => {
+    const fixture = await createWithLockedState('unfinished');
+    const fakeEvent = { stopPropagation: vi.fn() } as unknown as Event;
+    fixture.componentInstance.toggleCriteriaDropdown(fakeEvent);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.queryAll(By.css('.criteria-icon-wrap--slate')).length).toBe(0);
+  });
+
+  it('shows finishedAfter and finishedBefore when lockedState is "finished" (Delete Finished)', async () => {
+    const fixture = await createWithLockedState('finished');
+    const fakeEvent = { stopPropagation: vi.fn() } as unknown as Event;
+    fixture.componentInstance.toggleCriteriaDropdown(fakeEvent);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.queryAll(By.css('.criteria-icon-wrap--slate')).length).toBe(2);
+  });
+
+  it('shows finishedAfter and finishedBefore when lockedState is null (free search)', async () => {
+    const fixture = await createWithLockedState(null);
+    const fakeEvent = { stopPropagation: vi.fn() } as unknown as Event;
+    fixture.componentInstance.toggleCriteriaDropdown(fakeEvent);
+    fixture.detectChanges();
+
+    expect(fixture.debugElement.queryAll(By.css('.criteria-icon-wrap--slate')).length).toBe(2);
+  });
+});
+
+// ─── Finished-date pills: stripped on restore for in-progress locked scope ──
+
+describe('InstanceFilterPanelComponent — ngOnInit strips finished-date pills for in-progress locked scope', () => {
+  async function createWithPillsAndLockedState(
+    pills: { field: string; values: string[] }[],
+    lockedState: string | null
+  ): Promise<InstanceFilterPanelComponent> {
+    initTestEnvironment();
+
+    const cockpitService = { getProcessDefinitions: vi.fn().mockReturnValue(of([])) } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [InstanceFilterPanelComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: CockpitService, useValue: cockpitService },
+      ],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(InstanceFilterPanelComponent);
+    const component = fixture.componentInstance;
+    component.initialPills = pills as any;
+    component.lockedState = lockedState;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: {} };
+
+    fixture.detectChanges();
+    return component;
+  }
+
+  it('strips finishedAfter pill when lockedState is "active"', async () => {
+    const component = await createWithPillsAndLockedState(
+      [{ field: 'finishedAfter', values: ['2024-01-01T00:00:00.000+0100'] }],
+      'active'
+    );
+    expect(component.activePills).toHaveLength(0);
+  });
+
+  it('strips finishedBefore pill when lockedState is "suspended"', async () => {
+    const component = await createWithPillsAndLockedState(
+      [{ field: 'finishedBefore', values: ['2024-12-31T23:59:59.000+0100'] }],
+      'suspended'
+    );
+    expect(component.activePills).toHaveLength(0);
+  });
+
+  it('strips both finished-date pills but keeps others when lockedState is "unfinished"', async () => {
+    const component = await createWithPillsAndLockedState(
+      [
+        { field: 'businessKey', values: ['ORDER-1'] },
+        { field: 'finishedAfter', values: ['2024-01-01T00:00:00.000+0100'] },
+        { field: 'finishedBefore', values: ['2024-12-31T23:59:59.000+0100'] },
+      ],
+      'unfinished'
+    );
+    expect(component.activePills).toHaveLength(1);
+    expect(component.activePills[0].field).toBe('businessKey');
+  });
+
+  it('keeps finished-date pills when lockedState is "finished" (Delete Finished)', async () => {
+    const component = await createWithPillsAndLockedState(
+      [
+        { field: 'finishedAfter', values: ['2024-01-01T00:00:00.000+0100'] },
+        { field: 'finishedBefore', values: ['2024-12-31T23:59:59.000+0100'] },
+      ],
+      'finished'
+    );
+    expect(component.activePills).toHaveLength(2);
+    expect(component.activePills.map(p => p.field)).toEqual(['finishedAfter', 'finishedBefore']);
+  });
+
+  it('keeps finished-date pills when lockedState is null (free search)', async () => {
+    const component = await createWithPillsAndLockedState(
+      [{ field: 'finishedAfter', values: ['2024-01-01T00:00:00.000+0100'] }],
+      null
+    );
+    expect(component.activePills).toHaveLength(1);
+    expect(component.activePills[0].field).toBe('finishedAfter');
   });
 });

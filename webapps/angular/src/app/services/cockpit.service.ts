@@ -442,11 +442,15 @@ export interface VariableLine {
 }
 
 export type GlobalSearchField =
-  | 'businessKey' | 'instanceId' | 'state' | 'withIncidents' | 'processDefinition'
+  | 'businessKey' | 'instanceId' | 'state' | 'withIncidents' | 'withJobsRetrying' | 'processDefinition'
   | 'startedAfter' | 'startedBefore' | 'finishedAfter' | 'finishedBefore'
   | 'variable' | 'variables'
   | 'decisionDefinition' | 'evaluatedAfter' | 'evaluatedBefore'
-  | 'decisionInstanceId' | 'processInstanceId';
+  | 'decisionInstanceId' | 'processInstanceId'
+  | 'superProcessInstanceId' | 'subProcessInstanceId'
+  | 'incidentId' | 'incidentType' | 'incidentMessage' | 'activityId'
+  | 'stateActive' | 'stateSuspended'
+  | 'stateCompleted' | 'stateTerminated';
 
 export interface MultiValueFilter {
   field: GlobalSearchField;
@@ -1279,7 +1283,7 @@ export class CockpitService {
               case 'active':     base.active = true; base.unfinished = true; break;
               case 'suspended':  base.suspended = true; base.unfinished = true; break;
               case 'completed':  base.completed = true; base.finished = true; break;
-              case 'terminated': base.externallyTerminated = true; base.finished = true; break;
+              case 'terminated': base.finished = true; break;
               case 'unfinished': base.unfinished = true; break;
               case 'finished':   base.finished = true; break;
             }
@@ -1287,6 +1291,9 @@ export class CockpitService {
           break;
         case 'withIncidents':
           base.withIncidents = true;
+          break;
+        case 'withJobsRetrying':
+          base.withJobsRetrying = true;
           break;
         case 'processDefinition':
           if (filter.values.length > 0) base.processDefinitionKeyIn = filter.values;
@@ -1303,6 +1310,18 @@ export class CockpitService {
           break;
         case 'finishedBefore':
           if (filter.values[0]) base.finishedBefore = filter.values[0];
+          break;
+        case 'superProcessInstanceId':
+          if (filter.values[0]) base.superProcessInstanceId = filter.values[0];
+          break;
+        case 'subProcessInstanceId':
+          if (filter.values[0]) base.subProcessInstanceId = filter.values[0];
+          break;
+        case 'incidentType':
+          if (filter.values[0]) base.incidentType = filter.values[0];
+          break;
+        case 'incidentMessage':
+          if (filter.values[0]) base.incidentMessageLike = `%${filter.values[0]}%`;
           break;
         case 'variable':
           if (filter.variableName && filter.values.length > 0) {
@@ -1400,7 +1419,7 @@ export class CockpitService {
     // When all possible states are selected, any instance qualifies â€” drop the state filter
     if (statePill && this.isExhaustiveStateSelection(statePill.values)) {
       filters = filters.filter(f => f.field !== 'state');
-    } else if (statePill && statePill.values.length > 1) {
+    } else if (statePill && (statePill.values.length > 1 || statePill.values[0] === 'terminated')) {
       const nativeFlag = this.resolveNativeStateFlag(statePill.values);
       if (nativeFlag) {
         const resolved: MultiValueFilter[] = [{ field: 'state', values: [nativeFlag] }, ...filters.filter(f => f.field !== 'state')];
@@ -1434,7 +1453,7 @@ export class CockpitService {
     const statePill = filters.find(f => f.field === 'state');
     if (statePill && this.isExhaustiveStateSelection(statePill.values)) {
       filters = filters.filter(f => f.field !== 'state');
-    } else if (statePill && statePill.values.length > 1) {
+    } else if (statePill && (statePill.values.length > 1 || statePill.values[0] === 'terminated')) {
       const nativeFlag = this.resolveNativeStateFlag(statePill.values);
       if (nativeFlag) {
         const resolved: MultiValueFilter[] = [{ field: 'state', values: [nativeFlag] }, ...filters.filter(f => f.field !== 'state')];
@@ -1486,10 +1505,10 @@ export class CockpitService {
       case 'active':    return [{ active: true, unfinished: true }];
       case 'suspended': return [{ suspended: true, unfinished: true }];
       case 'completed': return [{ completed: true, finished: true }];
-      case 'terminated': return [{
-        finished: true,
-        orQueries: [{ externallyTerminated: true }, { internallyTerminated: true }]
-      }];
+      case 'terminated': return [
+        { finished: true, externallyTerminated: true },
+        { finished: true, internallyTerminated: true }
+      ];
       default: return [];
     }
   }

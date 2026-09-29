@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
+import { SimpleChange } from '@angular/core';
+import { of } from 'rxjs';
 import { BatchOperationsWizardComponent } from './batch-operations-wizard';
 import { MultiValueFilter } from '../../../../services/cockpit.service';
+import { InstanceFilterPanelComponent } from '../../../../shared/instance-filter-panel/instance-filter-panel';
 import { VariableDef } from './variable-definitions-modal/variable-definitions-modal';
 
 function getLockedFilterState(selectedOperationId: string): string | null {
@@ -21,7 +24,7 @@ function buildQuery(
   vnIgnoreCase = false,
   vvIgnoreCase = false
 ): Record<string, unknown> {
-  const stub = { selectedOperationId, filterCriteria, vnIgnoreCase, vvIgnoreCase };
+  const stub = { selectedOperationId, filterCriteria, vnIgnoreCase, vvIgnoreCase, lockedFilterState: getLockedFilterState(selectedOperationId) };
   return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
 }
 
@@ -283,6 +286,100 @@ describe('BatchOperationsWizardComponent — lockedFilterState: State always abs
 
 });
 
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch withJobsRetrying', () => {
+
+  it('suspend: withJobsRetrying criterion sets withJobsRetrying=true, preserves locked state', () => {
+    const result = buildQuery('suspend', [{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activate: withJobsRetrying criterion sets withJobsRetrying=true', () => {
+    const result = buildQuery('activate', [{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('delete-running: withJobsRetrying criterion sets withJobsRetrying=true', () => {
+    const result = buildQuery('delete-running', [{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('combined: withJobsRetrying + processDefinition', () => {
+    const result = buildQuery('suspend', [
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'processDefinition', values: ['order-proc'] },
+    ]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['active']).toBe(true);
+  });
+
+});
+
+describe('InstanceFilterPanelComponent — ngOnChanges resets pills on operation switch', () => {
+
+  function applyPillsChange(
+    prevPills: MultiValueFilter[],
+    nextPills: MultiValueFilter[],
+    isFirstChange = false
+  ): { activePills: MultiValueFilter[]; activeEditorType: string | null; editingPillIndex: number | null } {
+    const stub: any = {
+      activePills: [...prevPills],
+      activeEditorType: null,
+      editingPillIndex: null,
+      cancelCriterion() {
+        this.activeEditorType = null;
+        this.editingPillIndex = null;
+      },
+      cdr: { markForCheck() {} },
+    };
+    InstanceFilterPanelComponent.prototype.ngOnChanges.call(stub, {
+      initialPills: new SimpleChange(prevPills, nextPills, isFirstChange),
+    });
+    return stub;
+  }
+
+  it('clears activePills when initialPills becomes empty (operation switch)', () => {
+    const prevPills: MultiValueFilter[] = [{ field: 'withJobsRetrying', values: [] }];
+    const stub = applyPillsChange(prevPills, []);
+    expect(stub.activePills).toHaveLength(0);
+  });
+
+  it('also clears the active editor when pills are reset', () => {
+    const prevPills: MultiValueFilter[] = [{ field: 'businessKey', values: ['ACME'] }];
+    const stub: any = {
+      activePills: [...prevPills],
+      activeEditorType: 'businessKey',
+      editingPillIndex: 0,
+      cancelCriterion() { this.activeEditorType = null; this.editingPillIndex = null; },
+      cdr: { markForCheck() {} },
+    };
+    InstanceFilterPanelComponent.prototype.ngOnChanges.call(stub, {
+      initialPills: new SimpleChange(prevPills, [], false),
+    });
+    expect(stub.activePills).toHaveLength(0);
+    expect(stub.activeEditorType).toBeNull();
+    expect(stub.editingPillIndex).toBeNull();
+  });
+
+  it('does NOT clear pills on firstChange — ngOnInit handles initial population', () => {
+    const stub = applyPillsChange([], [], true);
+    expect(stub.activePills).toHaveLength(0); // unchanged, not reset by ngOnChanges
+  });
+
+  it('does NOT clear pills when initialPills becomes non-empty (parent restoring saved criteria)', () => {
+    const prev: MultiValueFilter[] = [{ field: 'withIncidents', values: [] }];
+    const next: MultiValueFilter[] = [{ field: 'withIncidents', values: [] }, { field: 'withJobsRetrying', values: [] }];
+    const stub = applyPillsChange(prev, next);
+    expect(stub.activePills).toEqual(prev); // unchanged — ngOnChanges only resets on empty
+  });
+
+});
+
 // ─── Helpers for canContinue and confirmPayloadJson ────────────────────────
 
 function getCanContinue(stub: Record<string, unknown>): boolean {
@@ -424,7 +521,7 @@ describe('BatchOperationsWizardComponent — set-retries-jobs: canContinue valid
 
 describe('BatchOperationsWizardComponent — set-retries-jobs: confirmPayloadJson', () => {
 
-  it('instances mode — body contains retries and jobQuery.processInstanceIds array', () => {
+  it('instances mode — body contains retries and processInstances array (job-retries-historic-query-based endpoint resolves incidents)', () => {
     const stub = {
       selectedOperationId: 'set-retries-jobs',
       mode: 'instances',
@@ -439,8 +536,8 @@ describe('BatchOperationsWizardComponent — set-retries-jobs: confirmPayloadJso
     };
     const payload = JSON.parse(getConfirmPayloadJson(stub));
     expect(payload['retries']).toBe(5);
-    expect(payload['jobQuery']['processInstanceIds']).toEqual(expect.arrayContaining(['inst-a', 'inst-b']));
-    expect(payload['processInstances']).toBeUndefined();
+    expect(payload['processInstances']).toEqual(expect.arrayContaining(['inst-a', 'inst-b']));
+    expect(payload['jobQuery']).toBeUndefined();
     expect(payload['dueDate']).toBeUndefined();
     expect(payload['historicProcessInstanceQuery']).toBeUndefined();
   });
@@ -505,11 +602,9 @@ describe('BatchOperationsWizardComponent — set-retries-jobs: confirmPayloadJso
 
 describe('BatchOperationsWizardComponent — set-retries-jobs: confirmEndpoint', () => {
 
-  it('instances mode → /job/retries', () => {
+  it('instances mode → /process-instance/job-retries-historic-query-based (same endpoint as query mode — resolves incidents)', () => {
     const stub = { selectedOperationId: 'set-retries-jobs', mode: 'instances' };
-    expect(getConfirmEndpoint(stub)).toContain('/job/retries');
-    expect(getConfirmEndpoint(stub)).not.toContain('process-instance/job-retries');
-    expect(getConfirmEndpoint(stub)).not.toContain('historic-query-based');
+    expect(getConfirmEndpoint(stub)).toContain('/process-instance/job-retries-historic-query-based');
   });
 
   it('query mode → /process-instance/job-retries-historic-query-based', () => {
@@ -1488,6 +1583,102 @@ describe('BatchOperationsWizardComponent — move-instances: filteredMoveInstanc
 });
 
 
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch: extended criteria (suspend)', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'superProcessInstanceId', values: ['parent-id-123'] }
+    ]);
+    expect(result['superProcessInstanceId']).toBe('parent-id-123');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'subProcessInstanceId', values: ['sub-id-456'] }
+    ]);
+    expect(result['subProcessInstanceId']).toBe('sub-id-456');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType → mapped to incidentType in query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'incidentType', values: ['failedJob'] }
+    ]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildQuery('suspend', [
+      { field: 'incidentMessage', values: ['Connection refused'] }
+    ]);
+    expect(result['incidentMessageLike']).toBe('%Connection refused%');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildQuery('suspend', [
+      { field: 'activityId', values: ['task-1'] }
+    ]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['activeActivityIdIn']).toBeUndefined();
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildQuery('suspend', [
+      { field: 'incidentId', values: ['inc-789'] }
+    ]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('non-regression: locked state (active + unfinished) preserved alongside activityId', () => {
+    const result = buildQuery('suspend', [
+      { field: 'activityId', values: ['task-claim'] },
+      { field: 'processDefinition', values: ['order-proc'] }
+    ]);
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['activityId']).toBeUndefined();
+  });
+
+  it('activate: superProcessInstanceId + locked suspended state', () => {
+    const result = buildQuery('activate', [
+      { field: 'superProcessInstanceId', values: ['root-proc-id'] }
+    ]);
+    expect(result['superProcessInstanceId']).toBe('root-proc-id');
+    expect(result['suspended']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('all 4 direct criteria combined in one query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'superProcessInstanceId', values: ['p-id'] },
+      { field: 'subProcessInstanceId',   values: ['s-id'] },
+      { field: 'incidentType',           values: ['failedExternalTask'] },
+      { field: 'incidentMessage',        values: ['Timeout'] },
+    ]);
+    expect(result['superProcessInstanceId']).toBe('p-id');
+    expect(result['subProcessInstanceId']).toBe('s-id');
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['incidentMessageLike']).toBe('%Timeout%');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+});
+
+
 describe('BatchOperationsWizardComponent — move-instances: onMoveInstancesRowClick', () => {
 
   const v1 = { id: 'orderProcess:1:aaa', key: 'orderProcess', name: 'Order', version: 1, deploymentId: '', suspended: false };
@@ -1516,4 +1707,1098 @@ describe('BatchOperationsWizardComponent — move-instances: onMoveInstancesRowC
     expect(navigateCalls[0]).toEqual(['orderProcess', 'orderProcess:2:bbb']);
   });
 
+});
+
+
+describe('BatchOperationsWizardComponent — loadActivitiesFromFilter: Activity ID dropdown vs free-text', () => {
+
+  function callLoadActivities(filterCriteria: MultiValueFilter[], getProcessDefinitionByKey?: (key: string) => any) {
+    const emitted: any[] = [];
+    const stub: any = {
+      filterCriteria,
+      activityLoad$: { next: (obs$: any) => emitted.push(obs$) },
+      processDefinitionService: {
+        getProcessDefinitionByKey: getProcessDefinitionByKey ?? (() => of(null))
+      }
+    };
+    (BatchOperationsWizardComponent.prototype as any)['loadActivitiesFromFilter'].call(stub);
+    return emitted;
+  }
+
+  it('single specific version selected → emits that version ID (dropdown activated)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-order-v2'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBe('pd-order-v2');
+  });
+
+  it('single key (no version pin) → resolves latest version via service (dropdown activated)', () => {
+    const [obs$] = callLoadActivities(
+      [{ field: 'processDefinition', values: ['order-proc'], processDefinitionIds: [] }],
+      (key: string) => of({ id: `latest-for-${key}`, key })
+    );
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBe('latest-for-order-proc');
+  });
+
+  it('no processDefinition criterion → emits null (free-text mode)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'businessKey', values: ['ACME'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+  it('multiple process keys selected → emits null (free-text mode)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'processDefinition', values: ['proc-a', 'proc-b'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+  it('multiple specific versions selected → emits null (free-text mode)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v1', 'pd-v2'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+  it('single key, service returns null → emits null gracefully', () => {
+    const [obs$] = callLoadActivities(
+      [{ field: 'processDefinition', values: ['unknown-proc'] }],
+      () => of(null)
+    );
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+});
+
+
+describe('InstanceFilterPanelComponent — processDefinition change clears stale activityId', () => {
+
+  it('removing processDefinition pill also removes activityId pill', () => {
+    const stub: any = {
+      activePills: [
+        { field: 'processDefinition', values: ['proc-a'], processDefinitionIds: [] },
+        { field: 'activityId', values: ['task-1'] },
+      ],
+      cdr: { markForCheck() {} },
+      emit() {},
+    };
+    InstanceFilterPanelComponent.prototype.removePill.call(stub, 0);
+    expect(stub.activePills.find((p: any) => p.field === 'activityId')).toBeUndefined();
+    expect(stub.activePills.find((p: any) => p.field === 'processDefinition')).toBeUndefined();
+  });
+
+  it('removing a non-processDefinition pill does NOT clear activityId', () => {
+    const stub: any = {
+      activePills: [
+        { field: 'processDefinition', values: ['proc-a'] },
+        { field: 'businessKey', values: ['ACME'] },
+        { field: 'activityId', values: ['task-1'] },
+      ],
+      cdr: { markForCheck() {} },
+      emit() {},
+    };
+    InstanceFilterPanelComponent.prototype.removePill.call(stub, 1); // remove businessKey
+    expect(stub.activePills.find((p: any) => p.field === 'activityId')).toBeDefined();
+    expect(stub.activePills.find((p: any) => p.field === 'processDefinition')).toBeDefined();
+  });
+
+  it('processDefinition pill without a prior activityId pill: removePill is a no-op for activityId', () => {
+    const stub: any = {
+      activePills: [
+        { field: 'processDefinition', values: ['proc-a'] },
+        { field: 'businessKey', values: ['ACME'] },
+      ],
+      cdr: { markForCheck() {} },
+      emit() {},
+    };
+    InstanceFilterPanelComponent.prototype.removePill.call(stub, 0);
+    expect(stub.activePills).toHaveLength(1);
+    expect(stub.activePills[0].field).toBe('businessKey');
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — loadFromSessionStorage triggers BPMN loading on restore', () => {
+
+  const SESSION_KEY = 'batch-wizard-test-key';
+
+  function makeRestoreStub(operationId: string, filterCriteria: MultiValueFilter[], step = 1) {
+    let activitiesLoaded = false;
+    const stub: any = {
+      SESSION_KEY,
+      selectedOperationId: null,
+      mode: 'instances',
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      hasActiveCriteria: false,
+      selectedIds: new Set(),
+      deleteReason: '',
+      skipCustomListeners: false,
+      skipIoMappings: false,
+      retries: 1,
+      setDueDate: false,
+      retriesDueDate: '',
+      variableDefinitions: [],
+      selectedDecisionIds: new Set(),
+      decisionFilterCriteria: [],
+      decisionHasActiveCriteria: false,
+      currentStep: 1,
+      moveInstancesSearchText: '',
+      loadInstances() {},
+      loadDecisionInstances() {},
+      loadMoveInstancesProcesses() {},
+      loadActivitiesFromFilter() { activitiesLoaded = true; },
+      cdr: { markForCheck() {} },
+    };
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ operationId, filterCriteria, step }));
+    (BatchOperationsWizardComponent.prototype as any)['loadFromSessionStorage'].call(stub);
+    sessionStorage.removeItem(SESSION_KEY);
+    return { stub, activitiesLoaded: () => activitiesLoaded };
+  }
+
+  it('suspend with single processDefinition restored → loadActivitiesFromFilter called', () => {
+    const { activitiesLoaded } = makeRestoreStub('suspend', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v1'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('activate with single processDefinition restored → loadActivitiesFromFilter called', () => {
+    const { activitiesLoaded } = makeRestoreStub('activate', [
+      { field: 'processDefinition', values: ['order-proc'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('delete-running with processDefinition restored → loadActivitiesFromFilter called', () => {
+    const { activitiesLoaded } = makeRestoreStub('delete-running', [
+      { field: 'processDefinition', values: ['order-proc'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('restore with no processDefinition → loadActivitiesFromFilter still called (emits null internally)', () => {
+    const { activitiesLoaded } = makeRestoreStub('suspend', [
+      { field: 'businessKey', values: ['ACME'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('filterCriteria is correctly restored alongside the call', () => {
+    const criteria: MultiValueFilter[] = [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v2'] },
+      { field: 'activityId', values: ['task-check'] },
+    ];
+    const { stub } = makeRestoreStub('suspend', criteria);
+    expect(stub.filterCriteria).toEqual(criteria);
+    expect(stub.selectedOperationId).toBe('suspend');
+  });
+
+});
+
+
+function buildDeleteRunningQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'delete-running',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — delete-running: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only (no active/suspended flags)', () => {
+    const result = buildDeleteRunningQuery([]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended pills → { unfinished: true } (both = default scope, no narrowing)', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill combined with processDefinitionKeyIn', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+  });
+
+  it('stateSuspended pill combined with processDefinitionIdIn', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v2'] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-v2']);
+  });
+
+});
+
+
+
+describe('BatchOperationsWizardComponent — delete-running: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying → mapped to withJobsRetrying:true in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType → mapped to incidentType in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildDeleteRunningQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildDeleteRunningQuery([{ field: 'activityId', values: ['task-review'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildDeleteRunningQuery([{ field: 'incidentId', values: ['inc-id-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateActive pill', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'incidentType', values: ['failedExternalTask'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['incidentType']).toBe('failedExternalTask');
+  });
+
+});
+
+
+
+describe('BatchOperationsWizardComponent — delete-running: state narrowing via filterCriteria pills', () => {
+
+  it('no state pill → active/suspended flags absent from query', () => {
+    const result = buildDeleteRunningQuery([]);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill alone → active: true in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill alone → suspended: true in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both state pills → neither active nor suspended flag (default scope)', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+});
+
+
+function buildDeleteFinishedQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'delete-finished',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — delete-finished: base query and Completed/Terminated narrowing', () => {
+
+  it('non-regression: no narrowing → { finished: true } only', () => {
+    const result = buildDeleteFinishedQuery([]);
+    expect(result['finished']).toBe(true);
+    expect(result['completed']).toBeUndefined();
+    expect(result['externallyTerminated']).toBeUndefined();
+  });
+
+  it('stateCompleted pill only → { completed: true }', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'stateCompleted', values: [] }]);
+    expect(result['completed']).toBe(true);
+    expect(result['finished']).toBeUndefined();
+    expect(result['externallyTerminated']).toBeUndefined();
+  });
+
+  it('stateTerminated pill only → { finished: true, internallyTerminated: true }', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'stateTerminated', values: [] }]);
+    expect(result['finished']).toBe(true);
+    expect(result['internallyTerminated']).toBe(true);
+    expect(result['externallyTerminated']).toBeUndefined();
+    expect(result['orQueries']).toBeUndefined();
+    expect(result['completed']).toBeUndefined();
+  });
+
+  it('both stateCompleted + stateTerminated pills → { finished: true } (same as default)', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'stateCompleted', values: [] },
+      { field: 'stateTerminated', values: [] },
+    ]);
+    expect(result['finished']).toBe(true);
+    expect(result['completed']).toBeUndefined();
+    expect(result['externallyTerminated']).toBeUndefined();
+  });
+
+  it('stateCompleted combined with processDefinitionKeyIn', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'stateCompleted', values: [] },
+    ]);
+    expect(result['completed']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+  });
+
+  it('stateTerminated combined with superProcessInstanceId', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'superProcessInstanceId', values: ['parent-abc'] },
+      { field: 'stateTerminated', values: [] },
+    ]);
+    expect(result['finished']).toBe(true);
+    expect(result['internallyTerminated']).toBe(true);
+    expect(result['externallyTerminated']).toBeUndefined();
+    expect(result['orQueries']).toBeUndefined();
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — delete-finished: extended criteria', () => {
+
+  it('superProcessInstanceId → mapped correctly', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'superProcessInstanceId', values: ['parent-1'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped correctly', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'subProcessInstanceId', values: ['child-2'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('incidentType → mapped correctly', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['finished']).toBe(true);
+  });
+
+  it('withJobsRetrying is excluded for delete-finished — no effect on finished query', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBeUndefined();
+    expect(result['finished']).toBe(true);
+  });
+
+  it('all direct extended criteria combined with stateCompleted narrowing', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'processDefinition', values: ['invoice'] },
+      { field: 'superProcessInstanceId', values: ['parent-x'] },
+      { field: 'subProcessInstanceId', values: ['child-y'] },
+      { field: 'incidentType', values: ['failedExternalTask'] },
+      { field: 'incidentMessage', values: ['Connection refused'] },
+      { field: 'stateCompleted', values: [] },
+    ]);
+    expect(result['completed']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['invoice']);
+    expect(result['superProcessInstanceId']).toBe('parent-x');
+    expect(result['subProcessInstanceId']).toBe('child-y');
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['incidentMessageLike']).toBe('%Connection refused%');
+  });
+
+});
+
+
+
+
+function buildRetriesJobsQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'set-retries-jobs',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only', () => {
+    const result = buildRetriesJobsQuery([]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildRetriesJobsQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildRetriesJobsQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended → { unfinished: true } (both = default, no narrowing)', () => {
+    const result = buildRetriesJobsQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying → mapped to withJobsRetrying:true in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedJob → mapped to incidentType in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedExternalTask → mapped to incidentType in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentType', values: ['failedExternalTask'] }]);
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesJobsQuery([{ field: 'activityId', values: ['task-review'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateActive narrowing', () => {
+    const result = buildRetriesJobsQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'subProcessInstanceId', values: ['child-2'] },
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'incidentType', values: ['failedJob'] },
+      { field: 'incidentMessage', values: ['connection'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['incidentMessageLike']).toBe('%connection%');
+  });
+
+});
+
+
+
+function buildRetriesExternalQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'set-retries-external',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — set-retries-external: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only', () => {
+    const result = buildRetriesExternalQuery([]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildRetriesExternalQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildRetriesExternalQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended → { unfinished: true } (both = default, no narrowing)', () => {
+    const result = buildRetriesExternalQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-retries-external: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildRetriesExternalQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildRetriesExternalQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedExternalTask → mapped to incidentType in query', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentType', values: ['failedExternalTask'] }]);
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedJob → also mapped (instance-level filter, both types valid)', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentMessage', values: ['worker timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%worker timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesExternalQuery([{ field: 'activityId', values: ['ext-task-1'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying pill is excluded from query for set-retries-external (defense-in-depth)', () => {
+    const result = buildRetriesExternalQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateSuspended narrowing', () => {
+    const result = buildRetriesExternalQuery([
+      { field: 'processDefinition', values: ['payment-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'subProcessInstanceId', values: ['child-2'] },
+      { field: 'incidentType', values: ['failedExternalTask'] },
+      { field: 'incidentMessage', values: ['connection'] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['payment-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['incidentMessageLike']).toBe('%connection%');
+    expect(result['withJobsRetrying']).toBeUndefined();
+  });
+
+  it('set-retries-jobs non-regression: withJobsRetrying still included for jobs', () => {
+    const result = buildRetriesJobsQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+  });
+
+});
+
+
+
+function buildSetVariablesQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'set-variables',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — set-variables: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only (no active/suspended flags)', () => {
+    const result = buildSetVariablesQuery([]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildSetVariablesQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildSetVariablesQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended → { unfinished: true } (both = default, no narrowing)', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill combined with processDefinitionKeyIn', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+  });
+
+  it('stateSuspended pill combined with processDefinitionIdIn', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v2'] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-v2']);
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-variables: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying → mapped to withJobsRetrying:true in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedJob → mapped to incidentType in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedExternalTask → mapped to incidentType in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentType', values: ['failedExternalTask'] }]);
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildSetVariablesQuery([{ field: 'activityId', values: ['task-review'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateActive narrowing', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'subProcessInstanceId', values: ['child-2'] },
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'incidentType', values: ['failedJob'] },
+      { field: 'incidentMessage', values: ['connection'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['incidentMessageLike']).toBe('%connection%');
+  });
+
+  it('set-retries-external non-regression: withJobsRetrying still excluded for external-tasks', () => {
+    const result = buildRetriesExternalQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBeUndefined();
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-variables: modalQueryFilter uses resolvedBatchQuery', () => {
+
+  it('resolvedBatchQuery present → returned directly (async criteria like activityId included)', () => {
+    const resolved = { unfinished: true, processInstanceIds: ['inst-a', 'inst-b'] };
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: true,
+      resolvedBatchQuery: resolved,
+      filterCriteria: [{ field: 'activityId', values: ['task-review'] }],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).toBe(resolved);
+    expect((result as any)['processInstanceIds']).toEqual(['inst-a', 'inst-b']);
+  });
+
+  it('resolvedBatchQuery null → falls back to buildHistoricQueryForBatch (sync)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: true,
+      resolvedBatchQuery: null,
+      filterCriteria: [{ field: 'stateActive', values: [] }],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).not.toBeNull();
+    expect(result!['unfinished']).toBe(true);
+    expect(result!['active']).toBe(true);
+  });
+
+  it('resolvedBatchQuery undefined → falls back to buildHistoricQueryForBatch (sync)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: true,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).not.toBeNull();
+    expect(result!['unfinished']).toBe(true);
+  });
+
+});
+
+// ─── Finished-date criteria: excluded from query for in-progress operations ─
+
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch: finishedAfter/finishedBefore excluded for in-progress operations', () => {
+  const finishedAfterDate  = '2024-01-01T00:00:00.000+0100';
+  const finishedBeforeDate = '2024-12-31T23:59:59.000+0100';
+
+  const finishedCriteria: MultiValueFilter[] = [
+    { field: 'finishedAfter',  values: [finishedAfterDate] },
+    { field: 'finishedBefore', values: [finishedBeforeDate] },
+  ];
+
+  it('suspend: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('suspend', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activate: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('activate', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['suspended']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('delete-running: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('delete-running', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('set-retries-jobs: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('set-retries-jobs', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('set-retries-external: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('set-retries-external', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('set-variables: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('set-variables', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('delete-finished: finishedAfter and finishedBefore ARE included in the query', () => {
+    const result = buildQuery('delete-finished', finishedCriteria);
+    expect(result['finishedAfter']).toBe(finishedAfterDate);
+    expect(result['finishedBefore']).toBe(finishedBeforeDate);
+    expect(result['finished']).toBe(true);
+  });
+});
+
+// ─── loadFromSessionStorage: finished-date pills stripped at the source ──────
+
+describe('BatchOperationsWizardComponent — loadFromSessionStorage strips finished-date criteria for in-progress operations', () => {
+  const SESSION_KEY = 'batchOpsWizardState';
+
+  function makeStub(operationId: string): any {
+    const stub: any = {
+      SESSION_KEY,
+      selectedOperationId: operationId,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      hasActiveCriteria: false,
+      mode: 'query',
+      selectedIds: new Set(),
+      deleteReason: '',
+      skipCustomListeners: false,
+      skipIoMappings: false,
+      retries: 1,
+      setDueDate: false,
+      retriesDueDate: '',
+      variableDefinitions: [],
+      selectedDecisionIds: new Set(),
+      decisionFilterCriteria: [],
+      decisionHasActiveCriteria: false,
+      currentStep: 1,
+    };
+    Object.defineProperty(stub, 'lockedFilterState', {
+      get: () => getLockedFilterState(stub.selectedOperationId),
+    });
+    return stub;
+  }
+
+  function loadSession(operationId: string, storedCriteria: MultiValueFilter[]): any {
+    const stub = makeStub(operationId);
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ operationId, filterCriteria: storedCriteria, step: 1 }));
+    try {
+      (BatchOperationsWizardComponent.prototype as any).loadFromSessionStorage.call(stub);
+    } finally {
+      sessionStorage.removeItem(SESSION_KEY);
+    }
+    return stub;
+  }
+
+  const finishedPills: MultiValueFilter[] = [
+    { field: 'finishedAfter',  values: ['2024-01-01T00:00:00.000+0100'] },
+    { field: 'finishedBefore', values: ['2024-12-31T23:59:59.000+0100'] },
+    { field: 'businessKey',    values: ['ORDER-1'] },
+  ];
+
+  it('suspend: strips finishedAfter and finishedBefore, keeps other criteria', () => {
+    const stub = loadSession('suspend', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('activate: strips finished-date pills', () => {
+    const stub = loadSession('activate', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('delete-running: strips finished-date pills', () => {
+    const stub = loadSession('delete-running', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('set-retries-jobs: strips finished-date pills', () => {
+    const stub = loadSession('set-retries-jobs', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('set-retries-external: strips finished-date pills', () => {
+    const stub = loadSession('set-retries-external', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('set-variables: strips finished-date pills', () => {
+    const stub = loadSession('set-variables', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('delete-finished: keeps finished-date pills', () => {
+    const stub = loadSession('delete-finished', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['finishedAfter', 'finishedBefore', 'businessKey']);
+  });
+
+  it('hasActiveCriteria is false after all criteria are stripped', () => {
+    const stub = loadSession('suspend', [{ field: 'finishedAfter', values: ['2024-01-01T00:00:00.000+0100'] }]);
+    expect(stub.filterCriteria).toHaveLength(0);
+    expect(stub.hasActiveCriteria).toBe(false);
+  });
 });

@@ -12,9 +12,10 @@ import {
   faSpinner, faPlus, faTimes, faFilter,
   faHashtag, faKey, faSitemap, faSync, faCircleDot,
   faExclamationTriangle, faCalendarAlt,
-  faPlay, faCircleStop, faUser, faGear, faCode, faTable,
+  faPlay, faPauseCircle, faCircleStop, faUser, faGear, faCode, faTable,
   faPaperPlane, faInbox, faHand, faArrowUpRightFromSquare,
-  faLayerGroup, faXmark, faSquare, faCheck, faServer, faChevronDown
+  faLayerGroup, faXmark, faSquare, faCheck, faServer, faChevronDown,
+  faLevelUpAlt, faLevelDownAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
@@ -301,7 +302,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('superProcessInstanceId')"
                           (click)="selectCriterion('superProcessInstanceId', $event)" type="button" role="menuitem">
-                    <span class="criteria-icon-wrap criteria-icon-wrap--orange"><fa-icon [icon]="faSitemap"></fa-icon></span>
+                    <span class="criteria-icon-wrap criteria-icon-wrap--purple"><fa-icon [icon]="faLevelUpAlt"></fa-icon></span>
                     <span class="criteria-option-body">
                       <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.querySuperProcessInstanceId' | translate }}</span>
                       <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.superProcessInstanceId' | translate }}</span>
@@ -309,7 +310,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('subProcessInstanceId')"
                           (click)="selectCriterion('subProcessInstanceId', $event)" type="button" role="menuitem">
-                    <span class="criteria-icon-wrap criteria-icon-wrap--orange"><fa-icon [icon]="faSitemap"></fa-icon></span>
+                    <span class="criteria-icon-wrap criteria-icon-wrap--sky"><fa-icon [icon]="faLevelDownAlt"></fa-icon></span>
                     <span class="criteria-option-body">
                       <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.querySubProcessInstanceId' | translate }}</span>
                       <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.subProcessInstanceId' | translate }}</span>
@@ -324,7 +325,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   <div class="criteria-group-label">{{ 'cockpit.modify.selectDialog.sectionState' | translate }}</div>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('active')"
                           (click)="selectCriterion('active', $event)" type="button" role="menuitem">
-                    <span class="criteria-icon-wrap criteria-icon-wrap--emerald"><fa-icon [icon]="faCircleDot"></fa-icon></span>
+                    <span class="criteria-icon-wrap criteria-icon-wrap--emerald"><fa-icon [icon]="faPlay"></fa-icon></span>
                     <span class="criteria-option-body">
                       <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.queryActive' | translate }}</span>
                       <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.active' | translate }}</span>
@@ -332,7 +333,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
                   </button>
                   <button class="criteria-option" [class.criteria-option--active]="isPillActive('suspended')"
                           (click)="selectCriterion('suspended', $event)" type="button" role="menuitem">
-                    <span class="criteria-icon-wrap criteria-icon-wrap--amber"><fa-icon [icon]="faCircleDot"></fa-icon></span>
+                    <span class="criteria-icon-wrap criteria-icon-wrap--amber"><fa-icon [icon]="faPauseCircle"></fa-icon></span>
                     <span class="criteria-option-body">
                       <span class="criteria-option-name">{{ 'cockpit.modify.selectDialog.querySuspended' | translate }}</span>
                       <span class="criteria-option-desc">{{ 'cockpit.modify.selectDialog.desc.suspended' | translate }}</span>
@@ -1124,6 +1125,8 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
     .criteria-icon-wrap--teal    { background: rgba(20,  184, 166, 0.10); color: #0d9488; }
     .criteria-icon-wrap--red     { background: rgba(220, 38,  38,  0.10); color: #dc2626; }
     .criteria-icon-wrap--indigo  { background: rgba(99,  102, 241, 0.10); color: #6366f1; }
+    .criteria-icon-wrap--purple  { background: rgba(168, 85,  247, 0.10); color: #a855f7; }
+    .criteria-icon-wrap--sky     { background: rgba(14,  165, 233, 0.10); color: #0ea5e9; }
     /* ── Criterion editor popover ───────────────────────────────────────── */
     .criterion-editor-popover {
       position: absolute;
@@ -1136,7 +1139,7 @@ const DATE_FIELDS: MoveField[] = ['startedAfter', 'startedBefore'];
       box-shadow: 0 8px 24px rgba(0,0,0,0.14);
       padding: 0.65rem 0.75rem 0.6rem;
       min-width: 260px;
-      max-width: 340px;
+      max-width: 420px;
     }
     .editor-header {
       display: flex;
@@ -1400,12 +1403,14 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
 
   faSpinner = faSpinner; faPlus = faPlus; faTimes = faTimes;
   faFilter = faFilter; faHashtag = faHashtag; faKey = faKey; faSitemap = faSitemap;
-  faSync = faSync; faCircleDot = faCircleDot; faExclamationTriangle = faExclamationTriangle;
+  faPlay = faPlay; faSync = faSync; faCircleDot = faCircleDot; faPauseCircle = faPauseCircle; faExclamationTriangle = faExclamationTriangle;
   faCalendarAlt = faCalendarAlt;
   faCode = faCode;
   faGear = faGear;
   faCheck = faCheck;
   faServer = faServer;
+  faLevelUpAlt = faLevelUpAlt;
+  faLevelDownAlt = faLevelDownAlt;
   faChevronDown = faChevronDown;
 
   readonly variableOperators = [
@@ -1629,11 +1634,11 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
       case 'instanceId':
       case 'activityId':            return this.faHashtag;
       case 'businessKey':           return this.faKey;
-      case 'superProcessInstanceId':
-      case 'subProcessInstanceId':  return this.faSitemap;
+      case 'superProcessInstanceId': return this.faLevelUpAlt;
+      case 'subProcessInstanceId':  return this.faLevelDownAlt;
       case 'withJobsRetrying':      return this.faSync;
-      case 'active':
-      case 'suspended':             return this.faCircleDot;
+      case 'active':                return this.faPlay;
+      case 'suspended':             return this.faPauseCircle;
       case 'withIncidents':
       case 'incidentId':
       case 'incidentType':
@@ -1703,7 +1708,7 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
     return this.translateService.instant('cockpit.modify.selectDialog.enterValue');
   }
 
-  dropdownMaxHeight = '340px';
+  dropdownMaxHeight = '420px';
 
   toggleCriteriaDropdown(event: Event): void {
     event.stopPropagation();
@@ -1716,7 +1721,7 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
         const btnRect = btn.getBoundingClientRect();
         const modalRect = modal.getBoundingClientRect();
         const available = modalRect.bottom - btnRect.bottom - 6 - 8;
-        this.dropdownMaxHeight = Math.min(340, Math.max(80, available)) + 'px';
+        this.dropdownMaxHeight = Math.min(420, Math.max(80, available)) + 'px';
       }
     }
     this.cdr.markForCheck();
