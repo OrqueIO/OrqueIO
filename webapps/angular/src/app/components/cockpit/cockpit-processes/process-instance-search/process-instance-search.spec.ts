@@ -3,7 +3,7 @@ import 'zone.js/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { ActivatedRoute, Router, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
@@ -1124,5 +1124,574 @@ describe('ProcessInstanceSearchComponent — pdVisibleSelectedCount counts proce
 
     expect(component.pendingProcessDefinitionKeys).toContain('proc-b');
     expect(component.pendingProcessDefinitionIds).not.toContain('proc-b:1:idb');
+  });
+});
+
+
+describe('ProcessInstanceSearchComponent — pill management', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  const realSvc = Object.create(CockpitService.prototype) as CockpitService;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should start with no active pills', () => {
+    expect(component.activePills.length).toBe(0);
+  });
+
+  it('should add withIncidents pill immediately without opening an editor', () => {
+    component.selectCriteriaType('withIncidents');
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('withIncidents');
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should not add a duplicate withIncidents pill', () => {
+    component.selectCriteriaType('withIncidents');
+    component.selectCriteriaType('withIncidents');
+    expect(component.activePills.length).toBe(1);
+  });
+
+  it('should open editor for businessKey and reset pending state', () => {
+    component.selectCriteriaType('businessKey');
+    expect(component.activeEditorType).toBe('businessKey');
+    expect(component.pendingValues.length).toBe(0);
+  });
+
+  it('should open editor for variable', () => {
+    component.selectCriteriaType('variable');
+    expect(component.activeEditorType).toBe('variable');
+  });
+
+  it('should add businessKey pill with multiple values', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001', 'BK-002'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('businessKey');
+    expect(component.activePills[0].values).toEqual(['BK-001', 'BK-002']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should not add pill when pendingValues is empty', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = [];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(0);
+  });
+
+  it('should add variable pill with all fields', () => {
+    component.selectCriteriaType('variable');
+    component.pendingVariableName = 'orderId';
+    component.pendingVariableOperator = 'eq';
+    component.pendingValues = ['1', '23'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    const pill = component.activePills[0];
+    expect(pill.field).toBe('variable');
+    expect(pill.variableName).toBe('orderId');
+    expect(pill.variableOperator).toBe('eq');
+    expect(pill.values).toEqual(['1', '23']);
+  });
+
+  it('should not add variable pill when name is empty', () => {
+    component.selectCriteriaType('variable');
+    component.pendingVariableName = '';
+    component.pendingValues = ['1'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(0);
+  });
+
+  it('should remove a pill by index', () => {
+    component.activePills = [
+      { field: 'businessKey', values: ['BK-001'] },
+      { field: 'withIncidents', values: [] },
+    ];
+    component.removePill(0);
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('withIncidents');
+  });
+
+  it('should cancel the editor without adding a pill', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    component.cancelCriterion();
+    expect(component.activePills.length).toBe(0);
+    expect(component.activeEditorType).toBeNull();
+    expect(component.pendingValues.length).toBe(0);
+  });
+
+  it('should add state pill', () => {
+    component.selectCriteriaType('state');
+    component.pendingStateValues = ['completed'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('state');
+    expect(component.activePills[0].values).toEqual(['completed']);
+  });
+
+  it('should accumulate multiple different criteria as independent pills', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+
+    component.selectCriteriaType('state');
+    component.pendingStateValues = ['active'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(2);
+    expect(component.activePills[0].field).toBe('businessKey');
+    expect(component.activePills[1].field).toBe('state');
+  });
+
+  it('should accumulate withIncidents alongside other pills', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    component.confirmCriterion();
+
+    component.selectCriteriaType('withIncidents');
+
+    expect(component.activePills.length).toBe(2);
+    expect(component.activePills[0].field).toBe('businessKey');
+    expect(component.activePills[1].field).toBe('withIncidents');
+  });
+
+  it('should confirm a 3-value variable pill (values set by child via two-way binding) and produce 3 payload variants', () => {
+    component.selectCriteriaType('variable');
+    component.pendingVariableName = 'amount';
+    component.pendingVariableOperator = 'eq';
+    component.pendingValues = ['100', '200', '300'];
+    expect(component.pendingValues).toEqual(['100', '200', '300']);
+
+    component.confirmCriterion();
+
+    expect(component.activePills.length).toBe(1);
+    const pill = component.activePills[0];
+    expect(pill.values).toEqual(['100', '200', '300']);
+    expect(pill.variableName).toBe('amount');
+    expect(component.getPillLabel(pill)).toBe('amount = 100, 200, 300');
+    expect(component.activeEditorType).toBeNull();
+    expect(component.pendingValues.length).toBe(0);
+
+    const ps = realSvc.buildPayloadVariants(component.activePills);
+    expect(ps.length).toBe(3);
+    expect(ps[0].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 100 });
+    expect(ps[1].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 200 });
+    expect(ps[2].variables[0]).toEqual({ name: 'amount', operator: 'eq', value: 300 });
+  });
+
+  describe('state multi-select', () => {
+    it('should add a state pill with two selected states', () => {
+      component.selectCriteriaType('state');
+      component.pendingStateValues = ['active', 'suspended'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].values).toEqual(['active', 'suspended']);
+      expect(component.getPillLabel(component.activePills[0])).toBe('State: Active, Suspended');
+    });
+
+    it('should not add a state pill when no state is selected (add mode)', () => {
+      component.selectCriteriaType('state');
+      component.pendingStateValues = [];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(0);
+    });
+
+    it('should remove the state pill when all states deselected and confirmed in edit mode', () => {
+      component.activePills = [{ field: 'state', values: ['active'] }];
+      component.startEditPill(0, new MouseEvent('click'));
+      component.pendingStateValues = [];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(0);
+      expect(component.editingPillIndex).toBeNull();
+      expect(component.activeEditorType).toBeNull();
+    });
+
+    it('should toggle state value on and off', () => {
+      component.selectCriteriaType('state');
+      component.toggleStateValue('active');
+      expect(component.pendingStateValues).toEqual(['active']);
+      component.toggleStateValue('active');
+      expect(component.pendingStateValues).toEqual([]);
+    });
+  });
+
+  describe('no duplicate pills', () => {
+    it('should not create a duplicate State pill — redirects to existing pill editor', () => {
+      component.selectCriteriaType('state');
+      component.pendingStateValues = ['active'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+
+      component.selectCriteriaType('state');
+      expect(component.activePills.length).toBe(1);
+      expect(component.editingPillIndex).toBe(0);
+      expect(component.activeEditorType).toBe('state');
+      expect(component.pendingStateValues).toEqual(['active']);
+    });
+
+    it('should not create a duplicate Variables pill — redirects to existing pill editor', () => {
+      component.selectCriteriaType('variables');
+      component.pendingVariableLines[0].name = 'orderId';
+      component.pendingVariableLines[0].values = ['123'];
+      component.confirmCriterion();
+      expect(component.activePills.length).toBe(1);
+
+      component.selectCriteriaType('variables');
+      expect(component.activePills.length).toBe(1);
+      expect(component.editingPillIndex).toBe(0);
+      expect(component.activeEditorType).toBe('variables');
+      expect(component.pendingVariableLines.length).toBe(1);
+      expect(component.pendingVariableLines[0].name).toBe('orderId');
+    });
+  });
+});
+
+describe('ProcessInstanceSearchComponent — pill editing', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  const realSvc = Object.create(CockpitService.prototype) as CockpitService;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should open editor pre-filled with businessKey pill values on startEditPill', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-001', 'BK-002'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.activeEditorType).toBe('businessKey');
+    expect(component.editingPillIndex).toBe(0);
+    expect(component.pendingValues).toEqual(['BK-001', 'BK-002']);
+  });
+
+  it('should open editor pre-filled with state pill values on startEditPill', () => {
+    component.activePills = [{ field: 'state', values: ['active', 'completed'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.activeEditorType).toBe('state');
+    expect(component.editingPillIndex).toBe(0);
+    expect(component.pendingStateValues).toEqual(['active', 'completed']);
+  });
+
+  it('should update the pill in place on confirmCriterion when editing', () => {
+    component.activePills = [
+      { field: 'businessKey', values: ['BK-001'] },
+      { field: 'state', values: ['active'] },
+    ];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingValues = ['BK-001', 'BK-999'];
+    component.confirmCriterion();
+
+    expect(component.activePills.length).toBe(2);
+    expect(component.activePills[0].values).toEqual(['BK-001', 'BK-999']);
+    expect(component.activePills[1].field).toBe('state');
+    expect(component.editingPillIndex).toBeNull();
+  });
+
+  it('should not add a duplicate pill when editing and confirming', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-001'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingValues = ['BK-NEW'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].values).toEqual(['BK-NEW']);
+  });
+
+  it('should leave pill unchanged on cancelCriterion when editing', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-ORIG'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingValues = ['BK-MODIFIED'];
+    component.cancelCriterion();
+    expect(component.activePills[0].values).toEqual(['BK-ORIG']);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should update state pill values on confirm when editing', () => {
+    component.activePills = [{ field: 'state', values: ['active'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingStateValues = ['active', 'suspended'];
+    component.confirmCriterion();
+    expect(component.activePills[0].values).toEqual(['active', 'suspended']);
+    expect(component.getPillLabel(component.activePills[0])).toBe('State: Active, Suspended');
+    const statePill = component.activePills[0];
+    const bodies = (realSvc as any).buildPerStateBodies([statePill], statePill, false, false);
+    expect(bodies.length).toBe(2);
+    expect(bodies[0]).toEqual({ active: true, unfinished: true, sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }] });
+    expect(bodies[1]).toEqual({ suspended: true, unfinished: true, sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }] });
+  });
+});
+
+describe('ProcessInstanceSearchComponent — click outside popover', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  const outsideClick = (comp: ProcessInstanceSearchComponent) =>
+    comp.onDocumentClick({ target: document.createElement('div') } as any as Event);
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should remove a state pill when all states are deselected and user clicks outside', () => {
+    component.activePills = [{ field: 'state', values: ['active'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingStateValues = [];
+    outsideClick(component);
+    expect(component.activePills.length).toBe(0);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should confirm a new instanceId criterion when the user clicks outside with a pending value', () => {
+    component.selectCriteriaType('instanceId');
+    component.pendingValues = ['inst-abc'];
+    outsideClick(component);
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('instanceId');
+    expect(component.activePills[0].values).toEqual(['inst-abc']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should leave a pill unchanged when the user clicks ✕ (cancel stays cancel)', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-ORIG'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingValues = ['BK-MODIFIED'];
+    component.cancelCriterion();
+    expect(component.activePills[0].values).toEqual(['BK-ORIG']);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should update a pill with new values when the user clicks outside an editing popover', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-ORIG'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingValues = ['BK-UPDATED'];
+    outsideClick(component);
+    expect(component.activePills[0].values).toEqual(['BK-UPDATED']);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+});
+
+describe('ProcessInstanceSearchComponent — Enter key shortcut', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+  let cockpitService: any;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of(MOCK_INSTANCES)),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(2)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should confirm businessKey criterion via emptyEnter (chip added then Enter on empty input)', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('businessKey');
+    expect(component.activePills[0].values).toEqual(['BK-001']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should confirm state criterion when keydown Enter is dispatched on state body', () => {
+    component.selectCriteriaType('state');
+    component.toggleStateValue('active');
+    fixture.detectChanges();
+
+    const stateBody: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body--state');
+    expect(stateBody).toBeTruthy();
+    stateBody.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('state');
+    expect(component.activePills[0].values).toEqual(['active']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should also work when editing an existing state pill via Enter', () => {
+    component.activePills = [{ field: 'state', values: ['active'] }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.toggleStateValue('completed');
+    fixture.detectChanges();
+
+    const stateBody: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body--state');
+    expect(stateBody).toBeTruthy();
+    stateBody.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills[0].values).toEqual(['active', 'completed']);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should confirm criterion when Enter pressed on body div after focus has left the chip input (blur scenario)', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    fixture.detectChanges();
+
+    const bodyDiv: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body');
+    expect(bodyDiv).toBeTruthy();
+    bodyDiv.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('businessKey');
+    expect(component.activePills[0].values).toEqual(['BK-001']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should trigger executeSearch when Enter is pressed anywhere (no popover open)', () => {
+    component.activePills = [
+      { field: 'businessKey', values: ['BK-001'] },
+      { field: 'state', values: ['active'] },
+    ];
+    fixture.detectChanges();
+
+    document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(cockpitService.searchProcessInstancesGlobal).toHaveBeenCalled();
+  });
+
+  it('should NOT trigger executeSearch when Enter is pressed while a popover is open', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001'];
+    fixture.detectChanges();
+
+    const bodyDiv: HTMLElement = fixture.nativeElement.querySelector('.editor-popover-body');
+    bodyDiv.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activeEditorType).toBeNull();
+    expect(cockpitService.searchProcessInstancesGlobal).not.toHaveBeenCalled();
   });
 });
