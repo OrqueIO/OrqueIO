@@ -116,6 +116,7 @@ describe('ProcessDetailComponent', () => {
       getHistoryUserTasksByProcessInstance: vi.fn().mockReturnValue(of([])),
       getExternalTasksByProcessInstance: vi.fn().mockReturnValue(of([])),
       getCalledProcessInstances: vi.fn().mockReturnValue(of([])),
+      getCallActivityMapping: vi.fn().mockReturnValue(of(new Map<string, string[]>())),
       suspendProcessInstance: vi.fn().mockReturnValue(of(undefined)),
       resumeProcessInstance: vi.fn().mockReturnValue(of(undefined)),
       cancelProcessInstance: vi.fn().mockReturnValue(of(undefined)),
@@ -144,7 +145,7 @@ describe('ProcessDetailComponent', () => {
         { provide: NavMenuService, useValue: navMenuService },
         {
           provide: ActivatedRoute,
-          useValue: { params: routeParams$.asObservable() },
+          useValue: { params: routeParams$.asObservable(), snapshot: { queryParams: {} } },
         },
       ],
     }).compileComponents();
