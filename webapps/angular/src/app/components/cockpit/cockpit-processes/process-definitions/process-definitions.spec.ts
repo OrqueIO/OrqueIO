@@ -204,11 +204,12 @@ describe('CockpitService.buildPayloadVariants', () => {
     expect(p.finished).toBe(true);
   });
 
-  it('should set externallyTerminated=true and finished=true for state=terminated', () => {
+  it('should set finished=true for state=terminated (routing sends terminated through stateBodyFragment, not buildPayloadVariants)', () => {
     const filters: MultiValueFilter[] = [{ field: 'state', values: ['terminated'] }];
     const [p] = realSvc.buildPayloadVariants(filters);
-    expect(p.externallyTerminated).toBe(true);
     expect(p.finished).toBe(true);
+    expect(p.externallyTerminated).toBeUndefined();
+    expect(p.internallyTerminated).toBeUndefined();
   });
 
   it('should set withIncidents=true for withIncidents filter', () => {

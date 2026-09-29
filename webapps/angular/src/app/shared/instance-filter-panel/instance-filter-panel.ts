@@ -1,5 +1,5 @@
 import {
-  Component, Input, Output, EventEmitter, OnInit,
+  Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges,
   ChangeDetectionStrategy, ChangeDetectorRef, HostListener, inject, DestroyRef
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -10,10 +10,14 @@ import {
   faPlus, faTimes, faFilter, faChevronDown, faChevronRight,
   faKey, faHashtag, faCalendarAlt, faCode,
   faExclamationTriangle, faCheck, faCircleDot,
-  faSitemap, faCodeBranch, faSquareMinus, faSquareCheck
+  faSitemap, faCodeBranch, faSquareMinus, faSquareCheck,
+  faPlay, faPauseCircle, faCircleStop, faCheckCircle, faTimesCircle, faUser, faGear, faTable, faPaperPlane,
+  faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer, faSync,
+  faLevelUpAlt, faLevelDownAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { CockpitService, MultiValueFilter, GlobalSearchField, VariableLine } from '../../services/cockpit.service';
+import { BpmnElement } from '../bpmn-viewer/bpmn-viewer';
 import { DecisionService } from '../../services/decision.service';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 import { TranslateService } from '../../i18n/translate.service';
@@ -60,10 +64,16 @@ interface ProcessDefinitionGroup {
   styleUrl: './instance-filter-panel.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InstanceFilterPanelComponent implements OnInit {
+export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   @Input() lockedState: string | null = null;
   @Input() criteriaSet: 'process' | 'decision' = 'process';
   @Input() initialPills: MultiValueFilter[] = [];
+  @Input() showExtendedCriteria = false;
+  @Input() showStateNarrowing = false;
+  @Input() showFinishedNarrowing = false;
+  @Input() finishedScope = false;
+  @Input() showWithJobsRetrying = true;
+  @Input() availableActivities: BpmnElement[] = [];
   @Output() criteriaChange = new EventEmitter<FilterPanelChange>();
 
   private cdr = inject(ChangeDetectorRef);
@@ -89,13 +99,63 @@ export class InstanceFilterPanelComponent implements OnInit {
   faSquare = faSquare;
   faSquareMinus = faSquareMinus;
   faSquareCheck = faSquareCheck;
+  faGear = faGear;
+  faServer = faServer;
+  faSync = faSync;
+  faPlay = faPlay;
+  faPauseCircle = faPauseCircle;
+  faCheckCircle = faCheckCircle;
+  faTimesCircle = faTimesCircle;
+  faLevelUpAlt = faLevelUpAlt;
+  faLevelDownAlt = faLevelDownAlt;
+
+  get bothStateNarrowingActive(): boolean {
+    return this.activePills.some(p => p.field === 'stateActive') &&
+           this.activePills.some(p => p.field === 'stateSuspended');
+  }
+
+  get bothFinishedNarrowingActive(): boolean {
+    return this.activePills.some(p => p.field === 'stateCompleted') &&
+           this.activePills.some(p => p.field === 'stateTerminated');
+  }
+
+  private readonly ACTIVITY_ICON_MAP: Record<string, { icon: any; color: string }> = {
+    'bpmn:StartEvent':             { icon: faPlay,                   color: 'var(--color-success)' },
+    'bpmn:EndEvent':               { icon: faCircleStop,             color: 'var(--color-danger)' },
+    'bpmn:UserTask':               { icon: faUser,                   color: 'var(--color-primary)' },
+    'bpmn:ServiceTask':            { icon: faGear,                   color: 'var(--color-primary)' },
+    'bpmn:ScriptTask':             { icon: faCode,                   color: 'var(--color-primary)' },
+    'bpmn:BusinessRuleTask':       { icon: faTable,                  color: 'var(--color-primary)' },
+    'bpmn:SendTask':               { icon: faPaperPlane,             color: 'var(--color-primary)' },
+    'bpmn:ReceiveTask':            { icon: faInbox,                  color: 'var(--color-primary)' },
+    'bpmn:ManualTask':             { icon: faHand,                   color: 'var(--color-primary)' },
+    'bpmn:CallActivity':           { icon: faArrowUpRightFromSquare, color: 'var(--color-primary)' },
+    'bpmn:SubProcess':             { icon: faLayerGroup,             color: 'var(--color-primary)' },
+    'bpmn:ExclusiveGateway':       { icon: faXmark,                  color: 'var(--color-warning)' },
+    'bpmn:ParallelGateway':        { icon: faPlus,                   color: 'var(--color-warning)' },
+    'bpmn:InclusiveGateway':       { icon: faPlus,                   color: 'var(--color-warning)' },
+    'bpmn:IntermediateCatchEvent': { icon: faCircleDot,              color: 'var(--text-secondary)' },
+    'bpmn:IntermediateThrowEvent': { icon: faCircleDot,              color: 'var(--text-secondary)' },
+    'bpmn:BoundaryEvent':          { icon: faCircleDot,              color: 'var(--text-secondary)' },
+  };
+
+  getActivityIcon(type: string): any {
+    return (this.ACTIVITY_ICON_MAP[type] ?? { icon: faCircleDot }).icon;
+  }
+
+  getActivityIconColor(type: string): string {
+    return (this.ACTIVITY_ICON_MAP[type] ?? { color: 'var(--text-muted)' }).color;
+  }
 
   showCriteriaDropdown = false;
   activeEditorType: GlobalSearchField | null = null;
   activePills: MultiValueFilter[] = [];
 
   pendingValues: string[] = [];
+  pendingTextValue = '';
   pendingStateValues: string[] = [];
+  activityHighlightIndex: number | null = null;
+  hoveredActivityId: string | null = null;
   pendingProcessDefinitionKeys: string[] = [];
   pendingProcessDefinitionIds: string[] = [];
   availableProcessDefinitionGroups: ProcessDefinitionGroup[] = [];
@@ -152,6 +212,32 @@ export class InstanceFilterPanelComponent implements OnInit {
     }
   }
 
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent): void {
+    if (this.activeEditorType !== 'activityId' || this.availableActivities.length === 0) return;
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      this.activityHighlightIndex = this.activityHighlightIndex === null
+        ? 0
+        : Math.min(this.activityHighlightIndex + 1, this.availableActivities.length - 1);
+      this.cdr.markForCheck();
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      this.activityHighlightIndex = this.activityHighlightIndex === null
+        ? this.availableActivities.length - 1
+        : Math.max(this.activityHighlightIndex - 1, 0);
+      this.cdr.markForCheck();
+    } else if (event.key === 'Enter' && this.activityHighlightIndex !== null) {
+      event.preventDefault();
+      const activity = this.availableActivities[this.activityHighlightIndex];
+      if (activity) {
+        this.pendingTextValue = activity.id;
+        this.activityHighlightIndex = null;
+        this.cdr.markForCheck();
+      }
+    }
+  }
+
   @HostListener('document:keydown.escape')
   onEscapeKey(): void {
     let changed = false;
@@ -173,7 +259,10 @@ export class InstanceFilterPanelComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.initialPills.length > 0) {
-      this.activePills = this.initialPills.map(p => ({ ...p, values: [...p.values] }));
+      const pills = this.initialPills.map(p => ({ ...p, values: [...p.values] }));
+      this.activePills = this.lockedState && this.lockedState !== 'finished'
+        ? pills.filter(p => p.field !== 'finishedAfter' && p.field !== 'finishedBefore')
+        : pills;
     }
     if (this.criteriaSet === 'decision') {
       this.decisionService.getDecisionDefinitions(1000)
@@ -207,6 +296,15 @@ export class InstanceFilterPanelComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    const pills = changes['initialPills'];
+    if (pills && !pills.firstChange && pills.currentValue?.length === 0) {
+      this.activePills = [];
+      this.cancelCriterion();
+      this.cdr.markForCheck();
+    }
+  }
+
   toggleCriteriaDropdown(event: Event): void {
     event.stopPropagation();
     if (this.activeEditorType || this.editingPillIndex !== null) {
@@ -228,6 +326,51 @@ export class InstanceFilterPanelComponent implements OnInit {
       return;
     }
 
+    if (type === 'withJobsRetrying') {
+      if (!this.activePills.some(p => p.field === 'withJobsRetrying')) {
+        this.activePills = [...this.activePills, { field: 'withJobsRetrying', values: [] }];
+        this.cdr.markForCheck();
+        this.emit();
+      }
+      return;
+    }
+
+    if (type === 'stateActive') {
+      if (!this.activePills.some(p => p.field === 'stateActive')) {
+        this.activePills = [...this.activePills, { field: 'stateActive', values: [] }];
+        this.cdr.markForCheck();
+        this.emit();
+      }
+      return;
+    }
+
+    if (type === 'stateSuspended') {
+      if (!this.activePills.some(p => p.field === 'stateSuspended')) {
+        this.activePills = [...this.activePills, { field: 'stateSuspended', values: [] }];
+        this.cdr.markForCheck();
+        this.emit();
+      }
+      return;
+    }
+
+    if (type === 'stateCompleted') {
+      if (!this.activePills.some(p => p.field === 'stateCompleted')) {
+        this.activePills = [...this.activePills, { field: 'stateCompleted', values: [] }];
+        this.cdr.markForCheck();
+        this.emit();
+      }
+      return;
+    }
+
+    if (type === 'stateTerminated') {
+      if (!this.activePills.some(p => p.field === 'stateTerminated')) {
+        this.activePills = [...this.activePills, { field: 'stateTerminated', values: [] }];
+        this.cdr.markForCheck();
+        this.emit();
+      }
+      return;
+    }
+
     const existingIndex = this.activePills.findIndex(p => p.field === type);
     if (existingIndex !== -1) {
       this.editingPillIndex = existingIndex;
@@ -240,6 +383,7 @@ export class InstanceFilterPanelComponent implements OnInit {
 
     this.activeEditorType = type;
     this.pendingValues = [];
+    this.pendingTextValue = '';
     this.pendingProcessDefinitionKeys = [];
     this.pendingProcessDefinitionIds = [];
     this.processDefinitionSearchText = '';
@@ -247,6 +391,7 @@ export class InstanceFilterPanelComponent implements OnInit {
     this.decisionDefinitionSearchText = '';
     this.pendingVariableOperator = 'eq';
     this.pendingDateValue = '';
+    this.activityHighlightIndex = null;
     this.pendingVariableLines = type === 'variables'
       ? [{ name: '', operator: 'eq', values: [] }]
       : [];
@@ -257,8 +402,15 @@ export class InstanceFilterPanelComponent implements OnInit {
   startEditPill(index: number, event: Event): void {
     event.stopPropagation();
     this.showCriteriaDropdown = false;
+    const field = this.activePills[index].field;
+    if (field === 'withIncidents'  || field === 'withJobsRetrying' ||
+        field === 'stateActive'    || field === 'stateSuspended' ||
+        field === 'stateCompleted' || field === 'stateTerminated') {
+      this.removePill(index);
+      return;
+    }
     this.editingPillIndex = index;
-    this.activeEditorType = this.activePills[index].field as GlobalSearchField;
+    this.activeEditorType = field as GlobalSearchField;
     if (this.activeEditorType === 'processDefinition') {
       this.processDefinitionSearchText = '';
     }
@@ -430,16 +582,26 @@ export class InstanceFilterPanelComponent implements OnInit {
 
   private populatePendingFromPill(pill: MultiValueFilter): void {
     this.pendingValues = [];
+    this.pendingTextValue = '';
     this.pendingStateValues = [];
     this.pendingProcessDefinitionKeys = [];
     this.pendingProcessDefinitionIds = [];
     this.pendingVariableLines = [];
+    this.activityHighlightIndex = null;
     switch (pill.field) {
       case 'businessKey':
       case 'instanceId':
       case 'decisionInstanceId':
       case 'processInstanceId':
         this.pendingValues = [...pill.values];
+        break;
+      case 'superProcessInstanceId':
+      case 'subProcessInstanceId':
+      case 'incidentId':
+      case 'incidentType':
+      case 'incidentMessage':
+      case 'activityId':
+        this.pendingTextValue = pill.values[0] ?? '';
         break;
       case 'state':
         this.pendingStateValues = [...pill.values];
@@ -546,6 +708,28 @@ export class InstanceFilterPanelComponent implements OnInit {
         pill = { field: 'processDefinition', values: pillValues, ...(pillIds ? { processDefinitionIds: pillIds } : {}) };
         break;
       }
+      case 'superProcessInstanceId':
+      case 'subProcessInstanceId':
+      case 'incidentId':
+      case 'incidentType':
+      case 'incidentMessage':
+      case 'activityId': {
+        const v = this.pendingTextValue.trim();
+        if (!v) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.popoverFlipped = false;
+            this.cdr.markForCheck();
+            this.emit();
+          }
+          return;
+        }
+        pill = { field: type, values: [v] };
+        break;
+      }
       case 'startedAfter':
       case 'startedBefore':
       case 'finishedAfter':
@@ -596,12 +780,18 @@ export class InstanceFilterPanelComponent implements OnInit {
     }
 
     if (pill) {
+      const prevPdPill = type === 'processDefinition'
+        ? this.activePills.find(p => p.field === 'processDefinition')
+        : undefined;
       if (this.editingPillIndex !== null) {
         const idx = this.editingPillIndex;
         this.activePills = this.activePills.map((p, i) => i === idx ? pill! : p);
         this.editingPillIndex = null;
       } else {
         this.activePills = [...this.activePills, pill];
+      }
+      if (type === 'processDefinition' && prevPdPill && !this.samePdPill(prevPdPill, pill)) {
+        this.activePills = this.activePills.filter(p => p.field !== 'activityId');
       }
       this.activeEditorType = null;
       this.pendingValues = [];
@@ -614,6 +804,7 @@ export class InstanceFilterPanelComponent implements OnInit {
   cancelCriterion(): void {
     this.activeEditorType = null;
     this.pendingValues = [];
+    this.pendingTextValue = '';
     this.pendingStateValues = [];
     this.pendingProcessDefinitionKeys = [];
     this.pendingProcessDefinitionIds = [];
@@ -621,6 +812,8 @@ export class InstanceFilterPanelComponent implements OnInit {
     this.pendingDecisionDefinitionKeys = [];
     this.decisionDefinitionSearchText = '';
     this.pendingVariableLines = [];
+    this.activityHighlightIndex = null;
+    this.hoveredActivityId = null;
     this.editingPillIndex = null;
     this.openOperatorMenuIndex = null;
     this.opMenuPosition = null;
@@ -699,6 +892,12 @@ export class InstanceFilterPanelComponent implements OnInit {
       this.openOperatorMenuIndex = null;
       this.opMenuPosition = null;
       this.cdr.markForCheck();
+    }
+  }
+
+  closeActivePillEditor(): void {
+    if (this.editingPillIndex !== null) {
+      this.cancelCriterion();
     }
   }
 
@@ -793,9 +992,18 @@ export class InstanceFilterPanelComponent implements OnInit {
   }
 
   removePill(index: number): void {
+    const removedField = this.activePills[index]?.field;
     this.activePills = this.activePills.filter((_, i) => i !== index);
+    if (removedField === 'processDefinition') {
+      this.activePills = this.activePills.filter(p => p.field !== 'activityId');
+    }
     this.cdr.markForCheck();
     this.emit();
+  }
+
+  private samePdPill(a: MultiValueFilter, b: MultiValueFilter): boolean {
+    return JSON.stringify([...(a.values ?? [])].sort()) === JSON.stringify([...(b.values ?? [])].sort())
+        && JSON.stringify([...(a.processDefinitionIds ?? [])].sort()) === JSON.stringify([...(b.processDefinitionIds ?? [])].sort());
   }
 
   onCaseOptionChange(): void {
@@ -815,7 +1023,12 @@ export class InstanceFilterPanelComponent implements OnInit {
     switch (pill.field) {
       case 'businessKey':    return t('cockpit.processes.globalSearch.pill.businessKey',  { value: pill.values.join(', ') });
       case 'instanceId':     return t('cockpit.processes.globalSearch.pill.instanceId',   { value: pill.values.join(', ') });
-      case 'withIncidents':  return t('cockpit.processes.globalSearch.pill.withIncidents');
+      case 'withIncidents':     return t('cockpit.processes.globalSearch.pill.withIncidents');
+      case 'withJobsRetrying':  return t('cockpit.processes.globalSearch.pill.withJobsRetrying');
+      case 'stateActive':       return t('cockpit.processes.globalSearch.pill.stateActive');
+      case 'stateSuspended':    return t('cockpit.processes.globalSearch.pill.stateSuspended');
+      case 'stateCompleted':    return t('cockpit.processes.globalSearch.pill.stateCompleted');
+      case 'stateTerminated':   return t('cockpit.processes.globalSearch.pill.stateTerminated');
       case 'processDefinition': {
         let labels: string[];
         if (pill.processDefinitionIds?.length) {
@@ -853,6 +1066,12 @@ export class InstanceFilterPanelComponent implements OnInit {
         const n = pill.variableLines?.filter(l => l.variableName).length ?? 0;
         return t('cockpit.processes.globalSearch.pill.variables', { count: String(n) });
       }
+      case 'superProcessInstanceId': return t('cockpit.processes.globalSearch.pill.superProcessInstanceId', { value: pill.values[0] ?? '' });
+      case 'subProcessInstanceId':   return t('cockpit.processes.globalSearch.pill.subProcessInstanceId',   { value: pill.values[0] ?? '' });
+      case 'incidentId':             return t('cockpit.processes.globalSearch.pill.incidentId',             { value: pill.values[0] ?? '' });
+      case 'incidentType':           return t('cockpit.processes.globalSearch.pill.incidentType',           { value: pill.values[0] ?? '' });
+      case 'incidentMessage':        return t('cockpit.processes.globalSearch.pill.incidentMessage',        { value: pill.values[0] ?? '' });
+      case 'activityId':             return t('cockpit.processes.globalSearch.pill.activityId',             { value: pill.values[0] ?? '' });
       default: return '';
     }
   }
@@ -864,12 +1083,23 @@ export class InstanceFilterPanelComponent implements OnInit {
       case 'decisionInstanceId':                             return this.faHashtag;
       case 'processInstanceId':                              return this.faKey;
       case 'withIncidents':                                  return this.faExclamationTriangle;
+      case 'withJobsRetrying':                               return this.faSync;
+      case 'stateActive':                                    return this.faPlay;
+      case 'stateSuspended':                                 return this.faPauseCircle;
+      case 'stateCompleted':                                 return this.faCheckCircle;
+      case 'stateTerminated':                                return this.faTimesCircle;
       case 'processDefinition':
       case 'decisionDefinition':                             return this.faSitemap;
       case 'startedAfter': case 'startedBefore':
       case 'finishedAfter': case 'finishedBefore':
       case 'evaluatedAfter': case 'evaluatedBefore':         return this.faCalendarAlt;
       case 'variables': case 'variable':                     return this.faCode;
+      case 'superProcessInstanceId':                         return this.faLevelUpAlt;
+      case 'subProcessInstanceId':                           return this.faLevelDownAlt;
+      case 'incidentId':
+      case 'incidentType':
+      case 'incidentMessage':                                return this.faExclamationTriangle;
+      case 'activityId':                                     return this.faCircleDot;
       default:                                               return this.faFilter;
     }
   }
