@@ -2018,3 +2018,334 @@ describe('ProcessInstanceSearchComponent — grouped variables criterion', () =>
     expect(popoverEl.classList.contains('criterion-editor-popover--variables')).toBe(true);
   });
 });
+
+describe('ProcessInstanceSearchComponent — variableConflicts getter', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should return no conflict when valid range: gteq 2 and lt 100', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'amount';
+    component.pendingVariableLines[0].operator = 'gteq';
+    component.pendingVariableLines[0].values = ['2'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'amount';
+    component.pendingVariableLines[1].operator = 'lt';
+    component.pendingVariableLines[1].values = ['100'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(0);
+  });
+
+  it('should return no conflicts when two lines share the same name AND same operator', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'orderId';
+    component.pendingVariableLines[0].operator = 'eq';
+    component.pendingVariableLines[0].values = ['1'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'orderId';
+    component.pendingVariableLines[1].operator = 'eq';
+    component.pendingVariableLines[1].values = ['2'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(0);
+  });
+
+  it('should return impossible conflict when gteq 10 and lteq 5', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'score';
+    component.pendingVariableLines[0].operator = 'gteq';
+    component.pendingVariableLines[0].values = ['10'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'score';
+    component.pendingVariableLines[1].operator = 'lteq';
+    component.pendingVariableLines[1].values = ['5'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(1);
+    expect(conflicts[0].name).toBe('score');
+    expect(conflicts[0].type).toBe('impossible');
+    expect(conflicts[0].detail).toContain('≥ 10');
+    expect(conflicts[0].detail).toContain('≤ 5');
+  });
+
+  it('should return impossible conflict when gt 5 and lt 5 (strict bounds exclude each other)', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'qty';
+    component.pendingVariableLines[0].operator = 'gt';
+    component.pendingVariableLines[0].values = ['5'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'qty';
+    component.pendingVariableLines[1].operator = 'lt';
+    component.pendingVariableLines[1].values = ['5'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(1);
+    expect(conflicts[0].type).toBe('impossible');
+  });
+
+  it('should return generic conflict when like operator is involved', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'label';
+    component.pendingVariableLines[0].operator = 'like';
+    component.pendingVariableLines[0].values = ['foo'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'label';
+    component.pendingVariableLines[1].operator = 'eq';
+    component.pendingVariableLines[1].values = ['bar'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(1);
+    expect(conflicts[0].name).toBe('label');
+    expect(conflicts[0].type).toBe('generic');
+  });
+
+  it('should return generic conflict when value is non-numeric for a comparison operator', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'invoiceNumber';
+    component.pendingVariableLines[0].operator = 'gteq';
+    component.pendingVariableLines[0].values = ['tg'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'invoiceNumber';
+    component.pendingVariableLines[1].operator = 'lt';
+    component.pendingVariableLines[1].values = ['100'];
+    const conflicts = component.variableConflicts;
+    expect(conflicts.length).toBe(1);
+    expect(conflicts[0].type).toBe('generic');
+  });
+});
+
+describe('ProcessInstanceSearchComponent — operator dropdown — custom single-select', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('isMultiValueOperator returns false for comparison operators (>, ≥, <, ≤)', () => {
+    expect(component.isMultiValueOperator('gt')).toBe(false);
+    expect(component.isMultiValueOperator('gteq')).toBe(false);
+    expect(component.isMultiValueOperator('lt')).toBe(false);
+    expect(component.isMultiValueOperator('lteq')).toBe(false);
+  });
+
+  it('isMultiValueOperator returns true for eq, neq, like', () => {
+    expect(component.isMultiValueOperator('eq')).toBe(true);
+    expect(component.isMultiValueOperator('neq')).toBe(true);
+    expect(component.isMultiValueOperator('like')).toBe(true);
+  });
+
+  it('switching eq→gt with 2 chips keeps only the first value', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].operator = 'eq';
+    component.pendingVariableLines[0].values = ['alpha', 'beta'];
+    component.selectOperator(0, 'gt');
+    expect(component.pendingVariableLines[0].operator).toBe('gt');
+    expect(component.pendingVariableLines[0].values).toEqual(['alpha']);
+  });
+
+  it('switching gt→eq with a single value preserves the value as a chip', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].operator = 'gt';
+    component.pendingVariableLines[0].values = ['42'];
+    component.selectOperator(0, 'eq');
+    expect(component.pendingVariableLines[0].operator).toBe('eq');
+    expect(component.pendingVariableLines[0].values).toEqual(['42']);
+  });
+
+  it('variable-like-hint appears when operator is like and disappears when changed', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'like');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.variable-like-hint')).toBeTruthy();
+
+    component.selectOperator(0, 'eq');
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.variable-like-hint')).toBeNull();
+  });
+
+  it('opening the operator menu renders all 7 operator rows (none clipped by overflow)', () => {
+    component.selectCriteriaType('variables');
+    fixture.detectChanges();
+    const stubTrigger = document.createElement('button');
+    component.toggleOperatorMenu(0, stubTrigger);
+    fixture.detectChanges();
+    const rows = fixture.nativeElement.querySelectorAll('.op-menu-row');
+    expect(rows.length).toBe(7);
+    const symbols = Array.from(rows as NodeListOf<HTMLElement>).map(
+      r => r.querySelector('.op-menu-symbol')?.textContent?.trim()
+    );
+    expect(symbols).toEqual(['=', '≠', '>', '≥', '<', '≤', '~']);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — comparison value validation', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('isComparisonValueInvalid returns true for gteq with non-numeric value', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gteq');
+    component.pendingVariableLines[0].values = ['tg'];
+    expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(true);
+  });
+
+  it('isComparisonValueInvalid returns false for gteq with a valid number', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gteq');
+    component.pendingVariableLines[0].values = ['42'];
+    expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(false);
+  });
+
+  it('isComparisonValueInvalid returns false for eq with non-numeric value (multi-value op)', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].operator = 'eq';
+    component.pendingVariableLines[0].values = ['tg'];
+    expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(false);
+  });
+
+  it('isComparisonValueInvalid returns false when value is empty (not yet entered)', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gt');
+    component.pendingVariableLines[0].values = [];
+    expect(component.isComparisonValueInvalid(component.pendingVariableLines[0])).toBe(false);
+  });
+
+  it('hasInvalidVariableValues is true when any comparison line has non-numeric value', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gteq');
+    component.pendingVariableLines[0].name = 'invoiceNumber';
+    component.pendingVariableLines[0].values = ['tg'];
+    expect(component.hasInvalidVariableValues).toBe(true);
+  });
+
+  it('confirm button is disabled when a comparison line has a non-numeric value', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gteq');
+    component.pendingVariableLines[0].name = 'invoiceNumber';
+    component.pendingVariableLines[0].values = ['tg'];
+    fixture.detectChanges();
+    const confirmBtn = fixture.nativeElement.querySelector('.btn-editor-confirm-icon');
+    expect(confirmBtn.disabled).toBe(true);
+  });
+
+  it('variable-value-error message is shown in the DOM when value is non-numeric for comparison op', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gt');
+    component.pendingVariableLines[0].name = 'amount';
+    component.pendingVariableLines[0].values = ['abc'];
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.variable-value-error')).toBeTruthy();
+  });
+
+  it('variable-value-error message disappears when value is corrected to a number', () => {
+    component.selectCriteriaType('variables');
+    component.selectOperator(0, 'gt');
+    component.pendingVariableLines[0].name = 'amount';
+    component.pendingVariableLines[0].values = ['abc'];
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.variable-value-error')).toBeTruthy();
+
+    const fakeEvt = { target: { value: '100' } } as unknown as Event;
+    component.onVariableLineSingleValueChange(0, fakeEvt);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('.variable-value-error')).toBeNull();
+  });
+});
