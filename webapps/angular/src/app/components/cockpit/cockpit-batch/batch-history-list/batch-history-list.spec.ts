@@ -1,8 +1,10 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { describe, it, expect, beforeAll, beforeEach } from 'vitest';
 import { of } from 'rxjs';
+import { TooltipDirective } from '../../../../shared/tooltip/tooltip.directive';
 
 import { initTestEnvironment } from '../../../../testing/test-utils';
 import { BatchHistoryListComponent } from './batch-history-list';
@@ -66,15 +68,15 @@ describe('BatchHistoryListComponent — DOM rendering', () => {
     await fixture.whenStable();
     fixture.detectChanges();
 
-    const el: HTMLElement = fixture.nativeElement;
+    const linkDebug = fixture.debugElement.query(By.css('.batch-link'));
+    const linkDir = linkDebug.injector.get(TooltipDirective);
+    expect(linkDir.tooltipText, 'batch-link must expose full id as tooltip').toBe('hist-uuid-full-5678');
+    expect(linkDir.tooltipOnlyIfTruncated, 'batch-link tooltip must be conditional on truncation').toBe(true);
 
-    const link = el.querySelector('.batch-link');
-    expect(link?.getAttribute('ng-reflect-app-tooltip'), 'batch-link must expose full id as tooltip').toBe('hist-uuid-full-5678');
-    expect(link?.getAttribute('ng-reflect-tooltip-only-if-truncated'), 'batch-link tooltip must be conditional on truncation').toBe('true');
-
-    const typeCell = el.querySelector('.batch-type');
-    expect(typeCell?.getAttribute('ng-reflect-app-tooltip'), 'batch-type must expose full type as tooltip').toBe('aHistoryTypeLong');
-    expect(typeCell?.getAttribute('ng-reflect-tooltip-only-if-truncated'), 'batch-type tooltip must be conditional on truncation').toBe('true');
+    const typeCellDebug = fixture.debugElement.query(By.css('.batch-type'));
+    const typeCellDir = typeCellDebug.injector.get(TooltipDirective);
+    expect(typeCellDir.tooltipText, 'batch-type must expose full type as tooltip').toBe('aHistoryTypeLong');
+    expect(typeCellDir.tooltipOnlyIfTruncated, 'batch-type tooltip must be conditional on truncation').toBe(true);
   });
 });
 

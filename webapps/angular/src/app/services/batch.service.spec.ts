@@ -28,21 +28,14 @@ describe('BatchService — /job pagination params', () => {
     service.getFailedJobs('job-def-1', { firstResult: 0, maxResults: 10 }).subscribe();
 
     const req = http.expectOne(r => r.url === `${base}/job`);
-    expect(req.request.method).toBe('POST');
+    expect(req.request.method).toBe('GET');
 
-    // Pagination must be in URL params
+    // All params must be in URL (GET has no body)
     expect(req.request.params.get('firstResult')).toBe('0');
     expect(req.request.params.get('maxResults')).toBe('10');
-
-    // Pagination must NOT appear in the request body
-    const body = req.request.body as Record<string, unknown>;
-    expect(body).not.toHaveProperty('firstResult');
-    expect(body).not.toHaveProperty('maxResults');
-
-    // Required filter fields must remain in body
-    expect(body['jobDefinitionId']).toBe('job-def-1');
-    expect(body['withException']).toBe(true);
-    expect(body['noRetriesLeft']).toBe(true);
+    expect(req.request.params.get('jobDefinitionId')).toBe('job-def-1');
+    expect(req.request.params.get('noRetriesLeft')).toBe('true');
+    expect(req.request.body).toBeNull();
 
     req.flush([]);
   });

@@ -117,8 +117,7 @@ describe('BatchEffects.detectBatchCompletion$', () => {
   });
 });
 
-───────────────────────────────────────────────────────────────────────────
-describe('BatchEffects.loadFailedJobs$ — exhaustMap behaviour', () => {
+describe('BatchEffects.loadFailedJobs$ — switchMap: last call wins', () => {
   beforeAll(() => initTestEnvironment());
 
   let actionsSubject: Subject<Action>;
@@ -164,18 +163,63 @@ describe('BatchEffects.loadFailedJobs$ — exhaustMap behaviour', () => {
     );
   });
 
-  it('ignores a second loadFailedJobs while the first is still in-flight (exhaustMap)', () => {
-    getFailedJobsSpy.mockReturnValue(NEVER);
-    getFailedJobsCountSpy.mockReturnValue(of(0));
+  it('a second loadFailedJobs before the first resolves cancels it — switchMap: last call wins', () => {
+    // The original test assumed exhaustMap (spy called once, second action ignored while
+    // first is in-flight). The effect uses switchMap: a new action unsubscribes from the
+    // previous inner Observable immediately and starts a fresh request.
+    const slowA = new Subject<any[]>();
+    const jobB = { id: 'job-b', exceptionMessage: 'err' } as any;
+
+    getFailedJobsSpy
+      .mockReturnValueOnce(slowA.asObservable()) // A: stays in-flight (never auto-completes)
+      .mockReturnValueOnce(of([jobB]));          // B: completes synchronously
+    getFailedJobsCountSpy.mockReturnValue(of(1));
+
+    const dispatched: Action[] = [];
+    effects.loadFailedJobs$.subscribe(a => dispatched.push(a));
+
+    actionsSubject.next(BatchActions.loadFailedJobs({ jobDefinitionId: 'jd-a' }));
+    // A is in-flight; switchMap subscribed to slowA
+    actionsSubject.next(BatchActions.loadFailedJobs({ jobDefinitionId: 'jd-b' }));
+    // switchMap unsubscribes from slowA and starts B immediately
+
+    expect(getFailedJobsSpy).toHaveBeenCalledTimes(2); // both requests were started
+    expect(dispatched).toHaveLength(1);                // only B produced a success action
+    expect(dispatched[0]).toEqual(
+      BatchActions.loadFailedJobsSuccess({ jobs: [jobB], count: 1 })
+    );
+
+    // Late emission from cancelled A has no effect (its observable was unsubscribed)
+    slowA.next([{ id: 'job-a' } as any]);
+    expect(dispatched).toHaveLength(1);
+  });
+
+  it('setJobsPage while a load is in-flight cancels the load and fetches the new page', () => {
+    // switchMap also applies when pagination or sorting actions arrive during a load,
+    // which is the primary use-case for this operator choice.
+    const slowFirstPage = new Subject<any[]>();
+    const jobPage2 = { id: 'job-p2', exceptionMessage: 'err' } as any;
+
+    getFailedJobsSpy
+      .mockReturnValueOnce(slowFirstPage.asObservable())
+      .mockReturnValueOnce(of([jobPage2]));
+    getFailedJobsCountSpy.mockReturnValue(of(1));
 
     const dispatched: Action[] = [];
     effects.loadFailedJobs$.subscribe(a => dispatched.push(a));
 
     actionsSubject.next(BatchActions.loadFailedJobs({ jobDefinitionId: 'jd1' }));
-    actionsSubject.next(BatchActions.loadFailedJobs({ jobDefinitionId: 'jd1' }));
+    actionsSubject.next(BatchActions.setJobsPage({ page: 2 }));
 
-    expect(getFailedJobsSpy).toHaveBeenCalledTimes(1);
-    expect(dispatched).toHaveLength(0);
+    expect(getFailedJobsSpy).toHaveBeenCalledTimes(2);
+    expect(dispatched).toHaveLength(1);
+    expect(dispatched[0]).toEqual(
+      BatchActions.loadFailedJobsSuccess({ jobs: [jobPage2], count: 1 })
+    );
+
+    // Late emission from cancelled first-page load has no effect
+    slowFirstPage.next([{ id: 'job-p1' } as any]);
+    expect(dispatched).toHaveLength(1);
   });
 
   it('dispatches loadFailedJobsFailure on HTTP error', () => {
@@ -194,7 +238,7 @@ describe('BatchEffects.loadFailedJobs$ — exhaustMap behaviour', () => {
     );
   });
 
-  it('accepts a new loadFailedJobs after the previous one completes', () => {
+  it('accepts a new loadFailedJobs after the previous one completes (sequential, no overlap)', () => {
     const mockJob = { id: 'job-1', exceptionMessage: 'err' } as any;
     getFailedJobsSpy.mockReturnValue(of([mockJob]));
     getFailedJobsCountSpy.mockReturnValue(of(1));
@@ -203,7 +247,7 @@ describe('BatchEffects.loadFailedJobs$ — exhaustMap behaviour', () => {
     effects.loadFailedJobs$.subscribe(a => dispatched.push(a));
 
     actionsSubject.next(BatchActions.loadFailedJobs({ jobDefinitionId: 'jd1' }));
-    // First request completed synchronously (of()), so exhaustMap is free again.
+    // First request completed synchronously (of()), so switchMap is free.
     actionsSubject.next(BatchActions.loadFailedJobs({ jobDefinitionId: 'jd1' }));
 
     expect(getFailedJobsSpy).toHaveBeenCalledTimes(2);

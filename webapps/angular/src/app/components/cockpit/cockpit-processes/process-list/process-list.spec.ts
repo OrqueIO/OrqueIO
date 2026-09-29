@@ -75,7 +75,7 @@ describe('ProcessListComponent', () => {
         { provide: NavMenuService, useValue: navMenuService },
         {
           provide: ActivatedRoute,
-          useValue: { params: routeParams$.asObservable() },
+          useValue: { params: routeParams$.asObservable(), snapshot: { queryParams: {} } },
         },
       ],
     }).compileComponents();
