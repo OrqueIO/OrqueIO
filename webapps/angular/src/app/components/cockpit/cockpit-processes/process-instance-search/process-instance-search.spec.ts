@@ -3103,3 +3103,109 @@ describe('ProcessInstanceSearchComponent — extractVersionNumber', () => {
     expect(component.extractVersionNumber('key:notANumber:id')).toBeNull();
   });
 });
+
+
+describe('ProcessInstanceSearchComponent — URL and localStorage persistence', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+  let router: Router;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+    router = TestBed.inject(Router);
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(router, 'navigate').mockResolvedValue(true);
+    localStorage.removeItem('globalSearchPreferences');
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should write pills as JSON criteria query param when a criterion is confirmed', () => {
+    component.selectCriteriaType('businessKey');
+    component.pendingValues = ['BK-001', 'BK-002'];
+    component.confirmCriterion();
+
+    component.selectCriteriaType('state');
+    component.toggleStateValue('active');
+    component.toggleStateValue('completed');
+    component.confirmCriterion();
+
+    const calls = (router.navigate as ReturnType<typeof vi.spyOn>).mock.calls;
+    const lastArgs = calls[calls.length - 1];
+    const pills = JSON.parse(lastArgs[1].queryParams.criteria);
+    expect(pills).toHaveLength(2);
+    expect(pills[0]).toMatchObject({ field: 'businessKey', values: ['BK-001', 'BK-002'] });
+    expect(pills[1]).toMatchObject({ field: 'state', values: ['active', 'completed'] });
+    expect(lastArgs[1].replaceUrl).toBe(true);
+    expect(lastArgs[1].queryParamsHandling).toBe('merge');
+  });
+
+  it('should set criteria to null in URL when clearSearch is called', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    component.clearSearch();
+
+    const calls = (router.navigate as ReturnType<typeof vi.spyOn>).mock.calls;
+    const lastArgs = calls[calls.length - 1];
+    expect(lastArgs[1].queryParams.criteria).toBeNull();
+  });
+
+  it('should remove a pill from the URL when removePill is called', () => {
+    component.activePills = [
+      { field: 'businessKey', values: ['BK-001'] },
+      { field: 'state', values: ['active'] },
+    ];
+    component.removePill(0);
+
+    const calls = (router.navigate as ReturnType<typeof vi.spyOn>).mock.calls;
+    const lastArgs = calls[calls.length - 1];
+    const pills = JSON.parse(lastArgs[1].queryParams.criteria);
+    expect(pills).toHaveLength(1);
+    expect(pills[0].field).toBe('state');
+  });
+
+  it('should persist page size in localStorage when onSearchPageSizeChange is called', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    component.searchPageSize = 50;
+    component.onSearchPageSizeChange();
+
+    const saved = JSON.parse(localStorage.getItem('globalSearchPreferences')!);
+    expect(saved.pageSize).toBe(50);
+  });
+
+  it('should restore page size from localStorage when a new component instance is created', () => {
+    localStorage.setItem('globalSearchPreferences', JSON.stringify({ pageSize: 100 }));
+
+    const fixture2 = TestBed.createComponent(ProcessInstanceSearchComponent);
+    fixture2.detectChanges();
+
+    expect(fixture2.componentInstance.searchPageSize).toBe(100);
+    fixture2.destroy();
+  });
+});
