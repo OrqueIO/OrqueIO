@@ -16,6 +16,8 @@ import {
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { initTestEnvironment } from '../../../../testing/test-utils';
+import { By } from '@angular/platform-browser';
+import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 
 const TEST_TRANSLATIONS: Record<string, string> = {
   'cockpit.processes.tabs.definitions': 'Definitions',
@@ -1693,5 +1695,326 @@ describe('ProcessInstanceSearchComponent — Enter key shortcut', () => {
     expect(component.activePills.length).toBe(1);
     expect(component.activeEditorType).toBeNull();
     expect(cockpitService.searchProcessInstancesGlobal).not.toHaveBeenCalled();
+  });
+});
+
+describe('ProcessInstanceSearchComponent — Variables popover — keyboard & click-outside behavior', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  const outsideClick = (comp: ProcessInstanceSearchComponent) =>
+    comp.onDocumentClick({ target: document.createElement('div') } as any as Event);
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should create a Variables pill when clicking outside the open popover with a valid line', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'amount';
+    component.pendingVariableLines[0].operator = 'eq';
+    component.pendingVariableLines[0].values = ['100'];
+
+    outsideClick(component);
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('variables');
+    expect(component.activePills[0].variableLines).toHaveLength(1);
+    expect(component.activePills[0].variableLines![0].variableName).toBe('amount');
+    expect(component.activePills[0].variableLines![0].values).toEqual(['100']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should confirm Variables criterion when Enter is pressed in a name input (2 valid lines)', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'price';
+    component.pendingVariableLines[0].values = ['50'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'qty';
+    component.pendingVariableLines[1].values = ['10'];
+    fixture.detectChanges();
+
+    const nameInput: HTMLElement = fixture.nativeElement.querySelector('.editor-input--name');
+    nameInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('variables');
+    expect(component.activePills[0].variableLines).toHaveLength(2);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should flush chip currentInput to values when clicking outside (blur fires before click)', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'tag';
+    fixture.detectChanges();
+
+    const chipDe = fixture.debugElement.query(By.directive(MultiValueChipInputComponent));
+    const chipComp = chipDe.componentInstance as MultiValueChipInputComponent;
+    chipComp.currentInput = 'pending-value';
+
+    chipComp.onBlur();
+
+    outsideClick(component);
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].variableLines![0].values).toContain('pending-value');
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('should not modify an existing Variables pill when ✕ is clicked after editing', () => {
+    component.activePills = [{
+      field: 'variables',
+      values: [],
+      variableLines: [{ variableName: 'amount', variableOperator: 'eq', values: ['500'] }]
+    }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingVariableLines[0].values = ['999'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'qty';
+    component.pendingVariableLines[1].values = ['5'];
+
+    component.cancelCriterion();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].variableLines).toHaveLength(1);
+    expect(component.activePills[0].variableLines![0].values).toEqual(['500']);
+    expect(component.editingPillIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+});
+
+describe('ProcessInstanceSearchComponent — Variables popover — Enter key edge cases', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should create a chip and keep the popover open when Enter is pressed in a chip input with text', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'amount';
+    fixture.detectChanges();
+
+    const chipDe = fixture.debugElement.query(By.directive(MultiValueChipInputComponent));
+    const chipComp = chipDe.componentInstance as MultiValueChipInputComponent;
+    chipComp.currentInput = 'hello';
+
+    chipComp.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.activeEditorType).toBe('variables');
+    expect(chipComp.values).toContain('hello');
+    expect(component.activePills.length).toBe(0);
+  });
+
+  it('should confirm criterion when Enter is pressed with focus outside the Variables popover (empty area click)', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'amount';
+    component.pendingVariableLines[0].values = ['100'];
+    fixture.detectChanges();
+
+    document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('variables');
+    expect(component.activeEditorType).toBeNull();
+  });
+});
+
+describe('ProcessInstanceSearchComponent — grouped variables criterion', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should create a single Variables (2) pill when 2 variables are added in the same popover', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'orderId';
+    component.pendingVariableLines[0].values = ['123'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'status';
+    component.pendingVariableLines[1].values = ['active'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('variables');
+    expect(component.getPillLabel(component.activePills[0])).toBe('Variables (2)');
+  });
+
+  it('should add new empty lines without closing the popover when addVariableLine is called twice', () => {
+    component.selectCriteriaType('variables');
+    expect(component.pendingVariableLines.length).toBe(1);
+    component.addVariableLine();
+    component.addVariableLine();
+    expect(component.pendingVariableLines.length).toBe(3);
+    expect(component.pendingVariableLines[1].name).toBe('');
+    expect(component.pendingVariableLines[2].name).toBe('');
+    expect(component.activeEditorType).toBe('variables');
+  });
+
+  it('should remove only the targeted line when removeVariableLine is called', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'orderId';
+    component.pendingVariableLines[0].values = ['123'];
+    component.addVariableLine();
+    component.pendingVariableLines[1].name = 'status';
+    component.pendingVariableLines[1].values = ['active'];
+    component.addVariableLine();
+    component.pendingVariableLines[2].name = 'amount';
+    component.pendingVariableLines[2].values = ['42'];
+    component.removeVariableLine(1);
+    expect(component.pendingVariableLines.length).toBe(2);
+    expect(component.pendingVariableLines[0].name).toBe('orderId');
+    expect(component.pendingVariableLines[1].name).toBe('amount');
+  });
+
+  it('should ignore empty lines when confirming — only valid lines are stored', () => {
+    component.selectCriteriaType('variables');
+    component.pendingVariableLines[0].name = 'orderId';
+    component.pendingVariableLines[0].values = ['123'];
+    component.addVariableLine();
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].variableLines?.length).toBe(1);
+    expect(component.activePills[0].variableLines?.[0].variableName).toBe('orderId');
+  });
+
+  it('should remove the Variables pill entirely when all lines are cleared then confirmed', () => {
+    component.activePills = [{
+      field: 'variables', values: [],
+      variableLines: [{ variableName: 'orderId', variableOperator: 'eq', values: ['123'] }]
+    }];
+    component.startEditPill(0, new MouseEvent('click'));
+    component.pendingVariableLines = [];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(0);
+    expect(component.editingPillIndex).toBeNull();
+  });
+
+  it('should reopen pre-filled with all variable lines when an existing Variables pill is clicked', () => {
+    component.activePills = [{
+      field: 'variables', values: [],
+      variableLines: [
+        { variableName: 'orderId', variableOperator: 'eq', values: ['123'] },
+        { variableName: 'status', variableOperator: 'like', values: ['act'] }
+      ]
+    }];
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.editingPillIndex).toBe(0);
+    expect(component.activeEditorType).toBe('variables');
+    expect(component.pendingVariableLines.length).toBe(2);
+    expect(component.pendingVariableLines[0].name).toBe('orderId');
+    expect(component.pendingVariableLines[0].values).toEqual(['123']);
+    expect(component.pendingVariableLines[1].name).toBe('status');
+    expect(component.pendingVariableLines[1].operator).toBe('like');
+    component.pendingVariableLines[0].values = ['456'];
+    component.confirmCriterion();
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].variableLines?.[0].values).toEqual(['456']);
+  });
+
+  it('should apply criterion-editor-popover--variables class to the popover when variables editor is open', () => {
+    fixture.detectChanges();
+    component.selectCriteriaType('variables');
+    fixture.detectChanges();
+    const popoverEl = fixture.nativeElement.querySelector('.criterion-editor-popover');
+    expect(popoverEl).toBeTruthy();
+    expect(popoverEl.classList.contains('criterion-editor-popover--variables')).toBe(true);
   });
 });
