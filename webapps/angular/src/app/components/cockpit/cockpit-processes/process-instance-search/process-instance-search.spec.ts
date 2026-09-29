@@ -2697,3 +2697,409 @@ describe('ProcessInstanceSearchComponent — incidentsWithTerminalStateConflict'
     expect(component.incidentsWithTerminalStateConflict).toBe(false);
   });
 });
+
+
+describe('ProcessInstanceSearchComponent — search loading state', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of(MOCK_INSTANCES)),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(2)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should set searchLoading to false and show results after executeSearch resolves, without extra user interaction', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    fixture.detectChanges();
+
+    component.executeSearch();
+    fixture.detectChanges();
+
+    expect(component.searchLoading).toBe(false);
+    expect(component.searchResults.length).toBeGreaterThan(0);
+
+    const loadingEl: HTMLElement | null = fixture.nativeElement.querySelector('.loading-state');
+    expect(loadingEl).toBeNull();
+  });
+});
+
+describe('ProcessInstanceSearchComponent — executeSearch (category B)', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+  let cockpitService: any;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of(MOCK_INSTANCES)),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(2)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should not execute search when there are no active pills', () => {
+    component.activePills = [];
+    component.executeSearch();
+    expect(cockpitService.searchProcessInstancesGlobal).not.toHaveBeenCalled();
+    expect(component.searchExecuted).toBe(false);
+  });
+
+  it('should mark searchExecuted=true and call the service', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    component.executeSearch();
+    expect(component.searchExecuted).toBe(true);
+    expect(cockpitService.searchProcessInstancesGlobal).toHaveBeenCalled();
+    expect(cockpitService.searchProcessInstancesGlobalCount).toHaveBeenCalled();
+  });
+
+  it('should populate searchResults and searchResultsCount after success', () => {
+    component.activePills = [{ field: 'withIncidents', values: [] }];
+    component.executeSearch();
+    expect(component.searchResults.length).toBe(2);
+    expect(component.searchResultsCount).toBe(2);
+    expect(component.searchLoading).toBe(false);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — clearSearch', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should reset all search state', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-001'] }];
+    component.searchResults = [...MOCK_INSTANCES];
+    component.searchResultsCount = 2;
+    component.searchExecuted = true;
+    component.variableNamesIgnoreCase = true;
+    component.variableValuesIgnoreCase = true;
+    component.clearSearch();
+    expect(component.activePills.length).toBe(0);
+    expect(component.searchResults.length).toBe(0);
+    expect(component.searchResultsCount).toBe(0);
+    expect(component.searchExecuted).toBe(false);
+    expect(component.variableNamesIgnoreCase).toBe(false);
+    expect(component.variableValuesIgnoreCase).toBe(false);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — hasVariableFilter', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should return false when no variable pill exists', () => {
+    component.activePills = [{ field: 'businessKey', values: ['BK-001'] }];
+    expect(component.hasVariableFilter()).toBe(false);
+  });
+
+  it('should return true when at least one variable pill exists', () => {
+    component.activePills = [{ field: 'variable', values: ['1'], variableName: 'x', variableOperator: 'eq' }];
+    expect(component.hasVariableFilter()).toBe(true);
+  });
+
+  it('should return true when a grouped variables pill exists', () => {
+    component.activePills = [{ field: 'variables', values: [], variableLines: [{ variableName: 'x', variableOperator: 'eq', values: ['v'] }] }];
+    expect(component.hasVariableFilter()).toBe(true);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — checkPopoverPosition', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should set popoverFlipped=true when popover right edge exceeds viewport width', () => {
+    component.popoverFlipped = false;
+    const fakeEl = { getBoundingClientRect: () => ({ right: 1100 } as DOMRect) } as HTMLElement;
+    Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true, writable: true });
+    component.checkPopoverPosition(fakeEl);
+    expect(component.popoverFlipped).toBe(true);
+  });
+
+  it('should set popoverFlipped=false when popover fits within viewport', () => {
+    component.popoverFlipped = true;
+    const fakeEl = { getBoundingClientRect: () => ({ right: 700 } as DOMRect) } as HTMLElement;
+    Object.defineProperty(window, 'innerWidth', { value: 1024, configurable: true, writable: true });
+    component.checkPopoverPosition(fakeEl);
+    expect(component.popoverFlipped).toBe(false);
+  });
+});
+
+describe('ProcessInstanceSearchComponent — getInstanceStateClass', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should return state-active for ACTIVE state', () => {
+    expect(component.getInstanceStateClass(MOCK_INSTANCES[0])).toBe('state-active');
+  });
+
+  it('should return state-completed for COMPLETED state', () => {
+    const inst: ProcessInstance = { ...MOCK_INSTANCES[0], state: 'COMPLETED' };
+    expect(component.getInstanceStateClass(inst)).toBe('state-completed');
+  });
+
+  it('should return state-suspended for SUSPENDED state', () => {
+    const inst: ProcessInstance = { ...MOCK_INSTANCES[0], state: 'SUSPENDED' };
+    expect(component.getInstanceStateClass(inst)).toBe('state-suspended');
+  });
+
+  it('should return state-terminated for EXTERNALLY_TERMINATED state', () => {
+    const inst: ProcessInstance = { ...MOCK_INSTANCES[0], state: 'EXTERNALLY_TERMINATED' };
+    expect(component.getInstanceStateClass(inst)).toBe('state-terminated');
+  });
+
+  it('should return state-terminated for INTERNALLY_TERMINATED state', () => {
+    const inst: ProcessInstance = { ...MOCK_INSTANCES[0], state: 'INTERNALLY_TERMINATED' };
+    expect(component.getInstanceStateClass(inst)).toBe('state-terminated');
+  });
+});
+
+describe('ProcessInstanceSearchComponent — extractVersionNumber', () => {
+  let fixture: ComponentFixture<ProcessInstanceSearchComponent>;
+  let component: ProcessInstanceSearchComponent;
+
+  beforeEach(async () => {
+    initTestEnvironment();
+
+    const cockpitService = {
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
+      getProcessDefinitions: vi.fn().mockReturnValue(of([])),
+    } as any;
+
+    await TestBed.configureTestingModule({
+      imports: [ProcessInstanceSearchComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        { provide: CockpitService, useValue: cockpitService },
+        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ProcessInstanceSearchComponent);
+    component = fixture.componentInstance;
+
+    const translateService = TestBed.inject(TranslateService);
+    (translateService as any).translations = { en: TEST_TRANSLATIONS };
+
+    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('globalSearchPreferences');
+  });
+
+  it('should extract version number from Camunda 7 definition ID', () => {
+    expect(component.extractVersionNumber('invoice:2:abc123')).toBe(2);
+  });
+
+  it('should return null for IDs without colon-delimited format', () => {
+    expect(component.extractVersionNumber('abc123')).toBeNull();
+  });
+
+  it('should return null for empty string', () => {
+    expect(component.extractVersionNumber('')).toBeNull();
+  });
+
+  it('should return null for non-numeric version segment', () => {
+    expect(component.extractVersionNumber('key:notANumber:id')).toBeNull();
+  });
+});
