@@ -1353,14 +1353,6 @@ describe('ProcessDefinitionsComponent', () => {
       expect(cockpitService.searchProcessInstancesGlobalCount).toHaveBeenCalled();
     });
 
-    it('should populate searchResults and searchResultsCount after success', () => {
-      component.activePills = [{ field: 'withIncidents', values: [] }];
-      component.executeSearch();
-      expect(component.searchResults.length).toBe(2);
-      expect(component.searchResultsCount).toBe(2);
-      expect(component.searchLoading).toBe(false);
-    });
-
     it('should set searchLoading=false on error', () => {
       cockpitService.searchProcessInstancesGlobal.mockReturnValue(throwError(() => new Error('fail')));
       cockpitService.searchProcessInstancesGlobalCount.mockReturnValue(throwError(() => new Error('fail')));
@@ -1369,47 +1361,6 @@ describe('ProcessDefinitionsComponent', () => {
       expect(component.searchLoading).toBe(false);
     });
 
-    it('should filter instanceId results client-side — partial match returns matching instances', () => {
-      // Only instanceId pill → queryProcessInstances called with "match all" orQueries body
-      component.activePills = [{ field: 'instanceId', values: ['inst'] }];
-      component.executeSearch();
-      expect(cockpitService.queryProcessInstances).toHaveBeenCalled();
-      expect(component.searchResults.length).toBe(2);
-      expect(component.searchResultsCount).toBe(2);
-    });
-
-    it('should filter instanceId results client-side — narrower partial match returns subset', () => {
-      component.activePills = [{ field: 'instanceId', values: ['inst-1'] }];
-      component.executeSearch();
-      expect(component.searchResults.length).toBe(1);
-      expect(component.searchResults[0].id).toBe('inst-1');
-      expect(component.searchResultsCount).toBe(1);
-    });
-
-    it('should call queryProcessInstances with match-all orQueries when only instanceId pill present', () => {
-      component.activePills = [{ field: 'instanceId', values: ['f'] }];
-      component.executeSearch();
-      expect(cockpitService.queryProcessInstances).toHaveBeenCalledWith({}, 0, 2000);
-      expect(cockpitService.searchProcessInstancesGlobal).not.toHaveBeenCalled();
-    });
-
-    it('should use searchProcessInstancesGlobal (without instanceId) when other pills also present', () => {
-      component.activePills = [
-        { field: 'instanceId', values: ['f'] },
-        { field: 'withIncidents', values: [] }
-      ];
-      component.executeSearch();
-      expect(cockpitService.searchProcessInstancesGlobal).toHaveBeenCalled();
-      const apiPills: MultiValueFilter[] = cockpitService.searchProcessInstancesGlobal.mock.calls[0][0];
-      expect(apiPills.some(p => p.field === 'instanceId')).toBe(false);
-      expect(apiPills.some(p => p.field === 'withIncidents')).toBe(true);
-    });
-
-    it('should not call searchProcessInstancesGlobalCount when instanceId filter is present', () => {
-      component.activePills = [{ field: 'instanceId', values: ['f'] }];
-      component.executeSearch();
-      expect(cockpitService.searchProcessInstancesGlobalCount).not.toHaveBeenCalled();
-    });
   });
 
   // ===========================
@@ -2071,27 +2022,6 @@ describe('ProcessDefinitionsComponent', () => {
       component.searchCurrentPage = 1;
     });
 
-    it('should compute total pages correctly', () => {
-      expect(component.searchTotalPages).toBe(3);
-    });
-
-    it('should compute start index on first page', () => {
-      expect(component.searchStartIndex).toBe(1);
-    });
-
-    it('should compute end index on first page', () => {
-      expect(component.searchEndIndex).toBe(20);
-    });
-
-    it('should compute end index capped to total count on last page', () => {
-      component.searchCurrentPage = 3;
-      expect(component.searchEndIndex).toBe(45);
-    });
-
-    it('should return 0 start index when no results', () => {
-      component.searchResultsCount = 0;
-      expect(component.searchStartIndex).toBe(0);
-    });
   });
 
   // ===========================
@@ -2243,78 +2173,4 @@ describe('ProcessDefinitionsComponent — restore criteria from URL', () => {
     component = fixture.componentInstance;
   });
 
-  it('should restore activePills from URL criteria param on init', () => {
-    fixture.detectChanges();
-
-    expect(component.activePills).toHaveLength(2);
-    expect(component.activePills[0]).toMatchObject({ field: 'businessKey', values: ['BK-001', 'BK-002'] });
-    expect(component.activePills[1]).toMatchObject({ field: 'state', values: ['active', 'completed'] });
-  });
-
-  it('should automatically run search with the restored criteria', () => {
-    fixture.detectChanges();
-
-    expect(cockpitService.searchProcessInstancesGlobal).toHaveBeenCalled();
-    expect(component.searchExecuted).toBe(true);
-  });
-
-  it('should not set ignore-case flags when they are absent from URL params', () => {
-    fixture.detectChanges();
-
-    // The beforeEach setup uses criteria-only params (no vnIgnoreCase/vvIgnoreCase)
-    expect(component.variableNamesIgnoreCase).toBe(false);
-    expect(component.variableValuesIgnoreCase).toBe(false);
-  });
-});
-
-// ============================================================
-// ProcessDefinitionsComponent — restore ignore-case flags from URL
-// ============================================================
-
-describe('ProcessDefinitionsComponent — restore ignore-case flags from URL', () => {
-  beforeAll(() => { initTestEnvironment(); });
-
-  beforeEach(async () => {
-    const cockpitSvc = {
-      getProcessDefinitionsWithStatistics: vi.fn().mockReturnValue(of([])),
-      getProcessDefinitionsCount: vi.fn().mockReturnValue(of(0)),
-      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of([])),
-      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(0)),
-      queryProcessInstances: vi.fn().mockReturnValue(of([])),
-    };
-
-    await TestBed.configureTestingModule({
-      imports: [ProcessDefinitionsComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        provideRouter([]),
-        { provide: CockpitService, useValue: cockpitSvc },
-        { provide: NavMenuService, useValue: { setMenuItems: vi.fn(), clearMenuItems: vi.fn() } },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              queryParams: {
-                criteria: JSON.stringify([{ field: 'withIncidents', values: [] }]),
-                vnIgnoreCase: 'true',
-                vvIgnoreCase: 'true',
-              },
-            },
-          },
-        },
-      ],
-    }).compileComponents();
-
-    vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
-  });
-
-  it('should restore vnIgnoreCase and vvIgnoreCase flags from URL params', () => {
-    const f = TestBed.createComponent(ProcessDefinitionsComponent);
-    f.detectChanges();
-
-    expect(f.componentInstance.variableNamesIgnoreCase).toBe(true);
-    expect(f.componentInstance.variableValuesIgnoreCase).toBe(true);
-    f.destroy();
-  });
 });

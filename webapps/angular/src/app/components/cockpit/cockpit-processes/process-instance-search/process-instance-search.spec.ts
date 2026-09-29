@@ -386,6 +386,13 @@ describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () 
     expect(vvIgnoreCase).toBe(true);
   });
 
+  it('should not set ignore-case flags when vnIgnoreCase and vvIgnoreCase are absent from URL', async () => {
+    await setup([{ field: 'businessKey', values: ['BK-001'] }]);
+
+    expect(component.variableNamesIgnoreCase).toBe(false);
+    expect(component.variableValuesIgnoreCase).toBe(false);
+  });
+
   it('should NOT trigger a search when URL criteria is absent', async () => {
     initTestEnvironment();
 
