@@ -492,6 +492,8 @@
   "cockpit.processDetail.userTasks.searchUser": "Search user...",
 
   "common.noUsersFound": "No users found",
+  "admin.groups.memberAlreadyExists": "User is already a member of this group",
+  "admin.groups.tenantAlreadyAssigned": "Group is already assigned to this tenant",
 
   "cockpit.processDetail.calledInstances.activity": "Activity",
   "cockpit.processDetail.calledInstances.businessKey": "Business Key",
@@ -1059,6 +1061,7 @@
   "CONFIRM_DIALOG_CANCEL": "Cancel",
 
   "common.delete": "Delete",
+  "common.dismiss": "Dismiss",
 
   "tasklist.title": "Tasklist",
   "tasklist.filters": "Filters",
@@ -1354,6 +1357,7 @@
   "tasklist.caseInstance": "Case Instance",
   "tasklist.viewProcessInstance": "View process instance in Cockpit",
   "tasklist.viewCaseInstance": "View case instance in Cockpit",
+  "tasklist.loadingForm": "Loading form...",
   "tasklist.noVariables": "No variables",
   "tasklist.variableDetail.title": "Value of",
   "tasklist.variableDetail.valueInfo": "Value Info",
@@ -1490,6 +1494,19 @@
   "BATCHES_LOAD_ENDED": "Load Completed Batches",
 
   "BATCH_DELETE_ERROR": "Failed to delete batch",
+  "BATCHES_BATCH_ID": "Batch ID",
+  "BATCHES_EXECUTION_START_TIME": "Execution Start Time",
+  "BATCHES_JOBS_PER_SEED": "Batch Jobs per Seed",
+  "BATCHES_INVOCATIONS_PER_JOB": "Invocations per Batch Job",
+  "BATCHES_PROGRESS_COMPLETED": "Completed",
+  "BATCHES_PROGRESS_IN_PROGRESS": "In progress",
+  "BATCHES_PROGRESS_FAILED_LABEL": "failed",
+  "BATCHES_PROGRESS_PROPERTY": "Property",
+  "BATCHES_PROGRESS_VALUE": "Value",
+  "BATCHES_PROGRESS_TOOLTIP_INCREMENT_NUMBER": "Retry all failed jobs",
+  "BATCHES_DELETE_BATCH_TITLE": "Delete batch",
+  "BATCHES_PROGRESS_NO_FINISHED": "No completed batches",
+  "ERROR_LOADING_DATA": "Error loading data",
   "JOB_RETRY_ERROR": "Failed to retry job",
   "JOB_RETRY_ALL_ERROR": "Failed to retry all jobs",
   "JOB_DELETE_ERROR": "Failed to delete job",
@@ -1573,6 +1590,7 @@
   "PAGE_TITLE_COCKPIT_TASKS": "Human Tasks",
   "PAGE_TITLE_COCKPIT_BATCH": "Batch Operations",
   "PAGE_TITLE_COCKPIT_DEPLOYMENTS": "Deployments",
+  "PAGE_TITLE_COCKPIT_DRD_DETAIL": "Decision Requirements Detail",
   "PAGE_TITLE_ADMIN": "Administration",
   "PAGE_TITLE_ADMIN_USERS": "User Management",
   "PAGE_TITLE_ADMIN_USER_DETAIL": "User Detail",

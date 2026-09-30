@@ -41,6 +41,7 @@ import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams,
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { TranslateService } from '../../../../i18n/translate.service';
 
 interface SortConfig {
   column: string;
@@ -83,6 +84,8 @@ interface FilterState {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProcessListComponent implements OnInit, OnDestroy {
+  private translateService = inject(TranslateService);
+
   private destroyRef = inject(DestroyRef);
   private navMenuService = inject(NavMenuService);
   private cockpitService = inject(CockpitService);
@@ -732,7 +735,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   formatDate(dateStr: string): string {
     if (!dateStr) return '-';
     const date = new Date(dateStr);
-    return date.toLocaleString();
+    return date.toLocaleString(this.translateService.locale);
   }
 
   getVersionLabel(def: ProcessDefinition): string {

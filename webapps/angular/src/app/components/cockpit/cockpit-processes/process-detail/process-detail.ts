@@ -56,6 +56,7 @@ import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockp
 import { SearchWidgetComponent, SearchType, SearchCriteria } from '../../../../shared/search-widget/search-widget';
 import { UserAutocompleteComponent } from '../../../../shared/user-autocomplete/user-autocomplete';
 import { User } from '../../../../models/admin/user.model';
+import { TranslateService } from '../../../../i18n/translate.service';
 
 type TabType = 'variables' | 'incidents' | 'calledInstances' | 'userTasks' | 'jobs' | 'externalTasks';
 type SidebarTab = 'info' | 'filter';
@@ -89,6 +90,8 @@ interface VariableEdit {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProcessDetailComponent implements OnInit, OnDestroy {
+  private translateService = inject(TranslateService);
+
   @ViewChild(BpmnViewerComponent) bpmnViewer?: BpmnViewerComponent;
 
   private destroyRef = inject(DestroyRef);
@@ -1064,7 +1067,7 @@ getTasklistUrl(task: UserTask): string {
   formatDate(dateStr: string | undefined): string {
     if (!dateStr) return '-';
     const date = new Date(dateStr);
-    return date.toLocaleString();
+    return date.toLocaleString(this.translateService.locale);
   }
 
   formatValue(value: any): string {

@@ -492,6 +492,8 @@
   "cockpit.processDetail.userTasks.searchUser": "搜索用户...",
 
   "common.noUsersFound": "未找到用户",
+  "admin.groups.memberAlreadyExists": "该用户已是此组的成员",
+  "admin.groups.tenantAlreadyAssigned": "该组已分配给此租户",
 
   "cockpit.processDetail.calledInstances.activity": "活动",
   "cockpit.processDetail.calledInstances.businessKey": "业务键",
@@ -1059,6 +1061,7 @@
   "CONFIRM_DIALOG_CANCEL": "取消",
 
   "common.delete": "删除",
+  "common.dismiss": "关闭",
 
   "tasklist.title": "Tasklist",
   "tasklist.filters": "筛选器",
@@ -1354,6 +1357,7 @@
   "tasklist.caseInstance": "案例实例",
   "tasklist.viewProcessInstance": "在 Cockpit 中查看流程实例",
   "tasklist.viewCaseInstance": "在 Cockpit 中查看案例实例",
+  "tasklist.loadingForm": "正在加载表单...",
   "tasklist.noVariables": "无变量",
   "tasklist.variableDetail.title": "值：",
   "tasklist.variableDetail.valueInfo": "值信息",
@@ -1490,6 +1494,19 @@
   "BATCHES_LOAD_ENDED": "加载已完成批处理",
 
   "BATCH_DELETE_ERROR": "删除批处理失败",
+  "BATCHES_BATCH_ID": "批处理 ID",
+  "BATCHES_EXECUTION_START_TIME": "执行开始时间",
+  "BATCHES_JOBS_PER_SEED": "每个种子的批处理作业数",
+  "BATCHES_INVOCATIONS_PER_JOB": "每个批处理作业的调用次数",
+  "BATCHES_PROGRESS_COMPLETED": "已完成",
+  "BATCHES_PROGRESS_IN_PROGRESS": "进行中",
+  "BATCHES_PROGRESS_FAILED_LABEL": "失败",
+  "BATCHES_PROGRESS_PROPERTY": "属性",
+  "BATCHES_PROGRESS_VALUE": "值",
+  "BATCHES_PROGRESS_TOOLTIP_INCREMENT_NUMBER": "重试所有失败的作业",
+  "BATCHES_DELETE_BATCH_TITLE": "删除批处理",
+  "BATCHES_PROGRESS_NO_FINISHED": "没有已完成的批处理",
+  "ERROR_LOADING_DATA": "加载数据时出错",
   "JOB_RETRY_ERROR": "重试作业失败",
   "JOB_RETRY_ALL_ERROR": "重试所有作业失败",
   "JOB_DELETE_ERROR": "删除作业失败",
@@ -1573,6 +1590,7 @@
   "PAGE_TITLE_COCKPIT_TASKS": "人工任务",
   "PAGE_TITLE_COCKPIT_BATCH": "批处理操作",
   "PAGE_TITLE_COCKPIT_DEPLOYMENTS": "部署",
+  "PAGE_TITLE_COCKPIT_DRD_DETAIL": "决策需求详情",
   "PAGE_TITLE_ADMIN": "管理",
   "PAGE_TITLE_ADMIN_USERS": "用户管理",
   "PAGE_TITLE_ADMIN_USER_DETAIL": "用户详情",

@@ -1034,6 +1034,8 @@
   "cockpit.processDetail.userTasks.searchUser": "Rechercher un utilisateur...",
 
   "common.noUsersFound": "Aucun utilisateur trouvé",
+  "admin.groups.memberAlreadyExists": "Cet utilisateur est déjà membre de ce groupe",
+  "admin.groups.tenantAlreadyAssigned": "Ce groupe est déjà affecté à ce tenant",
 
   "cockpit.processDetail.calledInstances.activity": "Activité",
   "cockpit.processDetail.calledInstances.businessKey": "Clé métier",
@@ -1054,6 +1056,7 @@
   "cockpit.processDetail.dialogs.cancelReason": "Raison (optionnel)",
 
   "common.delete": "Supprimer",
+  "common.dismiss": "Ignorer",
 
   "tasklist.title": "Liste des tâches",
   "tasklist.filters": "Filtres",
@@ -1335,6 +1338,7 @@
   "tasklist.caseInstance": "Instance de cas",
   "tasklist.viewProcessInstance": "Voir l'instance de processus dans Cockpit",
   "tasklist.viewCaseInstance": "Voir l'instance de cas dans Cockpit",
+  "tasklist.loadingForm": "Chargement du formulaire...",
   "tasklist.noVariables": "Aucune variable",
   "tasklist.variableDetail.title": "Valeur de",
   "tasklist.variableDetail.valueInfo": "Info valeur",
@@ -1471,6 +1475,19 @@
   "BATCHES_LOAD_ENDED": "Charger les lots terminés",
 
   "BATCH_DELETE_ERROR": "Échec de la suppression du lot",
+  "BATCHES_BATCH_ID": "ID du batch",
+  "BATCHES_EXECUTION_START_TIME": "Début de l'exécution",
+  "BATCHES_JOBS_PER_SEED": "Jobs de batch par seed",
+  "BATCHES_INVOCATIONS_PER_JOB": "Invocations par job de batch",
+  "BATCHES_PROGRESS_COMPLETED": "Terminé",
+  "BATCHES_PROGRESS_IN_PROGRESS": "En cours",
+  "BATCHES_PROGRESS_FAILED_LABEL": "en échec",
+  "BATCHES_PROGRESS_PROPERTY": "Propriété",
+  "BATCHES_PROGRESS_VALUE": "Valeur",
+  "BATCHES_PROGRESS_TOOLTIP_INCREMENT_NUMBER": "Relancer tous les jobs en échec",
+  "BATCHES_DELETE_BATCH_TITLE": "Supprimer le batch",
+  "BATCHES_PROGRESS_NO_FINISHED": "Aucun batch terminé",
+  "ERROR_LOADING_DATA": "Erreur lors du chargement des données",
   "JOB_RETRY_ERROR": "Échec de la relance du job",
   "JOB_RETRY_ALL_ERROR": "Échec de la relance de tous les jobs",
   "JOB_DELETE_ERROR": "Échec de la suppression du job",
@@ -1554,6 +1571,7 @@
   "PAGE_TITLE_COCKPIT_TASKS": "Tâches humaines",
   "PAGE_TITLE_COCKPIT_BATCH": "Opérations par lot",
   "PAGE_TITLE_COCKPIT_DEPLOYMENTS": "Déploiements",
+  "PAGE_TITLE_COCKPIT_DRD_DETAIL": "Détail des exigences de décision",
   "PAGE_TITLE_ADMIN": "Administration",
   "PAGE_TITLE_ADMIN_USERS": "Gestion des utilisateurs",
   "PAGE_TITLE_ADMIN_USER_DETAIL": "Détail de l'utilisateur",

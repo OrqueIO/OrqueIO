@@ -4,6 +4,7 @@ import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { TooltipDirective } from '../../../shared/tooltip/tooltip.directive';
 import { Task, FilterVariable } from '../../../models/tasklist';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
+import { TranslateService } from '../../../i18n/translate.service';
 
 interface TaskVariable {
   name: string;
@@ -21,6 +22,8 @@ interface TaskVariable {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskCardComponent implements OnInit, OnChanges {
+  private translateService = inject(TranslateService);
+
   private readonly tasklistService = inject(TasklistService);
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -121,7 +124,7 @@ export class TaskCardComponent implements OnInit, OnChanges {
       case 'boolean':
         return variable.value ? 'true' : 'false';
       case 'date':
-        return new Date(variable.value).toLocaleDateString();
+        return new Date(variable.value).toLocaleDateString(this.translateService.locale);
       case 'object':
       case 'json':
         try {

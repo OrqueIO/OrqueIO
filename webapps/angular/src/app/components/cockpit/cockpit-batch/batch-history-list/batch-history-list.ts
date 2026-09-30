@@ -43,10 +43,10 @@ export class BatchHistoryListComponent {
 
   // Table columns
   columns = [
-    { key: 'batchId', label: 'BATCHES_PROGRESS_ID', sortable: true },
-    { key: 'type', label: 'BATCHES_PROGRESS_TYPE', sortable: false },
-    { key: 'startTime', label: 'BATCHES_PROGRESS_START_TIME', sortable: true },
-    { key: 'endTime', label: 'BATCHES_PROGRESS_END_TIME', sortable: true }
+    { key: 'batchId', label: 'BATCHES_BATCH_ID', sortable: true },
+    { key: 'type', label: 'BATCHES_TYPE', sortable: false },
+    { key: 'startTime', label: 'BATCHES_START_TIME', sortable: true },
+    { key: 'endTime', label: 'BATCHES_END_TIME', sortable: true }
   ];
 
   onLoadHistory(): void {

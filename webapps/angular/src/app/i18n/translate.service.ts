@@ -74,6 +74,21 @@ export class TranslateService {
   }
 
   /**
+   * Full locale of the current language, to format dates and numbers
+   * (e.g. toLocaleString(translateService.locale))
+   */
+  get locale(): string {
+    const locales: Record<Language, string> = {
+      'fr': 'fr-FR',
+      'en': 'en-US',
+      'de': 'de-DE',
+      'zh-CN': 'zh-CN',
+      'zh-TW': 'zh-TW'
+    };
+    return locales[this.currentLang];
+  }
+
+  /**
    * Load translations for a language, together with the fallback language
    */
   async loadLanguage(lang: Language): Promise<void> {

@@ -492,6 +492,8 @@
   "cockpit.processDetail.userTasks.searchUser": "搜尋使用者...",
 
   "common.noUsersFound": "找不到使用者",
+  "admin.groups.memberAlreadyExists": "此使用者已是該群組的成員",
+  "admin.groups.tenantAlreadyAssigned": "此群組已指派給該租用戶",
 
   "cockpit.processDetail.calledInstances.activity": "活動",
   "cockpit.processDetail.calledInstances.businessKey": "業務鍵",
@@ -1059,6 +1061,7 @@
   "CONFIRM_DIALOG_CANCEL": "取消",
 
   "common.delete": "刪除",
+  "common.dismiss": "關閉",
 
   "tasklist.title": "Tasklist",
   "tasklist.filters": "篩選器",
@@ -1354,6 +1357,7 @@
   "tasklist.caseInstance": "案例實例",
   "tasklist.viewProcessInstance": "在 Cockpit 中檢視流程實例",
   "tasklist.viewCaseInstance": "在 Cockpit 中檢視案例實例",
+  "tasklist.loadingForm": "正在載入表單...",
   "tasklist.noVariables": "沒有變數",
   "tasklist.variableDetail.title": "值：",
   "tasklist.variableDetail.valueInfo": "值資訊",
@@ -1490,6 +1494,19 @@
   "BATCHES_LOAD_ENDED": "載入已完成批次",
 
   "BATCH_DELETE_ERROR": "刪除批次失敗",
+  "BATCHES_BATCH_ID": "批次作業 ID",
+  "BATCHES_EXECUTION_START_TIME": "執行開始時間",
+  "BATCHES_JOBS_PER_SEED": "每個種子的批次作業數",
+  "BATCHES_INVOCATIONS_PER_JOB": "每個批次作業的呼叫次數",
+  "BATCHES_PROGRESS_COMPLETED": "已完成",
+  "BATCHES_PROGRESS_IN_PROGRESS": "進行中",
+  "BATCHES_PROGRESS_FAILED_LABEL": "失敗",
+  "BATCHES_PROGRESS_PROPERTY": "屬性",
+  "BATCHES_PROGRESS_VALUE": "值",
+  "BATCHES_PROGRESS_TOOLTIP_INCREMENT_NUMBER": "重試所有失敗的作業",
+  "BATCHES_DELETE_BATCH_TITLE": "刪除批次作業",
+  "BATCHES_PROGRESS_NO_FINISHED": "沒有已完成的批次作業",
+  "ERROR_LOADING_DATA": "載入資料時發生錯誤",
   "JOB_RETRY_ERROR": "重試工作失敗",
   "JOB_RETRY_ALL_ERROR": "重試所有工作失敗",
   "JOB_DELETE_ERROR": "刪除工作失敗",
@@ -1573,6 +1590,7 @@
   "PAGE_TITLE_COCKPIT_TASKS": "人工任務",
   "PAGE_TITLE_COCKPIT_BATCH": "批次操作",
   "PAGE_TITLE_COCKPIT_DEPLOYMENTS": "部署",
+  "PAGE_TITLE_COCKPIT_DRD_DETAIL": "決策需求詳細資料",
   "PAGE_TITLE_ADMIN": "管理",
   "PAGE_TITLE_ADMIN_USERS": "使用者管理",
   "PAGE_TITLE_ADMIN_USER_DETAIL": "使用者詳細資料",

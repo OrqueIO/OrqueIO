@@ -28,16 +28,16 @@
           <!-- Header -->
           <div class="detail-header">
             <h3 class="detail-title">
-              <span *ngIf="data.type === 'history'">{{ 'BATCHES_PROGRESS_COMPLETED' | translate }}</span>
-              <span *ngIf="data.type === 'runtime'">{{ 'BATCHES_PROGRESS_IN_PROGRESS' | translate }}</span>
-              {{ 'BATCHES_PROGRESS_BATCH_DETAILS' | translate }}
+              {{ 'BATCHES_DETAIL_TITLE' | translate }}
+              <span *ngIf="data.type === 'history'">({{ 'BATCHES_PROGRESS_COMPLETED' | translate }})</span>
+              <span *ngIf="data.type === 'runtime'">({{ 'BATCHES_PROGRESS_IN_PROGRESS' | translate }})</span>
             </h3>
 
             <div class="detail-actions" *ngIf="data.type === 'runtime'">
               <!-- Suspend/Resume -->
               <button class="btn btn-icon"
                       (click)="onToggleSuspension(data.batch)"
-                      [appTooltip]="data.isSuspended ? ('BATCHES_PROGRESS_TOOLTIP_ACTIVATE_BATCH' | translate) : ('BATCHES_PROGRESS_TOOLTIP_SUSPEND_BATCH' | translate)">
+                      [appTooltip]="data.isSuspended ? ('BATCHES_RESUME' | translate) : ('BATCHES_SUSPEND' | translate)">
                 <fa-icon [icon]="data.isSuspended ? faPlay : faPause"></fa-icon>
               </button>
 
@@ -52,7 +52,7 @@
               <!-- Delete -->
               <button class="btn btn-icon btn-danger"
                       (click)="onDeleteClick()"
-                      [appTooltip]="'BATCHES_PROGRESS_TOOLTIP_DELETE_BATCH' | translate">
+                      [appTooltip]="'BATCHES_DELETE' | translate">
                 <fa-icon [icon]="faTrash"></fa-icon>
               </button>
             </div>
@@ -61,7 +61,7 @@
             <div class="detail-actions" *ngIf="data.type === 'history'">
               <button class="btn btn-icon btn-danger"
                       (click)="onDeleteClick()"
-                      [appTooltip]="'BATCHES_PROGRESS_TOOLTIP_DELETE_BATCH' | translate">
+                      [appTooltip]="'BATCHES_DELETE' | translate">
                 <fa-icon [icon]="faTrash"></fa-icon>
               </button>
             </div>
@@ -79,7 +79,7 @@
               <tbody>
                 <ng-container *ngFor="let key of detailKeys">
                   <tr *ngIf="shouldShowKey(data.batch, key)" [class]="key">
-                    <td class="prop-name">{{ key }}</td>
+                    <td class="prop-name">{{ detailLabels[key] | translate }}</td>
                     <td class="prop-value">
                       <ng-container *ngIf="!isTimeKey(key)">
                         {{ getBatchValue(data.batch, key) }}
@@ -107,7 +107,7 @@
           <app-confirm-dialog
             *ngIf="showDeleteModal"
             [title]="'BATCHES_DELETE_BATCH_TITLE' | translate"
-            [message]="'BATCHES_DELETE_BATCH_MESSAGE' | translate"
+            [message]="'BATCHES_CONFIRM_DELETE' | translate"
             [confirmLabel]="'DELETE' | translate"
             [cancelLabel]="'CANCEL' | translate"
             [isDanger]="true"

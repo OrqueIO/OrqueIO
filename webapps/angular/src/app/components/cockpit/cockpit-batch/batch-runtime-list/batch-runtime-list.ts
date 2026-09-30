@@ -43,12 +43,12 @@ export class BatchRuntimeListComponent {
 
   // Table columns
   columns = [
-    { key: 'batchId', label: 'BATCHES_PROGRESS_ID', sortable: true },
-    { key: 'type', label: 'BATCHES_PROGRESS_TYPE', sortable: false },
-    { key: 'user', label: 'BATCHES_PROGRESS_USER', sortable: false },
-    { key: 'startTime', label: 'BATCHES_PROGRESS_START_TIME', sortable: true },
-    { key: 'failed', label: 'BATCHES_PROGRESS_FAIL_JOBS', sortable: false },
-    { key: 'progress', label: 'BATCHES_PROGRESS_PROGRESS', sortable: false }
+    { key: 'batchId', label: 'BATCHES_BATCH_ID', sortable: true },
+    { key: 'type', label: 'BATCHES_TYPE', sortable: false },
+    { key: 'user', label: 'BATCHES_CREATE_USER', sortable: false },
+    { key: 'startTime', label: 'BATCHES_START_TIME', sortable: true },
+    { key: 'failed', label: 'BATCHES_FAILED_JOBS', sortable: false },
+    { key: 'progress', label: 'BATCHES_PROGRESS', sortable: false }
   ];
 
   onSort(column: { key: string; sortable: boolean }, currentSorting: BatchSorting): void {
