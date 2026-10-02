@@ -47,7 +47,7 @@
 
     </div>
 
-    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external' || selectedOperationId === 'set-variables'" class="operation-steps">
+    <div *ngIf="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external' || selectedOperationId === 'set-variables' || selectedOperationId === 'correlate'" class="operation-steps">
 
       <!-- ── Carte 1 : Définition de la requête ────────────────────── -->
       <div class="operation-card">
@@ -80,8 +80,8 @@
           <span>{{ 'cockpit.batchOps.setRetriesJobs.pendingJobsNote' | translate }}</span>
         </div>
 
-        <!-- Info note — instances mode for suspend/activate; both modes for delete-running, delete-finished, set-variables -->
-        <div *ngIf="(mode === 'instances' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-variables') && selectedOperationId !== 'set-retries-external' && selectedOperationId !== 'set-retries-jobs'" class="info-note">
+        <!-- Info note — instances mode for suspend/activate; both modes for delete-running, delete-finished, set-variables, correlate -->
+        <div *ngIf="(mode === 'instances' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-variables' || selectedOperationId === 'correlate') && selectedOperationId !== 'set-retries-external' && selectedOperationId !== 'set-retries-jobs'" class="info-note">
           <fa-icon [icon]="faInfoCircle"></fa-icon>
           <span>{{ operationOnlyNoteKey | translate }}</span>
         </div>
@@ -200,12 +200,52 @@
 
         </div>
 
+        <!-- Correlate: message name + variables -->
+        <div *ngIf="selectedOperationId === 'correlate'" class="correlate-section">
+
+          <div class="correlate-msg-field">
+            <label class="correlate-msg-label">
+              {{ 'cockpit.batchOps.correlate.messageNameLabel' | translate }}
+            </label>
+            <input type="text" class="delete-options__input"
+                   [(ngModel)]="correlateMessageName"
+                   [placeholder]="'cockpit.batchOps.correlate.messageNamePlaceholder' | translate">
+          </div>
+
+          <div class="correlate-variables-section">
+            <label class="correlate-section-label">{{ 'cockpit.batchOps.correlate.variablesLabel' | translate }}</label>
+            <button type="button" class="correlate-vars-btn" (click)="openCorrelateVarsModal()">
+              <fa-icon [icon]="faPlus" class="set-vars-btn__icon"></fa-icon>
+              <span class="set-vars-btn__text">{{ 'cockpit.batchOps.correlate.openVarsModalBtn' | translate }}</span>
+            </button>
+
+            <div *ngIf="correlateVariableDefs.length > 0" class="var-chips">
+              <div *ngFor="let v of correlateVariableDefs; let i = index; trackBy: trackByIndex" class="var-chip">
+                <button type="button" class="var-chip__edit" (click)="openCorrelateVarsModal()">
+                  <span class="var-chip__name">{{ v.name }}</span>
+                  <span class="var-chip__eq">=</span>
+                  <span class="var-chip__value">{{ v.value }}</span>
+                  <span class="var-chip__type">{{ v.type }}</span>
+                </button>
+                <button type="button" class="var-chip__remove" (click)="removeCorrelateVarDef(i)" title="Remove">&#x2715;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preventive warning: empty messageName + no criteria = unbounded scope -->
+          <div *ngIf="showCorrelateEmptyMessageWarning" class="query-warning">
+            <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+            <span>{{ 'cockpit.batchOps.correlate.emptyNameWarning' | translate }}</span>
+          </div>
+
+        </div>
+
         <!-- Filter panel — both modes -->
         <app-instance-filter-panel
           [lockedState]="lockedFilterState"
           [initialPills]="filterCriteria"
-          [showExtendedCriteria]="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external' || selectedOperationId === 'set-variables'"
-          [showStateNarrowing]="selectedOperationId === 'delete-running' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external' || selectedOperationId === 'set-variables'"
+          [showExtendedCriteria]="selectedOperationId === 'suspend' || selectedOperationId === 'activate' || selectedOperationId === 'delete-running' || selectedOperationId === 'delete-finished' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external' || selectedOperationId === 'set-variables' || selectedOperationId === 'correlate'"
+          [showStateNarrowing]="selectedOperationId === 'delete-running' || selectedOperationId === 'set-retries-jobs' || selectedOperationId === 'set-retries-external' || selectedOperationId === 'set-variables' || selectedOperationId === 'correlate'"
           [showWithJobsRetrying]="selectedOperationId !== 'set-retries-external'"
           [showFinishedNarrowing]="selectedOperationId === 'delete-finished'"
           [finishedScope]="selectedOperationId === 'delete-finished'"
@@ -679,7 +719,7 @@
   </div>
   <!-- /step 3 -->
 
-  <!-- Variable definitions modal -->
+  <!-- Variable definitions modal (set-variables) -->
   <app-variable-definitions-modal
     *ngIf="showVariablesModal"
     [initialVariables]="modalInitialVariables"
@@ -687,6 +727,16 @@
     [queryFilter]="modalQueryFilter"
     (apply)="onVariablesApplied($event)"
     (closeModal)="closeVariablesModal()">
+  </app-variable-definitions-modal>
+
+  <!-- Variable definitions modal (correlate) -->
+  <app-variable-definitions-modal
+    *ngIf="showCorrelateVarsModal"
+    [initialVariables]="correlateModalInitialVariables"
+    [targetInstanceIds]="modalTargetInstanceIds"
+    [queryFilter]="modalQueryFilter"
+    (apply)="onCorrelateVarsApplied($event)"
+    (closeModal)="closeCorrelateVarsModal()">
   </app-variable-definitions-modal>
 
 </div>

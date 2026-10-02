@@ -893,6 +893,26 @@ app-pagination {
   border-color: var(--color-primary);
 }
 
+.correlate-vars-btn {
+  width: fit-content;
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 0.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.correlate-vars-btn:hover {
+  background: var(--color-gray-50);
+  border-color: var(--border-color-dark);
+}
+
 .set-vars-btn__icon {
   color: var(--text-accent, var(--color-primary));
   font-size: 16px;
@@ -902,6 +922,47 @@ app-pagination {
   color: var(--text-secondary);
   font-size: 13px;
   font-weight: 500;
+}
+
+.correlate-variables-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.correlate-section-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.correlate-variables-section .var-chips {
+  margin-top: 10px;
+}
+
+.correlate-section .query-warning {
+  margin-top: 28px;
+}
+
+/* ── Correlate Message form ──────────────────────────────────────────────── */
+.correlate-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.correlate-msg-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 380px;
+  margin-bottom: 24px;
+}
+
+.correlate-msg-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
 }
 
 .var-chips {
