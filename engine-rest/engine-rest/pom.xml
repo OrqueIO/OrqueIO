@@ -18,7 +18,7 @@
 
   <properties>
     <!-- pin tomcat version for engine-rest -->
-    <version.tomcat>9.0.118</version.tomcat>
+    <version.tomcat>9.0.121</version.tomcat>
     <rest.http.port>38080</rest.http.port>
     <javax.activation.version>1.1.1</javax.activation.version>
   </properties>
