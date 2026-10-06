@@ -44,6 +44,14 @@
         <scope>import</scope>
       </dependency>
 
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${version.jackson}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 
@@ -321,12 +329,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.github.tomakehurst</groupId>
-      <artifactId>wiremock</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>28.2-jre</version>
@@ -341,7 +343,7 @@
 
     <dependency>
       <groupId>org.python</groupId>
-      <artifactId>jython</artifactId>
+      <artifactId>jython-standalone</artifactId>
       <scope>test</scope>
     </dependency>
 
