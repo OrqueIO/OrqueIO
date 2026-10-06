@@ -250,13 +250,21 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .definition-name {
   font-size: 0.875rem;
   font-weight: 600;
   color: #fff;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .definition-key {
@@ -623,7 +631,6 @@
 .section-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 1rem;
   padding: 0.75rem 1rem;
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
@@ -633,7 +640,16 @@
   color: var(--text-inverse, #fff);
   font-size: 0.8125rem;
   flex-shrink: 0;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+}
+
+.section-header-identity {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  overflow: hidden;
 }
 
 .section-title {
@@ -1191,11 +1207,26 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .section-header-identity {
+    width: 100%;
+    overflow: visible;
+    flex-wrap: wrap;
   }
 
   .definition-info {
     width: 100%;
     flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .definition-name {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    flex: none;
   }
 
   .filters-content {
@@ -1293,5 +1324,65 @@
 .pagination-btn:focus-visible,
 .page-number:focus-visible {
   outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* =====================================================
+   SECTION ACTIONS — Correlate (same visual as Instance toolbar)
+   ===================================================== */
+
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+
+.pl-toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.pl-toolbar-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.pl-toolbar-btn:active {
+  transform: translateY(0);
+}
+
+.pl-toolbar-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.pl-toolbar-btn--info {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: var(--color-info-light, #60a5fa);
+}
+
+.pl-toolbar-btn--info:hover {
+  background: var(--color-info, #3b82f6);
+  border-color: var(--color-info, #3b82f6);
+  color: #fff;
+}
+
+.pl-toolbar-btn:focus-visible {
+  outline: 2px solid var(--color-info, #3b82f6);
   outline-offset: 2px;
 }

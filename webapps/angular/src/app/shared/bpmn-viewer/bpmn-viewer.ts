@@ -94,6 +94,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private badgeOverlayIds: Map<string, string[]> = new Map();
   private callActivityOverlayIds: string[] = [];
   private callActivityErrorOverlayIds: string[] = [];
+  private correlateOverlayIds: string[] = [];
   private currentXml: string | null = null;
   private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -426,6 +427,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private clearAllOverlays(): void {
     this.clearBadgeOverlays();
     this.clearCallActivityOverlays();
+    this.clearCorrelateOverlays();
   }
 
   private updateBadges(): void {
@@ -746,5 +748,76 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       };
     }
     return null;
+  }
+
+  getAllElements(): any[] {
+    if (!this.viewer) return [];
+    const elementRegistry = this.viewer.get('elementRegistry');
+    return elementRegistry.getAll();
+  }
+
+  addCorrelateOverlays(messageNodes: Map<string, string>, onClick: (messageName: string) => void): void {
+    if (!this.viewer || !this.overlays) return;
+    this.clearCorrelateOverlays();
+
+    const elementRegistry = this.viewer.get('elementRegistry');
+    // Tracks how many eligible BoundaryEvents have been placed per host task (for stacking)
+    const hostBoundaryCount = new Map<string, number>();
+    const envelope = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 16 16"><path fill="currentColor" d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/></svg>';
+
+    messageNodes.forEach((messageName, elementId) => {
+      const element = elementRegistry.get(elementId);
+      let anchorId = elementId;
+      let position: { top: number; right: number };
+
+      if (element?.type === 'bpmn:BoundaryEvent' && element.host) {
+        // Anchor to host task so the button sits at the task's top-right, not on the small circle
+        const hostId: string = element.host.id;
+        const idx = hostBoundaryCount.get(hostId) ?? 0;
+        hostBoundaryCount.set(hostId, idx + 1);
+        anchorId = hostId;
+        position = this.correlateOverlayPosition('bpmn:BoundaryEvent', idx);
+      } else {
+        position = this.correlateOverlayPosition(element?.type ?? '', 0);
+      }
+
+      const btn = document.createElement('button');
+      btn.className = 'bpmn-correlate-overlay';
+      btn.title = messageName;
+      btn.innerHTML = envelope;
+      btn.addEventListener('click', (e: Event) => {
+        e.stopPropagation();
+        onClick(messageName);
+      });
+
+      try {
+        const id = this.overlays.add(anchorId, { position, html: btn });
+        this.correlateOverlayIds.push(id);
+      } catch (_) {}
+    });
+  }
+
+  private correlateOverlayPosition(
+    elementType: string,
+    boundaryIndex: number
+  ): { top: number; right: number } {
+    const BTN = 28;  // matches .bpmn-correlate-overlay width/height
+    const GAP = 4;   // spacing between stacked buttons on the same host task
+
+    // BoundaryEvent: anchor on host task top-right; additional BEs on same task stack leftward
+    // Formula: right = i*(BTN+GAP) → button[i].left = host.width − i*(BTN+GAP), gap = GAP px
+    if (elementType === 'bpmn:BoundaryEvent') {
+      return { top: -BTN, right: boundaryIndex * (BTN + GAP) };
+    }
+    // ICE, ReceiveTask, StartEvent (event subprocess): button BL exactly at element TR corner
+    // right:0 → CSS left = element.width → button.left = element.right (0-px gap)
+    return { top: -BTN, right: 0 };
+  }
+
+  clearCorrelateOverlays(): void {
+    for (const id of this.correlateOverlayIds) {
+      try { this.overlays?.remove(id); } catch (_) {}
+    }
+    this.correlateOverlayIds = [];
   }
 }

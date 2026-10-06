@@ -355,3 +355,37 @@ describe('BpmnViewerComponent — subprocess breadcrumb', () => {
     });
   });
 });
+
+describe('BpmnViewerComponent — correlateOverlayPosition', () => {
+  // BoundaryEvent index 0 → button BL at host task TR corner (right: 0 → CSS left = task.width)
+  it('returns { top: -28, right: 0 } for bpmn:BoundaryEvent index 0 (first button at task TR)', () => {
+    const comp: any = Object.create(BpmnViewerComponent.prototype);
+    expect(comp.correlateOverlayPosition('bpmn:BoundaryEvent', 0)).toEqual({ top: -28, right: 0 });
+  });
+
+  // BoundaryEvent index 1 → second button stacked leftward (right: 32 → button.left = task.right − 32, 4-px gap)
+  it('returns { top: -28, right: 32 } for bpmn:BoundaryEvent index 1 (second button on same task)', () => {
+    const comp: any = Object.create(BpmnViewerComponent.prototype);
+    expect(comp.correlateOverlayPosition('bpmn:BoundaryEvent', 1)).toEqual({ top: -28, right: 32 });
+  });
+
+  it('returns { top: -28, right: 0 } for bpmn:IntermediateCatchEvent', () => {
+    const comp: any = Object.create(BpmnViewerComponent.prototype);
+    expect(comp.correlateOverlayPosition('bpmn:IntermediateCatchEvent', 0)).toEqual({ top: -28, right: 0 });
+  });
+
+  it('returns { top: -28, right: 0 } for bpmn:ReceiveTask', () => {
+    const comp: any = Object.create(BpmnViewerComponent.prototype);
+    expect(comp.correlateOverlayPosition('bpmn:ReceiveTask', 0)).toEqual({ top: -28, right: 0 });
+  });
+
+  it('returns { top: -28, right: 0 } for bpmn:StartEvent', () => {
+    const comp: any = Object.create(BpmnViewerComponent.prototype);
+    expect(comp.correlateOverlayPosition('bpmn:StartEvent', 0)).toEqual({ top: -28, right: 0 });
+  });
+
+  it('returns { top: -28, right: 0 } for unknown type (fallback)', () => {
+    const comp: any = Object.create(BpmnViewerComponent.prototype);
+    expect(comp.correlateOverlayPosition('', 0)).toEqual({ top: -28, right: 0 });
+  });
+});
