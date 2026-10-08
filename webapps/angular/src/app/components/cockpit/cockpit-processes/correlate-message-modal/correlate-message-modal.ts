@@ -25,6 +25,7 @@ export class CorrelateMessageModalComponent {
 
   inputValue = '';
   showDropdown = false;
+  private mousedownTarget: EventTarget | null = null;
 
   @HostListener('document:keydown.escape')
   onEscapeKey(): void {
@@ -58,9 +59,16 @@ export class CorrelateMessageModalComponent {
     this.cancel.emit();
   }
 
+  onBackdropMousedown(event: MouseEvent): void {
+    this.mousedownTarget = event.target;
+  }
+
   onBackdropClick(event: MouseEvent): void {
-    if ((event.target as HTMLElement).classList.contains('modal-backdrop')) {
+    const target = event.target as HTMLElement;
+    // Only close if both mousedown and mouseup happened on the backdrop
+    if (target.classList.contains('modal-backdrop') && this.mousedownTarget === target) {
       this.onCancel();
     }
+    this.mousedownTarget = null;
   }
 }

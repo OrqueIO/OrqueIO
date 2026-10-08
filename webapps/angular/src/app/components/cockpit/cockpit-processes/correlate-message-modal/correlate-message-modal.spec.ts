@@ -87,22 +87,61 @@ describe('CorrelateMessageModalComponent', () => {
     expect(component.showDropdown).toBe(false);
   });
 
-  it('onBackdropClick calls cancel when clicking backdrop', () => {
+  it('onBackdropClick calls cancel when both mousedown and mouseup on backdrop', () => {
     const spy = vi.fn();
     component.cancel.subscribe(spy);
-    const fakeTarget = document.createElement('div');
-    fakeTarget.classList.add('modal-backdrop');
-    component.onBackdropClick({ target: fakeTarget } as unknown as MouseEvent);
+    const fakeBackdrop = document.createElement('div');
+    fakeBackdrop.classList.add('modal-backdrop');
+
+    component.onBackdropMousedown({ target: fakeBackdrop } as unknown as MouseEvent);
+    component.onBackdropClick({ target: fakeBackdrop } as unknown as MouseEvent);
+
     expect(spy).toHaveBeenCalled();
   });
 
   it('onBackdropClick does not cancel when clicking inside modal', () => {
     const spy = vi.fn();
     component.cancel.subscribe(spy);
-    const fakeTarget = document.createElement('div');
-    fakeTarget.classList.add('modal-container');
-    component.onBackdropClick({ target: fakeTarget } as unknown as MouseEvent);
+    const fakeBackdrop = document.createElement('div');
+    fakeBackdrop.classList.add('modal-backdrop');
+    const fakeContainer = document.createElement('div');
+    fakeContainer.classList.add('modal-container');
+
+    component.onBackdropMousedown({ target: fakeBackdrop } as unknown as MouseEvent);
+    component.onBackdropClick({ target: fakeContainer } as unknown as MouseEvent);
+
     expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('BUG FIX: does not close when mousedown on input but mouseup on backdrop (text selection)', () => {
+    const spy = vi.fn();
+    component.cancel.subscribe(spy);
+    const fakeInput = document.createElement('input');
+    const fakeBackdrop = document.createElement('div');
+    fakeBackdrop.classList.add('modal-backdrop');
+
+    component.onBackdropMousedown({ target: fakeInput } as unknown as MouseEvent);
+    component.onBackdropClick({ target: fakeBackdrop } as unknown as MouseEvent);
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('closes on Escape key', () => {
+    const spy = vi.fn();
+    component.cancel.subscribe(spy);
+    component.onEscapeKey();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('resets mousedownTarget after click', () => {
+    const fakeBackdrop = document.createElement('div');
+    fakeBackdrop.classList.add('modal-backdrop');
+
+    component.onBackdropMousedown({ target: fakeBackdrop } as unknown as MouseEvent);
+    expect((component as any).mousedownTarget).toBe(fakeBackdrop);
+
+    component.onBackdropClick({ target: fakeBackdrop } as unknown as MouseEvent);
+    expect((component as any).mousedownTarget).toBeNull();
   });
 
   it('suggestionsEnabled defaults to true', () => {

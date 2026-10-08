@@ -1,4 +1,4 @@
-<div class="modal-backdrop" (click)="onBackdropClick($event)">
+<div class="modal-backdrop" (mousedown)="onBackdropMousedown($event)" (click)="onBackdropClick($event)">
   <div class="modal-container modal-sm correlate-message-modal" role="dialog" aria-modal="true">
     <div class="modal-header">
       <h3 class="modal-title">{{ 'cockpit.correlateMessage.title' | translate }}</h3>
