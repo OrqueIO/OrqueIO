@@ -1806,7 +1806,7 @@
   "cockpit.batchOps.correlate.messageNameLabel": "Message Name",
   "cockpit.batchOps.correlate.messageNamePlaceholder": "Enter value...",
   "cockpit.batchOps.correlate.variablesLabel": "Variables",
-  "cockpit.batchOps.correlate.emptyNameWarning": "No message name set and no criteria selected — the operation may target all unfinished instances. Consider adding a message name or search criteria to narrow the scope.",
+  "cockpit.batchOps.correlate.emptyNameWarning": "Leave empty to correlate any message.",
   "cockpit.batchOps.correlate.openVarsModalBtn": "Add variables...",
   "cockpit.batchOps.confirm.correlateSummary": "A message will be correlated to {{count}} process instance(s).",
   "cockpit.batchOps.confirm.correlateQuerySummary": "A message will be correlated to all matching process instances.",

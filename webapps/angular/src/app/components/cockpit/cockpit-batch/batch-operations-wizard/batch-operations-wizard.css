@@ -951,10 +951,6 @@ app-pagination {
   margin-top: 10px;
 }
 
-.correlate-section .query-warning {
-  margin-top: 28px;
-}
-
 /* ── Correlate Message form ──────────────────────────────────────────────── */
 .correlate-section {
   display: flex;
@@ -973,6 +969,13 @@ app-pagination {
 .correlate-msg-label {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+}
+
+.correlate-help-text {
+  margin: var(--space-1) 0 0 0;
+  font-size: var(--font-size-xs, 12px);
+  line-height: 1.5;
   color: var(--text-secondary);
 }
 

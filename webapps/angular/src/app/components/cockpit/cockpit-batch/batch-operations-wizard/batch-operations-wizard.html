@@ -87,7 +87,7 @@
         </div>
 
         <!-- Query warning — required by Camunda 7.18 spec -->
-        <div *ngIf="mode === 'query'" class="query-warning">
+        <div *ngIf="mode === 'query' && !hasActiveCriteria" class="query-warning">
           <fa-icon [icon]="faExclamationTriangle"></fa-icon>
           <span>{{ 'cockpit.batchOps.suspend.queryWarning' | translate }}</span>
         </div>
@@ -209,7 +209,11 @@
             </label>
             <input type="text" class="delete-options__input"
                    [(ngModel)]="correlateMessageName"
-                   [placeholder]="'cockpit.batchOps.correlate.messageNamePlaceholder' | translate">
+                   [placeholder]="'cockpit.batchOps.correlate.messageNamePlaceholder' | translate"
+                   [attr.aria-describedby]="showCorrelateEmptyMessageWarning ? 'correlate-help-text' : null">
+            <p *ngIf="showCorrelateEmptyMessageWarning" id="correlate-help-text" class="correlate-help-text">
+              {{ 'cockpit.batchOps.correlate.emptyNameWarning' | translate }}
+            </p>
           </div>
 
           <div class="correlate-variables-section">
@@ -230,12 +234,6 @@
                 <button type="button" class="var-chip__remove" (click)="removeCorrelateVarDef(i)" title="Remove">&#x2715;</button>
               </div>
             </div>
-          </div>
-
-          <!-- Preventive warning: empty messageName + no criteria = unbounded scope -->
-          <div *ngIf="showCorrelateEmptyMessageWarning" class="query-warning">
-            <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-            <span>{{ 'cockpit.batchOps.correlate.emptyNameWarning' | translate }}</span>
           </div>
 
         </div>
