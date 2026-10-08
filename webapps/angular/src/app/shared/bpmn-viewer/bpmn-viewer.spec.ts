@@ -389,3 +389,69 @@ describe('BpmnViewerComponent — correlateOverlayPosition', () => {
     expect(comp.correlateOverlayPosition('', 0)).toEqual({ top: -28, right: 0 });
   });
 });
+
+describe('BpmnViewerComponent — correlate overlay click triggers change detection', () => {
+  beforeAll(() => initTestEnvironment());
+
+  let fixture: ComponentFixture<BpmnViewerComponent>;
+  let component: BpmnViewerComponent;
+  let overlays: any;
+  let elementRegistry: any;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [BpmnViewerComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(BpmnViewerComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges(); // triggers ngAfterViewInit → initViewer
+
+    const comp = component as any;
+    overlays = comp.viewer?.get('overlays');
+    elementRegistry = comp.viewer?.get('elementRegistry');
+  });
+
+  afterEach(() => vi.clearAllMocks());
+
+  it('overlay click callback executes inside NgZone and triggers change detection', async () => {
+    // Arrange: mock an element in the registry
+    const mockElement = {
+      id: 'Task_1',
+      type: 'bpmn:ReceiveTask',
+      businessObject: { id: 'Task_1' }
+    };
+    elementRegistry.get.mockReturnValue(mockElement);
+
+    let capturedButton: HTMLButtonElement | null = null;
+    overlays.add.mockImplementation((_anchorId: string, config: any) => {
+      capturedButton = config.html;
+      return 'overlay-id-1';
+    });
+
+    const callbackSpy = vi.fn();
+    const messageNodes = new Map([['Task_1', 'test-message']]);
+
+    // Act: add overlays (creates button with click listener)
+    component.addCorrelateOverlays(messageNodes, callbackSpy);
+
+    expect(capturedButton).not.toBeNull();
+    expect(capturedButton?.className).toBe('bpmn-correlate-overlay');
+
+    // Simulate click OUTSIDE Angular zone (like a real DOM event from bpmn-js overlay)
+    const ngZone = (component as any).ngZone;
+    await ngZone.runOutsideAngular(() => {
+      capturedButton?.click();
+    });
+
+    // Wait for async tasks (NgZone.run is async)
+    await fixture.whenStable();
+
+    // Assert: callback was called with the message name
+    expect(callbackSpy).toHaveBeenCalledWith('test-message');
+    expect(callbackSpy).toHaveBeenCalledTimes(1);
+
+    // The key assertion: change detection was triggered (no manual detectChanges needed)
+    // In a real scenario, this would make `*ngIf="showCorrelateModal"` render immediately
+  });
+});

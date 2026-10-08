@@ -1,5 +1,5 @@
 <div class="modal-backdrop" (click)="onBackdropClick($event)">
-  <div class="modal-container modal-sm" role="dialog" aria-modal="true">
+  <div class="modal-container modal-sm correlate-message-modal" role="dialog" aria-modal="true">
     <div class="modal-header">
       <h3 class="modal-title">{{ 'cockpit.correlateMessage.title' | translate }}</h3>
     </div>
@@ -12,11 +12,11 @@
             class="modal-input"
             [(ngModel)]="inputValue"
             [placeholder]="'cockpit.correlateMessage.messageNamePlaceholder' | translate"
-            (focus)="showDropdown = true"
+            (focus)="suggestionsEnabled && (showDropdown = true)"
             (blur)="onInputBlur()"
             autocomplete="off"
           />
-          <ul class="cm-suggestions" *ngIf="showDropdown && filteredSuggestions.length > 0">
+          <ul class="cm-suggestions" *ngIf="suggestionsEnabled && showDropdown && filteredSuggestions.length > 0">
             <li *ngFor="let s of filteredSuggestions" (mousedown)="selectSuggestion(s)">{{ s }}</li>
           </ul>
         </div>

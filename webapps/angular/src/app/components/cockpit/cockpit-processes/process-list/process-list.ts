@@ -47,7 +47,7 @@ import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent
 import { ModifyTabComponent, ModifyOverlay } from '../modify-tab/modify-tab';
 import { MOVE_INSTANCES_DIALOG_SESSION_KEY, BATCH_OPS_MODIFY_SIGNAL_KEY } from '../modify-tab/select-instances-dialog';
 import { CorrelateMessageModalComponent } from '../correlate-message-modal/correlate-message-modal';
-import { buildMessageNodeMap } from '../../../../utils/message-names.utils';
+import { buildMessageNodeMap, extractMessageNames } from '../../../../utils/message-names.utils';
 import { MultiValueFilter } from '../../../../services/cockpit.service';
 
 interface SortConfig {
@@ -1178,7 +1178,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   onBpmnViewerReady(): void {
     const elements = this.bpmnViewer?.getAllElements() ?? [];
     const nodeMap = buildMessageNodeMap(elements);
-    this.messageSuggestions = [...new Set(nodeMap.values())];
+    this.messageSuggestions = extractMessageNames(elements);
     if (nodeMap.size > 0) {
       this.bpmnViewer?.addCorrelateOverlays(nodeMap, (name) => {
         this.correlateInitialMessageName = name;

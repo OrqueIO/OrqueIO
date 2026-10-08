@@ -10,6 +10,7 @@ function make(): CorrelateMessageModalComponent {
   inst.inputValue = '';
   inst.showDropdown = false;
   inst.suggestions = [];
+  inst.suggestionsEnabled = true;
   return inst;
 }
 
@@ -102,5 +103,34 @@ describe('CorrelateMessageModalComponent', () => {
     fakeTarget.classList.add('modal-container');
     component.onBackdropClick({ target: fakeTarget } as unknown as MouseEvent);
     expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('suggestionsEnabled defaults to true', () => {
+    expect(component.suggestionsEnabled).toBe(true);
+  });
+
+  it('when suggestionsEnabled is false, filteredSuggestions still works (for internal consistency)', () => {
+    component.suggestionsEnabled = false;
+    component.suggestions = ['A', 'B', 'C'];
+    component.inputValue = '';
+    expect(component.filteredSuggestions).toEqual(['A', 'B', 'C']);
+  });
+
+  it('confirm emits inputValue when suggestionsEnabled is false (overlay mode)', () => {
+    component.suggestionsEnabled = false;
+    component.inputValue = 'PrefilledMessage';
+    const spy = vi.fn();
+    component.confirm.subscribe(spy);
+    component.onConfirm();
+    expect(spy).toHaveBeenCalledWith('PrefilledMessage');
+  });
+
+  it('confirm emits edited value when suggestionsEnabled is false and user edits input', () => {
+    component.suggestionsEnabled = false;
+    component.inputValue = 'EditedMessage';
+    const spy = vi.fn();
+    component.confirm.subscribe(spy);
+    component.onConfirm();
+    expect(spy).toHaveBeenCalledWith('EditedMessage');
   });
 });

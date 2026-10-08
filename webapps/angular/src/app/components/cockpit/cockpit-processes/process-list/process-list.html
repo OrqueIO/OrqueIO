@@ -650,6 +650,7 @@
   *ngIf="showCorrelateModal"
   [messageName]="correlateInitialMessageName"
   [suggestions]="messageSuggestions"
+  [suggestionsEnabled]="correlateInitialMessageName === null"
   (confirm)="onCorrelateOpenBatchOp($event)"
   (cancel)="showCorrelateModal = false"
 ></app-correlate-message-modal>

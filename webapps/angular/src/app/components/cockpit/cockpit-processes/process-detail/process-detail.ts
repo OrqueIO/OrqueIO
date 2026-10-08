@@ -53,7 +53,7 @@ import {
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { CorrelateMessageModalComponent } from '../correlate-message-modal/correlate-message-modal';
-import { buildMessageNodeMap } from '../../../../utils/message-names.utils';
+import { buildMessageNodeMap, extractMessageNames } from '../../../../utils/message-names.utils';
 import { ActivityInstanceTreeComponent } from '../../../../shared/activity-instance-tree/activity-instance-tree';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
@@ -648,7 +648,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       this.bpmnViewer?.resize();
       const elements = this.bpmnViewer?.getAllElements() ?? [];
       const nodeMap = buildMessageNodeMap(elements);
-      this.messageSuggestions = [...new Set(nodeMap.values())];
+      this.messageSuggestions = extractMessageNames(elements);
       if (nodeMap.size > 0) {
         this.bpmnViewer?.addCorrelateOverlays(nodeMap, (name) => {
           this.correlateInitialMessageName = name;

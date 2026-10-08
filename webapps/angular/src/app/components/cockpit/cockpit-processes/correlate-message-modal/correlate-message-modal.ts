@@ -18,6 +18,7 @@ export class CorrelateMessageModalComponent {
     this.inputValue = v ?? '';
   }
   @Input() suggestions: string[] = [];
+  @Input() suggestionsEnabled: boolean = true;
 
   @Output() confirm = new EventEmitter<string | null>();
   @Output() cancel = new EventEmitter<void>();

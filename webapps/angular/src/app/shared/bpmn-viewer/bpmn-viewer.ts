@@ -12,7 +12,8 @@ import {
   HostListener,
   ChangeDetectorRef,
   ViewEncapsulation,
-  inject
+  inject,
+  NgZone
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -60,6 +61,7 @@ export interface CallActivityClickEvent {
 })
 export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
+  private ngZone = inject(NgZone);
 
   @ViewChild('canvas', { static: true }) private canvasRef!: ElementRef<HTMLDivElement>;
 
@@ -787,7 +789,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       btn.innerHTML = envelope;
       btn.addEventListener('click', (e: Event) => {
         e.stopPropagation();
-        onClick(messageName);
+        this.ngZone.run(() => onClick(messageName));
       });
 
       try {
