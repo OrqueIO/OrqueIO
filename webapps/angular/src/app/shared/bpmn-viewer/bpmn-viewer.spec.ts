@@ -358,35 +358,35 @@ describe('BpmnViewerComponent — subprocess breadcrumb', () => {
 
 describe('BpmnViewerComponent — correlateOverlayPosition', () => {
   // BoundaryEvent index 0 → button BL at host task TR corner (right: 0 → CSS left = task.width)
-  it('returns { top: -28, right: 0 } for bpmn:BoundaryEvent index 0 (first button at task TR)', () => {
+  it('returns { top: -24, right: 0 } for bpmn:BoundaryEvent index 0 (first button at task TR)', () => {
     const comp: any = Object.create(BpmnViewerComponent.prototype);
-    expect(comp.correlateOverlayPosition('bpmn:BoundaryEvent', 0)).toEqual({ top: -28, right: 0 });
+    expect(comp.correlateOverlayPosition('bpmn:BoundaryEvent', 0)).toEqual({ top: -24, right: 0 });
   });
 
-  // BoundaryEvent index 1 → second button stacked leftward (right: 32 → button.left = task.right − 32, 4-px gap)
-  it('returns { top: -28, right: 32 } for bpmn:BoundaryEvent index 1 (second button on same task)', () => {
+  // BoundaryEvent index 1 → second button stacked leftward (right: 28 → button.left = task.right − 28, 4-px gap)
+  it('returns { top: -24, right: 28 } for bpmn:BoundaryEvent index 1 (second button on same task)', () => {
     const comp: any = Object.create(BpmnViewerComponent.prototype);
-    expect(comp.correlateOverlayPosition('bpmn:BoundaryEvent', 1)).toEqual({ top: -28, right: 32 });
+    expect(comp.correlateOverlayPosition('bpmn:BoundaryEvent', 1)).toEqual({ top: -24, right: 28 });
   });
 
-  it('returns { top: -28, right: 0 } for bpmn:IntermediateCatchEvent', () => {
+  it('returns { top: -24, right: 0 } for bpmn:IntermediateCatchEvent', () => {
     const comp: any = Object.create(BpmnViewerComponent.prototype);
-    expect(comp.correlateOverlayPosition('bpmn:IntermediateCatchEvent', 0)).toEqual({ top: -28, right: 0 });
+    expect(comp.correlateOverlayPosition('bpmn:IntermediateCatchEvent', 0)).toEqual({ top: -24, right: 0 });
   });
 
-  it('returns { top: -28, right: 0 } for bpmn:ReceiveTask', () => {
+  it('returns { top: -24, right: 0 } for bpmn:ReceiveTask', () => {
     const comp: any = Object.create(BpmnViewerComponent.prototype);
-    expect(comp.correlateOverlayPosition('bpmn:ReceiveTask', 0)).toEqual({ top: -28, right: 0 });
+    expect(comp.correlateOverlayPosition('bpmn:ReceiveTask', 0)).toEqual({ top: -24, right: 0 });
   });
 
-  it('returns { top: -28, right: 0 } for bpmn:StartEvent', () => {
+  it('returns { top: -24, right: 0 } for bpmn:StartEvent', () => {
     const comp: any = Object.create(BpmnViewerComponent.prototype);
-    expect(comp.correlateOverlayPosition('bpmn:StartEvent', 0)).toEqual({ top: -28, right: 0 });
+    expect(comp.correlateOverlayPosition('bpmn:StartEvent', 0)).toEqual({ top: -24, right: 0 });
   });
 
-  it('returns { top: -28, right: 0 } for unknown type (fallback)', () => {
+  it('returns { top: -24, right: 0 } for unknown type (fallback)', () => {
     const comp: any = Object.create(BpmnViewerComponent.prototype);
-    expect(comp.correlateOverlayPosition('', 0)).toEqual({ top: -28, right: 0 });
+    expect(comp.correlateOverlayPosition('', 0)).toEqual({ top: -24, right: 0 });
   });
 });
 
@@ -436,7 +436,7 @@ describe('BpmnViewerComponent — correlate overlay click triggers change detect
     component.addCorrelateOverlays(messageNodes, callbackSpy);
 
     expect(capturedButton).not.toBeNull();
-    expect(capturedButton?.className).toBe('bpmn-correlate-overlay');
+    expect(capturedButton?.className).toBe('bpmn-correlate-overlay bpmn-correlate-overlay--hidden');
 
     // Simulate click OUTSIDE Angular zone (like a real DOM event from bpmn-js overlay)
     const ngZone = (component as any).ngZone;
@@ -453,5 +453,113 @@ describe('BpmnViewerComponent — correlate overlay click triggers change detect
 
     // The key assertion: change detection was triggered (no manual detectChanges needed)
     // In a real scenario, this would make `*ngIf="showCorrelateModal"` render immediately
+  });
+
+  it('overlay is hidden by default', () => {
+    const mockElement = {
+      id: 'Task_1',
+      type: 'bpmn:ReceiveTask',
+      businessObject: { id: 'Task_1' }
+    };
+    elementRegistry.get.mockReturnValue(mockElement);
+
+    let capturedButton: HTMLButtonElement | null = null;
+    overlays.add.mockImplementation((_anchorId: string, config: any) => {
+      capturedButton = config.html;
+      return 'overlay-id-1';
+    });
+
+    const messageNodes = new Map([['Task_1', 'test-message']]);
+    component.addCorrelateOverlays(messageNodes, vi.fn());
+
+    expect(capturedButton).not.toBeNull();
+    expect(capturedButton?.classList.contains('bpmn-correlate-overlay--hidden')).toBe(true);
+  });
+
+  it('overlay becomes visible on element hover', () => {
+    const mockElement = {
+      id: 'Task_1',
+      type: 'bpmn:ReceiveTask',
+      businessObject: { id: 'Task_1' }
+    };
+    elementRegistry.get.mockReturnValue(mockElement);
+
+    let capturedButton: HTMLButtonElement | null = null;
+    let hoverCallback: ((event: any) => void) | null = null;
+
+    overlays.add.mockImplementation((_anchorId: string, config: any) => {
+      capturedButton = config.html;
+      return 'overlay-id-1';
+    });
+
+    const comp = component as any;
+    const eventBus = comp.viewer?.get('eventBus');
+    const originalOn = eventBus.on;
+    eventBus.on = vi.fn((eventName: string, callback: any) => {
+      if (eventName === 'element.hover') {
+        hoverCallback = callback;
+      }
+      return originalOn.call(eventBus, eventName, callback);
+    });
+
+    const messageNodes = new Map([['Task_1', 'test-message']]);
+    component.addCorrelateOverlays(messageNodes, vi.fn());
+
+    expect(capturedButton?.classList.contains('bpmn-correlate-overlay--hidden')).toBe(true);
+
+    // Simulate element.hover event
+    if (hoverCallback) {
+      hoverCallback({ element: { id: 'Task_1' } });
+    }
+
+    expect(capturedButton?.classList.contains('bpmn-correlate-overlay--hidden')).toBe(false);
+  });
+
+  it('overlay becomes visible on focus (keyboard navigation)', () => {
+    const mockElement = {
+      id: 'Task_1',
+      type: 'bpmn:ReceiveTask',
+      businessObject: { id: 'Task_1' }
+    };
+    elementRegistry.get.mockReturnValue(mockElement);
+
+    let capturedButton: HTMLButtonElement | null = null;
+    overlays.add.mockImplementation((_anchorId: string, config: any) => {
+      capturedButton = config.html;
+      return 'overlay-id-1';
+    });
+
+    const messageNodes = new Map([['Task_1', 'test-message']]);
+    component.addCorrelateOverlays(messageNodes, vi.fn());
+
+    expect(capturedButton?.classList.contains('bpmn-correlate-overlay--hidden')).toBe(true);
+
+    // Simulate focus event
+    const focusEvent = new Event('focus');
+    capturedButton?.dispatchEvent(focusEvent);
+
+    expect(capturedButton?.classList.contains('bpmn-correlate-overlay--hidden')).toBe(false);
+  });
+
+  it('cleans up event listeners and timers on clearCorrelateOverlays', () => {
+    const mockElement = {
+      id: 'Task_1',
+      type: 'bpmn:ReceiveTask',
+      businessObject: { id: 'Task_1' }
+    };
+    elementRegistry.get.mockReturnValue(mockElement);
+
+    overlays.add.mockReturnValue('overlay-id-1');
+    const messageNodes = new Map([['Task_1', 'test-message']]);
+    component.addCorrelateOverlays(messageNodes, vi.fn());
+
+    const comp = component as any;
+    expect(comp.correlateHoverListeners.length).toBeGreaterThan(0);
+    expect(comp.correlateOverlayData.size).toBe(1);
+
+    component.clearCorrelateOverlays();
+
+    expect(comp.correlateHoverListeners.length).toBe(0);
+    expect(comp.correlateOverlayData.size).toBe(0);
   });
 });

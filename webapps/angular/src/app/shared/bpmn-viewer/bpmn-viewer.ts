@@ -97,6 +97,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private callActivityOverlayIds: string[] = [];
   private callActivityErrorOverlayIds: string[] = [];
   private correlateOverlayIds: string[] = [];
+  private correlateOverlayData: Map<string, { btn: HTMLButtonElement; elementId: string; anchorId: string; hideTimer: ReturnType<typeof setTimeout> | null }> = new Map();
+  private correlateHoverListeners: Array<() => void> = [];
   private currentXml: string | null = null;
   private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -763,6 +765,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.clearCorrelateOverlays();
 
     const elementRegistry = this.viewer.get('elementRegistry');
+    const eventBus = this.viewer.get('eventBus');
+
     // Tracks how many eligible BoundaryEvents have been placed per host task (for stacking)
     const hostBoundaryCount = new Map<string, number>();
     const envelope = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 16 16"><path fill="currentColor" d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/></svg>';
@@ -784,8 +788,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
 
       const btn = document.createElement('button');
-      btn.className = 'bpmn-correlate-overlay';
-      btn.title = messageName;
+      btn.className = 'bpmn-correlate-overlay bpmn-correlate-overlay--hidden';
+      btn.title = `Correlate message: ${messageName}`;
+      btn.setAttribute('aria-label', `Correlate message: ${messageName}`);
       btn.innerHTML = envelope;
       btn.addEventListener('click', (e: Event) => {
         e.stopPropagation();
@@ -795,7 +800,92 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       try {
         const id = this.overlays.add(anchorId, { position, html: btn });
         this.correlateOverlayIds.push(id);
+
+        // Store overlay data for hover management
+        this.correlateOverlayData.set(id, { btn, elementId, anchorId, hideTimer: null });
+
+        // Setup hover listeners outside Angular zone for performance
+        this.ngZone.runOutsideAngular(() => {
+          this.setupCorrelateOverlayHover(id, elementId, anchorId, btn, eventBus, elementRegistry);
+        });
       } catch (_) {}
+    });
+  }
+
+  private setupCorrelateOverlayHover(
+    overlayId: string,
+    elementId: string,
+    anchorId: string,
+    btn: HTMLButtonElement,
+    eventBus: any,
+    elementRegistry: any
+  ): void {
+    const HIDE_DELAY = 150;
+
+    const showOverlay = () => {
+      const data = this.correlateOverlayData.get(overlayId);
+      if (!data) return;
+      if (data.hideTimer) {
+        clearTimeout(data.hideTimer);
+        data.hideTimer = null;
+      }
+      btn.classList.remove('bpmn-correlate-overlay--hidden');
+    };
+
+    const hideOverlay = () => {
+      const data = this.correlateOverlayData.get(overlayId);
+      if (!data) return;
+      if (data.hideTimer) clearTimeout(data.hideTimer);
+      data.hideTimer = setTimeout(() => {
+        btn.classList.add('bpmn-correlate-overlay--hidden');
+        data.hideTimer = null;
+      }, HIDE_DELAY);
+    };
+
+    // Show on element hover (elementId or anchorId if different, e.g., BoundaryEvent on host task)
+    const onElementHover = (event: any) => {
+      const hoveredId = event.element?.id;
+      if (hoveredId === elementId || hoveredId === anchorId) {
+        showOverlay();
+      }
+    };
+
+    // Hide on element out
+    const onElementOut = (event: any) => {
+      const leftId = event.element?.id;
+      if (leftId === elementId || leftId === anchorId) {
+        hideOverlay();
+      }
+    };
+
+    // Keep visible when hovering the button itself
+    const onButtonEnter = () => showOverlay();
+    const onButtonLeave = () => hideOverlay();
+
+    // Show on focus (keyboard navigation)
+    const onButtonFocus = () => showOverlay();
+    const onButtonBlur = () => hideOverlay();
+
+    eventBus.on('element.hover', onElementHover);
+    eventBus.on('element.out', onElementOut);
+    btn.addEventListener('mouseenter', onButtonEnter);
+    btn.addEventListener('mouseleave', onButtonLeave);
+    btn.addEventListener('focus', onButtonFocus);
+    btn.addEventListener('blur', onButtonBlur);
+
+    // Store cleanup functions
+    this.correlateHoverListeners.push(() => {
+      eventBus.off('element.hover', onElementHover);
+      eventBus.off('element.out', onElementOut);
+      btn.removeEventListener('mouseenter', onButtonEnter);
+      btn.removeEventListener('mouseleave', onButtonLeave);
+      btn.removeEventListener('focus', onButtonFocus);
+      btn.removeEventListener('blur', onButtonBlur);
+      const data = this.correlateOverlayData.get(overlayId);
+      if (data?.hideTimer) {
+        clearTimeout(data.hideTimer);
+        data.hideTimer = null;
+      }
     });
   }
 
@@ -803,7 +893,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     elementType: string,
     boundaryIndex: number
   ): { top: number; right: number } {
-    const BTN = 28;  // matches .bpmn-correlate-overlay width/height
+    const BTN = 24;  // reduced from 28px to 24px
     const GAP = 4;   // spacing between stacked buttons on the same host task
 
     // BoundaryEvent: anchor on host task top-right; additional BEs on same task stack leftward
@@ -817,9 +907,26 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   clearCorrelateOverlays(): void {
+    // Clean up all timers
+    for (const data of this.correlateOverlayData.values()) {
+      if (data.hideTimer) {
+        clearTimeout(data.hideTimer);
+        data.hideTimer = null;
+      }
+    }
+
+    // Clean up all event listeners
+    for (const cleanup of this.correlateHoverListeners) {
+      cleanup();
+    }
+    this.correlateHoverListeners = [];
+
+    // Remove overlays from DOM
     for (const id of this.correlateOverlayIds) {
       try { this.overlays?.remove(id); } catch (_) {}
     }
+
     this.correlateOverlayIds = [];
+    this.correlateOverlayData.clear();
   }
 }

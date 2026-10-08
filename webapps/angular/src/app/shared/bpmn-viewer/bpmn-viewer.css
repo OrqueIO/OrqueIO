@@ -340,8 +340,8 @@ button.breadcrumb-parent-name {
 
 /* Correlate Message Overlay */
 .bpmn-correlate-overlay {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   cursor: pointer;
   border: 1.5px solid var(--color-info, #3b82f6);
@@ -354,7 +354,13 @@ button.breadcrumb-parent-name {
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  opacity: 1;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.12s ease;
+}
+
+.bpmn-correlate-overlay--hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .bpmn-correlate-overlay svg {
@@ -370,6 +376,8 @@ button.breadcrumb-parent-name {
 }
 
 .bpmn-correlate-overlay:focus-visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
   outline: 2px solid var(--color-info, #3b82f6);
   outline-offset: 2px;
 }
