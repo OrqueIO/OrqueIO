@@ -320,6 +320,347 @@ describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch withJobs
 
 });
 
+describe('BatchOperationsWizardComponent — correlate buildHistoricQueryForBatch', () => {
+
+  it('correlate: base query is unfinished only — no active/suspended/finished lock', () => {
+    const result = buildQuery('correlate', []);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+    expect(result['finished']).toBeUndefined();
+  });
+
+  it('correlate: user can narrow to active via stateActive criterion', () => {
+    const result = buildQuery('correlate', [{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('correlate: user can narrow to suspended via stateSuspended criterion', () => {
+    const result = buildQuery('correlate', [{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('correlate: no process definition locked by default', () => {
+    const result = buildQuery('correlate', []);
+    expect(result['processDefinitionIdIn']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+  });
+
+  it('correlate: user-provided processDefinition criterion is accepted (cross-process by design)', () => {
+    const result = buildQuery('correlate', [
+      { field: 'processDefinition', values: ['order-proc', 'invoice-val'] }
+    ]);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc', 'invoice-val']);
+    expect(result['unfinished']).toBe(true);
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — correlate buildVariablesPayload (via parameterised overload)', () => {
+
+  function buildCorrelateVarsPayload(defs: VariableDef[]): Record<string, { value: unknown; type: string }> {
+    const stub = { variableDefinitions: [] as VariableDef[] };
+    return BatchOperationsWizardComponent.prototype.buildVariablesPayload.call(stub, defs);
+  }
+
+  it('instances mode with messageName and one variable: payload contains the variable', () => {
+    const vars = buildCorrelateVarsPayload([{ name: 'orderId', type: 'String', value: 'ORD-001' }]);
+    expect(vars['orderId']).toEqual({ value: 'ORD-001', type: 'String' });
+    expect(Object.keys(vars)).toHaveLength(1);
+  });
+
+  it('empty correlateVariableDefs: payload is empty object (variables field omitted from request)', () => {
+    const vars = buildCorrelateVarsPayload([]);
+    expect(Object.keys(vars)).toHaveLength(0);
+  });
+
+  it('set-variables behavior unchanged: buildVariablesPayload() without args still uses variableDefinitions', () => {
+    const stub = { variableDefinitions: [{ name: 'x', type: 'String', value: 'hello' }] as VariableDef[] };
+    const vars = BatchOperationsWizardComponent.prototype.buildVariablesPayload.call(stub);
+    expect(vars['x']).toEqual({ value: 'hello', type: 'String' });
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — correlate lockedFilterState', () => {
+
+  it('correlate: lockedFilterState is "unfinished" (not "active" like suspend)', () => {
+    expect(getLockedFilterState('correlate')).toBe('unfinished');
+  });
+
+  it('correlate vs suspend: different locked states — correlate allows suspended instances too', () => {
+    expect(getLockedFilterState('suspend')).toBe('active');
+    expect(getLockedFilterState('correlate')).toBe('unfinished');
+    expect(getLockedFilterState('correlate')).not.toBe(getLockedFilterState('suspend'));
+  });
+
+  it('correlate vs set-variables: same locked state (both target unfinished instances)', () => {
+    expect(getLockedFilterState('correlate')).toBe('unfinished');
+    expect(getLockedFilterState('set-variables')).toBe('unfinished');
+  });
+
+});
+
+// ─── correlate: confirmPayloadJson ─────────────────────────────────────────
+
+function getCorrelatePayload(
+  mode: 'instances' | 'query',
+  overrides: Partial<{
+    correlateMessageName: string;
+    correlateVariableDefs: VariableDef[];
+    selectedIds: Set<string>;
+    filterCriteria: MultiValueFilter[];
+    resolvedBatchQuery: Record<string, unknown> | null;
+  }> = {}
+): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'correlate',
+    mode,
+    correlateMessageName: 'payment-received',
+    correlateVariableDefs: [] as VariableDef[],
+    selectedIds: new Set(['inst-1', 'inst-2']),
+    filterCriteria: [],
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+    resolvedBatchQuery: null as Record<string, unknown> | null,
+    buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload,
+    ...overrides
+  };
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmPayloadJson');
+  return JSON.parse(desc?.get?.call(stub) as string);
+}
+
+describe('BatchOperationsWizardComponent — correlate: confirmPayloadJson', () => {
+
+  it('instances mode with messageName — payload contains messageName and processInstanceIds', () => {
+    const payload = getCorrelatePayload('instances', { correlateMessageName: 'payment-received' });
+    expect(payload['messageName']).toBe('payment-received');
+    expect(payload['processInstanceIds']).toEqual(expect.arrayContaining(['inst-1', 'inst-2']));
+    expect(payload['historicProcessInstanceQuery']).toBeUndefined();
+    expect(payload['variables']).toBeUndefined();
+  });
+
+  it('instances mode without messageName — messageName omitted from payload (never "")', () => {
+    const payload = getCorrelatePayload('instances', { correlateMessageName: '' });
+    expect(payload['messageName']).toBeUndefined();
+    expect(payload['messageName']).not.toBe('');
+    expect(payload['processInstanceIds']).toBeDefined();
+  });
+
+  it('instances mode with whitespace-only messageName — treated as empty, messageName omitted', () => {
+    const payload = getCorrelatePayload('instances', { correlateMessageName: '   ' });
+    expect(payload['messageName']).toBeUndefined();
+    expect(payload['messageName']).not.toBe('');
+    expect(payload['messageName']).not.toBe('   ');
+  });
+
+  it('query mode with messageName — payload contains messageName and historicProcessInstanceQuery', () => {
+    const payload = getCorrelatePayload('query', {
+      correlateMessageName: 'order-created',
+      selectedIds: new Set()
+    });
+    expect(payload['messageName']).toBe('order-created');
+    expect(payload['historicProcessInstanceQuery']).toBeDefined();
+    expect(payload['processInstanceIds']).toBeUndefined();
+    expect((payload['historicProcessInstanceQuery'] as Record<string, unknown>)['unfinished']).toBe(true);
+  });
+
+  it('query mode without messageName — messageName omitted, historicProcessInstanceQuery present', () => {
+    const payload = getCorrelatePayload('query', { correlateMessageName: '', selectedIds: new Set() });
+    expect(payload['messageName']).toBeUndefined();
+    expect(payload['messageName']).not.toBe('');
+    expect(payload['historicProcessInstanceQuery']).toBeDefined();
+  });
+
+  it('instances mode with variables — variables map included in payload', () => {
+    const payload = getCorrelatePayload('instances', {
+      correlateMessageName: 'msg',
+      correlateVariableDefs: [{ name: 'amount', type: 'Integer', value: '42' }]
+    });
+    expect(payload['variables']).toBeDefined();
+    expect((payload['variables'] as Record<string, unknown>)['amount']).toEqual({ value: 42, type: 'Integer' });
+  });
+
+  it('instances mode without variables — variables key absent from payload', () => {
+    const payload = getCorrelatePayload('instances', { correlateVariableDefs: [] });
+    expect(payload['variables']).toBeUndefined();
+  });
+
+  it('query mode with variables — variables map included alongside historicProcessInstanceQuery', () => {
+    const payload = getCorrelatePayload('query', {
+      correlateMessageName: 'msg',
+      correlateVariableDefs: [{ name: 'status', type: 'String', value: 'active' }],
+      selectedIds: new Set()
+    });
+    expect(payload['variables']).toBeDefined();
+    expect((payload['variables'] as Record<string, unknown>)['status']).toEqual({ value: 'active', type: 'String' });
+    expect(payload['historicProcessInstanceQuery']).toBeDefined();
+  });
+
+  it('query mode with resolvedBatchQuery — uses resolvedBatchQuery instead of buildHistoricQueryForBatch', () => {
+    const resolved = { unfinished: true, processInstanceIdIn: ['p-1', 'p-2'] };
+    const payload = getCorrelatePayload('query', {
+      correlateMessageName: 'done',
+      resolvedBatchQuery: resolved,
+      selectedIds: new Set()
+    });
+    const hq = payload['historicProcessInstanceQuery'] as Record<string, unknown>;
+    expect(hq['processInstanceIdIn']).toEqual(['p-1', 'p-2']);
+  });
+
+  it('messageName is trimmed before inclusion — leading/trailing whitespace stripped', () => {
+    const payload = getCorrelatePayload('instances', { correlateMessageName: '  msg-name  ' });
+    expect(payload['messageName']).toBe('msg-name');
+  });
+
+  it('historicProcessInstanceQuery base includes unfinished:true for correlate', () => {
+    const payload = getCorrelatePayload('query', { correlateMessageName: '', selectedIds: new Set() });
+    const hq = payload['historicProcessInstanceQuery'] as Record<string, unknown>;
+    expect(hq['unfinished']).toBe(true);
+    expect(hq['finished']).toBeUndefined();
+  });
+
+  it('no processDefinitionKeyIn in historicProcessInstanceQuery by default (multi-process by design)', () => {
+    const payload = getCorrelatePayload('query', { correlateMessageName: '', selectedIds: new Set() });
+    const hq = payload['historicProcessInstanceQuery'] as Record<string, unknown>;
+    expect(hq['processDefinitionKeyIn']).toBeUndefined();
+    expect(hq['processDefinitionIdIn']).toBeUndefined();
+  });
+
+  it('set-variables non-regression — buildVariablesPayload without args still uses variableDefinitions', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances' as const,
+      variableDefinitions: [{ name: 'x', type: 'String', value: 'hello' }] as VariableDef[],
+      selectedIds: new Set(['inst-a']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload,
+    };
+    const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmPayloadJson');
+    const payload = JSON.parse(desc?.get?.call(stub) as string);
+    expect(payload['variables']['x']).toEqual({ value: 'hello', type: 'String' });
+    expect(payload['processInstanceIds']).toContain('inst-a');
+  });
+
+});
+
+// ─── correlate: confirmEndpoint ────────────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — correlate: confirmEndpoint', () => {
+
+  it('instances mode → /process-instance/message-async', () => {
+    const stub = { selectedOperationId: 'correlate', mode: 'instances' };
+    expect(getConfirmEndpoint(stub)).toContain('/process-instance/message-async');
+  });
+
+  it('query mode → /process-instance/message-async (same endpoint, body differs)', () => {
+    const stub = { selectedOperationId: 'correlate', mode: 'query' };
+    expect(getConfirmEndpoint(stub)).toContain('/process-instance/message-async');
+  });
+
+});
+
+// ─── correlate: canContinue ────────────────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — correlate: canContinue', () => {
+
+  it('instances mode with no instances selected → false', () => {
+    const stub = {
+      selectedOperationId: 'correlate',
+      mode: 'instances',
+      selectedIds: new Set<string>()
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('instances mode with instances selected → true (messageName not required)', () => {
+    const stub = {
+      selectedOperationId: 'correlate',
+      mode: 'instances',
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+  it('query mode with no instances → true (query mode never requires explicit selection)', () => {
+    const stub = {
+      selectedOperationId: 'correlate',
+      mode: 'query',
+      selectedIds: new Set<string>()
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+});
+
+// ─── correlate: showCorrelateEmptyMessageWarning ───────────────────────────
+
+function getShowCorrelateEmptyMessageWarning(stub: Record<string, unknown>): boolean {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'showCorrelateEmptyMessageWarning');
+  return desc?.get?.call(stub) as boolean;
+}
+
+describe('BatchOperationsWizardComponent — correlate: showCorrelateEmptyMessageWarning', () => {
+
+  it('returns true when messageName is empty and no criteria active', () => {
+    const stub = { selectedOperationId: 'correlate', correlateMessageName: '', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(true);
+  });
+
+  it('returns true when messageName is whitespace-only and no criteria active', () => {
+    const stub = { selectedOperationId: 'correlate', correlateMessageName: '   ', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(true);
+  });
+
+  it('returns false when messageName is set (even without criteria)', () => {
+    const stub = { selectedOperationId: 'correlate', correlateMessageName: 'payment-received', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(false);
+  });
+
+  it('returns false when criteria are active (even with empty messageName)', () => {
+    const stub = { selectedOperationId: 'correlate', correlateMessageName: '', hasActiveCriteria: true };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(false);
+  });
+
+  it('returns false when both messageName is set and criteria are active', () => {
+    const stub = { selectedOperationId: 'correlate', correlateMessageName: 'msg', hasActiveCriteria: true };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(false);
+  });
+
+  it('returns false for other operations even with no messageName and no criteria', () => {
+    const stub = { selectedOperationId: 'set-variables', correlateMessageName: '', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(false);
+  });
+
+  it('returns false when selectedOperationId is null', () => {
+    const stub = { selectedOperationId: null, correlateMessageName: '', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(false);
+  });
+
+  it('warning disappears when user types a messageName (reactive)', () => {
+    const withName = { selectedOperationId: 'correlate', correlateMessageName: 'msg', hasActiveCriteria: false };
+    const withoutName = { selectedOperationId: 'correlate', correlateMessageName: '', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(withName)).toBe(false);
+    expect(getShowCorrelateEmptyMessageWarning(withoutName)).toBe(true);
+  });
+
+  it('warning disappears when user adds a search criterion (reactive)', () => {
+    const withCriteria = { selectedOperationId: 'correlate', correlateMessageName: '', hasActiveCriteria: true };
+    const withoutCriteria = { selectedOperationId: 'correlate', correlateMessageName: '', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(withCriteria)).toBe(false);
+    expect(getShowCorrelateEmptyMessageWarning(withoutCriteria)).toBe(true);
+  });
+
+});
+
 describe('InstanceFilterPanelComponent — ngOnChanges resets pills on operation switch', () => {
 
   function applyPillsChange(
@@ -2801,4 +3142,78 @@ describe('BatchOperationsWizardComponent — loadFromSessionStorage strips finis
     expect(stub.filterCriteria).toHaveLength(0);
     expect(stub.hasActiveCriteria).toBe(false);
   });
+
+  it('correlate: strips finished-date pills', () => {
+    const stub = loadSession('correlate', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+});
+
+// ─── correlate: buildDisplayStatePill (regression guard for display query) ───────────
+// Bug: correlate was absent from the instanceLoad$ if/else chain and fell to the else
+// branch which hardcodes ['active']. Fix: correlate now returns ['unfinished'] by default,
+// matching buildHistoricQueryForBatch (the execute payload) and lockedFilterState.
+
+function buildDisplayStatePill(
+  operationId: string,
+  filterCriteria: MultiValueFilter[]
+): { field: string; values: string[] } | null {
+  return BatchOperationsWizardComponent.prototype.buildDisplayStatePill.call({}, operationId, filterCriteria);
+}
+
+describe('BatchOperationsWizardComponent — correlate: buildDisplayStatePill (display query)', () => {
+
+  it('default (no criteria): returns unfinished — suspended instances visible in table', () => {
+    const pill = buildDisplayStatePill('correlate', []);
+    expect(pill?.values).toEqual(['unfinished']);
+  });
+
+  it('regression guard: no longer returns active by default (was the bug)', () => {
+    const pill = buildDisplayStatePill('correlate', []);
+    expect(pill?.values).not.toEqual(['active']);
+  });
+
+  it('stateActive criterion: narrows display to active only', () => {
+    const pill = buildDisplayStatePill('correlate', [{ field: 'stateActive', values: [] }]);
+    expect(pill?.values).toEqual(['active']);
+  });
+
+  it('stateSuspended criterion: narrows display to suspended only', () => {
+    const pill = buildDisplayStatePill('correlate', [{ field: 'stateSuspended', values: [] }]);
+    expect(pill?.values).toEqual(['suspended']);
+  });
+
+  it('both toggles absent: returns unfinished (active + suspended)', () => {
+    const pill = buildDisplayStatePill('correlate', [{ field: 'businessKey', values: ['ORD-1'] }]);
+    expect(pill?.values).toEqual(['unfinished']);
+  });
+
+  it('set-variables non-regression: still unfinished by default', () => {
+    expect(buildDisplayStatePill('set-variables', [])?.values).toEqual(['unfinished']);
+  });
+
+  it('set-retries-jobs non-regression: still unfinished by default', () => {
+    expect(buildDisplayStatePill('set-retries-jobs', [])?.values).toEqual(['unfinished']);
+  });
+
+  it('set-retries-external non-regression: still unfinished by default', () => {
+    expect(buildDisplayStatePill('set-retries-external', [])?.values).toEqual(['unfinished']);
+  });
+
+  it('delete-running non-regression: still unfinished by default', () => {
+    expect(buildDisplayStatePill('delete-running', [])?.values).toEqual(['unfinished']);
+  });
+
+  it('activate non-regression: still suspended', () => {
+    expect(buildDisplayStatePill('activate', [])?.values).toEqual(['suspended']);
+  });
+
+  it('delete-finished non-regression: still finished by default', () => {
+    expect(buildDisplayStatePill('delete-finished', [])?.values).toEqual(['finished']);
+  });
+
+  it('suspend (else branch): still active — suspend targets active instances', () => {
+    expect(buildDisplayStatePill('suspend', [])?.values).toEqual(['active']);
+  });
+
 });

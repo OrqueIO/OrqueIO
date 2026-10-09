@@ -32,7 +32,8 @@ import {
   faPlus,
   faMinus,
   faSync,
-  faArrowUp
+  faArrowUp,
+  faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -45,6 +46,9 @@ import { TranslateService } from '../../../../i18n/translate.service';
 import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { ModifyTabComponent, ModifyOverlay } from '../modify-tab/modify-tab';
 import { MOVE_INSTANCES_DIALOG_SESSION_KEY, BATCH_OPS_MODIFY_SIGNAL_KEY } from '../modify-tab/select-instances-dialog';
+import { CorrelateMessageModalComponent } from '../correlate-message-modal/correlate-message-modal';
+import { buildMessageNodeMap, extractMessageNames } from '../../../../utils/message-names.utils';
+import { MultiValueFilter } from '../../../../services/cockpit.service';
 
 interface SortConfig {
   column: string;
@@ -81,7 +85,8 @@ interface FilterState {
     CockpitHeaderComponent,
     TranslatePipe,
     BpmnViewerComponent,
-    ModifyTabComponent
+    ModifyTabComponent,
+    CorrelateMessageModalComponent
   ],
   templateUrl: './process-list.html',
   styleUrls: ['./process-list.css'],
@@ -128,6 +133,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   faMinus = faMinus;
   faSync = faSync;
   faArrowUp = faArrowUp;
+  faEnvelope = faEnvelope;
 
   @ViewChild('bpmnViewer') bpmnViewer!: BpmnViewerComponent;
   @ViewChild('modifyTab') modifyTab?: ModifyTabComponent;
@@ -206,6 +212,11 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   calledProcessDefinitionsLoading = false;
 
   private modifyOverlayIds: string[] = [];
+
+  // Correlate Message
+  showCorrelateModal = false;
+  messageSuggestions: string[] = [];
+  correlateInitialMessageName: string | null = null;
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
@@ -1162,5 +1173,51 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           );
         }
       });
+  }
+
+  onBpmnViewerReady(): void {
+    const elements = this.bpmnViewer?.getAllElements() ?? [];
+    const nodeMap = buildMessageNodeMap(elements);
+    this.messageSuggestions = extractMessageNames(elements);
+    if (nodeMap.size > 0) {
+      this.bpmnViewer?.addCorrelateOverlays(nodeMap, (name) => {
+        this.correlateInitialMessageName = name;
+        this.showCorrelateModal = true;
+        this.cdr.markForCheck();
+      });
+    }
+    this.cdr.markForCheck();
+  }
+
+  openCorrelateMessage(): void {
+    this.correlateInitialMessageName = null;
+    this.showCorrelateModal = true;
+    this.cdr.markForCheck();
+  }
+
+  onCorrelateOpenBatchOp(messageName: string | null): void {
+    this.showCorrelateModal = false;
+    if (!this.processDefinition) return;
+
+    const criterion: MultiValueFilter = {
+      field: 'processDefinition',
+      values: [this.processDefinitionKey],
+      processDefinitionIds: [this.processDefinition.id]
+    };
+
+    const state = {
+      operationId: 'correlate',
+      mode: 'query',
+      step: 1,
+      filterCriteria: [criterion],
+      messageName: messageName ?? undefined,
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedIds: [],
+      correlateVariableDefs: []
+    };
+
+    sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+    this.router.navigate(['/cockpit/batch/operations']);
   }
 }

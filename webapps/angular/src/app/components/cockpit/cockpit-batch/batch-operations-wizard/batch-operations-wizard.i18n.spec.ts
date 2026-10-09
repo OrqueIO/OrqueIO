@@ -81,6 +81,20 @@ const STEP1_KEYS = [
   'cockpit.batchOps.moveInstances.noProcesses',
 ];
 
+const CORRELATE_KEYS = [
+  'cockpit.batchOps.correlate.anyStateNote',
+  'cockpit.batchOps.correlate.noInstances',
+  'cockpit.batchOps.correlate.messageNameLabel',
+  'cockpit.batchOps.correlate.messageNamePlaceholder',
+  'cockpit.batchOps.correlate.variablesLabel',
+  'cockpit.batchOps.correlate.emptyNameWarning',
+  'cockpit.batchOps.correlate.openVarsModalBtn',
+  'cockpit.batchOps.confirm.correlateSummary',
+  'cockpit.batchOps.confirm.correlateQuerySummary',
+  'cockpit.batchOps.confirm.correlateBtn',
+  'cockpit.batchOps.confirm.correlateBtnQuery',
+];
+
 const STEP2_KEYS = [
   'cockpit.batchOps.confirm.title',
   'cockpit.batchOps.confirm.suspendSummary',
@@ -121,6 +135,7 @@ const ALL_KEYS = [
   ...OPERATION_LIST_KEYS,
   ...OPERATIONS_KEYS,
   ...STEP1_KEYS,
+  ...CORRELATE_KEYS,
   ...STEP2_KEYS,
   ...STEP3_KEYS,
   ...MISC_KEYS,
