@@ -50,6 +50,14 @@
     <!-- Right: Actions -->
     <div class="toolbar-section toolbar-actions-section">
       <div class="toolbar-actions" *ngIf="isProcessRunning()">
+        <!-- Correlate Message -->
+        <button class="toolbar-btn toolbar-btn--info"
+                (click)="openCorrelateMessage()"
+                [title]="'cockpit.batchOps.correlate.label' | translate"
+                aria-label="Correlate a message to process instances waiting on a message event">
+          <fa-icon [icon]="faEnvelope"></fa-icon>
+        </button>
+
         <!-- Cancel Instance -->
         <button class="toolbar-btn danger"
                 (click)="showCancelDialog = true"
@@ -771,4 +779,13 @@
     (confirm)="suspendInstance()"
     (cancel)="showSuspendDialog = false"
   ></app-confirm-dialog>
+
+  <app-correlate-message-modal
+    *ngIf="showCorrelateModal"
+    [messageName]="correlateInitialMessageName"
+    [suggestions]="messageSuggestions"
+    [suggestionsEnabled]="correlateInitialMessageName === null"
+    (confirm)="onCorrelateOpenBatchOp($event)"
+    (cancel)="showCorrelateModal = false"
+  ></app-correlate-message-modal>
 </div>

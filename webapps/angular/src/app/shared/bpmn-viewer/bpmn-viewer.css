@@ -338,6 +338,50 @@ button.breadcrumb-parent-name {
   background-color: #999999;
 }
 
+/* Correlate Message Overlay */
+.bpmn-correlate-overlay {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  cursor: pointer;
+  border: 1.5px solid var(--color-info, #3b82f6);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--color-info, #3b82f6);
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  opacity: 1;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.12s ease;
+}
+
+.bpmn-correlate-overlay--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bpmn-correlate-overlay svg {
+  width: 14px;
+  height: 14px;
+}
+
+.bpmn-correlate-overlay:hover {
+  background: var(--color-info, #3b82f6);
+  color: #fff;
+  border-color: var(--color-info-dark, #2563eb);
+  box-shadow: 0 3px 8px rgba(59, 130, 246, 0.35);
+}
+
+.bpmn-correlate-overlay:focus-visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  outline: 2px solid var(--color-info, #3b82f6);
+  outline-offset: 2px;
+}
+
 .bpmn-call-activity-error {
   background-color: #fee2e2;
   border: 1px solid #ef4444;

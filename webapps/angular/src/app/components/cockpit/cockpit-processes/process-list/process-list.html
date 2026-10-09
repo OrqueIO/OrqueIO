@@ -159,30 +159,41 @@
           <section class="diagram-section" [class.maximized]="diagramMaximized" [class.collapsed]="tableMaximized">
 
             <div class="section-header" *ngIf="!diagramMaximized">
-              <div class="section-title">
-                <fa-icon [icon]="faProjectDiagram"></fa-icon>
-                <span>{{ 'cockpit.processDetail.diagram' | translate }}</span>
-              </div>
-              <div class="definition-info" *ngIf="processDefinition">
-                <span class="definition-name">{{ processDefinition.name || processDefinition.key }}</span>
-                <span class="definition-key">{{ processDefinition.key }}</span>
-                <span class="definition-version" *ngIf="selectedVersion === 'all'">
-                  {{ 'cockpit.processes.allVersions' | translate }}
-                </span>
-                <span class="tenant-id" *ngIf="processDefinition.tenantId">
-                  <fa-icon [icon]="faCog"></fa-icon>
-                  {{ processDefinition.tenantId }}
-                </span>
-                <!-- Version selector -->
-                <div class="version-selector" *ngIf="processDefinitionVersions.length > 1">
-                  <label>{{ 'cockpit.processes.version' | translate }}:</label>
-                  <select [(ngModel)]="selectedVersion" (change)="onVersionChange()">
-                    <option value="all">{{ 'cockpit.processes.allVersions' | translate }}</option>
-                    <option *ngFor="let v of processDefinitionVersions" [value]="v.id">
-                      {{ getVersionLabel(v) }}
-                    </option>
-                  </select>
+              <div class="section-header-identity">
+                <div class="section-title">
+                  <fa-icon [icon]="faProjectDiagram"></fa-icon>
+                  <span>{{ 'cockpit.processDetail.diagram' | translate }}</span>
                 </div>
+                <div class="definition-info" *ngIf="processDefinition">
+                  <span class="definition-name">{{ processDefinition.name || processDefinition.key }}</span>
+                  <span class="definition-key">{{ processDefinition.key }}</span>
+                  <span class="definition-version" *ngIf="selectedVersion === 'all'">
+                    {{ 'cockpit.processes.allVersions' | translate }}
+                  </span>
+                  <span class="tenant-id" *ngIf="processDefinition.tenantId">
+                    <fa-icon [icon]="faCog"></fa-icon>
+                    {{ processDefinition.tenantId }}
+                  </span>
+                  <!-- Version selector -->
+                  <div class="version-selector" *ngIf="processDefinitionVersions.length > 1">
+                    <label>{{ 'cockpit.processes.version' | translate }}:</label>
+                    <select [(ngModel)]="selectedVersion" (change)="onVersionChange()">
+                      <option value="all">{{ 'cockpit.processes.allVersions' | translate }}</option>
+                      <option *ngFor="let v of processDefinitionVersions" [value]="v.id">
+                        {{ getVersionLabel(v) }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- Actions group (same visual as Instance view toolbar) -->
+              <div class="section-actions" *ngIf="processDefinition">
+                <button class="pl-toolbar-btn pl-toolbar-btn--info"
+                        (click)="openCorrelateMessage()"
+                        [title]="'cockpit.batchOps.correlate.label' | translate"
+                        aria-label="Correlate a message to process instances waiting on a message event">
+                  <fa-icon [icon]="faEnvelope"></fa-icon>
+                </button>
               </div>
             </div>
 
@@ -204,6 +215,7 @@
                 (expandToggle)="toggleDiagramMaximize()"
                 (callActivityClick)="navigateToCalledDefinition($event)"
                 (elementClick)="onBpmnElementClick($event)"
+                (viewerReady)="onBpmnViewerReady()"
               ></app-bpmn-viewer>
 
               <div class="empty-state" *ngIf="!loadingDiagram && !bpmnXml">
@@ -633,3 +645,12 @@
     </div>
   </main>
 </div>
+
+<app-correlate-message-modal
+  *ngIf="showCorrelateModal"
+  [messageName]="correlateInitialMessageName"
+  [suggestions]="messageSuggestions"
+  [suggestionsEnabled]="correlateInitialMessageName === null"
+  (confirm)="onCorrelateOpenBatchOp($event)"
+  (cancel)="showCorrelateModal = false"
+></app-correlate-message-modal>

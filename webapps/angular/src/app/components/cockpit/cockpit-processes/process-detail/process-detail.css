@@ -278,6 +278,18 @@
   color: #fff;
 }
 
+.toolbar-btn--info {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: var(--color-info-light);
+}
+
+.toolbar-btn--info:hover {
+  background: var(--color-info);
+  border-color: var(--color-info);
+  color: #fff;
+}
+
 .toolbar-btn.has-badge {
   width: auto;
   padding: 0 10px;

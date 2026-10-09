@@ -615,6 +615,20 @@ export class ProcessInstanceService {
     );
   }
 
+  correlateMessageAsync(payload: {
+    messageName?: string;
+    variables?: Record<string, { value: unknown; type: string }>;
+    processInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    const body: Record<string, unknown> = {};
+    if (payload.messageName?.trim()) body['messageName'] = payload.messageName.trim();
+    if (payload.variables && Object.keys(payload.variables).length) body['variables'] = payload.variables;
+    if (payload.processInstanceIds?.length) body['processInstanceIds'] = payload.processInstanceIds;
+    if (payload.historicProcessInstanceQuery) body['historicProcessInstanceQuery'] = payload.historicProcessInstanceQuery;
+    return this.http.post<{ id: string }>(`${this.baseUrl}/process-instance/message-async`, body);
+  }
+
   executeModificationAsync(dto: ModificationDto): Observable<{ id: string }> {
     return this.http.post<{ id: string }>(
       `${this.baseUrl}/modification/executeAsync`,

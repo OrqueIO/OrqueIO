@@ -14,7 +14,7 @@ import {
   faCheckCircle, faTimesCircle, faExclamationTriangle,
   faChevronDown, faChevronUp, faChevronRight, faInfoCircle, faEye,
   faDatabase, faSyncAlt, faCodeBranch, faClock, faTag, faEnvelope,
-  faCirclePlus, faArrowRight
+  faCirclePlus, faArrowRight, faPlus
 } from '@fortawesome/free-solid-svg-icons';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
@@ -164,7 +164,9 @@ const BATCH_OPERATIONS: BatchOperationDef[] = [
     descKey: 'cockpit.batchOps.correlate.desc',
     icon: faEnvelope,
     badgeClass: 'badge--blue',
-    available: false
+    available: true,
+    actionBtnKey: 'cockpit.batchOps.confirm.correlateBtn',
+    actionBtnQueryKey: 'cockpit.batchOps.confirm.correlateBtnQuery',
   },
   {
     id: 'removal-time-process',
@@ -210,6 +212,8 @@ interface WizardPersistedState {
   retriesDueDate?: string;
   variableDefinitions?: { name: string; type: string; value: string }[];
   moveInstancesSearchText?: string;
+  messageName?: string;
+  correlateVariableDefs?: { name: string; type: string; value: string }[];
 }
 
 @Component({
@@ -256,6 +260,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   faPauseCircle = faPauseCircle;
   faCodeBranch = faCodeBranch;
   faCirclePlus = faCirclePlus;
+  faPlus = faPlus;
   faArrowRight = faArrowRight;
   faChevronRight = faChevronRight;
 
@@ -301,6 +306,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   moveInstancesProcessesLoading = false;
   moveInstancesSearchText = '';
   moveInstancesUniqueProcesses: ProcessDefinition[] = [];
+
+  correlateMessageName = '';
+  correlateVariableDefs: VariableDef[] = [];
+  showCorrelateVarsModal = false;
   moveInstancesByKey = new Map<string, ProcessDefinition[]>();
 
   get filteredMoveInstancesProcesses(): ProcessDefinition[] {
@@ -350,52 +359,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
     this.instanceLoad$.pipe(
       switchMap(() => {
-        let injectedStatePill: MultiValueFilter | null;
-        if (this.selectedOperationId === 'activate') {
-          injectedStatePill = { field: 'state', values: ['suspended'] };
-        } else if (this.selectedOperationId === 'delete-running') {
-          const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
-          const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
-          let stateValue: string;
-          if (hasActive && !hasSuspended) stateValue = 'active';
-          else if (hasSuspended && !hasActive) stateValue = 'suspended';
-          else stateValue = 'unfinished';
-          injectedStatePill = { field: 'state', values: [stateValue] };
-        } else if (this.selectedOperationId === 'set-retries-jobs') {
-          const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
-          const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
-          let stateValue: string;
-          if (hasActive && !hasSuspended) stateValue = 'active';
-          else if (hasSuspended && !hasActive) stateValue = 'suspended';
-          else stateValue = 'unfinished';
-          injectedStatePill = { field: 'state', values: [stateValue] };
-        } else if (this.selectedOperationId === 'set-retries-external') {
-          const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
-          const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
-          let stateValue: string;
-          if (hasActive && !hasSuspended) stateValue = 'active';
-          else if (hasSuspended && !hasActive) stateValue = 'suspended';
-          else stateValue = 'unfinished';
-          injectedStatePill = { field: 'state', values: [stateValue] };
-        } else if (this.selectedOperationId === 'delete-finished') {
-          const hasCompleted = this.filterCriteria.some(f => f.field === 'stateCompleted');
-          const hasTerminated = this.filterCriteria.some(f => f.field === 'stateTerminated');
-          let stateValue: string;
-          if (hasCompleted && !hasTerminated) stateValue = 'completed';
-          else if (hasTerminated && !hasCompleted) stateValue = 'terminated';
-          else stateValue = 'finished';
-          injectedStatePill = { field: 'state', values: [stateValue] };
-        } else if (this.selectedOperationId === 'set-variables') {
-          const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
-          const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
-          let stateValue: string;
-          if (hasActive && !hasSuspended) stateValue = 'active';
-          else if (hasSuspended && !hasActive) stateValue = 'suspended';
-          else stateValue = 'unfinished';
-          injectedStatePill = { field: 'state', values: [stateValue] };
-        } else {
-          injectedStatePill = { field: 'state', values: ['active'] };
-        }
+        const injectedStatePill = this.buildDisplayStatePill(this.selectedOperationId, this.filterCriteria);
         const criteria: MultiValueFilter[] = injectedStatePill
           ? [injectedStatePill, ...this.filterCriteria]
           : [...this.filterCriteria];
@@ -495,7 +459,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === id) return;
     this.selectedOperationId = id;
     this.resetForm();
-    if (id === 'suspend' || id === 'activate' || id === 'delete-running' || id === 'delete-finished' || id === 'set-retries-jobs' || id === 'set-retries-external' || id === 'set-variables') {
+    if (id === 'suspend' || id === 'activate' || id === 'delete-running' || id === 'delete-finished' || id === 'set-retries-jobs' || id === 'set-retries-external' || id === 'set-variables' || id === 'correlate') {
       this.loadInstances();
     } else if (id === 'delete-decision') {
       this.loadDecisionInstances();
@@ -552,6 +516,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.moveInstancesSearchText = '';
     this.availableActivities = [];
     this.resolvedBatchQuery = null;
+    this.correlateMessageName = '';
+    this.correlateVariableDefs = [];
+    this.showCorrelateVarsModal = false;
   }
 
   onRowClick(id: string): void {
@@ -778,6 +745,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       if (!varsValid) return false;
       return this.mode === 'instances' ? this.selectedIds.size > 0 : true;
     }
+    if (this.selectedOperationId === 'correlate') {
+      return this.mode === 'instances' ? this.selectedIds.size > 0 : true;
+    }
     if (this.mode === 'instances') return this.selectedIds.size > 0;
     return true;
   }
@@ -837,6 +807,16 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   get confirmPayloadJson(): string {
+    if (this.selectedOperationId === 'correlate') {
+      const variables = this.buildVariablesPayload(this.correlateVariableDefs);
+      const base: Record<string, unknown> = {};
+      if (this.correlateMessageName.trim()) base['messageName'] = this.correlateMessageName.trim();
+      if (Object.keys(variables).length) base['variables'] = variables;
+      if (this.mode === 'instances') {
+        return JSON.stringify({ ...base, processInstanceIds: [...this.selectedIds] }, null, 2);
+      }
+      return JSON.stringify({ ...base, historicProcessInstanceQuery: this.resolvedBatchQuery ?? this.buildHistoricQueryForBatch() }, null, 2);
+    }
     if (this.selectedOperationId === 'set-variables') {
       const variables = this.buildVariablesPayload();
       if (this.mode === 'instances') {
@@ -896,6 +876,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   }
 
   get confirmEndpoint(): string {
+    if (this.selectedOperationId === 'correlate') {
+      return `POST ${environment.engineUrl}/default/process-instance/message-async`;
+    }
     if (this.selectedOperationId === 'set-variables') {
       return `POST ${environment.engineUrl}/default/process-instance/variables-async`;
     }
@@ -946,6 +929,12 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       else if (hasTerminated && !hasCompleted) query = { finished: true, internallyTerminated: true };
       else query = { finished: true };
     } else if (this.selectedOperationId === 'set-variables') {
+      query = { unfinished: true };
+      const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
+      const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
+      if (hasActive && !hasSuspended) query['active'] = true;
+      else if (hasSuspended && !hasActive) query['suspended'] = true;
+    } else if (this.selectedOperationId === 'correlate') {
       query = { unfinished: true };
       const hasActive = this.filterCriteria.some(f => f.field === 'stateActive');
       const hasSuspended = this.filterCriteria.some(f => f.field === 'stateSuspended');
@@ -1035,9 +1024,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     return query;
   }
 
-  buildVariablesPayload(): Record<string, { value: unknown; type: string }> {
+  buildVariablesPayload(defs = this.variableDefinitions): Record<string, { value: unknown; type: string }> {
     const vars: Record<string, { value: unknown; type: string }> = {};
-    for (const v of this.variableDefinitions) {
+    for (const v of defs) {
       if (!v.name.trim()) continue;
       let parsed: unknown = v.value;
       if (v.type === 'Integer' || v.type === 'Long' || v.type === 'Short') {
@@ -1093,6 +1082,35 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   removeVariableDefinition(index: number): void {
     this.variableDefinitions = this.variableDefinitions.filter((_, i) => i !== index);
+    this.saveToSessionStorage();
+    this.cdr.markForCheck();
+  }
+
+  get correlateModalInitialVariables(): VariableDef[] {
+    return this.correlateVariableDefs;
+  }
+
+  openCorrelateVarsModal(): void {
+    this.showCorrelateVarsModal = true;
+    this.cdr.markForCheck();
+  }
+
+  onCorrelateVarsApplied(vars: VariableDef[]): void {
+    const seen = new Map<string, VariableDef>();
+    for (const v of vars) { seen.set(v.name, v); }
+    this.correlateVariableDefs = [...seen.values()];
+    this.showCorrelateVarsModal = false;
+    this.saveToSessionStorage();
+    this.cdr.markForCheck();
+  }
+
+  closeCorrelateVarsModal(): void {
+    this.showCorrelateVarsModal = false;
+    this.cdr.markForCheck();
+  }
+
+  removeCorrelateVarDef(index: number): void {
+    this.correlateVariableDefs = this.correlateVariableDefs.filter((_, i) => i !== index);
     this.saveToSessionStorage();
     this.cdr.markForCheck();
   }
@@ -1166,6 +1184,31 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           error: (err) => {
             const msg: string = err?.error?.message ?? '';
             this.batchErrorNoJobs = msg.includes('jobIds is empty');
+            this.batchError = true;
+            this.executing = false;
+            this.cdr.markForCheck();
+          }
+        });
+      return;
+    }
+
+    if (this.selectedOperationId === 'correlate') {
+      const variables = this.buildVariablesPayload(this.correlateVariableDefs);
+      const messageName = this.correlateMessageName.trim() || undefined;
+      const hasVars = Object.keys(variables).length > 0;
+      const correlatePayload = this.mode === 'instances'
+        ? { messageName, variables: hasVars ? variables : undefined, processInstanceIds: [...this.selectedIds] }
+        : { messageName, variables: hasVars ? variables : undefined, historicProcessInstanceQuery: this.resolvedBatchQuery ?? this.buildHistoricQueryForBatch() };
+      this.processInstanceService.correlateMessageAsync(correlatePayload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: batch => {
+            this.batchId = batch.id;
+            this.executing = false;
+            this.clearSessionStorage();
+            this.cdr.markForCheck();
+          },
+          error: () => {
             this.batchError = true;
             this.executing = false;
             this.cdr.markForCheck();
@@ -1376,7 +1419,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         setDueDate: this.setDueDate,
         retriesDueDate: this.retriesDueDate,
         variableDefinitions: this.variableDefinitions,
-        moveInstancesSearchText: this.moveInstancesSearchText
+        moveInstancesSearchText: this.moveInstancesSearchText,
+        messageName: this.correlateMessageName,
+        correlateVariableDefs: this.correlateVariableDefs
       };
       sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(state));
     } catch {
@@ -1417,6 +1462,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.setDueDate = state.setDueDate ?? false;
       this.retriesDueDate = state.retriesDueDate ?? '';
       this.variableDefinitions = state.variableDefinitions ?? [];
+      this.correlateMessageName = state.messageName ?? '';
+      this.correlateVariableDefs = state.correlateVariableDefs ?? [];
       this.selectedDecisionIds = new Set(state.decisionSelectedIds ?? []);
       this.decisionFilterCriteria = state.decisionFilterCriteria ?? [];
       this.decisionHasActiveCriteria = this.decisionFilterCriteria.length > 0;
@@ -1424,7 +1471,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       const restoredStep: number = state.step ?? 1;
       this.currentStep = restoredStep >= 3 ? 1 : restoredStep as 1 | 2;
 
-      if (this.currentStep === 1 && (this.selectedOperationId === 'suspend' || this.selectedOperationId === 'activate' || this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'delete-finished' || this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external' || this.selectedOperationId === 'set-variables')) {
+      if (this.currentStep === 1 && (this.selectedOperationId === 'suspend' || this.selectedOperationId === 'activate' || this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'delete-finished' || this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external' || this.selectedOperationId === 'set-variables' || this.selectedOperationId === 'correlate')) {
         this.loadInstances();
         this.loadActivitiesFromFilter();
       } else if (this.currentStep === 1 && this.selectedOperationId === 'delete-decision') {
@@ -1538,6 +1585,29 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected buildDisplayStatePill(operationId: string | null, filterCriteria: MultiValueFilter[]): MultiValueFilter | null {
+    if (operationId === 'activate') return { field: 'state', values: ['suspended'] };
+    if (operationId === 'delete-finished') {
+      const hasCompleted = filterCriteria.some(f => f.field === 'stateCompleted');
+      const hasTerminated = filterCriteria.some(f => f.field === 'stateTerminated');
+      const stateValue = (hasCompleted && !hasTerminated) ? 'completed'
+        : (hasTerminated && !hasCompleted) ? 'terminated'
+        : 'finished';
+      return { field: 'state', values: [stateValue] };
+    }
+    if (operationId === 'delete-running' || operationId === 'set-retries-jobs'
+        || operationId === 'set-retries-external' || operationId === 'set-variables'
+        || operationId === 'correlate') {
+      const hasActive = filterCriteria.some(f => f.field === 'stateActive');
+      const hasSuspended = filterCriteria.some(f => f.field === 'stateSuspended');
+      const stateValue = (hasActive && !hasSuspended) ? 'active'
+        : (hasSuspended && !hasActive) ? 'suspended'
+        : 'unfinished';
+      return { field: 'state', values: [stateValue] };
+    }
+    return { field: 'state', values: ['active'] };
+  }
+
   get lockedFilterState(): string | null {
     if (this.selectedOperationId === 'activate') return 'suspended';
     if (this.selectedOperationId === 'delete-running') return 'unfinished';
@@ -1549,6 +1619,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     // Completed instances are excluded at the engine level — restricting the filter here
     // prevents selecting IDs that would produce an empty batch element list and a 400.
     if (this.selectedOperationId === 'set-variables') return 'unfinished';
+    // correlate: targets running instances waiting at a message catch event; active and suspended both valid
+    if (this.selectedOperationId === 'correlate') return 'unfinished';
     return 'active';
   }
 
@@ -1558,6 +1630,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'delete-finished') return 'cockpit.batchOps.deleteFinished.onlyFinishedNote';
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.setRetriesJobs.onlyActiveNote';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.setVariables.anyStateNote';
+    if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.correlate.anyStateNote';
     return 'cockpit.batchOps.suspend.onlyRunningNote';
   }
 
@@ -1568,6 +1641,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.setRetriesJobs.noInstances';
     if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.setRetriesExternal.noInstances';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.setVariables.noInstances';
+    if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.correlate.noInstances';
     return 'cockpit.batchOps.suspend.noInstances';
   }
 
@@ -1579,6 +1653,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsSummary';
     if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalSummary';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesSummary';
+    if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateSummary';
     return 'cockpit.batchOps.confirm.suspendSummary';
   }
 
@@ -1590,6 +1665,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsQuerySummary';
     if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalQuerySummary';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesQuerySummary';
+    if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateQuerySummary';
     return 'cockpit.batchOps.confirm.querySummary';
   }
 
@@ -1601,6 +1677,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsBtn';
     if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalBtn';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesBtn';
+    if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateBtn';
     return 'cockpit.batchOps.confirm.suspendBtn';
   }
 
@@ -1612,7 +1689,14 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'set-retries-jobs') return 'cockpit.batchOps.confirm.setRetriesJobsBtnQuery';
     if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalBtnQuery';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesBtnQuery';
+    if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateBtnQuery';
     return 'cockpit.batchOps.confirm.suspendBtnQuery';
+  }
+
+  get showCorrelateEmptyMessageWarning(): boolean {
+    return this.selectedOperationId === 'correlate'
+      && !this.correlateMessageName.trim()
+      && !this.hasActiveCriteria;
   }
 
   get showLargeVolumeWarning(): boolean {

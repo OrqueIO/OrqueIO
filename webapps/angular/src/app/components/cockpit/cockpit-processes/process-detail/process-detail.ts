@@ -28,7 +28,8 @@ import {
   faExpand,
   faCompress,
   faSitemap,
-  faArrowUp
+  faArrowUp,
+  faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -46,10 +47,13 @@ import {
   ActivityStatistics,
   Job,
   UserTask,
-  ExternalTask
+  ExternalTask,
+  MultiValueFilter
 } from '../../../../services/cockpit.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { CorrelateMessageModalComponent } from '../correlate-message-modal/correlate-message-modal';
+import { buildMessageNodeMap, extractMessageNames } from '../../../../utils/message-names.utils';
 import { ActivityInstanceTreeComponent } from '../../../../shared/activity-instance-tree/activity-instance-tree';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
@@ -83,7 +87,8 @@ interface VariableEdit {
     ClipboardDirective,
     CockpitHeaderComponent,
     SearchWidgetComponent,
-    UserAutocompleteComponent
+    UserAutocompleteComponent,
+    CorrelateMessageModalComponent
   ],
   templateUrl: './process-detail.html',
   styleUrls: ['./process-detail.css'],
@@ -122,6 +127,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   faCompress = faCompress;
   faSitemap = faSitemap;
   faArrowUp = faArrowUp;
+  faEnvelope = faEnvelope;
 
   processId = '';
   loading = true;
@@ -177,6 +183,11 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   callActivityMapping: Map<string, string[]> = new Map(); // activityId -> calledProcessInstanceIds[]
   filteredCallActivityId: string | null = null;
   bpmnXml: string | null = null;
+
+  // Correlate Message
+  showCorrelateModal = false;
+  messageSuggestions: string[] = [];
+  correlateInitialMessageName: string | null = null;
 
   // Computed property for Call Activities with instances
   get callActivityIdsWithInstances(): Set<string> {
@@ -633,8 +644,50 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   }
 
   onBpmnViewerReady(): void {
-    // Run in a fresh macrotask so Angular CD and browser layout are fully settled
-    setTimeout(() => this.bpmnViewer?.resize());
+    setTimeout(() => {
+      this.bpmnViewer?.resize();
+      const elements = this.bpmnViewer?.getAllElements() ?? [];
+      const nodeMap = buildMessageNodeMap(elements);
+      this.messageSuggestions = extractMessageNames(elements);
+      if (nodeMap.size > 0) {
+        this.bpmnViewer?.addCorrelateOverlays(nodeMap, (name) => {
+          this.correlateInitialMessageName = name;
+          this.showCorrelateModal = true;
+          this.cdr.markForCheck();
+        });
+      }
+      this.cdr.markForCheck();
+    });
+  }
+
+  openCorrelateMessage(): void {
+    this.correlateInitialMessageName = null;
+    this.showCorrelateModal = true;
+    this.cdr.markForCheck();
+  }
+
+  onCorrelateOpenBatchOp(messageName: string | null): void {
+    this.showCorrelateModal = false;
+
+    const criterion: MultiValueFilter = {
+      field: 'instanceId',
+      values: [this.processId]
+    };
+
+    const state = {
+      operationId: 'correlate',
+      mode: 'query',
+      step: 1,
+      filterCriteria: [criterion],
+      messageName: messageName ?? undefined,
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedIds: [],
+      correlateVariableDefs: []
+    };
+
+    sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+    this.router.navigate(['/cockpit/batch/operations']);
   }
 
   private resizeDiagramAfterTransition(): void {

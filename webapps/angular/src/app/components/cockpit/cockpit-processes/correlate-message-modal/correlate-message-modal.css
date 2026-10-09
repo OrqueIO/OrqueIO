@@ -1,0 +1,43 @@
+/* Override modal-body overflow only for Correlate Message modal to allow dropdown to escape */
+.correlate-message-modal .modal-body {
+  overflow: visible;
+}
+
+.cm-input-wrap {
+  position: relative;
+}
+
+.cm-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  list-style: none;
+  padding: var(--space-1) 0;
+  margin: var(--space-1) 0 0;
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.cm-suggestions li {
+  padding: var(--space-2) var(--space-3);
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: background-color 0.15s ease, border-left-color 0.15s ease;
+  border-left: 3px solid transparent;
+}
+
+.cm-suggestions li:hover {
+  background: var(--color-primary-bg);
+  color: var(--color-primary-dark);
+  border-left-color: var(--color-primary);
+}
