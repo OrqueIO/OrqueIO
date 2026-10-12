@@ -543,7 +543,8 @@
 .state-dot--completed  { background-color: var(--color-primary); }
 .state-dot--terminated { background-color: var(--color-danger); }
 
-/* Compact icon wrap for state menu (removal-time-process) — reuses criteria-icon-wrap colors */
+/* Compact icon wrap for State menu of "Set removal time" operation */
+/* 24px instead of 34px (.criteria-icon-wrap baseline), reuses color variants */
 .state-row .criteria-icon-wrap--compact {
   display: flex;
   align-items: center;
