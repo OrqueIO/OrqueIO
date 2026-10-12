@@ -963,6 +963,14 @@
   overflow-y: auto;
 }
 
+/* Activity list scrollable — limit height to ~8 visible rows */
+.activity-list--scrollable {
+  max-height: 254px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: var(--space-1);
+}
+
 .processdef-empty {
   font-size: var(--font-size-sm);
   color: var(--text-muted);

@@ -751,7 +751,7 @@
        *ngIf="activeEditorType === 'activityId'"
        (keydown.enter)="$event.preventDefault(); confirmCriterion()">
     <ng-container *ngIf="availableActivities.length > 0; else activityFreeText">
-      <div class="state-checklist activity-list">
+      <div class="state-checklist activity-list activity-list--scrollable">
         <button *ngFor="let activity of availableActivities; let i = index"
                 class="state-row activity-row"
                 [class.state-row--selected]="pendingTextValue === activity.id"
