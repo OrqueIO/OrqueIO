@@ -1812,7 +1812,7 @@
   "cockpit.batchOps.removalTimeProcess.absoluteLabel": "Absolu",
   "cockpit.batchOps.removalTimeProcess.absoluteHelp": "Définit un délai de suppression fixe.",
   "cockpit.batchOps.removalTimeProcess.absoluteDateLabel": "Date et heure de suppression",
-  "cockpit.batchOps.removalTimeProcess.absoluteDateHint": "Le fuseau horaire est inclus dans la requête mais n'est pas affiché dans le champ. Votre fuseau horaire local sera utilisé.",
+  "cockpit.batchOps.removalTimeProcess.absoluteDateTimezone": "Heure locale{{offset}}",
   "cockpit.batchOps.removalTimeProcess.hierarchicalLabel": "Hiérarchique",
   "cockpit.batchOps.removalTimeProcess.hierarchicalDesc": "S'applique également à toutes les instances de la même hiérarchie de processus.",
   "cockpit.batchOps.removalTimeProcess.updateInChunksLabel": "Mise à jour par lots",

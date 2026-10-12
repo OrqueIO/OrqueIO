@@ -641,7 +641,10 @@
               {{ 'cockpit.batchOps.removalTimeProcess.absoluteDateLabel' | translate }}
             </label>
             <input type="datetime-local" class="due-date-input" [(ngModel)]="removalTimeAbsoluteDate" required style="width: 100%; max-width: 300px;">
-            <span class="field-hint">{{ 'cockpit.batchOps.removalTimeProcess.absoluteDateHint' | translate }}</span>
+            <div class="removal-time-absolute-hint" [class.removal-time-absolute-hint--hidden]="!removalTimeTimezoneOffset" [attr.aria-hidden]="!removalTimeTimezoneOffset ? 'true' : null">
+              <fa-icon [icon]="faGlobe" aria-hidden="true"></fa-icon>
+              {{ 'cockpit.batchOps.removalTimeProcess.absoluteDateTimezone' | translate: { offset: ' (' + removalTimeTimezoneOffset + ')' } }}
+            </div>
           </div>
         </div>
 
