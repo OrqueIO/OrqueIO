@@ -875,6 +875,29 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       }
       return JSON.stringify({ ...base, historicProcessInstanceQuery: this.buildHistoricQueryForBatch() }, null, 2);
     }
+    if (this.selectedOperationId === 'removal-time-process') {
+      const removalTimePayload: Record<string, unknown> = this.mode === 'instances'
+        ? { historicProcessInstanceIds: [...this.selectedIds] }
+        : { historicProcessInstanceQuery: this.buildHistoricQueryForBatch() };
+
+      if (this.removalTimeMode === 'cleared') {
+        removalTimePayload['clearedRemovalTime'] = true;
+      } else if (this.removalTimeMode === 'calculated') {
+        removalTimePayload['calculatedRemovalTime'] = true;
+      } else if (this.removalTimeMode === 'absolute') {
+        removalTimePayload['absoluteRemovalTime'] = this.removalTimeAbsoluteDateFormatted;
+      }
+
+      if (this.removalTimeHierarchical) {
+        removalTimePayload['hierarchical'] = true;
+      }
+
+      if (this.removalTimeUpdateInChunks) {
+        removalTimePayload['updateInChunks'] = true;
+      }
+
+      return JSON.stringify(removalTimePayload, null, 2);
+    }
     const suspended = this.selectedOperationId === 'suspend';
     if (this.mode === 'instances') {
       return JSON.stringify({ suspended, processInstanceIds: [...this.selectedIds] }, null, 2);
@@ -904,6 +927,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     }
     if (this.selectedOperationId === 'delete-finished') {
       return `POST ${environment.engineUrl}/default/history/process-instance/delete`;
+    }
+    if (this.selectedOperationId === 'removal-time-process') {
+      return `POST ${environment.engineUrl}/default/history/process-instance/set-removal-time`;
     }
     return `POST ${environment.engineUrl}/default/process-instance/suspended-async`;
   }
@@ -1812,6 +1838,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalSummary';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesSummary';
     if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateSummary';
+    if (this.selectedOperationId === 'removal-time-process') return 'cockpit.batchOps.confirm.removalTimeProcessSummary';
     return 'cockpit.batchOps.confirm.suspendSummary';
   }
 
@@ -1824,6 +1851,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalQuerySummary';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesQuerySummary';
     if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateQuerySummary';
+    if (this.selectedOperationId === 'removal-time-process') return 'cockpit.batchOps.confirm.removalTimeProcessQuerySummary';
     return 'cockpit.batchOps.confirm.querySummary';
   }
 
@@ -1836,6 +1864,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalBtn';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesBtn';
     if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateBtn';
+    if (this.selectedOperationId === 'removal-time-process') return 'cockpit.batchOps.confirm.removalTimeProcessBtn';
     return 'cockpit.batchOps.confirm.suspendBtn';
   }
 
@@ -1848,6 +1877,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.confirm.setRetriesExternalBtnQuery';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.confirm.setVariablesBtnQuery';
     if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateBtnQuery';
+    if (this.selectedOperationId === 'removal-time-process') return 'cockpit.batchOps.confirm.removalTimeProcessBtnQuery';
     return 'cockpit.batchOps.confirm.suspendBtnQuery';
   }
 
