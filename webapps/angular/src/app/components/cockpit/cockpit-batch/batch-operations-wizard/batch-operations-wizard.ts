@@ -175,8 +175,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     icon: faClock,
     badgeClass: 'badge--gray',
     available: true,
-    actionBtnKey: 'cockpit.batchOps.removalTimeProcess.actionBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.removalTimeProcess.actionBtnQuery'
+    actionBtnKey: 'cockpit.batchOps.confirm.removalTimeProcessBtn',
+    actionBtnQueryKey: 'cockpit.batchOps.confirm.removalTimeProcessBtnQuery'
   },
   {
     id: 'removal-time-decision',
