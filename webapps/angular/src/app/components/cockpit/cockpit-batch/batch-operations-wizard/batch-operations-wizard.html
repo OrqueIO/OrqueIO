@@ -635,16 +635,12 @@
             </span>
           </label>
 
-          <!-- Date input for Absolute mode -->
+          <!-- Date and time input for Absolute mode -->
           <div *ngIf="removalTimeMode === 'absolute'" style="margin-top: 0.75rem;">
             <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; color: var(--text-primary);">
               {{ 'cockpit.batchOps.removalTimeProcess.absoluteDateLabel' | translate }}
             </label>
-            <input type="datetime-local" class="due-date-input" [(ngModel)]="removalTimeAbsoluteDate" required style="width: 100%; max-width: 300px;">
-            <div class="removal-time-absolute-hint" [class.removal-time-absolute-hint--hidden]="!removalTimeTimezoneOffset" [attr.aria-hidden]="!removalTimeTimezoneOffset ? 'true' : null">
-              <fa-icon [icon]="faGlobe" aria-hidden="true"></fa-icon>
-              {{ 'cockpit.batchOps.removalTimeProcess.absoluteDateTimezone' | translate: { offset: ' (' + removalTimeTimezoneOffset + ')' } }}
-            </div>
+            <input type="datetime-local" class="due-date-input" [(ngModel)]="removalTimeAbsoluteDate" required>
           </div>
         </div>
 

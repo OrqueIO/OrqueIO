@@ -14,7 +14,7 @@ import {
   faCheckCircle, faTimesCircle, faExclamationTriangle,
   faChevronDown, faChevronUp, faChevronRight, faInfoCircle, faEye,
   faDatabase, faSyncAlt, faCodeBranch, faClock, faTag, faEnvelope,
-  faCirclePlus, faArrowRight, faPlus, faGlobe
+  faCirclePlus, faArrowRight, faPlus
 } from '@fortawesome/free-solid-svg-icons';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
@@ -52,23 +52,6 @@ function formatDateTimeVariableForApi(value: string): string {
   const mm = String(absOff % 60).padStart(2, '0');
   const p = (n: number) => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:00.000${sign}${hh}${mm}`;
-}
-
-function getTimezoneOffsetDisplay(value: string): string {
-  if (!value) return '';
-  const tIdx = value.indexOf('T');
-  const datePart = tIdx >= 0 ? value.slice(0, tIdx) : value;
-  const timePart = tIdx >= 0 ? value.slice(tIdx + 1) : '00:00';
-  const [year, month, day] = datePart.split('-').map(Number);
-  const [hours = 0, minutes = 0] = timePart.split(':').map(Number);
-  const d = new Date(year, month - 1, day, hours, minutes, 0, 0);
-  if (isNaN(d.getTime())) return '';
-  const offset = -d.getTimezoneOffset();
-  const sign = offset >= 0 ? '+' : '-';
-  const absOff = Math.abs(offset);
-  const hh = String(Math.floor(absOff / 60)).padStart(2, '0');
-  const mm = String(absOff % 60).padStart(2, '0');
-  return `UTC${sign}${hh}:${mm}`;
 }
 
 function formatDueDateForApi(dateStr: string): string {
@@ -282,7 +265,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   faPlus = faPlus;
   faArrowRight = faArrowRight;
   faChevronRight = faChevronRight;
-  faGlobe = faGlobe;
 
   breadcrumbs: BreadcrumbItem[] = [
     { translateKey: 'cockpit.menu.batchOperations' }
@@ -1874,9 +1856,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     return formatDateTimeVariableForApi(this.removalTimeAbsoluteDate);
   }
 
-  get removalTimeTimezoneOffset(): string {
-    return getTimezoneOffsetDisplay(this.removalTimeAbsoluteDate);
-  }
 
   get showCorrelateEmptyMessageWarning(): boolean {
     return this.selectedOperationId === 'correlate'
