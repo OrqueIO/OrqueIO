@@ -1838,7 +1838,7 @@
   "cockpit.batchOps.removalTimeProcess.hierarchicalDesc": "Also applies to all instances in the same process hierarchy.",
   "cockpit.batchOps.removalTimeProcess.updateInChunksLabel": "Update in chunks",
   "cockpit.batchOps.removalTimeProcess.updateInChunksDesc": "Updates the historic data in chunks to limit the load on the database.",
-  "cockpit.batchOps.removalTimeProcess.noInstances": "No historic process instances found.",
+  "cockpit.batchOps.removalTimeProcess.noInstances": "No process instances found.",
   "cockpit.batchOps.removalTimeProcess.actionBtn": "Continue with {{count}} instance(s)",
   "cockpit.batchOps.removalTimeProcess.actionBtnQuery": "Continue",
   "cockpit.batchOps.removalTimeDecision.label": "Set removal time (decisions)",

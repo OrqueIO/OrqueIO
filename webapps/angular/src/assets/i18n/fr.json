@@ -1820,7 +1820,7 @@
   "cockpit.batchOps.removalTimeProcess.hierarchicalDesc": "S'applique également à toutes les instances de la même hiérarchie de processus.",
   "cockpit.batchOps.removalTimeProcess.updateInChunksLabel": "Mise à jour par lots",
   "cockpit.batchOps.removalTimeProcess.updateInChunksDesc": "Met à jour les données historiques par lots pour limiter la charge sur la base de données.",
-  "cockpit.batchOps.removalTimeProcess.noInstances": "Aucune instance de processus historique trouvée.",
+  "cockpit.batchOps.removalTimeProcess.noInstances": "Aucune instance de processus trouvée.",
   "cockpit.batchOps.removalTimeProcess.actionBtn": "Continuer avec {{count}} instance(s)",
   "cockpit.batchOps.removalTimeProcess.actionBtnQuery": "Continuer",
   "cockpit.batchOps.removalTimeDecision.label": "Définir le délai de suppression (décisions)",

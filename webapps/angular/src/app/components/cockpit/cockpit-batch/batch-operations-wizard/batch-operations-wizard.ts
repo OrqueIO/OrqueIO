@@ -1780,10 +1780,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       return { field: 'state', values: [stateValue] };
     }
     if (operationId === 'removal-time-process') {
-      // Use generic 'state' criterion
       const statePill = filterCriteria.find(f => f.field === 'state');
       if (statePill && statePill.values.length > 0) {
-        return statePill; // Return the state pill as-is (may have multiple values)
+        return statePill;
       }
       return null;
     }
@@ -1796,14 +1795,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'set-retries-jobs') return 'unfinished';
     if (this.selectedOperationId === 'set-retries-external') return 'unfinished';
     if (this.selectedOperationId === 'delete-finished') return 'finished';
-    // 'unfinished' (not null): SetVariablesToProcessInstancesBatchCmd forces .unfinished()
-    // on historicProcessInstanceQuery and uses a runtime-only query for processInstanceIds.
-    // Completed instances are excluded at the engine level — restricting the filter here
-    // prevents selecting IDs that would produce an empty batch element list and a 400.
     if (this.selectedOperationId === 'set-variables') return 'unfinished';
-    // correlate: targets running instances waiting at a message catch event; active and suspended both valid
     if (this.selectedOperationId === 'correlate') return 'unfinished';
-    // removal-time-process: accepts all states (active, suspended, completed, terminated)
     if (this.selectedOperationId === 'removal-time-process') return null;
     return 'active';
   }
@@ -1826,6 +1819,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'set-retries-external') return 'cockpit.batchOps.setRetriesExternal.noInstances';
     if (this.selectedOperationId === 'set-variables') return 'cockpit.batchOps.setVariables.noInstances';
     if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.correlate.noInstances';
+    if (this.selectedOperationId === 'removal-time-process') return 'cockpit.batchOps.removalTimeProcess.noInstances';
     return 'cockpit.batchOps.suspend.noInstances';
   }
 
