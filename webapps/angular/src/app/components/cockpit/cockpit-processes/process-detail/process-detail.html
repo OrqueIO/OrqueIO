@@ -189,6 +189,15 @@
             {{ processDefinition?.deploymentId || '-' }}
           </dd>
 
+          <dt>{{ 'cockpit.processDetail.removalTime' | translate }}</dt>
+          <dd class="removal-time">
+            @if (processInstance.removalTime) {
+              {{ processInstance.removalTime | camDate }}
+            } @else {
+              <span class="null-value">null</span>
+            }
+          </dd>
+
           <!-- Super Process Instance ID -->
           <dt *ngIf="superProcessInstance"
               appClipboard [appClipboard]="superProcessInstance.id">
