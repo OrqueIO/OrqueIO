@@ -207,10 +207,11 @@ describe('InstanceFilterPanelComponent — State criterion editor: all 4 states 
     component.selectCriteriaType('state');
     fixture.detectChanges();
 
-    expect(fixture.debugElement.query(By.css('.state-dot--active'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.state-dot--suspended'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.state-dot--completed'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.state-dot--terminated'))).not.toBeNull();
+    // State menu now uses compact icon badges instead of dots
+    expect(fixture.debugElement.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--emerald'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--amber'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--blue'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--red'))).not.toBeNull();
   });
 
   it('should render exactly 4 state rows (no state missing, no duplicate)', () => {

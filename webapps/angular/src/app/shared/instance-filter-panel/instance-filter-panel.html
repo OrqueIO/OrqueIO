@@ -464,7 +464,9 @@
     <div class="state-checklist">
       <button class="state-row" [class.state-row--selected]="pendingStateValues.includes('active')"
               (click)="toggleStateValue('active')" type="button">
-        <span class="state-dot state-dot--active"></span>
+        <span class="criteria-icon-wrap criteria-icon-wrap--compact criteria-icon-wrap--emerald" aria-hidden="true">
+          <fa-icon [icon]="faPlay"></fa-icon>
+        </span>
         <span class="state-row-label" [class.is-selected]="pendingStateValues.includes('active')">
           {{ 'cockpit.processes.filters.stateActive' | translate }}
         </span>
@@ -472,7 +474,9 @@
       </button>
       <button class="state-row" [class.state-row--selected]="pendingStateValues.includes('suspended')"
               (click)="toggleStateValue('suspended')" type="button">
-        <span class="state-dot state-dot--suspended"></span>
+        <span class="criteria-icon-wrap criteria-icon-wrap--compact criteria-icon-wrap--amber" aria-hidden="true">
+          <fa-icon [icon]="faPauseCircle"></fa-icon>
+        </span>
         <span class="state-row-label" [class.is-selected]="pendingStateValues.includes('suspended')">
           {{ 'cockpit.processes.filters.stateSuspended' | translate }}
         </span>
@@ -480,7 +484,9 @@
       </button>
       <button class="state-row" [class.state-row--selected]="pendingStateValues.includes('completed')"
               (click)="toggleStateValue('completed')" type="button">
-        <span class="state-dot state-dot--completed"></span>
+        <span class="criteria-icon-wrap criteria-icon-wrap--compact criteria-icon-wrap--blue" aria-hidden="true">
+          <fa-icon [icon]="faCheckCircle"></fa-icon>
+        </span>
         <span class="state-row-label" [class.is-selected]="pendingStateValues.includes('completed')">
           {{ 'cockpit.processes.filters.stateCompleted' | translate }}
         </span>
@@ -488,7 +494,9 @@
       </button>
       <button class="state-row" [class.state-row--selected]="pendingStateValues.includes('terminated')"
               (click)="toggleStateValue('terminated')" type="button">
-        <span class="state-dot state-dot--terminated"></span>
+        <span class="criteria-icon-wrap criteria-icon-wrap--compact criteria-icon-wrap--red" aria-hidden="true">
+          <fa-icon [icon]="faTimesCircle"></fa-icon>
+        </span>
         <span class="state-row-label" [class.is-selected]="pendingStateValues.includes('terminated')">
           {{ 'cockpit.processes.filters.stateTerminated' | translate }}
         </span>

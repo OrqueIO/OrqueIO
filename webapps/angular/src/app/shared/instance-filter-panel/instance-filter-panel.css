@@ -543,6 +543,18 @@
 .state-dot--completed  { background-color: var(--color-primary); }
 .state-dot--terminated { background-color: var(--color-danger); }
 
+/* Compact icon wrap for state menu (removal-time-process) — reuses criteria-icon-wrap colors */
+.state-row .criteria-icon-wrap--compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-lg);
+  font-size: 0.625rem;
+  flex-shrink: 0;
+}
+
 .state-row-label {
   flex: 1;
   font-size: var(--font-size-sm);
