@@ -815,6 +815,243 @@
     </div>
     <!-- /removal-time-process -->
 
+    <!-- ─── Set Removal Time Decision ─────────────────────────────────────── -->
+    <div *ngIf="selectedOperationId === 'removal-time-decision'" class="operation-steps">
+
+      <!-- ── Card 1: Removal time options + filter ────────────────────────── -->
+      <div class="operation-card">
+
+        <!-- Mode toggle -->
+        <div class="mode-toggle" role="group">
+          <button type="button" class="mode-btn"
+                  [class.mode-btn--active]="mode === 'instances'"
+                  (click)="setMode('instances')">
+            {{ 'cockpit.batchOps.removalTimeDecision.modeInstances' | translate }}
+          </button>
+          <button type="button" class="mode-btn"
+                  [class.mode-btn--active]="mode === 'query'"
+                  (click)="setMode('query')">
+            {{ 'cockpit.batchOps.removalTimeDecision.modeQuery' | translate }}
+          </button>
+        </div>
+
+        <!-- Info note -->
+        <div class="info-note">
+          <fa-icon [icon]="faInfoCircle"></fa-icon>
+          <span>{{ 'cockpit.batchOps.removalTimeDecision.operationNote' | translate }}</span>
+        </div>
+
+        <!-- Query warning -->
+        <div *ngIf="mode === 'query'" class="query-warning">
+          <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+          <span>{{ 'cockpit.batchOps.suspend.queryWarning' | translate }}</span>
+        </div>
+
+        <!-- Removal time mode selection -->
+        <div class="due-date-options">
+          <h3 style="font-size: 0.95rem; font-weight: 600; margin: 1rem 0 0.75rem 0; color: var(--text-primary);">
+            {{ 'cockpit.batchOps.removalTimeDecision.modeTitle' | translate }}
+          </h3>
+
+          <!-- Radio: Cleared -->
+          <label class="due-date-option" (click)="removalTimeDecisionMode = 'cleared'">
+            <span class="radio-circle" [class.radio-circle--selected]="removalTimeDecisionMode === 'cleared'">
+              <span class="radio-circle__dot" *ngIf="removalTimeDecisionMode === 'cleared'"></span>
+            </span>
+            <span style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="due-date-option__label">{{ 'cockpit.batchOps.removalTimeDecision.clearedLabel' | translate }}</span>
+              <span class="help-icon" [title]="'cockpit.batchOps.removalTimeDecision.clearedHelp' | translate" style="cursor: help; color: var(--text-secondary); font-size: 0.9rem;">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+              </span>
+            </span>
+          </label>
+
+          <!-- Radio: Calculated -->
+          <label class="due-date-option" (click)="removalTimeDecisionMode = 'calculated'">
+            <span class="radio-circle" [class.radio-circle--selected]="removalTimeDecisionMode === 'calculated'">
+              <span class="radio-circle__dot" *ngIf="removalTimeDecisionMode === 'calculated'"></span>
+            </span>
+            <span style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="due-date-option__label">{{ 'cockpit.batchOps.removalTimeDecision.calculatedLabel' | translate }}</span>
+              <span class="help-icon" [title]="'cockpit.batchOps.removalTimeDecision.calculatedHelp' | translate" style="cursor: help; color: var(--text-secondary); font-size: 0.9rem;">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+              </span>
+            </span>
+          </label>
+
+          <!-- Radio: Absolute -->
+          <label class="due-date-option" (click)="removalTimeDecisionMode = 'absolute'">
+            <span class="radio-circle" [class.radio-circle--selected]="removalTimeDecisionMode === 'absolute'">
+              <span class="radio-circle__dot" *ngIf="removalTimeDecisionMode === 'absolute'"></span>
+            </span>
+            <span style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="due-date-option__label">{{ 'cockpit.batchOps.removalTimeDecision.absoluteLabel' | translate }}</span>
+              <span class="help-icon" [title]="'cockpit.batchOps.removalTimeDecision.absoluteHelp' | translate" style="cursor: help; color: var(--text-secondary); font-size: 0.9rem;">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+              </span>
+            </span>
+          </label>
+
+          <!-- Date and time input for Absolute mode -->
+          <div *ngIf="removalTimeDecisionMode === 'absolute'" style="margin-top: 0.75rem;">
+            <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; color: var(--text-primary);">
+              {{ 'cockpit.batchOps.removalTimeDecision.absoluteDateLabel' | translate }}
+            </label>
+            <input type="datetime-local" class="due-date-input" [(ngModel)]="removalTimeDecisionAbsoluteDate" required>
+          </div>
+        </div>
+
+        <!-- Hierarchical option -->
+        <div class="skip-options-row">
+          <label class="toggle-block">
+            <span class="toggle-wrap">
+              <input type="checkbox" class="toggle-input" [(ngModel)]="removalTimeDecisionHierarchical">
+              <span class="toggle-track"></span>
+            </span>
+            <span class="toggle-body">
+              <span class="toggle-label">{{ 'cockpit.batchOps.removalTimeDecision.hierarchicalLabel' | translate }}</span>
+              <span class="toggle-desc">{{ 'cockpit.batchOps.removalTimeDecision.hierarchicalDesc' | translate }}</span>
+            </span>
+          </label>
+        </div>
+
+        <!-- Filter panel -->
+        <app-instance-filter-panel
+          [lockedState]="null"
+          [initialPills]="decisionFilterCriteria"
+          [showExtendedCriteria]="true"
+          [showStateNarrowing]="false"
+          [showWithJobsRetrying]="false"
+          [showFinishedNarrowing]="false"
+          [finishedScope]="false"
+          [criteriaSet]="'decision'"
+          (criteriaChange)="onDecisionFilterChange($event)">
+        </app-instance-filter-panel>
+
+      </div>
+      <!-- /card 1 -->
+
+      <!-- Pagination -->
+      <app-pagination
+        *ngIf="!decisionInstancesLoading && decisionInstances.length > 0"
+        [current]="decisionInstancesPage"
+        [size]="decisionInstancesPageSize"
+        [total]="decisionInstancesTotal"
+        [showSizeSelector]="true"
+        (pageChange)="onDecisionInstancesPageChange($event)">
+      </app-pagination>
+
+      <!-- ── Card 2: Instances table ──── -->
+      <div class="operation-card">
+
+        <!-- Loading -->
+        <div *ngIf="decisionInstancesLoading" class="loading-state">
+          <fa-icon [icon]="faSpinner" [animation]="'spin'"></fa-icon>
+          <span>{{ 'common.loading' | translate }}</span>
+        </div>
+
+        <!-- Empty -->
+        <div *ngIf="!decisionInstancesLoading && decisionInstances.length === 0" class="empty-state">
+          {{ 'cockpit.batchOps.removalTimeDecision.noInstances' | translate }}
+        </div>
+
+        <!-- Table -->
+        <ng-container *ngIf="!decisionInstancesLoading && decisionInstances.length > 0">
+
+          <!-- Select-all bar — instances mode only -->
+          <div *ngIf="mode === 'instances'" class="select-all-bar">
+            <label class="select-all-label">
+              <input type="checkbox"
+                     [checked]="isAllDecisionOnPageSelected"
+                     [indeterminate]="isDecisionIndeterminate"
+                     (change)="toggleSelectAllDecision()">
+              <span>{{ 'cockpit.batchOps.suspend.selectAllOnPage' | translate: { count: decisionInstances.length.toString() } }}</span>
+            </label>
+            <span class="selection-count" [class.selection-count--empty]="selectedDecisionIds.size === 0">
+              {{ 'cockpit.batchOps.selectedCount' | translate: { count: selectedDecisionIds.size.toString() } }}
+            </span>
+          </div>
+
+          <!-- Query preview note -->
+          <div *ngIf="mode === 'query'" class="query-preview-note">
+            <fa-icon [icon]="faInfoCircle"></fa-icon>
+            <span>{{ 'cockpit.batchOps.suspend.queryPreviewNote' | translate }}</span>
+          </div>
+
+          <div class="table-container">
+            <table class="instances-table">
+              <thead>
+                <tr>
+                  <th *ngIf="mode === 'instances'" class="col-check"></th>
+                  <th class="col-id">{{ 'cockpit.processes.columns.id' | translate }}</th>
+                  <th class="col-definition">{{ 'cockpit.batchOps.deleteDecision.colDecisionDef' | translate }}</th>
+                  <th class="col-starttime">{{ 'cockpit.batchOps.deleteDecision.colEvalTime' | translate }}</th>
+                  <th class="col-processinstance">{{ 'cockpit.batchOps.deleteDecision.colProcessInstance' | translate }}</th>
+                  <th class="col-actions">{{ 'cockpit.processes.columns.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let di of decisionInstances"
+                    [class.row--selected]="mode === 'instances' && isDecisionSelected(di.id)"
+                    [style.cursor]="mode === 'instances' ? 'pointer' : 'default'"
+                    (click)="onDecisionRowClick(di.id)">
+                  <td *ngIf="mode === 'instances'" class="col-check"
+                      (click)="$event.stopPropagation(); toggleDecisionInstance(di.id)">
+                    <input type="checkbox"
+                           [checked]="isDecisionSelected(di.id)"
+                           (change)="toggleDecisionInstance(di.id)"
+                           (click)="$event.stopPropagation()">
+                  </td>
+                  <td class="col-id" (click)="$event.stopPropagation()">
+                    <a [routerLink]="['/cockpit/decision-instance', di.id]"
+                       class="instance-link mono"
+                       [title]="di.id">{{ di.id }}</a>
+                  </td>
+                  <td class="col-definition">{{ di.decisionDefinitionName || di.decisionDefinitionKey }}</td>
+                  <td class="col-starttime cell-nowrap">{{ di.evaluationTime | camDate }}</td>
+                  <td class="col-processinstance">
+                    <a *ngIf="di.processInstanceId"
+                       [routerLink]="['/cockpit/processes/instance', di.processInstanceId]"
+                       class="instance-link mono"
+                       [title]="di.processInstanceId">{{ di.processInstanceId }}</a>
+                    <span *ngIf="!di.processInstanceId">—</span>
+                  </td>
+                  <td class="col-actions" (click)="$event.stopPropagation()">
+                    <a [routerLink]="['/cockpit/decision-instance', di.id]"
+                       class="action-btn"
+                       [title]="'cockpit.processes.viewDetails' | translate">
+                      <fa-icon [icon]="faEye"></fa-icon>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </ng-container>
+
+      </div>
+      <!-- /card 2 -->
+
+      <!-- Action button -->
+      <div class="step-footer">
+        <button *ngIf="mode === 'instances'"
+                type="button" class="btn-primary"
+                [disabled]="!canContinue"
+                (click)="continue()">
+          {{ 'cockpit.batchOps.removalTimeDecision.actionBtn' | translate: { count: selectedDecisionIds.size.toString() } }}
+        </button>
+        <button *ngIf="mode === 'query'"
+                type="button" class="btn-primary"
+                [disabled]="!canContinue"
+                (click)="continue()">
+          {{ 'cockpit.batchOps.removalTimeDecision.actionBtnQuery' | translate }}
+        </button>
+      </div>
+
+    </div>
+    <!-- /removal-time-decision -->
+
     <!-- ─── Move Instances: process directory ────────────────────────────── -->
     <div *ngIf="selectedOperationId === 'move-instances'" class="operation-steps">
 

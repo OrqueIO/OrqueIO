@@ -3,7 +3,8 @@
  *
  * Ensures:
  * - removal-time-process is available (no "Coming soon" badge)
- * - removal-time-decision and removal-time-batch remain disabled with badge
+ * - removal-time-decision is available (no "Coming soon" badge)
+ * - removal-time-batch remains disabled with badge
  * - No duplicate entries
  * - Other operations unchanged
  */
@@ -20,12 +21,13 @@ describe('Batch Operations - Availability', () => {
     expect(removalTimeProcess?.actionBtnQueryKey).toBeDefined();
   });
 
-  it('should have removal-time-decision disabled with "Coming soon" status', () => {
+  it('should have removal-time-decision available without "Coming soon" badge', () => {
     const removalTimeDecision = BATCH_OPERATIONS.find(op => op.id === 'removal-time-decision');
 
     expect(removalTimeDecision).toBeDefined();
-    expect(removalTimeDecision?.available).toBe(false);
-    expect(removalTimeDecision?.actionBtnKey).toBeUndefined();
+    expect(removalTimeDecision?.available).toBe(true);
+    expect(removalTimeDecision?.actionBtnKey).toBeDefined();
+    expect(removalTimeDecision?.actionBtnQueryKey).toBeDefined();
   });
 
   it('should have removal-time-batch disabled with "Coming soon" status', () => {

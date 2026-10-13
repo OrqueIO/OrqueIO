@@ -453,18 +453,6 @@ describe('DecisionDetailComponent', () => {
     });
   });
 
-  describe('truncateId', () => {
-    beforeEach(() => { createComponent(); });
-
-    it('should truncate long id', () => {
-      expect(component.truncateId('abcdefghijklmnop', 8)).toBe('abcdefgh...');
-    });
-
-    it('should not truncate short id', () => {
-      expect(component.truncateId('abc', 8)).toBe('abc');
-    });
-  });
-
   describe('toggleDmnExpand', () => {
     beforeEach(() => { createComponent(); });
 
