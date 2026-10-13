@@ -1039,13 +1039,13 @@
                 type="button" class="btn-primary"
                 [disabled]="!canContinue"
                 (click)="continue()">
-          {{ 'cockpit.batchOps.removalTimeDecision.actionBtn' | translate: { count: selectedDecisionIds.size.toString() } }}
+          {{ 'cockpit.batchOps.confirm.removalTimeDecisionBtn' | translate: { count: selectedDecisionIds.size.toString() } }}
         </button>
         <button *ngIf="mode === 'query'"
                 type="button" class="btn-primary"
                 [disabled]="!canContinue"
                 (click)="continue()">
-          {{ 'cockpit.batchOps.removalTimeDecision.actionBtnQuery' | translate }}
+          {{ 'cockpit.batchOps.confirm.removalTimeDecisionBtnQuery' | translate }}
         </button>
       </div>
 
