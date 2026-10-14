@@ -186,6 +186,7 @@ export const BATCH_DETAIL_KEYS = [
   'startTime',
   'executionStartTime',
   'endTime',
+  'removalTime',
   'totalJobs',
   'completedJobs',
   'remainingJobs',

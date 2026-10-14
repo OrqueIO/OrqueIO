@@ -26,6 +26,7 @@ import { ProcessDefinitionService } from '../../../../services/process-definitio
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { BATCH_OPS_MODIFY_SIGNAL_KEY } from '../../cockpit-processes/modify-tab/select-instances-dialog';
 import { DecisionService, DecisionInstance } from '../../../../services/decision.service';
+import { BatchService } from '../../../../services/batch.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { CamDatePipe } from '../../../../pipes';
@@ -194,7 +195,9 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     descKey: 'cockpit.batchOps.removalTimeBatch.desc',
     icon: faClock,
     badgeClass: 'badge--gray',
-    available: false
+    available: true,
+    actionBtnKey: 'cockpit.batchOps.confirm.removalTimeBatchBtn',
+    actionBtnQueryKey: 'cockpit.batchOps.confirm.removalTimeBatchBtnQuery'
   }
 ];
 
@@ -221,6 +224,10 @@ interface WizardPersistedState {
   removalTimeDecisionMode?: 'cleared' | 'calculated' | 'absolute';
   removalTimeDecisionAbsoluteDate?: string;
   removalTimeDecisionHierarchical?: boolean;
+  removalTimeBatchMode?: 'cleared' | 'calculated' | 'absolute';
+  removalTimeBatchAbsoluteDate?: string;
+  batchSelectedIds?: string[];
+  batchFilterCriteria?: MultiValueFilter[];
 }
 
 @Component({
@@ -250,6 +257,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   private processDefinitionService = inject(ProcessDefinitionService);
   private cockpitService = inject(CockpitService);
   private decisionService = inject(DecisionService);
+  private batchService = inject(BatchService);
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
   private translateService = inject(TranslateService);
@@ -327,6 +335,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   removalTimeDecisionAbsoluteDate = '';
   removalTimeDecisionHierarchical = false;
 
+  removalTimeBatchMode: 'cleared' | 'calculated' | 'absolute' = 'calculated';
+  removalTimeBatchAbsoluteDate = '';
+  removalTimeBatchSelectedIds = new Set<string>();
+
   moveInstancesByKey = new Map<string, ProcessDefinition[]>();
 
   get filteredMoveInstancesProcesses(): ProcessDefinition[] {
@@ -350,10 +362,19 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   decisionInstancesPageSize = 10;
   selectedDecisionIds = new Set<string>();
 
+  batchFilterCriteria: MultiValueFilter[] = [];
+  batchHasActiveCriteria = false;
+  batchInstances: any[] = [];
+  batchInstancesTotal = 0;
+  batchInstancesLoading = false;
+  batchInstancesPage = 1;
+  batchInstancesPageSize = 10;
+
   private knownInstances = new Map<string, ProcessInstance>();
 
   private readonly instanceLoad$ = new Subject<void>();
   private readonly decisionInstanceLoad$ = new Subject<void>();
+  private readonly batchInstanceLoad$ = new Subject<void>();
   private readonly activityLoad$ = new Subject<Observable<string | null>>();
 
   selectedIds = new Set<string>();
@@ -450,6 +471,31 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.cdr.markForCheck();
     });
 
+    this.batchInstanceLoad$.pipe(
+      switchMap(() => {
+        const params = this.buildHistoricBatchQueryParams();
+        const countParams = this.buildHistoricBatchQueryParams(true);
+        return forkJoin({
+          results: this.batchService.getHistoryBatches(params),
+          count: this.batchService.getHistoryBatchesCount(countParams)
+        }).pipe(
+          catchError(() => {
+            this.batchInstances = [];
+            this.batchInstancesTotal = 0;
+            this.batchInstancesLoading = false;
+            this.cdr.markForCheck();
+            return EMPTY;
+          })
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(({ results, count }) => {
+      this.batchInstances = results;
+      this.batchInstancesTotal = Math.max(count, results.length);
+      this.batchInstancesLoading = false;
+      this.cdr.markForCheck();
+    });
+
     this.activityLoad$.pipe(
       switchMap(source$ => source$),
       switchMap(versionId => {
@@ -482,6 +528,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.loadDecisionInstances();
     } else if (id === 'removal-time-decision') {
       this.loadDecisionInstances();
+    } else if (id === 'removal-time-batch') {
+      this.loadBatchInstances();
     } else if (id === 'move-instances') {
       this.loadMoveInstancesProcesses();
     }
@@ -501,6 +549,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.mode = m;
     this.selectedIds = new Set();
     this.selectedDecisionIds = new Set();
+    this.removalTimeBatchSelectedIds = new Set();
     this.cdr.markForCheck();
     this.saveToSessionStorage();
   }
@@ -541,6 +590,14 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.removalTimeDecisionMode = 'calculated';
     this.removalTimeDecisionAbsoluteDate = '';
     this.removalTimeDecisionHierarchical = false;
+    this.removalTimeBatchMode = 'calculated';
+    this.removalTimeBatchAbsoluteDate = '';
+    this.removalTimeBatchSelectedIds = new Set();
+    this.batchFilterCriteria = [];
+    this.batchHasActiveCriteria = false;
+    this.batchInstances = [];
+    this.batchInstancesTotal = 0;
+    this.batchInstancesPage = 1;
   }
 
   onRowClick(id: string): void {
@@ -704,6 +761,99 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.loadDecisionInstances();
   }
 
+  onBatchFilterChange(event: FilterPanelChange): void {
+    this.batchFilterCriteria = event.criteria;
+    this.batchHasActiveCriteria = event.criteria.length > 0;
+    this.batchInstancesPage = 1;
+    this.removalTimeBatchSelectedIds = new Set();
+    this.loadBatchInstances();
+    this.saveToSessionStorage();
+  }
+
+  private loadBatchInstances(): void {
+    this.batchInstancesLoading = true;
+    this.cdr.markForCheck();
+    this.batchInstanceLoad$.next();
+  }
+
+  private buildHistoricBatchQueryParams(excludePagination: boolean = false): Record<string, unknown> {
+    const params: Record<string, unknown> = {};
+    if (!excludePagination) {
+      params['sortBy'] = 'startTime';
+      params['sortOrder'] = 'desc';
+      params['firstResult'] = (this.batchInstancesPage - 1) * this.batchInstancesPageSize;
+      params['maxResults'] = this.batchInstancesPageSize;
+    }
+    for (const f of this.batchFilterCriteria) {
+      switch (f.field) {
+        case 'batchId':
+          if (f.values.length === 1) params['batchId'] = f.values[0];
+          else if (f.values.length > 1) params['batchIds'] = f.values;
+          break;
+        case 'type':
+          if (f.values.length > 0) params['type'] = f.values.join(',');
+          break;
+        case 'completed':
+          if (f.values.length === 1 && f.values[0] !== null) params['completed'] = f.values[0] === 'true';
+          break;
+        case 'tenantIdIn':
+          if (f.values.length > 0) params['tenantIdIn'] = f.values.join(',');
+          break;
+        case 'withoutTenantId':
+          if (f.values.length === 1 && f.values[0] === 'true') params['withoutTenantId'] = true;
+          break;
+      }
+    }
+    return params;
+  }
+
+  toggleBatchInstance(id: string): void {
+    const next = new Set(this.removalTimeBatchSelectedIds);
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
+    this.removalTimeBatchSelectedIds = next;
+    this.cdr.markForCheck();
+    this.saveToSessionStorage();
+  }
+
+  isBatchSelected(id: string): boolean {
+    return this.removalTimeBatchSelectedIds.has(id);
+  }
+
+  get isAllBatchOnPageSelected(): boolean {
+    return this.batchInstances.length > 0 && this.batchInstances.every(b => this.removalTimeBatchSelectedIds.has(b.id));
+  }
+
+  get isBatchIndeterminate(): boolean {
+    const count = this.batchInstances.filter(b => this.removalTimeBatchSelectedIds.has(b.id)).length;
+    return count > 0 && count < this.batchInstances.length;
+  }
+
+  toggleSelectAllBatch(): void {
+    const next = new Set(this.removalTimeBatchSelectedIds);
+    if (this.isAllBatchOnPageSelected) {
+      this.batchInstances.forEach(b => next.delete(b.id));
+    } else {
+      this.batchInstances.forEach(b => next.add(b.id));
+    }
+    this.removalTimeBatchSelectedIds = next;
+    this.cdr.markForCheck();
+    this.saveToSessionStorage();
+  }
+
+  onBatchRowClick(id: string): void {
+    if (this.mode === 'instances') this.toggleBatchInstance(id);
+  }
+
+  onBatchInstancesPageChange(event: PageChangeEvent): void {
+    this.batchInstancesPage = event.current;
+    this.batchInstancesPageSize = event.size;
+    this.loadBatchInstances();
+  }
+
   toggleInstance(id: string): void {
     const next = new Set(this.selectedIds);
     if (next.has(id)) {
@@ -756,6 +906,12 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         return false;
       }
       return this.mode === 'instances' ? this.selectedDecisionIds.size > 0 : true;
+    }
+    if (this.selectedOperationId === 'removal-time-batch') {
+      if (this.removalTimeBatchMode === 'absolute' && !this.removalTimeBatchAbsoluteDate) {
+        return false;
+      }
+      return this.mode === 'instances' ? this.removalTimeBatchSelectedIds.size > 0 : true;
     }
     if (this.selectedOperationId === 'set-retries-jobs') {
       const retriesValid = Number.isInteger(this.retries) && this.retries >= 0;
@@ -834,6 +990,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'removal-time-decision') {
       return this.mode === 'instances' ? this.selectedDecisionIds.size : this.decisionInstancesTotal;
     }
+    if (this.selectedOperationId === 'removal-time-batch') {
+      return this.mode === 'instances' ? this.removalTimeBatchSelectedIds.size : this.batchInstancesTotal;
+    }
     return this.mode === 'instances' ? this.selectedIds.size : this.instancesTotal;
   }
 
@@ -894,6 +1053,21 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
       if (this.removalTimeDecisionHierarchical) {
         removalTimePayload['hierarchical'] = true;
+      }
+
+      return JSON.stringify(removalTimePayload, null, 2);
+    }
+    if (this.selectedOperationId === 'removal-time-batch') {
+      const removalTimePayload: Record<string, unknown> = this.mode === 'instances'
+        ? { historicBatchIds: [...this.removalTimeBatchSelectedIds] }
+        : { historicBatchQuery: this.buildHistoricBatchQueryForBatch() };
+
+      if (this.removalTimeBatchMode === 'cleared') {
+        removalTimePayload['clearedRemovalTime'] = true;
+      } else if (this.removalTimeBatchMode === 'calculated') {
+        removalTimePayload['calculatedRemovalTime'] = true;
+      } else if (this.removalTimeBatchMode === 'absolute') {
+        removalTimePayload['absoluteRemovalTime'] = this.removalTimeBatchAbsoluteDateFormatted;
       }
 
       return JSON.stringify(removalTimePayload, null, 2);
@@ -1122,6 +1296,31 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           break;
         case 'evaluatedBefore':
           if (f.values[0]) query['evaluatedBefore'] = f.values[0];
+          break;
+      }
+    }
+    return query;
+  }
+
+  buildHistoricBatchQueryForBatch(): Record<string, unknown> {
+    const query: Record<string, unknown> = {};
+    for (const f of this.batchFilterCriteria) {
+      switch (f.field) {
+        case 'batchId':
+          if (f.values.length === 1) query['batchId'] = f.values[0];
+          else if (f.values.length > 1) query['batchIds'] = [...f.values];
+          break;
+        case 'type':
+          if (f.values.length > 0) query['type'] = f.values.join(',');
+          break;
+        case 'completed':
+          if (f.values.length === 1 && f.values[0] !== null) query['completed'] = f.values[0] === 'true';
+          break;
+        case 'tenantIdIn':
+          if (f.values.length > 0) query['tenantIdIn'] = f.values.join(',');
+          break;
+        case 'withoutTenantId':
+          if (f.values.length === 1 && f.values[0] === 'true') query['withoutTenantId'] = true;
           break;
       }
     }
@@ -1524,6 +1723,43 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       return;
     }
 
+    if (this.selectedOperationId === 'removal-time-batch') {
+      const removalTimePayload: {
+        calculatedRemovalTime?: boolean;
+        absoluteRemovalTime?: string;
+        clearedRemovalTime?: boolean;
+        historicBatchIds?: string[];
+        historicBatchQuery?: Record<string, unknown>;
+      } = this.mode === 'instances'
+        ? { historicBatchIds: [...this.removalTimeBatchSelectedIds] }
+        : { historicBatchQuery: this.buildHistoricBatchQueryForBatch() };
+
+      if (this.removalTimeBatchMode === 'cleared') {
+        removalTimePayload.clearedRemovalTime = true;
+      } else if (this.removalTimeBatchMode === 'calculated') {
+        removalTimePayload.calculatedRemovalTime = true;
+      } else if (this.removalTimeBatchMode === 'absolute') {
+        removalTimePayload.absoluteRemovalTime = this.removalTimeBatchAbsoluteDateFormatted;
+      }
+
+      this.batchService.setRemovalTimeAsync(removalTimePayload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: batch => {
+            this.batchId = batch.id;
+            this.executing = false;
+            this.clearSessionStorage();
+            this.cdr.markForCheck();
+          },
+          error: () => {
+            this.batchError = true;
+            this.executing = false;
+            this.cdr.markForCheck();
+          }
+        });
+      return;
+    }
+
     if (this.selectedOperationId === 'delete-running') {
       const deleteReason = this.deleteReason.trim() || undefined;
       const deletePayload = this.mode === 'instances'
@@ -1685,7 +1921,11 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         correlateVariableDefs: this.correlateVariableDefs,
         removalTimeDecisionMode: this.removalTimeDecisionMode,
         removalTimeDecisionAbsoluteDate: this.removalTimeDecisionAbsoluteDate,
-        removalTimeDecisionHierarchical: this.removalTimeDecisionHierarchical
+        removalTimeDecisionHierarchical: this.removalTimeDecisionHierarchical,
+        removalTimeBatchMode: this.removalTimeBatchMode,
+        removalTimeBatchAbsoluteDate: this.removalTimeBatchAbsoluteDate,
+        batchSelectedIds: [...this.removalTimeBatchSelectedIds],
+        batchFilterCriteria: this.batchFilterCriteria
       };
       sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(state));
     } catch {
@@ -1734,6 +1974,11 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.removalTimeDecisionMode = state.removalTimeDecisionMode ?? 'calculated';
       this.removalTimeDecisionAbsoluteDate = state.removalTimeDecisionAbsoluteDate ?? '';
       this.removalTimeDecisionHierarchical = state.removalTimeDecisionHierarchical ?? false;
+      this.removalTimeBatchMode = state.removalTimeBatchMode ?? 'calculated';
+      this.removalTimeBatchAbsoluteDate = state.removalTimeBatchAbsoluteDate ?? '';
+      this.removalTimeBatchSelectedIds = new Set(state.batchSelectedIds ?? []);
+      this.batchFilterCriteria = state.batchFilterCriteria ?? [];
+      this.batchHasActiveCriteria = this.batchFilterCriteria.length > 0;
       const restoredStep: number = state.step ?? 1;
       this.currentStep = restoredStep >= 3 ? 1 : restoredStep as 1 | 2;
 
@@ -1744,6 +1989,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         this.loadDecisionInstances();
       } else if (this.currentStep === 1 && this.selectedOperationId === 'removal-time-decision') {
         this.loadDecisionInstances();
+      } else if (this.currentStep === 1 && this.selectedOperationId === 'removal-time-batch') {
+        this.loadBatchInstances();
       } else if (this.currentStep === 1 && this.selectedOperationId === 'move-instances') {
         this.moveInstancesSearchText = state.moveInstancesSearchText ?? '';
         this.loadMoveInstancesProcesses();
@@ -1915,6 +2162,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.correlate.noInstances';
     if (this.selectedOperationId === 'removal-time-process') return 'cockpit.batchOps.removalTimeProcess.noInstances';
     if (this.selectedOperationId === 'removal-time-decision') return 'cockpit.batchOps.removalTimeDecision.noInstances';
+    if (this.selectedOperationId === 'removal-time-batch') return 'cockpit.batchOps.removalTimeBatch.noBatches';
     return 'cockpit.batchOps.suspend.noInstances';
   }
 
@@ -1929,6 +2177,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateSummary';
     if (this.selectedOperationId === 'removal-time-process') return 'cockpit.batchOps.confirm.removalTimeProcessSummary';
     if (this.selectedOperationId === 'removal-time-decision') return 'cockpit.batchOps.confirm.removalTimeDecisionSummary';
+    if (this.selectedOperationId === 'removal-time-batch') return 'cockpit.batchOps.confirm.removalTimeBatchSummary';
     return 'cockpit.batchOps.confirm.suspendSummary';
   }
 
@@ -1943,6 +2192,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateQuerySummary';
     if (this.selectedOperationId === 'removal-time-process') return 'cockpit.batchOps.confirm.removalTimeProcessQuerySummary';
     if (this.selectedOperationId === 'removal-time-decision') return 'cockpit.batchOps.confirm.removalTimeDecisionQuerySummary';
+    if (this.selectedOperationId === 'removal-time-batch') return 'cockpit.batchOps.confirm.removalTimeBatchQuerySummary';
     return 'cockpit.batchOps.confirm.querySummary';
   }
 
@@ -1957,6 +2207,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateBtn';
     if (this.selectedOperationId === 'removal-time-process') return 'cockpit.batchOps.confirm.removalTimeProcessBtn';
     if (this.selectedOperationId === 'removal-time-decision') return 'cockpit.batchOps.confirm.removalTimeDecisionBtn';
+    if (this.selectedOperationId === 'removal-time-batch') return 'cockpit.batchOps.confirm.removalTimeBatchBtn';
     return 'cockpit.batchOps.confirm.suspendBtn';
   }
 
@@ -1971,6 +2222,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     if (this.selectedOperationId === 'correlate') return 'cockpit.batchOps.confirm.correlateBtnQuery';
     if (this.selectedOperationId === 'removal-time-process') return 'cockpit.batchOps.confirm.removalTimeProcessBtnQuery';
     if (this.selectedOperationId === 'removal-time-decision') return 'cockpit.batchOps.confirm.removalTimeDecisionBtnQuery';
+    if (this.selectedOperationId === 'removal-time-batch') return 'cockpit.batchOps.confirm.removalTimeBatchBtnQuery';
     return 'cockpit.batchOps.confirm.suspendBtnQuery';
   }
 
@@ -1982,6 +2234,11 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   get removalTimeDecisionAbsoluteDateFormatted(): string {
     if (!this.removalTimeDecisionAbsoluteDate) return '';
     return formatDateTimeVariableForApi(this.removalTimeDecisionAbsoluteDate);
+  }
+
+  get removalTimeBatchAbsoluteDateFormatted(): string {
+    if (!this.removalTimeBatchAbsoluteDate) return '';
+    return formatDateTimeVariableForApi(this.removalTimeBatchAbsoluteDate);
   }
 
   get showCorrelateEmptyMessageWarning(): boolean {

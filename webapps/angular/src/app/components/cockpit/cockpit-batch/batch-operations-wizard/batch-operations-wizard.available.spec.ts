@@ -1,10 +1,6 @@
 /**
  * Test: Set removal time operations activation status
  *
- * Ensures:
- * - removal-time-process is available (no "Coming soon" badge)
- * - removal-time-decision is available (no "Coming soon" badge)
- * - removal-time-batch remains disabled with badge
  * - No duplicate entries
  * - Other operations unchanged
  */
@@ -30,12 +26,13 @@ describe('Batch Operations - Availability', () => {
     expect(removalTimeDecision?.actionBtnQueryKey).toBeDefined();
   });
 
-  it('should have removal-time-batch disabled with "Coming soon" status', () => {
+  it('should have removal-time-batch available without "Coming soon" badge', () => {
     const removalTimeBatch = BATCH_OPERATIONS.find(op => op.id === 'removal-time-batch');
 
     expect(removalTimeBatch).toBeDefined();
-    expect(removalTimeBatch?.available).toBe(false);
-    expect(removalTimeBatch?.actionBtnKey).toBeUndefined();
+    expect(removalTimeBatch?.available).toBe(true);
+    expect(removalTimeBatch?.actionBtnKey).toBeDefined();
+    expect(removalTimeBatch?.actionBtnQueryKey).toBeDefined();
   });
 
   it('should not have duplicate removal-time-process entries', () => {

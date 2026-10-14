@@ -66,7 +66,7 @@ interface ProcessDefinitionGroup {
 })
 export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   @Input() lockedState: string | null = null;
-  @Input() criteriaSet: 'process' | 'decision' = 'process';
+  @Input() criteriaSet: 'process' | 'decision' | 'batch' = 'process';
   @Input() initialPills: MultiValueFilter[] = [];
   @Input() showExtendedCriteria = false;
   @Input() showStateNarrowing = false;

@@ -450,7 +450,8 @@ export type GlobalSearchField =
   | 'superProcessInstanceId' | 'subProcessInstanceId'
   | 'incidentId' | 'incidentType' | 'incidentMessage' | 'activityId'
   | 'stateActive' | 'stateSuspended'
-  | 'stateCompleted' | 'stateTerminated';
+  | 'stateCompleted' | 'stateTerminated'
+  | 'batchId' | 'type' | 'completed' | 'tenantIdIn' | 'withoutTenantId';
 
 export interface MultiValueFilter {
   field: GlobalSearchField;

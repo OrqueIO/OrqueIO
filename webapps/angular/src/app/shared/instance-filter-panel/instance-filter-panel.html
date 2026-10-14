@@ -355,6 +355,46 @@
 
           </ng-container>
 
+          <!-- ── Batch criteria ─────────────────────────────────────────────── -->
+          <ng-container *ngIf="criteriaSet === 'batch'">
+
+            <div class="criteria-group">
+              <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupInstance' | translate }}</div>
+
+              <button class="criteria-option" (click)="selectCriteriaType('batchId')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--violet">
+                  <fa-icon [icon]="faHashtag"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">Batch ID</span>
+                  <span class="criteria-option-desc">Filter by batch identifier</span>
+                </span>
+              </button>
+
+              <button class="criteria-option" (click)="selectCriteriaType('type')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--blue">
+                  <fa-icon [icon]="faCodeBranch"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">Type</span>
+                  <span class="criteria-option-desc">Filter by batch operation type</span>
+                </span>
+              </button>
+
+              <button class="criteria-option" (click)="selectCriteriaType('completed')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--emerald">
+                  <fa-icon [icon]="faCheckCircle"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">Status</span>
+                  <span class="criteria-option-desc">Filter by completion status</span>
+                </span>
+              </button>
+
+            </div>
+
+          </ng-container>
+
         </div>
 
         <!-- Criterion editor popover — handles both new criteria and pill editing -->
