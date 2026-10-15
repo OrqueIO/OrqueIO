@@ -67,7 +67,7 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
         'BATCH_TYPE_MODIFICATION': 'Process Instance Modification',
         'BATCH_TYPE_RESTART': 'Process Instance Restart',
         'BATCH_TYPE_DELETION': 'Process Instance Deletion',
-        'BATCH_TYPE_SUSPENSION': 'Process Instance Suspension',
+        'BATCH_TYPE_SUSPENSION': 'Process Instance State Change',
         'BATCH_TYPE_HISTORIC_INSTANCE_DELETION': 'Finished Instance Deletion',
         'BATCH_TYPE_HISTORIC_DECISION_INSTANCE_DELETION': 'Decision Instance Deletion',
         'BATCH_TYPE_SET_JOB_RETRIES': 'Set Job Retries',
@@ -84,7 +84,7 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
         'BATCH_TYPE_MODIFICATION': 'Modification d\'instances de processus',
         'BATCH_TYPE_RESTART': 'Redémarrage d\'instances de processus',
         'BATCH_TYPE_DELETION': 'Suppression d\'instances de processus',
-        'BATCH_TYPE_SUSPENSION': 'Suspension d\'instances de processus',
+        'BATCH_TYPE_SUSPENSION': 'Changement d\'état d\'instances',
         'BATCH_TYPE_HISTORIC_INSTANCE_DELETION': 'Suppression d\'instances terminées',
         'BATCH_TYPE_HISTORIC_DECISION_INSTANCE_DELETION': 'Suppression d\'instances de décision',
         'BATCH_TYPE_SET_JOB_RETRIES': 'Définir les tentatives de job',
@@ -115,7 +115,7 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       const expectedLabels = [
         'Process Instance Modification',
         'Process Instance Deletion',
-        'Process Instance Suspension',
+        'Process Instance State Change',
         'Finished Instance Deletion',
         'Decision Instance Deletion',
         'Set Job Retries',
@@ -200,7 +200,7 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       const expectedLabels = [
         'Modification d\'instances',                              // instance-modification
         'Suppression d\'instances',                               // instance-deletion
-        'Suspension d\'instances',                                // instance-update-suspension-state
+        'Changement d\'état d\'instances',                        // instance-update-suspension-state
         'Suppression d\'instances terminées',                     // historic-instance-deletion
         'Suppression d\'instances de décision',                   // historic-decision-instance-deletion
         'Tentatives de job',                                      // set-job-retries (raccourci)
@@ -251,6 +251,34 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
 
       expect(enLabel).toBe('Process Instance Restart');
       expect(frLabel).toBe('Redémarrage d\'instances');
+    });
+
+    it('[REAL RENDER] instance-update-suspension-state displays new label in EN and FR with real i18n files', () => {
+      // Load real i18n files
+      const enTranslations = require('../../../assets/i18n/en.json');
+      const frTranslations = require('../../../assets/i18n/fr.json');
+
+      // Verify translations exist and match expected values
+      expect(enTranslations['BATCH_TYPE_SUSPENSION']).toBe('Process Instance State Change');
+      expect(frTranslations['BATCH_TYPE_SUSPENSION']).toBe('Changement d\'état d\'instances');
+
+      // Verify no raw keys displayed in EN
+      component.selectCriteriaType('type');
+      fixture.detectChanges();
+
+      const suspensionButton = Array.from(compiled.querySelectorAll('.batch-type-row')).find(btn => {
+        const option = component.BATCH_TYPE_OPTIONS.find(o => o.value === 'instance-update-suspension-state');
+        return btn.querySelector('.state-row-label')?.textContent?.trim() === enTranslations[option!.i18nKey];
+      });
+
+      expect(suspensionButton).toBeTruthy();
+      const labelText = suspensionButton?.querySelector('.state-row-label')?.textContent?.trim();
+      expect(labelText).toBe('Process Instance State Change');
+      expect(labelText).not.toContain('cockpit.');
+      expect(labelText).not.toBe('BATCH_TYPE_SUSPENSION');
+
+      // Verify title attribute
+      expect(suspensionButton?.getAttribute('title')).toBe('Process Instance State Change');
     });
   });
 

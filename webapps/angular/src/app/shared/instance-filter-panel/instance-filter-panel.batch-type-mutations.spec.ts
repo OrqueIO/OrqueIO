@@ -79,7 +79,7 @@ describe('InstanceFilterPanel — Batch Type Mutations', () => {
         'BATCH_TYPE_MODIFICATION': 'Process Instance Modification',
         'BATCH_TYPE_RESTART': 'Process Instance Restart',
         'BATCH_TYPE_DELETION': 'Process Instance Deletion',
-        'BATCH_TYPE_SUSPENSION': 'Process Instance Suspension',
+        'BATCH_TYPE_SUSPENSION': 'Process Instance State Change',
         'BATCH_TYPE_HISTORIC_INSTANCE_DELETION': 'Finished Instance Deletion',
         'BATCH_TYPE_HISTORIC_DECISION_INSTANCE_DELETION': 'Decision Instance Deletion',
         'BATCH_TYPE_SET_JOB_RETRIES': 'Set Job Retries',

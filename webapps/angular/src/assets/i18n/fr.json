@@ -1524,7 +1524,7 @@
   "BATCH_TYPE_MODIFICATION": "Modification d'instances",
   "BATCH_TYPE_RESTART": "Redémarrage d'instances",
   "BATCH_TYPE_DELETION": "Suppression d'instances",
-  "BATCH_TYPE_SUSPENSION": "Suspension d'instances",
+  "BATCH_TYPE_SUSPENSION": "Changement d'état d'instances",
   "BATCH_TYPE_HISTORIC_INSTANCE_DELETION": "Suppression d'instances terminées",
   "BATCH_TYPE_HISTORIC_DECISION_INSTANCE_DELETION": "Suppression d'instances de décision",
   "BATCH_TYPE_SET_JOB_RETRIES": "Tentatives de job",

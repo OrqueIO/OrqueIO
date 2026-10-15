@@ -138,7 +138,7 @@ describe('InstanceFilterPanel — Batch Type Narrow Card', () => {
       const expectedEN = [
         'Process Instance Modification',
         'Process Instance Deletion',
-        'Process Instance Suspension',
+        'Process Instance State Change',
         'Finished Instance Deletion',
         'Decision Instance Deletion',
         'Set Job Retries',
