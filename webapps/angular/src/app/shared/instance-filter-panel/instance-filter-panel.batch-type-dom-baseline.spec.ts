@@ -10,27 +10,31 @@ import { CockpitService } from '../../services/cockpit.service';
 import { DecisionService } from '../../services/decision.service';
 import { TranslateService } from '../../i18n/translate.service';
 import { initTestEnvironment } from '../../testing/test-utils';
+import { BATCH_TYPE_LABELS } from '../../models/cockpit/batch.model';
 
 /**
  * BASELINE TEST: Batch Type filter DOM structure
  *
- * This test captures the EXACT DOM structure of the Type filter BEFORE converting to *ngFor.
- * After converting to *ngFor, the same DOM must be rendered (11 buttons, same order, same classes).
+ * This test captures the EXACT DOM structure of the Type filter with 13 batch types.
+ * Expected: 13 buttons in logical grouped order with icons.
+ * Note: 'instance-migration' is excluded (no corresponding batch operation in wizard).
  *
- * Expected order (from BATCH_TYPE_LABELS):
- * 1. instance-migration
- * 2. instance-modification
+ * Expected order (from BATCH_TYPE_OPTIONS):
+ * 1. instance-modification
+ * 2. instance-restart
  * 3. instance-deletion
  * 4. instance-update-suspension-state
- * 5. set-job-retries
- * 6. set-external-task-retries
- * 7. process-set-removal-time
- * 8. decision-set-removal-time
- * 9. batch-set-removal-time
- * 10. set-variables
- * 11. correlate-message
+ * 5. historic-instance-deletion
+ * 6. historic-decision-instance-deletion
+ * 7. set-job-retries
+ * 8. set-external-task-retries
+ * 9. set-variables
+ * 10. correlate-message
+ * 11. process-set-removal-time
+ * 12. decision-set-removal-time
+ * 13. batch-set-removal-time
  */
-describe('InstanceFilterPanel - Batch Type DOM Baseline (before *ngFor)', () => {
+describe('InstanceFilterPanel - Batch Type DOM Baseline (13 types)', () => {
   let component: InstanceFilterPanelComponent;
   let fixture: ComponentFixture<InstanceFilterPanelComponent>;
   let compiled: HTMLElement;
@@ -58,10 +62,13 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (before *ngFor)', () => 
     const translateService = TestBed.inject(TranslateService);
     (translateService as any).translations = {
       en: {
-        'BATCH_TYPE_MIGRATION': 'Instance Migration',
-        'BATCH_TYPE_MODIFICATION': 'Instance Modification',
-        'BATCH_TYPE_DELETION': 'Instance Deletion',
-        'BATCH_TYPE_SUSPENSION': 'Instance Update Suspension State',
+        'BATCH_TYPE_MIGRATION': 'Process Instance Migration',
+        'BATCH_TYPE_MODIFICATION': 'Process Instance Modification',
+        'BATCH_TYPE_RESTART': 'Process Instance Restart',
+        'BATCH_TYPE_DELETION': 'Process Instance Deletion',
+        'BATCH_TYPE_SUSPENSION': 'Process Instance Suspension',
+        'BATCH_TYPE_HISTORIC_INSTANCE_DELETION': 'Finished Instance Deletion',
+        'BATCH_TYPE_HISTORIC_DECISION_INSTANCE_DELETION': 'Decision Instance Deletion',
         'BATCH_TYPE_SET_JOB_RETRIES': 'Set Job Retries',
         'BATCH_TYPE_SET_EXTERNAL_TASK_RETRIES': 'Set External Task Retries',
         'BATCH_TYPE_SET_REMOVAL_TIME': 'Set Removal Time',
@@ -77,13 +84,13 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (before *ngFor)', () => 
     fixture.detectChanges();
   });
 
-  it('renders exactly 11 Type option buttons with correct classes', async () => {
+  it('renders exactly 13 Type option buttons with correct classes', async () => {
     component.selectCriteriaType('type');
     fixture.detectChanges();
     await fixture.whenStable();
 
     const buttons = compiled.querySelectorAll('.state-row');
-    expect(buttons.length).toBe(11);
+    expect(buttons.length).toBe(13);
 
     // Each button should have class="state-row"
     buttons.forEach(btn => {
@@ -91,23 +98,25 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (before *ngFor)', () => 
     });
   });
 
-  it('renders Type options in correct order (matching BATCH_TYPE_LABELS)', async () => {
+  it('renders Type options in correct order (matching BATCH_TYPE_OPTIONS)', async () => {
     component.selectCriteriaType('type');
     fixture.detectChanges();
     await fixture.whenStable();
 
     const expectedValues = [
-      'instance-migration',
       'instance-modification',
+      'instance-restart',
       'instance-deletion',
       'instance-update-suspension-state',
+      'historic-instance-deletion',
+      'historic-decision-instance-deletion',
       'set-job-retries',
       'set-external-task-retries',
+      'set-variables',
+      'correlate-message',
       'process-set-removal-time',
       'decision-set-removal-time',
-      'batch-set-removal-time',
-      'set-variables',
-      'correlate-message'
+      'batch-set-removal-time'
     ];
 
     const buttons = compiled.querySelectorAll<HTMLButtonElement>('.state-row');
@@ -128,7 +137,7 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (before *ngFor)', () => 
     await fixture.whenStable();
 
     const labels = compiled.querySelectorAll('.state-row-label');
-    expect(labels.length).toBe(11);
+    expect(labels.length).toBe(13);
 
     // Labels should contain translated text (not raw keys)
     labels.forEach(label => {
@@ -149,11 +158,34 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (before *ngFor)', () => 
     buttons[0].click();
     fixture.detectChanges();
     expect(component.pendingValues.length).toBe(1);
+    expect(component.pendingValues[0]).toBe('instance-modification');
 
     // Click second button - should replace first
     buttons[1].click();
     fixture.detectChanges();
     expect(component.pendingValues.length).toBe(1);
-    expect(component.pendingValues[0]).toBe('instance-modification');
+    expect(component.pendingValues[0]).toBe('instance-restart');
+  });
+
+  it('all types from BATCH_TYPE_LABELS must be in BATCH_TYPE_OPTIONS except excluded ones', () => {
+    // This test ensures no type is missing from the filter options
+    const batchTypeLabelsKeys = Object.keys(BATCH_TYPE_LABELS);
+    const batchTypeOptionsValues = component.BATCH_TYPE_OPTIONS.map(opt => opt.value);
+    const excludedTypes = ['instance-migration']; // No corresponding batch operation in wizard
+
+    // Every type in BATCH_TYPE_LABELS (except excluded) must be in BATCH_TYPE_OPTIONS
+    batchTypeLabelsKeys.forEach(type => {
+      if (excludedTypes.includes(type)) {
+        expect(batchTypeOptionsValues).not.toContain(type);
+      } else {
+        expect(batchTypeOptionsValues).toContain(type);
+      }
+    });
+
+    // 'instance-migration' must NOT be in options
+    expect(batchTypeOptionsValues).not.toContain('instance-migration');
+
+    // BATCH_TYPE_OPTIONS should have same count as BATCH_TYPE_LABELS minus excluded
+    expect(batchTypeOptionsValues.length).toBe(batchTypeLabelsKeys.length - excludedTypes.length);
   });
 });

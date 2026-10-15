@@ -1086,3 +1086,125 @@
   color: var(--text-muted);
   font-style: italic;
 }
+
+/* ========== BATCH TYPE FILTER — MODERN DESIGN WITH ICONS ========== */
+
+/* Scrollable container for batch type list — exactly 6 visible rows */
+.batch-type-list--scrollable {
+  --batch-type-row-height: 36px;
+  --batch-type-row-gap: 2px;
+  --batch-type-visible-rows: 6;
+  --batch-type-list-padding: 4px;
+
+  max-height: calc(
+    var(--batch-type-visible-rows) * var(--batch-type-row-height) +
+    (var(--batch-type-visible-rows) - 1) * var(--batch-type-row-gap) +
+    2 * var(--batch-type-list-padding)
+  );
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--batch-type-list-padding) 0;
+  gap: var(--batch-type-row-gap);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Batch type row — compact 36px height */
+.batch-type-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: var(--radius-lg);
+  transition: background-color 120ms ease-out;
+  min-height: var(--batch-type-row-height);
+  font-size: 13px;
+}
+
+.batch-type-row:hover {
+  background-color: var(--color-gray-50);
+}
+
+.batch-type-row:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+  box-shadow: var(--shadow-focus);
+}
+
+/* Icon tile — compact 24x24px */
+.batch-type-row__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 6px;
+  background-color: var(--color-gray-100);
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+/* Label with ellipsis for long text */
+.batch-type-row .state-row-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Check icon — compact 12px */
+.batch-type-row .state-row-check {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* Selected state — primary tint + bold label + primary icon tile */
+.batch-type-row--selected {
+  background-color: var(--color-primary-bg);
+}
+
+.batch-type-row--selected .state-row-label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.batch-type-row--selected .batch-type-row__icon {
+  background-color: var(--color-primary);
+  color: var(--text-inverse);
+}
+
+/* Icon family tints — deletion types = danger, removal time = warning, others = neutral */
+.batch-type-row[aria-pressed="false"] .batch-type-row__icon {
+  /* Default neutral tint (already set above) */
+}
+
+/* Deletion types: instance-deletion, historic-instance-deletion, historic-decision-instance-deletion */
+.batch-type-row:nth-child(3) .batch-type-row__icon,
+.batch-type-row:nth-child(5) .batch-type-row__icon,
+.batch-type-row:nth-child(6) .batch-type-row__icon {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+.batch-type-row:nth-child(3).batch-type-row--selected .batch-type-row__icon,
+.batch-type-row:nth-child(5).batch-type-row--selected .batch-type-row__icon,
+.batch-type-row:nth-child(6).batch-type-row--selected .batch-type-row__icon {
+  background-color: var(--color-danger);
+  color: var(--text-inverse);
+}
+
+/* Removal time types: process-set-removal-time, decision-set-removal-time, batch-set-removal-time */
+.batch-type-row:nth-child(11) .batch-type-row__icon,
+.batch-type-row:nth-child(12) .batch-type-row__icon,
+.batch-type-row:nth-child(13) .batch-type-row__icon {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.batch-type-row:nth-child(11).batch-type-row--selected .batch-type-row__icon,
+.batch-type-row:nth-child(12).batch-type-row--selected .batch-type-row__icon,
+.batch-type-row:nth-child(13).batch-type-row--selected .batch-type-row__icon {
+  background-color: var(--color-warning);
+  color: var(--text-inverse);
+}

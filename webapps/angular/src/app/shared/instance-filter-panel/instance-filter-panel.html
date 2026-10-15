@@ -520,15 +520,15 @@
   <div class="editor-popover-body editor-popover-body--state"
        *ngIf="activeEditorType === 'type' && criteriaSet === 'batch'"
        (keydown.enter)="$event.preventDefault(); confirmCriterion()">
-    <div class="state-checklist">
+    <div class="state-checklist batch-type-list--scrollable">
       <button *ngFor="let option of BATCH_TYPE_OPTIONS"
-              class="state-row"
-              [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === option.value"
-              (click)="pendingValues = [option.value]"
-              type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === option.value">
-          {{ option.i18nKey | translate }}
-        </span>
+              type="button"
+              class="state-row batch-type-row"
+              [class.batch-type-row--selected]="pendingValues.length === 1 && pendingValues[0] === option.value"
+              [attr.aria-pressed]="pendingValues.length === 1 && pendingValues[0] === option.value"
+              (click)="pendingValues = [option.value]">
+        <span class="batch-type-row__icon" aria-hidden="true"><fa-icon [icon]="option.icon"></fa-icon></span>
+        <span class="state-row-label">{{ option.i18nKey | translate }}</span>
         <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === option.value" [icon]="faCheck" class="state-row-check"></fa-icon>
       </button>
     </div>

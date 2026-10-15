@@ -16,7 +16,8 @@ import { BATCH_TYPE_LABELS } from '../../models/cockpit/batch.model';
  * RENDERING TEST for Type select and Status (2 options) in batch criteriaSet
  *
  * Tests:
- * - Type popover displays 11 options from BATCH_TYPE_LABELS with translated labels (not raw values)
+ * - Type popover displays 13 options from BATCH_TYPE_OPTIONS with translated labels (not raw values)
+ *   Note: 'instance-migration' excluded (no corresponding batch operation in wizard)
  * - Status popover displays exactly 2 options (Completed, Running) - NO "All"
  * - No raw i18n keys visible ("cockpit.", "BATCH_TYPE_")
  *
@@ -63,8 +64,11 @@ describe('InstanceFilterPanelComponent — Batch Type select & Status (no All)',
         'cockpit.batchOps.removalTimeBatch.filters.statusRunning': 'Running',
         'BATCH_TYPE_MIGRATION': 'Process Instance Migration',
         'BATCH_TYPE_MODIFICATION': 'Process Instance Modification',
+        'BATCH_TYPE_RESTART': 'Process Instance Restart',
         'BATCH_TYPE_DELETION': 'Process Instance Deletion',
         'BATCH_TYPE_SUSPENSION': 'Process Instance Suspension',
+        'BATCH_TYPE_HISTORIC_INSTANCE_DELETION': 'Finished Instance Deletion',
+        'BATCH_TYPE_HISTORIC_DECISION_INSTANCE_DELETION': 'Decision Instance Deletion',
         'BATCH_TYPE_SET_JOB_RETRIES': 'Set Job Retries',
         'BATCH_TYPE_SET_EXTERNAL_TASK_RETRIES': 'Set External Task Retries',
         'BATCH_TYPE_SET_REMOVAL_TIME': 'Set Removal Time',
@@ -80,8 +84,11 @@ describe('InstanceFilterPanelComponent — Batch Type select & Status (no All)',
         'cockpit.batchOps.removalTimeBatch.filters.statusRunning': 'En cours',
         'BATCH_TYPE_MIGRATION': 'Migration d\'instances',
         'BATCH_TYPE_MODIFICATION': 'Modification d\'instances',
+        'BATCH_TYPE_RESTART': 'Redémarrage d\'instances de processus',
         'BATCH_TYPE_DELETION': 'Suppression d\'instances',
         'BATCH_TYPE_SUSPENSION': 'Suspension d\'instances',
+        'BATCH_TYPE_HISTORIC_INSTANCE_DELETION': 'Suppression d\'instances terminées',
+        'BATCH_TYPE_HISTORIC_DECISION_INSTANCE_DELETION': 'Suppression d\'instances de décision',
         'BATCH_TYPE_SET_JOB_RETRIES': 'Définir les tentatives de job',
         'BATCH_TYPE_SET_EXTERNAL_TASK_RETRIES': 'Définir les tentatives de tâche externe',
         'BATCH_TYPE_SET_REMOVAL_TIME': 'Définir le temps de suppression',
@@ -97,21 +104,21 @@ describe('InstanceFilterPanelComponent — Batch Type select & Status (no All)',
     fixture.detectChanges();
   });
 
-  describe('Type popover renders 11 batch types as select options', () => {
+  describe('Type popover renders 13 batch types as select options', () => {
     beforeEach(() => {
       component.selectCriteriaType('type');
       fixture.detectChanges();
     });
 
-    it('should display exactly 11 batch type options', () => {
+    it('should display exactly 13 batch type options', () => {
       const buttons = compiled.querySelectorAll('.editor-popover-body--state .state-row');
-      expect(buttons.length).toBe(11);
+      expect(buttons.length).toBe(13);
     });
 
-    it('should display "Process Instance Migration" for instance-migration', () => {
+    it('should NOT display "Process Instance Migration" (excluded from filter)', () => {
       const buttons = Array.from(compiled.querySelectorAll('.state-row-label'));
       const migrationLabel = buttons.find(b => b.textContent?.trim() === 'Process Instance Migration');
-      expect(migrationLabel).toBeTruthy();
+      expect(migrationLabel).toBeUndefined();
     });
 
     it('should display "Set Removal Time" for process-set-removal-time', () => {
@@ -195,17 +202,17 @@ describe('InstanceFilterPanelComponent — Batch Type select & Status (no All)',
     it('should select only one type at a time (single select)', () => {
       const buttons = compiled.querySelectorAll('.state-row') as NodeListOf<HTMLButtonElement>;
 
-      // Click first type
+      // Click first type (now instance-modification, not migration)
       buttons[0].click();
       fixture.detectChanges();
       expect(component.pendingValues.length).toBe(1);
-      expect(component.pendingValues[0]).toBe('instance-migration');
+      expect(component.pendingValues[0]).toBe('instance-modification');
 
       // Click second type - should replace first
       buttons[1].click();
       fixture.detectChanges();
       expect(component.pendingValues.length).toBe(1);
-      expect(component.pendingValues[0]).toBe('instance-modification');
+      expect(component.pendingValues[0]).toBe('instance-restart');
     });
 
     it('should apply correct value to API (raw key, not translated label)', () => {

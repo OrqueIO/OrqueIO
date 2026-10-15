@@ -160,15 +160,18 @@ export type LoadingState = 'INITIAL' | 'LOADING' | 'LOADED' | 'EMPTY' | 'ERROR';
 export const BATCH_TYPE_LABELS: Record<string, string> = {
   'instance-migration': 'BATCH_TYPE_MIGRATION',
   'instance-modification': 'BATCH_TYPE_MODIFICATION',
+  'instance-restart': 'BATCH_TYPE_RESTART',
   'instance-deletion': 'BATCH_TYPE_DELETION',
   'instance-update-suspension-state': 'BATCH_TYPE_SUSPENSION',
+  'historic-instance-deletion': 'BATCH_TYPE_HISTORIC_INSTANCE_DELETION',
+  'historic-decision-instance-deletion': 'BATCH_TYPE_HISTORIC_DECISION_INSTANCE_DELETION',
   'set-job-retries': 'BATCH_TYPE_SET_JOB_RETRIES',
   'set-external-task-retries': 'BATCH_TYPE_SET_EXTERNAL_TASK_RETRIES',
+  'set-variables': 'BATCH_TYPE_SET_VARIABLES',
+  'correlate-message': 'BATCH_TYPE_CORRELATE_MESSAGE',
   'process-set-removal-time': 'BATCH_TYPE_SET_REMOVAL_TIME',
   'decision-set-removal-time': 'BATCH_TYPE_DECISION_SET_REMOVAL_TIME',
-  'batch-set-removal-time': 'BATCH_TYPE_BATCH_SET_REMOVAL_TIME',
-  'set-variables': 'BATCH_TYPE_SET_VARIABLES',
-  'correlate-message': 'BATCH_TYPE_CORRELATE_MESSAGE'
+  'batch-set-removal-time': 'BATCH_TYPE_BATCH_SET_REMOVAL_TIME'
 };
 
 /**

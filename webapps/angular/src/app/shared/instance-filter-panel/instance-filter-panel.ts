@@ -13,7 +13,10 @@ import {
   faSitemap, faCodeBranch, faSquareMinus, faSquareCheck,
   faPlay, faPauseCircle, faCircleStop, faCheckCircle, faTimesCircle, faUser, faGear, faTable, faPaperPlane,
   faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer, faSync,
-  faLevelUpAlt, faLevelDownAlt, faList
+  faLevelUpAlt, faLevelDownAlt, faList,
+  faPenToSquare, faArrowRotateRight, faTrash, faCirclePause,
+  faBoxArchive, faTrashCan, faRotateRight, faArrowsRotate, faSliders, faEnvelope,
+  faHourglassEnd, faHourglassHalf, faHourglassStart
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { CockpitService, MultiValueFilter, GlobalSearchField, VariableLine } from '../../services/cockpit.service';
@@ -24,6 +27,9 @@ import { TranslateService } from '../../i18n/translate.service';
 import { MultiValueChipInputComponent } from '../multi-value-chip-input/multi-value-chip-input';
 import { dateRangeConflicts } from '../../utils/search-validation';
 import { BATCH_TYPE_LABELS } from '../../models/cockpit/batch.model';
+
+// Batch types excluded from filter options (no corresponding batch operation in wizard)
+const BATCH_TYPES_EXCLUDED_FROM_FILTER = ['instance-migration'];
 
 export interface FilterPanelChange {
   criteria: MultiValueFilter[];
@@ -141,10 +147,21 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     'bpmn:BoundaryEvent':          { icon: faCircleDot,              color: 'var(--text-secondary)' },
   };
 
-  readonly BATCH_TYPE_OPTIONS = Object.entries(BATCH_TYPE_LABELS).map(([value, i18nKey]) => ({
-    value,
-    i18nKey
-  }));
+  readonly BATCH_TYPE_OPTIONS = [
+    { value: 'instance-modification', i18nKey: BATCH_TYPE_LABELS['instance-modification'], icon: faPenToSquare },
+    { value: 'instance-restart', i18nKey: BATCH_TYPE_LABELS['instance-restart'], icon: faArrowRotateRight },
+    { value: 'instance-deletion', i18nKey: BATCH_TYPE_LABELS['instance-deletion'], icon: faTrash },
+    { value: 'instance-update-suspension-state', i18nKey: BATCH_TYPE_LABELS['instance-update-suspension-state'], icon: faCirclePause },
+    { value: 'historic-instance-deletion', i18nKey: BATCH_TYPE_LABELS['historic-instance-deletion'], icon: faBoxArchive },
+    { value: 'historic-decision-instance-deletion', i18nKey: BATCH_TYPE_LABELS['historic-decision-instance-deletion'], icon: faTrashCan },
+    { value: 'set-job-retries', i18nKey: BATCH_TYPE_LABELS['set-job-retries'], icon: faRotateRight },
+    { value: 'set-external-task-retries', i18nKey: BATCH_TYPE_LABELS['set-external-task-retries'], icon: faArrowsRotate },
+    { value: 'set-variables', i18nKey: BATCH_TYPE_LABELS['set-variables'], icon: faSliders },
+    { value: 'correlate-message', i18nKey: BATCH_TYPE_LABELS['correlate-message'], icon: faEnvelope },
+    { value: 'process-set-removal-time', i18nKey: BATCH_TYPE_LABELS['process-set-removal-time'], icon: faHourglassEnd },
+    { value: 'decision-set-removal-time', i18nKey: BATCH_TYPE_LABELS['decision-set-removal-time'], icon: faHourglassHalf },
+    { value: 'batch-set-removal-time', i18nKey: BATCH_TYPE_LABELS['batch-set-removal-time'], icon: faHourglassStart }
+  ];
 
   getActivityIcon(type: string): any {
     return (this.ACTIVITY_ICON_MAP[type] ?? { icon: faCircleDot }).icon;
@@ -454,6 +471,18 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       : [];
     this.cdr.markForCheck();
     this.schedulePositionCheck();
+
+    // Scroll selected batch type option into view
+    if (type === 'type' && this.criteriaSet === 'batch' && this.pendingValues.length > 0) {
+      setTimeout(() => this.scrollSelectedBatchTypeIntoView(), 0);
+    }
+  }
+
+  private scrollSelectedBatchTypeIntoView(): void {
+    const selectedButton = document.querySelector('.batch-type-row--selected');
+    if (selectedButton) {
+      selectedButton.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+    }
   }
 
   startEditPill(index: number, event: Event): void {
