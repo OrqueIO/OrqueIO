@@ -527,6 +527,7 @@
               class="state-row batch-type-row"
               [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === option.value"
               [attr.aria-pressed]="pendingValues.length === 1 && pendingValues[0] === option.value"
+              [attr.title]="option.i18nKey | translate"
               (click)="pendingValues = [option.value]">
         <span class="batch-type-icon batch-type-icon--{{option.iconColor}}" aria-hidden="true"><fa-icon [icon]="option.icon"></fa-icon></span>
         <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === option.value">{{ option.i18nKey | translate }}</span>

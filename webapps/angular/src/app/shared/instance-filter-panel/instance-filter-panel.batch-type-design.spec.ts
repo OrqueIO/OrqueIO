@@ -201,18 +201,18 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
     it('should display exact FR labels for all 13 batch types', () => {
       const expectedLabels = [
         'Modification d\'instances',                              // instance-modification
-        'Redémarrage d\'instances de processus',                  // instance-restart
+        'Redémarrage d\'instances',                               // instance-restart (raccourci)
         'Suppression d\'instances',                               // instance-deletion
         'Suspension d\'instances',                                // instance-update-suspension-state
         'Suppression d\'instances terminées',                     // historic-instance-deletion
         'Suppression d\'instances de décision',                   // historic-decision-instance-deletion
-        'Définir les tentatives de job',                          // set-job-retries
-        'Définir les tentatives de tâche externe',                // set-external-task-retries
-        'Définir les variables',                                  // set-variables
-        'Corréler un message',                                    // correlate-message
-        'Définir le temps de suppression',                        // process-set-removal-time
-        'Définir le temps de suppression (décisions)',            // decision-set-removal-time
-        'Définir le temps de suppression (lots)'                  // batch-set-removal-time
+        'Tentatives de job',                                      // set-job-retries (raccourci)
+        'Tentatives de tâche externe',                            // set-external-task-retries (raccourci)
+        'Définition de variables',                                // set-variables (nominal)
+        'Corrélation de message',                                 // correlate-message (nominal)
+        'Temps de suppression (processus)',                       // process-set-removal-time (raccourci + clarification)
+        'Temps de suppression (décisions)',                       // decision-set-removal-time (raccourci)
+        'Temps de suppression (lots)'                             // batch-set-removal-time (raccourci)
       ];
 
       // Verify each expected label exists in FR translations
@@ -224,14 +224,14 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       });
     });
 
-    it('[MUTATION PROOF] FR label for instance-restart should NOT be old label', () => {
+    it('[MUTATION PROOF] FR label for instance-restart should be shortened version', () => {
       const restartOption = component.BATCH_TYPE_OPTIONS.find(o => o.value === 'instance-restart');
       const frLabel = frTranslations[restartOption!.i18nKey];
 
-      // Should FAIL if FR translation reverts to old label
-      expect(frLabel).toBe('Redémarrage d\'instances de processus');
-      expect(frLabel).not.toBe('Redémarrage d\'instances');
-      expect(frLabel).toContain('de processus');
+      // Should FAIL if FR translation reverts to old long label
+      expect(frLabel).toBe('Redémarrage d\'instances');
+      expect(frLabel).not.toBe('Redémarrage d\'instances de processus');
+      expect(frLabel).not.toContain('de processus');
     });
 
     it('[MUTATION PROOF] FR label for historic-instance-deletion should be exact', () => {
