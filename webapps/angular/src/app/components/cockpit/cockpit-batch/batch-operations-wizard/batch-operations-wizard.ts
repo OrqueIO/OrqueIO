@@ -27,6 +27,7 @@ import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { BATCH_OPS_MODIFY_SIGNAL_KEY } from '../../cockpit-processes/modify-tab/select-instances-dialog';
 import { DecisionService, DecisionInstance } from '../../../../services/decision.service';
 import { BatchService } from '../../../../services/batch.service';
+import { HistoryBatch } from '../../../../models/cockpit/batch.model';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { CamDatePipe } from '../../../../pipes';
@@ -364,9 +365,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   batchFilterCriteria: MultiValueFilter[] = [];
   batchHasActiveCriteria = false;
-  batchInstances: any[] = [];
+  batchInstances: HistoryBatch[] = [];
   batchInstancesTotal = 0;
   batchInstancesLoading = false;
+  batchInstancesError = false;
   batchInstancesPage = 1;
   batchInstancesPageSize = 10;
 
@@ -483,6 +485,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
             this.batchInstances = [];
             this.batchInstancesTotal = 0;
             this.batchInstancesLoading = false;
+            this.batchInstancesError = true;
             this.cdr.markForCheck();
             return EMPTY;
           })
@@ -493,6 +496,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.batchInstances = results;
       this.batchInstancesTotal = Math.max(count, results.length);
       this.batchInstancesLoading = false;
+      this.batchInstancesError = false;
       this.cdr.markForCheck();
     });
 
@@ -772,6 +776,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
 
   private loadBatchInstances(): void {
     this.batchInstancesLoading = true;
+    this.batchInstancesError = false;
     this.cdr.markForCheck();
     this.batchInstanceLoad$.next();
   }

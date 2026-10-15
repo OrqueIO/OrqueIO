@@ -141,6 +141,11 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     'bpmn:BoundaryEvent':          { icon: faCircleDot,              color: 'var(--text-secondary)' },
   };
 
+  readonly BATCH_TYPE_OPTIONS = Object.entries(BATCH_TYPE_LABELS).map(([value, i18nKey]) => ({
+    value,
+    i18nKey
+  }));
+
   getActivityIcon(type: string): any {
     return (this.ACTIVITY_ICON_MAP[type] ?? { icon: faCircleDot }).icon;
   }
@@ -645,7 +650,12 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'instanceId':
       case 'decisionInstanceId':
       case 'processInstanceId':
+      case 'type':
+      case 'completed':
         this.pendingValues = [...pill.values];
+        break;
+      case 'batchId':
+        this.pendingTextValue = pill.values[0] ?? '';
         break;
       case 'superProcessInstanceId':
       case 'subProcessInstanceId':
@@ -810,7 +820,23 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
         }
         pill = { field: 'decisionDefinition', values: [...this.pendingDecisionDefinitionKeys] };
         break;
-      case 'batchId':
+      case 'batchId': {
+        const v = this.pendingTextValue.trim();
+        if (!v) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.popoverFlipped = false;
+            this.cdr.markForCheck();
+            this.emit();
+          }
+          return;
+        }
+        pill = { field: 'batchId', values: [v] };
+        break;
+      }
       case 'type':
       case 'completed':
         if (this.pendingValues.length === 0) {

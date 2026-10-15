@@ -492,9 +492,9 @@
     </button>
   </div>
 
-  <!-- Business Key / Instance ID / Decision Instance ID / Process Instance ID / Batch ID / Type (non-batch) -->
+  <!-- Business Key / Instance ID / Decision Instance ID / Process Instance ID / Type (non-batch) -->
   <div class="editor-popover-body"
-       *ngIf="(activeEditorType === 'businessKey' || activeEditorType === 'instanceId' || activeEditorType === 'decisionInstanceId' || activeEditorType === 'processInstanceId' || activeEditorType === 'batchId') || (activeEditorType === 'type' && criteriaSet !== 'batch')"
+       *ngIf="(activeEditorType === 'businessKey' || activeEditorType === 'instanceId' || activeEditorType === 'decisionInstanceId' || activeEditorType === 'processInstanceId') || (activeEditorType === 'type' && criteriaSet !== 'batch')"
        (keydown.enter)="confirmCriterion()">
     <app-multi-value-chip-input
       [(values)]="pendingValues"
@@ -505,87 +505,31 @@
     </app-multi-value-chip-input>
   </div>
 
+  <!-- Batch ID (single value text input) -->
+  <div class="editor-popover-body"
+       *ngIf="activeEditorType === 'batchId'"
+       (keydown.enter)="confirmCriterion()">
+    <input type="text"
+           class="editor-input"
+           [(ngModel)]="pendingTextValue"
+           [placeholder]="'cockpit.processes.globalSearch.valuePlaceholder' | translate"
+           autofocus />
+  </div>
+
   <!-- Batch Type (criteriaSet=batch only) - single select from BATCH_TYPE_LABELS -->
   <div class="editor-popover-body editor-popover-body--state"
        *ngIf="activeEditorType === 'type' && criteriaSet === 'batch'"
        (keydown.enter)="$event.preventDefault(); confirmCriterion()">
     <div class="state-checklist">
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'instance-migration'"
-              (click)="pendingValues = ['instance-migration']" type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'instance-migration'">
-          {{ 'BATCH_TYPE_MIGRATION' | translate }}
+      <button *ngFor="let option of BATCH_TYPE_OPTIONS"
+              class="state-row"
+              [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === option.value"
+              (click)="pendingValues = [option.value]"
+              type="button">
+        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === option.value">
+          {{ option.i18nKey | translate }}
         </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'instance-migration'" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'instance-modification'"
-              (click)="pendingValues = ['instance-modification']" type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'instance-modification'">
-          {{ 'BATCH_TYPE_MODIFICATION' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'instance-modification'" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'instance-deletion'"
-              (click)="pendingValues = ['instance-deletion']" type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'instance-deletion'">
-          {{ 'BATCH_TYPE_DELETION' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'instance-deletion'" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'instance-update-suspension-state'"
-              (click)="pendingValues = ['instance-update-suspension-state']" type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'instance-update-suspension-state'">
-          {{ 'BATCH_TYPE_SUSPENSION' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'instance-update-suspension-state'" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'set-job-retries'"
-              (click)="pendingValues = ['set-job-retries']" type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'set-job-retries'">
-          {{ 'BATCH_TYPE_SET_JOB_RETRIES' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'set-job-retries'" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'set-external-task-retries'"
-              (click)="pendingValues = ['set-external-task-retries']" type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'set-external-task-retries'">
-          {{ 'BATCH_TYPE_SET_EXTERNAL_TASK_RETRIES' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'set-external-task-retries'" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'process-set-removal-time'"
-              (click)="pendingValues = ['process-set-removal-time']" type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'process-set-removal-time'">
-          {{ 'BATCH_TYPE_SET_REMOVAL_TIME' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'process-set-removal-time'" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'decision-set-removal-time'"
-              (click)="pendingValues = ['decision-set-removal-time']" type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'decision-set-removal-time'">
-          {{ 'BATCH_TYPE_DECISION_SET_REMOVAL_TIME' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'decision-set-removal-time'" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'batch-set-removal-time'"
-              (click)="pendingValues = ['batch-set-removal-time']" type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'batch-set-removal-time'">
-          {{ 'BATCH_TYPE_BATCH_SET_REMOVAL_TIME' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'batch-set-removal-time'" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'set-variables'"
-              (click)="pendingValues = ['set-variables']" type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'set-variables'">
-          {{ 'BATCH_TYPE_SET_VARIABLES' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'set-variables'" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'correlate-message'"
-              (click)="pendingValues = ['correlate-message']" type="button">
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'correlate-message'">
-          {{ 'BATCH_TYPE_CORRELATE_MESSAGE' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'correlate-message'" [icon]="faCheck" class="state-row-check"></fa-icon>
+        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === option.value" [icon]="faCheck" class="state-row-check"></fa-icon>
       </button>
     </div>
   </div>

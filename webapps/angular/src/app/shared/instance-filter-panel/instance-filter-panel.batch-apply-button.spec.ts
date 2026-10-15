@@ -73,7 +73,6 @@ describe('InstanceFilterPanelComponent — Batch Apply button BUG', () => {
     component.criteriaSet = 'batch';
     component.ngOnInit();
 
-    // Spy on criteriaChange event
     emittedEvents = [];
     component.criteriaChange.subscribe((event: any) => {
       emittedEvents.push(event);
@@ -84,16 +83,13 @@ describe('InstanceFilterPanelComponent — Batch Apply button BUG', () => {
 
   describe('[BUG] Type criterion Apply button', () => {
     it('should create pill and emit event when Type → option selected → Apply clicked', async () => {
-      // User clicks "Add criteria" → "Type"
       component.selectCriteriaType('type');
       fixture.detectChanges();
       await fixture.whenStable();
 
-      // Verify Type popover is open
       const typeButtons = compiled.querySelectorAll('.editor-popover-body--state .state-row');
-      expect(typeButtons.length).toBe(11); // 11 batch types
+      expect(typeButtons.length).toBe(11);
 
-      // User clicks on "Set Removal Time (Decisions)" option
       const decisionRemovalTimeButton = Array.from(typeButtons).find(b =>
         b.querySelector('.state-row-label')?.textContent?.trim() === 'Set Removal Time (Decisions)'
       ) as HTMLButtonElement;
@@ -102,46 +98,38 @@ describe('InstanceFilterPanelComponent — Batch Apply button BUG', () => {
       fixture.detectChanges();
       await fixture.whenStable();
 
-      // Verify pendingValues is set
       expect(component.pendingValues).toEqual(['decision-set-removal-time']);
 
-      // User clicks Apply (✓) button
       const applyButton = compiled.querySelector('.btn-editor-confirm-icon') as HTMLButtonElement;
       expect(applyButton).toBeTruthy();
-      expect(applyButton.disabled).toBe(false); // Button should NOT be disabled
+      expect(applyButton.disabled).toBe(false);
 
       applyButton.click();
       fixture.detectChanges();
       await fixture.whenStable();
 
-      // CRITICAL: Should create a pill with type='decision-set-removal-time'
       expect(component.activePills.length).toBe(1);
       expect(component.activePills[0].field).toBe('type');
       expect(component.activePills[0].values).toEqual(['decision-set-removal-time']);
 
-      // CRITICAL: Should emit criteriaChange event
       expect(emittedEvents.length).toBe(1);
       expect(emittedEvents[0].criteria.length).toBe(1);
       expect(emittedEvents[0].criteria[0].field).toBe('type');
       expect(emittedEvents[0].criteria[0].values).toEqual(['decision-set-removal-time']);
 
-      // Popover should close
       expect(component.activeEditorType).toBeNull();
     });
   });
 
   describe('[BUG] Status (completed) criterion Apply button', () => {
     it('should create pill and emit event when Status → Completed → Apply clicked', async () => {
-      // User clicks "Add criteria" → "Status"
       component.selectCriteriaType('completed');
       fixture.detectChanges();
       await fixture.whenStable();
 
-      // Verify Status popover is open
       const statusButtons = compiled.querySelectorAll('.editor-popover-body--state .state-row');
-      expect(statusButtons.length).toBe(2); // Completed, Running (no "All")
+      expect(statusButtons.length).toBe(2);
 
-      // User clicks on "Completed" option
       const completedButton = Array.from(statusButtons).find(b =>
         b.querySelector('.state-row-label')?.textContent?.trim() === 'Completed'
       ) as HTMLButtonElement;
@@ -150,22 +138,18 @@ describe('InstanceFilterPanelComponent — Batch Apply button BUG', () => {
       fixture.detectChanges();
       await fixture.whenStable();
 
-      // Verify pendingValues is set
       expect(component.pendingValues).toEqual(['true']);
 
-      // User clicks Apply (✓) button
       const applyButton = compiled.querySelector('.btn-editor-confirm-icon') as HTMLButtonElement;
       expect(applyButton).toBeTruthy();
       applyButton.click();
       fixture.detectChanges();
       await fixture.whenStable();
 
-      // CRITICAL: Should create a pill with completed=true
       expect(component.activePills.length).toBe(1);
       expect(component.activePills[0].field).toBe('completed');
       expect(component.activePills[0].values).toEqual(['true']);
 
-      // CRITICAL: Should emit criteriaChange event
       expect(emittedEvents.length).toBe(1);
       expect(emittedEvents[0].criteria[0].field).toBe('completed');
       expect(emittedEvents[0].criteria[0].values).toEqual(['true']);
@@ -196,28 +180,24 @@ describe('InstanceFilterPanelComponent — Batch Apply button BUG', () => {
 
   describe('[BUG] Batch ID criterion Apply button', () => {
     it('should create pill and emit event when Batch ID → value entered → Apply clicked', async () => {
-      // User clicks "Add criteria" → "Batch ID"
+
       component.selectCriteriaType('batchId');
       fixture.detectChanges();
       await fixture.whenStable();
 
-      // User enters a batch ID value (simulate multi-value-chip-input)
-      component.pendingValues = ['batch-123'];
+      component.pendingTextValue = 'batch-123';
       fixture.detectChanges();
 
-      // User clicks Apply (✓) button
       const applyButton = compiled.querySelector('.btn-editor-confirm-icon') as HTMLButtonElement;
       expect(applyButton).toBeTruthy();
       applyButton.click();
       fixture.detectChanges();
       await fixture.whenStable();
 
-      // CRITICAL: Should create a pill with batchId='batch-123'
       expect(component.activePills.length).toBe(1);
       expect(component.activePills[0].field).toBe('batchId');
       expect(component.activePills[0].values).toEqual(['batch-123']);
 
-      // CRITICAL: Should emit criteriaChange event
       expect(emittedEvents.length).toBe(1);
       expect(emittedEvents[0].criteria[0].field).toBe('batchId');
       expect(emittedEvents[0].criteria[0].values).toEqual(['batch-123']);
@@ -231,7 +211,7 @@ describe('InstanceFilterPanelComponent — Batch Apply button BUG', () => {
       fixture.detectChanges();
 
       const applyButton = compiled.querySelector('.btn-editor-confirm-icon') as HTMLButtonElement;
-      expect(applyButton.disabled).toBe(false); // Not disabled
+      expect(applyButton.disabled).toBe(false);
     });
 
     it('should NOT be disabled for Status criterion', () => {
@@ -240,7 +220,7 @@ describe('InstanceFilterPanelComponent — Batch Apply button BUG', () => {
       fixture.detectChanges();
 
       const applyButton = compiled.querySelector('.btn-editor-confirm-icon') as HTMLButtonElement;
-      expect(applyButton.disabled).toBe(false); // Not disabled
+      expect(applyButton.disabled).toBe(false);
     });
 
     it('should NOT be disabled for Batch ID criterion', () => {
@@ -249,7 +229,7 @@ describe('InstanceFilterPanelComponent — Batch Apply button BUG', () => {
       fixture.detectChanges();
 
       const applyButton = compiled.querySelector('.btn-editor-confirm-icon') as HTMLButtonElement;
-      expect(applyButton.disabled).toBe(false); // Not disabled
+      expect(applyButton.disabled).toBe(false);
     });
   });
 });

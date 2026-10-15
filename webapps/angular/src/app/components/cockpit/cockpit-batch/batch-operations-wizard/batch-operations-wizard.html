@@ -1156,7 +1156,7 @@
 
       <!-- Pagination -->
       <app-pagination
-        *ngIf="!batchInstancesLoading && batchInstances.length > 0"
+        *ngIf="!batchInstancesLoading && !batchInstancesError && batchInstances.length > 0"
         [current]="batchInstancesPage"
         [size]="batchInstancesPageSize"
         [total]="batchInstancesTotal"
@@ -1173,13 +1173,19 @@
           <span>{{ 'common.loading' | translate }}</span>
         </div>
 
+        <!-- Error -->
+        <div *ngIf="!batchInstancesLoading && batchInstancesError" class="error-state">
+          <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+          <span>{{ 'common.loadError' | translate }}</span>
+        </div>
+
         <!-- Empty -->
-        <div *ngIf="!batchInstancesLoading && batchInstances.length === 0" class="empty-state">
+        <div *ngIf="!batchInstancesLoading && !batchInstancesError && batchInstances.length === 0" class="empty-state">
           {{ 'cockpit.batchOps.removalTimeBatch.noBatches' | translate }}
         </div>
 
         <!-- Table -->
-        <ng-container *ngIf="!batchInstancesLoading && batchInstances.length > 0">
+        <ng-container *ngIf="!batchInstancesLoading && !batchInstancesError && batchInstances.length > 0">
 
           <!-- Select-all bar — instances mode only -->
           <div *ngIf="mode === 'instances'" class="select-all-bar">
