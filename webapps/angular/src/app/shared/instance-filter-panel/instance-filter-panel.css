@@ -1087,7 +1087,14 @@
   font-style: italic;
 }
 
-/* ========== BATCH TYPE FILTER — MODERN DESIGN WITH ICONS ========== */
+/* ========== BATCH TYPE FILTER — WIZARD ICONS + OVERFLOW FIX ========== */
+
+/* Popover card width modifier — only for batch Type filter */
+.criterion-editor-popover--batch-type {
+  width: 320px;
+  min-width: 320px;
+  max-width: calc(100vw - 32px);
+}
 
 /* Scrollable container for batch type list — exactly 6 visible rows */
 .batch-type-list--scrollable {
@@ -1104,25 +1111,31 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: var(--batch-type-list-padding) 0;
+  padding-right: var(--space-1);
   gap: var(--batch-type-row-gap);
   display: flex;
   flex-direction: column;
 }
 
-/* Batch type row — compact 36px height */
+/* Batch type row — exactly same as state-row, NO fixed width */
 .batch-type-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
-  border-radius: var(--radius-lg);
-  transition: background-color 120ms ease-out;
-  min-height: var(--batch-type-row-height);
-  font-size: 13px;
+  gap: var(--space-3);
+  padding: 7px var(--space-3);
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  transition: background var(--transition-fast);
+  margin: 0;
 }
 
 .batch-type-row:hover {
-  background-color: var(--color-gray-50);
+  background: var(--color-gray-50);
 }
 
 .batch-type-row:focus-visible {
@@ -1131,80 +1144,61 @@
   box-shadow: var(--shadow-focus);
 }
 
-/* Icon tile — compact 24x24px */
-.batch-type-row__icon {
-  display: flex;
+/* Icon wrapper — wizard icon colors, ~20px width, 14px size, no background */
+.batch-type-icon {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  min-width: 24px;
-  border-radius: 6px;
-  background-color: var(--color-gray-100);
-  color: var(--text-secondary);
-  font-size: 12px;
-}
-
-/* Label with ellipsis for long text */
-.batch-type-row .state-row-label {
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Check icon — compact 12px */
-.batch-type-row .state-row-check {
-  font-size: 12px;
+  width: 20px;
+  min-width: 20px;
+  font-size: 14px;
   flex-shrink: 0;
 }
 
-/* Selected state — primary tint + bold label + primary icon tile */
-.batch-type-row--selected {
-  background-color: var(--color-primary-bg);
+/* Icon colors from BATCH_OPERATIONS wizard (badge colors) */
+.batch-type-icon--amber {
+  color: #d97706;
 }
 
-.batch-type-row--selected .state-row-label {
-  font-weight: 600;
-  color: var(--text-primary);
+.batch-type-icon--green {
+  color: #16a34a;
 }
 
-.batch-type-row--selected .batch-type-row__icon {
-  background-color: var(--color-primary);
-  color: var(--text-inverse);
+.batch-type-icon--red {
+  color: #dc2626;
 }
 
-/* Icon family tints — deletion types = danger, removal time = warning, others = neutral */
-.batch-type-row[aria-pressed="false"] .batch-type-row__icon {
-  /* Default neutral tint (already set above) */
+.batch-type-icon--blue {
+  color: #2563eb;
 }
 
-/* Deletion types: instance-deletion, historic-instance-deletion, historic-decision-instance-deletion */
-.batch-type-row:nth-child(3) .batch-type-row__icon,
-.batch-type-row:nth-child(5) .batch-type-row__icon,
-.batch-type-row:nth-child(6) .batch-type-row__icon {
-  background-color: var(--color-danger-bg);
-  color: var(--color-danger);
+.batch-type-icon--purple {
+  color: #7c3aed;
 }
 
-.batch-type-row:nth-child(3).batch-type-row--selected .batch-type-row__icon,
-.batch-type-row:nth-child(5).batch-type-row--selected .batch-type-row__icon,
-.batch-type-row:nth-child(6).batch-type-row--selected .batch-type-row__icon {
-  background-color: var(--color-danger);
-  color: var(--text-inverse);
+.batch-type-icon--gray {
+  color: #6b7280;
 }
 
-/* Removal time types: process-set-removal-time, decision-set-removal-time, batch-set-removal-time */
-.batch-type-row:nth-child(11) .batch-type-row__icon,
-.batch-type-row:nth-child(12) .batch-type-row__icon,
-.batch-type-row:nth-child(13) .batch-type-row__icon {
-  background-color: var(--color-warning-bg);
-  color: var(--color-warning);
+.batch-type-icon--secondary {
+  color: var(--text-secondary);
 }
 
-.batch-type-row:nth-child(11).batch-type-row--selected .batch-type-row__icon,
-.batch-type-row:nth-child(12).batch-type-row--selected .batch-type-row__icon,
-.batch-type-row:nth-child(13).batch-type-row--selected .batch-type-row__icon {
-  background-color: var(--color-warning);
-  color: var(--text-inverse);
+/* Label — ellipsis for long text, margin-left auto for check icon */
+.batch-type-row .state-row-label {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+/* Check icon — exactly same as Activity ID, margin-left auto to push to right */
+.batch-type-row .state-row-check {
+  font-size: 0.7rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  margin-left: auto;
 }

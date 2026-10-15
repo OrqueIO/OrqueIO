@@ -96,12 +96,12 @@ describe('InstanceFilterPanel — Batch Type Compact Design (6 rows)', () => {
       });
     });
 
-    it('should have batch-type-row__icon class on all icon containers', () => {
-      const icons = compiled.querySelectorAll('.batch-type-row__icon');
+    it('should have batch-type-icon class on all icon containers', () => {
+      const icons = compiled.querySelectorAll('.batch-type-icon');
       expect(icons.length).toBe(13);
 
       icons.forEach(icon => {
-        expect(icon.classList.contains('batch-type-row__icon')).toBe(true);
+        expect(icon.classList.contains('batch-type-icon')).toBe(true);
       });
     });
 
@@ -150,11 +150,11 @@ describe('InstanceFilterPanel — Batch Type Compact Design (6 rows)', () => {
       expect(container).not.toBeNull();
     });
 
-    it('should have batch-type-row__icon on all icon containers', () => {
+    it('should have batch-type-icon on all icon containers', () => {
       component.selectCriteriaType('type');
       fixture.detectChanges();
 
-      const icons = compiled.querySelectorAll('.batch-type-row__icon');
+      const icons = compiled.querySelectorAll('.batch-type-icon');
       // MUTATION: If someone removes the class, count will be 0
       expect(icons.length).toBe(13);
       expect(icons.length).not.toBe(0);

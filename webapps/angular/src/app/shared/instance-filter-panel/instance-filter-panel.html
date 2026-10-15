@@ -400,6 +400,7 @@
         <!-- Criterion editor popover — handles both new criteria and pill editing -->
         <div class="criterion-editor-popover"
              [class.criterion-editor-popover--variables]="activeEditorType === 'variables'"
+             [class.criterion-editor-popover--batch-type]="activeEditorType === 'type' && criteriaSet === 'batch'"
              [class.criterion-editor-popover--flip]="popoverFlipped"
              *ngIf="activeEditorType"
              role="dialog" aria-modal="true"
@@ -524,11 +525,11 @@
       <button *ngFor="let option of BATCH_TYPE_OPTIONS"
               type="button"
               class="state-row batch-type-row"
-              [class.batch-type-row--selected]="pendingValues.length === 1 && pendingValues[0] === option.value"
+              [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === option.value"
               [attr.aria-pressed]="pendingValues.length === 1 && pendingValues[0] === option.value"
               (click)="pendingValues = [option.value]">
-        <span class="batch-type-row__icon" aria-hidden="true"><fa-icon [icon]="option.icon"></fa-icon></span>
-        <span class="state-row-label">{{ option.i18nKey | translate }}</span>
+        <span class="batch-type-icon batch-type-icon--{{option.iconColor}}" aria-hidden="true"><fa-icon [icon]="option.icon"></fa-icon></span>
+        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === option.value">{{ option.i18nKey | translate }}</span>
         <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === option.value" [icon]="faCheck" class="state-row-check"></fa-icon>
       </button>
     </div>

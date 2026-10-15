@@ -14,9 +14,9 @@ import {
   faPlay, faPauseCircle, faCircleStop, faCheckCircle, faTimesCircle, faUser, faGear, faTable, faPaperPlane,
   faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer, faSync,
   faLevelUpAlt, faLevelDownAlt, faList,
-  faPenToSquare, faArrowRotateRight, faTrash, faCirclePause,
+  faPen, faArrowRotateLeft, faTrash, faPause,
   faBoxArchive, faTrashCan, faRotateRight, faArrowsRotate, faSliders, faEnvelope,
-  faHourglassEnd, faHourglassHalf, faHourglassStart
+  faCalendarXmark, faSyncAlt, faTag, faArrowRight, faClock, faDatabase, faPlayCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { CockpitService, MultiValueFilter, GlobalSearchField, VariableLine } from '../../services/cockpit.service';
@@ -148,19 +148,19 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   };
 
   readonly BATCH_TYPE_OPTIONS = [
-    { value: 'instance-modification', i18nKey: BATCH_TYPE_LABELS['instance-modification'], icon: faPenToSquare },
-    { value: 'instance-restart', i18nKey: BATCH_TYPE_LABELS['instance-restart'], icon: faArrowRotateRight },
-    { value: 'instance-deletion', i18nKey: BATCH_TYPE_LABELS['instance-deletion'], icon: faTrash },
-    { value: 'instance-update-suspension-state', i18nKey: BATCH_TYPE_LABELS['instance-update-suspension-state'], icon: faCirclePause },
-    { value: 'historic-instance-deletion', i18nKey: BATCH_TYPE_LABELS['historic-instance-deletion'], icon: faBoxArchive },
-    { value: 'historic-decision-instance-deletion', i18nKey: BATCH_TYPE_LABELS['historic-decision-instance-deletion'], icon: faTrashCan },
-    { value: 'set-job-retries', i18nKey: BATCH_TYPE_LABELS['set-job-retries'], icon: faRotateRight },
-    { value: 'set-external-task-retries', i18nKey: BATCH_TYPE_LABELS['set-external-task-retries'], icon: faArrowsRotate },
-    { value: 'set-variables', i18nKey: BATCH_TYPE_LABELS['set-variables'], icon: faSliders },
-    { value: 'correlate-message', i18nKey: BATCH_TYPE_LABELS['correlate-message'], icon: faEnvelope },
-    { value: 'process-set-removal-time', i18nKey: BATCH_TYPE_LABELS['process-set-removal-time'], icon: faHourglassEnd },
-    { value: 'decision-set-removal-time', i18nKey: BATCH_TYPE_LABELS['decision-set-removal-time'], icon: faHourglassHalf },
-    { value: 'batch-set-removal-time', i18nKey: BATCH_TYPE_LABELS['batch-set-removal-time'], icon: faHourglassStart }
+    { value: 'instance-modification', i18nKey: BATCH_TYPE_LABELS['instance-modification'], icon: faArrowRight, iconColor: 'blue' },
+    { value: 'instance-restart', i18nKey: BATCH_TYPE_LABELS['instance-restart'], icon: faArrowRotateLeft, iconColor: 'secondary' },
+    { value: 'instance-deletion', i18nKey: BATCH_TYPE_LABELS['instance-deletion'], icon: faTrash, iconColor: 'red' },
+    { value: 'instance-update-suspension-state', i18nKey: BATCH_TYPE_LABELS['instance-update-suspension-state'], icon: faPauseCircle, iconColor: 'amber' },
+    { value: 'historic-instance-deletion', i18nKey: BATCH_TYPE_LABELS['historic-instance-deletion'], icon: faTrash, iconColor: 'red' },
+    { value: 'historic-decision-instance-deletion', i18nKey: BATCH_TYPE_LABELS['historic-decision-instance-deletion'], icon: faDatabase, iconColor: 'red' },
+    { value: 'set-job-retries', i18nKey: BATCH_TYPE_LABELS['set-job-retries'], icon: faSyncAlt, iconColor: 'blue' },
+    { value: 'set-external-task-retries', i18nKey: BATCH_TYPE_LABELS['set-external-task-retries'], icon: faSyncAlt, iconColor: 'blue' },
+    { value: 'set-variables', i18nKey: BATCH_TYPE_LABELS['set-variables'], icon: faTag, iconColor: 'purple' },
+    { value: 'correlate-message', i18nKey: BATCH_TYPE_LABELS['correlate-message'], icon: faEnvelope, iconColor: 'blue' },
+    { value: 'process-set-removal-time', i18nKey: BATCH_TYPE_LABELS['process-set-removal-time'], icon: faClock, iconColor: 'gray' },
+    { value: 'decision-set-removal-time', i18nKey: BATCH_TYPE_LABELS['decision-set-removal-time'], icon: faClock, iconColor: 'gray' },
+    { value: 'batch-set-removal-time', i18nKey: BATCH_TYPE_LABELS['batch-set-removal-time'], icon: faClock, iconColor: 'gray' }
   ];
 
   getActivityIcon(type: string): any {

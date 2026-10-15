@@ -138,7 +138,7 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       const buttons = compiled.querySelectorAll('.batch-type-row');
 
       buttons.forEach(btn => {
-        const iconWrap = btn.querySelector('.batch-type-row__icon');
+        const iconWrap = btn.querySelector('.batch-type-icon');
         expect(iconWrap).toBeTruthy();
 
         const faIcon = iconWrap?.querySelector('fa-icon');
@@ -149,20 +149,41 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       });
     });
 
-    it('should have different icons for each batch type', () => {
+    it('should have colored icons matching wizard operations (amber/green/red/blue/purple/gray/secondary)', () => {
       const buttons = compiled.querySelectorAll('.batch-type-row');
-      const iconClasses = new Set<string>();
+
+      // All 13 options should have an icon with a color class
+      expect(buttons.length).toBe(13);
 
       buttons.forEach(btn => {
-        const svg = btn.querySelector('.batch-type-row__icon svg');
-        const dataIcon = svg?.getAttribute('data-icon');
-        if (dataIcon) {
-          iconClasses.add(dataIcon);
-        }
+        const iconWrapper = btn.querySelector('.batch-type-icon');
+        expect(iconWrapper).toBeTruthy();
+
+        const svg = iconWrapper?.querySelector('svg');
+        expect(svg).toBeTruthy();
+
+        // Should have exactly one icon color class
+        const hasAmber = iconWrapper?.classList.contains('batch-type-icon--amber');
+        const hasGreen = iconWrapper?.classList.contains('batch-type-icon--green');
+        const hasRed = iconWrapper?.classList.contains('batch-type-icon--red');
+        const hasBlue = iconWrapper?.classList.contains('batch-type-icon--blue');
+        const hasPurple = iconWrapper?.classList.contains('batch-type-icon--purple');
+        const hasGray = iconWrapper?.classList.contains('batch-type-icon--gray');
+        const hasSecondary = iconWrapper?.classList.contains('batch-type-icon--secondary');
+
+        const colorCount = [hasAmber, hasGreen, hasRed, hasBlue, hasPurple, hasGray, hasSecondary].filter(Boolean).length;
+        expect(colorCount).toBe(1);
       });
 
-      // Should have at least 8 different icons (some may be reused for related operations)
-      expect(iconClasses.size).toBeGreaterThanOrEqual(8);
+      // Verify specific icon colors from wizard
+      const iconWrappers = compiled.querySelectorAll('.batch-type-icon');
+      expect(iconWrappers[0].classList.contains('batch-type-icon--blue')).toBe(true); // instance-modification (move-instances)
+      expect(iconWrappers[1].classList.contains('batch-type-icon--secondary')).toBe(true); // instance-restart (no wizard op)
+      expect(iconWrappers[2].classList.contains('batch-type-icon--red')).toBe(true); // instance-deletion
+      expect(iconWrappers[3].classList.contains('batch-type-icon--amber')).toBe(true); // instance-update-suspension-state (suspend)
+      expect(iconWrappers[8].classList.contains('batch-type-icon--purple')).toBe(true); // set-variables
+      expect(iconWrappers[9].classList.contains('batch-type-icon--blue')).toBe(true); // correlate-message
+      expect(iconWrappers[10].classList.contains('batch-type-icon--gray')).toBe(true); // process-set-removal-time
     });
   });
 
@@ -190,7 +211,7 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
 
       expect(component.pendingValues.length).toBe(1);
       expect(component.pendingValues[0]).toBe('instance-modification');
-      expect(buttons[0].classList.contains('batch-type-row--selected')).toBe(true);
+      expect(buttons[0].classList.contains('state-row--selected')).toBe(true);
       expect(buttons[0].getAttribute('aria-pressed')).toBe('true');
 
       // Check mark should be visible
@@ -203,8 +224,8 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
 
       expect(component.pendingValues.length).toBe(1);
       expect(component.pendingValues[0]).toBe('instance-restart');
-      expect(buttons[0].classList.contains('batch-type-row--selected')).toBe(false);
-      expect(buttons[1].classList.contains('batch-type-row--selected')).toBe(true);
+      expect(buttons[0].classList.contains('state-row--selected')).toBe(false);
+      expect(buttons[1].classList.contains('state-row--selected')).toBe(true);
       expect(buttons[1].getAttribute('aria-pressed')).toBe('true');
     });
 
@@ -270,7 +291,7 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
 
       // Previously selected option should still be selected
       const buttonsReopen = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
-      expect(buttonsReopen[4].classList.contains('batch-type-row--selected')).toBe(true);
+      expect(buttonsReopen[4].classList.contains('state-row--selected')).toBe(true);
       expect(component.pendingValues[0]).toBe('historic-instance-deletion');
     });
 
@@ -300,21 +321,21 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       fixture.detectChanges();
     });
 
-    it('should have batch-type-row__icon class on all icon wrappers', () => {
-      const iconWrappers = compiled.querySelectorAll('.batch-type-row__icon');
+    it('should have batch-type-icon class on all icon wrappers', () => {
+      const iconWrappers = compiled.querySelectorAll('.batch-type-icon');
       expect(iconWrappers.length).toBe(13);
 
       iconWrappers.forEach(wrap => {
-        expect(wrap.classList.contains('batch-type-row__icon')).toBe(true);
+        expect(wrap.classList.contains('batch-type-icon')).toBe(true);
       });
     });
 
-    it('should have batch-type-row--selected class only on selected row', () => {
+    it('should have state-row--selected class only on selected row', () => {
       const buttons = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
 
       // No selection initially
       buttons.forEach(btn => {
-        expect(btn.classList.contains('batch-type-row--selected')).toBe(false);
+        expect(btn.classList.contains('state-row--selected')).toBe(false);
       });
 
       // Select one
@@ -324,9 +345,9 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       // Only selected one should have the class
       buttons.forEach((btn, idx) => {
         if (idx === 5) {
-          expect(btn.classList.contains('batch-type-row--selected')).toBe(true);
+          expect(btn.classList.contains('state-row--selected')).toBe(true);
         } else {
-          expect(btn.classList.contains('batch-type-row--selected')).toBe(false);
+          expect(btn.classList.contains('state-row--selected')).toBe(false);
         }
       });
     });
@@ -344,6 +365,30 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
           expect(ariaPressed === null || ariaPressed === 'false').toBe(true);
         }
       });
+    });
+
+    it('should have wizard icon colors for deletion (red), retries (blue), removal-time (gray), variables (purple), suspend (amber)', () => {
+      const iconWrappers = compiled.querySelectorAll('.batch-type-icon');
+
+      // Deletion types should have red class (from wizard badge--red)
+      expect(iconWrappers[2].classList.contains('batch-type-icon--red')).toBe(true); // instance-deletion
+      expect(iconWrappers[4].classList.contains('batch-type-icon--red')).toBe(true); // historic-instance-deletion
+      expect(iconWrappers[5].classList.contains('batch-type-icon--red')).toBe(true); // historic-decision-instance-deletion
+
+      // Retries should have blue class (from wizard badge--blue)
+      expect(iconWrappers[6].classList.contains('batch-type-icon--blue')).toBe(true); // set-job-retries
+      expect(iconWrappers[7].classList.contains('batch-type-icon--blue')).toBe(true); // set-external-task-retries
+
+      // Removal time types should have gray class (from wizard badge--gray)
+      expect(iconWrappers[10].classList.contains('batch-type-icon--gray')).toBe(true); // process-set-removal-time
+      expect(iconWrappers[11].classList.contains('batch-type-icon--gray')).toBe(true); // decision-set-removal-time
+      expect(iconWrappers[12].classList.contains('batch-type-icon--gray')).toBe(true); // batch-set-removal-time
+
+      // Variables should have purple class (from wizard badge--purple)
+      expect(iconWrappers[8].classList.contains('batch-type-icon--purple')).toBe(true); // set-variables
+
+      // Suspend should have amber class (from wizard badge--amber)
+      expect(iconWrappers[3].classList.contains('batch-type-icon--amber')).toBe(true); // instance-update-suspension-state
     });
   });
 });

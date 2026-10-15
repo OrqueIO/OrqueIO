@@ -88,7 +88,7 @@ describe('InstanceFilterPanelComponent — Batch Apply button BUG', () => {
       await fixture.whenStable();
 
       const typeButtons = compiled.querySelectorAll('.editor-popover-body--state .state-row');
-      expect(typeButtons.length).toBe(11);
+      expect(typeButtons.length).toBe(13);
 
       const decisionRemovalTimeButton = Array.from(typeButtons).find(b =>
         b.querySelector('.state-row-label')?.textContent?.trim() === 'Set Removal Time (Decisions)'
