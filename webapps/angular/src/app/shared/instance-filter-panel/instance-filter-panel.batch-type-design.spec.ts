@@ -188,11 +188,60 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
   });
 
   describe('FR translations', () => {
-    // Note: Full FR test skipped due to TranslateService test limitations
-    // FR translations are verified manually and match en.json/fr.json exactly
-    it.skip('should display exact FR labels for all 13 batch types', () => {
-      // Skipped: TranslateService currentLang is read-only in tests
-      // Manual verification confirms FR translations work correctly
+    let frTranslations: any;
+
+    beforeEach(() => {
+      // Load real FR translations from JSON file
+      const fs = require('fs');
+      const path = require('path');
+      const frPath = path.resolve(__dirname, '../../../assets/i18n/fr.json');
+      frTranslations = JSON.parse(fs.readFileSync(frPath, 'utf-8'));
+    });
+
+    it('should display exact FR labels for all 13 batch types', () => {
+      const expectedLabels = [
+        'Modification d\'instances',                              // instance-modification
+        'Redémarrage d\'instances de processus',                  // instance-restart
+        'Suppression d\'instances',                               // instance-deletion
+        'Suspension d\'instances',                                // instance-update-suspension-state
+        'Suppression d\'instances terminées',                     // historic-instance-deletion
+        'Suppression d\'instances de décision',                   // historic-decision-instance-deletion
+        'Définir les tentatives de job',                          // set-job-retries
+        'Définir les tentatives de tâche externe',                // set-external-task-retries
+        'Définir les variables',                                  // set-variables
+        'Corréler un message',                                    // correlate-message
+        'Définir le temps de suppression',                        // process-set-removal-time
+        'Définir le temps de suppression (décisions)',            // decision-set-removal-time
+        'Définir le temps de suppression (lots)'                  // batch-set-removal-time
+      ];
+
+      // Verify each expected label exists in FR translations
+      expectedLabels.forEach((label, index) => {
+        const option = component.BATCH_TYPE_OPTIONS[index];
+        const frLabel = frTranslations[option.i18nKey];
+        expect(frLabel).toBeDefined();
+        expect(frLabel).toBe(label);
+      });
+    });
+
+    it('[MUTATION PROOF] FR label for instance-restart should NOT be old label', () => {
+      const restartOption = component.BATCH_TYPE_OPTIONS.find(o => o.value === 'instance-restart');
+      const frLabel = frTranslations[restartOption!.i18nKey];
+
+      // Should FAIL if FR translation reverts to old label
+      expect(frLabel).toBe('Redémarrage d\'instances de processus');
+      expect(frLabel).not.toBe('Redémarrage d\'instances');
+      expect(frLabel).toContain('de processus');
+    });
+
+    it('[MUTATION PROOF] FR label for historic-instance-deletion should be exact', () => {
+      const deleteOption = component.BATCH_TYPE_OPTIONS.find(o => o.value === 'historic-instance-deletion');
+      const frLabel = frTranslations[deleteOption!.i18nKey];
+
+      // Should FAIL if FR translation changes
+      expect(frLabel).toBe('Suppression d\'instances terminées');
+      expect(frLabel).not.toBe('Suppression d\'instances historiques');
+      expect(frLabel).toContain('terminées');
     });
   });
 
