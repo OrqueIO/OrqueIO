@@ -15,26 +15,25 @@ import { BATCH_TYPE_LABELS } from '../../models/cockpit/batch.model';
 /**
  * BASELINE TEST: Batch Type filter DOM structure
  *
- * This test captures the EXACT DOM structure of the Type filter with 13 batch types.
- * Expected: 13 buttons in logical grouped order with icons.
- * Note: 'instance-migration' is excluded (no corresponding batch operation in wizard).
+ * This test captures the EXACT DOM structure of the Type filter with 12 batch types.
+ * Expected: 12 buttons in logical grouped order with icons.
+ * Note: 'instance-migration' and 'instance-restart' are excluded (no corresponding batch operation in wizard).
  *
  * Expected order (from BATCH_TYPE_OPTIONS):
  * 1. instance-modification
- * 2. instance-restart
- * 3. instance-deletion
- * 4. instance-update-suspension-state
- * 5. historic-instance-deletion
- * 6. historic-decision-instance-deletion
- * 7. set-job-retries
- * 8. set-external-task-retries
- * 9. set-variables
- * 10. correlate-message
- * 11. process-set-removal-time
- * 12. decision-set-removal-time
- * 13. batch-set-removal-time
+ * 2. instance-deletion
+ * 3. instance-update-suspension-state
+ * 4. historic-instance-deletion
+ * 5. historic-decision-instance-deletion
+ * 6. set-job-retries
+ * 7. set-external-task-retries
+ * 8. set-variables
+ * 9. correlate-message
+ * 10. process-set-removal-time
+ * 11. decision-set-removal-time
+ * 12. batch-set-removal-time
  */
-describe('InstanceFilterPanel - Batch Type DOM Baseline (13 types)', () => {
+describe('InstanceFilterPanel - Batch Type DOM Baseline (12 types)', () => {
   let component: InstanceFilterPanelComponent;
   let fixture: ComponentFixture<InstanceFilterPanelComponent>;
   let compiled: HTMLElement;
@@ -90,7 +89,7 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (13 types)', () => {
     await fixture.whenStable();
 
     const buttons = compiled.querySelectorAll('.state-row');
-    expect(buttons.length).toBe(13);
+    expect(buttons.length).toBe(12);
 
     // Each button should have class="state-row"
     buttons.forEach(btn => {
@@ -105,7 +104,6 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (13 types)', () => {
 
     const expectedValues = [
       'instance-modification',
-      'instance-restart',
       'instance-deletion',
       'instance-update-suspension-state',
       'historic-instance-deletion',
@@ -137,7 +135,7 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (13 types)', () => {
     await fixture.whenStable();
 
     const labels = compiled.querySelectorAll('.state-row-label');
-    expect(labels.length).toBe(13);
+    expect(labels.length).toBe(12);
 
     // Labels should contain translated text (not raw keys)
     labels.forEach(label => {
@@ -164,14 +162,14 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (13 types)', () => {
     buttons[1].click();
     fixture.detectChanges();
     expect(component.pendingValues.length).toBe(1);
-    expect(component.pendingValues[0]).toBe('instance-restart');
+    expect(component.pendingValues[0]).toBe('instance-deletion');
   });
 
   it('all types from BATCH_TYPE_LABELS must be in BATCH_TYPE_OPTIONS except excluded ones', () => {
     // This test ensures no type is missing from the filter options
     const batchTypeLabelsKeys = Object.keys(BATCH_TYPE_LABELS);
     const batchTypeOptionsValues = component.BATCH_TYPE_OPTIONS.map(opt => opt.value);
-    const excludedTypes = ['instance-migration']; // No corresponding batch operation in wizard
+    const excludedTypes = ['instance-migration', 'instance-restart']; // No corresponding batch operation in wizard
 
     // Every type in BATCH_TYPE_LABELS (except excluded) must be in BATCH_TYPE_OPTIONS
     batchTypeLabelsKeys.forEach(type => {
@@ -182,8 +180,9 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (13 types)', () => {
       }
     });
 
-    // 'instance-migration' must NOT be in options
+    // 'instance-migration' and 'instance-restart' must NOT be in options
     expect(batchTypeOptionsValues).not.toContain('instance-migration');
+    expect(batchTypeOptionsValues).not.toContain('instance-restart');
 
     // BATCH_TYPE_OPTIONS should have same count as BATCH_TYPE_LABELS minus excluded
     expect(batchTypeOptionsValues.length).toBe(batchTypeLabelsKeys.length - excludedTypes.length);

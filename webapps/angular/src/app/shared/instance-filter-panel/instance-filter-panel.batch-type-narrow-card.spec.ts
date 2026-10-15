@@ -137,7 +137,6 @@ describe('InstanceFilterPanel — Batch Type Narrow Card', () => {
     it('should have EN labels unchanged (all original values)', () => {
       const expectedEN = [
         'Process Instance Modification',
-        'Process Instance Restart',
         'Process Instance Deletion',
         'Process Instance Suspension',
         'Finished Instance Deletion',
@@ -213,7 +212,7 @@ describe('InstanceFilterPanel — Batch Type Narrow Card', () => {
       const compiled = fixture.nativeElement as HTMLElement;
       const buttons = compiled.querySelectorAll('.batch-type-row');
 
-      expect(buttons.length).toBe(13);
+      expect(buttons.length).toBe(12);
 
       buttons.forEach((button, index) => {
         const title = button.getAttribute('title');

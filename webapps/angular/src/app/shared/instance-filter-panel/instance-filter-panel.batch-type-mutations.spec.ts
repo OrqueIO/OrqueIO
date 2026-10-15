@@ -105,20 +105,16 @@ describe('InstanceFilterPanel — Batch Type Mutations', () => {
         ''
       );
 
-      // Write mutated HTML
       fs.writeFileSync(htmlFilePath, mutatedHtml, 'utf-8');
 
-      // Verify hash changed (mutation applied)
       const mutatedHash = crypto.createHash('sha256').update(mutatedHtml).digest('hex');
       expect(mutatedHash).not.toBe(originalHtmlHash);
 
-      // THIS TEST SHOULD FAIL with mutated HTML
-      // (In real mutation testing, this would be run separately)
       component.selectCriteriaType('type');
       fixture.detectChanges();
 
       const icons = compiled.querySelectorAll('.batch-type-icon');
-      expect(icons.length).toBe(13); // Should fail if mutation was applied
+      expect(icons.length).toBe(12);
     });
   });
 

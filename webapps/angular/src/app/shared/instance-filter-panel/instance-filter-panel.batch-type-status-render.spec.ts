@@ -16,8 +16,8 @@ import { BATCH_TYPE_LABELS } from '../../models/cockpit/batch.model';
  * RENDERING TEST for Type select and Status (2 options) in batch criteriaSet
  *
  * Tests:
- * - Type popover displays 13 options from BATCH_TYPE_OPTIONS with translated labels (not raw values)
- *   Note: 'instance-migration' excluded (no corresponding batch operation in wizard)
+ * - Type popover displays 12 options from BATCH_TYPE_OPTIONS with translated labels (not raw values)
+ *   Note: 'instance-migration' and 'instance-restart' excluded (no corresponding batch operation in wizard)
  * - Status popover displays exactly 2 options (Completed, Running) - NO "All"
  * - No raw i18n keys visible ("cockpit.", "BATCH_TYPE_")
  *
@@ -104,21 +104,27 @@ describe('InstanceFilterPanelComponent — Batch Type select & Status (no All)',
     fixture.detectChanges();
   });
 
-  describe('Type popover renders 13 batch types as select options', () => {
+  describe('Type popover renders 12 batch types as select options', () => {
     beforeEach(() => {
       component.selectCriteriaType('type');
       fixture.detectChanges();
     });
 
-    it('should display exactly 13 batch type options', () => {
+    it('should display exactly 12 batch type options', () => {
       const buttons = compiled.querySelectorAll('.editor-popover-body--state .state-row');
-      expect(buttons.length).toBe(13);
+      expect(buttons.length).toBe(12);
     });
 
     it('should NOT display "Process Instance Migration" (excluded from filter)', () => {
       const buttons = Array.from(compiled.querySelectorAll('.state-row-label'));
       const migrationLabel = buttons.find(b => b.textContent?.trim() === 'Process Instance Migration');
       expect(migrationLabel).toBeUndefined();
+    });
+
+    it('should NOT display "Process Instance Restart" (excluded from filter)', () => {
+      const buttons = Array.from(compiled.querySelectorAll('.state-row-label'));
+      const restartLabel = buttons.find(b => b.textContent?.trim() === 'Process Instance Restart');
+      expect(restartLabel).toBeUndefined();
     });
 
     it('should display "Set Removal Time" for process-set-removal-time', () => {
@@ -212,7 +218,7 @@ describe('InstanceFilterPanelComponent — Batch Type select & Status (no All)',
       buttons[1].click();
       fixture.detectChanges();
       expect(component.pendingValues.length).toBe(1);
-      expect(component.pendingValues[0]).toBe('instance-restart');
+      expect(component.pendingValues[0]).toBe('instance-deletion');
     });
 
     it('should apply correct value to API (raw key, not translated label)', () => {

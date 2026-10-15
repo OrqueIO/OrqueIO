@@ -89,7 +89,7 @@ describe('InstanceFilterPanel — Batch Type Compact Design (6 rows)', () => {
 
     it('should have batch-type-row class on all option buttons', () => {
       const buttons = compiled.querySelectorAll('.batch-type-row');
-      expect(buttons.length).toBe(13);
+      expect(buttons.length).toBe(12);
 
       buttons.forEach(btn => {
         expect(btn.classList.contains('batch-type-row')).toBe(true);
@@ -98,7 +98,7 @@ describe('InstanceFilterPanel — Batch Type Compact Design (6 rows)', () => {
 
     it('should have batch-type-icon class on all icon containers', () => {
       const icons = compiled.querySelectorAll('.batch-type-icon');
-      expect(icons.length).toBe(13);
+      expect(icons.length).toBe(12);
 
       icons.forEach(icon => {
         expect(icon.classList.contains('batch-type-icon')).toBe(true);
@@ -130,13 +130,13 @@ describe('InstanceFilterPanel — Batch Type Compact Design (6 rows)', () => {
   });
 
   describe('[MUTATION PROOF] CSS classes must be present', () => {
-    it('should have exactly 13 rows with batch-type-row class', () => {
+    it('should have exactly 12 rows with batch-type-row class', () => {
       component.selectCriteriaType('type');
       fixture.detectChanges();
 
       const rows = compiled.querySelectorAll('.batch-type-row');
       // MUTATION: If someone removes the class, count will be 0
-      expect(rows.length).toBe(13);
+      expect(rows.length).toBe(12);
       expect(rows.length).not.toBe(0);
     });
 
@@ -156,7 +156,7 @@ describe('InstanceFilterPanel — Batch Type Compact Design (6 rows)', () => {
 
       const icons = compiled.querySelectorAll('.batch-type-icon');
       // MUTATION: If someone removes the class, count will be 0
-      expect(icons.length).toBe(13);
+      expect(icons.length).toBe(12);
       expect(icons.length).not.toBe(0);
     });
   });

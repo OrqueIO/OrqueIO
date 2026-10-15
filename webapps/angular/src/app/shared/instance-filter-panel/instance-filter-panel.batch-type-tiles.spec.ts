@@ -197,19 +197,18 @@ describe('InstanceFilterPanel — Batch Type Colored Tiles', () => {
   });
 
   describe('[DOM RENDERING] All options have correct color family class', () => {
-    it('should render all 13 batch type options with icon color classes', () => {
+    it('should render all 12 batch type options with icon color classes', () => {
       component.selectCriteriaType('type');
       fixture.detectChanges();
 
       const compiled = fixture.nativeElement as HTMLElement;
       const iconWrappers = compiled.querySelectorAll('.batch-type-icon');
 
-      expect(iconWrappers.length).toBe(13);
+      expect(iconWrappers.length).toBe(12);
 
       // Expected iconColor per option (from BATCH_TYPE_OPTIONS order)
       const expectedColors = [
         'blue',      // instance-modification
-        'secondary', // instance-restart
         'red',       // instance-deletion
         'amber',     // instance-update-suspension-state
         'red',       // historic-instance-deletion

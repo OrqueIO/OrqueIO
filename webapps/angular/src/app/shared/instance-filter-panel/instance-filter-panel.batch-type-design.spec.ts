@@ -102,19 +102,18 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
     fixture.detectChanges();
   });
 
-  describe('13 batch types with exact EN labels and icons', () => {
+  describe('12 batch types with exact EN labels and icons', () => {
     beforeEach(() => {
       component.selectCriteriaType('type');
       fixture.detectChanges();
     });
 
-    it('should render exactly 13 batch type options in correct order', () => {
+    it('should render exactly 12 batch type options in correct order', () => {
       const buttons = compiled.querySelectorAll('.batch-type-row');
-      expect(buttons.length).toBe(13);
+      expect(buttons.length).toBe(12);
 
       const expectedLabels = [
         'Process Instance Modification',
-        'Process Instance Restart',
         'Process Instance Deletion',
         'Process Instance Suspension',
         'Finished Instance Deletion',
@@ -152,8 +151,8 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
     it('should have colored icons matching wizard operations (amber/green/red/blue/purple/gray/secondary)', () => {
       const buttons = compiled.querySelectorAll('.batch-type-row');
 
-      // All 13 options should have an icon with a color class
-      expect(buttons.length).toBe(13);
+      // All 12 options should have an icon with a color class
+      expect(buttons.length).toBe(12);
 
       buttons.forEach(btn => {
         const iconWrapper = btn.querySelector('.batch-type-icon');
@@ -178,12 +177,11 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       // Verify specific icon colors from wizard
       const iconWrappers = compiled.querySelectorAll('.batch-type-icon');
       expect(iconWrappers[0].classList.contains('batch-type-icon--blue')).toBe(true); // instance-modification (move-instances)
-      expect(iconWrappers[1].classList.contains('batch-type-icon--secondary')).toBe(true); // instance-restart (no wizard op)
-      expect(iconWrappers[2].classList.contains('batch-type-icon--red')).toBe(true); // instance-deletion
-      expect(iconWrappers[3].classList.contains('batch-type-icon--amber')).toBe(true); // instance-update-suspension-state (suspend)
-      expect(iconWrappers[8].classList.contains('batch-type-icon--purple')).toBe(true); // set-variables
-      expect(iconWrappers[9].classList.contains('batch-type-icon--blue')).toBe(true); // correlate-message
-      expect(iconWrappers[10].classList.contains('batch-type-icon--gray')).toBe(true); // process-set-removal-time
+      expect(iconWrappers[1].classList.contains('batch-type-icon--red')).toBe(true); // instance-deletion
+      expect(iconWrappers[2].classList.contains('batch-type-icon--amber')).toBe(true); // instance-update-suspension-state (suspend)
+      expect(iconWrappers[7].classList.contains('batch-type-icon--purple')).toBe(true); // set-variables
+      expect(iconWrappers[8].classList.contains('batch-type-icon--blue')).toBe(true); // correlate-message
+      expect(iconWrappers[9].classList.contains('batch-type-icon--gray')).toBe(true); // process-set-removal-time
     });
   });
 
@@ -198,10 +196,9 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       frTranslations = JSON.parse(fs.readFileSync(frPath, 'utf-8'));
     });
 
-    it('should display exact FR labels for all 13 batch types', () => {
+    it('should display exact FR labels for all 12 batch types', () => {
       const expectedLabels = [
         'Modification d\'instances',                              // instance-modification
-        'Redémarrage d\'instances',                               // instance-restart (raccourci)
         'Suppression d\'instances',                               // instance-deletion
         'Suspension d\'instances',                                // instance-update-suspension-state
         'Suppression d\'instances terminées',                     // historic-instance-deletion
@@ -224,14 +221,12 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       });
     });
 
-    it('[MUTATION PROOF] FR label for instance-restart should be shortened version', () => {
+    it('[MUTATION PROOF] instance-restart should NOT be in filter options', () => {
       const restartOption = component.BATCH_TYPE_OPTIONS.find(o => o.value === 'instance-restart');
-      const frLabel = frTranslations[restartOption!.i18nKey];
 
-      // Should FAIL if FR translation reverts to old long label
-      expect(frLabel).toBe('Redémarrage d\'instances');
-      expect(frLabel).not.toBe('Redémarrage d\'instances de processus');
-      expect(frLabel).not.toContain('de processus');
+      // Should FAIL if instance-restart is re-added to filter options
+      expect(restartOption).toBeUndefined();
+      expect(component.BATCH_TYPE_OPTIONS.length).toBe(12);
     });
 
     it('[MUTATION PROOF] FR label for historic-instance-deletion should be exact', () => {
@@ -242,6 +237,20 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       expect(frLabel).toBe('Suppression d\'instances terminées');
       expect(frLabel).not.toBe('Suppression d\'instances historiques');
       expect(frLabel).toContain('terminées');
+    });
+
+    it('[MUTATION PROOF] instance-restart must remain in BATCH_TYPE_LABELS for displaying existing batches', () => {
+      // Even though instance-restart is excluded from filter options,
+      // it must remain in BATCH_TYPE_LABELS so existing batches can display the type correctly
+      expect(BATCH_TYPE_LABELS['instance-restart']).toBeDefined();
+      expect(BATCH_TYPE_LABELS['instance-restart']).toBe('BATCH_TYPE_RESTART');
+
+      // Verify EN and FR translations exist
+      const enLabel = require('../../../assets/i18n/en.json')[BATCH_TYPE_LABELS['instance-restart']];
+      const frLabel = frTranslations[BATCH_TYPE_LABELS['instance-restart']];
+
+      expect(enLabel).toBe('Process Instance Restart');
+      expect(frLabel).toBe('Redémarrage d\'instances');
     });
   });
 
@@ -267,12 +276,12 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       const checkIcon1 = buttons[0].querySelector('.state-row-check');
       expect(checkIcon1).toBeTruthy();
 
-      // Click second type (instance-restart) — should replace first
+      // Click second type (instance-deletion) — should replace first
       buttons[1].click();
       fixture.detectChanges();
 
       expect(component.pendingValues.length).toBe(1);
-      expect(component.pendingValues[0]).toBe('instance-restart');
+      expect(component.pendingValues[0]).toBe('instance-deletion');
       expect(buttons[0].classList.contains('state-row--selected')).toBe(false);
       expect(buttons[1].classList.contains('state-row--selected')).toBe(true);
       expect(buttons[1].getAttribute('aria-pressed')).toBe('true');
@@ -281,8 +290,8 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
     it('should apply raw batch type value (not translated label) to API', () => {
       const buttons = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
 
-      // Click "Set Removal Time" (11th option, index 10)
-      buttons[10].click();
+      // Click "Set Removal Time" (10th option, index 9)
+      buttons[9].click();
       fixture.detectChanges();
 
       // Value should be raw key, not translated label
@@ -299,9 +308,9 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       component.selectCriteriaType('type');
       fixture.detectChanges();
 
-      // Click "Process Instance Deletion" (3rd option, index 2)
+      // Click "Process Instance Deletion" (2nd option, index 1)
       const buttons = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
-      buttons[2].click();
+      buttons[1].click();
       fixture.detectChanges();
 
       // Value should be raw key before confirmation
@@ -329,7 +338,7 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       fixture.detectChanges();
 
       const buttons = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
-      buttons[4].click(); // Select "Finished Instance Deletion"
+      buttons[3].click(); // Select "Finished Instance Deletion"
       fixture.detectChanges();
       component.confirmCriterion();
       fixture.detectChanges();
@@ -340,7 +349,7 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
 
       // Previously selected option should still be selected
       const buttonsReopen = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
-      expect(buttonsReopen[4].classList.contains('state-row--selected')).toBe(true);
+      expect(buttonsReopen[3].classList.contains('state-row--selected')).toBe(true);
       expect(component.pendingValues[0]).toBe('historic-instance-deletion');
     });
 
@@ -372,7 +381,7 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
 
     it('should have batch-type-icon class on all icon wrappers', () => {
       const iconWrappers = compiled.querySelectorAll('.batch-type-icon');
-      expect(iconWrappers.length).toBe(13);
+      expect(iconWrappers.length).toBe(12);
 
       iconWrappers.forEach(wrap => {
         expect(wrap.classList.contains('batch-type-icon')).toBe(true);
@@ -420,24 +429,24 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       const iconWrappers = compiled.querySelectorAll('.batch-type-icon');
 
       // Deletion types should have red class (from wizard badge--red)
-      expect(iconWrappers[2].classList.contains('batch-type-icon--red')).toBe(true); // instance-deletion
-      expect(iconWrappers[4].classList.contains('batch-type-icon--red')).toBe(true); // historic-instance-deletion
-      expect(iconWrappers[5].classList.contains('batch-type-icon--red')).toBe(true); // historic-decision-instance-deletion
+      expect(iconWrappers[1].classList.contains('batch-type-icon--red')).toBe(true); // instance-deletion
+      expect(iconWrappers[3].classList.contains('batch-type-icon--red')).toBe(true); // historic-instance-deletion
+      expect(iconWrappers[4].classList.contains('batch-type-icon--red')).toBe(true); // historic-decision-instance-deletion
 
       // Retries should have blue class (from wizard badge--blue)
-      expect(iconWrappers[6].classList.contains('batch-type-icon--blue')).toBe(true); // set-job-retries
-      expect(iconWrappers[7].classList.contains('batch-type-icon--blue')).toBe(true); // set-external-task-retries
+      expect(iconWrappers[5].classList.contains('batch-type-icon--blue')).toBe(true); // set-job-retries
+      expect(iconWrappers[6].classList.contains('batch-type-icon--blue')).toBe(true); // set-external-task-retries
 
       // Removal time types should have gray class (from wizard badge--gray)
-      expect(iconWrappers[10].classList.contains('batch-type-icon--gray')).toBe(true); // process-set-removal-time
-      expect(iconWrappers[11].classList.contains('batch-type-icon--gray')).toBe(true); // decision-set-removal-time
-      expect(iconWrappers[12].classList.contains('batch-type-icon--gray')).toBe(true); // batch-set-removal-time
+      expect(iconWrappers[9].classList.contains('batch-type-icon--gray')).toBe(true); // process-set-removal-time
+      expect(iconWrappers[10].classList.contains('batch-type-icon--gray')).toBe(true); // decision-set-removal-time
+      expect(iconWrappers[11].classList.contains('batch-type-icon--gray')).toBe(true); // batch-set-removal-time
 
       // Variables should have purple class (from wizard badge--purple)
-      expect(iconWrappers[8].classList.contains('batch-type-icon--purple')).toBe(true); // set-variables
+      expect(iconWrappers[7].classList.contains('batch-type-icon--purple')).toBe(true); // set-variables
 
       // Suspend should have amber class (from wizard badge--amber)
-      expect(iconWrappers[3].classList.contains('batch-type-icon--amber')).toBe(true); // instance-update-suspension-state
+      expect(iconWrappers[2].classList.contains('batch-type-icon--amber')).toBe(true); // instance-update-suspension-state
     });
   });
 });

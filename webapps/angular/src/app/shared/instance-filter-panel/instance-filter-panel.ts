@@ -14,7 +14,7 @@ import {
   faPlay, faPauseCircle, faCircleStop, faCheckCircle, faTimesCircle, faUser, faGear, faTable, faPaperPlane,
   faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer, faSync,
   faLevelUpAlt, faLevelDownAlt, faList,
-  faPen, faArrowRotateLeft, faTrash, faPause,
+  faPen, faTrash, faPause,
   faBoxArchive, faTrashCan, faRotateRight, faArrowsRotate, faSliders, faEnvelope,
   faCalendarXmark, faSyncAlt, faTag, faArrowRight, faClock, faDatabase, faPlayCircle
 } from '@fortawesome/free-solid-svg-icons';
@@ -29,7 +29,7 @@ import { dateRangeConflicts } from '../../utils/search-validation';
 import { BATCH_TYPE_LABELS } from '../../models/cockpit/batch.model';
 
 // Batch types excluded from filter options (no corresponding batch operation in wizard)
-const BATCH_TYPES_EXCLUDED_FROM_FILTER = ['instance-migration'];
+const BATCH_TYPES_EXCLUDED_FROM_FILTER = ['instance-migration', 'instance-restart'];
 
 export interface FilterPanelChange {
   criteria: MultiValueFilter[];
@@ -149,7 +149,6 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
 
   readonly BATCH_TYPE_OPTIONS = [
     { value: 'instance-modification', i18nKey: BATCH_TYPE_LABELS['instance-modification'], icon: faArrowRight, iconColor: 'blue' },
-    { value: 'instance-restart', i18nKey: BATCH_TYPE_LABELS['instance-restart'], icon: faArrowRotateLeft, iconColor: 'secondary' },
     { value: 'instance-deletion', i18nKey: BATCH_TYPE_LABELS['instance-deletion'], icon: faTrash, iconColor: 'red' },
     { value: 'instance-update-suspension-state', i18nKey: BATCH_TYPE_LABELS['instance-update-suspension-state'], icon: faPauseCircle, iconColor: 'amber' },
     { value: 'historic-instance-deletion', i18nKey: BATCH_TYPE_LABELS['historic-instance-deletion'], icon: faTrash, iconColor: 'red' },
