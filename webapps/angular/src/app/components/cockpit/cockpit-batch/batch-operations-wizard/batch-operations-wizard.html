@@ -1052,6 +1052,227 @@
     </div>
     <!-- /removal-time-decision -->
 
+    <!-- ─── Set Removal Time Batch ────────────────────────────────────────── -->
+    <div *ngIf="selectedOperationId === 'removal-time-batch'" class="operation-steps">
+
+      <!-- ── Card 1: Removal time options + filter ────────────────────────── -->
+      <div class="operation-card">
+
+        <!-- Mode toggle -->
+        <div class="mode-toggle" role="group">
+          <button type="button" class="mode-btn"
+                  [class.mode-btn--active]="mode === 'instances'"
+                  (click)="setMode('instances')">
+            {{ 'cockpit.batchOps.removalTimeBatch.modeInstances' | translate }}
+          </button>
+          <button type="button" class="mode-btn"
+                  [class.mode-btn--active]="mode === 'query'"
+                  (click)="setMode('query')">
+            {{ 'cockpit.batchOps.removalTimeBatch.modeQuery' | translate }}
+          </button>
+        </div>
+
+        <!-- Info note -->
+        <div class="info-note">
+          <fa-icon [icon]="faInfoCircle"></fa-icon>
+          <span>{{ 'cockpit.batchOps.removalTimeBatch.operationNote' | translate }}</span>
+        </div>
+
+        <!-- Query warning -->
+        <div *ngIf="mode === 'query'" class="query-warning">
+          <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+          <span>{{ 'cockpit.batchOps.suspend.queryWarning' | translate }}</span>
+        </div>
+
+        <!-- Removal time mode selection -->
+        <div class="due-date-options">
+          <h3 style="font-size: 0.95rem; font-weight: 600; margin: 1rem 0 0.75rem 0; color: var(--text-primary);">
+            {{ 'cockpit.batchOps.removalTimeBatch.modeTitle' | translate }}
+          </h3>
+
+          <!-- Radio: Cleared -->
+          <label class="due-date-option" (click)="removalTimeBatchMode = 'cleared'">
+            <span class="radio-circle" [class.radio-circle--selected]="removalTimeBatchMode === 'cleared'">
+              <span class="radio-circle__dot" *ngIf="removalTimeBatchMode === 'cleared'"></span>
+            </span>
+            <span style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="due-date-option__label">{{ 'cockpit.batchOps.removalTimeBatch.clearedLabel' | translate }}</span>
+              <span class="help-icon" [title]="'cockpit.batchOps.removalTimeBatch.clearedHelp' | translate" style="cursor: help; color: var(--text-secondary); font-size: 0.9rem;">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+              </span>
+            </span>
+          </label>
+
+          <!-- Radio: Calculated -->
+          <label class="due-date-option" (click)="removalTimeBatchMode = 'calculated'">
+            <span class="radio-circle" [class.radio-circle--selected]="removalTimeBatchMode === 'calculated'">
+              <span class="radio-circle__dot" *ngIf="removalTimeBatchMode === 'calculated'"></span>
+            </span>
+            <span style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="due-date-option__label">{{ 'cockpit.batchOps.removalTimeBatch.calculatedLabel' | translate }}</span>
+              <span class="help-icon" [title]="'cockpit.batchOps.removalTimeBatch.calculatedHelp' | translate" style="cursor: help; color: var(--text-secondary); font-size: 0.9rem;">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+              </span>
+            </span>
+          </label>
+
+          <!-- Radio: Absolute -->
+          <label class="due-date-option" (click)="removalTimeBatchMode = 'absolute'">
+            <span class="radio-circle" [class.radio-circle--selected]="removalTimeBatchMode === 'absolute'">
+              <span class="radio-circle__dot" *ngIf="removalTimeBatchMode === 'absolute'"></span>
+            </span>
+            <span style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="due-date-option__label">{{ 'cockpit.batchOps.removalTimeBatch.absoluteLabel' | translate }}</span>
+              <span class="help-icon" [title]="'cockpit.batchOps.removalTimeBatch.absoluteHelp' | translate" style="cursor: help; color: var(--text-secondary); font-size: 0.9rem;">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+              </span>
+            </span>
+          </label>
+
+          <!-- Date and time input for Absolute mode -->
+          <div *ngIf="removalTimeBatchMode === 'absolute'" style="margin-top: 0.75rem;">
+            <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; color: var(--text-primary);">
+              {{ 'cockpit.batchOps.removalTimeBatch.absoluteDateLabel' | translate }}
+            </label>
+            <input type="datetime-local" class="due-date-input" [(ngModel)]="removalTimeBatchAbsoluteDate" required>
+          </div>
+        </div>
+
+        <!-- Filter panel -->
+        <app-instance-filter-panel
+          [lockedState]="null"
+          [initialPills]="batchFilterCriteria"
+          [showExtendedCriteria]="true"
+          [showStateNarrowing]="false"
+          [showWithJobsRetrying]="false"
+          [showFinishedNarrowing]="false"
+          [finishedScope]="false"
+          [criteriaSet]="'batch'"
+          (criteriaChange)="onBatchFilterChange($event)">
+        </app-instance-filter-panel>
+
+      </div>
+      <!-- /card 1 -->
+
+      <!-- Pagination -->
+      <app-pagination
+        *ngIf="!batchInstancesLoading && batchInstances.length > 0"
+        [current]="batchInstancesPage"
+        [size]="batchInstancesPageSize"
+        [total]="batchInstancesTotal"
+        [showSizeSelector]="true"
+        (pageChange)="onBatchInstancesPageChange($event)">
+      </app-pagination>
+
+      <!-- ── Card 2: Batch instances table ──── -->
+      <div class="operation-card">
+
+        <!-- Loading -->
+        <div *ngIf="batchInstancesLoading" class="loading-state">
+          <fa-icon [icon]="faSpinner" [animation]="'spin'"></fa-icon>
+          <span>{{ 'common.loading' | translate }}</span>
+        </div>
+
+        <!-- Empty -->
+        <div *ngIf="!batchInstancesLoading && batchInstances.length === 0" class="empty-state">
+          {{ 'cockpit.batchOps.removalTimeBatch.noBatches' | translate }}
+        </div>
+
+        <!-- Table -->
+        <ng-container *ngIf="!batchInstancesLoading && batchInstances.length > 0">
+
+          <!-- Select-all bar — instances mode only -->
+          <div *ngIf="mode === 'instances'" class="select-all-bar">
+            <label class="select-all-label">
+              <input type="checkbox"
+                     [checked]="isAllBatchOnPageSelected"
+                     [indeterminate]="isBatchIndeterminate"
+                     (change)="toggleSelectAllBatch()">
+              <span>{{ 'cockpit.batchOps.removalTimeBatch.selectAllOnPage' | translate: { count: batchInstances.length.toString() } }}</span>
+            </label>
+            <span class="selection-count" [class.selection-count--empty]="removalTimeBatchSelectedIds.size === 0">
+              {{ 'cockpit.batchOps.removalTimeBatch.selectedCount' | translate: { count: removalTimeBatchSelectedIds.size.toString() } }}
+            </span>
+          </div>
+
+          <!-- Query preview note -->
+          <div *ngIf="mode === 'query'" class="query-preview-note">
+            <fa-icon [icon]="faInfoCircle"></fa-icon>
+            <span>{{ 'cockpit.batchOps.suspend.queryPreviewNote' | translate }}</span>
+          </div>
+
+          <div class="table-container">
+            <table class="instances-table">
+              <thead>
+                <tr>
+                  <th *ngIf="mode === 'instances'" class="col-check"></th>
+                  <th class="col-id">{{ 'cockpit.batchOps.removalTimeBatch.columns.batchId' | translate }}</th>
+                  <th class="col-definition">{{ 'cockpit.batchOps.removalTimeBatch.columns.type' | translate }}</th>
+                  <th class="col-starttime">{{ 'cockpit.batchOps.removalTimeBatch.columns.startTime' | translate }}</th>
+                  <th class="col-endtime">{{ 'cockpit.batchOps.removalTimeBatch.columns.endTime' | translate }}</th>
+                  <th class="col-removaltime">{{ 'cockpit.batchOps.removalTimeBatch.columns.removalTime' | translate }}</th>
+                  <th class="col-actions">{{ 'cockpit.batchOps.removalTimeBatch.columns.actions' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let batch of batchInstances"
+                    [class.row--selected]="mode === 'instances' && isBatchSelected(batch.id)"
+                    [style.cursor]="mode === 'instances' ? 'pointer' : 'default'"
+                    (click)="onBatchRowClick(batch.id)">
+                  <td *ngIf="mode === 'instances'" class="col-check"
+                      (click)="$event.stopPropagation(); toggleBatchInstance(batch.id)">
+                    <input type="checkbox"
+                           [checked]="isBatchSelected(batch.id)"
+                           (change)="toggleBatchInstance(batch.id)"
+                           (click)="$event.stopPropagation()">
+                  </td>
+                  <td class="col-id" (click)="$event.stopPropagation()">
+                    <a [routerLink]="['/cockpit/batch']"
+                       [queryParams]="{details: batch.id, type: batch.endTime ? 'history' : 'runtime'}"
+                       class="instance-link mono"
+                       [title]="batch.id">{{ batch.id }}</a>
+                  </td>
+                  <td class="col-definition">{{ batch.type }}</td>
+                  <td class="col-starttime cell-nowrap">{{ batch.startTime | camDate }}</td>
+                  <td class="col-endtime cell-nowrap">{{ (batch.endTime | camDate) || '—' }}</td>
+                  <td class="col-removaltime cell-nowrap">{{ (batch.removalTime | camDate) || '—' }}</td>
+                  <td class="col-actions" (click)="$event.stopPropagation()">
+                    <a [routerLink]="['/cockpit/batch']"
+                       [queryParams]="{details: batch.id, type: batch.endTime ? 'history' : 'runtime'}"
+                       class="action-btn"
+                       [title]="'cockpit.processes.viewDetails' | translate">
+                      <fa-icon [icon]="faEye"></fa-icon>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </ng-container>
+
+      </div>
+      <!-- /card 2 -->
+
+      <!-- Action button -->
+      <div class="step-footer">
+        <button *ngIf="mode === 'instances'"
+                type="button" class="btn-primary"
+                [disabled]="!canContinue"
+                (click)="continue()">
+          {{ 'cockpit.batchOps.confirm.removalTimeBatchBtn' | translate: { count: removalTimeBatchSelectedIds.size.toString() } }}
+        </button>
+        <button *ngIf="mode === 'query'"
+                type="button" class="btn-primary"
+                [disabled]="!canContinue"
+                (click)="continue()">
+          {{ 'cockpit.batchOps.confirm.removalTimeBatchBtnQuery' | translate }}
+        </button>
+      </div>
+
+    </div>
+    <!-- /removal-time-batch -->
+
     <!-- ─── Move Instances: process directory ────────────────────────────── -->
     <div *ngIf="selectedOperationId === 'move-instances'" class="operation-steps">
 

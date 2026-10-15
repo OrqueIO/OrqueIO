@@ -13,7 +13,7 @@ import {
   faSitemap, faCodeBranch, faSquareMinus, faSquareCheck,
   faPlay, faPauseCircle, faCircleStop, faCheckCircle, faTimesCircle, faUser, faGear, faTable, faPaperPlane,
   faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer, faSync,
-  faLevelUpAlt, faLevelDownAlt
+  faLevelUpAlt, faLevelDownAlt, faList
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { CockpitService, MultiValueFilter, GlobalSearchField, VariableLine } from '../../services/cockpit.service';
@@ -23,6 +23,7 @@ import { TranslatePipe } from '../../i18n/translate.pipe';
 import { TranslateService } from '../../i18n/translate.service';
 import { MultiValueChipInputComponent } from '../multi-value-chip-input/multi-value-chip-input';
 import { dateRangeConflicts } from '../../utils/search-validation';
+import { BATCH_TYPE_LABELS } from '../../models/cockpit/batch.model';
 
 export interface FilterPanelChange {
   criteria: MultiValueFilter[];
@@ -108,6 +109,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   faTimesCircle = faTimesCircle;
   faLevelUpAlt = faLevelUpAlt;
   faLevelDownAlt = faLevelDownAlt;
+  faList = faList;
 
   get bothStateNarrowingActive(): boolean {
     return this.activePills.some(p => p.field === 'stateActive') &&
@@ -150,6 +152,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   showCriteriaDropdown = false;
   activeEditorType: GlobalSearchField | null = null;
   activePills: MultiValueFilter[] = [];
+  availableCriteria: Array<{ field: GlobalSearchField }> = [];
 
   pendingValues: string[] = [];
   pendingTextValue = '';
@@ -264,6 +267,54 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
         ? pills.filter(p => p.field !== 'finishedAfter' && p.field !== 'finishedBefore')
         : pills;
     }
+
+    if (this.criteriaSet === 'batch') {
+      this.availableCriteria = [
+        { field: 'batchId' as const },
+        { field: 'type' as const },
+        { field: 'completed' as const }
+      ];
+    } else if (this.criteriaSet === 'decision') {
+      this.availableCriteria = [
+        { field: 'decisionInstanceId' as const },
+        { field: 'decisionDefinition' as const },
+        { field: 'processInstanceId' as const },
+        { field: 'evaluatedAfter' as const },
+        { field: 'evaluatedBefore' as const }
+      ];
+    } else {
+      const processCriteria: Array<{ field: GlobalSearchField }> = [
+        { field: 'businessKey' as const },
+        { field: 'instanceId' as const }
+      ];
+      if (!this.lockedState) {
+        processCriteria.push({ field: 'state' as const });
+      }
+      processCriteria.push(
+        { field: 'processDefinition' as const },
+        { field: 'startedAfter' as const },
+        { field: 'startedBefore' as const }
+      );
+      if (this.lockedState === null || this.lockedState === 'finished') {
+        processCriteria.push(
+          { field: 'finishedAfter' as const },
+          { field: 'finishedBefore' as const }
+        );
+      }
+      if (this.showExtendedCriteria) {
+        processCriteria.push(
+          { field: 'superProcessInstanceId' as const },
+          { field: 'subProcessInstanceId' as const },
+          { field: 'incidentId' as const },
+          { field: 'incidentType' as const },
+          { field: 'incidentMessage' as const },
+          { field: 'activityId' as const },
+          { field: 'variables' as const }
+        );
+      }
+      this.availableCriteria = processCriteria;
+    }
+
     if (this.criteriaSet === 'decision') {
       this.decisionService.getDecisionDefinitions(1000)
         .pipe(takeUntilDestroyed(this.destroyRef))
@@ -274,7 +325,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
             .sort((a, b) => a.name.localeCompare(b.name));
           this.cdr.markForCheck();
         });
-    } else {
+    } else if (this.criteriaSet === 'process') {
       this.cockpitService.getProcessDefinitions(1000, false)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(defs => {
@@ -759,6 +810,23 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
         }
         pill = { field: 'decisionDefinition', values: [...this.pendingDecisionDefinitionKeys] };
         break;
+      case 'batchId':
+      case 'type':
+      case 'completed':
+        if (this.pendingValues.length === 0) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.popoverFlipped = false;
+            this.cdr.markForCheck();
+            this.emit();
+          }
+          return;
+        }
+        pill = { field: type, values: [...this.pendingValues] };
+        break;
       case 'variables': {
         const validLines: VariableLine[] = this.pendingVariableLines
           .filter(l => l.name.trim() && l.values.length > 0)
@@ -1087,6 +1155,20 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'incidentType':           return t('cockpit.processes.globalSearch.pill.incidentType',           { value: pill.values[0] ?? '' });
       case 'incidentMessage':        return t('cockpit.processes.globalSearch.pill.incidentMessage',        { value: pill.values[0] ?? '' });
       case 'activityId':             return t('cockpit.processes.globalSearch.pill.activityId',             { value: pill.values[0] ?? '' });
+      case 'batchId':                return t('cockpit.batchOps.removalTimeBatch.pills.batchId',            { value: pill.values.join(', ') });
+      case 'type': {
+        const typeLabels = pill.values.map(v => {
+          const i18nKey = BATCH_TYPE_LABELS[v];
+          return i18nKey ? t(i18nKey) : v;
+        });
+        return t('cockpit.batchOps.removalTimeBatch.pills.type', { value: typeLabels.join(', ') });
+      }
+      case 'completed': {
+        const statusLabel = pill.values[0] === 'true'
+          ? t('cockpit.batchOps.removalTimeBatch.filters.statusCompleted')
+          : t('cockpit.batchOps.removalTimeBatch.filters.statusRunning');
+        return t('cockpit.batchOps.removalTimeBatch.pills.status', { value: statusLabel });
+      }
       default: return '';
     }
   }

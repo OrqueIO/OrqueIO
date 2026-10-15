@@ -95,15 +95,13 @@ export interface BatchQueryParams {
 
 /**
  * Query params for history batches
+ * Based on HistoricBatchQueryDto.java - only accepts single values for batchId and type
  */
 export interface HistoryBatchQueryParams {
-  // Pagination
   firstResult?: number;
   maxResults?: number;
-  // Sorting
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-  // Filters
   batchId?: string;
   type?: string;
   completed?: boolean;
@@ -115,12 +113,9 @@ export interface HistoryBatchQueryParams {
  * Query params for failed jobs
  */
 export interface JobQueryParams {
-  // Pagination
   firstResult?: number;
   maxResults?: number;
-  // Sorting
   sorting?: JobSorting[];
-  // Filters
   jobDefinitionId?: string;
   withException?: boolean;
   noRetriesLeft?: boolean;

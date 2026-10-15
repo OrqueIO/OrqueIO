@@ -787,11 +787,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     for (const f of this.batchFilterCriteria) {
       switch (f.field) {
         case 'batchId':
-          if (f.values.length === 1) params['batchId'] = f.values[0];
-          else if (f.values.length > 1) params['batchIds'] = f.values;
+          if (f.values.length > 0) params['batchId'] = f.values[0];
           break;
         case 'type':
-          if (f.values.length > 0) params['type'] = f.values.join(',');
+          if (f.values.length > 0) params['type'] = f.values[0];
           break;
         case 'completed':
           if (f.values.length === 1 && f.values[0] !== null) params['completed'] = f.values[0] === 'true';
@@ -1307,11 +1306,10 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     for (const f of this.batchFilterCriteria) {
       switch (f.field) {
         case 'batchId':
-          if (f.values.length === 1) query['batchId'] = f.values[0];
-          else if (f.values.length > 1) query['batchIds'] = [...f.values];
+          if (f.values.length > 0) query['batchId'] = f.values[0];
           break;
         case 'type':
-          if (f.values.length > 0) query['type'] = f.values.join(',');
+          if (f.values.length > 0) query['type'] = f.values[0];
           break;
         case 'completed':
           if (f.values.length === 1 && f.values[0] !== null) query['completed'] = f.values[0] === 'true';
