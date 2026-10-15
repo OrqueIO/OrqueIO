@@ -1145,43 +1145,52 @@
   box-shadow: var(--shadow-focus);
 }
 
-/* Icon wrapper — wizard icon colors, ~20px width, 14px size, no background */
+/* Icon wrapper — 24x24px rounded tile with wizard badge background colors */
 .batch-type-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  min-width: 20px;
-  font-size: 14px;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  font-size: 12px;
   flex-shrink: 0;
+  border-radius: 6px;
 }
 
-/* Icon colors from BATCH_OPERATIONS wizard (badge colors) */
+/* Icon colors + backgrounds from BATCH_OPERATIONS wizard (exact badge styles) */
 .batch-type-icon--amber {
+  background: rgba(245, 158, 11, 0.12);
   color: #d97706;
 }
 
 .batch-type-icon--green {
+  background: rgba(22, 163, 74, 0.12);
   color: #16a34a;
 }
 
 .batch-type-icon--red {
+  background: rgba(220, 38, 38, 0.12);
   color: #dc2626;
 }
 
 .batch-type-icon--blue {
+  background: rgba(59, 130, 246, 0.12);
   color: #2563eb;
 }
 
 .batch-type-icon--purple {
+  background: rgba(124, 58, 237, 0.12);
   color: #7c3aed;
 }
 
 .batch-type-icon--gray {
+  background: rgba(107, 114, 128, 0.12);
   color: #6b7280;
 }
 
 .batch-type-icon--secondary {
+  background: rgba(107, 114, 128, 0.08);
   color: var(--text-secondary);
 }
 
