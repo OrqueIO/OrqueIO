@@ -111,7 +111,7 @@ describe('InstanceFilterPanelComponent — Batch Type select & Status (no All)',
     });
 
     it('should display exactly 12 batch type options', () => {
-      const buttons = compiled.querySelectorAll('.editor-popover-body--state .state-row');
+      const buttons = compiled.querySelectorAll('.editor-popover-body--state .batch-type-row');
       expect(buttons.length).toBe(12);
     });
 
@@ -206,7 +206,7 @@ describe('InstanceFilterPanelComponent — Batch Type select & Status (no All)',
     });
 
     it('should allow multiple types to be selected (multi-select toggle)', () => {
-      const buttons = compiled.querySelectorAll('.state-row') as NodeListOf<HTMLButtonElement>;
+      const buttons = compiled.querySelectorAll('.batch-type-row') as NodeListOf<HTMLButtonElement>;
 
       // Click first type (now instance-modification, not migration)
       buttons[0].click();

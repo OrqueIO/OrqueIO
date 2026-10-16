@@ -88,7 +88,7 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (12 types)', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const buttons = compiled.querySelectorAll('.state-row');
+    const buttons = compiled.querySelectorAll('.batch-type-row');
     expect(buttons.length).toBe(12);
 
     // Each button should have class="state-row"
@@ -117,7 +117,7 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (12 types)', () => {
       'batch-set-removal-time'
     ];
 
-    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.state-row');
+    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
 
     // Click each button and verify it sets the correct value
     buttons.forEach((btn, index) => {
@@ -134,7 +134,7 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (12 types)', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const labels = compiled.querySelectorAll('.state-row-label');
+    const labels = compiled.querySelectorAll('.batch-type-row .state-row-label');
     expect(labels.length).toBe(12);
 
     // Labels should contain translated text (not raw keys)
@@ -150,7 +150,7 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (12 types)', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.state-row');
+    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
 
     // Click first button
     buttons[0].click();

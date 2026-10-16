@@ -673,6 +673,27 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     this.cdr.markForCheck();
   }
 
+  get btSelectedCount(): number {
+    return this.BATCH_TYPE_OPTIONS.filter(opt => this.pendingValues.includes(opt.value)).length;
+  }
+
+  get btAllSelected(): boolean {
+    return this.BATCH_TYPE_OPTIONS.length > 0 && this.BATCH_TYPE_OPTIONS.every(opt => this.pendingValues.includes(opt.value));
+  }
+
+  get btSomeSelected(): boolean {
+    return this.btSelectedCount > 0 && !this.btAllSelected;
+  }
+
+  toggleSelectAllBatchTypes(): void {
+    if (this.btAllSelected) {
+      this.pendingValues = [];
+    } else {
+      this.pendingValues = this.BATCH_TYPE_OPTIONS.map(opt => opt.value);
+    }
+    this.cdr.markForCheck();
+  }
+
   private populatePendingFromPill(pill: MultiValueFilter): void {
     this.pendingValues = [];
     this.pendingTextValue = '';

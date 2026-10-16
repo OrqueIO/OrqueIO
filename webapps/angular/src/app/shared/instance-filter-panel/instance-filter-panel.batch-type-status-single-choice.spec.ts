@@ -69,7 +69,7 @@ describe('Batch Type Multi-Select and Status Single Choice', () => {
     component.pendingValues = [];
 
     // Find Type option buttons
-    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.state-row');
+    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
     
     // Click first button (process-set-removal-time)
     buttons[0].click();
@@ -100,7 +100,7 @@ describe('Batch Type Multi-Select and Status Single Choice', () => {
     await fixture.whenStable();
 
     component.pendingValues = [];
-    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.state-row');
+    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
 
     // Click option A
     buttons[0].click();
@@ -122,7 +122,7 @@ describe('Batch Type Multi-Select and Status Single Choice', () => {
     await fixture.whenStable();
 
     component.pendingValues = [];
-    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.state-row');
+    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
 
     // Click A
     buttons[0].click();
@@ -148,8 +148,8 @@ describe('Batch Type Multi-Select and Status Single Choice', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    // Find Status option buttons in DOM
-    const buttons = compiled.querySelectorAll('.state-row');
+    // Find Status option buttons in DOM (NOT batch-type-row, this is Status criteria)
+    const buttons = compiled.querySelectorAll('.state-row:not(.processdef-select-all-row)');
     expect(buttons.length).toBe(2);
 
     // Click Completed (button at index 0)

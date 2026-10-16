@@ -521,6 +521,17 @@
   <div class="editor-popover-body editor-popover-body--state"
        *ngIf="activeEditorType === 'type' && criteriaSet === 'batch'"
        (keydown.enter)="$event.preventDefault(); confirmCriterion()">
+    <button class="state-row processdef-select-all-row"
+            (click)="toggleSelectAllBatchTypes()" type="button">
+      <span class="processdef-sa-badge">
+        <fa-icon *ngIf="!btAllSelected && !btSomeSelected" [icon]="faSquare"      class="processdef-sa-icon processdef-sa-icon--empty"></fa-icon>
+        <fa-icon *ngIf="btSomeSelected"                    [icon]="faSquareMinus" class="processdef-sa-icon processdef-sa-icon--partial"></fa-icon>
+        <fa-icon *ngIf="btAllSelected"                     [icon]="faSquareCheck" class="processdef-sa-icon processdef-sa-icon--all"></fa-icon>
+      </span>
+      <span class="state-row-label">{{ 'cockpit.processes.globalSearch.selectAll' | translate }}</span>
+      <span class="processdef-select-all-count">{{ 'cockpit.processes.globalSearch.selectedOf' | translate: { selected: btSelectedCount.toString(), total: BATCH_TYPE_OPTIONS.length.toString() } }}</span>
+    </button>
+    <div class="processdef-select-all-divider"></div>
     <div class="state-checklist batch-type-list--scrollable">
       <button *ngFor="let option of BATCH_TYPE_OPTIONS"
               type="button"
