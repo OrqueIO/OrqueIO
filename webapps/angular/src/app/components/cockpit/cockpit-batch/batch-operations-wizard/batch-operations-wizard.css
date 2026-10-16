@@ -300,6 +300,7 @@
 
 .due-date-input {
   width: 220px;
+  max-width: 100%;
   box-sizing: border-box;
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--border-color);
@@ -309,7 +310,6 @@
   color: var(--text-primary);
   background: var(--bg-card);
   transition: border-color var(--transition-fast);
-  margin-top: 8px;
 }
 
 .due-date-input:focus {

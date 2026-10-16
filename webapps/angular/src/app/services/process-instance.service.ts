@@ -629,6 +629,21 @@ export class ProcessInstanceService {
     return this.http.post<{ id: string }>(`${this.baseUrl}/process-instance/message-async`, body);
   }
 
+  setRemovalTimeAsync(payload: {
+    calculatedRemovalTime?: boolean;
+    absoluteRemovalTime?: string;
+    clearedRemovalTime?: boolean;
+    historicProcessInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+    hierarchical?: boolean;
+    updateInChunks?: boolean;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.historyUrl}/process-instance/set-removal-time`,
+      payload
+    );
+  }
+
   executeModificationAsync(dto: ModificationDto): Observable<{ id: string }> {
     return this.http.post<{ id: string }>(
       `${this.baseUrl}/modification/executeAsync`,

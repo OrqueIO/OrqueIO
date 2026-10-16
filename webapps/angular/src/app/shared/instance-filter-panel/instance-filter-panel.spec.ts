@@ -207,10 +207,11 @@ describe('InstanceFilterPanelComponent — State criterion editor: all 4 states 
     component.selectCriteriaType('state');
     fixture.detectChanges();
 
-    expect(fixture.debugElement.query(By.css('.state-dot--active'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.state-dot--suspended'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.state-dot--completed'))).not.toBeNull();
-    expect(fixture.debugElement.query(By.css('.state-dot--terminated'))).not.toBeNull();
+    // State menu now uses compact icon badges instead of dots
+    expect(fixture.debugElement.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--emerald'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--amber'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--blue'))).not.toBeNull();
+    expect(fixture.debugElement.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--red'))).not.toBeNull();
   });
 
   it('should render exactly 4 state rows (no state missing, no duplicate)', () => {
@@ -218,6 +219,33 @@ describe('InstanceFilterPanelComponent — State criterion editor: all 4 states 
     fixture.detectChanges();
 
     expect(fixture.debugElement.queryAll(By.css('.state-row')).length).toBe(4);
+  });
+
+  it('should render compact icon badges with correct glyphs and color variants', () => {
+    component.selectCriteriaType('state');
+    fixture.detectChanges();
+
+    const activeRow = fixture.debugElement.queryAll(By.css('.state-row'))[0];
+    const activeIcon = activeRow.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--emerald'));
+    expect(activeIcon).not.toBeNull();
+    expect(activeIcon.nativeElement.classList.contains('criteria-icon-wrap')).toBe(true);
+    expect(activeIcon.nativeElement.classList.contains('criteria-icon-wrap--compact')).toBe(true);
+    expect(activeIcon.nativeElement.classList.contains('criteria-icon-wrap--emerald')).toBe(true);
+
+    const suspendedRow = fixture.debugElement.queryAll(By.css('.state-row'))[1];
+    const suspendedIcon = suspendedRow.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--amber'));
+    expect(suspendedIcon).not.toBeNull();
+    expect(suspendedIcon.nativeElement.classList.contains('criteria-icon-wrap--amber')).toBe(true);
+
+    const completedRow = fixture.debugElement.queryAll(By.css('.state-row'))[2];
+    const completedIcon = completedRow.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--blue'));
+    expect(completedIcon).not.toBeNull();
+    expect(completedIcon.nativeElement.classList.contains('criteria-icon-wrap--blue')).toBe(true);
+
+    const terminatedRow = fixture.debugElement.queryAll(By.css('.state-row'))[3];
+    const terminatedIcon = terminatedRow.query(By.css('.criteria-icon-wrap--compact.criteria-icon-wrap--red'));
+    expect(terminatedIcon).not.toBeNull();
+    expect(terminatedIcon.nativeElement.classList.contains('criteria-icon-wrap--red')).toBe(true);
   });
 });
 
