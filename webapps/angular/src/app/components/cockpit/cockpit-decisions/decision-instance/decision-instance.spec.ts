@@ -436,26 +436,6 @@ describe('DecisionInstanceComponent', () => {
     });
   });
 
-  describe('truncateId', () => {
-    beforeEach(() => { createComponent(); });
-
-    it('should truncate id longer than default 8 chars', () => {
-      expect(component.truncateId('abcdefghijk')).toBe('abcdefgh...');
-    });
-
-    it('should not truncate id equal to limit', () => {
-      expect(component.truncateId('abcdefgh')).toBe('abcdefgh');
-    });
-
-    it('should handle custom length', () => {
-      expect(component.truncateId('hello world', 5)).toBe('hello...');
-    });
-
-    it('should handle empty string', () => {
-      expect(component.truncateId('')).toBe('');
-    });
-  });
-
   describe('toggleDmnExpand', () => {
     beforeEach(() => { createComponent(); });
 

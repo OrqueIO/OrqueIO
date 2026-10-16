@@ -62,6 +62,14 @@
             {{ formatDate(decisionInstance.evaluationTime) }}
           </dd>
 
+          <!-- Removal Time -->
+          <dt>{{ 'cockpit.decisionInstance.removalTime' | translate }}</dt>
+          <dd>
+            <fa-icon [icon]="faClock" class="info-icon"></fa-icon>
+            <span *ngIf="decisionInstance.removalTime">{{ formatDate(decisionInstance.removalTime) }}</span>
+            <span *ngIf="!decisionInstance.removalTime" class="null-value">null</span>
+          </dd>
+
           <!-- Definition Version -->
           <dt>{{ 'cockpit.decisionInstance.definitionVersion' | translate }}</dt>
           <dd class="definition-version">{{ decisionDefinition?.version || '-' }}</dd>
@@ -162,10 +170,6 @@
           </dd>
           <dt *ngIf="!decisionInstance.decisionRequirementsDefinitionId">{{ 'cockpit.decisionInstance.drdId' | translate }}</dt>
           <dd *ngIf="!decisionInstance.decisionRequirementsDefinitionId"><span class="null-value">null</span></dd>
-
-          <!-- Removal Time -->
-          <dt *ngIf="decisionInstance.removalTime">{{ 'cockpit.decisionInstance.removalTime' | translate }}</dt>
-          <dd *ngIf="decisionInstance.removalTime">{{ formatDate(decisionInstance.removalTime) }}</dd>
 
         </dl>
       </div>

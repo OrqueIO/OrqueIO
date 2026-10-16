@@ -49,6 +49,7 @@ export interface DecisionInstance {
   decisionDefinitionKey: string;
   decisionDefinitionName?: string;
   evaluationTime: string;
+  removalTime?: string;
   processDefinitionId?: string;
   processDefinitionKey?: string;
   processInstanceId?: string;
@@ -458,6 +459,20 @@ export class DecisionService {
   }): Observable<{ id: string }> {
     return this.http.post<{ id: string }>(
       `${this.historyUrl}/decision-instance/delete`,
+      payload
+    );
+  }
+
+  setRemovalTimeAsync(payload: {
+    calculatedRemovalTime?: boolean;
+    absoluteRemovalTime?: string;
+    clearedRemovalTime?: boolean;
+    historicDecisionInstanceIds?: string[];
+    historicDecisionInstanceQuery?: Record<string, unknown>;
+    hierarchical?: boolean;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.historyUrl}/decision-instance/set-removal-time`,
       payload
     );
   }

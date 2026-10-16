@@ -211,9 +211,9 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let instance of decisionInstances">
-                      <td class="id-cell">
+                      <td class="id-cell full-id-cell">
                         <a [routerLink]="['/cockpit/decision-instance', instance.id]" class="instance-link" [title]="instance.id">
-                          {{ truncateId(instance.id, 8) }}
+                          {{ instance.id }}
                         </a>
                       </td>
                       <td>{{ formatDate(instance.evaluationTime) }}</td>
@@ -226,15 +226,15 @@
                         <span *ngIf="!instance.processDefinitionKey && instance.caseDefinitionKey">{{ instance.caseDefinitionKey }}</span>
                         <span *ngIf="!instance.processDefinitionKey && !instance.caseDefinitionKey" class="null-value">-</span>
                       </td>
-                      <td>
+                      <td class="full-id-cell">
                         <a *ngIf="instance.processInstanceId"
                            [routerLink]="['/cockpit/processes/instance', instance.processInstanceId]"
                            class="action-link"
                            [title]="instance.processInstanceId">
-                          {{ truncateId(instance.processInstanceId, 8) }}
+                          {{ instance.processInstanceId }}
                         </a>
                         <span *ngIf="!instance.processInstanceId && instance.caseInstanceId" [title]="instance.caseInstanceId">
-                          {{ truncateId(instance.caseInstanceId, 8) }}
+                          {{ instance.caseInstanceId }}
                         </span>
                         <span *ngIf="!instance.processInstanceId && !instance.caseInstanceId" class="null-value">-</span>
                       </td>
