@@ -282,13 +282,13 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
     });
   });
 
-  describe('Single select behavior with DOM clicks', () => {
+  describe('Multi select (toggle) behavior with DOM clicks', () => {
     beforeEach(() => {
       component.selectCriteriaType('type');
       fixture.detectChanges();
     });
 
-    it('should select first type when clicked, then replace with second type', () => {
+    it('should select first type when clicked, then add second type (both selected)', () => {
       const buttons = compiled.querySelectorAll<HTMLButtonElement>('.batch-type-row');
 
       // Click first type (instance-modification)
@@ -308,9 +308,10 @@ describe('InstanceFilterPanel — Batch Type Filter Design (Real Integration)', 
       buttons[1].click();
       fixture.detectChanges();
 
-      expect(component.pendingValues.length).toBe(1);
-      expect(component.pendingValues[0]).toBe('instance-deletion');
-      expect(buttons[0].classList.contains('state-row--selected')).toBe(false);
+      expect(component.pendingValues.length).toBe(2);
+      expect(component.pendingValues).toContain('instance-modification');
+      expect(component.pendingValues).toContain('instance-deletion');
+      expect(buttons[0].classList.contains('state-row--selected')).toBe(true);
       expect(buttons[1].classList.contains('state-row--selected')).toBe(true);
       expect(buttons[1].getAttribute('aria-pressed')).toBe('true');
     });

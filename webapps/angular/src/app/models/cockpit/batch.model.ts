@@ -104,6 +104,7 @@ export interface HistoryBatchQueryParams {
   sortOrder?: 'asc' | 'desc';
   batchId?: string;
   type?: string;
+  typeIn?: string[];
   completed?: boolean;
   tenantIdIn?: string[];
   withoutTenantId?: boolean;

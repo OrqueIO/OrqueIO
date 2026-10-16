@@ -12,16 +12,15 @@ import { TranslateService } from '../../i18n/translate.service';
 import { initTestEnvironment } from '../../testing/test-utils';
 
 /**
- * TEST: Batch Type and Status are SINGLE CHOICE
+ * TEST: Batch Type is MULTI-SELECT, Status is SINGLE CHOICE
  *
  * Verifies:
- * - Type: Selecting option A then B → only B remains (pill, pendingValues, HTTP request)
- * - Status: Selecting Completed then Running → only Running remains
- * - No multi-select behavior
+ * - Type: Toggle behavior - clicking same option deselects it, can select multiple
+ * - Status: Selecting Completed then Running → only Running remains (single choice)
  *
- * Part of batch filter single-value requirement (#114)
+ * Updated for #114 typeIn multi-value support (2026-10-16)
  */
-describe('Batch Type and Status - Single Choice Verification', () => {
+describe('Batch Type Multi-Select and Status Single Choice', () => {
   let component: InstanceFilterPanelComponent;
   let fixture: ComponentFixture<InstanceFilterPanelComponent>;
   let compiled: HTMLElement;
@@ -61,53 +60,30 @@ describe('Batch Type and Status - Single Choice Verification', () => {
     fixture.detectChanges();
   });
 
-  it('[Type] Real DOM click: A then B → only B selected (pill + pendingValues)', async () => {
+  it('[Type] Real DOM click: A then B → both A and B selected (multi-select toggle)', async () => {
     component.selectCriteriaType('type');
     fixture.detectChanges();
     await fixture.whenStable();
 
-    // Find Type option buttons in DOM using test IDs or click handlers
-    // Since buttons set pendingValues via click handler, we can identify them
-    // by checking which one triggers the right value
+    // Clear any previous state
+    component.pendingValues = [];
 
-    // Click option A: process-set-removal-time
-    // Find button by simulating clicks and checking pendingValues
-    let buttonA: HTMLButtonElement | null = null;
-    let buttonB: HTMLButtonElement | null = null;
-
+    // Find Type option buttons
     const buttons = compiled.querySelectorAll<HTMLButtonElement>('.state-row');
-    for (const btn of Array.from(buttons)) {
-      // Reset pendingValues to test
-      component.pendingValues = [];
-      btn.click();
-      fixture.detectChanges();
-
-      if (component.pendingValues[0] === 'process-set-removal-time') {
-        buttonA = btn;
-      } else if (component.pendingValues[0] === 'decision-set-removal-time') {
-        buttonB = btn;
-      }
-
-      if (buttonA && buttonB) break;
-    }
-
-    expect(buttonA).toBeTruthy();
-    expect(buttonB).toBeTruthy();
-
-    // Now perform the real test: click A then B
-    buttonA!.click();
+    
+    // Click first button (process-set-removal-time)
+    buttons[0].click();
     fixture.detectChanges();
-
-    // Verify A selected
-    expect(component.pendingValues).toEqual(['process-set-removal-time']);
-
-    // Click option B: decision-set-removal-time
-    buttonB!.click();
-    fixture.detectChanges();
-
-    // Verify ONLY B selected (A replaced)
-    expect(component.pendingValues).toEqual(['decision-set-removal-time']);
+    const firstValue = component.pendingValues[0];
     expect(component.pendingValues.length).toBe(1);
+
+    // Click second button (decision-set-removal-time)
+    buttons[1].click();
+    fixture.detectChanges();
+    
+    // Verify BOTH selected (multi-select behavior)
+    expect(component.pendingValues.length).toBe(2);
+    expect(component.pendingValues).toContain(firstValue);
 
     // Apply and verify pill
     component.confirmCriterion();
@@ -115,10 +91,59 @@ describe('Batch Type and Status - Single Choice Verification', () => {
 
     expect(component.activePills.length).toBe(1);
     expect(component.activePills[0].field).toBe('type');
-    expect(component.activePills[0].values).toEqual(['decision-set-removal-time']);
+    expect(component.activePills[0].values.length).toBe(2);
   });
 
-  it('[Status] Real DOM click: Completed then Running → only Running selected (pill + pendingValues)', async () => {
+  it('[Type] Real DOM click: A then A → deselects A (toggle off)', async () => {
+    component.selectCriteriaType('type');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.pendingValues = [];
+    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.state-row');
+
+    // Click option A
+    buttons[0].click();
+    fixture.detectChanges();
+    expect(component.pendingValues.length).toBe(1);
+    const valueA = component.pendingValues[0];
+
+    // Click option A again
+    buttons[0].click();
+    fixture.detectChanges();
+
+    // Verify deselected (toggle off)
+    expect(component.pendingValues.length).toBe(0);
+  });
+
+  it('[Type] Real DOM click: A, B, A → only B remains (toggle A off)', async () => {
+    component.selectCriteriaType('type');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    component.pendingValues = [];
+    const buttons = compiled.querySelectorAll<HTMLButtonElement>('.state-row');
+
+    // Click A
+    buttons[0].click();
+    fixture.detectChanges();
+    const valueA = component.pendingValues[0];
+
+    // Click B
+    buttons[1].click();
+    fixture.detectChanges();
+    expect(component.pendingValues.length).toBe(2);
+    const valueB = component.pendingValues.find(v => v !== valueA);
+
+    // Click A again (toggle off)
+    buttons[0].click();
+    fixture.detectChanges();
+
+    // Verify only B remains
+    expect(component.pendingValues).toEqual([valueB]);
+  });
+
+  it('[Status] Real DOM click: Completed then Running → only Running selected (single choice)', async () => {
     component.selectCriteriaType('completed');
     fixture.detectChanges();
     await fixture.whenStable();
@@ -140,7 +165,7 @@ describe('Batch Type and Status - Single Choice Verification', () => {
     buttonRunning.click();
     fixture.detectChanges();
 
-    // Verify ONLY Running selected (Completed replaced)
+    // Verify ONLY Running selected (Completed replaced - single choice behavior)
     expect(component.pendingValues).toEqual(['false']);
     expect(component.pendingValues.length).toBe(1);
 

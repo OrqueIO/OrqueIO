@@ -515,6 +515,14 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     this.cdr.markForCheck();
   }
 
+  toggleBatchType(value: string): void {
+    const idx = this.pendingValues.indexOf(value);
+    this.pendingValues = idx === -1
+      ? [...this.pendingValues, value]
+      : this.pendingValues.filter(v => v !== value);
+    this.cdr.markForCheck();
+  }
+
   toggleProcessDefinitionKey(key: string): void {
     const group = this.availableProcessDefinitionGroups.find(g => g.key === key);
     if (this.pendingProcessDefinitionKeys.includes(key)) {

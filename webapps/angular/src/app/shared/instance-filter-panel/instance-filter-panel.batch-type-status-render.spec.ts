@@ -205,7 +205,7 @@ describe('InstanceFilterPanelComponent — Batch Type select & Status (no All)',
       fixture.detectChanges();
     });
 
-    it('should select only one type at a time (single select)', () => {
+    it('should allow multiple types to be selected (multi-select toggle)', () => {
       const buttons = compiled.querySelectorAll('.state-row') as NodeListOf<HTMLButtonElement>;
 
       // Click first type (now instance-modification, not migration)
@@ -214,11 +214,12 @@ describe('InstanceFilterPanelComponent — Batch Type select & Status (no All)',
       expect(component.pendingValues.length).toBe(1);
       expect(component.pendingValues[0]).toBe('instance-modification');
 
-      // Click second type - should replace first
+      // Click second type - should ADD to selection
       buttons[1].click();
       fixture.detectChanges();
-      expect(component.pendingValues.length).toBe(1);
-      expect(component.pendingValues[0]).toBe('instance-deletion');
+      expect(component.pendingValues.length).toBe(2);
+      expect(component.pendingValues).toContain('instance-modification');
+      expect(component.pendingValues).toContain('instance-deletion');
     });
 
     it('should apply correct value to API (raw key, not translated label)', () => {

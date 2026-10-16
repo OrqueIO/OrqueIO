@@ -517,7 +517,7 @@
            autofocus />
   </div>
 
-  <!-- Batch Type (criteriaSet=batch only) - single select from BATCH_TYPE_LABELS -->
+  <!-- Batch Type (criteriaSet=batch only) - multi-select from BATCH_TYPE_LABELS -->
   <div class="editor-popover-body editor-popover-body--state"
        *ngIf="activeEditorType === 'type' && criteriaSet === 'batch'"
        (keydown.enter)="$event.preventDefault(); confirmCriterion()">
@@ -525,13 +525,14 @@
       <button *ngFor="let option of BATCH_TYPE_OPTIONS"
               type="button"
               class="state-row batch-type-row"
-              [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === option.value"
-              [attr.aria-pressed]="pendingValues.length === 1 && pendingValues[0] === option.value"
+              [class.batch-type-row--selected]="pendingValues.includes(option.value)"
+              [class.state-row--selected]="pendingValues.includes(option.value)"
+              [attr.aria-pressed]="pendingValues.includes(option.value)"
               [attr.title]="option.i18nKey | translate"
-              (click)="pendingValues = [option.value]">
+              (click)="toggleBatchType(option.value)">
         <span class="batch-type-icon batch-type-icon--{{option.iconColor}}" aria-hidden="true"><fa-icon [icon]="option.icon"></fa-icon></span>
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === option.value">{{ option.i18nKey | translate }}</span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === option.value" [icon]="faCheck" class="state-row-check"></fa-icon>
+        <span class="state-row-label" [class.is-selected]="pendingValues.includes(option.value)">{{ option.i18nKey | translate }}</span>
+        <fa-icon *ngIf="pendingValues.includes(option.value)" [icon]="faCheck" class="state-row-check"></fa-icon>
       </button>
     </div>
   </div>

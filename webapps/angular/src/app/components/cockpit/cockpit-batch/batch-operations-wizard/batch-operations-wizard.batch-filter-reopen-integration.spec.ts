@@ -176,8 +176,8 @@ describe('BatchOperationsWizard + FilterPanel Reopen Integration', () => {
     const dataReq = requests.find(r => !r.request.url.includes('/count'));
     const countReq = requests.find(r => r.request.url.includes('/count'));
 
-    expect(dataReq!.request.params.get('type')).toBe('decision-set-removal-time');
-    expect(countReq!.request.params.get('type')).toBe('decision-set-removal-time');
+    expect(dataReq!.request.params.get('typeIn')).toBe('decision-set-removal-time');
+    expect(countReq!.request.params.get('typeIn')).toBe('decision-set-removal-time');
 
     dataReq!.flush([{ id: 'b2', type: 'decision-set-removal-time', endTime: '2024-01-02T00:00:00.000Z' }]);
     countReq!.flush({ count: 1 });

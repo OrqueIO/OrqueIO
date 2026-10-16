@@ -108,13 +108,13 @@ describe('BatchOperationsWizard — Batch filter application (BUGFIX)', () => {
     expect(countReq).toBeDefined();
 
     // Verify filter parameters on data request
-    expect(dataReq!.request.params.get('type')).toBe('process-set-removal-time');
+    expect(dataReq!.request.params.get('typeIn')).toBe('process-set-removal-time');
     expect(dataReq!.request.params.get('sortBy')).toBe('startTime');
     expect(dataReq!.request.params.get('firstResult')).toBe('0');
     dataReq!.flush([{ id: 'batch-123', type: 'process-set-removal-time', endTime: '2024-01-01T00:00:00.000Z' }]);
 
     // Verify filter parameters on count request
-    expect(countReq!.request.params.get('type')).toBe('process-set-removal-time');
+    expect(countReq!.request.params.get('typeIn')).toBe('process-set-removal-time');
     countReq!.flush({ count: 1 });
 
     // Verify list updated
@@ -232,10 +232,10 @@ describe('BatchOperationsWizard — Batch filter application (BUGFIX)', () => {
     expect(countReq).toBeDefined();
 
     expect(dataReq!.request.params.get('firstResult')).toBe('0'); // page 1 offset
-    expect(dataReq!.request.params.get('type')).toBe('decision-set-removal-time');
+    expect(dataReq!.request.params.get('typeIn')).toBe('decision-set-removal-time');
     dataReq!.flush([]);
 
-    expect(countReq!.request.params.get('type')).toBe('decision-set-removal-time');
+    expect(countReq!.request.params.get('typeIn')).toBe('decision-set-removal-time');
     countReq!.flush({ count: 0 });
   });
 });

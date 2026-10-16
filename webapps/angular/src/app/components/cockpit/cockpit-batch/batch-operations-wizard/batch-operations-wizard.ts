@@ -795,7 +795,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           if (f.values.length > 0) params['batchId'] = f.values[0];
           break;
         case 'type':
-          if (f.values.length > 0) params['type'] = f.values[0];
+          if (f.values.length > 0) params['typeIn'] = f.values;
           break;
         case 'completed':
           if (f.values.length === 1 && f.values[0] !== null) params['completed'] = f.values[0] === 'true';
@@ -1314,7 +1314,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           if (f.values.length > 0) query['batchId'] = f.values[0];
           break;
         case 'type':
-          if (f.values.length > 0) query['type'] = f.values[0];
+          if (f.values.length > 0) query['typeIn'] = f.values;
           break;
         case 'completed':
           if (f.values.length === 1 && f.values[0] !== null) query['completed'] = f.values[0] === 'true';

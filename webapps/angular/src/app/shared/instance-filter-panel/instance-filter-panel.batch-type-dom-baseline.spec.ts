@@ -145,7 +145,7 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (12 types)', () => {
     });
   });
 
-  it('buttons have correct selection behavior (single choice)', async () => {
+  it('buttons have correct selection behavior (multi-select toggle)', async () => {
     component.selectCriteriaType('type');
     fixture.detectChanges();
     await fixture.whenStable();
@@ -158,11 +158,12 @@ describe('InstanceFilterPanel - Batch Type DOM Baseline (12 types)', () => {
     expect(component.pendingValues.length).toBe(1);
     expect(component.pendingValues[0]).toBe('instance-modification');
 
-    // Click second button - should replace first
+    // Click second button - should ADD to selection (multi-select)
     buttons[1].click();
     fixture.detectChanges();
-    expect(component.pendingValues.length).toBe(1);
-    expect(component.pendingValues[0]).toBe('instance-deletion');
+    expect(component.pendingValues.length).toBe(2);
+    expect(component.pendingValues).toContain('instance-modification');
+    expect(component.pendingValues).toContain('instance-deletion');
   });
 
   it('all types from BATCH_TYPE_LABELS must be in BATCH_TYPE_OPTIONS except excluded ones', () => {

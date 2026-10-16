@@ -131,8 +131,8 @@ describe('BatchOperationsWizard + FilterPanel Integration (DOM clicks)', () => {
     expect(countReq).toBeDefined();
 
     // Verify type parameter
-    expect(dataReq!.request.params.get('type')).toBe('decision-set-removal-time');
-    expect(countReq!.request.params.get('type')).toBe('decision-set-removal-time');
+    expect(dataReq!.request.params.get('typeIn')).toBe('decision-set-removal-time');
+    expect(countReq!.request.params.get('typeIn')).toBe('decision-set-removal-time');
 
     dataReq!.flush([{ id: 'batch-001', type: 'decision-set-removal-time', endTime: '2024-01-01T00:00:00.000Z' }]);
     countReq!.flush({ count: 1 });
