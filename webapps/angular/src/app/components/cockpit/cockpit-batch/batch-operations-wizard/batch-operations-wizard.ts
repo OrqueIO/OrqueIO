@@ -800,6 +800,12 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         case 'completed':
           if (f.values.length === 1 && f.values[0] !== null) params['completed'] = f.values[0] === 'true';
           break;
+        case 'batchCompleted':
+          params['completed'] = true;
+          break;
+        case 'batchRunning':
+          params['completed'] = false;
+          break;
         case 'tenantIdIn':
           if (f.values.length > 0) params['tenantIdIn'] = f.values.join(',');
           break;
@@ -1318,6 +1324,12 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           break;
         case 'completed':
           if (f.values.length === 1 && f.values[0] !== null) query['completed'] = f.values[0] === 'true';
+          break;
+        case 'batchCompleted':
+          query['completed'] = true;
+          break;
+        case 'batchRunning':
+          query['completed'] = false;
           break;
         case 'tenantIdIn':
           if (f.values.length > 0) query['tenantIdIn'] = f.values.join(',');
@@ -1981,6 +1993,17 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.removalTimeBatchAbsoluteDate = state.removalTimeBatchAbsoluteDate ?? '';
       this.removalTimeBatchSelectedIds = new Set(state.batchSelectedIds ?? []);
       this.batchFilterCriteria = state.batchFilterCriteria ?? [];
+      // Migrate old 'completed' format to new 'batchCompleted'/'batchRunning' format
+      this.batchFilterCriteria = this.batchFilterCriteria.map(f => {
+        if (f.field === 'completed' && f.values.length === 1) {
+          if (f.values[0] === 'true') {
+            return { field: 'batchCompleted' as GlobalSearchField, values: [] };
+          } else if (f.values[0] === 'false') {
+            return { field: 'batchRunning' as GlobalSearchField, values: [] };
+          }
+        }
+        return f;
+      });
       this.batchHasActiveCriteria = this.batchFilterCriteria.length > 0;
       const restoredStep: number = state.step ?? 1;
       this.currentStep = restoredStep >= 3 ? 1 : restoredStep as 1 | 2;

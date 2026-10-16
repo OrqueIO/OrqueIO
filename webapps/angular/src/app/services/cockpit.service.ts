@@ -451,7 +451,9 @@ export type GlobalSearchField =
   | 'incidentId' | 'incidentType' | 'incidentMessage' | 'activityId'
   | 'stateActive' | 'stateSuspended'
   | 'stateCompleted' | 'stateTerminated'
-  | 'batchId' | 'type' | 'completed' | 'tenantIdIn' | 'withoutTenantId';
+  | 'batchId' | 'type' | 'completed'
+  | 'batchCompleted' | 'batchRunning'
+  | 'tenantIdIn' | 'withoutTenantId';
 
 export interface MultiValueFilter {
   field: GlobalSearchField;

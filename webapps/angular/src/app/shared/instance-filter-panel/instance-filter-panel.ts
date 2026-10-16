@@ -443,6 +443,27 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       return;
     }
 
+    if (type === 'batchCompleted') {
+      this.activePills = this.activePills.filter(p => p.field !== 'batchRunning');
+      if (!this.activePills.some(p => p.field === 'batchCompleted')) {
+        this.activePills = [...this.activePills, { field: 'batchCompleted', values: [] }];
+      }
+      this.cdr.markForCheck();
+      this.emit();
+      return;
+    }
+
+    if (type === 'batchRunning') {
+      this.activePills = this.activePills.filter(p => p.field !== 'batchCompleted');
+
+      if (!this.activePills.some(p => p.field === 'batchRunning')) {
+        this.activePills = [...this.activePills, { field: 'batchRunning', values: [] }];
+      }
+      this.cdr.markForCheck();
+      this.emit();
+      return;
+    }
+
     const existingIndex = this.activePills.findIndex(p => p.field === type);
     if (existingIndex !== -1) {
       this.editingPillIndex = existingIndex;
@@ -490,7 +511,8 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     const field = this.activePills[index].field;
     if (field === 'withIncidents'  || field === 'withJobsRetrying' ||
         field === 'stateActive'    || field === 'stateSuspended' ||
-        field === 'stateCompleted' || field === 'stateTerminated') {
+        field === 'stateCompleted' || field === 'stateTerminated' ||
+        field === 'batchCompleted' || field === 'batchRunning') {
       this.removePill(index);
       return;
     }
@@ -708,7 +730,6 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'decisionInstanceId':
       case 'processInstanceId':
       case 'type':
-      case 'completed':
         this.pendingValues = [...pill.values];
         break;
       case 'batchId':
@@ -895,7 +916,6 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
         break;
       }
       case 'type':
-      case 'completed':
         if (this.pendingValues.length === 0) {
           if (this.editingPillIndex !== null) {
             const idx = this.editingPillIndex;
@@ -1252,6 +1272,8 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
           : t('cockpit.batchOps.removalTimeBatch.filters.statusRunning');
         return t('cockpit.batchOps.removalTimeBatch.pills.status', { value: statusLabel });
       }
+      case 'batchCompleted':  return t('cockpit.batchOps.globalSearch.pill.batchCompleted');
+      case 'batchRunning':    return t('cockpit.batchOps.globalSearch.pill.batchRunning');
       default: return '';
     }
   }
@@ -1281,6 +1303,8 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'incidentType':
       case 'incidentMessage':                                return this.faExclamationTriangle;
       case 'activityId':                                     return this.faCircleDot;
+      case 'batchCompleted':                                 return this.faCheckCircle;
+      case 'batchRunning':                                   return this.faPlay;
       default:                                               return this.faFilter;
     }
   }

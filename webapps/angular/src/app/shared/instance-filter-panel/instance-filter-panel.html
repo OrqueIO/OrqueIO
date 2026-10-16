@@ -381,13 +381,31 @@
                 </span>
               </button>
 
-              <button class="criteria-option" (click)="selectCriteriaType('completed')" type="button" role="menuitem">
-                <span class="criteria-icon-wrap criteria-icon-wrap--emerald">
+            </div>
+
+            <div class="criteria-separator"></div>
+
+            <!-- Group: State -->
+            <div class="criteria-group">
+              <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupState' | translate }}</div>
+
+              <button class="criteria-option" (click)="selectCriteriaType('batchCompleted')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--blue">
                   <fa-icon [icon]="faCheckCircle"></fa-icon>
                 </span>
                 <span class="criteria-option-body">
-                  <span class="criteria-option-name">{{ 'cockpit.batchOps.removalTimeBatch.filters.status' | translate }}</span>
-                  <span class="criteria-option-desc">{{ 'cockpit.batchOps.removalTimeBatch.filters.statusDesc' | translate }}</span>
+                  <span class="criteria-option-name">{{ 'cockpit.batchOps.filters.batchCompleted' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.batchOps.globalSearch.desc.batchCompleted' | translate }}</span>
+                </span>
+              </button>
+
+              <button class="criteria-option" (click)="selectCriteriaType('batchRunning')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--amber">
+                  <fa-icon [icon]="faPlay"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.batchOps.filters.batchRunning' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.batchOps.globalSearch.desc.batchRunning' | translate }}</span>
                 </span>
               </button>
 
@@ -470,14 +488,6 @@
   <div class="state-popover-header" *ngIf="activeEditorType === 'decisionDefinition'">
     <span class="state-popover-label">{{ 'cockpit.processes.filters.decisionDefinition' | translate }}</span>
     <button class="state-popover-clear" (click)="pendingDecisionDefinitionKeys = []" type="button">
-      {{ 'cockpit.processes.globalSearch.clearBtn' | translate }}
-    </button>
-  </div>
-
-  <!-- Header for completed (batch status) editor -->
-  <div class="state-popover-header" *ngIf="activeEditorType === 'completed'">
-    <span class="state-popover-label">{{ 'cockpit.batchOps.removalTimeBatch.filters.status' | translate }}</span>
-    <button class="state-popover-clear" (click)="pendingValues = []" type="button">
       {{ 'cockpit.processes.globalSearch.clearBtn' | translate }}
     </button>
   </div>
@@ -592,34 +602,6 @@
           {{ 'cockpit.processes.filters.stateTerminated' | translate }}
         </span>
         <fa-icon *ngIf="pendingStateValues.includes('terminated')" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-    </div>
-  </div>
-
-  <!-- Batch Status (completed field) -->
-  <div class="editor-popover-body editor-popover-body--state"
-       *ngIf="activeEditorType === 'completed'"
-       (keydown.enter)="$event.preventDefault(); confirmCriterion()">
-    <div class="state-checklist">
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'true'"
-              (click)="pendingValues = ['true']" type="button">
-        <span class="criteria-icon-wrap criteria-icon-wrap--compact criteria-icon-wrap--blue" aria-hidden="true">
-          <fa-icon [icon]="faCheckCircle"></fa-icon>
-        </span>
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'true'">
-          {{ 'cockpit.batchOps.removalTimeBatch.filters.statusCompleted' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'true'" [icon]="faCheck" class="state-row-check"></fa-icon>
-      </button>
-      <button class="state-row" [class.state-row--selected]="pendingValues.length === 1 && pendingValues[0] === 'false'"
-              (click)="pendingValues = ['false']" type="button">
-        <span class="criteria-icon-wrap criteria-icon-wrap--compact criteria-icon-wrap--amber" aria-hidden="true">
-          <fa-icon [icon]="faPlay"></fa-icon>
-        </span>
-        <span class="state-row-label" [class.is-selected]="pendingValues.length === 1 && pendingValues[0] === 'false'">
-          {{ 'cockpit.batchOps.removalTimeBatch.filters.statusRunning' | translate }}
-        </span>
-        <fa-icon *ngIf="pendingValues.length === 1 && pendingValues[0] === 'false'" [icon]="faCheck" class="state-row-check"></fa-icon>
       </button>
     </div>
   </div>
