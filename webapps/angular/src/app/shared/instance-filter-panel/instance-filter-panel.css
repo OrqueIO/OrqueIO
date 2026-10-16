@@ -543,6 +543,19 @@
 .state-dot--completed  { background-color: var(--color-primary); }
 .state-dot--terminated { background-color: var(--color-danger); }
 
+/* Compact icon wrap for State menu of "Set removal time" operation */
+/* 24px instead of 34px (.criteria-icon-wrap baseline), reuses color variants */
+.state-row .criteria-icon-wrap--compact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-lg);
+  font-size: 0.625rem;
+  flex-shrink: 0;
+}
+
 .state-row-label {
   flex: 1;
   font-size: var(--font-size-sm);
@@ -948,6 +961,14 @@
 .processdef-checklist {
   max-height: 175px;
   overflow-y: auto;
+}
+
+/* Activity list scrollable — limit height to ~8 visible rows */
+.activity-list--scrollable {
+  max-height: 254px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: var(--space-1);
 }
 
 .processdef-empty {

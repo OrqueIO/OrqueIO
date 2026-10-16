@@ -736,4 +736,62 @@ describe('ProcessDetailComponent', () => {
       expect(url).toBe('/orqueio/app/tasklist?task=task-1');
     });
   });
+
+  describe('removal time field', () => {
+    it('should display removal time when present', async () => {
+      const instanceWithRemovalTime = {
+        ...mockInstance,
+        removalTime: '2027-01-01T00:00:00.000+0000',
+      };
+      cockpitService.getProcessInstance.mockReturnValue(of(instanceWithRemovalTime));
+
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const removalTimeDd = compiled.querySelector('.removal-time');
+      expect(removalTimeDd).toBeTruthy();
+      expect(removalTimeDd?.textContent?.trim()).not.toBe('null');
+      expect(removalTimeDd?.textContent?.trim()).not.toBe('-');
+    });
+
+    it('should display null when removal time is absent', async () => {
+      const instanceWithoutRemovalTime = {
+        ...mockInstance,
+        removalTime: undefined,
+      };
+      cockpitService.getProcessInstance.mockReturnValue(of(instanceWithoutRemovalTime));
+
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const removalTimeDd = compiled.querySelector('.removal-time');
+      expect(removalTimeDd).toBeTruthy();
+      const nullValue = removalTimeDd?.querySelector('.null-value');
+      expect(nullValue).toBeTruthy();
+      expect(nullValue?.textContent?.trim()).toBe('null');
+    });
+
+    it('should not affect other fields', async () => {
+      const instanceWithRemovalTime = {
+        ...mockInstance,
+        removalTime: '2027-01-01T00:00:00.000+0000',
+      };
+      cockpitService.getProcessInstance.mockReturnValue(of(instanceWithRemovalTime));
+
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      expect(compiled.querySelector('.instance-id')?.textContent?.trim()).toBe('pi-1');
+      expect(compiled.querySelector('.definition-key')?.textContent?.trim()).toBe('invoice');
+    });
+  });
 });

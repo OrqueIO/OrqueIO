@@ -51,6 +51,7 @@ import {
   MultiValueFilter
 } from '../../../../services/cockpit.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { CamDatePipe } from '../../../../pipes/cam-date.pipe';
 import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { CorrelateMessageModalComponent } from '../correlate-message-modal/correlate-message-modal';
 import { buildMessageNodeMap, extractMessageNames } from '../../../../utils/message-names.utils';
@@ -81,6 +82,7 @@ interface VariableEdit {
     FormsModule,
     FontAwesomeModule,
     TranslatePipe,
+    CamDatePipe,
     BpmnViewerComponent,
     ActivityInstanceTreeComponent,
     ConfirmDialogComponent,

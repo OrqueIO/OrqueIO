@@ -392,6 +392,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     this.pendingVariableOperator = 'eq';
     this.pendingDateValue = '';
     this.activityHighlightIndex = null;
+    this.pendingStateValues = [];
     this.pendingVariableLines = type === 'variables'
       ? [{ name: '', operator: 'eq', values: [] }]
       : [];
@@ -1021,6 +1022,20 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   getPillLabel(pill: MultiValueFilter): string {
     const t = (key: string, p?: Record<string, string>) => this.translateService.instant(key, p);
     switch (pill.field) {
+      case 'state': {
+        const stateLabels = pill.values.map(v => {
+          switch (v) {
+            case 'active':     return t('cockpit.processes.filters.stateActive');
+            case 'suspended':  return t('cockpit.processes.filters.stateSuspended');
+            case 'completed':  return t('cockpit.processes.filters.stateCompleted');
+            case 'terminated': return t('cockpit.processes.filters.stateTerminated');
+            case 'unfinished': return 'Unfinished';
+            case 'finished':   return 'Finished';
+            default: return v;
+          }
+        });
+        return t('cockpit.processes.globalSearch.pill.state', { value: stateLabels.join(', ') });
+      }
       case 'businessKey':    return t('cockpit.processes.globalSearch.pill.businessKey',  { value: pill.values.join(', ') });
       case 'instanceId':     return t('cockpit.processes.globalSearch.pill.instanceId',   { value: pill.values.join(', ') });
       case 'withIncidents':     return t('cockpit.processes.globalSearch.pill.withIncidents');
@@ -1078,6 +1093,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
 
   getPillIcon(pill: MultiValueFilter): any {
     switch (pill.field) {
+      case 'state':                                          return this.faCircleDot; // Generic state icon
       case 'businessKey':                                    return this.faKey;
       case 'instanceId':
       case 'decisionInstanceId':                             return this.faHashtag;
