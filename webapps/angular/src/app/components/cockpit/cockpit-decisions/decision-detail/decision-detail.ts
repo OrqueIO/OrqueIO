@@ -356,11 +356,6 @@ export class DecisionDetailComponent implements OnInit, OnDestroy {
     return `/cockpit/processes/instance/${instance.processInstanceId}`;
   }
 
-  truncateId(id: string, length: number = 8): string {
-    if (id.length <= length) return id;
-    return id.substring(0, length) + '...';
-  }
-
   toggleDmnExpand(): void {
     this.isDmnExpanded = !this.isDmnExpanded;
     this.cdr.detectChanges();

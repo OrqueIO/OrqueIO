@@ -123,7 +123,7 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
             this.breadcrumbs = [
               { translateKey: 'cockpit.menu.decisions', route: '/cockpit/decisions' },
               { label: instance.decisionDefinitionName || instance.decisionDefinitionKey, route: `/cockpit/decisions/${instance.decisionDefinitionId}` },
-              { label: this.truncateId(instance.id, 8) }
+              { label: instance.id }
             ];
             // Load definition for additional info
             this.loadDecisionDefinition(instance.decisionDefinitionId);
@@ -200,11 +200,6 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
     // Simplify Java types
     const parts = type.split('.');
     return parts[parts.length - 1];
-  }
-
-  truncateId(id: string, length: number = 8): string {
-    if (!id || id.length <= length) return id || '';
-    return id.substring(0, length) + '...';
   }
 
   getProcessInstanceUrl(): string {

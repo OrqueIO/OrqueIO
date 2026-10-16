@@ -670,6 +670,10 @@
   color: var(--text-secondary);
 }
 
+.full-id-cell {
+  white-space: nowrap;
+}
+
 .instance-link {
   color: var(--color-primary);
   text-decoration: none;
