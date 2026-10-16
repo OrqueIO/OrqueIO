@@ -1086,3 +1086,132 @@
   color: var(--text-muted);
   font-style: italic;
 }
+
+/* ========== BATCH TYPE FILTER — WIZARD ICONS + OVERFLOW FIX ========== */
+
+/* Popover card width modifier — only for batch Type filter */
+.criterion-editor-popover--batch-type {
+  width: 300px;
+  min-width: 300px;
+  max-width: calc(100vw - 32px);
+}
+
+/* Scrollable container for batch type list — exactly 6 visible rows */
+.batch-type-list--scrollable {
+  --batch-type-row-height: 36px;
+  --batch-type-row-gap: 2px;
+  --batch-type-visible-rows: 6;
+  --batch-type-list-padding: 4px;
+
+  max-height: calc(
+    var(--batch-type-visible-rows) * var(--batch-type-row-height) +
+    (var(--batch-type-visible-rows) - 1) * var(--batch-type-row-gap) +
+    2 * var(--batch-type-list-padding)
+  );
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--batch-type-list-padding) 0;
+  padding-right: var(--space-1);
+  gap: var(--batch-type-row-gap);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Batch type row — exactly same as state-row, NO fixed width, min-height for 2-line support */
+.batch-type-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 7px var(--space-3);
+  border-radius: 8px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  transition: background var(--transition-fast);
+  margin: 0;
+  min-height: 36px;
+}
+
+.batch-type-row:hover {
+  background: var(--color-gray-50);
+}
+
+.batch-type-row:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+  box-shadow: var(--shadow-focus);
+}
+
+/* Icon wrapper — 24x24px rounded tile with wizard badge background colors */
+.batch-type-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  font-size: 12px;
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+
+/* Icon colors + backgrounds from BATCH_OPERATIONS wizard (exact badge styles) */
+.batch-type-icon--amber {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+}
+
+.batch-type-icon--green {
+  background: rgba(22, 163, 74, 0.12);
+  color: #16a34a;
+}
+
+.batch-type-icon--red {
+  background: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
+}
+
+.batch-type-icon--blue {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+}
+
+.batch-type-icon--purple {
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+}
+
+.batch-type-icon--gray {
+  background: rgba(107, 114, 128, 0.12);
+  color: #6b7280;
+}
+
+.batch-type-icon--secondary {
+  background: rgba(107, 114, 128, 0.08);
+  color: var(--text-secondary);
+}
+
+/* Label — 2 lines max with line-clamp, no ellipsis, tight line-height */
+.batch-type-row .state-row-label {
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.3;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+/* Check icon — exactly same as Activity ID, margin-left auto to push to right */
+.batch-type-row .state-row-check {
+  font-size: 0.7rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  margin-left: auto;
+}

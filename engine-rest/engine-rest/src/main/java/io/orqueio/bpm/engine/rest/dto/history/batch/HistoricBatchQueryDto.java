@@ -40,6 +40,7 @@ public class HistoricBatchQueryDto extends AbstractQueryDto<HistoricBatchQuery> 
 
   protected String batchId;
   protected String type;
+  protected List<String> types;
   protected Boolean completed;
   protected List<String> tenantIds;
   protected Boolean withoutTenantId;
@@ -68,6 +69,11 @@ public class HistoricBatchQueryDto extends AbstractQueryDto<HistoricBatchQuery> 
   @OrqueioQueryParam("type")
   public void setType(String type) {
     this.type = type;
+  }
+
+  @OrqueioQueryParam(value = "typeIn", converter = StringListConverter.class)
+  public void setTypeIn(List<String> types) {
+    this.types = types;
   }
 
   @OrqueioQueryParam(value = "completed", converter = BooleanConverter.class)
@@ -99,6 +105,9 @@ public class HistoricBatchQueryDto extends AbstractQueryDto<HistoricBatchQuery> 
     }
     if (type != null) {
       query.type(type);
+    }
+    if (types != null && !types.isEmpty()) {
+      query.typeIn(types.toArray(new String[0]));
     }
     if (completed != null) {
       query.completed(completed);

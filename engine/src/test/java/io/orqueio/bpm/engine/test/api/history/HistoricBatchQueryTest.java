@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import java.util.Arrays;
+
 import io.orqueio.bpm.engine.HistoryService;
 import io.orqueio.bpm.engine.ManagementService;
 import io.orqueio.bpm.engine.ProcessEngineConfiguration;
@@ -37,6 +39,8 @@ import io.orqueio.bpm.engine.batch.history.HistoricBatch;
 import io.orqueio.bpm.engine.exception.NotValidException;
 import io.orqueio.bpm.engine.exception.NullValueException;
 import io.orqueio.bpm.engine.impl.util.ClockUtil;
+import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.engine.test.Deployment;
 import io.orqueio.bpm.engine.test.ProcessEngineRule;
 import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
 import io.orqueio.bpm.engine.test.api.runtime.migration.MigrationTestRule;
@@ -349,5 +353,151 @@ public class HistoricBatchQueryTest {
       assertThat(e.getMessage()).contains("You should call any of the orderBy methods "
           + "first before specifying a direction");
     }
+  }
+
+  @Test
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  public void testBatchQueryByTypeIn() {
+    // given
+    ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneTaskProcess");
+    ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("oneTaskProcess");
+
+    Batch migrationBatch = helper.migrateProcessInstancesAsync(1);
+    Batch deletionBatch = runtimeService.deleteProcessInstancesAsync(
+        Arrays.asList(processInstance1.getId()), "test");
+    Batch suspensionBatch = runtimeService.updateProcessInstanceSuspensionState()
+        .byProcessInstanceIds(Arrays.asList(processInstance2.getId()))
+        .suspendAsync();
+
+    // when - query for 2 types among 3
+    List<HistoricBatch> result = historyService.createHistoricBatchQuery()
+        .typeIn(Batch.TYPE_PROCESS_INSTANCE_DELETION, Batch.TYPE_PROCESS_INSTANCE_MIGRATION)
+        .list();
+    long count = historyService.createHistoricBatchQuery()
+        .typeIn(Batch.TYPE_PROCESS_INSTANCE_DELETION, Batch.TYPE_PROCESS_INSTANCE_MIGRATION)
+        .count();
+
+    // then - exactly 2 batches returned
+    assertEquals(2, result.size());
+    assertEquals(2, count);
+
+    List<String> resultIds = new ArrayList<String>();
+    for (HistoricBatch batch : result) {
+      resultIds.add(batch.getId());
+    }
+    Assert.assertTrue(resultIds.contains(migrationBatch.getId()));
+    Assert.assertTrue(resultIds.contains(deletionBatch.getId()));
+    Assert.assertFalse(resultIds.contains(suspensionBatch.getId()));
+  }
+
+  @Test
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  public void testBatchQueryByTypeInSingleValue() {
+    // given
+    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
+
+    Batch migrationBatch = helper.migrateProcessInstancesAsync(1);
+    Batch deletionBatch = runtimeService.deleteProcessInstancesAsync(
+        Arrays.asList(processInstance.getId()), "test");
+
+    // when
+    List<HistoricBatch> result = historyService.createHistoricBatchQuery()
+        .typeIn(Batch.TYPE_PROCESS_INSTANCE_DELETION)
+        .list();
+
+    // then
+    assertEquals(1, result.size());
+    assertEquals(deletionBatch.getId(), result.get(0).getId());
+  }
+
+  @Test
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  public void testBatchQueryByTypeInNonExisting() {
+    // given
+    helper.migrateProcessInstancesAsync(1);
+
+    // when
+    long count = historyService.createHistoricBatchQuery()
+        .typeIn("non-existing-type-1", "non-existing-type-2")
+        .count();
+
+    // then
+    assertEquals(0, count);
+  }
+
+  @Test
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  public void testBatchQueryByTypeAndTypeIn() {
+    // given
+    ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
+
+    Batch migrationBatch = helper.migrateProcessInstancesAsync(1);
+    Batch deletionBatch = runtimeService.deleteProcessInstancesAsync(
+        Arrays.asList(processInstance.getId()), "test");
+
+    // when - type and typeIn both specified
+    long count = historyService.createHistoricBatchQuery()
+        .type(Batch.TYPE_PROCESS_INSTANCE_MIGRATION)
+        .typeIn(Batch.TYPE_PROCESS_INSTANCE_DELETION, Batch.TYPE_PROCESS_INSTANCE_MIGRATION)
+        .count();
+
+    // then - both conditions must match (AND semantics)
+    assertEquals(1, count);
+  }
+
+  @Test
+  public void testBatchQueryByTypeInNull() {
+    try {
+      historyService.createHistoricBatchQuery().typeIn((String[]) null).singleResult();
+      Assert.fail("exception expected");
+    }
+    catch (NullValueException e) {
+      assertThat(e.getMessage()).contains("types is null");
+    }
+  }
+
+  @Test
+  public void testBatchQueryByTypeInContainsNull() {
+    try {
+      historyService.createHistoricBatchQuery()
+          .typeIn(Batch.TYPE_PROCESS_INSTANCE_MIGRATION, null)
+          .singleResult();
+      Assert.fail("exception expected");
+    }
+    catch (NullValueException e) {
+      assertThat(e.getMessage()).contains("types contains null value");
+    }
+  }
+
+  @Test
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  public void testBatchQueryByTypeInListPage() {
+    // given
+    ProcessInstance processInstance1 = runtimeService.startProcessInstanceByKey("oneTaskProcess");
+    ProcessInstance processInstance2 = runtimeService.startProcessInstanceByKey("oneTaskProcess");
+
+    Batch migrationBatch = helper.migrateProcessInstancesAsync(1);
+    Batch deletionBatch = runtimeService.deleteProcessInstancesAsync(
+        Arrays.asList(processInstance1.getId()), "test");
+    Batch suspensionBatch = runtimeService.updateProcessInstanceSuspensionState()
+        .byProcessInstanceIds(Arrays.asList(processInstance2.getId()))
+        .suspendAsync();
+
+    // when - paginated query
+    List<HistoricBatch> firstPage = historyService.createHistoricBatchQuery()
+        .typeIn(Batch.TYPE_PROCESS_INSTANCE_DELETION, Batch.TYPE_PROCESS_INSTANCE_MIGRATION)
+        .listPage(0, 1);
+    List<HistoricBatch> secondPage = historyService.createHistoricBatchQuery()
+        .typeIn(Batch.TYPE_PROCESS_INSTANCE_DELETION, Batch.TYPE_PROCESS_INSTANCE_MIGRATION)
+        .listPage(1, 1);
+    long totalCount = historyService.createHistoricBatchQuery()
+        .typeIn(Batch.TYPE_PROCESS_INSTANCE_DELETION, Batch.TYPE_PROCESS_INSTANCE_MIGRATION)
+        .count();
+
+    // then
+    assertEquals(1, firstPage.size());
+    assertEquals(1, secondPage.size());
+    assertEquals(2, totalCount);
+    Assert.assertNotEquals(firstPage.get(0).getId(), secondPage.get(0).getId());
   }
 }

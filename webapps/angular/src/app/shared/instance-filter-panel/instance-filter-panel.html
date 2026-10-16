@@ -355,11 +355,70 @@
 
           </ng-container>
 
+          <!-- ── Batch criteria ─────────────────────────────────────────────── -->
+          <ng-container *ngIf="criteriaSet === 'batch'">
+
+            <div class="criteria-group">
+              <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupInstance' | translate }}</div>
+
+              <button class="criteria-option" (click)="selectCriteriaType('batchId')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--violet">
+                  <fa-icon [icon]="faHashtag"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.batchOps.removalTimeBatch.filters.batchId' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.batchOps.removalTimeBatch.filters.batchIdDesc' | translate }}</span>
+                </span>
+              </button>
+
+              <button class="criteria-option" (click)="selectCriteriaType('type')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--blue">
+                  <fa-icon [icon]="faCodeBranch"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.batchOps.removalTimeBatch.filters.type' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.batchOps.removalTimeBatch.filters.typeDesc' | translate }}</span>
+                </span>
+              </button>
+
+            </div>
+
+            <div class="criteria-separator"></div>
+
+            <!-- Group: State -->
+            <div class="criteria-group">
+              <div class="criteria-group-label">{{ 'cockpit.processes.globalSearch.groupState' | translate }}</div>
+
+              <button class="criteria-option" (click)="selectCriteriaType('batchCompleted')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--blue">
+                  <fa-icon [icon]="faCheckCircle"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.batchOps.filters.batchCompleted' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.batchOps.globalSearch.desc.batchCompleted' | translate }}</span>
+                </span>
+              </button>
+
+              <button class="criteria-option" (click)="selectCriteriaType('batchRunning')" type="button" role="menuitem">
+                <span class="criteria-icon-wrap criteria-icon-wrap--amber">
+                  <fa-icon [icon]="faPlay"></fa-icon>
+                </span>
+                <span class="criteria-option-body">
+                  <span class="criteria-option-name">{{ 'cockpit.batchOps.filters.batchRunning' | translate }}</span>
+                  <span class="criteria-option-desc">{{ 'cockpit.batchOps.globalSearch.desc.batchRunning' | translate }}</span>
+                </span>
+              </button>
+
+            </div>
+
+          </ng-container>
+
         </div>
 
         <!-- Criterion editor popover — handles both new criteria and pill editing -->
         <div class="criterion-editor-popover"
              [class.criterion-editor-popover--variables]="activeEditorType === 'variables'"
+             [class.criterion-editor-popover--batch-type]="activeEditorType === 'type' && criteriaSet === 'batch'"
              [class.criterion-editor-popover--flip]="popoverFlipped"
              *ngIf="activeEditorType"
              role="dialog" aria-modal="true"
@@ -404,9 +463,9 @@
 
   <!-- Header for simple editors -->
   <div class="editor-popover-header"
-       *ngIf="activeEditorType !== 'state' && activeEditorType !== 'variables' && activeEditorType !== 'processDefinition' && activeEditorType !== 'decisionDefinition'">
+       *ngIf="activeEditorType !== 'state' && activeEditorType !== 'variables' && activeEditorType !== 'processDefinition' && activeEditorType !== 'decisionDefinition' && activeEditorType !== 'completed'">
     <fa-icon [icon]="getEditorIcon()" class="editor-popover-icon editor-popover-icon--{{ activeEditorType }}"></fa-icon>
-    <span class="editor-popover-title">{{ ('cockpit.processes.filters.' + activeEditorType) | translate }}</span>
+    <span class="editor-popover-title">{{ (criteriaSet === 'batch' && (activeEditorType === 'batchId' || activeEditorType === 'type') ? 'cockpit.batchOps.removalTimeBatch.filters.' : 'cockpit.processes.filters.') + activeEditorType | translate }}</span>
   </div>
 
   <!-- Header for state editor -->
@@ -444,9 +503,9 @@
     </button>
   </div>
 
-  <!-- Business Key / Instance ID / Decision Instance ID / Process Instance ID -->
+  <!-- Business Key / Instance ID / Decision Instance ID / Process Instance ID / Type (non-batch) -->
   <div class="editor-popover-body"
-       *ngIf="activeEditorType === 'businessKey' || activeEditorType === 'instanceId' || activeEditorType === 'decisionInstanceId' || activeEditorType === 'processInstanceId'"
+       *ngIf="(activeEditorType === 'businessKey' || activeEditorType === 'instanceId' || activeEditorType === 'decisionInstanceId' || activeEditorType === 'processInstanceId') || (activeEditorType === 'type' && criteriaSet !== 'batch')"
        (keydown.enter)="confirmCriterion()">
     <app-multi-value-chip-input
       [(values)]="pendingValues"
@@ -455,6 +514,48 @@
       (emptyEnter)="confirmCriterion()"
       (keydown.enter)="$event.stopPropagation()">
     </app-multi-value-chip-input>
+  </div>
+
+  <!-- Batch ID (single value text input) -->
+  <div class="editor-popover-body"
+       *ngIf="activeEditorType === 'batchId'"
+       (keydown.enter)="confirmCriterion()">
+    <input type="text"
+           class="editor-input"
+           [(ngModel)]="pendingTextValue"
+           [placeholder]="'cockpit.processes.globalSearch.valuePlaceholder' | translate"
+           autofocus />
+  </div>
+
+  <!-- Batch Type (criteriaSet=batch only) - multi-select from BATCH_TYPE_LABELS -->
+  <div class="editor-popover-body editor-popover-body--state"
+       *ngIf="activeEditorType === 'type' && criteriaSet === 'batch'"
+       (keydown.enter)="$event.preventDefault(); confirmCriterion()">
+    <button class="state-row processdef-select-all-row"
+            (click)="toggleSelectAllBatchTypes()" type="button">
+      <span class="processdef-sa-badge">
+        <fa-icon *ngIf="!btAllSelected && !btSomeSelected" [icon]="faSquare"      class="processdef-sa-icon processdef-sa-icon--empty"></fa-icon>
+        <fa-icon *ngIf="btSomeSelected"                    [icon]="faSquareMinus" class="processdef-sa-icon processdef-sa-icon--partial"></fa-icon>
+        <fa-icon *ngIf="btAllSelected"                     [icon]="faSquareCheck" class="processdef-sa-icon processdef-sa-icon--all"></fa-icon>
+      </span>
+      <span class="state-row-label">{{ 'cockpit.processes.globalSearch.selectAll' | translate }}</span>
+      <span class="processdef-select-all-count">{{ 'cockpit.processes.globalSearch.selectedOf' | translate: { selected: btSelectedCount.toString(), total: BATCH_TYPE_OPTIONS.length.toString() } }}</span>
+    </button>
+    <div class="processdef-select-all-divider"></div>
+    <div class="state-checklist batch-type-list--scrollable">
+      <button *ngFor="let option of BATCH_TYPE_OPTIONS"
+              type="button"
+              class="state-row batch-type-row"
+              [class.batch-type-row--selected]="pendingValues.includes(option.value)"
+              [class.state-row--selected]="pendingValues.includes(option.value)"
+              [attr.aria-pressed]="pendingValues.includes(option.value)"
+              [attr.title]="option.i18nKey | translate"
+              (click)="toggleBatchType(option.value)">
+        <span class="batch-type-icon batch-type-icon--{{option.iconColor}}" aria-hidden="true"><fa-icon [icon]="option.icon"></fa-icon></span>
+        <span class="state-row-label" [class.is-selected]="pendingValues.includes(option.value)">{{ option.i18nKey | translate }}</span>
+        <fa-icon *ngIf="pendingValues.includes(option.value)" [icon]="faCheck" class="state-row-check"></fa-icon>
+      </button>
+    </div>
   </div>
 
   <!-- State (shown only when lockedState is null) -->
