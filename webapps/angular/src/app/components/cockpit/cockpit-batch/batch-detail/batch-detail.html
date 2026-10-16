@@ -87,7 +87,8 @@
                   <tr *ngIf="shouldShowKey(data.batch, key)" [class]="key">
                     <td class="prop-name">
                       <ng-container *ngIf="key === 'createUserId'">{{ 'BATCHES_PROGRESS_USER' | translate }}</ng-container>
-                      <ng-container *ngIf="key !== 'createUserId'">{{ key }}</ng-container>
+                      <ng-container *ngIf="key === 'removalTime'">{{ 'BATCHES_PROGRESS_REMOVAL_TIME' | translate }}</ng-container>
+                      <ng-container *ngIf="key !== 'createUserId' && key !== 'removalTime'">{{ key }}</ng-container>
                     </td>
                     <td class="prop-value">
                       <ng-container *ngIf="key === 'createUserId'">

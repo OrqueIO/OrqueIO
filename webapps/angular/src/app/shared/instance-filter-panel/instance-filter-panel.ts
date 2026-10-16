@@ -13,7 +13,10 @@ import {
   faSitemap, faCodeBranch, faSquareMinus, faSquareCheck,
   faPlay, faPauseCircle, faCircleStop, faCheckCircle, faTimesCircle, faUser, faGear, faTable, faPaperPlane,
   faInbox, faHand, faArrowUpRightFromSquare, faLayerGroup, faXmark, faServer, faSync,
-  faLevelUpAlt, faLevelDownAlt
+  faLevelUpAlt, faLevelDownAlt, faList,
+  faPen, faTrash, faPause,
+  faBoxArchive, faTrashCan, faRotateRight, faArrowsRotate, faSliders, faEnvelope,
+  faCalendarXmark, faSyncAlt, faTag, faArrowRight, faClock, faDatabase, faPlayCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { faSquare } from '@fortawesome/free-regular-svg-icons';
 import { CockpitService, MultiValueFilter, GlobalSearchField, VariableLine } from '../../services/cockpit.service';
@@ -23,6 +26,10 @@ import { TranslatePipe } from '../../i18n/translate.pipe';
 import { TranslateService } from '../../i18n/translate.service';
 import { MultiValueChipInputComponent } from '../multi-value-chip-input/multi-value-chip-input';
 import { dateRangeConflicts } from '../../utils/search-validation';
+import { BATCH_TYPE_LABELS } from '../../models/cockpit/batch.model';
+
+// Batch types excluded from filter options (no corresponding batch operation in wizard)
+const BATCH_TYPES_EXCLUDED_FROM_FILTER = ['instance-migration', 'instance-restart'];
 
 export interface FilterPanelChange {
   criteria: MultiValueFilter[];
@@ -66,7 +73,7 @@ interface ProcessDefinitionGroup {
 })
 export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   @Input() lockedState: string | null = null;
-  @Input() criteriaSet: 'process' | 'decision' = 'process';
+  @Input() criteriaSet: 'process' | 'decision' | 'batch' = 'process';
   @Input() initialPills: MultiValueFilter[] = [];
   @Input() showExtendedCriteria = false;
   @Input() showStateNarrowing = false;
@@ -108,6 +115,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   faTimesCircle = faTimesCircle;
   faLevelUpAlt = faLevelUpAlt;
   faLevelDownAlt = faLevelDownAlt;
+  faList = faList;
 
   get bothStateNarrowingActive(): boolean {
     return this.activePills.some(p => p.field === 'stateActive') &&
@@ -139,6 +147,21 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     'bpmn:BoundaryEvent':          { icon: faCircleDot,              color: 'var(--text-secondary)' },
   };
 
+  readonly BATCH_TYPE_OPTIONS = [
+    { value: 'instance-modification', i18nKey: BATCH_TYPE_LABELS['instance-modification'], icon: faArrowRight, iconColor: 'blue' },
+    { value: 'instance-deletion', i18nKey: BATCH_TYPE_LABELS['instance-deletion'], icon: faTrash, iconColor: 'red' },
+    { value: 'instance-update-suspension-state', i18nKey: BATCH_TYPE_LABELS['instance-update-suspension-state'], icon: faPauseCircle, iconColor: 'amber' },
+    { value: 'historic-instance-deletion', i18nKey: BATCH_TYPE_LABELS['historic-instance-deletion'], icon: faTrash, iconColor: 'red' },
+    { value: 'historic-decision-instance-deletion', i18nKey: BATCH_TYPE_LABELS['historic-decision-instance-deletion'], icon: faDatabase, iconColor: 'red' },
+    { value: 'set-job-retries', i18nKey: BATCH_TYPE_LABELS['set-job-retries'], icon: faSyncAlt, iconColor: 'blue' },
+    { value: 'set-external-task-retries', i18nKey: BATCH_TYPE_LABELS['set-external-task-retries'], icon: faSyncAlt, iconColor: 'blue' },
+    { value: 'set-variables', i18nKey: BATCH_TYPE_LABELS['set-variables'], icon: faTag, iconColor: 'purple' },
+    { value: 'correlate-message', i18nKey: BATCH_TYPE_LABELS['correlate-message'], icon: faEnvelope, iconColor: 'blue' },
+    { value: 'process-set-removal-time', i18nKey: BATCH_TYPE_LABELS['process-set-removal-time'], icon: faClock, iconColor: 'gray' },
+    { value: 'decision-set-removal-time', i18nKey: BATCH_TYPE_LABELS['decision-set-removal-time'], icon: faClock, iconColor: 'gray' },
+    { value: 'batch-set-removal-time', i18nKey: BATCH_TYPE_LABELS['batch-set-removal-time'], icon: faClock, iconColor: 'gray' }
+  ];
+
   getActivityIcon(type: string): any {
     return (this.ACTIVITY_ICON_MAP[type] ?? { icon: faCircleDot }).icon;
   }
@@ -150,6 +173,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   showCriteriaDropdown = false;
   activeEditorType: GlobalSearchField | null = null;
   activePills: MultiValueFilter[] = [];
+  availableCriteria: Array<{ field: GlobalSearchField }> = [];
 
   pendingValues: string[] = [];
   pendingTextValue = '';
@@ -264,6 +288,54 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
         ? pills.filter(p => p.field !== 'finishedAfter' && p.field !== 'finishedBefore')
         : pills;
     }
+
+    if (this.criteriaSet === 'batch') {
+      this.availableCriteria = [
+        { field: 'batchId' as const },
+        { field: 'type' as const },
+        { field: 'completed' as const }
+      ];
+    } else if (this.criteriaSet === 'decision') {
+      this.availableCriteria = [
+        { field: 'decisionInstanceId' as const },
+        { field: 'decisionDefinition' as const },
+        { field: 'processInstanceId' as const },
+        { field: 'evaluatedAfter' as const },
+        { field: 'evaluatedBefore' as const }
+      ];
+    } else {
+      const processCriteria: Array<{ field: GlobalSearchField }> = [
+        { field: 'businessKey' as const },
+        { field: 'instanceId' as const }
+      ];
+      if (!this.lockedState) {
+        processCriteria.push({ field: 'state' as const });
+      }
+      processCriteria.push(
+        { field: 'processDefinition' as const },
+        { field: 'startedAfter' as const },
+        { field: 'startedBefore' as const }
+      );
+      if (this.lockedState === null || this.lockedState === 'finished') {
+        processCriteria.push(
+          { field: 'finishedAfter' as const },
+          { field: 'finishedBefore' as const }
+        );
+      }
+      if (this.showExtendedCriteria) {
+        processCriteria.push(
+          { field: 'superProcessInstanceId' as const },
+          { field: 'subProcessInstanceId' as const },
+          { field: 'incidentId' as const },
+          { field: 'incidentType' as const },
+          { field: 'incidentMessage' as const },
+          { field: 'activityId' as const },
+          { field: 'variables' as const }
+        );
+      }
+      this.availableCriteria = processCriteria;
+    }
+
     if (this.criteriaSet === 'decision') {
       this.decisionService.getDecisionDefinitions(1000)
         .pipe(takeUntilDestroyed(this.destroyRef))
@@ -274,7 +346,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
             .sort((a, b) => a.name.localeCompare(b.name));
           this.cdr.markForCheck();
         });
-    } else {
+    } else if (this.criteriaSet === 'process') {
       this.cockpitService.getProcessDefinitions(1000, false)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(defs => {
@@ -371,6 +443,27 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       return;
     }
 
+    if (type === 'batchCompleted') {
+      this.activePills = this.activePills.filter(p => p.field !== 'batchRunning');
+      if (!this.activePills.some(p => p.field === 'batchCompleted')) {
+        this.activePills = [...this.activePills, { field: 'batchCompleted', values: [] }];
+      }
+      this.cdr.markForCheck();
+      this.emit();
+      return;
+    }
+
+    if (type === 'batchRunning') {
+      this.activePills = this.activePills.filter(p => p.field !== 'batchCompleted');
+
+      if (!this.activePills.some(p => p.field === 'batchRunning')) {
+        this.activePills = [...this.activePills, { field: 'batchRunning', values: [] }];
+      }
+      this.cdr.markForCheck();
+      this.emit();
+      return;
+    }
+
     const existingIndex = this.activePills.findIndex(p => p.field === type);
     if (existingIndex !== -1) {
       this.editingPillIndex = existingIndex;
@@ -398,6 +491,18 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       : [];
     this.cdr.markForCheck();
     this.schedulePositionCheck();
+
+    // Scroll selected batch type option into view
+    if (type === 'type' && this.criteriaSet === 'batch' && this.pendingValues.length > 0) {
+      setTimeout(() => this.scrollSelectedBatchTypeIntoView(), 0);
+    }
+  }
+
+  private scrollSelectedBatchTypeIntoView(): void {
+    const selectedButton = document.querySelector('.batch-type-row--selected');
+    if (selectedButton) {
+      selectedButton.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+    }
   }
 
   startEditPill(index: number, event: Event): void {
@@ -406,7 +511,8 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     const field = this.activePills[index].field;
     if (field === 'withIncidents'  || field === 'withJobsRetrying' ||
         field === 'stateActive'    || field === 'stateSuspended' ||
-        field === 'stateCompleted' || field === 'stateTerminated') {
+        field === 'stateCompleted' || field === 'stateTerminated' ||
+        field === 'batchCompleted' || field === 'batchRunning') {
       this.removePill(index);
       return;
     }
@@ -428,6 +534,14 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     this.pendingStateValues = idx === -1
       ? [...this.pendingStateValues, v]
       : this.pendingStateValues.filter(s => s !== v);
+    this.cdr.markForCheck();
+  }
+
+  toggleBatchType(value: string): void {
+    const idx = this.pendingValues.indexOf(value);
+    this.pendingValues = idx === -1
+      ? [...this.pendingValues, value]
+      : this.pendingValues.filter(v => v !== value);
     this.cdr.markForCheck();
   }
 
@@ -581,6 +695,27 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
     this.cdr.markForCheck();
   }
 
+  get btSelectedCount(): number {
+    return this.BATCH_TYPE_OPTIONS.filter(opt => this.pendingValues.includes(opt.value)).length;
+  }
+
+  get btAllSelected(): boolean {
+    return this.BATCH_TYPE_OPTIONS.length > 0 && this.BATCH_TYPE_OPTIONS.every(opt => this.pendingValues.includes(opt.value));
+  }
+
+  get btSomeSelected(): boolean {
+    return this.btSelectedCount > 0 && !this.btAllSelected;
+  }
+
+  toggleSelectAllBatchTypes(): void {
+    if (this.btAllSelected) {
+      this.pendingValues = [];
+    } else {
+      this.pendingValues = this.BATCH_TYPE_OPTIONS.map(opt => opt.value);
+    }
+    this.cdr.markForCheck();
+  }
+
   private populatePendingFromPill(pill: MultiValueFilter): void {
     this.pendingValues = [];
     this.pendingTextValue = '';
@@ -594,7 +729,11 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'instanceId':
       case 'decisionInstanceId':
       case 'processInstanceId':
+      case 'type':
         this.pendingValues = [...pill.values];
+        break;
+      case 'batchId':
+        this.pendingTextValue = pill.values[0] ?? '';
         break;
       case 'superProcessInstanceId':
       case 'subProcessInstanceId':
@@ -758,6 +897,38 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
           return;
         }
         pill = { field: 'decisionDefinition', values: [...this.pendingDecisionDefinitionKeys] };
+        break;
+      case 'batchId': {
+        const v = this.pendingTextValue.trim();
+        if (!v) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.popoverFlipped = false;
+            this.cdr.markForCheck();
+            this.emit();
+          }
+          return;
+        }
+        pill = { field: 'batchId', values: [v] };
+        break;
+      }
+      case 'type':
+        if (this.pendingValues.length === 0) {
+          if (this.editingPillIndex !== null) {
+            const idx = this.editingPillIndex;
+            this.activePills = this.activePills.filter((_, i) => i !== idx);
+            this.editingPillIndex = null;
+            this.activeEditorType = null;
+            this.popoverFlipped = false;
+            this.cdr.markForCheck();
+            this.emit();
+          }
+          return;
+        }
+        pill = { field: type, values: [...this.pendingValues] };
         break;
       case 'variables': {
         const validLines: VariableLine[] = this.pendingVariableLines
@@ -1087,6 +1258,22 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'incidentType':           return t('cockpit.processes.globalSearch.pill.incidentType',           { value: pill.values[0] ?? '' });
       case 'incidentMessage':        return t('cockpit.processes.globalSearch.pill.incidentMessage',        { value: pill.values[0] ?? '' });
       case 'activityId':             return t('cockpit.processes.globalSearch.pill.activityId',             { value: pill.values[0] ?? '' });
+      case 'batchId':                return t('cockpit.batchOps.removalTimeBatch.pills.batchId',            { value: pill.values.join(', ') });
+      case 'type': {
+        const typeLabels = pill.values.map(v => {
+          const i18nKey = BATCH_TYPE_LABELS[v];
+          return i18nKey ? t(i18nKey) : v;
+        });
+        return t('cockpit.batchOps.removalTimeBatch.pills.type', { value: typeLabels.join(', ') });
+      }
+      case 'completed': {
+        const statusLabel = pill.values[0] === 'true'
+          ? t('cockpit.batchOps.removalTimeBatch.filters.statusCompleted')
+          : t('cockpit.batchOps.removalTimeBatch.filters.statusRunning');
+        return t('cockpit.batchOps.removalTimeBatch.pills.status', { value: statusLabel });
+      }
+      case 'batchCompleted':  return t('cockpit.batchOps.globalSearch.pill.batchCompleted');
+      case 'batchRunning':    return t('cockpit.batchOps.globalSearch.pill.batchRunning');
       default: return '';
     }
   }
@@ -1116,6 +1303,8 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'incidentType':
       case 'incidentMessage':                                return this.faExclamationTriangle;
       case 'activityId':                                     return this.faCircleDot;
+      case 'batchCompleted':                                 return this.faCheckCircle;
+      case 'batchRunning':                                   return this.faPlay;
       default:                                               return this.faFilter;
     }
   }

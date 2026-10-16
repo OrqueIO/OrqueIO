@@ -21,6 +21,7 @@ import static io.orqueio.bpm.engine.rest.util.JsonPathUtil.from;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
@@ -46,6 +47,7 @@ import io.orqueio.bpm.engine.rest.util.container.TestContainerRule;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 
@@ -278,6 +280,86 @@ public class HistoricBatchRestServiceQueryTest extends AbstractRestServiceTest {
       .statusCode(expectedStatus.getStatusCode())
     .when()
       .get(HISTORIC_BATCH_RESOURCE_URL);
+  }
+
+  @Test
+  public void testHistoricBatchQueryByTypeIn() {
+    Response response = given()
+      .queryParam("typeIn", "instance-migration,instance-deletion")
+    .then().expect()
+      .statusCode(Status.OK.getStatusCode())
+    .when()
+      .get(HISTORIC_BATCH_RESOURCE_URL);
+
+    ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
+    verify(queryMock).typeIn(captor.capture());
+    String[] capturedTypes = captor.getValue();
+
+    assertNotNull(capturedTypes);
+    assertEquals(2, capturedTypes.length);
+    assertEquals("instance-migration", capturedTypes[0]);
+    assertEquals("instance-deletion", capturedTypes[1]);
+
+    verify(queryMock).list();
+    verifyHistoricBatchListJson(response.asString());
+  }
+
+  @Test
+  public void testHistoricBatchQueryByTypeInSingleValue() {
+    Response response = given()
+      .queryParam("typeIn", "instance-migration")
+    .then().expect()
+      .statusCode(Status.OK.getStatusCode())
+    .when()
+      .get(HISTORIC_BATCH_RESOURCE_URL);
+
+    ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
+    verify(queryMock).typeIn(captor.capture());
+    String[] capturedTypes = captor.getValue();
+
+    assertNotNull(capturedTypes);
+    assertEquals(1, capturedTypes.length);
+    assertEquals("instance-migration", capturedTypes[0]);
+
+    verify(queryMock).list();
+    verifyHistoricBatchListJson(response.asString());
+  }
+
+  @Test
+  public void testHistoricBatchQueryWithoutTypeIn() {
+    Response response = given()
+      .queryParam("batchId", MockProvider.EXAMPLE_BATCH_ID)
+    .then().expect()
+      .statusCode(Status.OK.getStatusCode())
+    .when()
+      .get(HISTORIC_BATCH_RESOURCE_URL);
+
+    verify(queryMock).batchId(MockProvider.EXAMPLE_BATCH_ID);
+    verify(queryMock, never()).typeIn(any());
+    verify(queryMock).list();
+
+    verifyHistoricBatchListJson(response.asString());
+  }
+
+  @Test
+  public void testHistoricBatchCountByTypeIn() {
+    given()
+      .queryParam("typeIn", "instance-migration,instance-deletion")
+    .then().expect()
+      .statusCode(Status.OK.getStatusCode())
+    .when()
+      .get(HISTORIC_BATCH_QUERY_COUNT_URL);
+
+    ArgumentCaptor<String[]> captor = ArgumentCaptor.forClass(String[].class);
+    verify(queryMock).typeIn(captor.capture());
+    String[] capturedTypes = captor.getValue();
+
+    assertNotNull(capturedTypes);
+    assertEquals(2, capturedTypes.length);
+    assertEquals("instance-migration", capturedTypes[0]);
+    assertEquals("instance-deletion", capturedTypes[1]);
+
+    verify(queryMock).count();
   }
 
   protected Map<String, Object> getCompleteQueryParameters() {

@@ -95,17 +95,16 @@ export interface BatchQueryParams {
 
 /**
  * Query params for history batches
+ * Based on HistoricBatchQueryDto.java - only accepts single values for batchId and type
  */
 export interface HistoryBatchQueryParams {
-  // Pagination
   firstResult?: number;
   maxResults?: number;
-  // Sorting
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-  // Filters
   batchId?: string;
   type?: string;
+  typeIn?: string[];
   completed?: boolean;
   tenantIdIn?: string[];
   withoutTenantId?: boolean;
@@ -115,12 +114,9 @@ export interface HistoryBatchQueryParams {
  * Query params for failed jobs
  */
 export interface JobQueryParams {
-  // Pagination
   firstResult?: number;
   maxResults?: number;
-  // Sorting
   sorting?: JobSorting[];
-  // Filters
   jobDefinitionId?: string;
   withException?: boolean;
   noRetriesLeft?: boolean;
@@ -165,15 +161,18 @@ export type LoadingState = 'INITIAL' | 'LOADING' | 'LOADED' | 'EMPTY' | 'ERROR';
 export const BATCH_TYPE_LABELS: Record<string, string> = {
   'instance-migration': 'BATCH_TYPE_MIGRATION',
   'instance-modification': 'BATCH_TYPE_MODIFICATION',
+  'instance-restart': 'BATCH_TYPE_RESTART',
   'instance-deletion': 'BATCH_TYPE_DELETION',
   'instance-update-suspension-state': 'BATCH_TYPE_SUSPENSION',
+  'historic-instance-deletion': 'BATCH_TYPE_HISTORIC_INSTANCE_DELETION',
+  'historic-decision-instance-deletion': 'BATCH_TYPE_HISTORIC_DECISION_INSTANCE_DELETION',
   'set-job-retries': 'BATCH_TYPE_SET_JOB_RETRIES',
   'set-external-task-retries': 'BATCH_TYPE_SET_EXTERNAL_TASK_RETRIES',
+  'set-variables': 'BATCH_TYPE_SET_VARIABLES',
+  'correlate-message': 'BATCH_TYPE_CORRELATE_MESSAGE',
   'process-set-removal-time': 'BATCH_TYPE_SET_REMOVAL_TIME',
   'decision-set-removal-time': 'BATCH_TYPE_DECISION_SET_REMOVAL_TIME',
-  'batch-set-removal-time': 'BATCH_TYPE_BATCH_SET_REMOVAL_TIME',
-  'set-variables': 'BATCH_TYPE_SET_VARIABLES',
-  'correlate-message': 'BATCH_TYPE_CORRELATE_MESSAGE'
+  'batch-set-removal-time': 'BATCH_TYPE_BATCH_SET_REMOVAL_TIME'
 };
 
 /**
@@ -186,6 +185,7 @@ export const BATCH_DETAIL_KEYS = [
   'startTime',
   'executionStartTime',
   'endTime',
+  'removalTime',
   'totalJobs',
   'completedJobs',
   'remainingJobs',

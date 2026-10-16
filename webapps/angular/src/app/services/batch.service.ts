@@ -26,6 +26,7 @@ interface UserProfile {
 })
 export class BatchService {
   private readonly baseUrl = environment.engineUrl + '/default';
+  private readonly historyUrl = `${this.baseUrl}/history`;
 
   constructor(private http: HttpClient) {}
 
@@ -368,6 +369,26 @@ export class BatchService {
         return null;
       }),
       catchError(() => of(null))
+    );
+  }
+
+  // ============================================
+  // BATCH OPERATIONS
+  // ============================================
+
+  /**
+   * Set removal time for batch instances (async batch operation)
+   */
+  setRemovalTimeAsync(payload: {
+    calculatedRemovalTime?: boolean;
+    absoluteRemovalTime?: string;
+    clearedRemovalTime?: boolean;
+    historicBatchIds?: string[];
+    historicBatchQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.historyUrl}/batch/set-removal-time`,
+      payload
     );
   }
 
