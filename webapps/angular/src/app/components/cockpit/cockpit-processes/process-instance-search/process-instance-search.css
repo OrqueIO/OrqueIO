@@ -81,6 +81,7 @@
 .panel-header-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-5);
   background: var(--color-gray-50);
@@ -1236,6 +1237,274 @@
 .col-starttime  { width: 160px; white-space: nowrap; }
 .col-endtime    { width: 160px; white-space: nowrap; }
 .col-actions    { width: 60px; text-align: center; }
+
+.col-check {
+  width: 44px;
+  text-align: center;
+}
+
+/* =====================================================
+   SELECTION BAR AND SELECTED ROWS
+   ===================================================== */
+
+.select-all-bar {
+  display: flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
+  background: var(--color-gray-50);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-md);
+}
+
+.select-all-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+  user-select: none;
+}
+
+.selection-count {
+  margin-left: auto;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.selection-count--empty {
+  color: var(--text-muted);
+}
+
+.result-row.row--selected {
+  background: var(--color-primary-bg, rgba(99, 102, 241, 0.08));
+}
+
+/* =====================================================
+   HEADER ACTIONS GROUP
+   ===================================================== */
+
+.search-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  margin-left: auto;
+}
+
+/* =====================================================
+   ACTION BAR (grouped buttons container)
+   ===================================================== */
+
+.action-bar {
+  display: inline-flex;
+  align-items: center;
+  height: 42px;
+  padding: 3px;
+  gap: 2px;
+  background: var(--color-gray-100);
+  border-radius: 12px;
+}
+
+/* =====================================================
+   ACTION BAR BUTTON (base class, reusable)
+   ===================================================== */
+
+.action-bar__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 11px;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: var(--color-gray-500);
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.action-bar__btn:hover:not(:disabled) {
+  background: var(--bg-card);
+  color: var(--color-gray-900);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.action-bar__btn:disabled {
+  color: var(--color-gray-400);
+  cursor: not-allowed;
+}
+
+.action-bar__btn:disabled:hover {
+  background: transparent;
+  box-shadow: none;
+}
+
+.action-bar__btn-icon {
+  font-size: 17px;
+}
+
+.action-bar__btn-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  background: var(--color-primary);
+  color: var(--text-inverse);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}
+
+.action-bar__btn-chevron {
+  font-size: 14px;
+}
+
+/* Batch action button - active state (with selection) */
+.action-bar__btn--batch:not(:disabled) {
+  background: var(--bg-card);
+  color: var(--color-primary-dark);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--color-primary-light);
+}
+
+/* =====================================================
+   BATCH OPERATIONS DROPDOWN
+   ===================================================== */
+
+.batch-ops-action-wrapper {
+  position: relative;
+}
+
+.batch-ops-dropdown-wrapper {
+  position: relative;
+}
+
+.batch-ops-dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-1));
+  right: 0;
+  z-index: 1000;
+  width: 340px;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.batch-ops-dropdown-header {
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-3) var(--space-2);
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.menu__list {
+  flex: 1 1 auto;
+  max-height: min(440px, calc(100vh - 240px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  padding: var(--space-2);
+}
+
+.batch-ops-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  text-align: left;
+}
+
+.batch-ops-dropdown-item:hover:not(:disabled) {
+  background: var(--color-gray-50);
+}
+
+.batch-ops-dropdown-item:disabled,
+.batch-ops-dropdown-item--disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.batch-ops-item-icon-wrapper {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  font-size: 16px;
+}
+
+.batch-ops-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.batch-ops-item-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-gray-900);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.batch-ops-dropdown-item--disabled .batch-ops-item-name {
+  color: var(--color-gray-400);
+}
+
+/* Badge color classes for operation icons */
+.badge--amber {
+  background: rgba(245, 158, 11, 0.1);
+  color: rgb(245, 158, 11);
+}
+
+.badge--green {
+  background: rgba(16, 185, 129, 0.1);
+  color: rgb(16, 185, 129);
+}
+
+.badge--red {
+  background: rgba(239, 68, 68, 0.1);
+  color: rgb(239, 68, 68);
+}
+
+.badge--blue {
+  background: rgba(59, 130, 246, 0.1);
+  color: rgb(59, 130, 246);
+}
+
+.badge--violet {
+  background: rgba(139, 92, 246, 0.1);
+  color: rgb(139, 92, 246);
+}
+
+.badge--emerald {
+  background: rgba(16, 185, 129, 0.1);
+  color: rgb(16, 185, 129);
+}
 
 /* =====================================================
    LINKS

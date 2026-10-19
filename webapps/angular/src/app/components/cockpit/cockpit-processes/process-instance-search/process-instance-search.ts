@@ -13,7 +13,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faSpinner, faSearch, faExclamationTriangle, faCheckCircle,
   faPlayCircle, faEye, faPlus, faTimes, faPauseCircle, faTimesCircle,
-  faFilter, faChevronLeft, faChevronRight, faChevronDown,
+  faFilter, faChevronLeft, faChevronRight, faChevronDown, faChevronUp,
   faKey, faHashtag, faCircleDot, faCalendarAlt, faCode, faRotateLeft, faCheck, faSitemap, faCodeBranch,
   faSquareMinus, faSquareCheck
 } from '@fortawesome/free-solid-svg-icons';
@@ -61,6 +61,8 @@ import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { dateRangeConflicts } from '../../../../utils/search-validation';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
+import { BATCH_OPERATIONS, WizardPersistedState } from '../../cockpit-batch/batch-operations-wizard/batch-operations-wizard';
+import { BatchOperationDef } from '../../cockpit-batch/batch-operation-list/batch-operation-list';
 
 @Component({
   selector: 'app-process-instance-search',
@@ -102,6 +104,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
   faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
   faKey = faKey;
   faHashtag = faHashtag;
   faCircleDot = faCircleDot;
@@ -169,6 +172,10 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   private lastKeysetPage: KeysetPage | null = null;
   multiStateAbsoluteOffset = 0;
   multiStateHasMore = false;
+
+  selectedInstanceIds = new Set<string>();
+  private selectedInstanceStatesCache = new Map<string, string>();
+  showBatchOpsDropdown = false;
 
   private readonly searchRequest$ = new Subject<boolean>();
 
@@ -314,6 +321,10 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
+    if (this.showBatchOpsDropdown && !target.closest('.batch-ops-dropdown-wrapper')) {
+      this.showBatchOpsDropdown = false;
+      this.cdr.markForCheck();
+    }
     if (this.openOperatorMenuIndex !== null && !target.closest('.op-dropdown-wrapper')) {
       this.openOperatorMenuIndex = null;
       this.opMenuPosition = null;
@@ -341,7 +352,10 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   @HostListener('document:keydown.escape')
   onEscapeKey(): void {
     let changed = false;
-    if (this.openOperatorMenuIndex !== null) {
+    if (this.showBatchOpsDropdown) {
+      this.showBatchOpsDropdown = false;
+      changed = true;
+    } else if (this.openOperatorMenuIndex !== null) {
       this.openOperatorMenuIndex = null;
       this.opMenuPosition = null;
       changed = true;
@@ -982,6 +996,8 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.searchExecuted = true;
     this.searchError = false;
     this.searchCurrentPage = 1;
+    this.selectedInstanceIds = new Set();
+    this.selectedInstanceStatesCache.clear();
     this.resetCursorState();
     this.cdr.markForCheck();
     this.loadSearchResults(true);
@@ -1198,5 +1214,141 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     if (!isoStr) return '';
     try { return new Date(isoStr).toLocaleDateString(); }
     catch { return isoStr; }
+  }
+
+  toggleInstanceSelection(id: string): void {
+    const instance = this.searchResults.find(i => i.id === id);
+    if (!instance) return;
+
+    if (this.selectedInstanceIds.has(id)) {
+      this.selectedInstanceIds.delete(id);
+      this.selectedInstanceStatesCache.delete(id);
+    } else {
+      this.selectedInstanceIds.add(id);
+      this.selectedInstanceStatesCache.set(id, instance.state);
+    }
+    this.selectedInstanceIds = new Set(this.selectedInstanceIds);
+    this.cdr.markForCheck();
+  }
+
+  isInstanceSelected(id: string): boolean {
+    return this.selectedInstanceIds.has(id);
+  }
+
+  toggleSelectAllInstances(): void {
+    if (this.isAllInstancesSelected) {
+      this.searchResults.forEach(i => {
+        this.selectedInstanceIds.delete(i.id);
+        this.selectedInstanceStatesCache.delete(i.id);
+      });
+    } else {
+      this.searchResults.forEach(i => {
+        this.selectedInstanceIds.add(i.id);
+        this.selectedInstanceStatesCache.set(i.id, i.state);
+      });
+    }
+    this.selectedInstanceIds = new Set(this.selectedInstanceIds);
+    this.cdr.markForCheck();
+  }
+
+  get isAllInstancesSelected(): boolean {
+    return this.searchResults.length > 0 && this.searchResults.every(i => this.selectedInstanceIds.has(i.id));
+  }
+
+  get isIndeterminateSelection(): boolean {
+    const count = this.searchResults.filter(i => this.selectedInstanceIds.has(i.id)).length;
+    return count > 0 && count < this.searchResults.length;
+  }
+
+  get applicableOperations(): BatchOperationDef[] {
+    return BATCH_OPERATIONS.filter(op => op.supportsProcessInstances);
+  }
+
+  get selectedInstanceStates(): Set<string> {
+    return new Set(this.selectedInstanceStatesCache.values());
+  }
+
+  isOperationApplicable(operationId: string): boolean {
+    if (this.selectedInstanceIds.size === 0) return false;
+    const states = this.selectedInstanceStates;
+    switch (operationId) {
+      case 'suspend':
+        return ![...states].some(s => s !== 'ACTIVE');
+      case 'activate':
+        return ![...states].some(s => s !== 'SUSPENDED');
+      case 'delete-running':
+        return ![...states].some(s => s !== 'ACTIVE' && s !== 'SUSPENDED');
+      case 'delete-finished':
+        return ![...states].some(s => s !== 'COMPLETED' && s !== 'EXTERNALLY_TERMINATED' && s !== 'INTERNALLY_TERMINATED');
+      case 'set-retries-jobs':
+      case 'set-retries-external':
+      case 'set-variables':
+      case 'correlate':
+        return ![...states].some(s => s !== 'ACTIVE' && s !== 'SUSPENDED');
+      case 'removal-time-process':
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  getOperationDisabledReason(operationId: string): string {
+    if (this.selectedInstanceIds.size === 0) return '';
+    const states = this.selectedInstanceStates;
+    switch (operationId) {
+      case 'suspend':
+        if ([...states].some(s => s !== 'ACTIVE')) {
+          return 'cockpit.processes.search.operationRequiresOnlyActive';
+        }
+        break;
+      case 'activate':
+        if ([...states].some(s => s !== 'SUSPENDED')) {
+          return 'cockpit.processes.search.operationRequiresOnlySuspended';
+        }
+        break;
+      case 'delete-running':
+        if ([...states].some(s => s !== 'ACTIVE' && s !== 'SUSPENDED')) {
+          return 'cockpit.processes.search.operationRequiresOnlyRunning';
+        }
+        break;
+      case 'delete-finished':
+        if ([...states].some(s => s !== 'COMPLETED' && s !== 'EXTERNALLY_TERMINATED' && s !== 'INTERNALLY_TERMINATED')) {
+          return 'cockpit.processes.search.operationRequiresOnlyFinished';
+        }
+        break;
+      case 'set-retries-jobs':
+      case 'set-retries-external':
+      case 'set-variables':
+      case 'correlate':
+        if ([...states].some(s => s !== 'ACTIVE' && s !== 'SUSPENDED')) {
+          return 'cockpit.processes.search.operationRequiresOnlyRunning';
+        }
+        break;
+    }
+    return '';
+  }
+
+  toggleBatchOpsDropdown(): void {
+    this.showBatchOpsDropdown = !this.showBatchOpsDropdown;
+    this.cdr.markForCheck();
+  }
+
+  onBatchOperationSelect(operationId: string): void {
+    const state: WizardPersistedState = {
+      operationId,
+      mode: 'instances',
+      step: 1,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedIds: [...this.selectedInstanceIds],
+      fromSearch: true,
+      returnUrl: this.router.url
+    };
+    try {
+      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+    } catch {
+    }
+    this.router.navigate(['/cockpit/batch/operations']);
   }
 }

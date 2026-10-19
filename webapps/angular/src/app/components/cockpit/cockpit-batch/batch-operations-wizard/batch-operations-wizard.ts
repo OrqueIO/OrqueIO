@@ -80,7 +80,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     badgeClass: 'badge--amber',
     available: true,
     actionBtnKey: 'cockpit.batchOps.suspend.actionBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.suspend.actionBtnQuery'
+    actionBtnQueryKey: 'cockpit.batchOps.suspend.actionBtnQuery',
+    supportsProcessInstances: true
   },
   {
     id: 'activate',
@@ -90,7 +91,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     badgeClass: 'badge--green',
     available: true,
     actionBtnKey: 'cockpit.batchOps.activate.actionBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.activate.actionBtnQuery'
+    actionBtnQueryKey: 'cockpit.batchOps.activate.actionBtnQuery',
+    supportsProcessInstances: true
   },
   {
     id: 'delete-running',
@@ -100,7 +102,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     badgeClass: 'badge--red',
     available: true,
     actionBtnKey: 'cockpit.batchOps.deleteRunning.actionBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.deleteRunning.actionBtnQuery'
+    actionBtnQueryKey: 'cockpit.batchOps.deleteRunning.actionBtnQuery',
+    supportsProcessInstances: true
   },
   {
     id: 'delete-finished',
@@ -110,7 +113,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     badgeClass: 'badge--red',
     available: true,
     actionBtnKey: 'cockpit.batchOps.deleteFinished.actionBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.deleteFinished.actionBtnQuery'
+    actionBtnQueryKey: 'cockpit.batchOps.deleteFinished.actionBtnQuery',
+    supportsProcessInstances: true
   },
   {
     id: 'delete-decision',
@@ -120,7 +124,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     badgeClass: 'badge--red',
     available: true,
     actionBtnKey: 'cockpit.batchOps.deleteDecision.actionBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.deleteDecision.actionBtnQuery'
+    actionBtnQueryKey: 'cockpit.batchOps.deleteDecision.actionBtnQuery',
+    supportsProcessInstances: false
   },
   {
     id: 'set-retries-jobs',
@@ -130,7 +135,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     badgeClass: 'badge--blue',
     available: true,
     actionBtnKey: 'cockpit.batchOps.setRetriesJobs.actionBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.setRetriesJobs.actionBtnQuery'
+    actionBtnQueryKey: 'cockpit.batchOps.setRetriesJobs.actionBtnQuery',
+    supportsProcessInstances: true
   },
   {
     id: 'set-retries-external',
@@ -140,7 +146,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     badgeClass: 'badge--blue',
     available: true,
     actionBtnKey: 'cockpit.batchOps.setRetriesExternal.actionBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.setRetriesExternal.actionBtnQuery'
+    actionBtnQueryKey: 'cockpit.batchOps.setRetriesExternal.actionBtnQuery',
+    supportsProcessInstances: true
   },
   {
     id: 'set-variables',
@@ -150,7 +157,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     badgeClass: 'badge--purple',
     available: true,
     actionBtnKey: 'cockpit.batchOps.setVariables.actionBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.setVariables.actionBtnQuery'
+    actionBtnQueryKey: 'cockpit.batchOps.setVariables.actionBtnQuery',
+    supportsProcessInstances: true
   },
   {
     id: 'move-instances',
@@ -158,7 +166,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     descKey: 'cockpit.batchOps.moveInstances.desc',
     icon: faArrowRight,
     badgeClass: 'badge--blue',
-    available: true
+    available: true,
+    supportsProcessInstances: false
   },
   {
     id: 'correlate',
@@ -169,6 +178,7 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     available: true,
     actionBtnKey: 'cockpit.batchOps.confirm.correlateBtn',
     actionBtnQueryKey: 'cockpit.batchOps.confirm.correlateBtnQuery',
+    supportsProcessInstances: true
   },
   {
     id: 'removal-time-process',
@@ -178,7 +188,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     badgeClass: 'badge--gray',
     available: true,
     actionBtnKey: 'cockpit.batchOps.confirm.removalTimeProcessBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.confirm.removalTimeProcessBtnQuery'
+    actionBtnQueryKey: 'cockpit.batchOps.confirm.removalTimeProcessBtnQuery',
+    supportsProcessInstances: true
   },
   {
     id: 'removal-time-decision',
@@ -188,7 +199,8 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     badgeClass: 'badge--gray',
     available: true,
     actionBtnKey: 'cockpit.batchOps.confirm.removalTimeDecisionBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.confirm.removalTimeDecisionBtnQuery'
+    actionBtnQueryKey: 'cockpit.batchOps.confirm.removalTimeDecisionBtnQuery',
+    supportsProcessInstances: false
   },
   {
     id: 'removal-time-batch',
@@ -198,11 +210,12 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     badgeClass: 'badge--gray',
     available: true,
     actionBtnKey: 'cockpit.batchOps.confirm.removalTimeBatchBtn',
-    actionBtnQueryKey: 'cockpit.batchOps.confirm.removalTimeBatchBtnQuery'
+    actionBtnQueryKey: 'cockpit.batchOps.confirm.removalTimeBatchBtnQuery',
+    supportsProcessInstances: false
   }
 ];
 
-interface WizardPersistedState {
+export interface WizardPersistedState {
   operationId: string | null;
   mode: 'instances' | 'query';
   step: 1 | 2;
@@ -229,6 +242,8 @@ interface WizardPersistedState {
   removalTimeBatchAbsoluteDate?: string;
   batchSelectedIds?: string[];
   batchFilterCriteria?: MultiValueFilter[];
+  fromSearch?: boolean;
+  returnUrl?: string;
 }
 
 @Component({
@@ -380,6 +395,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   private readonly activityLoad$ = new Subject<Observable<string | null>>();
 
   selectedIds = new Set<string>();
+
+  fromSearch = false;
+  returnUrl: string | undefined;
 
   showTechnicalDetails = false;
   showVariablesModal = false;
@@ -1907,8 +1925,18 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.batchErrorNoJobs = false;
     this.executing = false;
     this.showTechnicalDetails = false;
+    this.fromSearch = false;
+    this.returnUrl = undefined;
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
+  }
+
+  backToSearch(): void {
+    if (this.returnUrl) {
+      this.router.navigateByUrl(this.returnUrl);
+    } else {
+      this.router.navigate(['/cockpit/processes/search']);
+    }
   }
 
   private saveToSessionStorage(): void {
@@ -1940,7 +1968,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         removalTimeBatchMode: this.removalTimeBatchMode,
         removalTimeBatchAbsoluteDate: this.removalTimeBatchAbsoluteDate,
         batchSelectedIds: [...this.removalTimeBatchSelectedIds],
-        batchFilterCriteria: this.batchFilterCriteria
+        batchFilterCriteria: this.batchFilterCriteria,
+        fromSearch: this.fromSearch,
+        returnUrl: this.returnUrl
       };
       sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(state));
     } catch {
@@ -2005,11 +2035,17 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         return f;
       });
       this.batchHasActiveCriteria = this.batchFilterCriteria.length > 0;
+      this.fromSearch = state.fromSearch ?? false;
+      this.returnUrl = state.returnUrl;
       const restoredStep: number = state.step ?? 1;
       this.currentStep = restoredStep >= 3 ? 1 : restoredStep as 1 | 2;
 
       if (this.currentStep === 1 && (this.selectedOperationId === 'suspend' || this.selectedOperationId === 'activate' || this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'delete-finished' || this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external' || this.selectedOperationId === 'set-variables' || this.selectedOperationId === 'correlate' || this.selectedOperationId === 'removal-time-process')) {
-        this.loadInstances();
+        if (state.fromSearch && this.selectedIds.size > 0) {
+          // Ne pas recharger - les instances sont déjà présélectionnées depuis la recherche
+        } else {
+          this.loadInstances();
+        }
         this.loadActivitiesFromFilter();
       } else if (this.currentStep === 1 && this.selectedOperationId === 'delete-decision') {
         this.loadDecisionInstances();
