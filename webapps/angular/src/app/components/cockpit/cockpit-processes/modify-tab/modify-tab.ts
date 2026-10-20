@@ -375,28 +375,6 @@ export class ModifyTabComponent implements OnInit, OnChanges, OnDestroy {
     return !!this.searchPreselection && !!this.sourceActivity && !!this.targetActivity;
   }
 
-  adjustSelection(): void {
-    if (!this.processDefinitionId || !this.searchPreselection) return;
-
-    const state = {
-      processDefinitionId: this.processDefinitionId,
-      activePills: [],
-      selectionMode: 'instance' as const,
-      selectedIds: this.searchPreselection.selectedIds,
-      variableNamesIgnoreCase: false,
-      variableValuesIgnoreCase: false,
-      sourceActivity: this.sourceActivity,
-      targetActivity: this.targetActivity
-    };
-
-    try {
-      sessionStorage.setItem(MOVE_INSTANCES_DIALOG_SESSION_KEY, JSON.stringify(state));
-    } catch {}
-
-    this.showSelectDialog = true;
-    this.cdr.markForCheck();
-  }
-
   clearAll(): void {
     this.sourceActivity = null;
     this.sourceActivity$.next(null); // Trigger reactive reset

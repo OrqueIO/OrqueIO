@@ -296,6 +296,43 @@
   padding-top: 0.25rem;
 }
 
+.modify-actions--preselection {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.modify-actions__left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.modify-actions__right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1280px) {
+  .modify-actions--preselection {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modify-actions__left {
+    width: 100%;
+  }
+
+  .modify-actions__right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
 .btn-primary, .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -429,45 +466,51 @@
 }
 
 /* Eligibility display */
-.eligibility-info {
+.eligibility-status {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.eligibility-status__checking,
+.eligibility-status__error,
+.eligibility-status__warning,
+.eligibility-status__none {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.375rem 0.5rem;
-  background: var(--color-success-bg, rgba(34, 197, 94, 0.1));
-  border: 1px solid var(--color-success-light, #4ade80);
-  border-radius: var(--radius-sm, 4px);
   font-size: 0.8rem;
-  color: var(--color-success-dark, #15803d);
-}
-
-.eligibility-info__text {
   line-height: 1.3;
 }
 
-.eligibility-error {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.375rem 0.5rem;
-  background: var(--color-danger-bg, rgba(220, 38, 38, 0.1));
-  border: 1px solid var(--color-danger-light, #f87171);
-  border-radius: var(--radius-sm, 4px);
-  font-size: 0.8rem;
+.eligibility-status__checking {
+  color: var(--text-secondary, #6b7280);
+}
+
+.eligibility-status__error {
   color: var(--color-danger-dark, #b91c1c);
 }
 
-.eligibility-error__icon {
+.eligibility-status__warning {
+  color: var(--color-warning-dark, #b45309);
+}
+
+.eligibility-status__none {
+  color: var(--color-danger-dark, #b91c1c);
+}
+
+.eligibility-status__icon {
   flex-shrink: 0;
   font-size: 0.85rem;
 }
 
-.eligibility-error__text {
+.eligibility-status__text {
   flex: 1;
-  line-height: 1.3;
+  min-width: 0;
 }
 
-.eligibility-error__retry {
+.eligibility-status__retry {
   flex-shrink: 0;
   background: transparent;
   border: 1px solid currentColor;
@@ -477,9 +520,10 @@
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.15s ease;
+  margin-left: 0.5rem;
 }
 
-.eligibility-error__retry:hover {
+.eligibility-status__retry:hover {
   background: var(--color-danger-dark, #b91c1c);
   color: white;
   border-color: var(--color-danger-dark, #b91c1c);
