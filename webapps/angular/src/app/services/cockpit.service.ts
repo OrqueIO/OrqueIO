@@ -686,6 +686,13 @@ export class CockpitService {
   }
 
   /**
+   * @deprecated Use ProcessDefinitionService.getProcessDefinitionById() directly
+   */
+  getProcessDefinitionById(id: string): Observable<ProcessDefinition | null> {
+    return this.processDefinitionService.getProcessDefinitionById(id);
+  }
+
+  /**
    * @deprecated Use ProcessDefinitionService.getProcessDefinitionsWithStatistics() directly
    */
   getProcessDefinitionsWithStatistics(includeIncidents = true): Observable<ProcessDefinitionStatistics[]> {

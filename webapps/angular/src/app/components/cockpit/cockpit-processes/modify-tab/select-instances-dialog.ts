@@ -27,6 +27,16 @@ import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 
 export const MOVE_INSTANCES_DIALOG_SESSION_KEY = 'moveInstancesDialogState';
 export const BATCH_OPS_MODIFY_SIGNAL_KEY = 'batchOpsModifySignal';
+export const SEARCH_PRESELECTION_SESSION_KEY = 'searchMovePreselection';
+
+export interface SearchMovePreselection {
+  processDefinitionId: string;
+  processDefinitionKey: string;
+  definitionName: string;
+  definitionVersion: number;
+  selectedIds: string[];
+  states: string[];
+}
 
 export interface DialogPersistedState {
   processDefinitionId: string;

@@ -63,6 +63,7 @@ import { dateRangeConflicts } from '../../../../utils/search-validation';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 import { BATCH_OPERATIONS, WizardPersistedState } from '../../cockpit-batch/batch-operations-wizard/batch-operations-wizard';
 import { BatchOperationDef } from '../../cockpit-batch/batch-operation-list/batch-operation-list';
+import { SEARCH_PRESELECTION_SESSION_KEY, SearchMovePreselection } from '../modify-tab/select-instances-dialog';
 
 @Component({
   selector: 'app-process-instance-search',
@@ -1048,6 +1049,8 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.variableNamesIgnoreCase = false;
     this.variableValuesIgnoreCase = false;
     this.pendingValues = [];
+    this.selectedInstanceIds = new Set();
+    this.selectedInstanceMetadataCache.clear();
     this.cdr.markForCheck();
     this.syncCriteriaToUrl();
   }
@@ -1350,11 +1353,28 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       case 'move-instances': {
         const metadata = [...this.selectedInstanceMetadataCache.values()];
         if (metadata.length === 0) return '';
+
+        // Check if all instances have the same processDefinitionId
         const firstDefId = metadata[0].processDefinitionId;
+        const firstDefKey = metadata[0].processDefinitionKey;
         const allSameDefinition = metadata.every(m => m.processDefinitionId === firstDefId);
+
         if (!allSameDefinition) {
-          return 'cockpit.processes.search.moveInstancesRequiresSameDefinition';
+          // Check if they have the same key but different versions
+          const allSameKey = metadata.every(m => m.processDefinitionKey === firstDefKey);
+
+          if (allSameKey) {
+            // Same key, different versions - show specific message with count
+            const uniqueVersions = new Set(metadata.map(m => m.processDefinitionId));
+            return this.translateService.instant('cockpit.processes.search.moveInstancesRequiresSameVersion', {
+              versions: String(uniqueVersions.size)
+            });
+          } else {
+            // Different keys - show generic message
+            return 'cockpit.processes.search.moveInstancesRequiresSameDefinition';
+          }
         }
+
         const allowedStates = ProcessInstanceSearchComponent.MOVE_INSTANCES_ALLOWED_STATES;
         if ([...states].some(s => !allowedStates.includes(s))) {
           return 'cockpit.processes.search.moveInstancesRequiresActiveOrSuspended';
@@ -1379,6 +1399,57 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   }
 
   onBatchOperationSelect(operationId: string): void {
+    if (operationId === 'move-instances') {
+      // Special handling for move-instances: navigate to Modify tab with preselection
+      const selectedIds = Array.from(this.selectedInstanceIds);
+      if (selectedIds.length === 0) return;
+
+      // Get selected instances
+      const selectedInstances = this.searchResults.filter(i => selectedIds.includes(i.id));
+      if (selectedInstances.length === 0) return;
+
+      // Validate all instances have the same processDefinitionId
+      const firstDefId = selectedInstances[0].processDefinitionId;
+      const firstDefKey = selectedInstances[0].processDefinitionKey;
+      const firstDefName = selectedInstances[0].processDefinitionName || firstDefKey;
+
+      const allSameDefinition = selectedInstances.every(i => i.processDefinitionId === firstDefId);
+      if (!allSameDefinition) {
+        // Handle error: instances from different versions
+        return;
+      }
+
+      // Extract version from processDefinitionId (format: key:version:deploymentId)
+      const versionMatch = firstDefId.match(/:(\d+):/);
+      const version = versionMatch ? parseInt(versionMatch[1], 10) : 1;
+
+      // Collect unique states from selected instances
+      const uniqueStates = Array.from(new Set(selectedInstances.map(i => i.state)));
+
+      const preselection: SearchMovePreselection = {
+        processDefinitionId: firstDefId,
+        processDefinitionKey: firstDefKey,
+        definitionName: firstDefName,
+        definitionVersion: version,
+        selectedIds,
+        states: uniqueStates
+      };
+
+      try {
+        sessionStorage.setItem(SEARCH_PRESELECTION_SESSION_KEY, JSON.stringify(preselection));
+      } catch {}
+
+      // Navigate to process-list with definitionId and tab=modify
+      this.router.navigate(['/cockpit/processes', firstDefKey, 'instances'], {
+        queryParams: {
+          definitionId: firstDefId,
+          tab: 'modify'
+        }
+      });
+      return;
+    }
+
+    // Original batch operations handling
     const state: WizardPersistedState = {
       operationId,
       mode: 'instances',

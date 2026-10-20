@@ -1,13 +1,13 @@
 import {
   Component, Input, Output, EventEmitter, ChangeDetectionStrategy,
-  ChangeDetectorRef, inject, DestroyRef, OnChanges, SimpleChanges, OnDestroy
+  ChangeDetectorRef, inject, DestroyRef, OnChanges, SimpleChanges, OnDestroy, OnInit
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subscription, interval } from 'rxjs';
-import { switchMap, takeWhile } from 'rxjs/operators';
+import { Subscription, interval, BehaviorSubject, combineLatest, of } from 'rxjs';
+import { switchMap, takeWhile, map, catchError, tap, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faTimes, faArrowRight, faExclamationTriangle, faSpinner,
@@ -21,7 +21,7 @@ import { ProcessInstanceService } from '../../../../services/process-instance.se
 import { BatchService } from '../../../../services/batch.service';
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { ModificationDto, ModificationInstruction } from '../../../../models/cockpit/modification.model';
-import { SelectInstancesDialogComponent, InstanceSelectionResult, MOVE_INSTANCES_DIALOG_SESSION_KEY } from './select-instances-dialog';
+import { SelectInstancesDialogComponent, InstanceSelectionResult, MOVE_INSTANCES_DIALOG_SESSION_KEY, SEARCH_PRESELECTION_SESSION_KEY, SearchMovePreselection } from './select-instances-dialog';
 import { ConfirmModificationDialogComponent } from './confirm-modification-dialog';
 
 export type ModifyOverlay = { activityId: string; role: 'source' | 'target' };
@@ -37,12 +37,19 @@ export type ModifyOverlay = { activityId: string; role: 'source' | 'target' };
   styleUrls: ['./modify-tab.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ModifyTabComponent implements OnChanges, OnDestroy {
+export class ModifyTabComponent implements OnInit, OnChanges, OnDestroy {
   private processInstanceService = inject(ProcessInstanceService);
   private batchService = inject(BatchService);
   private cdr = inject(ChangeDetectorRef);
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private pollSub: Subscription | null = null;
+
+  // Reactive eligibility: these subjects drive automatic recalculation
+  private sourceActivity$ = new BehaviorSubject<BpmnElement | null>(null);
+  private searchPreselection$ = new BehaviorSubject<SearchMovePreselection | null>(null);
+  private processDefinitionId$ = new BehaviorSubject<string | null>(null);
 
   @Input() processDefinitionId: string | null = null;
   @Input() bpmnXml: string | null = null;
@@ -86,8 +93,77 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
   batchId: string | null = null;
   batchError = false;
   batchCompleted = false;
+
+  // Search preselection support
+  searchPreselection: SearchMovePreselection | null = null;
+  eligibleCount = 0;
+  eligibleInstanceIds: string[] = [];
+  eligibilityLoading = false;
+  eligibilityError: string | null = null;
   batchProgress = 0;
   batchTotal = 0;
+
+  ngOnInit(): void {
+    // Reactive eligibility calculation: whenever source, preselection, or definitionId changes,
+    // automatically recompute eligibility
+    combineLatest([
+      this.sourceActivity$,
+      this.searchPreselection$,
+      this.processDefinitionId$
+    ]).pipe(
+      debounceTime(50), // Avoid duplicate calls during rapid assignments
+      switchMap(([source, preselection, defId]) => {
+        // Reset state if any required input is missing
+        if (!source || !preselection || !defId) {
+          return of({
+            loading: false,
+            error: null as string | null,
+            eligibleIds: [] as string[],
+            eligibleCount: 0
+          });
+        }
+
+        // All inputs present: start loading and fetch eligibility
+        const requestBody = {
+          processInstanceIds: preselection.selectedIds,
+          activityIdIn: [source.id],
+          processDefinitionId: defId
+        };
+
+        // Return loading state immediately, then fetch
+        return of({ loading: true, error: null, eligibleIds: [], eligibleCount: 0 }).pipe(
+          // Fetch actual data
+          switchMap(() =>
+            this.processInstanceService.queryRuntimeInstancesAtActivity(requestBody).pipe(
+              map(eligibleIds => {
+                return {
+                  loading: false,
+                  error: null as string | null,
+                  eligibleIds,
+                  eligibleCount: eligibleIds.length
+                };
+              }),
+              catchError(err => {
+                return of({
+                  loading: false,
+                  error: 'cockpit.modify.eligibilityCheckFailed' as string | null,
+                  eligibleIds: [] as string[],
+                  eligibleCount: 0
+                });
+              })
+            )
+          )
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(state => {
+      this.eligibilityLoading = state.loading;
+      this.eligibilityError = state.error;
+      this.eligibleCount = state.eligibleCount;
+      this.eligibleInstanceIds = state.eligibleIds;
+      this.cdr.markForCheck();
+    });
+  }
 
   ngOnDestroy(): void {
     this.stopPolling();
@@ -97,7 +173,25 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
     if (changes['processDefinitionId']) {
       this.reset();
       if (this.processDefinitionId) {
+        // Update reactive stream
+        this.processDefinitionId$.next(this.processDefinitionId);
+
         try {
+          // Check for search preselection (Move from Search)
+          const preselectionRaw = sessionStorage.getItem(SEARCH_PRESELECTION_SESSION_KEY);
+          if (preselectionRaw) {
+            const preselection = JSON.parse(preselectionRaw);
+            if (preselection?.processDefinitionId === this.processDefinitionId) {
+              this.searchPreselection = preselection;
+              this.searchPreselection$.next(preselection); // Trigger reactive flow
+              // DON'T remove from sessionStorage yet - keep it until success or manual clear
+            } else {
+              // Wrong process definition, clear it
+              sessionStorage.removeItem(SEARCH_PRESELECTION_SESSION_KEY);
+            }
+          }
+
+          // Check for dialogue session (Adjust selection)
           const raw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
           if (raw) {
             const state = JSON.parse(raw);
@@ -105,8 +199,13 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
               if (state.sourceActivity || state.targetActivity) {
                 this.showSelectDialog = true;
               }
-              if (state.sourceActivity) this.sourceActivity = state.sourceActivity;
-              if (state.targetActivity) this.targetActivity = state.targetActivity;
+              if (state.sourceActivity) {
+                this.sourceActivity = state.sourceActivity;
+                this.sourceActivity$.next(state.sourceActivity); // Trigger reactive flow
+              }
+              if (state.targetActivity) {
+                this.targetActivity = state.targetActivity;
+              }
               this.emitOverlays();
               this.cdr.markForCheck();
             } else {
@@ -134,10 +233,25 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
 
   get payloadJson(): string {
     if (!this.processDefinitionId || this.instructions.length === 0) return '';
-    const preview = {
+    const preview: any = {
       processDefinitionId: this.processDefinitionId,
       instructions: this.instructions
     };
+
+    // Add instance selection (when available)
+    if (this.selectionIsQuery && this.selectedQuery) {
+      preview.processInstanceQuery = this.selectedQuery;
+    } else if (this.searchPreselection && this.eligibleInstanceIds.length > 0) {
+      preview.processInstanceIds = this.eligibleInstanceIds;
+    } else if (this.selectedInstanceIds.length > 0) {
+      preview.processInstanceIds = this.selectedInstanceIds;
+    }
+
+    // Add default options
+    preview.skipCustomListeners = true;
+    preview.skipIoMappings = true;
+    preview.annotation = '(optional)';
+
     return JSON.stringify(preview, null, 2);
   }
 
@@ -162,6 +276,7 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
 
     if (this.selectionMode === 'source') {
       this.sourceActivity = element;
+      this.sourceActivity$.next(element); // Trigger reactive eligibility
       this.selectionMode = 'target';
       this.eventSubprocessWarning = false;
     } else {
@@ -189,6 +304,7 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
 
   setSource(element: BpmnElement | null): void {
     this.sourceActivity = element;
+    this.sourceActivity$.next(element); // Trigger reactive eligibility
     this.emitOverlays();
     this.cdr.markForCheck();
   }
@@ -203,8 +319,87 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  // checkEligibility() removed - now handled by reactive stream in ngOnInit
+
+  clearSearchPreselection(): void {
+    this.searchPreselection = null;
+    this.searchPreselection$.next(null); // Trigger reactive reset
+    try {
+      sessionStorage.removeItem(SEARCH_PRESELECTION_SESSION_KEY);
+    } catch {}
+    this.cdr.markForCheck();
+  }
+
+  retryEligibilityCheck(): void {
+    // Re-trigger the reactive flow by re-emitting current values
+    this.sourceActivity$.next(this.sourceActivity);
+  }
+
+  applyToEligibleInstances(): void {
+    if (!this.searchPreselection || this.eligibleInstanceIds.length === 0 || !this.processDefinitionId || !this.sourceActivity) return;
+
+    // Save state to sessionStorage for Select Instances dialog
+    // CRITICAL: Include BOTH activityId and instanceId pills
+    // - activityId pill is REQUIRED by validation to enable "Modify Selected" button
+    // - instanceId pill restricts the query to eligible instances only
+    const state = {
+      processDefinitionId: this.processDefinitionId,
+      activePills: [
+        {
+          field: 'activityId',
+          values: [this.sourceActivity.id]
+        },
+        {
+          field: 'instanceId',
+          values: this.eligibleInstanceIds
+        }
+      ],
+      selectionMode: 'instance' as const,
+      selectedIds: this.eligibleInstanceIds,
+      variableNamesIgnoreCase: false,
+      variableValuesIgnoreCase: false,
+      sourceActivity: this.sourceActivity,
+      targetActivity: this.targetActivity
+    };
+
+    try {
+      sessionStorage.setItem(MOVE_INSTANCES_DIALOG_SESSION_KEY, JSON.stringify(state));
+    } catch {}
+
+    // Open Select Instances dialog (not Confirm Modification)
+    this.showSelectDialog = true;
+    this.cdr.markForCheck();
+  }
+
+  get canApplyToPreselection(): boolean {
+    return !!this.searchPreselection && !!this.sourceActivity && !!this.targetActivity;
+  }
+
+  adjustSelection(): void {
+    if (!this.processDefinitionId || !this.searchPreselection) return;
+
+    const state = {
+      processDefinitionId: this.processDefinitionId,
+      activePills: [],
+      selectionMode: 'instance' as const,
+      selectedIds: this.searchPreselection.selectedIds,
+      variableNamesIgnoreCase: false,
+      variableValuesIgnoreCase: false,
+      sourceActivity: this.sourceActivity,
+      targetActivity: this.targetActivity
+    };
+
+    try {
+      sessionStorage.setItem(MOVE_INSTANCES_DIALOG_SESSION_KEY, JSON.stringify(state));
+    } catch {}
+
+    this.showSelectDialog = true;
+    this.cdr.markForCheck();
+  }
+
   clearAll(): void {
     this.sourceActivity = null;
+    this.sourceActivity$.next(null); // Trigger reactive reset
     this.targetActivity = null;
     this.selectedInstanceIds = [];
     this.selectedQuery = null;
@@ -235,10 +430,13 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
   onActivityIdCriterionChange(id: string | null): void {
     if (id === null) {
       this.sourceActivity = null;
+      this.sourceActivity$.next(null);
     } else if (this.sourceActivity) {
       this.sourceActivity = { ...this.sourceActivity, id };
+      this.sourceActivity$.next(this.sourceActivity);
     } else {
       this.sourceActivity = { id, type: 'bpmn:FlowNode' };
+      this.sourceActivity$.next(this.sourceActivity);
     }
     this.emitOverlays();
     this.cdr.markForCheck();
@@ -356,6 +554,18 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
   private onBatchCompleted(): void {
     this.batchCompleted = true;
     this.stopPolling();
+
+    // Clear preselection on success
+    try {
+      sessionStorage.removeItem(SEARCH_PRESELECTION_SESSION_KEY);
+    } catch {}
+    this.searchPreselection = null;
+    this.searchPreselection$.next(null);
+
+    // Clear query params from URL
+    const currentUrl = this.router.url.split('?')[0];
+    this.router.navigate([currentUrl], { replaceUrl: true, queryParams: {} });
+
     this.refreshRequested.emit();
     this.cdr.detectChanges();
   }
@@ -368,6 +578,7 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
   private reset(): void {
     this.stopPolling();
     this.sourceActivity = null;
+    this.sourceActivity$.next(null); // Trigger reactive reset
     this.targetActivity = null;
     this.selectedInstanceIds = [];
     this.selectionCount = 0;
@@ -381,6 +592,10 @@ export class ModifyTabComponent implements OnChanges, OnDestroy {
     this.batchTotal = 0;
     this.eventSubprocessWarning = false;
     this.multiInstanceWarning = false;
+    this.searchPreselection = null;
+    this.searchPreselection$.next(null); // Trigger reactive reset
+    this.eligibleCount = 0;
+    this.eligibleInstanceIds = [];
     this.emitOverlays();
   }
 
