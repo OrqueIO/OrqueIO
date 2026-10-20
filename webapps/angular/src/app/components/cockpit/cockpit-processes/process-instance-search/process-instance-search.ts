@@ -1387,8 +1387,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       vnIgnoreCase: false,
       vvIgnoreCase: false,
       selectedIds: [...this.selectedInstanceIds],
-      fromSearch: true,
-      returnUrl: this.router.url
+      fromSearch: true
     };
     try {
       sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));

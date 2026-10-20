@@ -1,369 +1,263 @@
-/**
- * Tests for batch operations wizard preselection feature (ORQ-283)
- *
- * Tests:
- * - loadFromSessionStorage with fromSearch=true skips loadInstances()
- * - backToSearch() navigation with returnUrl
- * - reset() clears fromSearch and returnUrl
- * - "Back to search" button visibility
- */
-
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { BatchOperationsWizardComponent } from './batch-operations-wizard';
+import 'zone.js';
+import 'zone.js/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
-describe('BatchOperationsWizardComponent — Preselection from search (ORQ-283)', () => {
+import { BatchOperationsWizardComponent } from './batch-operations-wizard';
+import { CockpitService } from '../../../../services/cockpit.service';
+import { ProcessInstanceService } from '../../../../services/process-instance.service';
+import { NavMenuService } from '../../../../services/nav-menu.service';
+import { TranslateService } from '../../../../i18n/translate.service';
+import { initTestEnvironment } from '../../../../testing/test-utils';
+
+describe('Batch Operations Wizard - Preselection from Search', () => {
   let component: BatchOperationsWizardComponent;
-  let mockProcessInstanceService: any;
-  let mockRouter: any;
-  let mockCdr: any;
-  let sessionStorageGetSpy: any;
-  let sessionStorageSetSpy: any;
-  let sessionStorageRemoveSpy: any;
+  let fixture: ComponentFixture<BatchOperationsWizardComponent>;
+  let httpMock: HttpTestingController;
 
-  beforeEach(() => {
+  // Mock sessionStorage for testing environment
+  const sessionStorageMock = (() => {
+    let store: Record<string, string> = {};
+    return {
+      getItem: (key: string) => store[key] || null,
+      setItem: (key: string, value: string) => { store[key] = value; },
+      removeItem: (key: string) => { delete store[key]; },
+      clear: () => { store = {}; },
+      key: (index: number) => Object.keys(store)[index] || null,
+      get length() { return Object.keys(store).length; }
+    };
+  })();
+
+  Object.defineProperty(globalThis, 'sessionStorage', {
+    value: sessionStorageMock,
+    writable: true
+  });
+
+  let mockNavMenuService: any;
+  let mockTranslateService: any;
+
+  beforeEach(async () => {
     sessionStorage.clear();
 
-    mockProcessInstanceService = {
-      getProcessInstances: vi.fn().mockReturnValue(of({ instances: [], total: 0 })),
-      suspendInstancesAsync: vi.fn().mockReturnValue(of({ id: 'batch-suspend' })),
+    if (TestBed.inject) {
+      TestBed.resetTestingModule();
+    }
+
+    initTestEnvironment();
+
+    mockNavMenuService = {
+      setTitle: vi.fn(),
+      setBreadcrumbs: vi.fn(),
+      setMenuItems: vi.fn(),
+      clearMenuItems: vi.fn()
     };
 
-    mockRouter = {
-      navigate: vi.fn().mockReturnValue(Promise.resolve(true)),
-      navigateByUrl: vi.fn().mockReturnValue(Promise.resolve(true)),
-      url: '/cockpit/processes/search?state=ACTIVE&processDefinitionKey=invoice',
+    mockTranslateService = {
+      instant: vi.fn((key: string) => key),
+      currentLang$: of('en')
     };
 
-    mockCdr = {
-      markForCheck: vi.fn(),
-    };
+    await TestBed.configureTestingModule({
+      imports: [BatchOperationsWizardComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideRouter([]),
+        CockpitService,
+        ProcessInstanceService,
+        { provide: NavMenuService, useValue: mockNavMenuService },
+        { provide: TranslateService, useValue: mockTranslateService }
+      ]
+    }).compileComponents();
 
-    component = Object.create(BatchOperationsWizardComponent.prototype);
-    component.processInstanceService = mockProcessInstanceService;
-    component.router = mockRouter;
-    component.cdr = mockCdr;
-    component.destroyRef = { onDestroy: vi.fn() };
-
-    component.currentStep = 1;
-    component.selectedOperationId = null;
-    component.selectedIds = new Set();
-    component.mode = 'instances';
-    component.fromSearch = false;
-    component.returnUrl = undefined;
-    component.executing = false;
-
-    sessionStorageGetSpy = vi.spyOn(Storage.prototype, 'getItem');
-    sessionStorageSetSpy = vi.spyOn(Storage.prototype, 'setItem');
-    sessionStorageRemoveSpy = vi.spyOn(Storage.prototype, 'removeItem');
+    fixture = TestBed.createComponent(BatchOperationsWizardComponent);
+    component = fixture.componentInstance;
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    if (httpMock) {
+      httpMock.verify();
+    }
     sessionStorage.clear();
   });
 
-  describe('loadFromSessionStorage with fromSearch', () => {
-    it('should skip loadInstances() when fromSearch=true and selectedIds has instances', () => {
-      const state = {
-        operationId: 'suspend',
-        selectedIds: ['inst-1', 'inst-2', 'inst-3'],
-        fromSearch: true,
-        returnUrl: '/cockpit/processes/search?state=ACTIVE',
-      };
-      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+  it('should load preselected instances with processInstanceIdIn filter (activate operation)', async () => {
+    const preselectedIds = ['inst-suspended-1', 'inst-suspended-2'];
+    const sessionState = {
+      operationId: 'activate',
+      mode: 'instances',
+      step: 1,
+      filterCriteria: [],
+      selectedIds: preselectedIds,
+      fromSearch: true
+    };
+    sessionStorage.setItem('batchOpsWizardState', JSON.stringify(sessionState));
 
-      component.loadFromSessionStorage();
+    fixture.detectChanges();
 
-      expect(component.selectedOperationId).toBe('suspend');
-      expect(component.selectedIds.size).toBe(3);
-      expect(component.selectedIds.has('inst-1')).toBe(true);
-      expect(component.selectedIds.has('inst-2')).toBe(true);
-      expect(component.selectedIds.has('inst-3')).toBe(true);
-      expect(component.fromSearch).toBe(true);
-      expect(component.returnUrl).toBe('/cockpit/processes/search?state=ACTIVE');
+    const processDefReq = httpMock.expectOne(req => req.url.includes('/process-definition'));
+    processDefReq.flush([]);
 
-      expect(mockProcessInstanceService.getProcessInstances).not.toHaveBeenCalled();
-    });
+    await fixture.whenStable();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 200));
 
-    it('should load instances when fromSearch=true but selectedIds is empty', () => {
-      const state = {
-        operationId: 'suspend',
-        selectedIds: [],
-        fromSearch: true,
-        returnUrl: '/cockpit/processes/search',
-      };
-      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+    const historyRequest = httpMock.expectOne(req =>
+      req.url.includes('/history/process-instance') &&
+      req.method === 'POST' &&
+      !req.url.includes('/count')
+    );
 
-      component.loadFromSessionStorage();
+    expect(historyRequest.request.body).toBeDefined();
 
-      expect(component.fromSearch).toBe(true);
-      expect(component.returnUrl).toBe('/cockpit/processes/search');
-      expect(component.selectedIds.size).toBe(0);
-      expect(mockProcessInstanceService.getProcessInstances).toHaveBeenCalled();
-    });
+    const body = historyRequest.request.body as any;
+    expect(body.processInstanceIds).toBeDefined();
+    expect(body.processInstanceIds).toEqual(preselectedIds);
 
-    it('should load instances when fromSearch=false', () => {
-      const state = {
-        operationId: 'suspend',
-        selectedIds: ['inst-1', 'inst-2'],
-        fromSearch: false,
-      };
-      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+    expect(body.suspended).toBe(true);
 
-      component.loadFromSessionStorage();
+    const mockInstances = [
+      {
+        id: 'inst-suspended-1',
+        state: 'SUSPENDED',
+        processDefinitionId: 'invoice:1:abc123',
+        processDefinitionKey: 'invoice',
+        businessKey: 'INV-001',
+        startTime: '2025-01-15T10:00:00.000Z',
+        endTime: null
+      },
+      {
+        id: 'inst-suspended-2',
+        state: 'SUSPENDED',
+        processDefinitionId: 'invoice:1:abc123',
+        processDefinitionKey: 'invoice',
+        businessKey: 'INV-002',
+        startTime: '2025-01-15T10:05:00.000Z',
+        endTime: null
+      }
+    ];
 
-      expect(component.fromSearch).toBe(false);
-      expect(component.selectedIds.size).toBe(2);
-      expect(mockProcessInstanceService.getProcessInstances).toHaveBeenCalled();
-    });
+    historyRequest.flush(mockInstances);
 
-    it('should load instances when fromSearch is not present in state', () => {
-      const state = {
-        operationId: 'suspend',
-        selectedIds: ['inst-1', 'inst-2'],
-      };
-      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+    // Flush count request
+    const countRequest = httpMock.expectOne(req => req.url.includes('/count'));
+    countRequest.flush({ count: 2 });
 
-      component.loadFromSessionStorage();
+    await new Promise(resolve => setTimeout(resolve, 10));
+    fixture.detectChanges();
 
-      expect(component.fromSearch).toBe(false);
-      expect(component.selectedIds.size).toBe(2);
-      expect(mockProcessInstanceService.getProcessInstances).toHaveBeenCalled();
-    });
+    expect(component.instances.length).toBe(2);
+    expect(component.instances[0].id).toBe('inst-suspended-1');
+    expect(component.instances[1].id).toBe('inst-suspended-2');
 
-    it('should handle missing returnUrl gracefully', () => {
-      const state = {
-        operationId: 'suspend',
-        selectedIds: ['inst-1'],
-        fromSearch: true,
-      };
-      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+    expect(component.selectedIds.size).toBe(2);
+    expect(component.selectedIds.has('inst-suspended-1')).toBe(true);
+    expect(component.selectedIds.has('inst-suspended-2')).toBe(true);
 
-      component.loadFromSessionStorage();
-
-      expect(component.fromSearch).toBe(true);
-      expect(component.returnUrl).toBeUndefined();
-      expect(mockProcessInstanceService.getProcessInstances).not.toHaveBeenCalled();
-    });
+    expect(component.selectedCount).toBe(2);
   });
 
-  describe('saveToSessionStorage with fromSearch', () => {
-    it('should save fromSearch and returnUrl to sessionStorage', () => {
-      component.selectedOperationId = 'suspend';
-      component.selectedIds = new Set(['inst-1', 'inst-2']);
-      component.fromSearch = true;
-      component.returnUrl = '/cockpit/processes/search?state=ACTIVE';
-      component.mode = 'instances';
+  it('should load preselected ACTIVE instances with processInstanceIdIn filter (suspend operation)', async () => {
+    const preselectedIds = ['inst-active-1', 'inst-active-2'];
+    const sessionState = {
+      operationId: 'suspend',
+      mode: 'instances',
+      step: 1,
+      filterCriteria: [],
+      selectedIds: preselectedIds,
+      fromSearch: true
+    };
+    sessionStorage.setItem('batchOpsWizardState', JSON.stringify(sessionState));
 
-      component.saveToSessionStorage();
+    fixture.detectChanges();
+    const processDefReq = httpMock.expectOne(req => req.url.includes('/process-definition'));
+    processDefReq.flush([]);
 
-      expect(sessionStorageSetSpy).toHaveBeenCalledWith(
-        'batchOpsWizardState',
-        expect.any(String)
-      );
+    await fixture.whenStable();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 200));
 
-      const savedState = JSON.parse(sessionStorageSetSpy.mock.calls[0][1]);
-      expect(savedState.fromSearch).toBe(true);
-      expect(savedState.returnUrl).toBe('/cockpit/processes/search?state=ACTIVE');
-      expect(savedState.operationId).toBe('suspend');
-      expect(savedState.selectedIds).toEqual(['inst-1', 'inst-2']);
-    });
+    const historyRequest = httpMock.expectOne(req =>
+      req.url.includes('/history/process-instance') &&
+      req.method === 'POST' &&
+      !req.url.includes('/count')
+    );
 
-    it('should not save fromSearch when it is false', () => {
-      component.selectedOperationId = 'suspend';
-      component.selectedIds = new Set(['inst-1']);
-      component.fromSearch = false;
-      component.mode = 'instances';
+    const body = historyRequest.request.body as any;
+    expect(body.processInstanceIds).toEqual(preselectedIds);
+    expect(body.active).toBe(true);
 
-      component.saveToSessionStorage();
+    // Mock response
+    const mockInstances = [
+      {
+        id: 'inst-active-1',
+        state: 'ACTIVE',
+        processDefinitionId: 'payment:1:xyz456',
+        processDefinitionKey: 'payment',
+        businessKey: 'PAY-001',
+        startTime: '2025-01-15T11:00:00.000Z',
+        endTime: null
+      },
+      {
+        id: 'inst-active-2',
+        state: 'ACTIVE',
+        processDefinitionId: 'payment:1:xyz456',
+        processDefinitionKey: 'payment',
+        businessKey: 'PAY-002',
+        startTime: '2025-01-15T11:05:00.000Z',
+        endTime: null
+      }
+    ];
 
-      const savedState = JSON.parse(sessionStorageSetSpy.mock.calls[0][1]);
-      expect(savedState.fromSearch).toBeUndefined();
-      expect(savedState.returnUrl).toBeUndefined();
-    });
+    historyRequest.flush(mockInstances);
+
+    const countRequest = httpMock.expectOne(req => req.url.includes('/count'));
+    countRequest.flush({ count: 2 });
+
+    await new Promise(resolve => setTimeout(resolve, 10));
+    fixture.detectChanges();
+
+    // ASSERT
+    expect(component.instances.length).toBe(2);
+    expect(component.selectedIds.size).toBe(2);
+    expect(component.selectedCount).toBe(2);
   });
 
-  describe('backToSearch() navigation', () => {
-    it('should navigate to returnUrl when returnUrl is present', () => {
-      component.returnUrl = '/cockpit/processes/search?state=ACTIVE&processDefinitionKey=invoice';
+  it('should NOT add processInstanceIdIn filter when launched without preselection', async () => {
+    fixture.detectChanges();
 
-      component.backToSearch();
+    const processDefReqs = httpMock.match(req => req.url.includes('/process-definition'));
+    processDefReqs.forEach(req => req.flush([]));
 
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(
-        '/cockpit/processes/search?state=ACTIVE&processDefinitionKey=invoice'
-      );
-      expect(mockRouter.navigate).not.toHaveBeenCalled();
-    });
+    component.selectedOperationId = 'activate';
+    component.mode = 'instances';
+    component['loadInstances']();
 
-    it('should navigate to default search page when returnUrl is undefined', () => {
-      component.returnUrl = undefined;
+    await fixture.whenStable();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve, 200));
 
-      component.backToSearch();
+    const historyRequest = httpMock.expectOne(req =>
+      req.url.includes('/history/process-instance') &&
+      req.method === 'POST' &&
+      !req.url.includes('/count')
+    );
 
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/cockpit/processes/search']);
-      expect(mockRouter.navigateByUrl).not.toHaveBeenCalled();
-    });
+    const body = historyRequest.request.body as any;
+    expect(body.processInstanceIds).toBeUndefined();
+    expect(body.suspended).toBe(true);
 
-    it('should navigate to default search page when returnUrl is empty string', () => {
-      component.returnUrl = '';
+    historyRequest.flush([]);
 
-      component.backToSearch();
+    const countRequest = httpMock.expectOne(req => req.url.includes('/count'));
+    countRequest.flush({ count: 0 });
 
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/cockpit/processes/search']);
-      expect(mockRouter.navigateByUrl).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('reset() clears fromSearch and returnUrl', () => {
-    it('should clear fromSearch and returnUrl on reset', () => {
-      component.fromSearch = true;
-      component.returnUrl = '/cockpit/processes/search?state=ACTIVE';
-      component.selectedOperationId = 'suspend';
-      component.selectedIds = new Set(['inst-1', 'inst-2']);
-      component.currentStep = 2;
-
-      component.reset();
-
-      expect(component.fromSearch).toBe(false);
-      expect(component.returnUrl).toBeUndefined();
-      expect(component.selectedOperationId).toBeNull();
-      expect(component.selectedIds.size).toBe(0);
-      expect(component.currentStep).toBe(1);
-    });
-
-    it('should clear fromSearch and returnUrl from sessionStorage on reset', () => {
-      component.fromSearch = true;
-      component.returnUrl = '/cockpit/processes/search?state=ACTIVE';
-      component.selectedOperationId = 'suspend';
-      component.selectedIds = new Set(['inst-1']);
-      component.mode = 'instances';
-
-      component.saveToSessionStorage();
-      component.reset();
-
-      expect(sessionStorageRemoveSpy).toHaveBeenCalledWith('batchOpsWizardState');
-    });
-  });
-
-  describe('Back to search button visibility logic', () => {
-    it('should show button when fromSearch=true and currentStep=1', () => {
-      component.fromSearch = true;
-      component.currentStep = 1;
-
-      const shouldShow = component.fromSearch && component.currentStep === 1;
-      expect(shouldShow).toBe(true);
-    });
-
-    it('should not show button when fromSearch=false and currentStep=1', () => {
-      component.fromSearch = false;
-      component.currentStep = 1;
-
-      const shouldShow = component.fromSearch && component.currentStep === 1;
-      expect(shouldShow).toBe(false);
-    });
-
-    it('should not show button when fromSearch=true but currentStep=2', () => {
-      component.fromSearch = true;
-      component.currentStep = 2;
-
-      const shouldShow = component.fromSearch && component.currentStep === 1;
-      expect(shouldShow).toBe(false);
-    });
-
-    it('should not show button when fromSearch=true but currentStep=3', () => {
-      component.fromSearch = true;
-      component.currentStep = 3;
-
-      const shouldShow = component.fromSearch && component.currentStep === 1;
-      expect(shouldShow).toBe(false);
-    });
-  });
-
-  describe('Integration: Full flow from search to wizard and back', () => {
-    it('should handle complete flow: search → wizard → back to search', () => {
-      const initialState = {
-        operationId: 'suspend',
-        selectedIds: ['inst-1', 'inst-2', 'inst-3'],
-        fromSearch: true,
-        returnUrl: '/cockpit/processes/search?state=ACTIVE&processDefinitionKey=invoice',
-      };
-      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(initialState));
-
-      component.loadFromSessionStorage();
-
-      expect(component.fromSearch).toBe(true);
-      expect(component.returnUrl).toBe('/cockpit/processes/search?state=ACTIVE&processDefinitionKey=invoice');
-      expect(component.selectedIds.size).toBe(3);
-      expect(component.selectedOperationId).toBe('suspend');
-      expect(mockProcessInstanceService.getProcessInstances).not.toHaveBeenCalled();
-
-      component.backToSearch();
-
-      expect(mockRouter.navigateByUrl).toHaveBeenCalledWith(
-        '/cockpit/processes/search?state=ACTIVE&processDefinitionKey=invoice'
-      );
-    });
-
-    it('should preserve selection when user navigates back from step 2', () => {
-      const initialState = {
-        operationId: 'activate',
-        selectedIds: ['inst-1', 'inst-2'],
-        fromSearch: true,
-        returnUrl: '/cockpit/processes/search',
-      };
-      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(initialState));
-
-      component.loadFromSessionStorage();
-
-      expect(component.selectedIds.size).toBe(2);
-      expect(component.fromSearch).toBe(true);
-
-      component.continue();
-      expect(component.currentStep).toBe(2);
-
-      const shouldShowBackButton = component.fromSearch && component.currentStep === 1;
-      expect(shouldShowBackButton).toBe(false);
-
-      component.back();
-      expect(component.currentStep).toBe(1);
-
-      const shouldShowBackButtonOnStep1 = component.fromSearch && component.currentStep === 1;
-      expect(shouldShowBackButtonOnStep1).toBe(true);
-      expect(component.selectedIds.size).toBe(2);
-    });
-  });
-
-  describe('Edge cases', () => {
-    it('should handle malformed sessionStorage state gracefully', () => {
-      sessionStorage.setItem('batchOpsWizardState', 'not-valid-json');
-
-      expect(() => component.loadFromSessionStorage()).not.toThrow();
-    });
-
-    it('should handle null returnUrl', () => {
-      const state = {
-        operationId: 'suspend',
-        selectedIds: ['inst-1'],
-        fromSearch: true,
-        returnUrl: null,
-      };
-      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
-
-      component.loadFromSessionStorage();
-
-      expect(component.returnUrl).toBeNull();
-
-      component.backToSearch();
-      expect(mockRouter.navigate).toHaveBeenCalledWith(['/cockpit/processes/search']);
-    });
-
-    it('should not skip loadInstances when fromSearch=true but selectedIds has size 0', () => {
-      component.fromSearch = true;
-      component.selectedIds = new Set();
-
-      const shouldSkipLoad = component.fromSearch && component.selectedIds.size > 0;
-      expect(shouldSkipLoad).toBe(false);
-    });
+    const remainingProcessDefReqs = httpMock.match(req => req.url.includes('/process-definition'));
+    remainingProcessDefReqs.forEach(req => req.flush([]));
   });
 });

@@ -243,7 +243,6 @@ export interface WizardPersistedState {
   batchSelectedIds?: string[];
   batchFilterCriteria?: MultiValueFilter[];
   fromSearch?: boolean;
-  returnUrl?: string;
 }
 
 @Component({
@@ -397,7 +396,6 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
   selectedIds = new Set<string>();
 
   fromSearch = false;
-  returnUrl: string | undefined;
 
   showTechnicalDetails = false;
   showVariablesModal = false;
@@ -1926,17 +1924,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     this.executing = false;
     this.showTechnicalDetails = false;
     this.fromSearch = false;
-    this.returnUrl = undefined;
     window.scrollTo(0, 0);
     this.cdr.markForCheck();
-  }
-
-  backToSearch(): void {
-    if (this.returnUrl) {
-      this.router.navigateByUrl(this.returnUrl);
-    } else {
-      this.router.navigate(['/cockpit/processes/search']);
-    }
   }
 
   private saveToSessionStorage(): void {
@@ -1969,8 +1958,7 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         removalTimeBatchAbsoluteDate: this.removalTimeBatchAbsoluteDate,
         batchSelectedIds: [...this.removalTimeBatchSelectedIds],
         batchFilterCriteria: this.batchFilterCriteria,
-        fromSearch: this.fromSearch,
-        returnUrl: this.returnUrl
+        fromSearch: this.fromSearch
       };
       sessionStorage.setItem(this.SESSION_KEY, JSON.stringify(state));
     } catch {
@@ -2036,16 +2024,22 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       });
       this.batchHasActiveCriteria = this.batchFilterCriteria.length > 0;
       this.fromSearch = state.fromSearch ?? false;
-      this.returnUrl = state.returnUrl;
+
+      // Inject instanceId filter for preselection from search
+      if (state.fromSearch && this.selectedIds.size > 0) {
+        const instanceIdFilter: MultiValueFilter = {
+          field: 'instanceId' as GlobalSearchField,
+          values: [...this.selectedIds]
+        };
+        this.filterCriteria = [instanceIdFilter, ...this.filterCriteria];
+        this.hasActiveCriteria = true;
+      }
+
       const restoredStep: number = state.step ?? 1;
       this.currentStep = restoredStep >= 3 ? 1 : restoredStep as 1 | 2;
 
       if (this.currentStep === 1 && (this.selectedOperationId === 'suspend' || this.selectedOperationId === 'activate' || this.selectedOperationId === 'delete-running' || this.selectedOperationId === 'delete-finished' || this.selectedOperationId === 'set-retries-jobs' || this.selectedOperationId === 'set-retries-external' || this.selectedOperationId === 'set-variables' || this.selectedOperationId === 'correlate' || this.selectedOperationId === 'removal-time-process')) {
-        if (state.fromSearch && this.selectedIds.size > 0) {
-          // Ne pas recharger - les instances sont déjà présélectionnées depuis la recherche
-        } else {
-          this.loadInstances();
-        }
+        this.loadInstances();
         this.loadActivitiesFromFilter();
       } else if (this.currentStep === 1 && this.selectedOperationId === 'delete-decision') {
         this.loadDecisionInstances();
@@ -2058,6 +2052,9 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
         this.loadMoveInstancesProcesses();
       }
       this.cdr.markForCheck();
+
+      // Clear sessionStorage after loading to prevent replay on page reload
+      this.clearSessionStorage();
     } catch {
     }
   }

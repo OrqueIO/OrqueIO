@@ -1684,7 +1684,6 @@
   "cockpit.batchOps.stepper.define": "Define operation",
   "cockpit.batchOps.stepper.confirm": "Confirm",
   "cockpit.batchOps.stepper.results": "Results",
-  "cockpit.batchOps.backToSearch": "Back to search",
   "cockpit.batchOps.operationList.comingSoon": "Coming soon",
   "cockpit.batchOps.operationList.showMore": "Show {{count}} more operations",
   "cockpit.batchOps.operationList.showLess": "Show less",

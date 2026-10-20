@@ -21,15 +21,6 @@
         <fa-icon [icon]="faCodeBranch"></fa-icon>
       </div>
 
-      <!-- Back to search button -->
-      <button *ngIf="fromSearch && currentStep === 1"
-              type="button"
-              class="back-to-search-btn"
-              (click)="backToSearch()">
-        <fa-icon [icon]="faChevronRight" class="back-icon"></fa-icon>
-        {{ 'cockpit.batchOps.backToSearch' | translate }}
-      </button>
-
       <!-- Title -->
       <h2 [class.step-title]="!!selectedOperationId"
           [class.step1-hero__title]="!selectedOperationId">
