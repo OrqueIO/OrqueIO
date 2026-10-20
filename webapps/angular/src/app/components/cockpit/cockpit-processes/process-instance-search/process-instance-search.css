@@ -7,9 +7,7 @@
   overflow: hidden;
 }
 
-/* =====================================================
-   BASE LAYOUT
-   ===================================================== */
+/* BASE LAYOUT */
 
 .cockpit-layout {
   display: flex;
@@ -38,9 +36,7 @@
   gap: 1.5rem;
 }
 
-/* =====================================================
-   TAB BAR
-   ===================================================== */
+/* TAB BAR */
 
 .processes-tabs-bar {
   flex-shrink: 0;
@@ -76,7 +72,6 @@
   border-bottom-color: var(--color-primary);
   font-weight: var(--font-weight-semibold);
 }
-
 
 .panel-header-bar {
   display: flex;
@@ -121,9 +116,7 @@
   gap: var(--space-4);
 }
 
-/* =====================================================
-   CRITERIA ZONE
-   ===================================================== */
+/* CRITERIA ZONE */
 
 .criteria-zone {
   background: var(--bg-card);
@@ -138,9 +131,7 @@
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
 }
 
-/* =====================================================
-   PILLS AREA
-   ===================================================== */
+/* PILLS AREA */
 
 .pills-area {
   display: flex;
@@ -220,9 +211,7 @@
   text-decoration: underline;
 }
 
-/* =====================================================
-   CRITERIA DROPDOWN
-   ===================================================== */
+/* CRITERIA DROPDOWN */
 
 .criteria-dropdown-wrapper {
   position: relative;
@@ -252,7 +241,7 @@
 
 @keyframes criteriaDropdownIn {
   from { opacity: 0; transform: translateY(-8px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0)    scale(1); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .criteria-dropdown {
@@ -404,9 +393,7 @@
   white-space: nowrap;
 }
 
-/* =====================================================
-   CRITERION EDITOR POPOVER
-   ===================================================== */
+/* CRITERION EDITOR POPOVER */
 
 .criterion-editor-popover {
   position: absolute;
@@ -452,16 +439,7 @@
   flex-shrink: 0;
 }
 
-.editor-popover-icon--businessKey    { color: #2563eb; }
-.editor-popover-icon--instanceId     { color: #7c3aed; }
-.editor-popover-icon--state          { color: #059669; }
-.editor-popover-icon--withIncidents  { color: #d97706; }
-.editor-popover-icon--startedAfter,
-.editor-popover-icon--startedBefore  { color: #0d9488; }
-.editor-popover-icon--finishedAfter,
-.editor-popover-icon--finishedBefore { color: #475569; }
-.editor-popover-icon--variable       { color: #6366f1; }
-.editor-popover-icon--variables      { color: #6366f1; }
+.editor-popover-icon--variables { color: #6366f1; }
 
 .editor-popover-title {
   font-size: var(--font-size-xs);
@@ -614,9 +592,7 @@
   text-align: center;
 }
 
-/* =====================================================
-   STATE CHECKLIST (inline popover)
-   ===================================================== */
+/* STATE CHECKLIST (inline popover) */
 
 .state-popover-header {
   display: flex;
@@ -686,9 +662,9 @@
   flex-shrink: 0;
 }
 
-.state-dot--active     { background-color: var(--color-success); }
-.state-dot--suspended  { background-color: var(--color-warning); }
-.state-dot--completed  { background-color: var(--color-primary); }
+.state-dot--active { background-color: var(--color-success); }
+.state-dot--suspended { background-color: var(--color-warning); }
+.state-dot--completed { background-color: var(--color-primary); }
 .state-dot--terminated { background-color: var(--color-danger); }
 
 .state-row-label {
@@ -739,7 +715,6 @@
   flex-shrink: 0;
   color: #ea580c;
 }
-
 
 .processdef-sa-badge {
   display: flex;
@@ -903,9 +878,7 @@
   gap: var(--space-2);
 }
 
-/* =====================================================
-   CASE-SENSITIVITY OPTIONS
-   ===================================================== */
+/* CASE-SENSITIVITY OPTIONS */
 
 .case-options {
   display: flex;
@@ -931,9 +904,7 @@
   cursor: pointer;
 }
 
-/* =====================================================
-   SEARCH PANEL ACTIONS
-   ===================================================== */
+/* SEARCH PANEL ACTIONS */
 
 .search-panel-actions {
   display: flex;
@@ -985,9 +956,7 @@
   color: var(--text-primary);
 }
 
-/* =====================================================
-   INITIAL EMPTY STATE
-   ===================================================== */
+/* INITIAL EMPTY STATE */
 
 .search-initial-state {
   display: flex;
@@ -1019,9 +988,7 @@
   color: var(--text-muted);
 }
 
-/* =====================================================
-   SEARCH RESULTS
-   ===================================================== */
+/* SEARCH RESULTS */
 
 .loading-state {
   display: flex;
@@ -1159,9 +1126,7 @@
   flex-shrink: 0;
 }
 
-/* =====================================================
-   STATE BADGES
-   ===================================================== */
+/* STATE BADGES */
 
 .state-badge {
   display: inline-flex;
@@ -1179,15 +1144,13 @@
   font-size: 0.625rem;
 }
 
-.state-active    { background: var(--color-success-bg); color: var(--color-success); }
+.state-active { background: var(--color-success-bg); color: var(--color-success); }
 .state-suspended { background: var(--color-warning-bg); color: var(--color-warning); }
 .state-completed { background: var(--color-info-bg); color: var(--color-info); }
-.state-terminated{ background: var(--color-danger-bg); color: var(--color-danger); }
-.state-error     { background: var(--color-danger-bg); color: var(--color-danger); }
+.state-terminated,
+.state-error { background: var(--color-danger-bg); color: var(--color-danger); }
 
-/* =====================================================
-   DATA TABLE
-   ===================================================== */
+/* DATA TABLE */
 
 .data-table {
   width: 100%;
@@ -1243,9 +1206,7 @@
   text-align: center;
 }
 
-/* =====================================================
-   SELECTION BAR AND SELECTED ROWS
-   ===================================================== */
+/* SELECTION BAR AND SELECTED ROWS */
 
 .select-all-bar {
   display: flex;
@@ -1282,9 +1243,7 @@
   background: var(--color-primary-bg, rgba(99, 102, 241, 0.08));
 }
 
-/* =====================================================
-   HEADER ACTIONS GROUP
-   ===================================================== */
+/* HEADER ACTIONS GROUP */
 
 .search-header-actions {
   display: flex;
@@ -1294,9 +1253,7 @@
   margin-left: auto;
 }
 
-/* =====================================================
-   ACTION BAR (grouped buttons container)
-   ===================================================== */
+/* ACTION BAR (grouped buttons container) */
 
 .action-bar {
   display: inline-flex;
@@ -1308,9 +1265,7 @@
   border-radius: 12px;
 }
 
-/* =====================================================
-   ACTION BAR BUTTON (base class, reusable)
-   ===================================================== */
+/* ACTION BAR BUTTON (base class, reusable) */
 
 .action-bar__btn {
   display: inline-flex;
@@ -1374,9 +1329,7 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--color-primary-light);
 }
 
-/* =====================================================
-   BATCH OPERATIONS DROPDOWN
-   ===================================================== */
+/* BATCH OPERATIONS DROPDOWN */
 
 .batch-ops-action-wrapper {
   position: relative;
@@ -1420,6 +1373,22 @@
   overscroll-behavior: contain;
   scrollbar-width: thin;
   padding: var(--space-2);
+  padding-bottom: 8px;
+  position: relative;
+}
+
+.menu__list::after {
+  content: '';
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: linear-gradient(to top, var(--bg-card) 0%, transparent 100%);
+  pointer-events: none;
+  display: block;
+  margin-left: calc(var(--space-2) * -1);
+  margin-right: calc(var(--space-2) * -1);
 }
 
 .batch-ops-dropdown-item {
@@ -1481,7 +1450,8 @@
   color: rgb(245, 158, 11);
 }
 
-.badge--green {
+.badge--green,
+.badge--emerald {
   background: rgba(16, 185, 129, 0.1);
   color: rgb(16, 185, 129);
 }
@@ -1501,14 +1471,17 @@
   color: rgb(139, 92, 246);
 }
 
-.badge--emerald {
-  background: rgba(16, 185, 129, 0.1);
-  color: rgb(16, 185, 129);
+.badge--purple {
+  background: rgba(168, 85, 247, 0.1);
+  color: rgb(168, 85, 247);
 }
 
-/* =====================================================
-   LINKS
-   ===================================================== */
+.badge--gray {
+  background: rgba(107, 114, 128, 0.1);
+  color: rgb(107, 114, 128);
+}
+
+/* LINKS */
 
 .instance-link {
   color: var(--text-primary);
@@ -1567,18 +1540,12 @@
   transform: scale(1.05);
 }
 
-/* =====================================================
-   UTILITY
-   ===================================================== */
-
 .mono {
   font-family: var(--font-family-mono);
   font-size: var(--font-size-xs);
 }
 
-/* =====================================================
-   CONFLICT WARNINGS
-   ===================================================== */
+/* CONFLICT WARNINGS */
 
 .variable-conflict-warning {
   display: flex;
@@ -1610,9 +1577,7 @@
   color: var(--color-error, #ef4444);
 }
 
-/* =====================================================
-   VARIABLES MULTI-LINE POPOVER
-   ===================================================== */
+/* VARIABLES MULTI-LINE POPOVER */
 
 .variables-popover-header {
   display: flex;
@@ -1766,9 +1731,7 @@
   text-align: center;
 }
 
-/* =====================================================
-   OPERATOR DROPDOWN
-   ===================================================== */
+/* OPERATOR DROPDOWN */
 
 .op-dropdown-wrapper {
   position: relative;
@@ -1880,16 +1843,13 @@
   box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
 }
 
-/* =====================================================
-   RESPONSIVE
-   ===================================================== */
+/* RESPONSIVE */
 
 @media (max-width: 768px) {
   .data-table { min-width: 600px; }
   .search-table-container { overflow-x: auto; }
   .editor-row--variable { flex-direction: column; }
   .editor-input--name { max-width: 100%; }
-  /* Prevent dropdown from escaping viewport on tablets */
   .criteria-dropdown { max-width: calc(100vw - 16px); }
   .criterion-editor-popover--variables {
     left: auto;
@@ -1899,16 +1859,12 @@
 }
 
 @media (max-width: 480px) {
-  /* Tighter padding on small phones */
   .tab-content { padding: var(--space-3); gap: var(--space-3); }
   .search-table-container { margin: 0 var(--space-3); }
-  /* Base popover also constrained on very narrow screens */
   .criterion-editor-popover { width: min(280px, calc(100vw - 20px)); }
 }
 
-/* =====================================================
-   ACCESSIBILITY
-   ===================================================== */
+/* ACCESSIBILITY */
 
 @media (prefers-reduced-motion: reduce) {
   * { transition-duration: 0.01ms !important; }
@@ -1922,29 +1878,22 @@
   outline-offset: 2px;
 }
 
-/* =====================================================
-   SCROLLBAR STYLING
-   ===================================================== */
+/* SCROLLBAR STYLING */
 
-.search-table-container::-webkit-scrollbar,
-.tab-content::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+.menu__list::-webkit-scrollbar {
+  width: 6px;
 }
 
-.search-table-container::-webkit-scrollbar-track,
-.tab-content::-webkit-scrollbar-track {
-  background: var(--color-gray-100);
-  border-radius: 4px;
+.menu__list::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.search-table-container::-webkit-scrollbar-thumb,
-.tab-content::-webkit-scrollbar-thumb {
+.menu__list::-webkit-scrollbar-thumb {
   background: var(--color-gray-300);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
-.search-table-container::-webkit-scrollbar-thumb:hover,
-.tab-content::-webkit-scrollbar-thumb:hover {
+.menu__list::-webkit-scrollbar-thumb:hover {
   background: var(--color-gray-400);
 }
+

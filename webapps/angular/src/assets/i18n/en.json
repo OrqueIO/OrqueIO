@@ -275,6 +275,8 @@
   "cockpit.processes.search.operationRequiresOnlySuspended": "This operation requires only suspended instances",
   "cockpit.processes.search.operationRequiresOnlyRunning": "This operation requires only running instances",
   "cockpit.processes.search.operationRequiresOnlyFinished": "This operation requires only finished instances",
+  "cockpit.processes.search.moveInstancesRequiresSameDefinition": "Select instances of a single process definition",
+  "cockpit.processes.search.moveInstancesRequiresActiveOrSuspended": "Active or suspended instances only",
   "cockpit.processes.search.selectAtLeastOne": "Please select at least one instance",
   "cockpit.processes.search.selectAllRows": "Select all {{count}} rows",
   "cockpit.processes.search.selectAllRowsHint": "Selects the rows of the current page",

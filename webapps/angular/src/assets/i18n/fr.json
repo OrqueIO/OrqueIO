@@ -272,6 +272,8 @@
   "cockpit.processes.search.operationRequiresOnlySuspended": "Cette opération nécessite uniquement des instances suspendues",
   "cockpit.processes.search.operationRequiresOnlyRunning": "Cette opération nécessite uniquement des instances en cours",
   "cockpit.processes.search.operationRequiresOnlyFinished": "Cette opération nécessite uniquement des instances terminées",
+  "cockpit.processes.search.moveInstancesRequiresSameDefinition": "Sélectionnez des instances d'une seule définition de processus",
+  "cockpit.processes.search.moveInstancesRequiresActiveOrSuspended": "Instances actives ou suspendues uniquement",
   "cockpit.processes.search.selectAtLeastOne": "Veuillez sélectionner au moins une instance",
   "cockpit.processes.search.selectAllRows": "Sélectionner les {{count}} lignes",
   "cockpit.processes.search.selectAllRowsHint": "Sélectionne les lignes de la page actuelle",

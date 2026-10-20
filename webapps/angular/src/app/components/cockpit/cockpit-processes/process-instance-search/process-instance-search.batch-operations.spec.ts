@@ -77,6 +77,7 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
         return result;
       }),
       currentLang: 'en',
+      currentLang$: of('en'),
       setLanguage: vi.fn(),
     };
 
@@ -105,6 +106,11 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
 
     // Initialize component
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture?.destroy();
+    TestBed.resetTestingModule();
   });
 
   describe('Instance Selection', () => {
@@ -215,7 +221,13 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
       expect(ids).not.toContain('delete-decision');
       expect(ids).not.toContain('removal-time-decision');
       expect(ids).not.toContain('removal-time-batch');
-      expect(ids).not.toContain('move-instances');
+    });
+
+    it('should include move-instances after enabling supportsProcessInstances', () => {
+      const applicable = component.applicableOperations;
+      const ids = applicable.map(op => op.id);
+
+      expect(ids).toContain('move-instances');
     });
   });
 

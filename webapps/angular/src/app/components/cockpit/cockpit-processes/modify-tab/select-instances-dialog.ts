@@ -28,7 +28,7 @@ import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 export const MOVE_INSTANCES_DIALOG_SESSION_KEY = 'moveInstancesDialogState';
 export const BATCH_OPS_MODIFY_SIGNAL_KEY = 'batchOpsModifySignal';
 
-interface DialogPersistedState {
+export interface DialogPersistedState {
   processDefinitionId: string;
   activePills: MovePill[];
   selectionMode: 'instance' | 'query';
@@ -66,7 +66,7 @@ type MoveField =
   | 'incidentId' | 'incidentType' | 'incidentMessageLike' | 'activityId'
   | 'startedAfter' | 'startedBefore' | 'variables';
 
-interface MovePill {
+export interface MovePill {
   field: MoveField;
   values: string[];
   variableLines?: VariableLine[];

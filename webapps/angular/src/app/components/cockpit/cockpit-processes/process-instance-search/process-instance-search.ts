@@ -173,8 +173,10 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   multiStateAbsoluteOffset = 0;
   multiStateHasMore = false;
 
+  private static readonly MOVE_INSTANCES_ALLOWED_STATES = ['ACTIVE', 'SUSPENDED'];
+
   selectedInstanceIds = new Set<string>();
-  private selectedInstanceStatesCache = new Map<string, string>();
+  private selectedInstanceMetadataCache = new Map<string, { state: string; processDefinitionId: string; processDefinitionKey: string }>();
   showBatchOpsDropdown = false;
 
   private readonly searchRequest$ = new Subject<boolean>();
@@ -997,7 +999,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.searchError = false;
     this.searchCurrentPage = 1;
     this.selectedInstanceIds = new Set();
-    this.selectedInstanceStatesCache.clear();
+    this.selectedInstanceMetadataCache.clear();
     this.resetCursorState();
     this.cdr.markForCheck();
     this.loadSearchResults(true);
@@ -1222,10 +1224,14 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
 
     if (this.selectedInstanceIds.has(id)) {
       this.selectedInstanceIds.delete(id);
-      this.selectedInstanceStatesCache.delete(id);
+      this.selectedInstanceMetadataCache.delete(id);
     } else {
       this.selectedInstanceIds.add(id);
-      this.selectedInstanceStatesCache.set(id, instance.state);
+      this.selectedInstanceMetadataCache.set(id, {
+        state: instance.state,
+        processDefinitionId: instance.processDefinitionId,
+        processDefinitionKey: instance.processDefinitionKey
+      });
     }
     this.selectedInstanceIds = new Set(this.selectedInstanceIds);
     this.cdr.markForCheck();
@@ -1239,12 +1245,16 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     if (this.isAllInstancesSelected) {
       this.searchResults.forEach(i => {
         this.selectedInstanceIds.delete(i.id);
-        this.selectedInstanceStatesCache.delete(i.id);
+        this.selectedInstanceMetadataCache.delete(i.id);
       });
     } else {
       this.searchResults.forEach(i => {
         this.selectedInstanceIds.add(i.id);
-        this.selectedInstanceStatesCache.set(i.id, i.state);
+        this.selectedInstanceMetadataCache.set(i.id, {
+          state: i.state,
+          processDefinitionId: i.processDefinitionId,
+          processDefinitionKey: i.processDefinitionKey
+        });
       });
     }
     this.selectedInstanceIds = new Set(this.selectedInstanceIds);
@@ -1265,7 +1275,11 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   }
 
   get selectedInstanceStates(): Set<string> {
-    return new Set(this.selectedInstanceStatesCache.values());
+    const states = new Set<string>();
+    for (const metadata of this.selectedInstanceMetadataCache.values()) {
+      states.add(metadata.state);
+    }
+    return states;
   }
 
   isOperationApplicable(operationId: string): boolean {
@@ -1287,6 +1301,15 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
         return ![...states].some(s => s !== 'ACTIVE' && s !== 'SUSPENDED');
       case 'removal-time-process':
         return true;
+      case 'move-instances': {
+        const metadata = [...this.selectedInstanceMetadataCache.values()];
+        if (metadata.length === 0) return false;
+        const firstDefId = metadata[0].processDefinitionId;
+        const allSameDefinition = metadata.every(m => m.processDefinitionId === firstDefId);
+        if (!allSameDefinition) return false;
+        const allowedStates = ProcessInstanceSearchComponent.MOVE_INSTANCES_ALLOWED_STATES;
+        return ![...states].some(s => !allowedStates.includes(s));
+      }
       default:
         return false;
     }
@@ -1324,12 +1347,34 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
           return 'cockpit.processes.search.operationRequiresOnlyRunning';
         }
         break;
+      case 'move-instances': {
+        const metadata = [...this.selectedInstanceMetadataCache.values()];
+        if (metadata.length === 0) return '';
+        const firstDefId = metadata[0].processDefinitionId;
+        const allSameDefinition = metadata.every(m => m.processDefinitionId === firstDefId);
+        if (!allSameDefinition) {
+          return 'cockpit.processes.search.moveInstancesRequiresSameDefinition';
+        }
+        const allowedStates = ProcessInstanceSearchComponent.MOVE_INSTANCES_ALLOWED_STATES;
+        if ([...states].some(s => !allowedStates.includes(s))) {
+          return 'cockpit.processes.search.moveInstancesRequiresActiveOrSuspended';
+        }
+        break;
+      }
     }
     return '';
   }
 
   toggleBatchOpsDropdown(): void {
     this.showBatchOpsDropdown = !this.showBatchOpsDropdown;
+    if (this.showBatchOpsDropdown) {
+      setTimeout(() => {
+        const menuList = document.querySelector('.menu__list') as HTMLElement;
+        if (menuList) {
+          menuList.scrollTop = 0;
+        }
+      }, 0);
+    }
     this.cdr.markForCheck();
   }
 

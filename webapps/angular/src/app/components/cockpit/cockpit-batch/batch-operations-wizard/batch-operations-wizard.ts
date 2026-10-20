@@ -142,7 +142,7 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     id: 'set-retries-external',
     labelKey: 'cockpit.batchOps.setRetriesExternal.label',
     descKey: 'cockpit.batchOps.setRetriesExternal.desc',
-    icon: faSyncAlt,
+    icon: faCodeBranch,
     badgeClass: 'badge--blue',
     available: true,
     actionBtnKey: 'cockpit.batchOps.setRetriesExternal.actionBtn',
@@ -167,7 +167,7 @@ export const BATCH_OPERATIONS: BatchOperationDef[] = [
     icon: faArrowRight,
     badgeClass: 'badge--blue',
     available: true,
-    supportsProcessInstances: false
+    supportsProcessInstances: true
   },
   {
     id: 'correlate',
