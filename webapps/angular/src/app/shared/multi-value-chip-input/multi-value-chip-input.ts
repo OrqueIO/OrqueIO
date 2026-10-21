@@ -26,6 +26,7 @@ export class MultiValueChipInputComponent implements AfterViewInit {
 
   @ViewChild('inputEl') inputEl?: ElementRef<HTMLInputElement>;
   @ViewChild('editInputEl') editInputEl?: ElementRef<HTMLInputElement>;
+  @ViewChild('containerEl') containerEl?: ElementRef<HTMLDivElement>;
 
   currentInput = '';
 
@@ -69,6 +70,7 @@ export class MultiValueChipInputComponent implements AfterViewInit {
     this.values = Array.from(current);
     this.currentInput = '';
     this.valuesChange.emit(this.values);
+    this.scrollToBottom();
     this.cdr.markForCheck();
   }
 
@@ -77,6 +79,7 @@ export class MultiValueChipInputComponent implements AfterViewInit {
     if (val && !this.values.includes(val)) {
       this.values = [...this.values, val];
       this.valuesChange.emit(this.values);
+      this.scrollToBottom();
     }
     this.currentInput = '';
     this.cdr.markForCheck();
@@ -167,5 +170,14 @@ export class MultiValueChipInputComponent implements AfterViewInit {
     this.editingError = null;
     this.cdr.markForCheck();
     setTimeout(() => this.inputEl?.nativeElement.focus());
+  }
+
+  private scrollToBottom(): void {
+    setTimeout(() => {
+      const container = this.containerEl?.nativeElement;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    });
   }
 }

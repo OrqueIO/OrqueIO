@@ -5,12 +5,21 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MultiValueChipInputComponent } from './multi-value-chip-input';
 import { initTestEnvironment } from '../../testing/test-utils';
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Read CSS file for direct assertion (jsdom doesn't compute styles)
+// Global variable shared across all describe blocks
+const cssPath = path.join(__dirname, 'multi-value-chip-input.css');
+const cssContent = fs.readFileSync(cssPath, 'utf-8');
 
 describe('MultiValueChipInputComponent', () => {
   let component: MultiValueChipInputComponent;
   let fixture: ComponentFixture<MultiValueChipInputComponent>;
 
-  beforeAll(() => { initTestEnvironment(); });
+  beforeAll(() => {
+    initTestEnvironment();
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -312,5 +321,81 @@ describe('MultiValueChipInputComponent — chip inline-edit', () => {
 
     expect(component.values).toEqual(['beta', 'gamma']);
     expect(component.editingIndex).toBe(1);
+  });
+
+
+  it('[T1] should apply max-height and overflow-y auto to container with 3 values (no overflow)', async () => {
+    component.values = ['value1', 'value2', 'value3'];
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const container = fixture.nativeElement.querySelector('.chip-input-container') as HTMLElement;
+    expect(container).toBeTruthy();
+
+    // Verify CSS file contains max-height and overflow-y (jsdom limitation workaround)
+    // Direct assertion on CSS source since jsdom doesn't compute styles
+    // Must NOT be commented out
+    expect(cssContent).toMatch(/^\s*max-height:\s*220px;/m);
+    expect(cssContent).toMatch(/^\s*overflow-y:\s*auto;/m);
+
+    expect(container.scrollHeight).toBeLessThanOrEqual(container.clientHeight + 1);
+  });
+
+  it('[T2] should apply max-height and overflow with 100 values (hint/buttons outside scrollable area)', async () => {
+    const manyValues = Array.from({ length: 100 }, (_, i) => `id-${i}`);
+    component.values = manyValues;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const container = fixture.nativeElement.querySelector('.chip-input-container') as HTMLElement;
+    const hint = fixture.nativeElement.querySelector('.chip-input-hint') as HTMLElement;
+
+    expect(container).toBeTruthy();
+    expect(hint).toBeTruthy();
+
+    // Verify CSS file contains max-height and overflow-y (not commented)
+    expect(cssContent).toMatch(/^\s*max-height:\s*220px;/m);
+    expect(cssContent).toMatch(/^\s*overflow-y:\s*auto;/m);
+
+    // Verify hint is OUTSIDE container (not a child)
+    const hintParent = hint.parentElement;
+    expect(hintParent).not.toBe(container);
+    expect(hint.closest('.chip-input-container')).toBeNull();
+  });
+
+  it('[T3] should scroll to bottom after adding a value', async () => {
+    const manyValues = Array.from({ length: 50 }, (_, i) => `id-${i}`);
+    component.values = manyValues;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const container = component.containerEl?.nativeElement;
+
+    Object.defineProperty(container, 'scrollHeight', { value: 500, configurable: true });
+    Object.defineProperty(container, 'clientHeight', { value: 220, configurable: true });
+
+    const initialScrollTop = container!.scrollTop;
+
+    component.currentInput = 'new-value';
+    component.addCurrentInput();
+    fixture.detectChanges();
+
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    expect(container!.scrollTop).toBe(500);
+  });
+
+  it('[T4] should remove chip when × button is clicked', () => {
+    component.values = ['value1', 'value2', 'value3'];
+    fixture.detectChanges();
+
+    const removeButtons = fixture.nativeElement.querySelectorAll('.chip-remove');
+    expect(removeButtons.length).toBe(3);
+
+
+    (removeButtons[1] as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    expect(component.values).toEqual(['value1', 'value3']);
   });
 });
