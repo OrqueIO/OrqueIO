@@ -15,6 +15,7 @@ import {
 } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslateService } from '../../../../i18n/translate.service';
+import { SearchInstancesStateService } from '../../../../services/search-instances-state.service';
 import { initTestEnvironment } from '../../../../testing/test-utils';
 import { By } from '@angular/platform-browser';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
@@ -104,6 +105,10 @@ describe('ProcessInstanceSearchComponent — loadSearchResults', () => {
   let cockpitService: CockpitService;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     cockpitService = {
@@ -139,6 +144,16 @@ describe('ProcessInstanceSearchComponent — loadSearchResults', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   describe('single action → single call to service', () => {
@@ -299,6 +314,7 @@ describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () 
   ];
 
   async function setup(criteria: MultiValueFilter[], extraParams: Record<string, string> = {}): Promise<void> {
+    sessionStorage.clear(); // Feature #283 persists state
     initTestEnvironment();
 
     cockpitService = {
@@ -344,6 +360,7 @@ describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () 
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    sessionStorage.clear(); // Feature #283 persists state
     TestBed.resetTestingModule();
   });
 
@@ -394,6 +411,7 @@ describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () 
   });
 
   it('should NOT trigger a search when URL criteria is absent', async () => {
+    sessionStorage.clear(); // Feature #283 persists state
     initTestEnvironment();
 
     cockpitService = {
@@ -424,6 +442,7 @@ describe('ProcessInstanceSearchComponent — URL restoration (loadFromUrl)', () 
   });
 
   it('should NOT trigger a search when URL criteria is an empty array', async () => {
+    sessionStorage.clear(); // Feature #283 persists state
     initTestEnvironment();
 
     cockpitService = {
@@ -461,6 +480,10 @@ describe('ProcessInstanceSearchComponent — cursor state lifecycle', () => {
   const KEYSET_PAGE = { items: MOCK_INSTANCES, nextCursor: { offsets: { '0': 2 } }, hasMore: true };
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     cockpitService = {
@@ -490,6 +513,16 @@ describe('ProcessInstanceSearchComponent — cursor state lifecycle', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('resets cursor state on new executeSearch so prior navigation never leaks', () => {
@@ -540,6 +573,10 @@ describe('ProcessInstanceSearchComponent — searchTotalPages & multiStateCurren
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -568,6 +605,16 @@ describe('ProcessInstanceSearchComponent — searchTotalPages & multiStateCurren
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   describe('searchTotalPages', () => {
@@ -649,6 +696,10 @@ describe('ProcessInstanceSearchComponent — processDefinition search filter', (
   ];
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     mockGetProcessDefinitions = vi.fn().mockReturnValue(of(DEFS));
@@ -760,6 +811,10 @@ describe('ProcessInstanceSearchComponent — searchEndIndex never exceeds total 
   const ALL_4_STATES = { field: 'state', values: ['active', 'suspended', 'completed', 'terminated'] };
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -887,6 +942,10 @@ describe('ProcessInstanceSearchComponent — isArbitraryMultiState: 4 states = o
   const ALL_4_STATES = { field: 'state', values: ['active', 'suspended', 'completed', 'terminated'] };
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     mockSearchGlobal = vi.fn().mockReturnValue(of([]));
@@ -1027,6 +1086,10 @@ describe('ProcessInstanceSearchComponent — pdVisibleSelectedCount counts proce
   ];
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -1144,6 +1207,10 @@ describe('ProcessInstanceSearchComponent — pill management', () => {
   const realSvc = Object.create(CockpitService.prototype) as CockpitService;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -1176,6 +1243,16 @@ describe('ProcessInstanceSearchComponent — pill management', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should start with no active pills', () => {
@@ -1397,6 +1474,10 @@ describe('ProcessInstanceSearchComponent — pill editing', () => {
   const realSvc = Object.create(CockpitService.prototype) as CockpitService;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -1429,6 +1510,16 @@ describe('ProcessInstanceSearchComponent — pill editing', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should open editor pre-filled with businessKey pill values on startEditPill', () => {
@@ -1504,6 +1595,10 @@ describe('ProcessInstanceSearchComponent — click outside popover', () => {
     comp.onDocumentClick({ target: document.createElement('div') } as any as Event);
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -1536,6 +1631,16 @@ describe('ProcessInstanceSearchComponent — click outside popover', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should remove a state pill when all states are deselected and user clicks outside', () => {
@@ -1585,6 +1690,10 @@ describe('ProcessInstanceSearchComponent — Enter key shortcut', () => {
   let cockpitService: any;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     cockpitService = {
@@ -1617,6 +1726,16 @@ describe('ProcessInstanceSearchComponent — Enter key shortcut', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should confirm businessKey criterion via emptyEnter (chip added then Enter on empty input)', () => {
@@ -1713,6 +1832,10 @@ describe('ProcessInstanceSearchComponent — Variables popover — keyboard & cl
     comp.onDocumentClick({ target: document.createElement('div') } as any as Event);
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -1745,6 +1868,16 @@ describe('ProcessInstanceSearchComponent — Variables popover — keyboard & cl
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should create a Variables pill when clicking outside the open popover with a valid line', () => {
@@ -1827,6 +1960,10 @@ describe('ProcessInstanceSearchComponent — Variables popover — Enter key edg
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -1859,6 +1996,16 @@ describe('ProcessInstanceSearchComponent — Variables popover — Enter key edg
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should create a chip and keep the popover open when Enter is pressed in a chip input with text', () => {
@@ -1897,6 +2044,10 @@ describe('ProcessInstanceSearchComponent — grouped variables criterion', () =>
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -1929,6 +2080,16 @@ describe('ProcessInstanceSearchComponent — grouped variables criterion', () =>
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should create a single Variables (2) pill when 2 variables are added in the same popover', () => {
@@ -2031,6 +2192,10 @@ describe('ProcessInstanceSearchComponent — variableConflicts getter', () => {
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2063,6 +2228,16 @@ describe('ProcessInstanceSearchComponent — variableConflicts getter', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should return no conflict when valid range: gteq 2 and lt 100', () => {
@@ -2157,6 +2332,10 @@ describe('ProcessInstanceSearchComponent — operator dropdown — custom single
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2189,6 +2368,16 @@ describe('ProcessInstanceSearchComponent — operator dropdown — custom single
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('isMultiValueOperator returns false for comparison operators (>, ≥, <, ≤)', () => {
@@ -2253,6 +2442,10 @@ describe('ProcessInstanceSearchComponent — comparison value validation', () =>
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2285,6 +2478,16 @@ describe('ProcessInstanceSearchComponent — comparison value validation', () =>
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('isComparisonValueInvalid returns true for gteq with non-numeric value', () => {
@@ -2363,6 +2566,10 @@ describe('ProcessInstanceSearchComponent — getPillLabel', () => {
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2395,6 +2602,16 @@ describe('ProcessInstanceSearchComponent — getPillLabel', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should return correct label for businessKey pill', () => {
@@ -2436,6 +2653,10 @@ describe('ProcessInstanceSearchComponent — date criteria — type="date" and t
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2468,6 +2689,16 @@ describe('ProcessInstanceSearchComponent — date criteria — type="date" and t
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should use type="date" (not datetime-local) in the date editor popover', () => {
@@ -2511,6 +2742,10 @@ describe('ProcessInstanceSearchComponent — startedDateConflict', () => {
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2543,6 +2778,16 @@ describe('ProcessInstanceSearchComponent — startedDateConflict', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should be true when startedAfter is later than startedBefore', () => {
@@ -2572,6 +2817,10 @@ describe('ProcessInstanceSearchComponent — finishedDateConflict', () => {
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2604,6 +2853,16 @@ describe('ProcessInstanceSearchComponent — finishedDateConflict', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should be true when finishedAfter is later than finishedBefore', () => {
@@ -2628,6 +2887,10 @@ describe('ProcessInstanceSearchComponent — incidentsWithTerminalStateConflict'
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2660,6 +2923,16 @@ describe('ProcessInstanceSearchComponent — incidentsWithTerminalStateConflict'
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should be true when withIncidents + only terminal states selected', () => {
@@ -2711,6 +2984,10 @@ describe('ProcessInstanceSearchComponent — search loading state', () => {
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2743,6 +3020,16 @@ describe('ProcessInstanceSearchComponent — search loading state', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should set searchLoading to false and show results after executeSearch resolves, without extra user interaction', () => {
@@ -2766,6 +3053,10 @@ describe('ProcessInstanceSearchComponent — executeSearch (category B)', () => 
   let cockpitService: any;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     cockpitService = {
@@ -2798,6 +3089,16 @@ describe('ProcessInstanceSearchComponent — executeSearch (category B)', () => 
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should not execute search when there are no active pills', () => {
@@ -2829,6 +3130,10 @@ describe('ProcessInstanceSearchComponent — clearSearch', () => {
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2861,6 +3166,16 @@ describe('ProcessInstanceSearchComponent — clearSearch', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should reset all search state', () => {
@@ -2885,6 +3200,10 @@ describe('ProcessInstanceSearchComponent — hasVariableFilter', () => {
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2917,6 +3236,16 @@ describe('ProcessInstanceSearchComponent — hasVariableFilter', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should return false when no variable pill exists', () => {
@@ -2940,6 +3269,10 @@ describe('ProcessInstanceSearchComponent — checkPopoverPosition', () => {
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -2972,6 +3305,16 @@ describe('ProcessInstanceSearchComponent — checkPopoverPosition', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should set popoverFlipped=true when popover right edge exceeds viewport width', () => {
@@ -2996,6 +3339,10 @@ describe('ProcessInstanceSearchComponent — getInstanceStateClass', () => {
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -3028,6 +3375,16 @@ describe('ProcessInstanceSearchComponent — getInstanceStateClass', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should return state-active for ACTIVE state', () => {
@@ -3060,6 +3417,10 @@ describe('ProcessInstanceSearchComponent — extractVersionNumber', () => {
   let component: ProcessInstanceSearchComponent;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -3092,6 +3453,16 @@ describe('ProcessInstanceSearchComponent — extractVersionNumber', () => {
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should extract version number from Camunda 7 definition ID', () => {
@@ -3118,6 +3489,10 @@ describe('ProcessInstanceSearchComponent — URL and localStorage persistence', 
   let router: Router;
 
   beforeEach(async () => {
+    // Clean sessionStorage BEFORE each test to prevent state pollution
+    // Feature #283 persists state in sessionStorage
+    sessionStorage.clear();
+
     initTestEnvironment();
 
     const cockpitService = {
@@ -3152,6 +3527,16 @@ describe('ProcessInstanceSearchComponent — URL and localStorage persistence', 
 
   afterEach(() => {
     localStorage.removeItem('globalSearchPreferences');
+    // Clean sessionStorage to prevent state pollution between tests
+    // Legitimate change: component now persists state in sessionStorage (feature #283)
+    sessionStorage.clear();
+    // Also clear SearchInstancesStateService singleton state
+    try {
+      const stateService = TestBed.inject(SearchInstancesStateService as any);
+      if (stateService && typeof stateService.clearState === 'function') {
+        stateService.clearState();
+      }
+    } catch {}
   });
 
   it('should write pills as JSON criteria query param when a criterion is confirmed', () => {

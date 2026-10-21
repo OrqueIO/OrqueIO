@@ -1,5 +1,19 @@
 <ng-container *ngIf="step === 'edit'">
 
+  <div class="modify-alert modify-alert--info modify-search-preselection" *ngIf="searchPreselection">
+    <fa-icon [icon]="faInfoCircle" class="modify-alert__icon"></fa-icon>
+    <span class="modify-alert__text">
+      {{ 'cockpit.modify.searchPreselection' | translate: {
+        count: searchPreselection.selectedIds.length.toString(),
+        name: searchPreselection.definitionName || searchPreselection.processDefinitionKey,
+        version: searchPreselection.definitionVersion.toString()
+      } }}
+    </span>
+    <button type="button" class="modify-alert__link" (click)="clearSearchPreselection()">
+      {{ 'cockpit.modify.clearSearchPreselection' | translate }}
+    </button>
+  </div>
+
   <div class="modify-empty" *ngIf="!hasInstructions">
     <fa-icon [icon]="faCrosshairs" class="modify-empty__icon"></fa-icon>
     <p class="modify-empty__title">{{ 'cockpit.modify.emptyState' | translate }}</p>
@@ -102,17 +116,68 @@
       </div>
     </div>
 
-    <div class="modify-actions">
-      <button class="btn-secondary" (click)="clearAll()" type="button"
-              [disabled]="!sourceActivity && !targetActivity">
-        <fa-icon [icon]="faTimes"></fa-icon>
-        {{ 'cockpit.modify.clearAll' | translate }}
-      </button>
-      <button class="btn-primary" (click)="openSelectInstancesDialog()" type="button"
-              [disabled]="!canSelectInstances">
-        <fa-icon [icon]="faListCheck"></fa-icon>
-        {{ 'cockpit.modify.selectInstances' | translate }}
-      </button>
+    <div class="modify-actions" [class.modify-actions--preselection]="!!searchPreselection">
+      <ng-container *ngIf="!searchPreselection">
+        <button class="btn-secondary" (click)="clearAll()" type="button"
+                [disabled]="!sourceActivity && !targetActivity">
+          <fa-icon [icon]="faTimes"></fa-icon>
+          {{ 'cockpit.modify.clearAll' | translate }}
+        </button>
+        <button class="btn-primary" (click)="openSelectInstancesDialog()" type="button"
+                [disabled]="!canSelectInstances">
+          <fa-icon [icon]="faListCheck"></fa-icon>
+          {{ 'cockpit.modify.selectInstances' | translate }}
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="searchPreselection">
+        <div class="modify-actions__left">
+          <div class="eligibility-status" *ngIf="sourceActivity">
+            <div class="eligibility-status__checking" *ngIf="eligibilityLoading">
+              <fa-icon [icon]="faSpinner" animation="spin" class="eligibility-status__icon"></fa-icon>
+              <span class="eligibility-status__text">{{ 'cockpit.modify.eligibilityChecking' | translate }}</span>
+            </div>
+            <div class="eligibility-status__error" *ngIf="eligibilityError && !eligibilityLoading">
+              <fa-icon [icon]="faExclamationTriangle" class="eligibility-status__icon"></fa-icon>
+              <span class="eligibility-status__text">{{ eligibilityError | translate }}</span>
+              <button class="eligibility-status__retry" (click)="retryEligibilityCheck()" type="button">
+                {{ 'cockpit.modify.retryEligibility' | translate }}
+              </button>
+            </div>
+            <div class="eligibility-status__warning"
+                 *ngIf="!eligibilityLoading && !eligibilityError && eligibleCount > 0 && eligibleCount < searchPreselection.selectedIds.length">
+              <span class="eligibility-status__text">
+                {{ 'cockpit.modify.eligibilityWarning' | translate: {
+                  skipped: (searchPreselection.selectedIds.length - eligibleCount).toString(),
+                  total: searchPreselection.selectedIds.length.toString(),
+                  activity: sourceActivity.name || sourceActivity.id
+                } }}
+              </span>
+            </div>
+            <div class="eligibility-status__none"
+                 *ngIf="!eligibilityLoading && !eligibilityError && eligibleCount === 0">
+              <span class="eligibility-status__text">
+                {{ 'cockpit.modify.eligibilityNone' | translate: {
+                  activity: sourceActivity.name || sourceActivity.id
+                } }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="modify-actions__right">
+          <button class="btn-secondary" (click)="clearAll()" type="button"
+                  [disabled]="!sourceActivity && !targetActivity">
+            <fa-icon [icon]="faTimes"></fa-icon>
+            {{ 'cockpit.modify.clearAll' | translate }}
+          </button>
+          <button class="btn-primary" (click)="applyToEligibleInstances()" type="button"
+                  [disabled]="!canApplyToPreselection || eligibleCount === 0 || !!eligibilityError"
+                  [title]="eligibilityError ? (eligibilityError | translate) : (eligibleCount === 0 ? ('cockpit.modify.noEligibleInstances' | translate) : '')">
+            <fa-icon [icon]="eligibilityLoading ? faSpinner : faListCheck" [animation]="eligibilityLoading ? 'spin' : undefined"></fa-icon>
+            {{ 'cockpit.modify.applyToInstances' | translate: { count: eligibleCount.toString() } }}
+          </button>
+        </div>
+      </ng-container>
     </div>
   </ng-container>
 </ng-container>
