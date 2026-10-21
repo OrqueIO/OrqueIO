@@ -64,9 +64,8 @@ import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chi
 import { BATCH_OPERATIONS, WizardPersistedState } from '../../cockpit-batch/batch-operations-wizard/batch-operations-wizard';
 import { BatchOperationDef } from '../../cockpit-batch/batch-operation-list/batch-operation-list';
 import { SEARCH_PRESELECTION_SESSION_KEY, SearchMovePreselection, BATCH_OPS_MODIFY_SIGNAL_KEY } from '../modify-tab/select-instances-dialog';
-import { SearchInstancesStateService } from '../../../../services/search-instances-state.service';
-
-const SEARCH_BATCH_RETURN_KEY = 'searchBatchReturn';
+import { SearchInstancesStateService, BATCH_RETURN_ORIGINS } from '../../../../services/search-instances-state.service';
+import { NavigationHistoryService } from '../../../../services/navigation-history.service';
 
 @Component({
   selector: 'app-process-instance-search',
@@ -93,6 +92,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private translateService = inject(TranslateService);
   private searchStateService = inject(SearchInstancesStateService);
+  private navigationHistoryService = inject(NavigationHistoryService);
 
   // Icons
   faSpinner = faSpinner;
@@ -219,7 +219,6 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
         }
         this.searchLoading = false;
         this.detectStaleSelectedIds();
-        this.saveCurrentState();
         this.cdr.markForCheck();
       });
 
@@ -247,14 +246,12 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.navMenuService.clearMenuItems();
-    this.saveCurrentState();
-    this.searchStateService.flushToStorage();
   }
 
   /**
    * Single initialization entry point that decides the source of truth:
    * 1. URL params (deep link) take priority
-   * 2. Persisted state (F5 refresh / back navigation)
+   * 2. Persisted state (ONLY if returning from batch operation)
    * 3. Clean slate (first visit)
    *
    * Ensures exactly ONE search execution at init.
@@ -262,9 +259,33 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   private initializeFromContext(): void {
     const urlParams = this.route.snapshot.queryParams;
     const criteriaJson: string | null = urlParams['criteria'] ?? null;
-    const persistedState = this.searchStateService.loadState();
 
-    // Priority 1: URL has explicit search params (deep link)
+    // NEW RULE: Check if batch was successfully created (wizard sets this flag)
+    const batchSuccessFlag = sessionStorage.getItem('searchBatchReturn');
+    if (batchSuccessFlag) {
+      // Batch was created successfully → clear selection from snapshot
+      sessionStorage.removeItem('searchBatchReturn');
+      // Also clear the snapshot to prevent restoring the selection
+      this.searchStateService.clearState();
+    }
+
+    const previousUrl = this.navigationHistoryService.previousUrl || '';
+    const isReturningFromBatch = BATCH_RETURN_ORIGINS.some(origin => {
+      if (origin === '/cockpit/processes/') {
+        return previousUrl.startsWith('/cockpit/processes/') &&
+               previousUrl.includes('/instances') &&
+               (previousUrl.includes('tab=modify') || previousUrl.includes('&tab=modify'));
+      }
+      if (origin.includes('?')) {
+        return previousUrl.startsWith(origin.split('?')[0]);
+      }
+      return previousUrl.startsWith(origin);
+    });
+
+    const persistedState = isReturningFromBatch
+      ? this.searchStateService.loadAndDeleteState()
+      : null;
+
     if (criteriaJson) {
       try {
         const urlPills = JSON.parse(criteriaJson) as MultiValueFilter[];
@@ -273,14 +294,12 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
           this.variableNamesIgnoreCase = urlParams['vnIgnoreCase'] === 'true';
           this.variableValuesIgnoreCase = urlParams['vvIgnoreCase'] === 'true';
 
-          // Check if URL criteria match persisted criteria
           const criteriaMatch = persistedState &&
             JSON.stringify(persistedState.criteria) === JSON.stringify(urlPills) &&
             persistedState.variableNamesIgnoreCase === this.variableNamesIgnoreCase &&
             persistedState.variableValuesIgnoreCase === this.variableValuesIgnoreCase;
 
           if (criteriaMatch) {
-            // Same criteria → restore selection + pagination
             this.searchCurrentPage = persistedState!.currentPage;
             this.searchPageSize = persistedState!.pageSize;
             this.selectedInstanceIds = new Set(persistedState!.selectedIds);
@@ -301,16 +320,11 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
               }, 100);
             }
           } else {
-            // Different criteria → fresh search, empty selection
             this.searchCurrentPage = 1;
             this.selectedInstanceIds = new Set();
             this.selectedInstanceMetadataCache.clear();
           }
 
-          // Check batch return BEFORE executing search
-          this.checkBatchOperationReturn();
-
-          // Execute search with explicit reason
           const reason = criteriaMatch ? 'init-url' : 'init-default';
           this.searchLoading = true;
           this.searchExecuted = true;
@@ -320,10 +334,9 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
           this.loadSearchResults(true);
           return;
         }
-      } catch { /* ignore malformed criteria */ }
+      } catch {  }
     }
 
-    // Priority 2: Persisted state exists (F5 refresh, back navigation)
     if (persistedState) {
       this.activePills = persistedState.criteria;
       this.variableNamesIgnoreCase = persistedState.variableNamesIgnoreCase;
@@ -349,9 +362,6 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
         }, 100);
       }
 
-      // Check batch return BEFORE executing search
-      this.checkBatchOperationReturn();
-
       // Execute search if criteria exist (with init-restore reason to preserve selection)
       if (this.activePills.length > 0) {
         this.searchLoading = true;
@@ -365,47 +375,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Priority 3: Clean slate (first visit, no URL params, no persisted state)
-    // Do nothing - user will add criteria and click Search button
-  }
 
-
-  private checkBatchOperationReturn(): void {
-    try {
-      const returnFlag = sessionStorage.getItem(SEARCH_BATCH_RETURN_KEY);
-      if (returnFlag) {
-        this.selectedInstanceIds.clear();
-        this.selectedInstanceMetadataCache.clear();
-        sessionStorage.removeItem(SEARCH_BATCH_RETURN_KEY);
-        if (this.searchExecuted) {
-          this.saveCurrentState();
-        }
-      }
-    } catch {
-    }
-  }
-
-  private saveCurrentState(): void {
-    if (!this.searchExecuted) return;
-
-    const metadata: Array<{ id: string; state: string; processDefinitionId: string; processDefinitionKey: string }> = [];
-    for (const [id, meta] of this.selectedInstanceMetadataCache.entries()) {
-      metadata.push({ id, ...meta });
-    }
-
-    const state: import('../../../../services/search-instances-state.service').SearchInstancesPersistedState = {
-      version: 1,
-      criteria: this.activePills,
-      variableNamesIgnoreCase: this.variableNamesIgnoreCase,
-      variableValuesIgnoreCase: this.variableValuesIgnoreCase,
-      currentPage: this.searchCurrentPage,
-      pageSize: this.searchPageSize,
-      selectedIds: [...this.selectedInstanceIds],
-      selectedMetadata: metadata,
-      scrollTop: window.scrollY
-    };
-
-    this.searchStateService.updateState(state);
   }
 
   private detectStaleSelectedIds(): void {
@@ -432,7 +402,6 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       this.staleIdsDetectedCount = staleIds.length;
       this.staleIdsMessageShown = true;
       this.selectedInstanceIds = new Set(this.selectedInstanceIds);
-      this.saveCurrentState();
     }
   }
 
@@ -1458,7 +1427,6 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       });
     }
     this.selectedInstanceIds = new Set(this.selectedInstanceIds);
-    this.saveCurrentState();
     this.cdr.markForCheck();
   }
 
@@ -1483,7 +1451,6 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       });
     }
     this.selectedInstanceIds = new Set(this.selectedInstanceIds);
-    this.saveCurrentState();
     this.cdr.markForCheck();
   }
 
@@ -1622,6 +1589,28 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   }
 
   onBatchOperationSelect(operationId: string): void {
+    // NEW RULE: Write snapshot BEFORE navigating to batch operation (all operations)
+    if (this.searchExecuted) {
+      const metadata: Array<{ id: string; state: string; processDefinitionId: string; processDefinitionKey: string }> = [];
+      for (const [id, meta] of this.selectedInstanceMetadataCache.entries()) {
+        metadata.push({ id, ...meta });
+      }
+
+      const snapshot: import('../../../../services/search-instances-state.service').SearchInstancesPersistedState = {
+        version: 1,
+        criteria: this.activePills,
+        variableNamesIgnoreCase: this.variableNamesIgnoreCase,
+        variableValuesIgnoreCase: this.variableValuesIgnoreCase,
+        currentPage: this.searchCurrentPage,
+        pageSize: this.searchPageSize,
+        selectedIds: [...this.selectedInstanceIds],
+        selectedMetadata: metadata,
+        scrollTop: window.scrollY
+      };
+
+      this.searchStateService.writeSnapshot(snapshot);
+    }
+
     if (operationId === 'move-instances') {
       // Special handling for move-instances: navigate to Modify tab with preselection
       const selectedIds = Array.from(this.selectedInstanceIds);
@@ -1685,8 +1674,6 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     };
     try {
       sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
-      // REMOVED: Do NOT set flag here - wizard must set it AFTER batch success
-      // sessionStorage.setItem(SEARCH_BATCH_RETURN_KEY, 'true');
     } catch {
     }
     this.router.navigate(['/cockpit/batch/operations']);

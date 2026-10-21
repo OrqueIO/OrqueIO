@@ -1,12 +1,14 @@
 import { Injectable, DestroyRef, inject } from '@angular/core';
-import { Subject, debounceTime, filter } from 'rxjs';
+import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MultiValueFilter } from './cockpit.service';
 import { AuthService } from './auth';
 
 /**
  * Persisted state for Process Instance Search screen.
- * Survives F5 refresh and navigation, stored in sessionStorage.
+ * NEW RULE: State is ONLY written at handoff (when navigating to batch operations).
+ * State is read ONLY when returning from batch operations.
+ * State is deleted immediately after being read (single-use snapshot).
  */
 export interface SearchInstancesPersistedState {
   version: number;
@@ -27,29 +29,26 @@ export interface SearchInstancesPersistedState {
 
 const STORAGE_KEY = 'searchInstancesState.v1';
 const MAX_PERSISTED_IDS = 100000;
-const DEBOUNCE_MS = 300;
+
+/**
+ * Destinations that are considered "batch return origins".
+ * If previousUrl matches one of these, the snapshot is restored.
+ */
+export const BATCH_RETURN_ORIGINS = [
+  '/cockpit/batch/operations',
+  // Process-list with tab=modify (Move Instances)
+  '/cockpit/processes/',  // Will check for tab=modify in query params
+];
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchInstancesStateService {
-  private currentState: SearchInstancesPersistedState | null = null;
-  private saveRequest$ = new Subject<void>();
-  private destroyRef = inject(DestroyRef);
   private authService = inject(AuthService);
+  private destroyRef = inject(DestroyRef);
   private storageQuotaWarningShown = false;
 
   constructor() {
-    // Debounced save to sessionStorage
-    this.saveRequest$
-      .pipe(
-        debounceTime(DEBOUNCE_MS),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe(() => {
-        this.flushToStorage();
-      });
-
     // Clear state on logout
     this.authService.authEvents$
       .pipe(
@@ -62,12 +61,19 @@ export class SearchInstancesStateService {
   }
 
   /**
-   * Load persisted state from sessionStorage.
+   * Load and DELETE persisted state from sessionStorage (single-use).
    * Returns null if no valid state found.
+   * ALWAYS deletes the snapshot after reading.
    */
-  loadState(): SearchInstancesPersistedState | null {
+  loadAndDeleteState(): SearchInstancesPersistedState | null {
     try {
       const raw = sessionStorage.getItem(STORAGE_KEY);
+
+      // ALWAYS delete after reading (single-use snapshot)
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch {}
+
       if (!raw) {
         return null;
       }
@@ -77,18 +83,15 @@ export class SearchInstancesStateService {
       // Validate structure
       if (!this.isValidState(parsed)) {
         console.warn('[SearchInstancesStateService] Invalid state structure, ignoring');
-        sessionStorage.removeItem(STORAGE_KEY);
         return null;
       }
 
       // Version check
       if (parsed.version !== 1) {
         console.warn('[SearchInstancesStateService] Unsupported version, ignoring');
-        sessionStorage.removeItem(STORAGE_KEY);
         return null;
       }
 
-      this.currentState = parsed;
       return parsed;
     } catch (error) {
       console.warn('[SearchInstancesStateService] Failed to load state:', error);
@@ -101,38 +104,22 @@ export class SearchInstancesStateService {
   }
 
   /**
-   * Update in-memory state and trigger debounced save.
+   * Write snapshot to storage (called ONLY at batch handoff).
+   * NEW RULE: No debounced save, no continuous updates.
    */
-  updateState(state: SearchInstancesPersistedState): void {
+  writeSnapshot(state: SearchInstancesPersistedState): void {
     // Check size limit
     if (state.selectedIds.length > MAX_PERSISTED_IDS) {
       if (!this.storageQuotaWarningShown) {
         console.warn(`[SearchInstancesStateService] Selection too large (${state.selectedIds.length} > ${MAX_PERSISTED_IDS}), not persisting selection`);
         this.storageQuotaWarningShown = true;
       }
-      // Persist everything except selection
-      this.currentState = {
-        ...state,
-        selectedIds: [],
-        selectedMetadata: []
-      };
-    } else {
-      this.currentState = state;
-    }
-
-    this.saveRequest$.next();
-  }
-
-  /**
-   * Immediately flush current state to storage (called in ngOnDestroy).
-   */
-  flushToStorage(): void {
-    if (!this.currentState) {
+      // Don't write at all if selection is too large
       return;
     }
 
     try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(this.currentState));
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (error) {
       // QuotaExceededError or storage unavailable
       if (!this.storageQuotaWarningShown && error instanceof Error && error.name === 'QuotaExceededError') {
@@ -146,25 +133,9 @@ export class SearchInstancesStateService {
    * Clear persisted state (called by Clear button and logout).
    */
   clearState(): void {
-    this.currentState = null;
     try {
       sessionStorage.removeItem(STORAGE_KEY);
     } catch {}
-  }
-
-  /**
-   * Clear only selection, keep criteria and pagination.
-   */
-  clearSelection(): void {
-    if (!this.currentState) return;
-
-    this.currentState = {
-      ...this.currentState,
-      selectedIds: [],
-      selectedMetadata: []
-    };
-
-    this.flushToStorage();
   }
 
   /**
