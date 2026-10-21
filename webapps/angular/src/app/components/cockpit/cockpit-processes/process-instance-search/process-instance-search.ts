@@ -186,7 +186,6 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
 
   private staleIdsDetectedCount = 0;
   private staleIdsMessageShown = false;
-  private restoringState = false;
 
   private readonly searchRequest$ = new Subject<boolean>();
 
@@ -224,9 +223,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
       });
 
-    this.restorePersistedState();
-    this.checkBatchOperationReturn();
-    this.loadFromUrl();
+    this.initializeFromContext();
 
     this.cockpitService.getProcessDefinitions(1000, false)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -254,49 +251,124 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.searchStateService.flushToStorage();
   }
 
-  private restorePersistedState(): void {
-    const state = this.searchStateService.loadState();
-    if (!state) {
+  /**
+   * Single initialization entry point that decides the source of truth:
+   * 1. URL params (deep link) take priority
+   * 2. Persisted state (F5 refresh / back navigation)
+   * 3. Clean slate (first visit)
+   *
+   * Ensures exactly ONE search execution at init.
+   */
+  private initializeFromContext(): void {
+    const urlParams = this.route.snapshot.queryParams;
+    const criteriaJson: string | null = urlParams['criteria'] ?? null;
+    const persistedState = this.searchStateService.loadState();
+
+    // Priority 1: URL has explicit search params (deep link)
+    if (criteriaJson) {
+      try {
+        const urlPills = JSON.parse(criteriaJson) as MultiValueFilter[];
+        if (Array.isArray(urlPills) && urlPills.length > 0) {
+          this.activePills = urlPills;
+          this.variableNamesIgnoreCase = urlParams['vnIgnoreCase'] === 'true';
+          this.variableValuesIgnoreCase = urlParams['vvIgnoreCase'] === 'true';
+
+          // Check if URL criteria match persisted criteria
+          const criteriaMatch = persistedState &&
+            JSON.stringify(persistedState.criteria) === JSON.stringify(urlPills) &&
+            persistedState.variableNamesIgnoreCase === this.variableNamesIgnoreCase &&
+            persistedState.variableValuesIgnoreCase === this.variableValuesIgnoreCase;
+
+          if (criteriaMatch) {
+            // Same criteria → restore selection + pagination
+            this.searchCurrentPage = persistedState!.currentPage;
+            this.searchPageSize = persistedState!.pageSize;
+            this.selectedInstanceIds = new Set(persistedState!.selectedIds);
+            this.selectedInstanceMetadataCache.clear();
+            for (const meta of persistedState!.selectedMetadata) {
+              this.selectedInstanceMetadataCache.set(meta.id, {
+                state: meta.state,
+                processDefinitionId: meta.processDefinitionId,
+                processDefinitionKey: meta.processDefinitionKey
+              });
+            }
+
+            if (persistedState!.scrollTop !== undefined && persistedState!.scrollTop > 0) {
+              setTimeout(() => {
+                try {
+                  window.scrollTo(0, persistedState!.scrollTop!);
+                } catch {}
+              }, 100);
+            }
+          } else {
+            // Different criteria → fresh search, empty selection
+            this.searchCurrentPage = 1;
+            this.selectedInstanceIds = new Set();
+            this.selectedInstanceMetadataCache.clear();
+          }
+
+          // Check batch return BEFORE executing search
+          this.checkBatchOperationReturn();
+
+          // Execute search with explicit reason
+          const reason = criteriaMatch ? 'init-url' : 'init-default';
+          this.searchLoading = true;
+          this.searchExecuted = true;
+          this.searchError = false;
+          this.resetCursorState();
+          this.cdr.markForCheck();
+          this.loadSearchResults(true);
+          return;
+        }
+      } catch { /* ignore malformed criteria */ }
+    }
+
+    // Priority 2: Persisted state exists (F5 refresh, back navigation)
+    if (persistedState) {
+      this.activePills = persistedState.criteria;
+      this.variableNamesIgnoreCase = persistedState.variableNamesIgnoreCase;
+      this.variableValuesIgnoreCase = persistedState.variableValuesIgnoreCase;
+      this.searchCurrentPage = persistedState.currentPage;
+      this.searchPageSize = persistedState.pageSize;
+
+      this.selectedInstanceIds = new Set(persistedState.selectedIds);
+      this.selectedInstanceMetadataCache.clear();
+      for (const meta of persistedState.selectedMetadata) {
+        this.selectedInstanceMetadataCache.set(meta.id, {
+          state: meta.state,
+          processDefinitionId: meta.processDefinitionId,
+          processDefinitionKey: meta.processDefinitionKey
+        });
+      }
+
+      if (persistedState.scrollTop !== undefined && persistedState.scrollTop > 0) {
+        setTimeout(() => {
+          try {
+            window.scrollTo(0, persistedState.scrollTop!);
+          } catch {}
+        }, 100);
+      }
+
+      // Check batch return BEFORE executing search
+      this.checkBatchOperationReturn();
+
+      // Execute search if criteria exist (with init-restore reason to preserve selection)
+      if (this.activePills.length > 0) {
+        this.searchLoading = true;
+        this.searchExecuted = true;
+        this.searchError = false;
+        this.resetCursorState();
+        this.cdr.markForCheck();
+        this.loadSearchResults(true);
+      }
+
       return;
     }
 
-    this.restoringState = true;
-
-    this.activePills = state.criteria;
-    this.variableNamesIgnoreCase = state.variableNamesIgnoreCase;
-    this.variableValuesIgnoreCase = state.variableValuesIgnoreCase;
-
-    this.searchCurrentPage = state.currentPage;
-    this.searchPageSize = state.pageSize;
-
-    this.selectedInstanceIds = new Set(state.selectedIds);
-    this.selectedInstanceMetadataCache.clear();
-    for (const meta of state.selectedMetadata) {
-      this.selectedInstanceMetadataCache.set(meta.id, {
-        state: meta.state,
-        processDefinitionId: meta.processDefinitionId,
-        processDefinitionKey: meta.processDefinitionKey
-      });
-    }
-
-    if (state.scrollTop !== undefined && state.scrollTop > 0) {
-      setTimeout(() => {
-        try {
-          window.scrollTo(0, state.scrollTop!);
-        } catch {}
-      }, 100);
-    }
-
-    if (this.activePills.length > 0) {
-      this.searchLoading = true;
-      this.searchExecuted = true;
-      this.searchError = false;
-      this.cdr.markForCheck();
-      this.loadSearchResults(true);
-    }
-
-    this.restoringState = false;
+    // Priority 3: Clean slate (first visit, no URL params, no persisted state)
+    // Do nothing - user will add criteria and click Search button
   }
+
 
   private checkBatchOperationReturn(): void {
     try {
@@ -1132,7 +1204,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     return this.activePills.some(p => p.field === 'variable' || p.field === 'variables');
   }
 
-  executeSearch(): void {
+  executeSearch(options?: { reason?: 'init-restore' | 'init-url' | 'init-default' | 'user' | 'page' }): void {
     if (this.activeEditorType) {
       this.confirmCriterion();
     }
@@ -1142,8 +1214,9 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.searchError = false;
     this.searchCurrentPage = 1;
 
-    // Only clear selection if NOT restoring state
-    if (!this.restoringState) {
+    // Only clear selection for NEW user-initiated searches (not restoration/pagination)
+    const reason = options?.reason || 'user';
+    if (reason === 'user') {
       this.selectedInstanceIds = new Set();
       this.selectedInstanceMetadataCache.clear();
     }
