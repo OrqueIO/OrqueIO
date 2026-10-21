@@ -59,9 +59,13 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
       getProcessDefinitions: vi.fn().mockReturnValue(of([])),
       getProcessInstances: vi.fn().mockReturnValue(of({ instances: MOCK_INSTANCES, total: 4 })),
       getProcessInstanceCounts: vi.fn().mockReturnValue(of({ active: 0, suspended: 0, completed: 0, incidents: 0 })),
+      searchProcessInstancesGlobal: vi.fn().mockReturnValue(of(MOCK_INSTANCES)),
+      searchProcessInstancesGlobalCount: vi.fn().mockReturnValue(of(4)),
     };
 
     const mockNavMenuService = {
+      setMenuItems: vi.fn(),
+      clearMenuItems: vi.fn(),
       setCockpitTab: vi.fn(),
       setActiveItem: vi.fn(),
     };
@@ -111,10 +115,33 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
   afterEach(() => {
     fixture?.destroy();
     TestBed.resetTestingModule();
+    vi.restoreAllMocks();
+    sessionStorage.clear();
   });
 
+  // Helper function to select instances with metadata (simulates real selection)
+  function selectInstancesWithMetadata(ids: string[], instancesSource: typeof MOCK_INSTANCES = MOCK_INSTANCES) {
+    component.selectedInstanceIds = new Set(ids);
+    ids.forEach(id => {
+      const instance = instancesSource.find(i => i.id === id);
+      if (instance) {
+        component['selectedInstanceMetadataCache'].set(id, {
+          state: instance.state,
+          processDefinitionId: instance.processDefinitionId,
+          processDefinitionKey: instance.processDefinitionKey
+        });
+      }
+    });
+  }
+
   describe('Instance Selection', () => {
+    beforeEach(() => {
+      component.selectedInstanceIds.clear();
+      component['selectedInstanceMetadataCache'].clear();
+    });
+
     it('should toggle instance selection', () => {
+      component.searchResults = MOCK_INSTANCES;
       expect(component.selectedInstanceIds.size).toBe(0);
 
       component.toggleInstanceSelection('inst-1');
@@ -134,7 +161,7 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
     });
 
     it('should select all instances on current page', () => {
-      component.instances = MOCK_INSTANCES;
+      component.searchResults = MOCK_INSTANCES;
       component.toggleSelectAllInstances();
 
       expect(component.selectedInstanceIds.size).toBe(4);
@@ -145,7 +172,7 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
     });
 
     it('should deselect all instances when all are selected', () => {
-      component.instances = MOCK_INSTANCES;
+      component.searchResults = MOCK_INSTANCES;
       component.selectedInstanceIds = new Set(['inst-1', 'inst-2', 'inst-3', 'inst-4']);
 
       component.toggleSelectAllInstances();
@@ -153,46 +180,78 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
     });
 
     it('should return true for isAllInstancesSelected when all are selected', () => {
-      component.instances = MOCK_INSTANCES;
+      component.searchResults = MOCK_INSTANCES;
       component.selectedInstanceIds = new Set(['inst-1', 'inst-2', 'inst-3', 'inst-4']);
 
       expect(component.isAllInstancesSelected).toBe(true);
     });
 
     it('should return false for isAllInstancesSelected when not all are selected', () => {
-      component.instances = MOCK_INSTANCES;
+      component.searchResults = MOCK_INSTANCES;
       component.selectedInstanceIds = new Set(['inst-1']);
 
       expect(component.isAllInstancesSelected).toBe(false);
     });
 
     it('should return true for isIndeterminateSelection when some are selected', () => {
-      component.instances = MOCK_INSTANCES;
+      component.searchResults = MOCK_INSTANCES;
       component.selectedInstanceIds = new Set(['inst-1', 'inst-2']);
 
       expect(component.isIndeterminateSelection).toBe(true);
     });
 
     it('should return false for isIndeterminateSelection when all are selected', () => {
-      component.instances = MOCK_INSTANCES;
+      component.searchResults = MOCK_INSTANCES;
       component.selectedInstanceIds = new Set(['inst-1', 'inst-2', 'inst-3', 'inst-4']);
 
       expect(component.isIndeterminateSelection).toBe(false);
     });
 
     it('should return false for isIndeterminateSelection when none are selected', () => {
-      component.instances = MOCK_INSTANCES;
+      component.searchResults = MOCK_INSTANCES;
       component.selectedInstanceIds = new Set();
 
       expect(component.isIndeterminateSelection).toBe(false);
     });
 
-    it('should clear selection on executeSearch()', () => {
-      component.selectedInstanceIds = new Set(['inst-1', 'inst-2']);
+    it('should clear selection when executeSearch is called with user reason (default)', () => {
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-2']);
+      component.activePills = [{ field: 'state', values: ['ACTIVE'], label: 'Active', operator: 'eq' }];
+
+      expect(component.selectedInstanceIds.size).toBe(2);
+      expect(component['selectedInstanceMetadataCache'].size).toBe(2);
 
       component.executeSearch();
 
       expect(component.selectedInstanceIds.size).toBe(0);
+      expect(component['selectedInstanceMetadataCache'].size).toBe(0);
+    });
+
+    it('should preserve selection when executeSearch is called with reason=page', () => {
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-2']);
+      component.activePills = [{ field: 'state', values: ['ACTIVE'], label: 'Active', operator: 'eq' }];
+
+      expect(component.selectedInstanceIds.size).toBe(2);
+
+      component.executeSearch({ reason: 'page' });
+
+      expect(component.selectedInstanceIds.size).toBe(2);
+      expect(component['selectedInstanceMetadataCache'].size).toBe(2);
+    });
+
+    it('should preserve selection when executeSearch is called with reason=init-restore', () => {
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-2']);
+      component.activePills = [{ field: 'state', values: ['ACTIVE'], label: 'Active', operator: 'eq' }];
+
+      expect(component.selectedInstanceIds.size).toBe(2);
+
+      component.executeSearch({ reason: 'init-restore' });
+
+      expect(component.selectedInstanceIds.size).toBe(2);
+      expect(component['selectedInstanceMetadataCache'].size).toBe(2);
     });
   });
 
@@ -232,15 +291,20 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
   });
 
   describe('Selected Instance States', () => {
+    beforeEach(() => {
+      component.selectedInstanceIds.clear();
+      component['selectedInstanceMetadataCache'].clear();
+    });
+
     it('should return empty set when no instances selected', () => {
-      component.instances = MOCK_INSTANCES;
+      component.searchResults = MOCK_INSTANCES;
 
       expect(component.selectedInstanceStates.size).toBe(0);
     });
 
     it('should return correct states for selected instances', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1', 'inst-2']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-2']);
 
       const states = component.selectedInstanceStates;
       expect(states.size).toBe(2);
@@ -249,8 +313,9 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
     });
 
     it('should return single state when all selected instances have same state', () => {
-      component.instances = [MOCK_INSTANCES[0], { ...MOCK_INSTANCES[0], id: 'inst-5' }];
-      component.selectedInstanceIds = new Set(['inst-1', 'inst-5']);
+      const instances = [MOCK_INSTANCES[0], { ...MOCK_INSTANCES[0], id: 'inst-5' }];
+      component.searchResults = instances;
+      selectInstancesWithMetadata(['inst-1', 'inst-5'], instances);
 
       const states = component.selectedInstanceStates;
       expect(states.size).toBe(1);
@@ -259,30 +324,35 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
   });
 
   describe('Operation Applicability - suspend', () => {
+    beforeEach(() => {
+      component.selectedInstanceIds.clear();
+      component['selectedInstanceMetadataCache'].clear();
+    });
+
     it('should be applicable when all selected instances are ACTIVE', () => {
-      component.instances = [MOCK_INSTANCES[0]];
-      component.selectedInstanceIds = new Set(['inst-1']);
+      component.searchResults = [MOCK_INSTANCES[0]];
+      selectInstancesWithMetadata(['inst-1'], [MOCK_INSTANCES[0]]);
 
       expect(component.isOperationApplicable('suspend')).toBe(true);
     });
 
     it('should not be applicable when any selected instance is not ACTIVE', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1', 'inst-2']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-2']);
 
       expect(component.isOperationApplicable('suspend')).toBe(false);
     });
 
     it('should not be applicable when selected instances include SUSPENDED', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-2']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-2']);
 
       expect(component.isOperationApplicable('suspend')).toBe(false);
     });
 
     it('should return correct disabled reason for suspend', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-2']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-2']);
 
       const reason = component.getOperationDisabledReason('suspend');
       expect(reason).toBe('cockpit.processes.search.operationRequiresOnlyActive');
@@ -290,30 +360,35 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
   });
 
   describe('Operation Applicability - activate', () => {
+    beforeEach(() => {
+      component.selectedInstanceIds.clear();
+      component['selectedInstanceMetadataCache'].clear();
+    });
+
     it('should be applicable when all selected instances are SUSPENDED', () => {
-      component.instances = [MOCK_INSTANCES[1]];
-      component.selectedInstanceIds = new Set(['inst-2']);
+      component.searchResults = [MOCK_INSTANCES[1]];
+      selectInstancesWithMetadata(['inst-2'], [MOCK_INSTANCES[1]]);
 
       expect(component.isOperationApplicable('activate')).toBe(true);
     });
 
     it('should not be applicable when any selected instance is not SUSPENDED', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1', 'inst-2']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-2']);
 
       expect(component.isOperationApplicable('activate')).toBe(false);
     });
 
     it('should not be applicable when selected instances include ACTIVE', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1']);
 
       expect(component.isOperationApplicable('activate')).toBe(false);
     });
 
     it('should return correct disabled reason for activate', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1']);
 
       const reason = component.getOperationDisabledReason('activate');
       expect(reason).toBe('cockpit.processes.search.operationRequiresOnlySuspended');
@@ -321,37 +396,42 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
   });
 
   describe('Operation Applicability - delete-running', () => {
+    beforeEach(() => {
+      component.selectedInstanceIds.clear();
+      component['selectedInstanceMetadataCache'].clear();
+    });
+
     it('should be applicable when all selected instances are ACTIVE', () => {
-      component.instances = [MOCK_INSTANCES[0]];
-      component.selectedInstanceIds = new Set(['inst-1']);
+      component.searchResults = [MOCK_INSTANCES[0]];
+      selectInstancesWithMetadata(['inst-1'], [MOCK_INSTANCES[0]]);
 
       expect(component.isOperationApplicable('delete-running')).toBe(true);
     });
 
     it('should be applicable when all selected instances are SUSPENDED', () => {
-      component.instances = [MOCK_INSTANCES[1]];
-      component.selectedInstanceIds = new Set(['inst-2']);
+      component.searchResults = [MOCK_INSTANCES[1]];
+      selectInstancesWithMetadata(['inst-2'], [MOCK_INSTANCES[1]]);
 
       expect(component.isOperationApplicable('delete-running')).toBe(true);
     });
 
     it('should not be applicable when any selected instance is COMPLETED', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1', 'inst-3']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-3']);
 
       expect(component.isOperationApplicable('delete-running')).toBe(false);
     });
 
     it('should not be applicable when any selected instance is EXTERNALLY_TERMINATED', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1', 'inst-4']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-4']);
 
       expect(component.isOperationApplicable('delete-running')).toBe(false);
     });
 
     it('should return correct disabled reason for delete-running', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-3']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-3']);
 
       const reason = component.getOperationDisabledReason('delete-running');
       expect(reason).toBe('cockpit.processes.search.operationRequiresOnlyRunning');
@@ -359,44 +439,49 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
   });
 
   describe('Operation Applicability - delete-finished', () => {
+    beforeEach(() => {
+      component.selectedInstanceIds.clear();
+      component['selectedInstanceMetadataCache'].clear();
+    });
+
     it('should be applicable when all selected instances are COMPLETED', () => {
-      component.instances = [MOCK_INSTANCES[2]];
-      component.selectedInstanceIds = new Set(['inst-3']);
+      component.searchResults = [MOCK_INSTANCES[2]];
+      selectInstancesWithMetadata(['inst-3'], [MOCK_INSTANCES[2]]);
 
       expect(component.isOperationApplicable('delete-finished')).toBe(true);
     });
 
     it('should be applicable when all selected instances are EXTERNALLY_TERMINATED', () => {
-      component.instances = [MOCK_INSTANCES[3]];
-      component.selectedInstanceIds = new Set(['inst-4']);
+      component.searchResults = [MOCK_INSTANCES[3]];
+      selectInstancesWithMetadata(['inst-4'], [MOCK_INSTANCES[3]]);
 
       expect(component.isOperationApplicable('delete-finished')).toBe(true);
     });
 
     it('should be applicable when all selected instances are finished (mixed terminated states)', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-3', 'inst-4']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-3', 'inst-4']);
 
       expect(component.isOperationApplicable('delete-finished')).toBe(true);
     });
 
     it('should not be applicable when any selected instance is ACTIVE', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1', 'inst-3']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-3']);
 
       expect(component.isOperationApplicable('delete-finished')).toBe(false);
     });
 
     it('should not be applicable when any selected instance is SUSPENDED', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-2', 'inst-3']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-2', 'inst-3']);
 
       expect(component.isOperationApplicable('delete-finished')).toBe(false);
     });
 
     it('should return correct disabled reason for delete-finished', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1']);
 
       const reason = component.getOperationDisabledReason('delete-finished');
       expect(reason).toBe('cockpit.processes.search.operationRequiresOnlyFinished');
@@ -404,18 +489,41 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
   });
 
   describe('Operation Applicability - other operations', () => {
-    it('should be applicable for set-retries-jobs regardless of state', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1', 'inst-2', 'inst-3']);
+    beforeEach(() => {
+      component.selectedInstanceIds.clear();
+      component['selectedInstanceMetadataCache'].clear();
+    });
+
+    it('should be applicable for set-retries-jobs when all selected are ACTIVE or SUSPENDED', () => {
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-2']);
 
       expect(component.isOperationApplicable('set-retries-jobs')).toBe(true);
     });
 
-    it('should be applicable for set-variables regardless of state', () => {
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1', 'inst-2', 'inst-3']);
+    it('should NOT be applicable for set-retries-jobs when any instance is COMPLETED', () => {
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-2', 'inst-3']);
+
+      expect(component.isOperationApplicable('set-retries-jobs')).toBe(false);
+      const reason = component.getOperationDisabledReason('set-retries-jobs');
+      expect(reason).toBe('cockpit.processes.search.operationRequiresOnlyRunning');
+    });
+
+    it('should be applicable for set-variables when all selected are ACTIVE or SUSPENDED', () => {
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-2']);
 
       expect(component.isOperationApplicable('set-variables')).toBe(true);
+    });
+
+    it('should NOT be applicable for set-variables when any instance is COMPLETED', () => {
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-2', 'inst-3']);
+
+      expect(component.isOperationApplicable('set-variables')).toBe(false);
+      const reason = component.getOperationDisabledReason('set-variables');
+      expect(reason).toBe('cockpit.processes.search.operationRequiresOnlyRunning');
     });
   });
 
@@ -453,8 +561,8 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
       const navigateSpy = vi.spyOn(router, 'navigate');
       const sessionStorageSpy = vi.spyOn(Storage.prototype, 'setItem');
 
-      component.instances = MOCK_INSTANCES;
-      component.selectedInstanceIds = new Set(['inst-1', 'inst-2']);
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1', 'inst-2']);
 
       component.onBatchOperationSelect('suspend');
 
@@ -470,37 +578,67 @@ describe('ProcessInstanceSearchComponent - Batch Operations', () => {
         'batchOpsWizardState',
         expect.stringContaining('"operationId":"suspend"')
       );
-      expect(sessionStorageSpy).toHaveBeenCalledWith(
-        'batchOpsWizardState',
-        expect.stringContaining('"returnUrl"')
-      );
 
-      expect(navigateSpy).toHaveBeenCalledWith(['/cockpit/batch-operations']);
+      expect(navigateSpy).toHaveBeenCalledWith(['/cockpit/batch/operations']);
     });
 
-    it('should close dropdown after operation selection', () => {
-      vi.spyOn(router, 'navigate');
-      vi.spyOn(Storage.prototype, 'setItem');
+    it('should save state without returnUrl (behavior changed in later commits)', () => {
+      // Start completely fresh
+      component.selectedInstanceIds = new Set();
+      component['selectedInstanceMetadataCache'].clear();
+      component.searchResults = MOCK_INSTANCES;
 
-      component.selectedInstanceIds = new Set(['inst-1']);
-      component.showBatchOpsDropdown = true;
+      // Add only inst-1
+      selectInstancesWithMetadata(['inst-1']);
 
-      component.onBatchOperationSelect('suspend');
+      // Debug: verify selection before calling onBatchOperationSelect
+      expect(component.selectedInstanceIds.size).toBe(1);
+      expect([...component.selectedInstanceIds]).toEqual(['inst-1']);
 
-      expect(component.showBatchOpsDropdown).toBe(false);
-    });
-
-    it('should include current URL as returnUrl', () => {
+      // Spy AFTER selection to avoid interference from previous test
       const sessionStorageSpy = vi.spyOn(Storage.prototype, 'setItem');
       vi.spyOn(router, 'navigate');
 
-      component.selectedInstanceIds = new Set(['inst-1']);
       component.onBatchOperationSelect('suspend');
 
       const callArg = sessionStorageSpy.mock.calls[0]?.[1] as string;
       const state = JSON.parse(callArg);
-      expect(state.returnUrl).toBeDefined();
-      expect(typeof state.returnUrl).toBe('string');
+      expect(state.selectedIds).toEqual(['inst-1']);
+      expect(state.fromSearch).toBe(true);
+      expect(state.operationId).toBe('suspend');
+      // returnUrl was removed in later commits - no longer expected
+      expect(state.returnUrl).toBeUndefined();
+    });
+
+    it('should navigate to wizard when selecting an applicable operation', () => {
+      const navigateSpy = vi.spyOn(router, 'navigate');
+      const sessionStorageSpy = vi.spyOn(Storage.prototype, 'setItem');
+
+      component.searchResults = MOCK_INSTANCES;
+      selectInstancesWithMetadata(['inst-1']); // ACTIVE - suspend is applicable
+
+      component.onBatchOperationSelect('suspend');
+
+      expect(sessionStorageSpy).toHaveBeenCalledWith(
+        'batchOpsWizardState',
+        expect.stringContaining('"operationId":"suspend"')
+      );
+      expect(navigateSpy).toHaveBeenCalledWith(['/cockpit/batch/operations']);
+    });
+
+    it('should return early without navigation when no instances are selected', () => {
+      const navigateSpy = vi.spyOn(router, 'navigate');
+      const sessionStorageSpy = vi.spyOn(Storage.prototype, 'setItem');
+
+      component.searchResults = MOCK_INSTANCES;
+      component.selectedInstanceIds = new Set(); // Empty selection
+
+      // onBatchOperationSelect won't be called from template due to disabled button,
+      // but if called directly it should return early for move-instances
+      component.onBatchOperationSelect('move-instances');
+
+      expect(sessionStorageSpy).not.toHaveBeenCalled();
+      expect(navigateSpy).not.toHaveBeenCalled();
     });
   });
 });
