@@ -165,6 +165,14 @@ export class ProcessDefinitionService {
   }
 
   /**
+   * Get a process definition by ID (specific version)
+   */
+  getProcessDefinitionById(id: string): Observable<ProcessDefinition | null> {
+    return this.http.get<ProcessDefinition>(`${this.baseUrl}/process-definition/${id}`)
+      .pipe(catchError(() => of(null)));
+  }
+
+  /**
    * Get all versions of a process definition by key
    */
   getProcessDefinitionVersions(key: string): Observable<ProcessDefinition[]> {

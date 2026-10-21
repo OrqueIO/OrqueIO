@@ -2,6 +2,7 @@ import 'zone.js';
 import 'zone.js/testing';
 import { vi, describe, it, expect, beforeAll } from 'vitest';
 import { TestBed } from '@angular/core/testing';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ModifyTabComponent } from './modify-tab';
 import { MOVE_INSTANCES_DIALOG_SESSION_KEY } from './select-instances-dialog';
 import { ProcessInstanceService } from '../../../../services/process-instance.service';
@@ -66,7 +67,9 @@ async function createModifyTab() {
     providers: [
       { provide: ProcessInstanceService, useValue: mockProcessInstanceService },
       { provide: BatchService, useValue: mockBatchService },
-      { provide: TranslateService, useValue: mockTranslateService }
+      { provide: TranslateService, useValue: mockTranslateService },
+      { provide: Router, useValue: { url: '/cockpit/process-definition/MyProcess:1:abc', navigate: vi.fn() } },
+      { provide: ActivatedRoute, useValue: { snapshot: { queryParams: {} }, queryParams: { subscribe: () => ({ unsubscribe: () => {} }) } } }
     ]
   }).compileComponents();
 

@@ -18,6 +18,7 @@ export interface BatchOperationDef {
   available: boolean;
   actionBtnKey?: string;
   actionBtnQueryKey?: string;
+  supportsProcessInstances?: boolean;
 }
 
 /**

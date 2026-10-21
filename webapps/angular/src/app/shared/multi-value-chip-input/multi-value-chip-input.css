@@ -4,11 +4,14 @@
   align-items: center;
   gap: 4px;
   min-height: 38px;
+  max-height: 220px;
   padding: 6px 10px;
   border: 1.5px solid var(--border-color);
   border-radius: var(--radius-md);
   background: var(--bg-card);
   cursor: text;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 

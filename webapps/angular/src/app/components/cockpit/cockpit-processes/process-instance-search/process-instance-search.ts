@@ -13,7 +13,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faSpinner, faSearch, faExclamationTriangle, faCheckCircle,
   faPlayCircle, faEye, faPlus, faTimes, faPauseCircle, faTimesCircle,
-  faFilter, faChevronLeft, faChevronRight, faChevronDown,
+  faFilter, faChevronLeft, faChevronRight, faChevronDown, faChevronUp,
   faKey, faHashtag, faCircleDot, faCalendarAlt, faCode, faRotateLeft, faCheck, faSitemap, faCodeBranch,
   faSquareMinus, faSquareCheck
 } from '@fortawesome/free-solid-svg-icons';
@@ -61,6 +61,11 @@ import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { dateRangeConflicts } from '../../../../utils/search-validation';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
+import { BATCH_OPERATIONS, WizardPersistedState } from '../../cockpit-batch/batch-operations-wizard/batch-operations-wizard';
+import { BatchOperationDef } from '../../cockpit-batch/batch-operation-list/batch-operation-list';
+import { SEARCH_PRESELECTION_SESSION_KEY, SearchMovePreselection, BATCH_OPS_MODIFY_SIGNAL_KEY } from '../modify-tab/select-instances-dialog';
+import { SearchInstancesStateService, BATCH_RETURN_ORIGINS } from '../../../../services/search-instances-state.service';
+import { NavigationHistoryService } from '../../../../services/navigation-history.service';
 
 @Component({
   selector: 'app-process-instance-search',
@@ -86,6 +91,8 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translateService = inject(TranslateService);
+  private searchStateService = inject(SearchInstancesStateService);
+  private navigationHistoryService = inject(NavigationHistoryService);
 
   // Icons
   faSpinner = faSpinner;
@@ -102,6 +109,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
   faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
   faKey = faKey;
   faHashtag = faHashtag;
   faCircleDot = faCircleDot;
@@ -170,6 +178,15 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   multiStateAbsoluteOffset = 0;
   multiStateHasMore = false;
 
+  private static readonly MOVE_INSTANCES_ALLOWED_STATES = ['ACTIVE', 'SUSPENDED'];
+
+  selectedInstanceIds = new Set<string>();
+  private selectedInstanceMetadataCache = new Map<string, { state: string; processDefinitionId: string; processDefinitionKey: string }>();
+  showBatchOpsDropdown = false;
+
+  private staleIdsDetectedCount = 0;
+  private staleIdsMessageShown = false;
+
   private readonly searchRequest$ = new Subject<boolean>();
 
   ngOnInit(): void {
@@ -201,10 +218,11 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
           this.multiStateHasMore = keysetPage.hasMore;
         }
         this.searchLoading = false;
+        this.detectStaleSelectedIds();
         this.cdr.markForCheck();
       });
 
-    this.loadFromUrl();
+    this.initializeFromContext();
 
     this.cockpitService.getProcessDefinitions(1000, false)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -228,6 +246,176 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.navMenuService.clearMenuItems();
+  }
+
+  /**
+   * Single initialization entry point that decides the source of truth:
+   * 1. URL params (deep link) take priority
+   * 2. Persisted state (ONLY if returning from batch operation)
+   * 3. Clean slate (first visit)
+   *
+   * Ensures exactly ONE search execution at init.
+   */
+  private initializeFromContext(): void {
+    const urlParams = this.route.snapshot.queryParams;
+    const criteriaJson: string | null = urlParams['criteria'] ?? null;
+
+    // NEW RULE: Check if batch was successfully created (wizard sets this flag)
+    const batchSuccessFlag = sessionStorage.getItem('searchBatchReturn');
+    if (batchSuccessFlag) {
+      // Batch was created successfully → clear selection from snapshot
+      sessionStorage.removeItem('searchBatchReturn');
+      // Also clear the snapshot to prevent restoring the selection
+      this.searchStateService.clearState();
+    }
+
+    const previousUrl = this.navigationHistoryService.previousUrl || '';
+    const isReturningFromBatch = BATCH_RETURN_ORIGINS.some(origin => {
+      if (origin === '/cockpit/processes/') {
+        return previousUrl.startsWith('/cockpit/processes/') &&
+               previousUrl.includes('/instances') &&
+               (previousUrl.includes('tab=modify') || previousUrl.includes('&tab=modify'));
+      }
+      if (origin.includes('?')) {
+        return previousUrl.startsWith(origin.split('?')[0]);
+      }
+      return previousUrl.startsWith(origin);
+    });
+
+    const persistedState = isReturningFromBatch
+      ? this.searchStateService.loadAndDeleteState()
+      : null;
+
+    if (criteriaJson) {
+      try {
+        const urlPills = JSON.parse(criteriaJson) as MultiValueFilter[];
+        if (Array.isArray(urlPills) && urlPills.length > 0) {
+          this.activePills = urlPills;
+          this.variableNamesIgnoreCase = urlParams['vnIgnoreCase'] === 'true';
+          this.variableValuesIgnoreCase = urlParams['vvIgnoreCase'] === 'true';
+
+          const criteriaMatch = persistedState &&
+            JSON.stringify(persistedState.criteria) === JSON.stringify(urlPills) &&
+            persistedState.variableNamesIgnoreCase === this.variableNamesIgnoreCase &&
+            persistedState.variableValuesIgnoreCase === this.variableValuesIgnoreCase;
+
+          if (criteriaMatch) {
+            this.searchCurrentPage = persistedState!.currentPage;
+            this.searchPageSize = persistedState!.pageSize;
+            this.selectedInstanceIds = new Set(persistedState!.selectedIds);
+            this.selectedInstanceMetadataCache.clear();
+            for (const meta of persistedState!.selectedMetadata) {
+              this.selectedInstanceMetadataCache.set(meta.id, {
+                state: meta.state,
+                processDefinitionId: meta.processDefinitionId,
+                processDefinitionKey: meta.processDefinitionKey
+              });
+            }
+
+            if (persistedState!.scrollTop !== undefined && persistedState!.scrollTop > 0) {
+              setTimeout(() => {
+                try {
+                  window.scrollTo(0, persistedState!.scrollTop!);
+                } catch {}
+              }, 100);
+            }
+          } else {
+            this.searchCurrentPage = 1;
+            this.selectedInstanceIds = new Set();
+            this.selectedInstanceMetadataCache.clear();
+          }
+
+          const reason = criteriaMatch ? 'init-url' : 'init-default';
+          this.searchLoading = true;
+          this.searchExecuted = true;
+          this.searchError = false;
+          this.resetCursorState();
+          this.cdr.markForCheck();
+          this.loadSearchResults(true);
+          return;
+        }
+      } catch {  }
+    }
+
+    if (persistedState) {
+      this.activePills = persistedState.criteria;
+      this.variableNamesIgnoreCase = persistedState.variableNamesIgnoreCase;
+      this.variableValuesIgnoreCase = persistedState.variableValuesIgnoreCase;
+      this.searchCurrentPage = persistedState.currentPage;
+      this.searchPageSize = persistedState.pageSize;
+
+      this.selectedInstanceIds = new Set(persistedState.selectedIds);
+      this.selectedInstanceMetadataCache.clear();
+      for (const meta of persistedState.selectedMetadata) {
+        this.selectedInstanceMetadataCache.set(meta.id, {
+          state: meta.state,
+          processDefinitionId: meta.processDefinitionId,
+          processDefinitionKey: meta.processDefinitionKey
+        });
+      }
+
+      if (persistedState.scrollTop !== undefined && persistedState.scrollTop > 0) {
+        setTimeout(() => {
+          try {
+            window.scrollTo(0, persistedState.scrollTop!);
+          } catch {}
+        }, 100);
+      }
+
+      // Execute search if criteria exist (with init-restore reason to preserve selection)
+      if (this.activePills.length > 0) {
+        this.searchLoading = true;
+        this.searchExecuted = true;
+        this.searchError = false;
+        this.resetCursorState();
+        this.cdr.markForCheck();
+        this.loadSearchResults(true);
+      }
+
+      return;
+    }
+
+
+  }
+
+  private detectStaleSelectedIds(): void {
+
+    if (this.selectedInstanceIds.size === 0 || this.searchResults.length === 0) return;
+    if (this.searchCurrentPage !== 1) return;
+
+    const currentPageIds = new Set(this.searchResults.map(r => r.id));
+    const staleIds: string[] = [];
+
+    let position = 0;
+    for (const id of this.selectedInstanceIds) {
+      position++;
+      if (position <= this.searchPageSize && !currentPageIds.has(id)) {
+        staleIds.push(id);
+      }
+    }
+
+    if (staleIds.length > 0) {
+      for (const id of staleIds) {
+        this.selectedInstanceIds.delete(id);
+        this.selectedInstanceMetadataCache.delete(id);
+      }
+      this.staleIdsDetectedCount = staleIds.length;
+      this.staleIdsMessageShown = true;
+      this.selectedInstanceIds = new Set(this.selectedInstanceIds);
+    }
+  }
+
+  get staleIdsMessage(): string | null {
+    if (!this.staleIdsMessageShown || this.staleIdsDetectedCount === 0) return null;
+    return this.translateService.instant('cockpit.processes.search.staleInstancesDetected', {
+      count: this.staleIdsDetectedCount.toString()
+    });
+  }
+
+  dismissStaleIdsMessage(): void {
+    this.staleIdsMessageShown = false;
+    this.staleIdsDetectedCount = 0;
+    this.cdr.markForCheck();
   }
 
   private buildKeysetSource(recomputeCount: boolean) {
@@ -284,6 +472,11 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   }
 
   private loadFromUrl(): void {
+    // Don't load from URL if state was already restored (avoid double query)
+    if (this.searchExecuted) {
+      return;
+    }
+
     const params = this.route.snapshot.queryParams;
     const criteriaJson: string | null = params['criteria'] ?? null;
     if (!criteriaJson) return;
@@ -314,6 +507,10 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
+    if (this.showBatchOpsDropdown && !target.closest('.batch-ops-dropdown-wrapper')) {
+      this.showBatchOpsDropdown = false;
+      this.cdr.markForCheck();
+    }
     if (this.openOperatorMenuIndex !== null && !target.closest('.op-dropdown-wrapper')) {
       this.openOperatorMenuIndex = null;
       this.opMenuPosition = null;
@@ -341,7 +538,10 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   @HostListener('document:keydown.escape')
   onEscapeKey(): void {
     let changed = false;
-    if (this.openOperatorMenuIndex !== null) {
+    if (this.showBatchOpsDropdown) {
+      this.showBatchOpsDropdown = false;
+      changed = true;
+    } else if (this.openOperatorMenuIndex !== null) {
       this.openOperatorMenuIndex = null;
       this.opMenuPosition = null;
       changed = true;
@@ -973,7 +1173,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     return this.activePills.some(p => p.field === 'variable' || p.field === 'variables');
   }
 
-  executeSearch(): void {
+  executeSearch(options?: { reason?: 'init-restore' | 'init-url' | 'init-default' | 'user' | 'page' }): void {
     if (this.activeEditorType) {
       this.confirmCriterion();
     }
@@ -982,6 +1182,14 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.searchExecuted = true;
     this.searchError = false;
     this.searchCurrentPage = 1;
+
+    // Only clear selection for NEW user-initiated searches (not restoration/pagination)
+    const reason = options?.reason || 'user';
+    if (reason === 'user') {
+      this.selectedInstanceIds = new Set();
+      this.selectedInstanceMetadataCache.clear();
+    }
+
     this.resetCursorState();
     this.cdr.markForCheck();
     this.loadSearchResults(true);
@@ -1030,6 +1238,9 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.variableNamesIgnoreCase = false;
     this.variableValuesIgnoreCase = false;
     this.pendingValues = [];
+    this.selectedInstanceIds = new Set();
+    this.selectedInstanceMetadataCache.clear();
+    this.searchStateService.clearState();
     this.cdr.markForCheck();
     this.syncCriteriaToUrl();
   }
@@ -1198,5 +1409,273 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     if (!isoStr) return '';
     try { return new Date(isoStr).toLocaleDateString(); }
     catch { return isoStr; }
+  }
+
+  toggleInstanceSelection(id: string): void {
+    const instance = this.searchResults.find(i => i.id === id);
+    if (!instance) return;
+
+    if (this.selectedInstanceIds.has(id)) {
+      this.selectedInstanceIds.delete(id);
+      this.selectedInstanceMetadataCache.delete(id);
+    } else {
+      this.selectedInstanceIds.add(id);
+      this.selectedInstanceMetadataCache.set(id, {
+        state: instance.state,
+        processDefinitionId: instance.processDefinitionId,
+        processDefinitionKey: instance.processDefinitionKey
+      });
+    }
+    this.selectedInstanceIds = new Set(this.selectedInstanceIds);
+    this.cdr.markForCheck();
+  }
+
+  isInstanceSelected(id: string): boolean {
+    return this.selectedInstanceIds.has(id);
+  }
+
+  toggleSelectAllInstances(): void {
+    if (this.isAllInstancesSelected) {
+      this.searchResults.forEach(i => {
+        this.selectedInstanceIds.delete(i.id);
+        this.selectedInstanceMetadataCache.delete(i.id);
+      });
+    } else {
+      this.searchResults.forEach(i => {
+        this.selectedInstanceIds.add(i.id);
+        this.selectedInstanceMetadataCache.set(i.id, {
+          state: i.state,
+          processDefinitionId: i.processDefinitionId,
+          processDefinitionKey: i.processDefinitionKey
+        });
+      });
+    }
+    this.selectedInstanceIds = new Set(this.selectedInstanceIds);
+    this.cdr.markForCheck();
+  }
+
+  get isAllInstancesSelected(): boolean {
+    return this.searchResults.length > 0 && this.searchResults.every(i => this.selectedInstanceIds.has(i.id));
+  }
+
+  get isIndeterminateSelection(): boolean {
+    const count = this.searchResults.filter(i => this.selectedInstanceIds.has(i.id)).length;
+    return count > 0 && count < this.searchResults.length;
+  }
+
+  get applicableOperations(): BatchOperationDef[] {
+    return BATCH_OPERATIONS.filter(op => op.supportsProcessInstances);
+  }
+
+  get selectedInstanceStates(): Set<string> {
+    const states = new Set<string>();
+    for (const metadata of this.selectedInstanceMetadataCache.values()) {
+      states.add(metadata.state);
+    }
+    return states;
+  }
+
+  isOperationApplicable(operationId: string): boolean {
+    if (this.selectedInstanceIds.size === 0) return false;
+    const states = this.selectedInstanceStates;
+    switch (operationId) {
+      case 'suspend':
+        return ![...states].some(s => s !== 'ACTIVE');
+      case 'activate':
+        return ![...states].some(s => s !== 'SUSPENDED');
+      case 'delete-running':
+        return ![...states].some(s => s !== 'ACTIVE' && s !== 'SUSPENDED');
+      case 'delete-finished':
+        return ![...states].some(s => s !== 'COMPLETED' && s !== 'EXTERNALLY_TERMINATED' && s !== 'INTERNALLY_TERMINATED');
+      case 'set-retries-jobs':
+      case 'set-retries-external':
+      case 'set-variables':
+      case 'correlate':
+        return ![...states].some(s => s !== 'ACTIVE' && s !== 'SUSPENDED');
+      case 'removal-time-process':
+        return true;
+      case 'move-instances': {
+        const metadata = [...this.selectedInstanceMetadataCache.values()];
+        if (metadata.length === 0) return false;
+        const firstDefId = metadata[0].processDefinitionId;
+        const allSameDefinition = metadata.every(m => m.processDefinitionId === firstDefId);
+        if (!allSameDefinition) return false;
+        const allowedStates = ProcessInstanceSearchComponent.MOVE_INSTANCES_ALLOWED_STATES;
+        return ![...states].some(s => !allowedStates.includes(s));
+      }
+      default:
+        return false;
+    }
+  }
+
+  getOperationDisabledReason(operationId: string): string {
+    if (this.selectedInstanceIds.size === 0) return '';
+    const states = this.selectedInstanceStates;
+    switch (operationId) {
+      case 'suspend':
+        if ([...states].some(s => s !== 'ACTIVE')) {
+          return 'cockpit.processes.search.operationRequiresOnlyActive';
+        }
+        break;
+      case 'activate':
+        if ([...states].some(s => s !== 'SUSPENDED')) {
+          return 'cockpit.processes.search.operationRequiresOnlySuspended';
+        }
+        break;
+      case 'delete-running':
+        if ([...states].some(s => s !== 'ACTIVE' && s !== 'SUSPENDED')) {
+          return 'cockpit.processes.search.operationRequiresOnlyRunning';
+        }
+        break;
+      case 'delete-finished':
+        if ([...states].some(s => s !== 'COMPLETED' && s !== 'EXTERNALLY_TERMINATED' && s !== 'INTERNALLY_TERMINATED')) {
+          return 'cockpit.processes.search.operationRequiresOnlyFinished';
+        }
+        break;
+      case 'set-retries-jobs':
+      case 'set-retries-external':
+      case 'set-variables':
+      case 'correlate':
+        if ([...states].some(s => s !== 'ACTIVE' && s !== 'SUSPENDED')) {
+          return 'cockpit.processes.search.operationRequiresOnlyRunning';
+        }
+        break;
+      case 'move-instances': {
+        const metadata = [...this.selectedInstanceMetadataCache.values()];
+        if (metadata.length === 0) return '';
+
+        // Check if all instances have the same processDefinitionId
+        const firstDefId = metadata[0].processDefinitionId;
+        const firstDefKey = metadata[0].processDefinitionKey;
+        const allSameDefinition = metadata.every(m => m.processDefinitionId === firstDefId);
+
+        if (!allSameDefinition) {
+          // Check if they have the same key but different versions
+          const allSameKey = metadata.every(m => m.processDefinitionKey === firstDefKey);
+
+          if (allSameKey) {
+            // Same key, different versions - show specific message with count
+            const uniqueVersions = new Set(metadata.map(m => m.processDefinitionId));
+            return this.translateService.instant('cockpit.processes.search.moveInstancesRequiresSameVersion', {
+              versions: String(uniqueVersions.size)
+            });
+          } else {
+            // Different keys - show generic message
+            return 'cockpit.processes.search.moveInstancesRequiresSameDefinition';
+          }
+        }
+
+        const allowedStates = ProcessInstanceSearchComponent.MOVE_INSTANCES_ALLOWED_STATES;
+        if ([...states].some(s => !allowedStates.includes(s))) {
+          return 'cockpit.processes.search.moveInstancesRequiresActiveOrSuspended';
+        }
+        break;
+      }
+    }
+    return '';
+  }
+
+  toggleBatchOpsDropdown(): void {
+    this.showBatchOpsDropdown = !this.showBatchOpsDropdown;
+    if (this.showBatchOpsDropdown) {
+      setTimeout(() => {
+        const menuList = document.querySelector('.menu__list') as HTMLElement;
+        if (menuList) {
+          menuList.scrollTop = 0;
+        }
+      }, 0);
+    }
+    this.cdr.markForCheck();
+  }
+
+  onBatchOperationSelect(operationId: string): void {
+    // NEW RULE: Write snapshot BEFORE navigating to batch operation (all operations)
+    if (this.searchExecuted) {
+      const metadata: Array<{ id: string; state: string; processDefinitionId: string; processDefinitionKey: string }> = [];
+      for (const [id, meta] of this.selectedInstanceMetadataCache.entries()) {
+        metadata.push({ id, ...meta });
+      }
+
+      const snapshot: import('../../../../services/search-instances-state.service').SearchInstancesPersistedState = {
+        version: 1,
+        criteria: this.activePills,
+        variableNamesIgnoreCase: this.variableNamesIgnoreCase,
+        variableValuesIgnoreCase: this.variableValuesIgnoreCase,
+        currentPage: this.searchCurrentPage,
+        pageSize: this.searchPageSize,
+        selectedIds: [...this.selectedInstanceIds],
+        selectedMetadata: metadata,
+        scrollTop: window.scrollY
+      };
+
+      this.searchStateService.writeSnapshot(snapshot);
+    }
+
+    if (operationId === 'move-instances') {
+      // Special handling for move-instances: navigate to Modify tab with preselection
+      const selectedIds = Array.from(this.selectedInstanceIds);
+      if (selectedIds.length === 0) return;
+
+      // Get selected instances
+      const selectedInstances = this.searchResults.filter(i => selectedIds.includes(i.id));
+      if (selectedInstances.length === 0) return;
+
+      // Validate all instances have the same processDefinitionId
+      const firstDefId = selectedInstances[0].processDefinitionId;
+      const firstDefKey = selectedInstances[0].processDefinitionKey;
+      const firstDefName = selectedInstances[0].processDefinitionName || firstDefKey;
+
+      const allSameDefinition = selectedInstances.every(i => i.processDefinitionId === firstDefId);
+      if (!allSameDefinition) {
+        // Handle error: instances from different versions
+        return;
+      }
+
+      // Extract version from processDefinitionId (format: key:version:deploymentId)
+      const versionMatch = firstDefId.match(/:(\d+):/);
+      const version = versionMatch ? parseInt(versionMatch[1], 10) : 1;
+
+      // Collect unique states from selected instances
+      const uniqueStates = Array.from(new Set(selectedInstances.map(i => i.state)));
+
+      const preselection: SearchMovePreselection = {
+        processDefinitionId: firstDefId,
+        processDefinitionKey: firstDefKey,
+        definitionName: firstDefName,
+        definitionVersion: version,
+        selectedIds,
+        states: uniqueStates
+      };
+
+      try {
+        sessionStorage.setItem(SEARCH_PRESELECTION_SESSION_KEY, JSON.stringify(preselection));
+      } catch {}
+
+      // Navigate to process-list with definitionId and tab=modify
+      this.router.navigate(['/cockpit/processes', firstDefKey, 'instances'], {
+        queryParams: {
+          definitionId: firstDefId,
+          tab: 'modify'
+        }
+      });
+      return;
+    }
+
+    // Original batch operations handling
+    const state: WizardPersistedState = {
+      operationId,
+      mode: 'instances',
+      step: 1,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedIds: [...this.selectedInstanceIds],
+      fromSearch: true
+    };
+    try {
+      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+    } catch {
+    }
+    this.router.navigate(['/cockpit/batch/operations']);
   }
 }

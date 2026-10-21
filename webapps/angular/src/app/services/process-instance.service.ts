@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { ModificationDto } from '../models/cockpit/modification.model';
@@ -310,6 +310,70 @@ export class ProcessInstanceService {
     }
     return this.http.get<{ id: string }[]>(`${this.baseUrl}/process-instance`, { params: httpParams }).pipe(
       map(instances => instances.map(i => i.id))
+    );
+  }
+
+  /**
+   * Max batch size for POST /process-instance queries.
+   * Must be well below queryMaxResultsLimit (configured at 2000) to avoid 400 errors.
+   */
+  private static readonly PROCESS_INSTANCE_QUERY_BATCH_SIZE = 500;
+
+  /**
+   * Query runtime process instances with POST (for eligibility checks with large processInstanceIds arrays).
+   * Unlike GET, POST allows sending large lists in the body without URL length limits.
+   * Automatically batches requests if processInstanceIds exceeds PROCESS_INSTANCE_QUERY_BATCH_SIZE.
+   */
+  queryRuntimeInstancesAtActivity(body: {
+    processInstanceIds: string[];
+    activityIdIn: string[];
+    processDefinitionId?: string;
+  }): Observable<string[]> {
+    if (!body.processInstanceIds.length || !body.activityIdIn.length) {
+      return of([]);
+    }
+
+    const batchSize = ProcessInstanceService.PROCESS_INSTANCE_QUERY_BATCH_SIZE;
+    const instanceIds = body.processInstanceIds;
+
+    // Split into batches
+    const batches: string[][] = [];
+    for (let i = 0; i < instanceIds.length; i += batchSize) {
+      batches.push(instanceIds.slice(i, i + batchSize));
+    }
+
+    // Query each batch with pagination params
+    const batchObservables = batches.map(batchIds => {
+      const params = new HttpParams()
+        .set('firstResult', '0')
+        .set('maxResults', batchSize.toString());
+
+      return this.http.post<{ id: string }[]>(
+        `${this.baseUrl}/process-instance`,
+        {
+          processInstanceIds: batchIds,
+          activityIdIn: body.activityIdIn,
+          processDefinitionId: body.processDefinitionId
+        },
+        { params }
+      );
+    });
+
+    // Execute all batches in parallel and concat results
+    if (batchObservables.length === 1) {
+      return batchObservables[0].pipe(
+        map(instances => instances.map(i => i.id))
+      );
+    }
+
+    return forkJoin(batchObservables).pipe(
+      map(batchResults => {
+        const allIds: string[] = [];
+        for (const batch of batchResults) {
+          allIds.push(...batch.map(i => i.id));
+        }
+        return allIds;
+      })
     );
   }
 

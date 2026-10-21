@@ -45,7 +45,7 @@ import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { ModifyTabComponent, ModifyOverlay } from '../modify-tab/modify-tab';
-import { MOVE_INSTANCES_DIALOG_SESSION_KEY, BATCH_OPS_MODIFY_SIGNAL_KEY } from '../modify-tab/select-instances-dialog';
+import { MOVE_INSTANCES_DIALOG_SESSION_KEY, BATCH_OPS_MODIFY_SIGNAL_KEY, SEARCH_PRESELECTION_SESSION_KEY } from '../modify-tab/select-instances-dialog';
 import { CorrelateMessageModalComponent } from '../correlate-message-modal/correlate-message-modal';
 import { buildMessageNodeMap, extractMessageNames } from '../../../../utils/message-names.utils';
 import { MultiValueFilter } from '../../../../services/cockpit.service';
@@ -246,6 +246,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
         if (newKey !== this.processDefinitionKey) {
           this.processDefinitionKey = newKey;
           this.processDefinition = null;
+          this.lastLoadedDefinitionId = null;
           this.currentPage = 1;
           this.loadProcessDefinition();
           this.loadProcessDefinitionVersions();
@@ -285,39 +286,39 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     }));
   }
 
+  private lastLoadedDefinitionId: string | null = null;
+
   loadProcessDefinition(): void {
     const requestedForKey = this.processDefinitionKey;
-    this.cockpitService.getProcessDefinitionByKey(this.processDefinitionKey)
+    const requestedDefinitionId = this.route.snapshot.queryParams['definitionId'] as string | undefined;
+    const requestedTab = this.route.snapshot.queryParams['tab'] as string | undefined;
+
+    // Guard: avoid reloading the same definition
+    const targetDefinitionId = requestedDefinitionId && requestedDefinitionId.startsWith(this.processDefinitionKey + ':')
+      ? requestedDefinitionId
+      : this.processDefinitionKey;
+
+    if (this.lastLoadedDefinitionId === targetDefinitionId && this.processDefinition?.id === targetDefinitionId) {
+      // Already loaded, just handle post-load logic
+      this.handlePostLoadLogic(requestedTab);
+      return;
+    }
+
+    // If definitionId is provided in query params, load that specific version
+    const loadObservable = requestedDefinitionId && requestedDefinitionId.startsWith(this.processDefinitionKey + ':')
+      ? this.cockpitService.getProcessDefinitionById(requestedDefinitionId)
+      : this.cockpitService.getProcessDefinitionByKey(this.processDefinitionKey);
+
+    loadObservable
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (definition) => {
           if (requestedForKey !== this.processDefinitionKey) return;
           this.processDefinition = definition;
           if (definition?.id) {
+            this.lastLoadedDefinitionId = definition.id;
             this.selectedVersion = definition.id;
-            try {
-              const batchSignal = sessionStorage.getItem(BATCH_OPS_MODIFY_SIGNAL_KEY);
-              const isForThisProcess = batchSignal && (
-                batchSignal === definition.id ||
-                batchSignal.startsWith(this.processDefinitionKey + ':')
-              );
-              if (isForThisProcess) {
-                sessionStorage.removeItem(BATCH_OPS_MODIFY_SIGNAL_KEY);
-                if (batchSignal !== definition.id) {
-                  this.selectedVersion = batchSignal;
-                  this.onVersionChange();
-                }
-                this.switchTab('modify');
-              } else {
-                const raw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
-                if (raw) {
-                  const state = JSON.parse(raw);
-                  if (state?.processDefinitionId === definition.id) {
-                    this.switchTab('modify');
-                  }
-                }
-              }
-            } catch { }
+            this.handlePostLoadLogic(requestedTab);
           }
           this.buildBreadcrumbs();
           this.cdr.markForCheck();
@@ -329,6 +330,80 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           }
         }
       });
+  }
+
+  private handlePostLoadLogic(requestedTab?: string): void {
+    if (!this.processDefinition?.id) return;
+
+    let tabToSwitch: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' | 'modify' | null = null;
+    let shouldCleanQueryParams = false;
+
+    try {
+      // Check for batch operation signal
+      const batchSignal = sessionStorage.getItem(BATCH_OPS_MODIFY_SIGNAL_KEY);
+      const isForThisProcess = batchSignal && (
+        batchSignal === this.processDefinition.id ||
+        batchSignal.startsWith(this.processDefinitionKey + ':')
+      );
+      if (isForThisProcess) {
+        sessionStorage.removeItem(BATCH_OPS_MODIFY_SIGNAL_KEY);
+        if (batchSignal !== this.processDefinition.id) {
+          this.selectedVersion = batchSignal;
+          this.onVersionChange();
+        }
+        tabToSwitch = 'modify';
+        shouldCleanQueryParams = true;
+      }
+
+      // Check for search preselection (Move instances from Search)
+      if (!tabToSwitch) {
+        const preselectionRaw = sessionStorage.getItem(SEARCH_PRESELECTION_SESSION_KEY);
+        if (preselectionRaw) {
+          const preselection = JSON.parse(preselectionRaw);
+          if (preselection?.processDefinitionId === this.processDefinition.id) {
+            // FIX: Do NOT remove the key here. Let modify-tab consume it in ngOnChanges.
+            // This fixes the race condition where the key was cleared before modify-tab could read it.
+            tabToSwitch = 'modify';
+            shouldCleanQueryParams = true;
+          }
+        }
+      }
+
+      // Check for dialogue session (Adjust selection)
+      if (!tabToSwitch) {
+        const dialogRaw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+        if (dialogRaw) {
+          const state = JSON.parse(dialogRaw);
+          if (state?.processDefinitionId === this.processDefinition.id) {
+            tabToSwitch = 'modify';
+            shouldCleanQueryParams = true;
+          }
+        }
+      }
+
+      // If a specific tab was requested via queryParams, use it (unless overridden above)
+      if (!tabToSwitch && requestedTab && this.isValidTab(requestedTab)) {
+        tabToSwitch = requestedTab as 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' | 'modify';
+        shouldCleanQueryParams = true;
+      }
+
+      // Switch to the determined tab
+      if (tabToSwitch) {
+        this.switchTab(tabToSwitch);
+      }
+
+      // Clean queryParams after consumption to prevent re-triggering
+      if (shouldCleanQueryParams) {
+        const currentParams = this.route.snapshot.queryParams;
+        if (currentParams['definitionId'] || currentParams['tab']) {
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {},
+            replaceUrl: true
+          });
+        }
+      }
+    } catch { }
   }
 
   private buildBreadcrumbs(): void {
@@ -846,6 +921,10 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     if (this.bpmnViewer && activityId) {
       this.bpmnViewer.scrollToElement(activityId);
     }
+  }
+
+  private isValidTab(tab: string): boolean {
+    return ['instances', 'incidents', 'called-definitions', 'job-definitions', 'modify'].includes(tab);
   }
 
   switchTab(tab: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' | 'modify'): void {

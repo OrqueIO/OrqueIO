@@ -28,6 +28,63 @@
           <fa-icon [icon]="faFilter" class="panel-header-icon"></fa-icon>
           <span class="panel-header-title">{{ 'cockpit.processes.globalSearch.title' | translate }}</span>
           <span class="pill-count-badge" *ngIf="activePills.length > 0">{{ activePills.length }}</span>
+          <div class="search-header-actions">
+            <div class="action-bar">
+              <div class="batch-ops-action-wrapper"
+                   [title]="selectedInstanceIds.size === 0 ? ('cockpit.processes.search.selectAtLeastOne' | translate) : ''">
+                <div class="batch-ops-dropdown-wrapper">
+                  <button
+                    type="button"
+                    class="action-bar__btn action-bar__btn--batch"
+                    [disabled]="selectedInstanceIds.size === 0"
+                    [attr.aria-haspopup]="'menu'"
+                    [attr.aria-expanded]="showBatchOpsDropdown"
+                    [attr.aria-label]="selectedInstanceIds.size > 0 ? (('cockpit.processes.search.performBatchOp' | translate) + ' (' + selectedInstanceIds.size + ' selected)') : ('cockpit.processes.search.performBatchOp' | translate)"
+                    [title]="'cockpit.processes.search.performBatchOp' | translate"
+                    (click)="toggleBatchOpsDropdown()"
+                  >
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="action-bar__btn-icon">
+                      <path d="m3 17 2 2 4-4"/>
+                      <path d="m3 7 2 2 4-4"/>
+                      <path d="M13 6h8M13 12h8M13 18h8"/>
+                    </svg>
+                    <svg *ngIf="!showBatchOpsDropdown" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="action-bar__btn-chevron">
+                      <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                    <svg *ngIf="showBatchOpsDropdown" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="action-bar__btn-chevron action-bar__btn-chevron--open">
+                      <path d="m18 15-6-6-6 6"/>
+                    </svg>
+                  </button>
+                  <div *ngIf="showBatchOpsDropdown" class="batch-ops-dropdown" role="menu">
+                    <div class="batch-ops-dropdown-header">
+                      {{ 'cockpit.processes.search.applyToInstances' | translate: { count: selectedInstanceIds.size.toString() } }}
+                    </div>
+                    <div class="menu__list">
+                      <button
+                        *ngFor="let op of applicableOperations"
+                        type="button"
+                        class="batch-ops-dropdown-item"
+                        [class.batch-ops-dropdown-item--disabled]="!isOperationApplicable(op.id)"
+                        [disabled]="!isOperationApplicable(op.id)"
+                        [attr.title]="isOperationApplicable(op.id) ? (op.descKey | translate) : (getOperationDisabledReason(op.id) | translate)"
+                        [attr.aria-label]="(op.labelKey | translate) + (isOperationApplicable(op.id) ? '' : ' : ' + (getOperationDisabledReason(op.id) | translate))"
+                        [attr.aria-disabled]="!isOperationApplicable(op.id)"
+                        role="menuitem"
+                        (click)="isOperationApplicable(op.id) && onBatchOperationSelect(op.id)"
+                      >
+                        <span class="batch-ops-item-icon-wrapper" [class]="op.badgeClass">
+                          <fa-icon [icon]="op.icon"></fa-icon>
+                        </span>
+                        <div class="batch-ops-item-content">
+                          <div class="batch-ops-item-name">{{ op.labelKey | translate }}</div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="panel-body">
@@ -636,9 +693,31 @@
 
               <!-- Table -->
               <div class="search-table-container">
+                <!-- Select all bar -->
+                <div *ngIf="searchResults.length > 0" class="select-all-bar">
+                  <label class="select-all-label">
+                    <input
+                      type="checkbox"
+                      [checked]="isAllInstancesSelected"
+                      [indeterminate]="isIndeterminateSelection"
+                      (change)="toggleSelectAllInstances()"
+                      [title]="'cockpit.processes.search.selectAllRowsHint' | translate"
+                      [attr.aria-label]="'cockpit.processes.search.selectAllRowsHint' | translate"
+                    />
+                    <span>
+                      {{ 'cockpit.processes.search.selectAllRows' | translate: { count: searchResults.length.toString() } }}
+                    </span>
+                  </label>
+                  <span class="selection-count"
+                        [class.selection-count--empty]="selectedInstanceIds.size === 0">
+                    {{ 'cockpit.batchOps.selectedCount' | translate: { count: selectedInstanceIds.size.toString() } }}
+                  </span>
+                </div>
+
                 <table class="data-table">
                   <thead>
                     <tr>
+                      <th class="col-check"></th>
                       <th class="col-state">{{ 'cockpit.processes.columns.state' | translate }}</th>
                       <th class="col-id">{{ 'cockpit.processes.columns.id' | translate }}</th>
                       <th class="col-definition">{{ 'cockpit.processes.columns.definition' | translate }}</th>
@@ -649,7 +728,16 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let instance of searchResults" class="result-row">
+                    <tr *ngFor="let instance of searchResults"
+                        class="result-row"
+                        [class.row--selected]="isInstanceSelected(instance.id)">
+                      <td class="col-check">
+                        <input
+                          type="checkbox"
+                          [checked]="isInstanceSelected(instance.id)"
+                          (change)="toggleInstanceSelection(instance.id)"
+                        />
+                      </td>
                       <td class="col-state">
                         <span class="state-badge" [ngClass]="getInstanceStateClass(instance)">
                           <fa-icon [icon]="getInstanceStateIcon(instance)"></fa-icon>
