@@ -1481,18 +1481,11 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.processInstanceService.setExternalTaskRetriesAsync(retriesPayload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
+          next: batch => this.handleBatchSuccess(batch),
           error: (err) => {
             const msg: string = err?.error?.message ?? '';
             this.batchErrorNoExternalTasks = msg.includes('externalTaskIds is empty');
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
+            this.handleBatchError();
           }
         });
       return;
@@ -1509,18 +1502,11 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.processInstanceService.setJobRetriesAsync(retriesPayload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
+          next: batch => this.handleBatchSuccess(batch),
           error: (err) => {
             const msg: string = err?.error?.message ?? '';
             this.batchErrorNoJobs = msg.includes('jobIds is empty');
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
+            this.handleBatchError();
           }
         });
       return;
@@ -1536,17 +1522,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.processInstanceService.correlateMessageAsync(correlatePayload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
-          error: () => {
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
+          next: batch => this.handleBatchSuccess(batch),
+          error: () => this.handleBatchError()
         });
       return;
     }
@@ -1559,17 +1536,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.processInstanceService.setVariablesAsync(setVarsPayload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
-          error: () => {
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
+          next: batch => this.handleBatchSuccess(batch),
+          error: () => this.handleBatchError()
         });
       return;
     }
@@ -1627,17 +1595,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
           );
 
           forkJoin(batchRequests).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-            next: (batches) => {
-              this.batchId = batches[batches.length - 1].id;
-              this.executing = false;
-              this.clearSessionStorage();
-              this.cdr.markForCheck();
-            },
-            error: () => {
-              this.batchError = true;
-              this.executing = false;
-              this.cdr.markForCheck();
-            }
+            next: (batches) => this.handleBatchSuccess(batches[batches.length - 1]),
+            error: () => this.handleBatchError()
           });
           return;
         }
@@ -1674,17 +1633,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.processInstanceService.setRemovalTimeAsync(removalTimePayload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
-          error: () => {
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
+          next: batch => this.handleBatchSuccess(batch),
+          error: () => this.handleBatchError()
         });
       return;
     }
@@ -1697,17 +1647,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.decisionService.deleteDecisionInstancesAsync(payload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
-          error: () => {
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
+          next: batch => this.handleBatchSuccess(batch),
+          error: () => this.handleBatchError()
         });
       return;
     }
@@ -1739,17 +1680,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.decisionService.setRemovalTimeAsync(removalTimePayload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
-          error: () => {
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
+          next: batch => this.handleBatchSuccess(batch),
+          error: () => this.handleBatchError()
         });
       return;
     }
@@ -1776,17 +1708,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.batchService.setRemovalTimeAsync(removalTimePayload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
-          error: () => {
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
+          next: batch => this.handleBatchSuccess(batch),
+          error: () => this.handleBatchError()
         });
       return;
     }
@@ -1799,17 +1722,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.processInstanceService.deleteInstancesAsync(deletePayload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
-          error: () => {
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
+          next: batch => this.handleBatchSuccess(batch),
+          error: () => this.handleBatchError()
         });
       return;
     }
@@ -1827,17 +1741,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
             this.processInstanceService.deleteFinishedInstancesAsync({ deleteReason, historicProcessInstanceQuery: extQuery }),
             this.processInstanceService.deleteFinishedInstancesAsync({ deleteReason, historicProcessInstanceQuery: intQuery }),
           ]).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-            next: ([, batch]) => {
-              this.batchId = batch.id;
-              this.executing = false;
-              this.clearSessionStorage();
-              this.cdr.markForCheck();
-            },
-            error: () => {
-              this.batchError = true;
-              this.executing = false;
-              this.cdr.markForCheck();
-            }
+            next: ([, batch]) => this.handleBatchSuccess(batch),
+            error: () => this.handleBatchError()
           });
           return;
         }
@@ -1848,17 +1753,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.processInstanceService.deleteFinishedInstancesAsync(deleteFinishedPayload)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
-          error: () => {
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
+          next: batch => this.handleBatchSuccess(batch),
+          error: () => this.handleBatchError()
         });
       return;
     }
@@ -1869,17 +1765,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.processInstanceService.suspendInstancesAsync({ suspended, processInstanceIds: [...this.selectedIds] })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
-          error: () => {
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
+          next: batch => this.handleBatchSuccess(batch),
+          error: () => this.handleBatchError()
         });
       return;
     }
@@ -1888,17 +1775,8 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
       this.processInstanceService.suspendInstancesAsync({ suspended, historicProcessInstanceQuery: query })
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
-          next: batch => {
-            this.batchId = batch.id;
-            this.executing = false;
-            this.clearSessionStorage();
-            this.cdr.markForCheck();
-          },
-          error: () => {
-            this.batchError = true;
-            this.executing = false;
-            this.cdr.markForCheck();
-          }
+          next: batch => this.handleBatchSuccess(batch),
+          error: () => this.handleBatchError()
         });
     };
 
@@ -1971,6 +1849,29 @@ export class BatchOperationsWizardComponent implements OnInit, OnDestroy {
     } catch {
       // ignore
     }
+  }
+
+  private signalBatchSuccessToSearch(): void {
+    if (this.fromSearch) {
+      try {
+        sessionStorage.setItem('searchBatchReturn', 'true');
+      } catch {
+      }
+    }
+  }
+
+  private handleBatchSuccess(batch: { id: string }): void {
+    this.batchId = batch.id;
+    this.executing = false;
+    this.signalBatchSuccessToSearch();
+    this.clearSessionStorage();
+    this.cdr.markForCheck();
+  }
+
+  private handleBatchError(): void {
+    this.batchError = true;
+    this.executing = false;
+    this.cdr.markForCheck();
   }
 
   private loadFromSessionStorage(): void {

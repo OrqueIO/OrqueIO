@@ -63,7 +63,10 @@ import { dateRangeConflicts } from '../../../../utils/search-validation';
 import { MultiValueChipInputComponent } from '../../../../shared/multi-value-chip-input/multi-value-chip-input';
 import { BATCH_OPERATIONS, WizardPersistedState } from '../../cockpit-batch/batch-operations-wizard/batch-operations-wizard';
 import { BatchOperationDef } from '../../cockpit-batch/batch-operation-list/batch-operation-list';
-import { SEARCH_PRESELECTION_SESSION_KEY, SearchMovePreselection } from '../modify-tab/select-instances-dialog';
+import { SEARCH_PRESELECTION_SESSION_KEY, SearchMovePreselection, BATCH_OPS_MODIFY_SIGNAL_KEY } from '../modify-tab/select-instances-dialog';
+import { SearchInstancesStateService } from '../../../../services/search-instances-state.service';
+
+const SEARCH_BATCH_RETURN_KEY = 'searchBatchReturn';
 
 @Component({
   selector: 'app-process-instance-search',
@@ -89,6 +92,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private translateService = inject(TranslateService);
+  private searchStateService = inject(SearchInstancesStateService);
 
   // Icons
   faSpinner = faSpinner;
@@ -180,6 +184,10 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   private selectedInstanceMetadataCache = new Map<string, { state: string; processDefinitionId: string; processDefinitionKey: string }>();
   showBatchOpsDropdown = false;
 
+  private staleIdsDetectedCount = 0;
+  private staleIdsMessageShown = false;
+  private restoringState = false;
+
   private readonly searchRequest$ = new Subject<boolean>();
 
   ngOnInit(): void {
@@ -211,9 +219,13 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
           this.multiStateHasMore = keysetPage.hasMore;
         }
         this.searchLoading = false;
+        this.detectStaleSelectedIds();
+        this.saveCurrentState();
         this.cdr.markForCheck();
       });
 
+    this.restorePersistedState();
+    this.checkBatchOperationReturn();
     this.loadFromUrl();
 
     this.cockpitService.getProcessDefinitions(1000, false)
@@ -238,6 +250,131 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.navMenuService.clearMenuItems();
+    this.saveCurrentState();
+    this.searchStateService.flushToStorage();
+  }
+
+  private restorePersistedState(): void {
+    const state = this.searchStateService.loadState();
+    if (!state) {
+      return;
+    }
+
+    this.restoringState = true;
+
+    this.activePills = state.criteria;
+    this.variableNamesIgnoreCase = state.variableNamesIgnoreCase;
+    this.variableValuesIgnoreCase = state.variableValuesIgnoreCase;
+
+    this.searchCurrentPage = state.currentPage;
+    this.searchPageSize = state.pageSize;
+
+    this.selectedInstanceIds = new Set(state.selectedIds);
+    this.selectedInstanceMetadataCache.clear();
+    for (const meta of state.selectedMetadata) {
+      this.selectedInstanceMetadataCache.set(meta.id, {
+        state: meta.state,
+        processDefinitionId: meta.processDefinitionId,
+        processDefinitionKey: meta.processDefinitionKey
+      });
+    }
+
+    if (state.scrollTop !== undefined && state.scrollTop > 0) {
+      setTimeout(() => {
+        try {
+          window.scrollTo(0, state.scrollTop!);
+        } catch {}
+      }, 100);
+    }
+
+    if (this.activePills.length > 0) {
+      this.searchLoading = true;
+      this.searchExecuted = true;
+      this.searchError = false;
+      this.cdr.markForCheck();
+      this.loadSearchResults(true);
+    }
+
+    this.restoringState = false;
+  }
+
+  private checkBatchOperationReturn(): void {
+    try {
+      const returnFlag = sessionStorage.getItem(SEARCH_BATCH_RETURN_KEY);
+      if (returnFlag) {
+        this.selectedInstanceIds.clear();
+        this.selectedInstanceMetadataCache.clear();
+        sessionStorage.removeItem(SEARCH_BATCH_RETURN_KEY);
+        if (this.searchExecuted) {
+          this.saveCurrentState();
+        }
+      }
+    } catch {
+    }
+  }
+
+  private saveCurrentState(): void {
+    if (!this.searchExecuted) return;
+
+    const metadata: Array<{ id: string; state: string; processDefinitionId: string; processDefinitionKey: string }> = [];
+    for (const [id, meta] of this.selectedInstanceMetadataCache.entries()) {
+      metadata.push({ id, ...meta });
+    }
+
+    const state: import('../../../../services/search-instances-state.service').SearchInstancesPersistedState = {
+      version: 1,
+      criteria: this.activePills,
+      variableNamesIgnoreCase: this.variableNamesIgnoreCase,
+      variableValuesIgnoreCase: this.variableValuesIgnoreCase,
+      currentPage: this.searchCurrentPage,
+      pageSize: this.searchPageSize,
+      selectedIds: [...this.selectedInstanceIds],
+      selectedMetadata: metadata,
+      scrollTop: window.scrollY
+    };
+
+    this.searchStateService.updateState(state);
+  }
+
+  private detectStaleSelectedIds(): void {
+
+    if (this.selectedInstanceIds.size === 0 || this.searchResults.length === 0) return;
+    if (this.searchCurrentPage !== 1) return;
+
+    const currentPageIds = new Set(this.searchResults.map(r => r.id));
+    const staleIds: string[] = [];
+
+    let position = 0;
+    for (const id of this.selectedInstanceIds) {
+      position++;
+      if (position <= this.searchPageSize && !currentPageIds.has(id)) {
+        staleIds.push(id);
+      }
+    }
+
+    if (staleIds.length > 0) {
+      for (const id of staleIds) {
+        this.selectedInstanceIds.delete(id);
+        this.selectedInstanceMetadataCache.delete(id);
+      }
+      this.staleIdsDetectedCount = staleIds.length;
+      this.staleIdsMessageShown = true;
+      this.selectedInstanceIds = new Set(this.selectedInstanceIds);
+      this.saveCurrentState();
+    }
+  }
+
+  get staleIdsMessage(): string | null {
+    if (!this.staleIdsMessageShown || this.staleIdsDetectedCount === 0) return null;
+    return this.translateService.instant('cockpit.processes.search.staleInstancesDetected', {
+      count: this.staleIdsDetectedCount.toString()
+    });
+  }
+
+  dismissStaleIdsMessage(): void {
+    this.staleIdsMessageShown = false;
+    this.staleIdsDetectedCount = 0;
+    this.cdr.markForCheck();
   }
 
   private buildKeysetSource(recomputeCount: boolean) {
@@ -294,6 +431,11 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
   }
 
   private loadFromUrl(): void {
+    // Don't load from URL if state was already restored (avoid double query)
+    if (this.searchExecuted) {
+      return;
+    }
+
     const params = this.route.snapshot.queryParams;
     const criteriaJson: string | null = params['criteria'] ?? null;
     if (!criteriaJson) return;
@@ -999,8 +1141,13 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.searchExecuted = true;
     this.searchError = false;
     this.searchCurrentPage = 1;
-    this.selectedInstanceIds = new Set();
-    this.selectedInstanceMetadataCache.clear();
+
+    // Only clear selection if NOT restoring state
+    if (!this.restoringState) {
+      this.selectedInstanceIds = new Set();
+      this.selectedInstanceMetadataCache.clear();
+    }
+
     this.resetCursorState();
     this.cdr.markForCheck();
     this.loadSearchResults(true);
@@ -1051,6 +1198,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     this.pendingValues = [];
     this.selectedInstanceIds = new Set();
     this.selectedInstanceMetadataCache.clear();
+    this.searchStateService.clearState();
     this.cdr.markForCheck();
     this.syncCriteriaToUrl();
   }
@@ -1237,6 +1385,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       });
     }
     this.selectedInstanceIds = new Set(this.selectedInstanceIds);
+    this.saveCurrentState();
     this.cdr.markForCheck();
   }
 
@@ -1261,6 +1410,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
       });
     }
     this.selectedInstanceIds = new Set(this.selectedInstanceIds);
+    this.saveCurrentState();
     this.cdr.markForCheck();
   }
 
@@ -1462,6 +1612,8 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     };
     try {
       sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+      // REMOVED: Do NOT set flag here - wizard must set it AFTER batch success
+      // sessionStorage.setItem(SEARCH_BATCH_RETURN_KEY, 'true');
     } catch {
     }
     this.router.navigate(['/cockpit/batch/operations']);
