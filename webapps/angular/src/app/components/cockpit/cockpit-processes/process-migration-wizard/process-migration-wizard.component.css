@@ -1,0 +1,330 @@
+/* =====================================================
+   COMPONENT HOST (from process-definitions.css)
+   ===================================================== */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* =====================================================
+   BASE LAYOUT (from process-definitions.css)
+   ===================================================== */
+
+.cockpit-layout {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  background: var(--bg-page);
+  overflow: hidden;
+}
+
+.cockpit-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.tab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-6);
+}
+
+/* =====================================================
+   TAB BAR (from process-definitions.css)
+   ===================================================== */
+
+.processes-tabs-bar {
+  flex-shrink: 0;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--border-color-light);
+  background: var(--bg-card);
+}
+
+.process-tabs {
+  display: flex;
+  gap: 0;
+}
+
+.process-tab {
+  position: relative;
+  padding: 0.85rem 1.25rem;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  cursor: pointer;
+}
+
+.process-tab:hover {
+  color: var(--text-primary);
+}
+
+.process-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* =====================================================
+   PANEL STYLES (from process-definitions.css)
+   ===================================================== */
+
+.panel-header-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  background: var(--color-gray-50);
+  border-bottom: 1px solid var(--border-color-light);
+  flex-shrink: 0;
+}
+
+.panel-header-icon {
+  color: var(--color-primary);
+  font-size: var(--font-size-base);
+}
+
+.panel-header-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.panel-body {
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.criteria-zone {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-xl);
+  flex-shrink: 0;
+}
+
+.criteria-zone .panel-header-bar {
+  background: var(--bg-card);
+  border-bottom: none;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+/* =====================================================
+   MIGRATION WIZARD SPECIFIC
+   ===================================================== */
+
+.migration-wizard-header {
+  margin-bottom: var(--space-4);
+}
+
+.step-content {
+  padding: var(--space-4);
+}
+
+.info-text {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.error-text {
+  color: var(--color-danger, #dc2626);
+  font-size: var(--font-size-base);
+}
+
+.mapping-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+  padding: var(--space-4) 0;
+}
+
+.definition-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+}
+
+.selector-label {
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  white-space: nowrap;
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 7px 32px 7px 10px;
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.custom-select:hover:not(:disabled) {
+  border-color: var(--border-color-dark);
+}
+
+.custom-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.custom-select:disabled {
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  border-color: var(--border-color-light);
+}
+
+.custom-select option {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+.selector-key {
+  min-width: 220px;
+  max-width: 280px;
+}
+
+.selector-version {
+  min-width: 90px;
+  max-width: 110px;
+}
+
+.select-chevron {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.selector-divider {
+  width: 1px;
+  height: 40px;
+  background: var(--border-color);
+  flex-shrink: 0;
+}
+
+.diagrams-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+  position: relative;
+}
+
+.diagram-panel {
+  height: 400px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  overflow: hidden;
+  position: relative;
+}
+
+.diagram-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.migration-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-6);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-left {
+  flex: 1;
+}
+
+.footer-checkboxes {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.footer-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary {
+  background: var(--color-primary, #3b82f6);
+  color: white;
+  border-color: var(--color-primary, #3b82f6);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-primary-dark, #2563eb);
+  border-color: var(--color-primary-dark, #2563eb);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

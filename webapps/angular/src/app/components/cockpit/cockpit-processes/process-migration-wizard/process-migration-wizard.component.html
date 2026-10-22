@@ -1,0 +1,184 @@
+<div class="cockpit-layout">
+  <main class="cockpit-main">
+    <app-cockpit-header [breadcrumbs]="breadcrumbs"></app-cockpit-header>
+
+    <div class="processes-tabs-bar">
+      <nav class="process-tabs">
+        <a class="process-tab"
+           routerLink="/cockpit/processes/definitions"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}">
+          {{ 'cockpit.processes.tabs.definitions' | translate }}
+        </a>
+        <a class="process-tab"
+           routerLink="/cockpit/processes/search"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}">
+          {{ 'cockpit.processes.tabs.searchInstances' | translate }}
+        </a>
+        <a class="process-tab"
+           routerLink="/cockpit/processes/migration"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}">
+          {{ 'cockpit.processes.tabs.migration' | translate }}
+        </a>
+      </nav>
+    </div>
+
+    <div class="tab-content">
+      <div class="criteria-zone">
+        <div class="panel-header-bar">
+          <fa-icon [icon]="faExchangeAlt" class="panel-header-icon"></fa-icon>
+          <span class="panel-header-title">{{ 'migration.title' | translate }}</span>
+        </div>
+
+        <div class="panel-body">
+      <div class="migration-wizard-header">
+        <app-batch-wizard-stepper
+          [steps]="wizardSteps"
+          [currentStep]="currentStep()">
+        </app-batch-wizard-stepper>
+      </div>
+
+      @if (currentStep() === 1) {
+        <div class="step-content step-1">
+        @if (loadingState() === 'loading') {
+          <p class="info-text">{{ 'migration.loadingDefinitions' | translate }}</p>
+        }
+
+        @if (loadingState() === 'error') {
+          <p class="error-text">{{ errorMessage() || ('migration.errorLoadingDefinitions' | translate) }}</p>
+        }
+
+        @if (loadingState() === 'loaded') {
+          <!-- Header: Source and Target selectors on one line -->
+          <div class="mapping-header">
+            <div class="definition-selector">
+              <span class="selector-label">{{ 'migration.source' | translate }}:</span>
+              <div class="select-wrapper">
+                <select
+                  id="sourceKey"
+                  class="custom-select selector-key"
+                  [value]="sourceKey()"
+                  (change)="onSourceKeyChange($any($event.target).value)"
+                  [attr.aria-label]="'migration.sourceProcessKey' | translate">
+                  <option value="">{{ 'migration.selectKey' | translate }}</option>
+                  @for (key of availableKeys(); track key) {
+                    <option [value]="key">{{ key }}</option>
+                  }
+                </select>
+                <span class="select-chevron" aria-hidden="true">▾</span>
+              </div>
+              <div class="select-wrapper">
+                <select
+                  id="sourceVersion"
+                  class="custom-select selector-version"
+                  [disabled]="!sourceKey()"
+                  (change)="onSourceVersionChange(+$any($event.target).value)"
+                  [attr.aria-label]="'migration.sourceVersion' | translate">
+                  <option value="">{{ 'migration.selectVersion' | translate }}</option>
+                  @for (def of sourceVersions(); track def.id) {
+                    <option [value]="def.version" [selected]="sourceVersion() === def.version">v{{ def.version }}</option>
+                  }
+                </select>
+                <span class="select-chevron" aria-hidden="true">▾</span>
+              </div>
+            </div>
+
+            <div class="selector-divider"></div>
+
+            <div class="definition-selector">
+              <span class="selector-label">{{ 'migration.target' | translate }}:</span>
+              <div class="select-wrapper">
+                <select
+                  id="targetKey"
+                  class="custom-select selector-key"
+                  [value]="targetKey()"
+                  (change)="onTargetKeyChange($any($event.target).value)"
+                  [attr.aria-label]="'migration.targetProcessKey' | translate">
+                  <option value="">{{ 'migration.selectKey' | translate }}</option>
+                  @for (key of availableKeys(); track key) {
+                    <option [value]="key">{{ key }}</option>
+                  }
+                </select>
+                <span class="select-chevron" aria-hidden="true">▾</span>
+              </div>
+              <div class="select-wrapper">
+                <select
+                  id="targetVersion"
+                  class="custom-select selector-version"
+                  [disabled]="!targetKey()"
+                  (change)="onTargetVersionChange(+$any($event.target).value)"
+                  [attr.aria-label]="'migration.targetVersion' | translate">
+                  <option value="">{{ 'migration.selectVersion' | translate }}</option>
+                  @for (def of targetVersions(); track def.id) {
+                    <option [value]="def.version" [selected]="targetVersion() === def.version">v{{ def.version }}</option>
+                  }
+                </select>
+                <span class="select-chevron" aria-hidden="true">▾</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="diagrams-container">
+            <div class="diagram-panel">
+              @if (sourceXmlLoading()) {
+                <div class="diagram-empty">{{ 'migration.loadingDiagram' | translate }}</div>
+              } @else if (sourceXml()) {
+                <app-bpmn-viewer
+                  [xml]="sourceXml()"
+                  [activityBadges]="sourceActivityBadges()">
+                </app-bpmn-viewer>
+              } @else {
+                <div class="diagram-empty">{{ 'migration.selectSourceDiagram' | translate }}</div>
+              }
+            </div>
+
+            <div class="diagram-panel">
+              @if (targetXmlLoading()) {
+                <div class="diagram-empty">{{ 'migration.loadingDiagram' | translate }}</div>
+              } @else if (targetXml()) {
+                <app-bpmn-viewer
+                  [xml]="targetXml()"
+                  [activityBadges]="targetActivityBadges()">
+                </app-bpmn-viewer>
+              } @else {
+                <div class="diagram-empty">{{ 'migration.selectTargetDiagram' | translate }}</div>
+              }
+            </div>
+
+            @if (migrationPlan() && migrationPlan()!.instructions.length > 0) {
+              <app-migration-arrows
+                [instructions]="migrationPlan()!.instructions"
+                [report]="migrationReport()"
+                [showAll]="showMigrationPlan">
+              </app-migration-arrows>
+            }
+          </div>
+
+          <div class="migration-footer">
+            <div class="footer-left"></div>
+            <div class="footer-checkboxes">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="linkDiagramsNavigation">
+                <span>{{ 'migration.linkDiagramsNavigation' | translate }}</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="showMigrationPlan">
+                <span>{{ 'migration.showMigrationPlan' | translate }}</span>
+              </label>
+            </div>
+            <div class="footer-right">
+              <button class="btn btn-primary" [disabled]="!isPlanValid() || planLoading()">
+                {{ 'migration.setVariables' | translate }} →
+              </button>
+            </div>
+          </div>
+        }
+        </div>
+      }
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

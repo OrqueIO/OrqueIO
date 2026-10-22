@@ -7,7 +7,8 @@ import {
   faBox,
   faCogs,
   faSearch,
-  faWrench
+  faWrench,
+  faExchangeAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { NavMenuItem } from './navbar/navbar';
 
@@ -34,6 +35,12 @@ export const COCKPIT_MENU_ITEMS: NavMenuItem[] = [
         icon: faSearch,
         label: 'cockpit.processes.tabs.searchInstances',
         route: '/cockpit/processes/search',
+        exact: true
+      },
+      {
+        icon: faExchangeAlt,
+        label: 'cockpit.processes.tabs.migration',
+        route: '/cockpit/processes/migration',
         exact: true
       }
     ]

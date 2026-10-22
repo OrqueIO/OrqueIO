@@ -287,6 +287,30 @@ button.breadcrumb-parent-name {
   background: #ef4444;
 }
 
+/* Migration status badges */
+.bpmn-badge-migration {
+  min-width: 20px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bpmn-badge-migration--valid {
+  background: #22c55e;
+}
+
+.bpmn-badge-migration--invalid {
+  background: #ef4444;
+}
+
+.bpmn-badge-migration--unmapped {
+  background: #f59e0b;
+}
+
 /* Collapsed Subprocess Drilldown Overlay */
 .bpmn-subprocess-drilldown {
   width: 20px;
