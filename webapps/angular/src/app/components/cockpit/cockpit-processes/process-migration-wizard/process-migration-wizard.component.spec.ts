@@ -23,7 +23,8 @@ describe('ProcessMigrationWizardComponent', () => {
 
   const mockDefinitions: ProcessDefinition[] = [
     { id: 'pd1:1', key: 'OrderProcess', name: 'Order Process', version: 1, deploymentId: 'dep1', suspended: false },
-    { id: 'pd1:2', key: 'OrderProcess', name: 'Order Process', version: 2, deploymentId: 'dep2', suspended: false },
+    { id: 'pd1:2', key: 'OrderProcess', name: 'Order Process v2', version: 2, deploymentId: 'dep2', suspended: false },
+    { id: 'pd1:3', key: 'OrderProcess', name: 'Order Process v3', version: 3, deploymentId: 'dep4', suspended: false },
     { id: 'pd2:1', key: 'InvoiceProcess', name: 'Invoice Process', version: 1, deploymentId: 'dep3', suspended: false }
   ];
 
@@ -45,7 +46,8 @@ describe('ProcessMigrationWizardComponent', () => {
     };
     const processDefSpy = {
       getBpmn20Xml: vi.fn(),
-      getActivityStatistics: vi.fn()
+      getActivityStatistics: vi.fn(),
+      getProcessDefinitionsStatisticsRaw: vi.fn()
     };
     const migrationSpy = {
       generateMigrationPlan: vi.fn(),
@@ -69,7 +71,7 @@ describe('ProcessMigrationWizardComponent', () => {
     processDefinitionService = TestBed.inject(ProcessDefinitionService) as any;
     migrationService = TestBed.inject(MigrationService) as any;
 
-    cockpitService.getProcessDefinitionsWithStatistics.mockReturnValue(of(mockStats));
+    processDefinitionService.getProcessDefinitionsStatisticsRaw.mockReturnValue(of(mockStats));
 
     fixture = TestBed.createComponent(ProcessMigrationWizardComponent);
     component = fixture.componentInstance;
@@ -81,7 +83,7 @@ describe('ProcessMigrationWizardComponent', () => {
 
   it('should load process definitions on init', () => {
     fixture.detectChanges();
-    expect(cockpitService.getProcessDefinitionsWithStatistics).toHaveBeenCalled();
+    expect(processDefinitionService.getProcessDefinitionsStatisticsRaw).toHaveBeenCalled();
     expect(component.availableKeys().length).toBe(2);
     expect(component.availableKeys()).toContain('OrderProcess');
     expect(component.availableKeys()).toContain('InvoiceProcess');
@@ -90,20 +92,22 @@ describe('ProcessMigrationWizardComponent', () => {
   it('should populate source versions when source key is selected', () => {
     fixture.detectChanges();
     component.onSourceKeyChange('OrderProcess');
-    expect(component.sourceVersions().length).toBe(2);
-    expect(component.sourceVersions()[0].version).toBe(2); // Sorted descending
-    expect(component.sourceVersions()[1].version).toBe(1);
+    expect(component.sourceVersions().length).toBe(3);
+    expect(component.sourceVersions()[0].version).toBe(3); // Sorted descending
+    expect(component.sourceVersions()[1].version).toBe(2);
+    expect(component.sourceVersions()[2].version).toBe(1);
   });
 
   it('should reset source version when source key changes', () => {
+    processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: '<xml></xml>' }));
+    processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+
     fixture.detectChanges();
     component.onSourceKeyChange('OrderProcess');
-    component.onSourceVersionChange(2);
-    expect(component.sourceVersion()).toBe(2);
+    expect(component.sourceVersion()).toBe(3);
 
     component.onSourceKeyChange('InvoiceProcess');
-    expect(component.sourceVersion()).toBeNull();
-    expect(component.sourceDefinitionId()).toBeNull();
+    expect(component.sourceVersion()).toBe(1); // Auto-selects most recent (v1)
   });
 
   it('should load XML when source version is selected', () => {
@@ -138,5 +142,58 @@ describe('ProcessMigrationWizardComponent', () => {
     fixture.detectChanges();
     component.migrationReport.set({ instructionReports: [] });
     expect(component.isPlanValid()).toBe(true);
+  });
+
+  it('should load all versions for a key (not just one)', () => {
+    fixture.detectChanges();
+    component.onSourceKeyChange('OrderProcess');
+    const versions = component.sourceVersions();
+    expect(versions.length).toBe(3);
+    expect(versions.map(v => v.version)).toEqual([3, 2, 1]);
+  });
+
+  it('should auto-select most recent version when key is selected', () => {
+    processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: '<xml></xml>' }));
+    processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+
+    fixture.detectChanges();
+    component.onSourceKeyChange('OrderProcess');
+
+    expect(component.sourceVersion()).toBe(3); // Most recent
+  });
+
+  it('should detect when source and target are identical', () => {
+    fixture.detectChanges();
+    component.sourceDefinitionId.set('pd1:2');
+    component.targetDefinitionId.set('pd1:2');
+
+    expect(component.isSourceTargetIdentical()).toBe(true);
+  });
+
+  it('should not detect identical when source and target differ', () => {
+    fixture.detectChanges();
+    component.sourceDefinitionId.set('pd1:2');
+    component.targetDefinitionId.set('pd1:3');
+
+    expect(component.isSourceTargetIdentical()).toBe(false);
+  });
+
+  it('should disable Set Variables button when source equals target', () => {
+    fixture.detectChanges();
+    component.sourceDefinitionId.set('pd1:2');
+    component.targetDefinitionId.set('pd1:2');
+    component.migrationReport.set({ instructionReports: [] });
+
+    expect(component.isPlanValid()).toBe(false);
+  });
+
+  it('should sort versions descending (most recent first)', () => {
+    fixture.detectChanges();
+    component.onSourceKeyChange('OrderProcess');
+    const versions = component.sourceVersions().map(v => v.version);
+
+    for (let i = 0; i < versions.length - 1; i++) {
+      expect(versions[i]).toBeGreaterThan(versions[i + 1]);
+    }
   });
 });

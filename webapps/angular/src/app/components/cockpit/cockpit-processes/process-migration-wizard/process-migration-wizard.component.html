@@ -157,7 +157,11 @@
           </div>
 
           <div class="migration-footer">
-            <div class="footer-left"></div>
+            <div class="footer-left">
+              @if (isSourceTargetIdentical()) {
+                <span class="warning-message">{{ 'migration.identicalSourceTarget' | translate }}</span>
+              }
+            </div>
             <div class="footer-checkboxes">
               <label class="checkbox-label">
                 <input type="checkbox" [(ngModel)]="linkDiagramsNavigation">

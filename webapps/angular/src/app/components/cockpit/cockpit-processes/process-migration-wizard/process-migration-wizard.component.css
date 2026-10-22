@@ -277,6 +277,12 @@
   flex: 1;
 }
 
+.warning-message {
+  color: var(--color-warning, #f59e0b);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
 .footer-checkboxes {
   display: flex;
   gap: var(--space-4);

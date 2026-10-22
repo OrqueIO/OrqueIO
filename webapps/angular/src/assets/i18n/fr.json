@@ -2108,5 +2108,6 @@
   "migration.selectTargetDiagram": "Sélectionner une définition de processus",
   "migration.linkDiagramsNavigation": "lier la navigation des diagrammes",
   "migration.showMigrationPlan": "afficher le plan de migration",
-  "migration.setVariables": "Définir les variables"
+  "migration.setVariables": "Définir les variables",
+  "migration.identicalSourceTarget": "La source et la cible sont identiques"
 }

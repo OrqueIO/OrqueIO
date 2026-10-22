@@ -176,8 +176,16 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   migrationReport = signal<MigrationPlanReportDto | null>(null);
   planLoading = signal(false);
 
-  // Plan is valid if report has no failures
+  // Check if source and target are identical
+  isSourceTargetIdentical = computed(() => {
+    const sourceId = this.sourceDefinitionId();
+    const targetId = this.targetDefinitionId();
+    return sourceId !== null && targetId !== null && sourceId === targetId;
+  });
+
+  // Plan is valid if report has no failures and source !== target
   isPlanValid = computed(() => {
+    if (this.isSourceTargetIdentical()) return false;
     const report = this.migrationReport();
     if (!report) return false;
     return !report.instructionReports || report.instructionReports.every(r => !r.failures || r.failures.length === 0);
@@ -198,7 +206,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   private loadProcessDefinitions(): void {
     this.loadingState.set('loading');
-    this.cockpitService.getProcessDefinitionsWithStatistics()
+    this.processDefinitionService.getProcessDefinitionsStatisticsRaw()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (stats) => {
