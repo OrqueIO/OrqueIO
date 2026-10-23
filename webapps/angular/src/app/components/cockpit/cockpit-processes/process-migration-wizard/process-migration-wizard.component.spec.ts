@@ -322,6 +322,33 @@ describe('ProcessMigrationWizardComponent', () => {
     expect(component.planGenerationError()).toBe('migration.identicalSourceTarget');
   });
 
+  it('should not call generate when re-selecting same key with different version while target already set (S6 bug)', () => {
+    processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: '<xml></xml>' }));
+    processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+    migrationService.generateMigrationPlan.mockReturnValue(of({
+      sourceProcessDefinitionId: 'pd1:1',
+      targetProcessDefinitionId: 'pd1:1',
+      instructions: []
+    }));
+
+    fixture.detectChanges();
+
+    component.onSourceKeyChange('OrderProcess');
+    component.onSourceVersionChange(1);
+    component.onTargetKeyChange('OrderProcess');
+    component.onTargetVersionChange(1);
+
+    fixture.detectChanges();
+    migrationService.generateMigrationPlan.mockClear();
+
+    component.onSourceKeyChange('OrderProcess');
+
+    fixture.detectChanges();
+
+    const totalCalls = migrationService.generateMigrationPlan.mock.calls.length;
+    expect(totalCalls).toBe(0);
+  });
+
   it('should handle generate error gracefully', () => {
     processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: '<xml></xml>' }));
     processDefinitionService.getActivityStatistics.mockReturnValue(of([]));

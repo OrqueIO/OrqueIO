@@ -453,6 +453,8 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   }
 
   onSourceKeyChange(key: string): void {
+    const prevKey = this.sourceKey();
+
     this.sourceKey.set(key);
     this.sourceVersion.set(null);
     const prevDefId = this.sourceDefinitionId();
@@ -493,6 +495,12 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
 
   onTargetKeyChange(key: string): void {
+    const prevKey = this.targetKey();
+
+    if (key === prevKey) {
+      return;
+    }
+
     this.targetKey.set(key);
     this.targetVersion.set(null);
     const prevDefId = this.targetDefinitionId();
