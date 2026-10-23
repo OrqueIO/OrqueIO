@@ -127,7 +127,13 @@
               } @else if (sourceXml()) {
                 <app-bpmn-viewer
                   [xml]="sourceXml()"
-                  [activityBadges]="sourceActivityBadges()">
+                  [activityBadges]="sourceActivityBadges()"
+                  [enableMappingButtons]="enableMappingButtons()"
+                  [mappedActivityIds]="mappedSourceActivityIds()"
+                  [migrationReport]="migrationReport()"
+                  [editableInstructions]="editableInstructions()"
+                  (createMapping)="onCreateMapping($event)"
+                  (deleteMapping)="onDeleteMapping($event)">
                 </app-bpmn-viewer>
               } @else {
                 <div class="diagram-empty">{{ 'migration.selectSourceDiagram' | translate }}</div>
@@ -140,7 +146,12 @@
               } @else if (targetXml()) {
                 <app-bpmn-viewer
                   [xml]="targetXml()"
-                  [activityBadges]="targetActivityBadges()">
+                  [activityBadges]="targetActivityBadges()"
+                  [mappingMode]="mappingMode()"
+                  [highlightTargets]="mappingMode()"
+                  [migrationReport]="migrationReport()"
+                  [editableInstructions]="editableInstructions()"
+                  (selectTarget)="onSelectTarget($event)">
                 </app-bpmn-viewer>
               } @else {
                 <div class="diagram-empty">{{ 'migration.selectTargetDiagram' | translate }}</div>

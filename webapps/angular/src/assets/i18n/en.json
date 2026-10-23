@@ -2127,5 +2127,12 @@
   "migration.linkDiagramsNavigation": "link diagrams navigation",
   "migration.showMigrationPlan": "show migration plan",
   "migration.setVariables": "Set Variables",
-  "migration.identicalSourceTarget": "Source and target are identical"
+  "migration.identicalSourceTarget": "Source and target are identical",
+  "migration.mapToTarget": "Map to target",
+  "migration.mapping": "Mapping",
+  "migration.mappingError": "Mapping Error",
+  "migration.removeMapping": "Remove mapping",
+  "migration.updateEventTrigger": "Update event trigger",
+  "migration.manageMapping": "Manage mapping",
+  "migration.viewMappingErrors": "View mapping errors"
 }

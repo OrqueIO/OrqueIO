@@ -80,6 +80,14 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() callActivityIdsWithInstances: Set<string> = new Set();
   @Input() parentBreadcrumb: ParentBreadcrumb | null = null;
 
+  // Migration mapping mode
+  @Input() enableMappingButtons = false;
+  @Input() mappedActivityIds: Set<string> = new Set();
+  @Input() mappingMode = false;
+  @Input() highlightTargets = false;
+  @Input() migrationReport: any = null;
+  @Input() editableInstructions: any[] = [];
+
   get expandState(): Record<string, boolean> {
     return { [EXPAND_DIAGRAM_STATE_KEY]: this.isExpanded };
   }
@@ -87,6 +95,11 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() elementClick = new EventEmitter<BpmnElement>();
   @Output() elementHover = new EventEmitter<BpmnElement | null>();
   @Output() viewerReady = new EventEmitter<void>();
+
+  // Migration mapping events
+  @Output() createMapping = new EventEmitter<string>();
+  @Output() deleteMapping = new EventEmitter<string>();
+  @Output() selectTarget = new EventEmitter<string>();
   @Output() error = new EventEmitter<Error>();
   @Output() expandToggle = new EventEmitter<void>();
   @Output() focusClick = new EventEmitter<void>();
@@ -101,6 +114,16 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private correlateOverlayIds: string[] = [];
   private correlateOverlayData: Map<string, { btn: HTMLButtonElement; elementId: string; anchorId: string; hideTimer: ReturnType<typeof setTimeout> | null }> = new Map();
   private correlateHoverListeners: Array<() => void> = [];
+
+  // Migration mapping overlays
+  private mappingOverlayIds: string[] = [];
+  private targetHighlightOverlayIds: string[] = [];
+  // PERMANENT OVERLAYS FIX: Maps as class properties to prevent race conditions
+  private buttonContainers: Map<string, HTMLElement> = new Map();
+  private hideTimeouts: Map<string, ReturnType<typeof setTimeout>> = new Map();
+  // Migration badge popover
+  private activePopover: HTMLElement | null = null;
+  private popoverCleanup: (() => void) | null = null;
   private currentXml: string | null = null;
   private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -149,6 +172,15 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }, 200);
   }
 
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    if (this.mappingMode) {
+      this.ngZone.run(() => {
+        this.createMapping.emit('');
+      });
+    }
+  }
+
   ngAfterViewInit(): void {
     this.initViewer();
   }
@@ -180,6 +212,12 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
     if (changes['callActivityIdsWithInstances'] && this.isViewerReady && this.currentXml && this.enableCallActivityNavigation) {
       this.addCallActivityOverlays();
+    }
+    if ((changes['enableMappingButtons'] || changes['mappedActivityIds']) && this.isViewerReady && this.currentXml) {
+      this.updateMappingButtons();
+    }
+    if ((changes['mappingMode'] || changes['highlightTargets']) && this.isViewerReady && this.currentXml) {
+      this.updateTargetHighlights();
     }
   }
 
@@ -213,6 +251,12 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       this.updateSelection();
       if (this.enableCallActivityNavigation) {
         this.addCallActivityOverlays();
+      }
+      if (this.enableMappingButtons) {
+        this.updateMappingButtons();
+      }
+      if (this.highlightTargets) {
+        this.updateTargetHighlights();
       }
       this.styleCollapsedSubprocessOverlays();
     });
@@ -487,11 +531,13 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         }
       }
 
-      // Migration status badge (top-right)
+      // Migration status badge (top-right) - clickable for valid/invalid
       if (badge.migrationStatus) {
-        const statusHtml = document.createElement('div');
+        const statusHtml = document.createElement('button');
+        statusHtml.type = 'button';
         let iconSvg = '';
         let className = 'bpmn-badge bpmn-badge-migration';
+        const isClickable = badge.migrationStatus === 'valid' || badge.migrationStatus === 'invalid';
 
         if (badge.migrationStatus === 'valid') {
           className += ' bpmn-badge-migration--valid';
@@ -508,6 +554,21 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         statusHtml.innerHTML = iconSvg;
         if (badge.tooltip) {
           statusHtml.title = badge.tooltip;
+        }
+
+        if (isClickable) {
+          statusHtml.style.cursor = 'pointer';
+          statusHtml.setAttribute('aria-label', badge.migrationStatus === 'valid' ? 'Manage mapping' : 'View mapping errors');
+
+          statusHtml.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.ngZone.run(() => {
+              this.showMappingPopover(badge.activityId, badge.migrationStatus!, statusHtml, badge);
+            });
+          });
+        } else {
+          statusHtml.disabled = true;
+          statusHtml.style.cursor = 'default';
         }
 
         try {
@@ -609,6 +670,414 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       console.warn('Could not add error overlay to', activityId, e);
     }
   }
+  private updateMappingButtons(): void {
+    // Clear existing mapping overlays
+    this.mappingOverlayIds.forEach(id => {
+      try { this.overlays?.remove(id); } catch (_) {}
+    });
+    this.mappingOverlayIds = [];
+
+    // Clear existing class-level Maps and timeouts
+    this.hideTimeouts.forEach(timeout => clearTimeout(timeout));
+    this.hideTimeouts.clear();
+    this.buttonContainers.clear();
+
+    // Remove old event bus listeners
+    if (this.hoverListener) {
+      const eventBus = this.viewer?.get('eventBus');
+      eventBus?.off('element.hover', this.hoverListener);
+      eventBus?.off('element.out', this.outListener!);
+      this.hoverListener = null;
+      this.outListener = null;
+    }
+
+    if (!this.viewer || !this.overlays || !this.enableMappingButtons) return;
+
+    const elementRegistry = this.viewer.get('elementRegistry');
+    const eventBus = this.viewer.get('eventBus');
+    const allElements = elementRegistry.getAll();
+
+    // Add mapping button overlays to mappable flow nodes (excluding Start/End Events)
+    allElements.forEach((element: any) => {
+      if (!element.businessObject || element.type === 'label') return;
+
+      // Exclude Start/End Events, SequenceFlow, Process, Participant/Pool, labels, and annotations
+      if (element.type === 'bpmn:StartEvent' ||
+          element.type === 'bpmn:EndEvent' ||
+          element.type === 'bpmn:SequenceFlow' ||
+          element.type === 'bpmn:Process' ||
+          element.type === 'bpmn:Participant' ||
+          element.type === 'bpmn:Collaboration' ||
+          element.type.includes('Annotation')) {
+        return;
+      }
+
+      const isFlowNode = element.type && (
+        element.type.includes('Task') ||
+        element.type.includes('IntermediateCatchEvent') ||
+        element.type.includes('IntermediateThrowEvent') ||
+        element.type.includes('BoundaryEvent') ||
+        element.type.includes('Gateway') ||
+        element.type.includes('SubProcess') ||
+        element.type.includes('CallActivity')
+      );
+
+      if (!isFlowNode) return;
+
+      const isMapped = this.mappedActivityIds.has(element.id);
+
+      // Create button (only for unmapped activities - mapped will use badge click)
+      if (isMapped) return; // Mapped activities use the green badge for control
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'bpmn-mapping-button bpmn-mapping-create';
+
+      // SVG arrow-right icon from FontAwesome
+      const arrowIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 448 512"><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>';
+      btn.innerHTML = arrowIcon;
+      btn.setAttribute('aria-label', 'Map to target');
+      btn.title = ''; // Will be set via i18n
+      btn.style.cssText = 'width: 24px; height: 24px; background: white; color: #3b82f6; border: 1.5px solid #3b82f6; border-radius: 50%; cursor: pointer; pointer-events: auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.12s ease; padding: 0;';
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.ngZone.run(() => {
+          this.createMapping.emit(element.id);
+        });
+      });
+
+      // Hover effect: blue background, white icon, slight scale
+      btn.addEventListener('mouseenter', () => {
+        btn.style.background = '#3b82f6';
+        btn.style.color = 'white';
+        btn.style.transform = 'scale(1.1)';
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        btn.style.background = 'white';
+        btn.style.color = '#3b82f6';
+        btn.style.transform = 'scale(1)';
+      });
+
+      // Prevent button from hiding when mouse enters it
+      btn.addEventListener('mouseenter', () => {
+        const timeout = this.hideTimeouts.get(element.id);
+        if (timeout) {
+          clearTimeout(timeout);
+          this.hideTimeouts.delete(element.id);
+        }
+      });
+
+      // Hide with delay when mouse leaves button
+      btn.addEventListener('mouseleave', () => {
+        const timeout = setTimeout(() => {
+          container.classList.remove('bpmn-mapping-visible');
+          this.hideTimeouts.delete(element.id);
+        }, 150);
+        this.hideTimeouts.set(element.id, timeout);
+      });
+
+      // Container with pointer-events none and hidden class
+      const container = document.createElement('div');
+      container.style.cssText = 'pointer-events: none;';
+      container.className = 'bpmn-mapping-container';
+      container.appendChild(btn);
+
+      this.buttonContainers.set(element.id, container);
+
+      try {
+        // Position at middle of right edge, half outside
+        // top: 50% centers vertically, right: -12px puts button half outside (24px button / 2)
+        const overlayId = this.overlays.add(element.id, {
+          position: { top: '50%', right: -12 },
+          html: container
+        });
+        this.mappingOverlayIds.push(overlayId);
+      } catch (e) {
+        // Silently ignore overlay errors
+      }
+    });
+
+    // Use BPMN.js event bus for hover detection
+    this.hoverListener = (event: any) => {
+      if (!event.element || this.mappingMode) return;
+
+      const container = this.buttonContainers.get(event.element.id);
+      if (container) {
+        // Cancel hide timeout
+        const timeout = this.hideTimeouts.get(event.element.id);
+        if (timeout) {
+          clearTimeout(timeout);
+          this.hideTimeouts.delete(event.element.id);
+        }
+        container.classList.add('bpmn-mapping-visible');
+      }
+    };
+
+    this.outListener = (event: any) => {
+      if (!event.element || this.mappingMode) return;
+
+      const container = this.buttonContainers.get(event.element.id);
+      if (container) {
+        // Hide with delay to allow mouse to move to button
+        const timeout = setTimeout(() => {
+          container.classList.remove('bpmn-mapping-visible');
+          this.hideTimeouts.delete(event.element.id);
+        }, 150);
+        this.hideTimeouts.set(event.element.id, timeout);
+      }
+    };
+
+    eventBus.on('element.hover', this.hoverListener);
+    eventBus.on('element.out', this.outListener);
+  }
+
+  private hoverListener: ((event: any) => void) | null = null;
+  private outListener: ((event: any) => void) | null = null;
+
+  private updateTargetHighlights(): void {
+    // Clear existing target highlights
+    this.targetHighlightOverlayIds.forEach(id => {
+      try { this.overlays?.remove(id); } catch (_) {}
+    });
+    this.targetHighlightOverlayIds = [];
+
+    if (!this.viewer || !this.highlightTargets) return;
+
+    const canvas = this.viewer.get('canvas');
+    const elementRegistry = this.viewer.get('elementRegistry');
+    const allElements = elementRegistry.getAll();
+
+    // Highlight all flow nodes with translucent blue (excluding Start/End Events, SequenceFlow, etc.)
+    allElements.forEach((element: any) => {
+      if (!element.businessObject || element.type === 'label') return;
+
+      // Exclude same elements as mapping buttons
+      if (element.type === 'bpmn:StartEvent' ||
+          element.type === 'bpmn:EndEvent' ||
+          element.type === 'bpmn:SequenceFlow' ||
+          element.type === 'bpmn:Process' ||
+          element.type === 'bpmn:Participant' ||
+          element.type === 'bpmn:Collaboration' ||
+          element.type.includes('Annotation')) {
+        return;
+      }
+
+      const isFlowNode = element.type && (
+        element.type.includes('Task') ||
+        element.type.includes('IntermediateCatchEvent') ||
+        element.type.includes('IntermediateThrowEvent') ||
+        element.type.includes('BoundaryEvent') ||
+        element.type.includes('Gateway') ||
+        element.type.includes('SubProcess') ||
+        element.type.includes('CallActivity')
+      );
+
+      if (!isFlowNode) return;
+
+      try {
+        // Use marker class to highlight ONLY the shape, not text elements
+        canvas.addMarker(element.id, 'target-highlight');
+
+        // Make element clickable
+        const canvasContainer = this.canvasRef.nativeElement;
+        const elementNode = canvasContainer.querySelector(`[data-element-id="${element.id}"]`);
+        if (elementNode) {
+          (elementNode as HTMLElement).style.cursor = 'crosshair';
+          const clickHandler = (e: Event) => {
+            e.stopPropagation();
+            this.ngZone.run(() => {
+              this.selectTarget.emit(element.id);
+            });
+            // Remove highlight and handler after selection
+            canvas.removeMarker(element.id, 'target-highlight');
+            (elementNode as HTMLElement).style.cursor = '';
+            elementNode.removeEventListener('click', clickHandler);
+          };
+          elementNode.addEventListener('click', clickHandler);
+        }
+      } catch (e) {
+        console.warn('Could not highlight target', element.id, e);
+      }
+    });
+
+    // Set crosshair cursor on canvas
+    if (this.mappingMode) {
+      const canvasContainer = this.canvasRef.nativeElement.querySelector('.djs-container');
+      if (canvasContainer) {
+        (canvasContainer as HTMLElement).style.cursor = 'crosshair';
+      }
+    }
+  }
+
+  private showMappingPopover(activityId: string, status: 'valid' | 'invalid' | 'unmapped', anchor: HTMLElement, badge: ActivityBadge): void {
+    if (status === 'unmapped') return; // Unmapped badges are not clickable
+    // Close any existing popover
+    this.closeMappingPopover();
+
+    const popover = document.createElement('div');
+    popover.className = 'bpmn-mapping-popover';
+
+    const title = document.createElement('div');
+    title.className = 'bpmn-mapping-popover__title';
+    title.textContent = status === 'valid' ? 'Mapping' : 'Mapping Error';
+    popover.appendChild(title);
+
+    // For invalid status, show error messages
+    if (status === 'invalid') {
+      const errorList = document.createElement('div');
+      errorList.className = 'bpmn-mapping-popover__errors';
+
+      // Extract failures from migration report for this activity
+      // We need to find the instruction that maps this activity and get its failures
+      const failures = this.getFailuresForActivity(activityId);
+
+      if (failures && failures.length > 0) {
+        failures.forEach(failure => {
+          const errorItem = document.createElement('div');
+          errorItem.className = 'bpmn-mapping-popover__error-item';
+          errorItem.textContent = failure;
+          errorList.appendChild(errorItem);
+        });
+      } else {
+        const errorItem = document.createElement('div');
+        errorItem.className = 'bpmn-mapping-popover__error-item';
+        errorItem.textContent = 'Unknown validation error';
+        errorList.appendChild(errorItem);
+      }
+
+      popover.appendChild(errorList);
+    }
+
+    // For valid status with events, show "Update event trigger" checkbox
+    if (status === 'valid') {
+      const element = this.getElement(activityId);
+      if (element && this.isEventType(element.type)) {
+        const checkboxContainer = document.createElement('label');
+        checkboxContainer.className = 'bpmn-mapping-popover__checkbox';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = this.getUpdateEventTriggerForActivity(activityId);
+
+        checkbox.addEventListener('change', () => {
+          this.ngZone.run(() => {
+            this.updateEventTrigger(activityId, checkbox.checked);
+          });
+        });
+
+        const label = document.createElement('span');
+        label.textContent = 'Update event trigger';
+
+        checkboxContainer.appendChild(checkbox);
+        checkboxContainer.appendChild(label);
+        popover.appendChild(checkboxContainer);
+      }
+    }
+
+    // Remove mapping button (for both valid and invalid)
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'bpmn-mapping-popover__remove-btn';
+    removeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="currentColor" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg><span>Remove mapping</span>';
+    removeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.ngZone.run(() => {
+        this.deleteMapping.emit(activityId);
+        this.closeMappingPopover();
+      });
+    });
+    popover.appendChild(removeBtn);
+
+    // Position popover below the badge
+    const anchorRect = anchor.getBoundingClientRect();
+    const containerRect = this.canvasRef.nativeElement.getBoundingClientRect();
+
+    popover.style.position = 'absolute';
+    popover.style.top = `${anchorRect.bottom - containerRect.top + 8}px`;
+    popover.style.left = `${anchorRect.left - containerRect.left}px`;
+    popover.style.zIndex = '1000';
+
+    // Add arrow
+    const arrow = document.createElement('div');
+    arrow.className = 'bpmn-mapping-popover__arrow';
+    popover.appendChild(arrow);
+
+    // Add to canvas
+    this.canvasRef.nativeElement.appendChild(popover);
+    this.activePopover = popover;
+
+    // Close on ESC or click outside
+    const closeOnEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        this.ngZone.run(() => this.closeMappingPopover());
+      }
+    };
+
+    const closeOnClickOutside = (e: MouseEvent) => {
+      if (!popover.contains(e.target as Node) && !anchor.contains(e.target as Node)) {
+        this.ngZone.run(() => this.closeMappingPopover());
+      }
+    };
+
+    document.addEventListener('keydown', closeOnEsc);
+    document.addEventListener('click', closeOnClickOutside);
+
+    this.popoverCleanup = () => {
+      document.removeEventListener('keydown', closeOnEsc);
+      document.removeEventListener('click', closeOnClickOutside);
+    };
+
+    // Focus management
+    removeBtn.focus();
+  }
+
+  private closeMappingPopover(): void {
+    if (this.activePopover) {
+      this.activePopover.remove();
+      this.activePopover = null;
+    }
+    if (this.popoverCleanup) {
+      this.popoverCleanup();
+      this.popoverCleanup = null;
+    }
+  }
+
+  private getFailuresForActivity(activityId: string): string[] {
+    if (!this.migrationReport) return [];
+
+    // Find instruction that contains this activity
+    const instructions = this.editableInstructions || [];
+    const instructionIndex = instructions.findIndex(instr =>
+      instr.sourceActivityIds.includes(activityId) || instr.targetActivityIds.includes(activityId)
+    );
+
+    if (instructionIndex === -1) return [];
+
+    const report = this.migrationReport.instructionReports?.[instructionIndex];
+    return report?.failures || [];
+  }
+
+  private isEventType(type: string): boolean {
+    return !!(type && (
+      type.includes('Event') ||
+      type === 'bpmn:ReceiveTask'
+    ));
+  }
+
+  private getUpdateEventTriggerForActivity(activityId: string): boolean {
+    const instructions = this.editableInstructions || [];
+    const instruction = instructions.find(instr => instr.sourceActivityIds.includes(activityId));
+    return instruction?.updateEventTrigger || false;
+  }
+
+  private updateEventTrigger(activityId: string, value: boolean): void {
+    // This will be handled by emitting an event or updating the instruction directly
+    // For now, we need to add this capability
+    // TODO: Add updateEventTrigger output event
+  }
+
   private getElementDisplayName(element: any): string {
     if (element.businessObject?.name) return element.businessObject.name;
     const id = element.id || '';

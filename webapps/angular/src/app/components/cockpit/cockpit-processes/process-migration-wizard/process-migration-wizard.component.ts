@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
-import { forkJoin, switchMap, of } from 'rxjs';
+import { forkJoin, switchMap, of, Subject, debounceTime } from 'rxjs';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
@@ -176,6 +176,16 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   migrationReport = signal<MigrationPlanReportDto | null>(null);
   planLoading = signal(false);
 
+  // Editable instructions for manual mapping
+  editableInstructions = signal<MigrationInstructionDto[]>([]);
+
+  // Mapping mode state
+  mappingMode = signal(false);
+  mappingSourceActivityId = signal<string | null>(null);
+
+  // Debounced validation subject
+  private validateSubject = new Subject<MigrationPlanDto>();
+
   // Check if source and target are identical
   isSourceTargetIdentical = computed(() => {
     const sourceId = this.sourceDefinitionId();
@@ -195,9 +205,22 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   showMigrationPlan = true;
   linkDiagramsNavigation = false;
 
+  // Computed for enabling mapping buttons
+  enableMappingButtons = computed(() => !!(this.sourceDefinitionId() && this.targetDefinitionId()));
+
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadProcessDefinitions();
+
+    // Setup debounced validation
+    this.validateSubject
+      .pipe(
+        debounceTime(250),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(plan => {
+        this.validateMigrationPlan(plan);
+      });
   }
 
   ngOnDestroy(): void {
@@ -339,8 +362,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         next: (plan) => {
           this.migrationPlan.set(plan);
           if (plan) {
+            // Initialize editable instructions with auto-generated plan
+            this.editableInstructions.set([...plan.instructions]);
             this.validateMigrationPlan(plan);
           } else {
+            this.editableInstructions.set([]);
             this.planLoading.set(false);
           }
           this.cdr.markForCheck();
@@ -366,5 +392,75 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
           this.cdr.markForCheck();
         }
       });
+  }
+
+  mappedSourceActivityIds = computed(() => {
+    const mapped = new Set<string>();
+    this.editableInstructions().forEach(instr => {
+      instr.sourceActivityIds.forEach(id => mapped.add(id));
+    });
+    return mapped;
+  });
+
+  // Mapping CRUD operations
+  onCreateMapping(sourceActivityId: string): void {
+    if (!sourceActivityId) {
+      // ESC pressed, cancel mapping
+      this.onCancelMapping();
+      return;
+    }
+    this.mappingMode.set(true);
+    this.mappingSourceActivityId.set(sourceActivityId);
+  }
+
+  onCancelMapping(): void {
+    this.mappingMode.set(false);
+    this.mappingSourceActivityId.set(null);
+  }
+
+  onSelectTarget(targetActivityId: string): void {
+    const sourceId = this.mappingSourceActivityId();
+    if (!sourceId) return;
+
+    // Create new instruction
+    const newInstruction: MigrationInstructionDto = {
+      sourceActivityIds: [sourceId],
+      targetActivityIds: [targetActivityId],
+      updateEventTrigger: false
+    };
+
+    const current = this.editableInstructions();
+    this.editableInstructions.set([...current, newInstruction]);
+
+    // Update plan and trigger validation
+    const plan = this.migrationPlan();
+    if (plan) {
+      const updatedPlan = {
+        ...plan,
+        instructions: this.editableInstructions()
+      };
+      this.migrationPlan.set(updatedPlan);
+      this.validateSubject.next(updatedPlan);
+    }
+
+    this.mappingMode.set(false);
+    this.mappingSourceActivityId.set(null);
+  }
+
+  onDeleteMapping(sourceActivityId: string): void {
+    const current = this.editableInstructions();
+    const filtered = current.filter(instr => !instr.sourceActivityIds.includes(sourceActivityId));
+    this.editableInstructions.set(filtered);
+
+    // Update plan and trigger validation
+    const plan = this.migrationPlan();
+    if (plan) {
+      const updatedPlan = {
+        ...plan,
+        instructions: filtered
+      };
+      this.migrationPlan.set(updatedPlan);
+      this.validateSubject.next(updatedPlan);
+    }
   }
 }

@@ -255,6 +255,13 @@ button.breadcrumb-parent-name {
   fill-opacity: 0.05 !important;
 }
 
+/* Target highlight (mapping mode) - affects ONLY shapes, not text */
+.target-highlight .djs-visual > :nth-child(1) {
+  fill: rgba(59, 130, 246, 0.2) !important;
+  stroke: #3b82f6 !important;
+  stroke-width: 2px !important;
+}
+
 /* Activity Badges (Overlays) */
 
 .bpmn-badge {
@@ -471,4 +478,151 @@ button.breadcrumb-parent-name {
 
 .bpmn-modify-marker--target {
   background: #10b981;
+}
+
+/* Mapping button overlays */
+.bpmn-mapping-container {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+  transform: translateY(-50%); /* Center vertically when positioned at 50% top */
+}
+
+.bpmn-mapping-container.bpmn-mapping-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.bpmn-mapping-button svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.bpmn-mapping-button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Migration badge popover */
+.bpmn-mapping-popover {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  min-width: 220px;
+  max-width: 320px;
+  pointer-events: auto;
+  z-index: 1000;
+}
+
+.bpmn-mapping-popover__arrow {
+  position: absolute;
+  top: -6px;
+  left: 12px;
+  width: 12px;
+  height: 12px;
+  background: white;
+  transform: rotate(45deg);
+  box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.bpmn-mapping-popover__title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.bpmn-mapping-popover__errors {
+  margin-bottom: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.bpmn-mapping-popover__error-item {
+  font-size: 12px;
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+.bpmn-mapping-popover__error-item:last-child {
+  margin-bottom: 0;
+}
+
+.bpmn-mapping-popover__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #374151;
+  margin-bottom: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.bpmn-mapping-popover__checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.bpmn-mapping-popover__remove-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 12px;
+  background: white;
+  border: 1.5px solid #ef4444;
+  border-radius: 6px;
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.bpmn-mapping-popover__remove-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.bpmn-mapping-popover__remove-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.bpmn-mapping-popover__remove-btn:focus-visible {
+  outline: 2px solid #ef4444;
+  outline-offset: 2px;
+}
+
+/* Make migration badges clickable */
+.bpmn-badge-migration--valid,
+.bpmn-badge-migration--invalid {
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.bpmn-badge-migration--valid:hover,
+.bpmn-badge-migration--invalid:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.bpmn-badge-migration--valid:focus-visible,
+.bpmn-badge-migration--invalid:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }

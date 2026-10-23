@@ -82,8 +82,8 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
 
   @Input() instructions: MigrationInstructionDto[] = [];
   @Input() report: MigrationPlanReportDto | null = null;
-  @Input() sourceContainerSelector = '.diagram-panel:first-child .bpmn-canvas';
-  @Input() targetContainerSelector = '.diagram-panel:last-child .bpmn-canvas';
+  @Input() sourceContainerSelector = '.diagram-panel:nth-child(1) .bpmn-canvas';
+  @Input() targetContainerSelector = '.diagram-panel:nth-child(2) .bpmn-canvas';
   @Input() showAll = true;
   @Input() visibleInstructionIndices: Set<number> = new Set();
 

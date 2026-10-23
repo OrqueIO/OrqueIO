@@ -2109,5 +2109,12 @@
   "migration.linkDiagramsNavigation": "lier la navigation des diagrammes",
   "migration.showMigrationPlan": "afficher le plan de migration",
   "migration.setVariables": "Définir les variables",
-  "migration.identicalSourceTarget": "La source et la cible sont identiques"
+  "migration.identicalSourceTarget": "La source et la cible sont identiques",
+  "migration.mapToTarget": "Mapper vers la cible",
+  "migration.mapping": "Mapping",
+  "migration.mappingError": "Erreur de mapping",
+  "migration.removeMapping": "Supprimer le mapping",
+  "migration.updateEventTrigger": "Mettre à jour le déclencheur d'événement",
+  "migration.manageMapping": "Gérer le mapping",
+  "migration.viewMappingErrors": "Voir les erreurs de mapping"
 }
