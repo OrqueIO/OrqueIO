@@ -2134,5 +2134,6 @@
   "migration.removeMapping": "Remove mapping",
   "migration.updateEventTrigger": "Update event trigger",
   "migration.manageMapping": "Manage mapping",
-  "migration.viewMappingErrors": "View mapping errors"
+  "migration.viewMappingErrors": "View mapping errors",
+  "migration.errorGeneratingPlan": "Failed to generate migration plan"
 }

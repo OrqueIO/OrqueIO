@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
-import { forkJoin, switchMap, of, Subject, debounceTime } from 'rxjs';
+import { forkJoin, switchMap, of, Subject, debounceTime, catchError, filter, tap } from 'rxjs';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
@@ -186,6 +186,14 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   // Debounced validation subject
   private validateSubject = new Subject<MigrationPlanDto>();
 
+  // Reactive subjects for definition changes
+  private sourceDefinitionChangeSubject = new Subject<string | null>();
+  private targetDefinitionChangeSubject = new Subject<string | null>();
+  private planGenerationSubject = new Subject<{ sourceId: string; targetId: string }>();
+
+  // Plan generation error
+  planGenerationError = signal<string | null>(null);
+
   // Check if source and target are identical
   isSourceTargetIdentical = computed(() => {
     const sourceId = this.sourceDefinitionId();
@@ -221,6 +229,118 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       .subscribe(plan => {
         this.validateMigrationPlan(plan);
       });
+
+    // Setup source diagram loading pipeline
+    this.sourceDefinitionChangeSubject
+      .pipe(
+        tap(() => {
+          this.sourceXmlLoading.set(true);
+          this.sourceXml.set(null);
+          this.sourceActivityStats.set([]);
+        }),
+        filter(defId => defId !== null),
+        switchMap(defId =>
+          forkJoin({
+            xml: this.processDefinitionService.getBpmn20Xml(defId!),
+            stats: this.processDefinitionService.getActivityStatistics(defId!, true),
+            defId: of(defId)
+          }).pipe(
+            catchError(() => of(null))
+          )
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(result => {
+        if (result && result.defId === this.sourceDefinitionId()) {
+          this.sourceXml.set(result.xml?.bpmn20Xml || null);
+          this.sourceActivityStats.set(result.stats);
+        }
+        this.sourceXmlLoading.set(false);
+        this.cdr.markForCheck();
+      });
+
+    // Setup target diagram loading pipeline
+    this.targetDefinitionChangeSubject
+      .pipe(
+        tap(() => {
+          this.targetXmlLoading.set(true);
+          this.targetXml.set(null);
+        }),
+        filter(defId => defId !== null),
+        switchMap(defId =>
+          this.processDefinitionService.getBpmn20Xml(defId!).pipe(
+            catchError(() => of(null)),
+            tap(() => {
+              if (defId === this.targetDefinitionId()) {
+                // Empty - just for structure
+              }
+            })
+          )
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(xml => {
+        this.targetXml.set(xml?.bpmn20Xml || null);
+        this.targetXmlLoading.set(false);
+        this.cdr.markForCheck();
+      });
+
+    // Setup plan generation pipeline
+    this.planGenerationSubject
+      .pipe(
+        tap(() => {
+          this.planLoading.set(true);
+          this.planGenerationError.set(null);
+        }),
+        switchMap(({ sourceId, targetId }) =>
+          this.migrationService.generateMigrationPlan({
+            sourceProcessDefinitionId: sourceId,
+            targetProcessDefinitionId: targetId
+          }).pipe(
+            catchError(() => {
+              this.planGenerationError.set('migration.errorGeneratingPlan');
+              this.migrationPlan.set(null);
+              this.migrationReport.set(null);
+              this.editableInstructions.set([]);
+              this.planLoading.set(false);
+              this.cdr.markForCheck();
+              return of(null);
+            }),
+            tap(plan => {
+              const currentSource = this.sourceDefinitionId();
+              const currentTarget = this.targetDefinitionId();
+              if (plan && currentSource === sourceId && currentTarget === targetId) {
+                // Valid response for current selection
+              } else if (currentSource !== sourceId || currentTarget !== targetId) {
+                // Discard late response
+                return;
+              }
+            })
+          )
+        ),
+        filter(plan => {
+          const currentSource = this.sourceDefinitionId();
+          const currentTarget = this.targetDefinitionId();
+          return plan !== null && plan.sourceProcessDefinitionId === currentSource && plan.targetProcessDefinitionId === currentTarget;
+        }),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(plan => {
+        this.migrationPlan.set(plan);
+        if (plan && plan.instructions) {
+          // Apply updateEventTrigger flags based on BPMN analysis
+          const instructionsWithFlags = this.applyUpdateEventTriggerFlags(plan.instructions);
+          this.editableInstructions.set(instructionsWithFlags);
+
+          // Update plan with flags for validation
+          const planWithFlags = { ...plan, instructions: instructionsWithFlags };
+          this.validateMigrationPlan(planWithFlags);
+        } else {
+          this.editableInstructions.set([]);
+          this.planLoading.set(false);
+        }
+        this.cdr.markForCheck();
+      });
   }
 
   ngOnDestroy(): void {
@@ -246,14 +366,101 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       });
   }
 
+  private resetDerivedState(): void {
+    this.mappingMode.set(false);
+    this.mappingSourceActivityId.set(null);
+    this.editableInstructions.set([]);
+    this.migrationPlan.set(null);
+    this.migrationReport.set(null);
+    this.planGenerationError.set(null);
+
+    // Reset downstream wizard steps
+    this.resetDownstream();
+  }
+
+  /**
+   * Reset all downstream wizard state (steps 2-5).
+   * Called whenever the source or target definition changes.
+   * This ensures that instance selection, variables, confirmation options,
+   * and execution results are cleared when the migration plan changes.
+   */
+  private resetDownstream(): void {
+    // Reset to step 1
+    this.currentStep.set(1);
+
+    // TODO: When implementing steps 2-5, reset their state here:
+    // - Step 2: variables (variableInstructions)
+    // - Step 3: selected instances (selectedInstances)
+    // - Step 4: confirmation options (skipIoMappings, skipCustomListeners, etc.)
+    // - Step 5: execution result (batchId, operationResult)
+  }
+
+  /**
+   * Determine if an activity should have updateEventTrigger = true.
+   * According to Camunda 7.24 docs: "By default, the update event trigger flag in cockpit migration
+   * is set for activities with message references"
+   * This includes:
+   * - Message boundary events (interrupting and non-interrupting)
+   * - Message intermediate catch events
+   * - Receive tasks
+   */
+  private shouldUpdateEventTrigger(activityId: string, sourceXml: string): boolean {
+    if (!sourceXml) return false;
+
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(sourceXml, 'text/xml');
+
+      // Find the element by id
+      const element = doc.querySelector(`[id="${activityId}"]`);
+      if (!element) return false;
+
+      const tagName = element.tagName;
+
+      // Check if it's a receive task
+      if (tagName.includes('receiveTask')) {
+        return true;
+      }
+
+      // Check if it's a boundary event or intermediate catch event with message definition
+      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
+        const messageEventDef = element.querySelector('messageEventDefinition');
+        if (messageEventDef) {
+          return true;
+        }
+      }
+
+      return false;
+    } catch (e) {
+      // If parsing fails, default to false
+      return false;
+    }
+  }
+
+  /**
+   * Apply updateEventTrigger flag to instructions based on source BPMN analysis
+   */
+  private applyUpdateEventTriggerFlags(instructions: MigrationInstructionDto[]): MigrationInstructionDto[] {
+    const sourceXml = this.sourceXml();
+    if (!sourceXml) return instructions;
+
+    return instructions.map(instr => ({
+      ...instr,
+      updateEventTrigger: instr.sourceActivityIds.some(activityId =>
+        this.shouldUpdateEventTrigger(activityId, sourceXml)
+      )
+    }));
+  }
+
   onSourceKeyChange(key: string): void {
     this.sourceKey.set(key);
     this.sourceVersion.set(null);
+    const prevDefId = this.sourceDefinitionId();
     this.sourceDefinitionId.set(null);
-    this.sourceXml.set(null);
-    this.sourceActivityStats.set([]);
 
-    // Auto-select most recent version and load diagram
+    this.resetDerivedState();
+
+    // Auto-select most recent version
     if (key) {
       const versions = this.sourceVersions();
       if (versions.length > 0) {
@@ -267,44 +474,33 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.sourceVersion.set(version);
     const def = this.sourceVersions().find(d => d.version === version);
     const defId = def?.id || null;
-    this.sourceDefinitionId.set(defId);
+    const prevDefId = this.sourceDefinitionId();
 
-    if (defId) {
-      this.loadSourceDiagram(defId);
-    } else {
-      this.sourceXml.set(null);
-      this.sourceActivityStats.set([]);
+    if (defId === prevDefId) {
+      // No change, don't trigger anything
+      return;
     }
+
+    this.sourceDefinitionId.set(defId);
+    this.resetDerivedState();
+
+    // Trigger diagram loading via subject
+    this.sourceDefinitionChangeSubject.next(defId);
+
+    // Trigger plan generation if both source and target are set
+    this.triggerPlanGeneration();
   }
 
-  private loadSourceDiagram(defId: string): void {
-    this.sourceXmlLoading.set(true);
-    forkJoin({
-      xml: this.processDefinitionService.getBpmn20Xml(defId),
-      stats: this.processDefinitionService.getActivityStatistics(defId, true)
-    })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: ({ xml, stats }) => {
-          this.sourceXml.set(xml?.bpmn20Xml || null);
-          this.sourceActivityStats.set(stats);
-          this.sourceXmlLoading.set(false);
-          this.cdr.markForCheck();
-        },
-        error: () => {
-          this.sourceXmlLoading.set(false);
-          this.cdr.markForCheck();
-        }
-      });
-  }
 
   onTargetKeyChange(key: string): void {
     this.targetKey.set(key);
     this.targetVersion.set(null);
+    const prevDefId = this.targetDefinitionId();
     this.targetDefinitionId.set(null);
-    this.targetXml.set(null);
 
-    // Auto-select most recent version and load diagram
+    this.resetDerivedState();
+
+    // Auto-select most recent version
     if (key) {
       const versions = this.targetVersions();
       if (versions.length > 0) {
@@ -318,65 +514,44 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.targetVersion.set(version);
     const def = this.targetVersions().find(d => d.version === version);
     const defId = def?.id || null;
-    this.targetDefinitionId.set(defId);
+    const prevDefId = this.targetDefinitionId();
 
-    if (defId) {
-      this.loadTargetDiagram(defId);
-    } else {
-      this.targetXml.set(null);
-    }
-  }
-
-  private loadTargetDiagram(defId: string): void {
-    this.targetXmlLoading.set(true);
-    this.processDefinitionService.getBpmn20Xml(defId)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (xml) => {
-          this.targetXml.set(xml?.bpmn20Xml || null);
-          this.targetXmlLoading.set(false);
-          this.generateMigrationPlan();
-          this.cdr.markForCheck();
-        },
-        error: () => {
-          this.targetXmlLoading.set(false);
-          this.cdr.markForCheck();
-        }
-      });
-  }
-
-  private generateMigrationPlan(): void {
-    const sourceId = this.sourceDefinitionId();
-    const targetId = this.targetDefinitionId();
-
-    if (!sourceId || !targetId || sourceId === targetId) {
-      this.migrationPlan.set(null);
-      this.migrationReport.set(null);
+    if (defId === prevDefId) {
+      // No change, don't trigger anything
       return;
     }
 
-    this.planLoading.set(true);
-    this.migrationService.generateMigrationPlan({ sourceProcessDefinitionId: sourceId, targetProcessDefinitionId: targetId })
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (plan) => {
-          this.migrationPlan.set(plan);
-          if (plan) {
-            // Initialize editable instructions with auto-generated plan
-            this.editableInstructions.set([...plan.instructions]);
-            this.validateMigrationPlan(plan);
-          } else {
-            this.editableInstructions.set([]);
-            this.planLoading.set(false);
-          }
-          this.cdr.markForCheck();
-        },
-        error: () => {
-          this.planLoading.set(false);
-          this.cdr.markForCheck();
-        }
-      });
+    this.targetDefinitionId.set(defId);
+    this.resetDerivedState();
+
+    // Trigger diagram loading via subject
+    this.targetDefinitionChangeSubject.next(defId);
+
+    // Trigger plan generation if both source and target are set
+    this.triggerPlanGeneration();
   }
+
+  private triggerPlanGeneration(): void {
+    const sourceId = this.sourceDefinitionId();
+    const targetId = this.targetDefinitionId();
+
+    if (!sourceId || !targetId) {
+      return;
+    }
+
+    if (sourceId === targetId) {
+      // Source and target are identical
+      this.planGenerationError.set('migration.identicalSourceTarget');
+      this.migrationPlan.set(null);
+      this.migrationReport.set(null);
+      this.editableInstructions.set([]);
+      return;
+    }
+
+    // Trigger plan generation via subject
+    this.planGenerationSubject.next({ sourceId, targetId });
+  }
+
 
   private validateMigrationPlan(plan: MigrationPlanDto): void {
     this.migrationService.validateMigrationPlan(plan)
