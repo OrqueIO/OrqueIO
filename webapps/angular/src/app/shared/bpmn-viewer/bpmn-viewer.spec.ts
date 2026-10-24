@@ -975,3 +975,255 @@ describe('BpmnViewerComponent — migration mapping buttons (A4)', () => {
     });
   });
 });
+
+describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)', () => {
+  beforeAll(() => initTestEnvironment());
+
+  let component: BpmnViewerComponent;
+  let fixture: ComponentFixture<BpmnViewerComponent>;
+  let comp: any;
+
+  const mockMessageBoundaryEvent = {
+    id: 'BoundaryEvent_1',
+    type: 'bpmn:BoundaryEvent',
+    businessObject: { id: 'BoundaryEvent_1', name: 'Message Boundary' }
+  };
+
+  const mockIntermediateCatchEvent = {
+    id: 'IntermediateCatchEvent_1',
+    type: 'bpmn:IntermediateCatchEvent',
+    businessObject: { id: 'IntermediateCatchEvent_1', name: 'Wait for Message' }
+  };
+
+  const mockReceiveTask = {
+    id: 'ReceiveTask_1',
+    type: 'bpmn:ReceiveTask',
+    businessObject: { id: 'ReceiveTask_1', name: 'Receive Message' }
+  };
+
+  const mockUserTask = {
+    id: 'UserTask_1',
+    type: 'bpmn:UserTask',
+    businessObject: { id: 'UserTask_1', name: 'Approve' }
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [BpmnViewerComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(BpmnViewerComponent);
+    component = fixture.componentInstance;
+    comp = component as any;
+    comp.editableInstructions = [];
+    comp.migrationReport = null;
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => vi.clearAllMocks());
+
+  describe('isSourceViewer input', () => {
+    it('defaults to false when not provided', () => {
+      expect(component.isSourceViewer).toBe(false);
+    });
+
+    it('can be set to true via @Input', () => {
+      component.isSourceViewer = true;
+      fixture.detectChanges();
+      expect(component.isSourceViewer).toBe(true);
+    });
+  });
+
+  describe('showMappingPopover — checkbox rendering based on isSourceViewer', () => {
+    let mockAnchor: HTMLElement;
+    let mockBadge: any;
+
+    beforeEach(() => {
+      mockAnchor = document.createElement('div');
+      mockAnchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100,
+        left: 100,
+        bottom: 120,
+        right: 124,
+        width: 24,
+        height: 20,
+        x: 100,
+        y: 100
+      });
+
+      const canvasElement = document.createElement('div');
+      canvasElement.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 0,
+        left: 0,
+        bottom: 600,
+        right: 800,
+        width: 800,
+        height: 600,
+        x: 0,
+        y: 0
+      });
+      document.body.appendChild(canvasElement);
+
+      comp.canvasRef = {
+        nativeElement: canvasElement
+      };
+
+      mockBadge = { activityId: 'test', migrationStatus: 'valid' };
+
+      comp.getElement = vi.fn((id: string) => {
+        if (id === 'BoundaryEvent_1') return mockMessageBoundaryEvent;
+        if (id === 'IntermediateCatchEvent_1') return mockIntermediateCatchEvent;
+        if (id === 'ReceiveTask_1') return mockReceiveTask;
+        if (id === 'UserTask_1') return mockUserTask;
+        return null;
+      });
+
+      comp.isEventType = vi.fn((type: string) => {
+        return type === 'bpmn:BoundaryEvent' ||
+               type === 'bpmn:IntermediateCatchEvent' ||
+               type === 'bpmn:ReceiveTask';
+      });
+
+      comp.getUpdateEventTriggerForActivity = vi.fn().mockReturnValue(false);
+      comp.updateEventTrigger = vi.fn();
+    });
+
+    it('renders checkbox for event type when isSourceViewer = true', () => {
+      comp.isSourceViewer = true;
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+      const checkboxLabel = popover?.querySelector('.bpmn-mapping-popover__checkbox span');
+
+      expect(checkbox).not.toBeNull();
+      expect(checkboxLabel?.textContent).toBe('Update event trigger');
+    });
+
+    it('does NOT render checkbox for event type when isSourceViewer = false', () => {
+      comp.isSourceViewer = false;
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+
+      expect(checkbox).toBeFalsy();
+    });
+
+    it('does NOT render checkbox for non-event type even when isSourceViewer = true', () => {
+      comp.isSourceViewer = true;
+      comp.showMappingPopover(mockUserTask.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+
+      expect(checkbox).toBeFalsy();
+    });
+
+    it('renders checkbox for IntermediateCatchEvent when isSourceViewer = true', () => {
+      comp.isSourceViewer = true;
+      comp.showMappingPopover(mockIntermediateCatchEvent.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+
+      expect(checkbox).toBeTruthy();
+    });
+
+    it('renders checkbox for ReceiveTask when isSourceViewer = true', () => {
+      comp.isSourceViewer = true;
+      comp.showMappingPopover(mockReceiveTask.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+
+      expect(checkbox).toBeTruthy();
+    });
+
+    it('does NOT render checkbox for ReceiveTask when isSourceViewer = false', () => {
+      comp.isSourceViewer = false;
+      comp.showMappingPopover(mockReceiveTask.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+
+      expect(checkbox).toBeFalsy();
+    });
+
+    it('checkbox change calls updateEventTrigger with correct parameters', async () => {
+      comp.isSourceViewer = true;
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      expect(checkbox).toBeTruthy();
+      expect(checkbox.checked).toBe(false);
+
+      checkbox.checked = true;
+      checkbox.dispatchEvent(new Event('change'));
+
+      await fixture.whenStable();
+      expect(comp.updateEventTrigger).toHaveBeenCalledWith(mockMessageBoundaryEvent.id, true);
+    });
+
+    it('persists updateEventTrigger flag after close and reopen - unchecked to checked', async () => {
+      delete (comp as any).updateEventTrigger;
+      delete (comp as any).getUpdateEventTriggerForActivity;
+
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BoundaryEvent_1'], targetActivityIds: ['Target_1'], updateEventTrigger: false }
+      ];
+
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+      let popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      let checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      expect(checkbox.checked).toBe(false);
+
+      checkbox.click();
+      await fixture.whenStable();
+
+      expect(comp.editableInstructions[0].updateEventTrigger).toBe(true);
+
+      comp.closeMappingPopover();
+
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+      popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      expect(checkbox.checked).toBe(true);
+    });
+
+    it('persists updateEventTrigger flag after close and reopen - checked to unchecked', async () => {
+      delete (comp as any).updateEventTrigger;
+      delete (comp as any).getUpdateEventTriggerForActivity;
+
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BoundaryEvent_1'], targetActivityIds: ['Target_1'], updateEventTrigger: true }
+      ];
+
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+      let popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      let checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      expect(checkbox.checked).toBe(true);
+
+      checkbox.click();
+      await fixture.whenStable();
+
+      expect(comp.editableInstructions[0].updateEventTrigger).toBe(false);
+
+      comp.closeMappingPopover();
+
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+      popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      expect(checkbox.checked).toBe(false);
+    });
+  });
+});

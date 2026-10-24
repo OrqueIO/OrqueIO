@@ -87,6 +87,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() highlightTargets = false;
   @Input() migrationReport: any = null;
   @Input() editableInstructions: any[] = [];
+  @Input() isSourceViewer = false;
 
   get expandState(): Record<string, boolean> {
     return { [EXPAND_DIAGRAM_STATE_KEY]: this.isExpanded };
@@ -940,7 +941,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     if (status === 'valid') {
       const element = this.getElement(activityId);
-      if (element && this.isEventType(element.type)) {
+      if (element && this.isEventType(element.type) && this.isSourceViewer) {
         const checkboxContainer = document.createElement('label');
         checkboxContainer.className = 'bpmn-mapping-popover__checkbox';
 
@@ -1053,7 +1054,11 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   private updateEventTrigger(activityId: string, value: boolean): void {
-
+    const instructions = this.editableInstructions || [];
+    const instruction = instructions.find(instr => instr.sourceActivityIds.includes(activityId));
+    if (instruction) {
+      instruction.updateEventTrigger = value;
+    }
   }
 
   private getElementDisplayName(element: any): string {
