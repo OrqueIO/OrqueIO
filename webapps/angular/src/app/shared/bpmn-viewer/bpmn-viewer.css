@@ -485,7 +485,7 @@ button.breadcrumb-parent-name {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.15s ease, visibility 0.15s ease;
-  transform: translateY(-50%); /* Center vertically when positioned at 50% top */
+  /* No transform needed - positioned at lower right corner via top/right */
 }
 
 .bpmn-mapping-container.bpmn-mapping-visible {

@@ -455,6 +455,10 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   onSourceKeyChange(key: string): void {
     const prevKey = this.sourceKey();
 
+    if (key === prevKey) {
+      return;
+    }
+
     this.sourceKey.set(key);
     this.sourceVersion.set(null);
     const prevDefId = this.sourceDefinitionId();
