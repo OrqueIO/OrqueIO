@@ -785,4 +785,149 @@ describe('ProcessMigrationWizardComponent', () => {
     expect(generateSubjects[0].observed).toBe(false); // switchMap unsubscribes
     expect(generateSubjects[1].observed).toBe(true);
   });
+
+  it('should clear target XML when target key is set to empty', () => {
+    processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: '<?xml version="1.0"?><bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"><bpmn:process id="test"/></bpmn:definitions>' }));
+    processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+    migrationService.generateMigrationPlan.mockReturnValue(of({
+      sourceProcessDefinitionId: 'pd1:1',
+      targetProcessDefinitionId: 'pd1:2',
+      instructions: []
+    }));
+    migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+    fixture.detectChanges();
+
+    component.onSourceKeyChange('OrderProcess');
+    component.onTargetKeyChange('OrderProcess');
+    component.onTargetVersionChange(2);
+    fixture.detectChanges();
+
+    expect(component.targetXml()).toBeTruthy();
+    expect(component.targetDefinitionId()).toBeTruthy();
+
+    component.onTargetKeyChange('');
+    fixture.detectChanges();
+
+    expect(component.targetXml()).toBeNull();
+    expect(component.targetDefinitionId()).toBeNull();
+    expect(component.migrationPlan()).toBeNull();
+    expect(component.editableInstructions()).toEqual([]);
+  });
+
+  it('should clear source XML when source key is set to empty', () => {
+    processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: '<?xml version="1.0"?><bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"><bpmn:process id="test"/></bpmn:definitions>' }));
+    processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+    migrationService.generateMigrationPlan.mockReturnValue(of({
+      sourceProcessDefinitionId: 'pd1:1',
+      targetProcessDefinitionId: 'pd1:2',
+      instructions: []
+    }));
+    migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+    fixture.detectChanges();
+
+    component.onSourceKeyChange('OrderProcess');
+    component.onTargetKeyChange('OrderProcess');
+    component.onTargetVersionChange(2);
+    fixture.detectChanges();
+
+    expect(component.sourceXml()).toBeTruthy();
+    expect(component.sourceDefinitionId()).toBeTruthy();
+
+    component.onSourceKeyChange('');
+    fixture.detectChanges();
+
+    expect(component.sourceXml()).toBeNull();
+    expect(component.sourceDefinitionId()).toBeNull();
+    expect(component.migrationPlan()).toBeNull();
+    expect(component.editableInstructions()).toEqual([]);
+  });
+
+  it('should not call generate or validate when target key is cleared', () => {
+    processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: '<?xml version="1.0"?><bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"><bpmn:process id="test"/></bpmn:definitions>' }));
+    processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+    migrationService.generateMigrationPlan.mockReturnValue(of({
+      sourceProcessDefinitionId: 'pd1:1',
+      targetProcessDefinitionId: 'pd1:2',
+      instructions: []
+    }));
+    migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+    fixture.detectChanges();
+
+    component.onSourceKeyChange('OrderProcess');
+    component.onTargetKeyChange('OrderProcess');
+    component.onTargetVersionChange(2);
+    fixture.detectChanges();
+
+    const generateCallsBefore = migrationService.generateMigrationPlan.mock.calls.length;
+    const validateCallsBefore = migrationService.validateMigrationPlan.mock.calls.length;
+
+    component.onTargetKeyChange('');
+    fixture.detectChanges();
+
+    expect(migrationService.generateMigrationPlan.mock.calls.length).toBe(generateCallsBefore);
+    expect(migrationService.validateMigrationPlan.mock.calls.length).toBe(validateCallsBefore);
+  });
+
+  it('should cancel inflight target diagram request when target key is cleared', () => {
+    const xmlSubjects: Subject<{ bpmn20Xml: string }>[] = [];
+
+    processDefinitionService.getBpmn20Xml.mockImplementation(() => {
+      const subject = new Subject<{ bpmn20Xml: string }>();
+      xmlSubjects.push(subject);
+      return subject.asObservable();
+    });
+    processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+
+    fixture.detectChanges();
+
+    component.onTargetKeyChange('OrderProcess');
+    component.onTargetVersionChange(2);
+    fixture.detectChanges();
+
+    expect(xmlSubjects.length).toBe(2);
+    expect(xmlSubjects[0].observed).toBe(false);
+    expect(xmlSubjects[1].observed).toBe(true);
+
+    component.onTargetKeyChange('');
+    fixture.detectChanges();
+
+    expect(xmlSubjects[1].observed).toBe(false);
+  });
+
+  it('should ignore late diagram response after target key is cleared', async () => {
+    const xmlSubjects: Subject<{ bpmn20Xml: string }>[] = [];
+
+    processDefinitionService.getBpmn20Xml.mockImplementation(() => {
+      const subject = new Subject<{ bpmn20Xml: string }>();
+      xmlSubjects.push(subject);
+      return subject.asObservable();
+    });
+    processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+    migrationService.generateMigrationPlan.mockReturnValue(of({
+      sourceProcessDefinitionId: 'pd1:1',
+      targetProcessDefinitionId: 'pd1:2',
+      instructions: []
+    }));
+    migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+    fixture.detectChanges();
+
+    component.onTargetKeyChange('OrderProcess');
+    component.onTargetVersionChange(2);
+    fixture.detectChanges();
+
+    component.onTargetKeyChange('');
+    fixture.detectChanges();
+
+    expect(component.targetXml()).toBeNull();
+
+    xmlSubjects[1].next({ bpmn20Xml: '<?xml version="1.0"?><late-response/>' });
+    await new Promise(resolve => setTimeout(resolve, 100));
+    fixture.detectChanges();
+
+    expect(component.targetXml()).toBeNull();
+  });
 });

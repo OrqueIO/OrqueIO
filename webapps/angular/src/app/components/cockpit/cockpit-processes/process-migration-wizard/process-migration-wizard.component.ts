@@ -238,20 +238,22 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
           this.sourceXml.set(null);
           this.sourceActivityStats.set([]);
         }),
-        filter(defId => defId !== null),
         switchMap(defId =>
-          forkJoin({
-            xml: this.processDefinitionService.getBpmn20Xml(defId!),
-            stats: this.processDefinitionService.getActivityStatistics(defId!, true),
-            defId: of(defId)
-          }).pipe(
-            catchError(() => of(null))
-          )
+          defId
+            ? forkJoin({
+                xml: this.processDefinitionService.getBpmn20Xml(defId),
+                stats: this.processDefinitionService.getActivityStatistics(defId, true),
+                defId: of(defId)
+              }).pipe(
+                catchError(() => of(null)),
+                filter(result => result !== null && result.defId === this.sourceDefinitionId())
+              )
+            : of(null)
         ),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(result => {
-        if (result && result.defId === this.sourceDefinitionId()) {
+        if (result) {
           this.sourceXml.set(result.xml?.bpmn20Xml || null);
           this.sourceActivityStats.set(result.stats);
         }
@@ -266,21 +268,20 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
           this.targetXmlLoading.set(true);
           this.targetXml.set(null);
         }),
-        filter(defId => defId !== null),
         switchMap(defId =>
-          this.processDefinitionService.getBpmn20Xml(defId!).pipe(
-            catchError(() => of(null)),
-            tap(() => {
-              if (defId === this.targetDefinitionId()) {
-                // Empty - just for structure
-              }
-            })
-          )
+          defId
+            ? this.processDefinitionService.getBpmn20Xml(defId).pipe(
+                catchError(() => of(null)),
+                filter(() => defId === this.targetDefinitionId())
+              )
+            : of(null)
         ),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(xml => {
-        this.targetXml.set(xml?.bpmn20Xml || null);
+        if (xml) {
+          this.targetXml.set(xml.bpmn20Xml || null);
+        }
         this.targetXmlLoading.set(false);
         this.cdr.markForCheck();
       });
@@ -466,6 +467,9 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     this.resetDerivedState();
 
+    // Trigger diagram clearing via subject (even when key is empty)
+    this.sourceDefinitionChangeSubject.next(null);
+
     // Auto-select most recent version
     if (key) {
       const versions = this.sourceVersions();
@@ -511,6 +515,9 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.targetDefinitionId.set(null);
 
     this.resetDerivedState();
+
+    // Trigger diagram clearing via subject (even when key is empty)
+    this.targetDefinitionChangeSubject.next(null);
 
     // Auto-select most recent version
     if (key) {
