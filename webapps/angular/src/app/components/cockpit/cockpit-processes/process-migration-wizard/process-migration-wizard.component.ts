@@ -22,6 +22,7 @@ import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { BatchWizardStepperComponent, WizardStep } from '../../cockpit-batch/batch-wizard-stepper/batch-wizard-stepper';
 import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { MigrationArrowsComponent } from './migration-arrows.component';
+import { Anchor, getAnchorKey } from './migration-arrow-anchors';
 
 type LoadingState = 'idle' | 'loading' | 'loaded' | 'error';
 
@@ -178,6 +179,8 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   // Editable instructions for manual mapping
   editableInstructions = signal<MigrationInstructionDto[]>([]);
+
+  customAnchors = signal<Map<string, { source: Anchor; target: Anchor }>>(new Map());
 
   // Mapping mode state
   mappingMode = signal(false);
@@ -376,6 +379,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.mappingSourceActivityId.set(null);
     this.removeEscapeKeyListener();
     this.editableInstructions.set([]);
+    this.customAnchors.set(new Map());
     this.migrationPlan.set(null);
     this.migrationReport.set(null);
     this.planGenerationError.set(null);
@@ -391,14 +395,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
    * and execution results are cleared when the migration plan changes.
    */
   private resetDownstream(): void {
-    // Reset to step 1
     this.currentStep.set(1);
-
-    // TODO: When implementing steps 2-5, reset their state here:
-    // - Step 2: variables (variableInstructions)
-    // - Step 3: selected instances (selectedInstances)
-    // - Step 4: confirmation options (skipIoMappings, skipCustomListeners, etc.)
-    // - Step 5: execution result (batchId, operationResult)
   }
 
   /**
@@ -417,18 +414,15 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       const parser = new DOMParser();
       const doc = parser.parseFromString(sourceXml, 'text/xml');
 
-      // Find the element by id
       const element = doc.querySelector(`[id="${activityId}"]`);
       if (!element) return false;
 
       const tagName = element.tagName;
 
-      // Check if it's a receive task
       if (tagName.includes('receiveTask')) {
         return true;
       }
 
-      // Check if it's a boundary event or intermediate catch event with message definition
       if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
         const messageEventDef = element.querySelector('messageEventDefinition');
         if (messageEventDef) {
@@ -438,7 +432,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
       return false;
     } catch (e) {
-      // If parsing fails, default to false
       return false;
     }
   }
@@ -472,14 +465,12 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     this.resetDerivedState();
 
-    // Trigger diagram clearing via subject (even when key is empty)
     this.sourceDefinitionChangeSubject.next(null);
 
-    // Auto-select most recent version
     if (key) {
       const versions = this.sourceVersions();
       if (versions.length > 0) {
-        const mostRecent = versions[0]; // Already sorted desc by version
+        const mostRecent = versions[0];
         this.onSourceVersionChange(mostRecent.version);
       }
     }
@@ -492,17 +483,12 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     const prevDefId = this.sourceDefinitionId();
 
     if (defId === prevDefId) {
-      // No change, don't trigger anything
       return;
     }
 
     this.sourceDefinitionId.set(defId);
     this.resetDerivedState();
-
-    // Trigger diagram loading via subject
     this.sourceDefinitionChangeSubject.next(defId);
-
-    // Trigger plan generation if both source and target are set
     this.triggerPlanGeneration();
   }
 
@@ -521,14 +507,12 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     this.resetDerivedState();
 
-    // Trigger diagram clearing via subject (even when key is empty)
     this.targetDefinitionChangeSubject.next(null);
 
-    // Auto-select most recent version
     if (key) {
       const versions = this.targetVersions();
       if (versions.length > 0) {
-        const mostRecent = versions[0]; // Already sorted desc by version
+        const mostRecent = versions[0];
         this.onTargetVersionChange(mostRecent.version);
       }
     }
@@ -541,17 +525,12 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     const prevDefId = this.targetDefinitionId();
 
     if (defId === prevDefId) {
-      // No change, don't trigger anything
       return;
     }
 
     this.targetDefinitionId.set(defId);
     this.resetDerivedState();
-
-    // Trigger diagram loading via subject
     this.targetDefinitionChangeSubject.next(defId);
-
-    // Trigger plan generation if both source and target are set
     this.triggerPlanGeneration();
   }
 
@@ -564,15 +543,12 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     }
 
     if (sourceId === targetId) {
-      // Source and target are identical
       this.planGenerationError.set('migration.identicalSourceTarget');
       this.migrationPlan.set(null);
       this.migrationReport.set(null);
       this.editableInstructions.set([]);
       return;
     }
-
-    // Trigger plan generation via subject
     this.planGenerationSubject.next({ sourceId, targetId });
   }
 
@@ -601,12 +577,10 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     return mapped;
   });
 
-  // Mapping CRUD operations
   onCreateMapping(sourceActivityId: string): void {
     this.mappingMode.set(true);
     this.mappingSourceActivityId.set(sourceActivityId);
 
-    // Setup escape key listener when entering mapping mode
     this.setupEscapeKeyListener();
   }
 
@@ -614,15 +588,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.mappingMode.set(false);
     this.mappingSourceActivityId.set(null);
 
-    // Remove escape key listener when exiting mapping mode
     this.removeEscapeKeyListener();
   }
 
   private setupEscapeKeyListener(): void {
-    // Remove any existing listener first
     this.removeEscapeKeyListener();
-
-    // Create new listener with capture phase
     this.escapeKeyListener = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault();
@@ -632,7 +602,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       }
     };
 
-    // Add listener in capture phase
     document.addEventListener('keydown', this.escapeKeyListener, true);
   }
 
@@ -647,7 +616,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     const sourceId = this.mappingSourceActivityId();
     if (!sourceId) return;
 
-    // Create new instruction
     const newInstruction: MigrationInstructionDto = {
       sourceActivityIds: [sourceId],
       targetActivityIds: [targetActivityId],
@@ -657,7 +625,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     const current = this.editableInstructions();
     this.editableInstructions.set([...current, newInstruction]);
 
-    // Update plan and trigger validation
     const plan = this.migrationPlan();
     if (plan) {
       const updatedPlan = {
@@ -678,7 +645,17 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     const filtered = current.filter(instr => !instr.sourceActivityIds.includes(sourceActivityId));
     this.editableInstructions.set(filtered);
 
-    // Update plan and trigger validation
+    const instruction = current.find(instr => instr.sourceActivityIds.includes(sourceActivityId));
+    if (instruction) {
+      const key = this.getInstructionKey(instruction);
+      const anchors = this.customAnchors();
+      if (anchors.has(key)) {
+        const newAnchors = new Map(anchors);
+        newAnchors.delete(key);
+        this.customAnchors.set(newAnchors);
+      }
+    }
+
     const plan = this.migrationPlan();
     if (plan) {
       const updatedPlan = {
@@ -688,5 +665,20 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       this.migrationPlan.set(updatedPlan);
       this.validateSubject.next(updatedPlan);
     }
+  }
+
+  /**
+   * Gets a unique key for an instruction based on its source and target activities.
+   */
+  private getInstructionKey(instruction: MigrationInstructionDto): string {
+    return getAnchorKey(instruction.sourceActivityIds[0], instruction.targetActivityIds[0]);
+  }
+
+  /**
+   * Handles anchor changes from migration arrows component.
+   * Updates customAnchors signal with new Map to trigger change detection.
+   */
+  onAnchorsChanged(newMap: Map<string, { source: Anchor; target: Anchor }>): void {
+    this.customAnchors.set(newMap);
   }
 }

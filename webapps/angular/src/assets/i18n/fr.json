@@ -2117,5 +2117,7 @@
   "migration.updateEventTrigger": "Mettre à jour le déclencheur d'événement",
   "migration.manageMapping": "Gérer le mapping",
   "migration.viewMappingErrors": "Voir les erreurs de mapping",
-  "migration.errorGeneratingPlan": "Échec de la génération du plan de migration"
+  "migration.errorGeneratingPlan": "Échec de la génération du plan de migration",
+  "migration.anchorStart": "Point d'ancrage de départ",
+  "migration.anchorEnd": "Point d'ancrage d'arrivée"
 }

@@ -2135,5 +2135,7 @@
   "migration.updateEventTrigger": "Update event trigger",
   "migration.manageMapping": "Manage mapping",
   "migration.viewMappingErrors": "View mapping errors",
-  "migration.errorGeneratingPlan": "Failed to generate migration plan"
+  "migration.errorGeneratingPlan": "Failed to generate migration plan",
+  "migration.anchorStart": "Anchor start point",
+  "migration.anchorEnd": "Anchor end point"
 }

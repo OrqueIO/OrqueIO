@@ -121,7 +121,7 @@
           </div>
 
           <div class="diagrams-container">
-            <div class="diagram-panel">
+            <div class="diagram-panel diagram-panel-source">
               @if (sourceXmlLoading()) {
                 <div class="diagram-empty">{{ 'migration.loadingDiagram' | translate }}</div>
               } @else if (sourceXml()) {
@@ -142,7 +142,7 @@
               }
             </div>
 
-            <div class="diagram-panel">
+            <div class="diagram-panel diagram-panel-target">
               @if (targetXmlLoading()) {
                 <div class="diagram-empty">{{ 'migration.loadingDiagram' | translate }}</div>
               } @else if (targetXml()) {
@@ -167,7 +167,9 @@
                 [report]="migrationReport()"
                 [showAll]="showMigrationPlan"
                 [mappingMode]="mappingMode()"
-                [mappingSourceActivityId]="mappingSourceActivityId()">
+                [mappingSourceActivityId]="mappingSourceActivityId()"
+                [customAnchors]="customAnchors()"
+                (anchorsChanged)="onAnchorsChanged($event)">
               </app-migration-arrows>
             }
             @if (mappingMode() && (!migrationPlan() || migrationPlan()!.instructions.length === 0)) {
@@ -176,7 +178,9 @@
                 [report]="null"
                 [showAll]="false"
                 [mappingMode]="mappingMode()"
-                [mappingSourceActivityId]="mappingSourceActivityId()">
+                [mappingSourceActivityId]="mappingSourceActivityId()"
+                [customAnchors]="customAnchors()"
+                (anchorsChanged)="onAnchorsChanged($event)">
               </app-migration-arrows>
             }
           </div>
