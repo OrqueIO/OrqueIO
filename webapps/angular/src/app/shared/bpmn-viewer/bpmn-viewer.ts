@@ -101,6 +101,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() createMapping = new EventEmitter<string>();
   @Output() deleteMapping = new EventEmitter<string>();
   @Output() selectTarget = new EventEmitter<string>();
+  @Output() backgroundClick = new EventEmitter<void>();
   @Output() error = new EventEmitter<Error>();
   @Output() expandToggle = new EventEmitter<void>();
   @Output() focusClick = new EventEmitter<void>();
@@ -173,14 +174,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }, 200);
   }
 
-  @HostListener('document:keydown.escape')
-  onEscapeKey(): void {
-    if (this.mappingMode) {
-      this.ngZone.run(() => {
-        this.createMapping.emit('');
-      });
-    }
-  }
 
   ngAfterViewInit(): void {
     this.initViewer();
@@ -241,10 +234,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     this.overlays = this.viewer.get('overlays');
 
-    // Register event handlers
     const eventBus = this.viewer.get('eventBus');
 
-    // Wire import.done to apply all visual updates AFTER diagram is loaded
     eventBus.on('import.done', () => {
       this.updateHighlights();
       this.updateRunningMarkers();
@@ -272,6 +263,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
           isInEventSubprocessScope: this.checkEventSubprocessScope(element),
           isInMultiInstanceScope: this.checkMultiInstanceScope(element)
         });
+      } else if (element && element.type === 'bpmn:Process') {
+        this.backgroundClick.emit();
       }
     });
 
@@ -290,9 +283,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       this.elementHover.emit(null);
     });
 
-    // Re-center diagram on collapsed subprocess drilldown navigation.
-    // bpmn-js fires root.set when the canvas root changes (drill-in or drill-out)
-    // without re-importing XML, so importXML / ngOnChanges never trigger the fit.
     eventBus.on('root.set', (event: any) => {
       this.updateSubprocessStack(event.element);
       this.needsZoomFit = true;

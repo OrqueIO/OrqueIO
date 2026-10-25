@@ -134,7 +134,8 @@
                   [editableInstructions]="editableInstructions()"
                   [isSourceViewer]="true"
                   (createMapping)="onCreateMapping($event)"
-                  (deleteMapping)="onDeleteMapping($event)">
+                  (deleteMapping)="onDeleteMapping($event)"
+                  (backgroundClick)="onCancelMapping()">
                 </app-bpmn-viewer>
               } @else {
                 <div class="diagram-empty">{{ 'migration.selectSourceDiagram' | translate }}</div>
@@ -152,7 +153,8 @@
                   [highlightTargets]="mappingMode()"
                   [migrationReport]="migrationReport()"
                   [editableInstructions]="editableInstructions()"
-                  (selectTarget)="onSelectTarget($event)">
+                  (selectTarget)="onSelectTarget($event)"
+                  (backgroundClick)="onCancelMapping()">
                 </app-bpmn-viewer>
               } @else {
                 <div class="diagram-empty">{{ 'migration.selectTargetDiagram' | translate }}</div>
@@ -163,7 +165,18 @@
               <app-migration-arrows
                 [instructions]="migrationPlan()!.instructions"
                 [report]="migrationReport()"
-                [showAll]="showMigrationPlan">
+                [showAll]="showMigrationPlan"
+                [mappingMode]="mappingMode()"
+                [mappingSourceActivityId]="mappingSourceActivityId()">
+              </app-migration-arrows>
+            }
+            @if (mappingMode() && (!migrationPlan() || migrationPlan()!.instructions.length === 0)) {
+              <app-migration-arrows
+                [instructions]="[]"
+                [report]="null"
+                [showAll]="false"
+                [mappingMode]="mappingMode()"
+                [mappingSourceActivityId]="mappingSourceActivityId()">
               </app-migration-arrows>
             }
           </div>

@@ -73,6 +73,13 @@ describe('ProcessMigrationWizardComponent', () => {
 
     processDefinitionService.getProcessDefinitionsStatisticsRaw.mockReturnValue(of(mockStats));
 
+    migrationService.generateMigrationPlan.mockReturnValue(of({
+      sourceProcessDefinitionId: '',
+      targetProcessDefinitionId: '',
+      instructions: []
+    }));
+    migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
     fixture = TestBed.createComponent(ProcessMigrationWizardComponent);
     component = fixture.componentInstance;
   });

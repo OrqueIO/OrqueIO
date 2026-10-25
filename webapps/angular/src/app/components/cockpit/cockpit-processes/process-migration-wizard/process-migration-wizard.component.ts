@@ -194,6 +194,9 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   // Plan generation error
   planGenerationError = signal<string | null>(null);
 
+  // Escape key listener for mapping mode
+  private escapeKeyListener: ((event: KeyboardEvent) => void) | null = null;
+
   // Check if source and target are identical
   isSourceTargetIdentical = computed(() => {
     const sourceId = this.sourceDefinitionId();
@@ -346,6 +349,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.navMenuService.clearMenuItems();
+    this.removeEscapeKeyListener();
   }
 
   private loadProcessDefinitions(): void {
@@ -370,6 +374,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   private resetDerivedState(): void {
     this.mappingMode.set(false);
     this.mappingSourceActivityId.set(null);
+    this.removeEscapeKeyListener();
     this.editableInstructions.set([]);
     this.migrationPlan.set(null);
     this.migrationReport.set(null);
@@ -598,18 +603,44 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   // Mapping CRUD operations
   onCreateMapping(sourceActivityId: string): void {
-    if (!sourceActivityId) {
-      // ESC pressed, cancel mapping
-      this.onCancelMapping();
-      return;
-    }
     this.mappingMode.set(true);
     this.mappingSourceActivityId.set(sourceActivityId);
+
+    // Setup escape key listener when entering mapping mode
+    this.setupEscapeKeyListener();
   }
 
   onCancelMapping(): void {
     this.mappingMode.set(false);
     this.mappingSourceActivityId.set(null);
+
+    // Remove escape key listener when exiting mapping mode
+    this.removeEscapeKeyListener();
+  }
+
+  private setupEscapeKeyListener(): void {
+    // Remove any existing listener first
+    this.removeEscapeKeyListener();
+
+    // Create new listener with capture phase
+    this.escapeKeyListener = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        this.onCancelMapping();
+        this.cdr.markForCheck();
+      }
+    };
+
+    // Add listener in capture phase
+    document.addEventListener('keydown', this.escapeKeyListener, true);
+  }
+
+  private removeEscapeKeyListener(): void {
+    if (this.escapeKeyListener) {
+      document.removeEventListener('keydown', this.escapeKeyListener, true);
+      this.escapeKeyListener = null;
+    }
   }
 
   onSelectTarget(targetActivityId: string): void {
@@ -639,6 +670,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     this.mappingMode.set(false);
     this.mappingSourceActivityId.set(null);
+    this.removeEscapeKeyListener();
   }
 
   onDeleteMapping(sourceActivityId: string): void {
