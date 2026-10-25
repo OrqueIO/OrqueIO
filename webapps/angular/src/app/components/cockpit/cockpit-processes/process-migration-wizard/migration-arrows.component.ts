@@ -44,7 +44,12 @@ interface ArrowPath {
 
       @for (arrow of arrows(); track arrow.instructionIndex; let i = $index) {
         @if (arrow.visible) {
-          <g class="arrow-group">
+          <g class="arrow-group"
+             [class.arrow-group--hovered]="hoveredArrowIndex() === i"
+             [class.arrow-group--selected]="selectedArrowIndex() === i"
+             [class.arrow-group--dragging]="draggingHandle()?.arrowIndex === i"
+             (mouseenter)="onArrowHover(i)"
+             (mouseleave)="onArrowLeave()">
             <!-- Hit area: transparent path with wider stroke for easier clicking -->
             <path
               [attr.d]="arrow.path"
@@ -53,8 +58,6 @@ interface ArrowPath {
               stroke="transparent"
               stroke-linecap="round"
               class="arrow-hit-area"
-              (mouseenter)="onArrowHover(i)"
-              (mouseleave)="onArrowLeave()"
               (click)="onArrowClick(i, $event)">
             </path>
             <!-- Visible arrow path -->
@@ -68,8 +71,8 @@ interface ArrowPath {
               [class.migration-arrow--valid]="arrow.valid"
               [class.migration-arrow--invalid]="!arrow.valid">
             </path>
-            <!-- Anchor handles (only when hovered or selected, not in mapping mode, and path has endpoints) -->
-            @if (!mappingMode && (hoveredArrowIndex() === i || selectedArrowIndex() === i) && arrow.path) {
+            <!-- Anchor handles (only when hovered or selected or dragging, not in mapping mode, and path has endpoints) -->
+            @if (!mappingMode && (hoveredArrowIndex() === i || selectedArrowIndex() === i || draggingHandle()?.arrowIndex === i) && arrow.path) {
               @let endpoints = parsePathEndpoints(arrow.path);
               @if (endpoints.start && endpoints.end) {
                 <!-- Start handle -->
@@ -182,11 +185,15 @@ interface ArrowPath {
       stroke-width: 2;
       cursor: grab;
       pointer-events: auto;
-      transition: opacity 0.15s ease, r 0.15s ease;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 120ms ease, visibility 0s linear 160ms, r 0.15s ease;
+      transform-box: fill-box;
+      transform-origin: center;
     }
 
     .anchor-handle:hover {
-      r: 7;
+      transform: scale(1.167);
     }
 
     .anchor-handle--dragging {
