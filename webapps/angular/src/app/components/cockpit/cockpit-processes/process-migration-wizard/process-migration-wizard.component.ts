@@ -21,10 +21,12 @@ import { calculateMigrationBadges } from '../../../../services/migration-badge.u
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { BatchWizardStepperComponent, WizardStep } from '../../cockpit-batch/batch-wizard-stepper/batch-wizard-stepper';
 import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
-import { MigrationArrowsComponent } from './migration-arrows.component';
+import { MigrationArrowsComponent, RouteParams } from './migration-arrows.component';
 import { Anchor, getAnchorKey } from './migration-arrow-anchors';
 
 type LoadingState = 'idle' | 'loading' | 'loaded' | 'error';
+
+const ENABLE_CONNECTION_EDITOR_SPIKE = false;
 
 @Component({
   selector: 'app-process-migration-wizard',
@@ -180,7 +182,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   // Editable instructions for manual mapping
   editableInstructions = signal<MigrationInstructionDto[]>([]);
 
-  customAnchors = signal<Map<string, { source: Anchor; target: Anchor }>>(new Map());
+  customAnchors = signal<Map<string, RouteParams>>(new Map());
 
   // Mapping mode state
   mappingMode = signal(false);
@@ -678,7 +680,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
    * Handles anchor changes from migration arrows component.
    * Updates customAnchors signal with new Map to trigger change detection.
    */
-  onAnchorsChanged(newMap: Map<string, { source: Anchor; target: Anchor }>): void {
+  onAnchorsChanged(newMap: Map<string, RouteParams>): void {
     this.customAnchors.set(newMap);
   }
 }

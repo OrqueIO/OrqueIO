@@ -16,7 +16,48 @@ import {
 import { CommonModule } from '@angular/common';
 import { MigrationInstructionDto, MigrationPlanReportDto } from '../../../../services/migration.model';
 import { Anchor, anchorPoint, nearestAnchor, buildArrowPath, getAnchorKey, Point, Rect as AnchorRect } from './migration-arrow-anchors';
-import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import {
+  buildOrthogonalRoute,
+  routeToPath,
+  sidePoint,
+  nearestPerimeterPoint,
+  midSegment,
+  Side,
+  Rect,
+  Point as RoutePoint
+} from './migration-arrow-route';
+import {
+  initialWaypoints,
+  repairWaypoints,
+  waypointsToPath,
+  cleanWaypoints,
+  segments,
+  segmentBarPosition,
+  moveSegment,
+  moveWaypoint,
+  moveDock,
+  nearestAnchorSnap,
+  dockPoint,
+  Point as WaypointPoint,
+  Rect as WaypointRect,
+  Side as WaypointSide
+} from './migration-waypoints';
+
+
+export interface RouteParams {
+  source?: Anchor;
+  target?: Anchor;
+
+  waypoints?: Point[] | null;
+
+  startSide?: Side;
+  startT?: number;
+  endSide?: Side;
+  endT?: number;
+
+  midOffset?: number | null;
+  bridgeY?: number | null;
+}
 
 interface ArrowPath {
   instructionIndex: number;
@@ -27,12 +68,19 @@ interface ArrowPath {
   targetIds: string[];
   sourceAnchor: Anchor;
   targetAnchor: Anchor;
+  startSide?: Side;
+  startT?: number;
+  endSide?: Side;
+  endT?: number;
+  midOffset?: number | null;
+  bridgeY?: number | null;
+  points?: RoutePoint[];
 }
 
 @Component({
   selector: 'app-migration-arrows',
   standalone: true,
-  imports: [CommonModule, TranslatePipe],
+  imports: [CommonModule],
   template: `
     <svg class="migration-arrows" [attr.viewBox]="viewBox()" xmlns="http://www.w3.org/2000/svg"
          (click)="onBackgroundClick()">
@@ -45,14 +93,16 @@ interface ArrowPath {
       @for (arrow of arrows(); track arrow.instructionIndex; let i = $index) {
         @if (arrow.visible) {
           <g class="arrow-group"
+             [attr.data-arrow-index]="i"
              [class.arrow-group--hovered]="hoveredArrowIndex() === i"
              [class.arrow-group--selected]="selectedArrowIndex() === i"
              [class.arrow-group--dragging]="draggingHandle()?.arrowIndex === i"
              (mouseenter)="onArrowHover(i)"
              (mouseleave)="onArrowLeave()">
+            @let effectivePath = getEffectivePath(i, arrow);
             <!-- Hit area: transparent path with wider stroke for easier clicking -->
             <path
-              [attr.d]="arrow.path"
+              [attr.d]="effectivePath"
               stroke-width="14"
               fill="none"
               stroke="transparent"
@@ -62,7 +112,7 @@ interface ArrowPath {
             </path>
             <!-- Visible arrow path -->
             <path
-              [attr.d]="arrow.path"
+              [attr.d]="effectivePath"
               stroke-width="2"
               fill="none"
               stroke-linecap="round"
@@ -71,42 +121,78 @@ interface ArrowPath {
               [class.migration-arrow--valid]="arrow.valid"
               [class.migration-arrow--invalid]="!arrow.valid">
             </path>
-            <!-- Anchor handles (only when hovered or selected or dragging, not in mapping mode, and path has endpoints) -->
-            @if (!mappingMode && (hoveredArrowIndex() === i || selectedArrowIndex() === i || draggingHandle()?.arrowIndex === i) && arrow.path) {
-              @let endpoints = parsePathEndpoints(arrow.path);
-              @if (endpoints.start && endpoints.end) {
-                <!-- Start handle -->
-                <circle
-                  [attr.cx]="endpoints.start.x"
-                  [attr.cy]="endpoints.start.y"
-                  r="6"
-                  class="anchor-handle anchor-handle--start"
-                  [class.anchor-handle--dragging]="draggingHandle()?.arrowIndex === i && draggingHandle()?.end === 'source'"
-                  [attr.data-arrow-index]="i"
-                  [attr.data-end]="'source'"
-                  [attr.aria-label]="'migration.anchorStart' | translate"
-                  (pointerdown)="onHandlePointerDown(i, 'source', $event)">
-                </circle>
-                <!-- End handle -->
-                <circle
-                  [attr.cx]="endpoints.end.x"
-                  [attr.cy]="endpoints.end.y"
-                  r="6"
-                  class="anchor-handle anchor-handle--end"
-                  [class.anchor-handle--dragging]="draggingHandle()?.arrowIndex === i && draggingHandle()?.end === 'target'"
-                  [attr.data-arrow-index]="i"
-                  [attr.data-end]="'target'"
-                  [attr.aria-label]="'migration.anchorEnd' | translate"
-                  (pointerdown)="onHandlePointerDown(i, 'target', $event)">
-                </circle>
+            <!-- Selection handles: always in DOM, visibility controlled by CSS -->
+            @if (!mappingMode) {
+              @let handles = getSelectionHandles(arrow);
+              @let bars = getSegmentBars(arrow);
+              @let showDecors = selectedArrowIndex() === i || hoveredArrowIndex() === i || draggingHandle()?.arrowIndex === i;
+
+              <!-- Blue circles at all route points (endpoints + corners) - W-A model -->
+              @if (handles) {
+                @for (handle of handles; track '|wp-' + $index) {
+                  <circle
+                    [attr.cx]="handle.x"
+                    [attr.cy]="handle.y"
+                    r="5"
+                    class="selection-handle-point"
+                    [class.selection-handle-point--visible]="showDecors"
+                    [style.cursor]="$index === 0 || $index === handles.length - 1 ? 'grab' : 'move'"
+                    [style.pointer-events]="showDecors ? 'all' : 'none'"
+                    (pointerdown)="onWaypointPointerDown(i, $index, $event)">
+                  </circle>
+                }
+              }
+              <!-- Segment bars: blue rectangle on EACH segment - W-A model -->
+              @if (bars.length > 0) {
+                @for (bar of bars; track '|bar-' + bar.segmentIndex) {
+                  <rect
+                    [attr.x]="bar.x"
+                    [attr.y]="bar.y"
+                    [attr.width]="bar.width"
+                    [attr.height]="bar.height"
+                    class="selection-handle-bar"
+                    [class.selection-handle-bar--visible]="showDecors"
+                    [class.selection-handle-bar--horizontal]="bar.orientation === 'horizontal'"
+                    [class.selection-handle-bar--vertical]="bar.orientation === 'vertical'"
+                    [style.cursor]="bar.orientation === 'horizontal' ? 'ns-resize' : 'ew-resize'"
+                    [style.pointer-events]="showDecors ? 'all' : 'none'"
+                    (pointerdown)="onSegmentBarPointerDown(i, bar.segmentIndex, bar.orientation, $event)">
+                  </rect>
+                  <!-- Draggable area: extended hit zone for segment -->
+                  @if (bar.orientation === 'horizontal') {
+                    <rect
+                      [attr.x]="bar.x"
+                      [attr.y]="bar.y - 7"
+                      [attr.width]="bar.width"
+                      [attr.height]="14"
+                      class="segment-drag-zone"
+                      [style.cursor]="'ns-resize'"
+                      [style.fill]="'transparent'"
+                      [style.pointer-events]="showDecors ? 'stroke' : 'none'"
+                      (pointerdown)="onSegmentBarPointerDown(i, bar.segmentIndex, bar.orientation, $event)">
+                    </rect>
+                  } @else {
+                    <rect
+                      [attr.x]="bar.x - 7"
+                      [attr.y]="bar.y"
+                      [attr.width]="14"
+                      [attr.height]="bar.height"
+                      class="segment-drag-zone"
+                      [style.cursor]="'ew-resize'"
+                      [style.fill]="'transparent'"
+                      [style.pointer-events]="showDecors ? 'stroke' : 'none'"
+                      (pointerdown)="onSegmentBarPointerDown(i, bar.segmentIndex, bar.orientation, $event)">
+                    </rect>
+                  }
+                }
               }
             }
           </g>
         }
       }
 
-      <!-- Anchor position indicators during drag -->
-      @if (draggingHandle() && dragTargetRect()) {
+      <!-- Anchor position indicators during drag (W-A: old anchor drag + W-B: endpoint waypoint drag) -->
+      @if ((draggingHandle() || (draggingWaypoint() && draggingWaypoint()?.isEndpoint)) && dragTargetRect()) {
         @let rect = dragTargetRect()!;
         @let nearestAnchor = dragPreviewAnchor();
         @for (anchor of ['top', 'right', 'bottom', 'left']; track anchor) {
@@ -227,6 +313,57 @@ interface ArrowPath {
     .live-arrow-marker {
       fill: var(--primary-light, #3b82f6);
     }
+
+    /* Selection handles for orthogonal routing */
+    .selection-handle-point {
+      fill: var(--primary, #3b82f6);
+      stroke: white;
+      stroke-width: 1.5;
+      pointer-events: none;
+      /* Hidden by default, shown on hover/select */
+      opacity: 0;
+      visibility: hidden;
+      /* Smooth transitions: opacity instant, visibility delayed on hide */
+      transition: opacity 120ms ease, visibility 0s linear 160ms;
+      /* No transition on position (cx/cy) */
+    }
+
+    .selection-handle-point--visible {
+      opacity: 0.9;
+      visibility: visible;
+      /* Remove visibility delay on show */
+      transition: opacity 120ms ease, visibility 0s linear;
+    }
+
+    .selection-handle-bar {
+      fill: var(--primary, #3b82f6);
+      stroke: white;
+      stroke-width: 1.5;
+      pointer-events: none;
+      rx: 3;
+      ry: 3;
+      /* Hidden by default, shown on hover/select */
+      opacity: 0;
+      visibility: hidden;
+      /* Smooth transitions: opacity instant, visibility delayed on hide */
+      transition: opacity 120ms ease, visibility 0s linear 160ms;
+      /* No transition on position (x/y) */
+    }
+
+    .selection-handle-bar--visible {
+      opacity: 0.8;
+      visibility: visible;
+      /* Remove visibility delay on show */
+      transition: opacity 120ms ease, visibility 0s linear;
+    }
+
+    /* Draggable zone for center segment - extended hit area */
+    .center-segment-drag-zone {
+      fill: transparent;
+      stroke: none;
+      pointer-events: all;
+      /* Cursor set inline based on orientation */
+    }
   `]
 })
 export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDestroy {
@@ -242,9 +379,9 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
   @Input() visibleInstructionIndices: Set<number> = new Set();
   @Input() mappingMode = false;
   @Input() mappingSourceActivityId: string | null = null;
-  @Input() customAnchors: Map<string, { source: Anchor; target: Anchor }> = new Map();
+  @Input() customAnchors: Map<string, RouteParams> = new Map();
 
-  @Output() anchorsChanged = new EventEmitter<Map<string, { source: Anchor; target: Anchor }>>();
+  @Output() anchorsChanged = new EventEmitter<Map<string, RouteParams>>();
 
   arrows = signal<ArrowPath[]>([]);
   viewBox = signal<string>('0 0 1920 1080');
@@ -254,11 +391,40 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
 
   selectedArrowIndex = signal<number | null>(null);
   hoveredArrowIndex = signal<number | null>(null);
-  draggingHandle = signal<{ arrowIndex: number; end: 'source' | 'target'; initialAnchor: Anchor } | null>(null);
+  draggingHandle = signal<{ arrowIndex: number; end: 'source' | 'target'; initialAnchor: Anchor; isSnapping?: boolean; snapTarget?: Anchor } | null>(null);
+  draggingCenterSegment = signal<{
+    arrowIndex: number;
+    initialMidOffset: number;
+    initialPointerPos: Point;
+    orientation: 'horizontal' | 'vertical';
+  } | null>(null);
+  draggingBridgeCreate = signal<{
+    arrowIndex: number;
+    initialPointerY: number;
+    initialBridgeY: number;
+  } | null>(null);
+
+  draggingWaypoint = signal<{
+    arrowIndex: number;
+    waypointIndex: number;
+    isEndpoint: boolean;
+    initialWaypoints: Point[];
+    initialPointerPos: Point;
+  } | null>(null);
+
+  draggingSegment = signal<{
+    arrowIndex: number;
+    segmentIndex: number;
+    orientation: 'horizontal' | 'vertical';
+    initialWaypoints: Point[];
+    initialPointerPos: Point;
+  } | null>(null);
 
   dragPreviewAnchor = signal<Anchor | null>(null);
   dragTargetRect = signal<DOMRect | null>(null);
   dragPointerPos = signal<Point | null>(null);
+
+  private snapStartTime: number = 0;
 
   private resizeObserver: ResizeObserver | null = null;
   private updateScheduled = false;
@@ -299,16 +465,13 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
     const diagramsContainer = this.hostElement.nativeElement.closest('.diagrams-container');
     if (!diagramsContainer) return;
 
-    // Watch for resize
     this.resizeObserver = new ResizeObserver(() => {
       this.scheduleUpdate();
     });
     this.resizeObserver.observe(diagramsContainer);
 
-    // Setup bpmn-js eventBus listeners for canvas.viewbox.changed
     this.setupViewboxListeners();
 
-    // Watch for scroll on diagrams-container
     const scrollListener = () => {
       this.scheduleUpdate();
     };
@@ -319,14 +482,12 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
   }
 
   private setupViewboxListeners(): void {
-    // No need for setTimeout delays - the rAF tracking loop will handle updates
     const sourceContainer = document.querySelector(this.sourceContainerSelector);
     const targetContainer = document.querySelector(this.targetContainerSelector);
 
     [sourceContainer, targetContainer].forEach(container => {
       if (!container) return;
 
-      // Try to access bpmn-js viewer instance
       const bpmnContainer = container.closest('.bpmn-viewer-container, .bjs-container');
       if (!bpmnContainer) return;
 
@@ -338,8 +499,6 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
         if (viewerInstance) {
           const eventBus = viewerInstance.get('eventBus');
           if (eventBus) {
-            // These listeners are kept for manual optimization hints,
-            // but the rAF loop will catch changes anyway
             const listener = () => {
               this.scheduleUpdate();
             };
@@ -356,7 +515,6 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
           }
         }
       } catch (e) {
-        // Fallback to DOM events if eventBus is not accessible
       }
 
       this.setupDOMListeners(container);
@@ -364,7 +522,6 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
   }
 
   private findViewerInstance(container: Element): any {
-    // Try to find viewer instance by traversing parent elements
     let current: Element | null = container;
     while (current) {
       if ((current as any).viewer || (current as any).__bpmnViewer) {
@@ -376,7 +533,6 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
   }
 
   private setupDOMListeners(container: Element): void {
-    // Fallback: Listen to DOM events
     const wheelListener = (e: Event) => {
       if ((e as WheelEvent).ctrlKey || (e as WheelEvent).metaKey) {
         this.scheduleUpdate();
@@ -428,7 +584,6 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
       this.updateScheduled = false;
       this.calculateArrows();
 
-      // Also update live arrow if in mapping mode
       if (this.mappingMode && this.mappingSourceActivityId) {
         this.updateLiveArrowPath();
       }
@@ -452,15 +607,12 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
     this.viewBox.set(`0 0 ${containerRect.width} ${containerRect.height}`);
 
     this.instructions.forEach((instruction, index) => {
-      // Check if this instruction should be visible
       const shouldShow = this.showAll || this.visibleInstructionIndices.has(index);
       if (!shouldShow) return;
 
-      // Determine if valid
       const instrReport = this.report?.instructionReports?.[index];
       const valid = !instrReport?.failures || instrReport.failures.length === 0;
 
-      // For each source-target pair, draw an arrow
       instruction.sourceActivityIds.forEach(sourceId => {
         instruction.targetActivityIds.forEach(targetId => {
           const sourceRect = this.getElementRect(sourceId, this.sourceContainerSelector, containerRect);
@@ -468,13 +620,67 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
 
           if (sourceRect && targetRect) {
             const instructionKey = sourceId + '-' + targetId;
-            const anchors = this.customAnchors.get(instructionKey);
-            const sourceAnchor: Anchor = anchors?.source || 'right';
-            const targetAnchor: Anchor = anchors?.target || 'left';
-            const startPoint = anchorPoint(sourceRect, sourceAnchor);
-            const endPoint = anchorPoint(targetRect, targetAnchor);
-            const path = buildArrowPath(startPoint, sourceAnchor, endPoint, targetAnchor);
+            const routeParams = this.customAnchors.get(instructionKey);
+
+            let startSide: Side;
+            let startT: number;
+            let endSide: Side;
+            let endT: number;
+            let storedWaypoints: Point[] | null | undefined;
+
+            if (routeParams && routeParams.startSide !== undefined) {
+              startSide = routeParams.startSide!;
+              startT = routeParams.startT ?? 0.5;
+              endSide = routeParams.endSide!;
+              endT = routeParams.endT ?? 0.5;
+
+              if (routeParams.waypoints !== undefined) {
+                storedWaypoints = routeParams.waypoints;
+              } else if (routeParams.midOffset !== undefined || routeParams.bridgeY !== undefined) {
+                storedWaypoints = null;
+              } else {
+                storedWaypoints = null;
+              }
+            } else if (routeParams && (routeParams.source || routeParams.target)) {
+              startSide = (routeParams.source as Side) || 'right';
+              startT = 0.5;
+              endSide = (routeParams.target as Side) || 'left';
+              endT = 0.5;
+              storedWaypoints = null;
+            } else {
+              startSide = 'right';
+              startT = 0.5;
+              endSide = 'left';
+              endT = 0.5;
+              storedWaypoints = null;
+            }
+
+            const sourceRectData: WaypointRect = {
+              left: sourceRect.left,
+              top: sourceRect.top,
+              width: sourceRect.width,
+              height: sourceRect.height
+            };
+
+            const targetRectData: WaypointRect = {
+              left: targetRect.left,
+              top: targetRect.top,
+              width: targetRect.width,
+              height: targetRect.height
+            };
+
+            let points: WaypointPoint[];
+            if (storedWaypoints === null || storedWaypoints === undefined) {
+              points = initialWaypoints(sourceRectData, targetRectData, startSide, startT, endSide, endT);
+            } else {
+              points = repairWaypoints(storedWaypoints, sourceRectData, targetRectData, startSide, startT, endSide, endT);
+            }
+
+            const path = waypointsToPath(points);
             const visible = this.isRectVisible(sourceRect, containerRect) && this.isRectVisible(targetRect, containerRect);
+
+            const sourceAnchor = startSide as Anchor;
+            const targetAnchor = endSide as Anchor;
 
             arrowPaths.push({
               instructionIndex: index,
@@ -484,7 +690,14 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
               sourceIds: instruction.sourceActivityIds,
               targetIds: instruction.targetActivityIds,
               sourceAnchor,
-              targetAnchor
+              targetAnchor,
+              startSide,
+              startT,
+              endSide,
+              endT,
+              midOffset: null,
+              bridgeY: null,
+              points
             });
           }
         });
@@ -493,12 +706,108 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
 
     this.arrows.set(arrowPaths);
 
-    // Update live arrow if in mapping mode
     if (this.mappingMode && this.mappingSourceActivityId) {
       this.updateLiveArrowPath();
     }
 
     this.cdr.markForCheck();
+  }
+
+  getSelectionHandles(arrow: ArrowPath): RoutePoint[] | null {
+    if (!arrow.points || arrow.points.length === 0) {
+      return null;
+    }
+    return arrow.points;
+  }
+
+  getSegmentBars(arrow: ArrowPath): Array<{ x: number; y: number; width: number; height: number; orientation: 'horizontal' | 'vertical'; segmentIndex: number }> {
+    if (!arrow.points || arrow.points.length < 2) {
+      return [];
+    }
+
+    const segs = segments(arrow.points);
+    return segs.map(seg => {
+      const center = segmentBarPosition(seg);
+
+      if (seg.orientation === 'horizontal') {
+        return {
+          x: center.x - 10,
+          y: center.y - 3,
+          width: 20,
+          height: 6,
+          orientation: 'horizontal' as const,
+          segmentIndex: seg.index
+        };
+      } else {
+        return {
+          x: center.x - 3,
+          y: center.y - 10,
+          width: 6,
+          height: 20,
+          orientation: 'vertical' as const,
+          segmentIndex: seg.index
+        };
+      }
+    });
+  }
+
+
+  getCenterBar(arrow: ArrowPath): { x: number; y: number; width: number; height: number; orientation: 'horizontal' | 'vertical' } | null {
+    const bars = this.getSegmentBars(arrow);
+    if (bars.length === 0) return null;
+    const middleIndex = Math.floor(bars.length / 2);
+    return bars[middleIndex];
+  }
+
+  getHorizontalBridgeZones(arrow: ArrowPath): Array<{ x: number; y: number; width: number; height: number }> | null {
+    // Only for routes without bridge
+    if (arrow.bridgeY !== null && arrow.bridgeY !== undefined) {
+      return null;
+    }
+
+    if (!arrow.points || arrow.points.length < 3) {
+      return null;
+    }
+
+    const points = arrow.points;
+
+    if (points.length === 4) {
+      const seg0Horizontal = Math.abs(points[1].y - points[0].y) < 0.01;
+      const seg2Horizontal = Math.abs(points[3].y - points[2].y) < 0.01;
+
+      if (seg0Horizontal && seg2Horizontal) {
+        return [
+          {
+            x: Math.min(points[0].x, points[1].x),
+            y: points[0].y - 7,
+            width: Math.abs(points[1].x - points[0].x),
+            height: 14
+          },
+          {
+            x: Math.min(points[2].x, points[3].x),
+            y: points[2].y - 7,
+            width: Math.abs(points[3].x - points[2].x),
+            height: 14
+          }
+        ];
+      }
+    } else if (points.length === 3) {
+      const allSameY = points.every(p => Math.abs(p.y - points[0].y) < 0.01);
+      if (allSameY) {
+        const minX = Math.min(points[0].x, points[1].x, points[2].x);
+        const maxX = Math.max(points[0].x, points[1].x, points[2].x);
+        return [
+          {
+            x: minX,
+            y: points[0].y - 7,
+            width: maxX - minX,
+            height: 14
+          }
+        ];
+      }
+    }
+
+    return null;
   }
 
   private getElementRect(elementId: string, containerSelector: string, layerContainerRect: DOMRect): DOMRect | null {
@@ -835,10 +1144,9 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
       const previousRect = this.previousRects.get(key);
 
       if (!previousRect) {
-        return true; // New rect appeared
+        return true;
       }
 
-      // Check if any dimension changed by more than 0.5px
       if (
         Math.abs(currentRect.left - previousRect.left) > 0.5 ||
         Math.abs(currentRect.top - previousRect.top) > 0.5 ||
@@ -856,8 +1164,8 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
    * Parses start and end points from an SVG path string.
    * Extracts coordinates from "M x y" (start) and the final coordinates (end).
    *
-   * @param path - SVG path string (e.g., "M 100 150 C 200 150, 300 250, 400 250")
-   * @returns Object with start and end points, or nulls if parsing fails
+   * @param path
+   * @returns
    */
   parsePathEndpoints(path: string): { start: Point | null; end: Point | null } {
     if (!path) {
@@ -922,6 +1230,76 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
   }
 
   /**
+   * Gets effective path for an arrow (elastic during drag, static otherwise).
+   */
+  /**
+   * Returns the path to display for an arrow.
+   * Note: Drag animation removed in R1 - will be reimplemented in R2.
+   */
+  getEffectivePath(arrowIndex: number, arrow: ArrowPath): string {
+    return arrow.path;
+  }
+
+  /**
+   * Gets handle positions for an arrow (dragPointerPos during drag, anchorPoint otherwise).
+   */
+  getHandlePositions(arrowIndex: number, arrow: ArrowPath): { start: Point | null; end: Point | null } {
+    const dragState = this.draggingHandle();
+    const instruction = this.instructions[arrow.instructionIndex];
+    if (!instruction) {
+      return { start: null, end: null };
+    }
+
+    const container = this.hostElement.nativeElement.closest('.diagrams-container');
+    if (!container) {
+      return { start: null, end: null };
+    }
+
+    const containerRect = container.getBoundingClientRect();
+    const sourceRect = this.getElementRect(instruction.sourceActivityIds[0], this.sourceContainerSelector, containerRect);
+    const targetRect = this.getElementRect(instruction.targetActivityIds[0], this.targetContainerSelector, containerRect);
+
+    if (!sourceRect || !targetRect) {
+      return { start: null, end: null };
+    }
+
+    let startPos: Point;
+    let endPos: Point;
+
+    if (dragState && dragState.arrowIndex === arrowIndex) {
+      if (dragState.isSnapping && dragState.snapTarget) {
+        const snapRect = dragState.end === 'source' ? sourceRect : targetRect;
+        const snapPoint = anchorPoint(snapRect, dragState.snapTarget);
+
+        if (dragState.end === 'source') {
+          startPos = snapPoint;
+          endPos = anchorPoint(targetRect, arrow.targetAnchor);
+        } else {
+          startPos = anchorPoint(sourceRect, arrow.sourceAnchor);
+          endPos = snapPoint;
+        }
+      } else {
+        const dragPos = this.dragPointerPos();
+        if (dragState.end === 'source' && dragPos) {
+          startPos = dragPos;
+          endPos = anchorPoint(targetRect, arrow.targetAnchor);
+        } else if (dragState.end === 'target' && dragPos) {
+          startPos = anchorPoint(sourceRect, arrow.sourceAnchor);
+          endPos = dragPos;
+        } else {
+          startPos = anchorPoint(sourceRect, arrow.sourceAnchor);
+          endPos = anchorPoint(targetRect, arrow.targetAnchor);
+        }
+      }
+    } else {
+      startPos = anchorPoint(sourceRect, arrow.sourceAnchor);
+      endPos = anchorPoint(targetRect, arrow.targetAnchor);
+    }
+
+    return { start: startPos, end: endPos };
+  }
+
+  /**
    * Handles pointerdown on an anchor handle.
    * Starts drag operation with pointer capture.
    */
@@ -962,6 +1340,13 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
       initialAnchor: currentAnchor
     });
     this.dragTargetRect.set(shapeRect);
+
+    const fixedEnd = end === 'source' ? 'target' : 'source';
+    const fixedRect = end === 'source' ? this.getElementRect(instruction.targetActivityIds[0], this.targetContainerSelector, layerContainerRect) : shapeRect;
+
+    if (fixedRect) {
+      const fixedAnchor = end === 'source' ? (this.customAnchors.get(this.getInstructionKey(instruction))?.target || 'left') : currentAnchor;
+    }
 
     const target = event.target as Element;
     if (target.setPointerCapture) {
@@ -1029,23 +1414,31 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
       }
     }
 
+    let snapTarget: Anchor;
     if (layerPoint && rect) {
       const distance = this.distanceToRect(layerPoint, rect);
 
       if (distance <= 80) {
-        const nearest = nearestAnchor(rect, layerPoint);
-        this.applyAnchorChange(dragState.arrowIndex, dragState.end, nearest);
+        snapTarget = nearestAnchor(rect, layerPoint);
+      } else {
+        snapTarget = dragState.initialAnchor;
       }
+    } else {
+      snapTarget = dragState.initialAnchor;
     }
 
-    this.draggingHandle.set(null);
-    this.dragTargetRect.set(null);
-    this.dragPreviewAnchor.set(null);
-    this.dragPointerPos.set(null);
+    this.snapStartTime = performance.now();
+    this.draggingHandle.set({
+      ...dragState,
+      isSnapping: true,
+      snapTarget
+    });
+    this.dragPreviewAnchor.set(snapTarget);
   }
 
   /**
    * Handles Escape key to cancel drag.
+   * Starts snap animation back to initial anchor.
    */
   private onHandleEscape(
     moveHandler: (e: PointerEvent) => void,
@@ -1065,10 +1458,16 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
       }
     }
 
-    this.draggingHandle.set(null);
-    this.dragTargetRect.set(null);
-    this.dragPreviewAnchor.set(null);
-    this.dragPointerPos.set(null);
+    const dragState = this.draggingHandle();
+    if (!dragState) return;
+
+    this.snapStartTime = performance.now();
+    this.draggingHandle.set({
+      ...dragState,
+      isSnapping: true,
+      snapTarget: dragState.initialAnchor
+    });
+    this.dragPreviewAnchor.set(dragState.initialAnchor);
   }
 
   /**
@@ -1077,6 +1476,417 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
   private findEscapeHandler(moveHandler: any, upHandler: any): (e: KeyboardEvent) => void {
     // Return a no-op since we'll remove in escape handler itself
     return () => {};
+  }
+
+  /**
+   * Handles pointerdown on center segment drag zone.
+   * CRITICAL: stopPropagation + preventDefault to prevent bpmn-js from panning.
+   * PUBLIC: Called from template.
+   */
+  onCenterSegmentPointerDown(arrowIndex: number, bar: any, event: PointerEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const arrow = this.arrows()[arrowIndex];
+    if (!arrow || !arrow.points || arrow.points.length < 3) return;
+    const currentMidOffset = arrow.midOffset ?? 0;
+    const initialPointerPos = this.toLayerPoint(event.clientX, event.clientY);
+    if (!initialPointerPos) return;
+    const mid = midSegment(arrow.points);
+    this.draggingCenterSegment.set({
+      arrowIndex,
+      initialMidOffset: currentMidOffset,
+      initialPointerPos,
+      orientation: mid.orientation
+    });
+
+    const target = event.currentTarget as Element;
+    target.setPointerCapture(event.pointerId);
+
+    const moveHandler = (e: PointerEvent) => this.onCenterSegmentPointerMove(e);
+    let escapeHandler: ((e: KeyboardEvent) => void) | null = null;
+    let cancelHandler: ((e: PointerEvent) => void) | null = null;
+    let lostCaptureHandler: ((e: Event) => void) | null = null;
+    let upHandler: ((e: PointerEvent) => void) | null = null;
+
+    escapeHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && escapeHandler && upHandler && cancelHandler && lostCaptureHandler) {
+        this.onCenterSegmentEscape(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId);
+      }
+    };
+
+    upHandler = (e: PointerEvent) => {
+      if (upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onCenterSegmentPointerUp(e, moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId);
+      }
+    };
+
+    cancelHandler = (e: PointerEvent) => {
+      if (upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onCenterSegmentCancel(e, moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId);
+      }
+    };
+
+    lostCaptureHandler = (e: Event) => {
+      if (upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onCenterSegmentLostCapture(e, moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId);
+      }
+    };
+
+    document.addEventListener('pointermove', moveHandler);
+    document.addEventListener('pointerup', upHandler);
+    document.addEventListener('pointercancel', cancelHandler);
+    target.addEventListener('lostpointercapture', lostCaptureHandler);
+    document.addEventListener('keydown', escapeHandler);
+  }
+
+  /**
+   * Handles pointermove during center segment drag.
+   * FORMULA WITHOUT JUMP: midOffset = initialMidOffset + (currentPos - initialPos) projected on axis
+   */
+  private onCenterSegmentPointerMove(event: PointerEvent): void {
+    const dragState = this.draggingCenterSegment();
+    if (!dragState) return;
+
+    const currentPointerPos = this.toLayerPoint(event.clientX, event.clientY);
+    if (!currentPointerPos) return;
+
+    const deltaX = currentPointerPos.x - dragState.initialPointerPos.x;
+    const deltaY = currentPointerPos.y - dragState.initialPointerPos.y;
+
+    let deltaMidOffset: number;
+    if (dragState.orientation === 'horizontal') {
+      deltaMidOffset = deltaY;
+    } else {
+      deltaMidOffset = deltaX;
+    }
+
+    const newMidOffset = dragState.initialMidOffset + deltaMidOffset;
+    this.updateArrowMidOffset(dragState.arrowIndex, newMidOffset);
+  }
+
+  /**
+   * Handles pointerup to finalize center segment drag.
+   */
+  private onCenterSegmentPointerUp(
+    event: PointerEvent,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    this.cleanupCenterSegmentDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+    this.draggingCenterSegment.set(null);
+  }
+
+  /**
+   * Handles Escape key to cancel center segment drag and restore initial state.
+   */
+  private onCenterSegmentEscape(
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    const dragState = this.draggingCenterSegment();
+    if (!dragState) return;
+
+    this.updateArrowMidOffset(dragState.arrowIndex, dragState.initialMidOffset);
+
+    const dragZones = document.querySelectorAll('.center-segment-drag-zone');
+    const target = dragZones[dragState.arrowIndex] as Element;
+
+    this.cleanupCenterSegmentDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, target);
+    this.draggingCenterSegment.set(null);
+  }
+
+  /**
+   * Handles pointercancel to abort center segment drag.
+   */
+  private onCenterSegmentCancel(
+    event: PointerEvent,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    const dragState = this.draggingCenterSegment();
+    if (!dragState) return;
+    this.updateArrowMidOffset(dragState.arrowIndex, dragState.initialMidOffset);
+    this.cleanupCenterSegmentDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+    this.draggingCenterSegment.set(null);
+  }
+
+  /**
+   * Handles lostpointercapture to abort center segment drag.
+   */
+  private onCenterSegmentLostCapture(
+    event: Event,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    const dragState = this.draggingCenterSegment();
+    if (!dragState) return;
+    this.updateArrowMidOffset(dragState.arrowIndex, dragState.initialMidOffset);
+    this.cleanupCenterSegmentDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+    this.draggingCenterSegment.set(null);
+  }
+
+  /**
+   * Common cleanup for all center segment drag end scenarios.
+   */
+  private cleanupCenterSegmentDrag(
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number,
+    target: Element
+  ): void {
+    document.removeEventListener('pointermove', moveHandler);
+    document.removeEventListener('pointerup', upHandler);
+    document.removeEventListener('pointercancel', cancelHandler);
+    target.removeEventListener('lostpointercapture', lostCaptureHandler);
+    document.removeEventListener('keydown', escapeHandler);
+
+    if (target.releasePointerCapture) {
+      try {
+        target.releasePointerCapture(pointerId);
+      } catch (e) {
+      }
+    }
+  }
+
+  /**
+   * Handles pointerdown on horizontal segments to create bridge.
+   * Creates bridge (bridgeY) by dragging vertically.
+   */
+  onBridgeCreatePointerDown(arrowIndex: number, event: PointerEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const arrow = this.arrows()[arrowIndex];
+    if (!arrow) return;
+
+    const target = event.currentTarget as Element;
+    target.setPointerCapture(event.pointerId);
+    this.draggingBridgeCreate.set({
+      arrowIndex,
+      initialPointerY: event.clientY,
+      initialBridgeY: 0
+    });
+
+    const moveHandler = (e: PointerEvent) => this.onBridgeCreatePointerMove(e);
+    const upHandler = (e: PointerEvent) => this.onBridgeCreatePointerUp(e, moveHandler, upHandler, cancelHandler!, lostCaptureHandler!, escapeHandler!, e.pointerId);
+    const cancelHandler = (e: PointerEvent) => this.onBridgeCreatePointerCancel(e, moveHandler, upHandler, cancelHandler, lostCaptureHandler!, escapeHandler!, e.pointerId);
+    let lostCaptureHandler: ((e: Event) => void) | null = null;
+    const escapeHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        this.onBridgeCreateEscape(moveHandler, upHandler, cancelHandler, lostCaptureHandler!, escapeHandler, event.pointerId);
+      }
+    };
+
+    lostCaptureHandler = (e: Event) => {
+      if (upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onBridgeCreateLostCapture(e, moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId);
+      }
+    };
+
+    document.addEventListener('pointermove', moveHandler);
+    document.addEventListener('pointerup', upHandler);
+    document.addEventListener('pointercancel', cancelHandler);
+    target.addEventListener('lostpointercapture', lostCaptureHandler);
+    document.addEventListener('keydown', escapeHandler);
+  }
+
+  /**
+   * Handles pointermove during bridge creation.
+   * Updates bridgeY = vertical displacement from initial position.
+   */
+  private onBridgeCreatePointerMove(event: PointerEvent): void {
+    const dragState = this.draggingBridgeCreate();
+    if (!dragState) return;
+
+    const arrow = this.arrows()[dragState.arrowIndex];
+    if (!arrow || !arrow.points) return;
+
+    const deltaY = event.clientY - dragState.initialPointerY;
+    const bridgeY = dragState.initialBridgeY + deltaY;
+    this.updateArrowBridgeY(dragState.arrowIndex, bridgeY);
+  }
+
+  private onBridgeCreatePointerUp(
+    event: PointerEvent,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    this.cleanupBridgeCreateDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+
+    const dragState = this.draggingBridgeCreate();
+    if (!dragState) return;
+
+    const arrow = this.arrows()[dragState.arrowIndex];
+    if (!arrow) return;
+
+    const currentBridgeY = arrow.bridgeY ?? 0;
+    if (Math.abs(currentBridgeY) < 4) {
+      this.updateArrowBridgeY(dragState.arrowIndex, null);
+    }
+
+    this.draggingBridgeCreate.set(null);
+  }
+
+  /**
+   * Handles pointercancel during bridge creation.
+   * Cancels bridge creation (set bridgeY = null).
+   */
+  private onBridgeCreatePointerCancel(
+    event: PointerEvent,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    const dragState = this.draggingBridgeCreate();
+    if (!dragState) return;
+
+    this.updateArrowBridgeY(dragState.arrowIndex, null);
+
+    this.cleanupBridgeCreateDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+    this.draggingBridgeCreate.set(null);
+  }
+
+  /**
+   * Handles Escape key during bridge creation.
+   * Cancels bridge creation.
+   */
+  private onBridgeCreateEscape(
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    const dragState = this.draggingBridgeCreate();
+    if (!dragState) return;
+
+    this.updateArrowBridgeY(dragState.arrowIndex, null);
+
+    const bridgeZones = document.querySelectorAll('.bridge-create-zone');
+    const target = bridgeZones[0] as Element;
+
+    this.cleanupBridgeCreateDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, target);
+    this.draggingBridgeCreate.set(null);
+  }
+
+  /**
+   * Handles lostpointercapture during bridge creation.
+   * Cancels bridge creation.
+   */
+  private onBridgeCreateLostCapture(
+    event: Event,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    const dragState = this.draggingBridgeCreate();
+    if (!dragState) return;
+
+    this.updateArrowBridgeY(dragState.arrowIndex, null);
+
+    this.cleanupBridgeCreateDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+    this.draggingBridgeCreate.set(null);
+  }
+
+  /**
+   * Cleans up event listeners and pointer capture for bridge creation drag.
+   */
+  private cleanupBridgeCreateDrag(
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number,
+    target: Element
+  ): void {
+    document.removeEventListener('pointermove', moveHandler);
+    document.removeEventListener('pointerup', upHandler);
+    document.removeEventListener('pointercancel', cancelHandler);
+    target.removeEventListener('lostpointercapture', lostCaptureHandler);
+    document.removeEventListener('keydown', escapeHandler);
+
+    if (target.releasePointerCapture) {
+      try {
+        target.releasePointerCapture(pointerId);
+      } catch (e) {
+      }
+    }
+  }
+
+  /**
+   * Updates midOffset for an arrow and recalculates routes.
+   */
+  private updateArrowMidOffset(arrowIndex: number, newMidOffset: number): void {
+    const arrow = this.arrows()[arrowIndex];
+    if (!arrow) return;
+
+    const instruction = this.instructions[arrow.instructionIndex];
+    if (!instruction) return;
+
+    const key = `${instruction.sourceActivityIds[0]}_${instruction.targetActivityIds[0]}`;
+    const currentParams = this.customAnchors.get(key);
+    const updatedParams: RouteParams = {
+      ...currentParams,
+      midOffset: newMidOffset
+    };
+
+    const newMap = new Map(this.customAnchors);
+    newMap.set(key, updatedParams);
+    this.anchorsChanged.emit(newMap);
+  }
+
+  /**
+   * Updates bridgeY for an arrow and recalculates routes.
+   */
+  private updateArrowBridgeY(arrowIndex: number, newBridgeY: number | null): void {
+    const arrow = this.arrows()[arrowIndex];
+    if (!arrow) return;
+
+    const instruction = this.instructions[arrow.instructionIndex];
+    if (!instruction) return;
+
+    const key = `${instruction.sourceActivityIds[0]}_${instruction.targetActivityIds[0]}`;
+    const currentParams = this.customAnchors.get(key);
+    const updatedParams: RouteParams = {
+      ...currentParams,
+      bridgeY: newBridgeY
+    };
+
+    const newMap = new Map(this.customAnchors);
+    newMap.set(key, updatedParams);
+    this.anchorsChanged.emit(newMap);
   }
 
   /**
@@ -1094,6 +1904,7 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
 
   /**
    * Applies anchor change and emits to parent component.
+   * Updates the new orthogonal routing format while maintaining backward compatibility.
    */
   private applyAnchorChange(arrowIndex: number, end: 'source' | 'target', newAnchor: Anchor): void {
     const arrow = this.arrows()[arrowIndex];
@@ -1104,17 +1915,32 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
 
     const instructionKey = this.getInstructionKey(instruction);
 
-    const currentAnchors = this.customAnchors.get(instructionKey);
-    const currentSource: Anchor = currentAnchors?.source || 'right';
-    const currentTarget: Anchor = currentAnchors?.target || 'left';
+    const currentParams = this.customAnchors.get(instructionKey);
 
-    const newAnchors = {
-      source: end === 'source' ? newAnchor : currentSource,
-      target: end === 'target' ? newAnchor : currentTarget
+    let currentStartSide: Side = currentParams?.startSide || (currentParams?.source as Side) || 'right';
+    let currentStartT: number = currentParams?.startT ?? 0.5;
+    let currentEndSide: Side = currentParams?.endSide || (currentParams?.target as Side) || 'left';
+    let currentEndT: number = currentParams?.endT ?? 0.5;
+    let currentMidOffset: number | null = currentParams?.midOffset ?? null;
+
+    if (end === 'source') {
+      currentStartSide = newAnchor as Side;
+    } else {
+      currentEndSide = newAnchor as Side;
+    }
+
+    const newRouteParams: RouteParams = {
+      startSide: currentStartSide,
+      startT: currentStartT,
+      endSide: currentEndSide,
+      endT: currentEndT,
+      midOffset: currentMidOffset,
+      source: currentStartSide as Anchor,
+      target: currentEndSide as Anchor
     };
 
     const newMap = new Map(this.customAnchors);
-    newMap.set(instructionKey, newAnchors);
+    newMap.set(instructionKey, newRouteParams);
 
     this.anchorsChanged.emit(newMap);
 
@@ -1127,5 +1953,487 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
    */
   private getInstructionKey(instruction: MigrationInstructionDto): string {
     return getAnchorKey(instruction.sourceActivityIds[0], instruction.targetActivityIds[0]);
+  }
+
+  onSegmentBarPointerDown(arrowIndex: number, segmentIndex: number, orientation: 'horizontal' | 'vertical', event: PointerEvent): void {
+    if (this.mappingMode) return;
+
+    event.stopPropagation();
+    event.preventDefault();
+
+    const arrow = this.arrows()[arrowIndex];
+    if (!arrow || !arrow.points || arrow.points.length < 2) return;
+
+    const initialPointerPos = this.toLayerPoint(event.clientX, event.clientY);
+    if (!initialPointerPos) return;
+
+    this.draggingSegment.set({
+      arrowIndex,
+      segmentIndex,
+      orientation,
+      initialWaypoints: [...arrow.points],
+      initialPointerPos
+    });
+
+    const target = event.currentTarget as Element;
+    target.setPointerCapture(event.pointerId);
+
+    const moveHandler = (e: PointerEvent) => this.onSegmentPointerMove(e);
+    let upHandler: ((e: PointerEvent) => void) | null = null;
+    let cancelHandler: ((e: PointerEvent) => void) | null = null;
+    let lostCaptureHandler: ((e: Event) => void) | null = null;
+    let escapeHandler: ((e: KeyboardEvent) => void) | null = null;
+
+    upHandler = (e: PointerEvent) => {
+      if (upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onSegmentPointerUp(e, moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId);
+      }
+    };
+
+    cancelHandler = (e: PointerEvent) => {
+      if (upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onSegmentPointerCancel(e, moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId);
+      }
+    };
+
+    escapeHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onSegmentEscape(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId, target);
+      }
+    };
+
+    lostCaptureHandler = (e: Event) => {
+      if (upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onSegmentLostCapture(e, moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId);
+      }
+    };
+
+    document.addEventListener('pointermove', moveHandler);
+    document.addEventListener('pointerup', upHandler);
+    document.addEventListener('pointercancel', cancelHandler);
+    target.addEventListener('lostpointercapture', lostCaptureHandler);
+    document.addEventListener('keydown', escapeHandler);
+  }
+
+  private onSegmentPointerMove(event: PointerEvent): void {
+    const dragState = this.draggingSegment();
+    if (!dragState) return;
+
+    const currentPointerPos = this.toLayerPoint(event.clientX, event.clientY);
+    if (!currentPointerPos) return;
+
+    const arrow = this.arrows()[dragState.arrowIndex];
+    if (!arrow) return;
+
+    const diagramsContainer = this.hostElement.nativeElement.closest('.diagrams-container');
+    if (!diagramsContainer) return;
+    const containerRect = diagramsContainer.getBoundingClientRect();
+
+    const sourceRect = this.getElementRect(arrow.sourceIds[0], this.sourceContainerSelector, containerRect);
+    const targetRect = this.getElementRect(arrow.targetIds[0], this.targetContainerSelector, containerRect);
+    if (!sourceRect || !targetRect) return;
+
+    const sourceRectData = {
+      left: sourceRect.left,
+      top: sourceRect.top,
+      width: sourceRect.width,
+      height: sourceRect.height
+    };
+    const targetRectData = {
+      left: targetRect.left,
+      top: targetRect.top,
+      width: targetRect.width,
+      height: targetRect.height
+    };
+
+    const deltaX = currentPointerPos.x - dragState.initialPointerPos.x;
+    const deltaY = currentPointerPos.y - dragState.initialPointerPos.y;
+
+    const delta = dragState.orientation === 'horizontal' ? deltaY : deltaX;
+
+    const newWaypoints = moveSegment(dragState.initialWaypoints, dragState.segmentIndex, delta, sourceRectData, targetRectData);
+
+    this.updateArrowWaypoints(dragState.arrowIndex, newWaypoints, false);
+  }
+
+  private onSegmentPointerUp(
+    event: PointerEvent,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    this.cleanupSegmentDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+
+    const dragState = this.draggingSegment();
+    if (!dragState) return;
+
+    const arrow = this.arrows()[dragState.arrowIndex];
+    if (arrow && arrow.points) {
+      this.updateArrowWaypoints(dragState.arrowIndex, arrow.points, true);
+    }
+
+    this.draggingSegment.set(null);
+  }
+
+  private onSegmentPointerCancel(
+    event: PointerEvent,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    const dragState = this.draggingSegment();
+    if (!dragState) return;
+
+    this.updateArrowWaypoints(dragState.arrowIndex, dragState.initialWaypoints, true);
+    this.cleanupSegmentDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+    this.draggingSegment.set(null);
+  }
+
+  private onSegmentEscape(
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number,
+    target: Element
+  ): void {
+    const dragState = this.draggingSegment();
+    if (!dragState) return;
+
+    this.updateArrowWaypoints(dragState.arrowIndex, dragState.initialWaypoints, true);
+    this.cleanupSegmentDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, target);
+    this.draggingSegment.set(null);
+  }
+
+  private onSegmentLostCapture(
+    event: Event,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    const dragState = this.draggingSegment();
+    if (!dragState) return;
+
+    this.updateArrowWaypoints(dragState.arrowIndex, dragState.initialWaypoints, true);
+    this.cleanupSegmentDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+    this.draggingSegment.set(null);
+  }
+
+  private cleanupSegmentDrag(
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number,
+    target: Element
+  ): void {
+    document.removeEventListener('pointermove', moveHandler);
+    document.removeEventListener('pointerup', upHandler);
+    document.removeEventListener('pointercancel', cancelHandler);
+    target.removeEventListener('lostpointercapture', lostCaptureHandler);
+    document.removeEventListener('keydown', escapeHandler);
+
+    if (target.releasePointerCapture) {
+      try {
+        target.releasePointerCapture(pointerId);
+      } catch (e) {
+        // Ignore
+      }
+    }
+  }
+
+
+  onWaypointPointerDown(arrowIndex: number, waypointIndex: number, event: PointerEvent): void {
+    if (this.mappingMode) return;
+
+    event.stopPropagation();
+    event.preventDefault();
+
+    const arrow = this.arrows()[arrowIndex];
+    if (!arrow || !arrow.points || arrow.points.length < 2) return;
+
+    const initialPointerPos = this.toLayerPoint(event.clientX, event.clientY);
+    if (!initialPointerPos) return;
+
+    const isEndpoint = waypointIndex === 0 || waypointIndex === arrow.points.length - 1;
+
+    this.draggingWaypoint.set({
+      arrowIndex,
+      waypointIndex,
+      isEndpoint,
+      initialWaypoints: [...arrow.points],
+      initialPointerPos
+    });
+
+    if (isEndpoint) {
+      const instruction = this.instructions[arrow.instructionIndex];
+      if (!instruction) return;
+
+      const whichEnd = waypointIndex === 0 ? 'source' : 'target';
+      const containerSelector = whichEnd === 'source' ? this.sourceContainerSelector : this.targetContainerSelector;
+      const activityId = whichEnd === 'source' ? instruction.sourceActivityIds[0] : instruction.targetActivityIds[0];
+
+      const container = this.hostElement.nativeElement.closest('.diagrams-container');
+      if (!container) return;
+
+      const layerContainerRect = container.getBoundingClientRect();
+      const shapeRect = this.getElementRect(activityId, containerSelector, layerContainerRect);
+      if (!shapeRect) return;
+
+      this.dragTargetRect.set(shapeRect);
+    }
+
+    const target = event.currentTarget as Element;
+    target.setPointerCapture(event.pointerId);
+
+    const moveHandler = (e: PointerEvent) => this.onWaypointPointerMove(e);
+    let upHandler: ((e: PointerEvent) => void) | null = null;
+    let cancelHandler: ((e: PointerEvent) => void) | null = null;
+    let lostCaptureHandler: ((e: Event) => void) | null = null;
+    let escapeHandler: ((e: KeyboardEvent) => void) | null = null;
+
+    upHandler = (e: PointerEvent) => {
+      if (upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onWaypointPointerUp(e, moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId);
+      }
+    };
+
+    cancelHandler = (e: PointerEvent) => {
+      if (upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onWaypointPointerCancel(e, moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId);
+      }
+    };
+
+    escapeHandler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onWaypointEscape(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId, target);
+      }
+    };
+
+    lostCaptureHandler = (e: Event) => {
+      if (upHandler && cancelHandler && lostCaptureHandler && escapeHandler) {
+        this.onWaypointLostCapture(e, moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, event.pointerId);
+      }
+    };
+
+    document.addEventListener('pointermove', moveHandler);
+    document.addEventListener('pointerup', upHandler);
+    document.addEventListener('pointercancel', cancelHandler);
+    target.addEventListener('lostpointercapture', lostCaptureHandler);
+    document.addEventListener('keydown', escapeHandler);
+  }
+
+  private onWaypointPointerMove(event: PointerEvent): void {
+    const dragState = this.draggingWaypoint();
+    if (!dragState) return;
+
+    const currentPointerPos = this.toLayerPoint(event.clientX, event.clientY);
+    if (!currentPointerPos) return;
+
+    const arrow = this.arrows()[dragState.arrowIndex];
+    if (!arrow) return;
+
+    const diagramsContainer = this.hostElement.nativeElement.closest('.diagrams-container');
+    if (!diagramsContainer) return;
+    const containerRect = diagramsContainer.getBoundingClientRect();
+
+    const sourceRect = this.getElementRect(arrow.sourceIds[0], this.sourceContainerSelector, containerRect);
+    const targetRect = this.getElementRect(arrow.targetIds[0], this.targetContainerSelector, containerRect);
+    if (!sourceRect || !targetRect) return;
+
+    const sourceRectData = {
+      left: sourceRect.left,
+      top: sourceRect.top,
+      width: sourceRect.width,
+      height: sourceRect.height
+    };
+    const targetRectData = {
+      left: targetRect.left,
+      top: targetRect.top,
+      width: targetRect.width,
+      height: targetRect.height
+    };
+
+    let newWaypoints: Point[];
+
+    if (dragState.isEndpoint) {
+      const whichEnd = dragState.waypointIndex === 0 ? 'start' : 'end';
+      const result = moveDock(dragState.initialWaypoints, whichEnd, sourceRectData, targetRectData, currentPointerPos);
+
+      newWaypoints = result.points;
+
+      const movingRect = whichEnd === 'start' ? sourceRect : targetRect;
+      const snapResult = nearestAnchorSnap(movingRect, currentPointerPos, 14);
+      this.dragPreviewAnchor.set(snapResult ? snapResult.side as Anchor : null);
+    } else {
+      newWaypoints = moveWaypoint(dragState.initialWaypoints, dragState.waypointIndex, currentPointerPos, sourceRectData, targetRectData);
+    }
+
+    this.updateArrowWaypoints(dragState.arrowIndex, newWaypoints, false);
+  }
+
+  private onWaypointPointerUp(
+    event: PointerEvent,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    this.cleanupWaypointDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+
+    const dragState = this.draggingWaypoint();
+    if (!dragState) return;
+
+    const currentPointerPos = this.toLayerPoint(event.clientX, event.clientY);
+
+    if (dragState.isEndpoint && currentPointerPos) {
+      const rect = this.dragTargetRect();
+      if (rect) {
+        const distance = this.distanceToRect(currentPointerPos, rect);
+        if (distance > 80) {
+          this.updateArrowWaypoints(dragState.arrowIndex, dragState.initialWaypoints, true);
+          this.draggingWaypoint.set(null);
+          this.dragTargetRect.set(null);
+          this.dragPreviewAnchor.set(null);
+          return;
+        }
+      }
+    }
+
+    const arrow = this.arrows()[dragState.arrowIndex];
+    if (arrow && arrow.points) {
+      this.updateArrowWaypoints(dragState.arrowIndex, arrow.points, true);
+    }
+
+    this.draggingWaypoint.set(null);
+    this.dragTargetRect.set(null);
+    this.dragPreviewAnchor.set(null);
+  }
+
+  private onWaypointPointerCancel(
+    event: PointerEvent,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    const dragState = this.draggingWaypoint();
+    if (!dragState) return;
+
+    this.updateArrowWaypoints(dragState.arrowIndex, dragState.initialWaypoints, true);
+    this.cleanupWaypointDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+    this.draggingWaypoint.set(null);
+    this.dragTargetRect.set(null);
+    this.dragPreviewAnchor.set(null);
+  }
+
+  private onWaypointEscape(
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number,
+    target: Element
+  ): void {
+    const dragState = this.draggingWaypoint();
+    if (!dragState) return;
+
+    this.updateArrowWaypoints(dragState.arrowIndex, dragState.initialWaypoints, true);
+    this.cleanupWaypointDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, target);
+    this.draggingWaypoint.set(null);
+    this.dragTargetRect.set(null);
+    this.dragPreviewAnchor.set(null);
+  }
+
+  private onWaypointLostCapture(
+    event: Event,
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number
+  ): void {
+    const dragState = this.draggingWaypoint();
+    if (!dragState) return;
+
+    this.updateArrowWaypoints(dragState.arrowIndex, dragState.initialWaypoints, true);
+    this.cleanupWaypointDrag(moveHandler, upHandler, cancelHandler, lostCaptureHandler, escapeHandler, pointerId, event.currentTarget as Element);
+    this.draggingWaypoint.set(null);
+    this.dragTargetRect.set(null);
+    this.dragPreviewAnchor.set(null);
+  }
+
+  private cleanupWaypointDrag(
+    moveHandler: (e: PointerEvent) => void,
+    upHandler: (e: PointerEvent) => void,
+    cancelHandler: (e: PointerEvent) => void,
+    lostCaptureHandler: (e: Event) => void,
+    escapeHandler: (e: KeyboardEvent) => void,
+    pointerId: number,
+    target: Element
+  ): void {
+    document.removeEventListener('pointermove', moveHandler);
+    document.removeEventListener('pointerup', upHandler);
+    document.removeEventListener('pointercancel', cancelHandler);
+    target.removeEventListener('lostpointercapture', lostCaptureHandler);
+    document.removeEventListener('keydown', escapeHandler);
+
+    if (target.releasePointerCapture) {
+      try {
+        target.releasePointerCapture(pointerId);
+      } catch (e) {
+      }
+    }
+  }
+
+
+  private updateArrowWaypoints(arrowIndex: number, newWaypoints: Point[], emit: boolean): void {
+    const arrow = this.arrows()[arrowIndex];
+    if (!arrow) return;
+
+    const instruction = this.instructions[arrow.instructionIndex];
+    if (!instruction) return;
+
+    const updatedArrows = [...this.arrows()];
+    updatedArrows[arrowIndex] = {
+      ...arrow,
+      points: newWaypoints,
+      path: waypointsToPath(newWaypoints)
+    };
+    this.arrows.set(updatedArrows);
+
+    if (emit) {
+      const instructionKey = this.getInstructionKey(instruction);
+      const currentParams = this.customAnchors.get(instructionKey);
+
+      const updatedParams: RouteParams = {
+        ...currentParams,
+        waypoints: newWaypoints
+      };
+
+      const newMap = new Map(this.customAnchors);
+      newMap.set(instructionKey, updatedParams);
+
+      this.anchorsChanged.emit(newMap);
+    }
+
+    this.cdr.markForCheck();
   }
 }
