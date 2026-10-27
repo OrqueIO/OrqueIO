@@ -128,9 +128,9 @@ describe('migration-waypoints-invariants (property-based)', () => {
     }
 
     const SEED = 42;
-    const ITERATIONS = 50; // Reduced for initial validation
+    const ITERATIONS = 800;
 
-    it.skip(`should maintain invariants I1-I5 over ${ITERATIONS} random operations (seed=${SEED})`, () => {
+    it(`should maintain invariants I1-I5 over ${ITERATIONS} random operations (seed=${SEED})`, () => {
       const rng = new SeededRandom(SEED);
       let failedCases = 0;
 
@@ -159,15 +159,32 @@ describe('migration-waypoints-invariants (property-based)', () => {
           continue;
         }
 
-        // Apply random sequence of 1-8 operations
         const numOps = Math.floor(rng.range(1, 9));
         for (let op = 0; op < numOps; op++) {
           const opType = Math.floor(rng.range(0, 4));
 
           if (opType === 0 && points.length >= 2) {
-            // moveSegment on random segment
             const segIdx = Math.floor(rng.range(0, points.length - 1));
-            const delta = rng.range(-50, 50);
+            const direction = Math.floor(rng.range(0, 4));
+            let delta: number;
+
+            switch (direction) {
+              case 0:
+                delta = -rng.range(10, 100);
+                break;
+              case 1:
+                delta = rng.range(10, 100);
+                break;
+              case 2:
+                delta = -rng.range(10, 100);
+                break;
+              case 3:
+                delta = rng.range(10, 100);
+                break;
+              default:
+                delta = rng.range(-50, 50);
+            }
+
             points = moveSegment(points, segIdx, delta, source, target);
           } else if (opType === 1 && points.length >= 3) {
             // moveWaypoint on random interior point

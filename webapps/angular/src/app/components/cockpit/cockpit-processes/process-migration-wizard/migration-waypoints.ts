@@ -63,7 +63,7 @@ export function initialWaypoints(
   endSide: Side = 'left',
   endT: number = 0.5
 ): Point[] {
-  // Convert our Rect format to diagram-js format
+
   const sourceBox = {
     x: sourceRect.left,
     y: sourceRect.top,
@@ -78,10 +78,8 @@ export function initialWaypoints(
     height: targetRect.height
   };
 
-  // Use ManhattanLayout.connectRectangles for production-quality orthogonal routing
   const waypoints = ManhattanLayout.connectRectangles(sourceBox, targetBox);
 
-  // Clean and normalize endpoints
   return normalizeToPerimeter(cleanWaypoints(waypoints), sourceRect, targetRect);
 }
 
@@ -111,20 +109,17 @@ export function cleanWaypoints(points: Point[]): Point[] {
     return noDuplicates;
   }
 
-  // Step 2: Remove collinear points (3+ points on same line)
   const noCollinear: Point[] = [noDuplicates[0]];
   for (let i = 1; i < noDuplicates.length - 1; i++) {
     const prev = noDuplicates[i - 1];
     const curr = noDuplicates[i];
     const next = noDuplicates[i + 1];
 
-    // Check if curr is collinear with prev and next
     const dx1 = curr.x - prev.x;
     const dy1 = curr.y - prev.y;
     const dx2 = next.x - curr.x;
     const dy2 = next.y - curr.y;
 
-    // Cross product = 0 means collinear
     const cross = dx1 * dy2 - dy1 * dx2;
     const isCollinear = Math.abs(cross) < 0.01;
 
@@ -167,7 +162,6 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
 
   let result = [...points];
 
-  // Helper: check if point is inside rect (not on perimeter)
   const isInside = (p: Point, rect: Rect): boolean => {
     const EPSILON = 0.5;
     return (
@@ -178,7 +172,6 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
     );
   };
 
-  // Helper: check if point is on perimeter (within tolerance)
   const isOnPerimeter = (p: Point, rect: Rect): boolean => {
     const EPSILON = 0.5;
     const onLeft = Math.abs(p.x - rect.left) < EPSILON;
@@ -192,14 +185,12 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
     return ((onLeft || onRight) && inYRange) || ((onTop || onBottom) && inXRange);
   };
 
-  // Helper: find nearest perimeter point
   const nearestPerimeterPoint = (p: Point, rect: Rect): Point => {
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
     const dx = p.x - cx;
     const dy = p.y - cy;
 
-    // Determine which side is closest
     const sides = [
       { side: 'top' as Side, point: { x: p.x, y: rect.top } },
       { side: 'bottom' as Side, point: { x: p.x, y: rect.top + rect.height } },
@@ -220,7 +211,6 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
       }
     }
 
-    // Clamp to valid range
     if (nearest.side === 'top' || nearest.side === 'bottom') {
       return {
         x: Math.max(rect.left, Math.min(rect.left + rect.width, nearest.point.x)),
@@ -234,26 +224,23 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
     }
   };
 
-  // STEP 1: Remove interior points adjacent to start
   while (result.length > 2 && isInside(result[1], sourceRect)) {
     result.splice(1, 1);
   }
-
-  // STEP 2: Remove interior points adjacent to end
   while (result.length > 2 && isInside(result[result.length - 2], targetRect)) {
     result.splice(result.length - 2, 1);
   }
 
   if (result.length < 2) {
-    // Degenerate case: recreate simple connection
     return initialWaypoints(sourceRect, targetRect);
   }
 
-  // STEP 3: Normalize start point
   const first = result[0];
   const second = result[1];
 
-  if (!isOnPerimeter(first, sourceRect)) {
+  const onStartPerimeter = isOnPerimeter(first, sourceRect);
+
+  if (!onStartPerimeter) {
     const dx = Math.abs(second.x - first.x);
     const dy = Math.abs(second.y - first.y);
     const isVertical = dy > dx;
@@ -303,26 +290,52 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
         }
       }
     }
-  }
-
-  // STEP 4: Normalize end point
-  const last = result[result.length - 1];
-  const secondLast = result[result.length - 2];
-
-  if (!isOnPerimeter(last, targetRect)) {
-    const dx = Math.abs(last.x - secondLast.x);
-    const dy = Math.abs(last.y - secondLast.y);
+  } else {
+    // Endpoint IS on perimeter - recalculate side based on neighbor position
+    const dx = Math.abs(second.x - first.x);
+    const dy = Math.abs(second.y - first.y);
     const isVertical = dy > dx;
 
     if (isVertical) {
+      const x = first.x;
+      const inXRange = x >= sourceRect.left && x <= sourceRect.left + sourceRect.width;
+      if (inXRange) {
+        const currentSide: Side = first.y <= sourceRect.top + 0.5 ? 'top' : 'bottom';
+        const { side: startSide } = dockSideFromNeighbor(sourceRect, second, currentSide);
+        const newY = (startSide === 'top' || startSide === 'left') ? sourceRect.top : sourceRect.top + sourceRect.height;
+        result[0] = { x, y: newY };
+      }
+    } else {
+      const y = first.y;
+      const inYRange = y >= sourceRect.top && y <= sourceRect.top + sourceRect.height;
+      if (inYRange) {
+        const currentSide: Side = first.x <= sourceRect.left + 0.5 ? 'left' : 'right';
+        const { side: startSide } = dockSideFromNeighbor(sourceRect, second, currentSide);
+        const newX = (startSide === 'left' || startSide === 'top') ? sourceRect.left : sourceRect.left + sourceRect.width;
+        result[0] = { x: newX, y };
+      }
+    }
+  }
+
+  // STEP 4: Normalize end point
+  // Recalculate dock side when endpoint is on perimeter
+  const last = result[result.length - 1];
+  const secondLast = result[result.length - 2];
+
+  const onEndPerimeter = isOnPerimeter(last, targetRect);
+
+  if (!onEndPerimeter) {
+    const endDx = Math.abs(last.x - secondLast.x);
+    const endDy = Math.abs(last.y - secondLast.y);
+    const endIsVertical = endDy > endDx;
+
+    if (endIsVertical) {
       // Vertical segment: intersect line x = last.x with top/bottom edge
       const x = last.x;
       const inXRange = x >= targetRect.left && x <= targetRect.left + targetRect.width;
 
       if (inXRange) {
         // Choose top or bottom based on direction of arrival
-        // If segment descends (last.y > secondLast.y), it enters from TOP
-        // If segment ascends (last.y < secondLast.y), it enters from BOTTOM
         const comingFromAbove = last.y > secondLast.y;
         const newY = comingFromAbove ? targetRect.top : targetRect.top + targetRect.height;
         result[result.length - 1] = { x, y: newY };
@@ -346,8 +359,6 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
 
       if (inYRange) {
         // Choose left or right based on direction of arrival
-        // If segment goes right (last.x > secondLast.x), it enters from LEFT
-        // If segment goes left (last.x < secondLast.x), it enters from RIGHT
         const comingFromLeft = last.x > secondLast.x;
         const newX = comingFromLeft ? targetRect.left : targetRect.left + targetRect.width;
         result[result.length - 1] = { x: newX, y };
@@ -363,6 +374,31 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
         } else if (Math.abs(docked.x - secondLast.x) > 0.5) {
           result.splice(insertIndex, 0, { x: docked.x, y: secondLast.y });
         }
+      }
+    }
+  } else {
+    // Endpoint IS on perimeter - recalculate side based on neighbor position
+    const endDx = Math.abs(last.x - secondLast.x);
+    const endDy = Math.abs(last.y - secondLast.y);
+    const endIsVertical = endDy > endDx;
+
+    if (endIsVertical) {
+      const x = last.x;
+      const inXRange = x >= targetRect.left && x <= targetRect.left + targetRect.width;
+      if (inXRange) {
+        const currentSide: Side = last.y <= targetRect.top + 0.5 ? 'top' : 'bottom';
+        const { side: endSide } = dockSideFromNeighbor(targetRect, secondLast, currentSide);
+        const newY = (endSide === 'top' || endSide === 'left') ? targetRect.top : targetRect.top + targetRect.height;
+        result[result.length - 1] = { x, y: newY };
+      }
+    } else {
+      const y = last.y;
+      const inYRange = y >= targetRect.top && y <= targetRect.top + targetRect.height;
+      if (inYRange) {
+        const currentSide: Side = last.x <= targetRect.left + 0.5 ? 'left' : 'right';
+        const { side: endSide } = dockSideFromNeighbor(targetRect, secondLast, currentSide);
+        const newX = (endSide === 'left' || endSide === 'top') ? targetRect.left : targetRect.left + targetRect.width;
+        result[result.length - 1] = { x: newX, y };
       }
     }
   }
@@ -945,4 +981,239 @@ function findNearestSide(rect: Rect, point: Point): Side {
   }
 
   return minSide;
+}
+
+/**
+ * Extracts dock sides and parameters from normalized waypoints.
+ * Analyzes the position of the first and last waypoints to determine
+ * which side they're on and their parameter t along that side.
+ *
+ * @param points - Normalized waypoints (endpoints must be on perimeters)
+ * @param sourceRect - Source shape rectangle
+ * @param targetRect - Target shape rectangle
+ * @returns { startSide, startT, endSide, endT }
+ */
+export function extractDockSides(
+  points: Point[],
+  sourceRect: Rect,
+  targetRect: Rect
+): { startSide: Side; startT: number; endSide: Side; endT: number } {
+  if (points.length < 2) {
+    return { startSide: 'right', startT: 0.5, endSide: 'left', endT: 0.5 };
+  }
+
+  const first = points[0];
+  const last = points[points.length - 1];
+
+  // Determine start side
+  const TOLERANCE = 1;
+  let startSide: Side = 'right';
+  let startT = 0.5;
+
+  if (Math.abs(first.y - sourceRect.top) < TOLERANCE) {
+    startSide = 'top';
+    startT = (first.x - sourceRect.left) / sourceRect.width;
+  } else if (Math.abs(first.y - (sourceRect.top + sourceRect.height)) < TOLERANCE) {
+    startSide = 'bottom';
+    startT = (first.x - sourceRect.left) / sourceRect.width;
+  } else if (Math.abs(first.x - sourceRect.left) < TOLERANCE) {
+    startSide = 'left';
+    startT = (first.y - sourceRect.top) / sourceRect.height;
+  } else if (Math.abs(first.x - (sourceRect.left + sourceRect.width)) < TOLERANCE) {
+    startSide = 'right';
+    startT = (first.y - sourceRect.top) / sourceRect.height;
+  }
+
+  // Clamp startT
+  startT = Math.max(0, Math.min(1, startT));
+
+  // Determine end side
+  let endSide: Side = 'left';
+  let endT = 0.5;
+
+  if (Math.abs(last.y - targetRect.top) < TOLERANCE) {
+    endSide = 'top';
+    endT = (last.x - targetRect.left) / targetRect.width;
+  } else if (Math.abs(last.y - (targetRect.top + targetRect.height)) < TOLERANCE) {
+    endSide = 'bottom';
+    endT = (last.x - targetRect.left) / targetRect.width;
+  } else if (Math.abs(last.x - targetRect.left) < TOLERANCE) {
+    endSide = 'left';
+    endT = (last.y - targetRect.top) / targetRect.height;
+  } else if (Math.abs(last.x - (targetRect.left + targetRect.width)) < TOLERANCE) {
+    endSide = 'right';
+    endT = (last.y - targetRect.top) / targetRect.height;
+  }
+
+  // Clamp endT
+  endT = Math.max(0, Math.min(1, endT));
+
+  return { startSide, startT, endSide, endT };
+}
+
+/**
+ * Determines the dock side based on the position of the neighbor point relative to the rect.
+ * Pushes neighbor away from rect if it's too close (< 12px).
+ * Uses hysteresis: when distances are equal, preserves previousSide.
+ *
+ * RULES:
+ * - neighbor.y < rect.top - 12    → 'top'
+ * - neighbor.y > rect.bottom + 12 → 'bottom'
+ * - neighbor.x < rect.left - 12   → 'left'
+ * - neighbor.x > rect.right + 12  → 'right'
+ * - If neighbor is within 12px margin or inside: push it out by 12px on the nearest side
+ *   (use previousSide for hysteresis when distances are equal)
+ *
+ * @param rect - Shape rectangle
+ * @param neighbor - The neighboring waypoint (first corner for start, last corner for end)
+ * @param previousSide - Previous dock side (for hysteresis)
+ * @returns { side, neighborAdjusted } - The dock side and potentially adjusted neighbor position
+ */
+export function dockSideFromNeighbor(
+  rect: Rect,
+  neighbor: Point,
+  previousSide: Side = 'right'
+): { side: Side; neighborAdjusted: Point } {
+  const MARGIN = 12;
+  const right = rect.left + rect.width;
+  const bottom = rect.top + rect.height;
+
+  // Calculate distances to each side
+  const distToTop = neighbor.y - (rect.top - MARGIN);
+  const distToBottom = (bottom + MARGIN) - neighbor.y;
+  const distToLeft = neighbor.x - (rect.left - MARGIN);
+  const distToRight = (right + MARGIN) - neighbor.x;
+
+  // Determine if neighbor is outside the margin zone on each side
+  const aboveMargin = neighbor.y < rect.top - MARGIN;
+  const belowMargin = neighbor.y > bottom + MARGIN;
+  const leftOfMargin = neighbor.x < rect.left - MARGIN;
+  const rightOfMargin = neighbor.x > right + MARGIN;
+
+  // Case 1: Neighbor is clearly outside margin zone
+  if (aboveMargin) {
+    return { side: 'top', neighborAdjusted: neighbor };
+  }
+  if (belowMargin) {
+    return { side: 'bottom', neighborAdjusted: neighbor };
+  }
+  if (leftOfMargin) {
+    return { side: 'left', neighborAdjusted: neighbor };
+  }
+  if (rightOfMargin) {
+    return { side: 'right', neighborAdjusted: neighbor };
+  }
+
+  // Case 2: Neighbor is inside margin zone or inside rect - need to push it out
+  // Find the nearest side to push neighbor to
+  const distances = [
+    { side: 'top' as Side, distance: Math.abs(neighbor.y - rect.top) },
+    { side: 'bottom' as Side, distance: Math.abs(neighbor.y - bottom) },
+    { side: 'left' as Side, distance: Math.abs(neighbor.x - rect.left) },
+    { side: 'right' as Side, distance: Math.abs(neighbor.x - right) }
+  ];
+
+  // Sort by distance
+  distances.sort((a, b) => a.distance - b.distance);
+
+  // Use hysteresis: if distances are equal within tolerance, prefer previousSide
+  const minDist = distances[0].distance;
+  const TOLERANCE = 0.5;
+  const equalSides = distances.filter(d => Math.abs(d.distance - minDist) < TOLERANCE);
+
+  let chosenSide: Side;
+  if (equalSides.length > 1 && equalSides.some(d => d.side === previousSide)) {
+    chosenSide = previousSide;
+  } else {
+    chosenSide = distances[0].side;
+  }
+
+  // Push neighbor out by MARGIN from the chosen side
+  let adjustedNeighbor: Point;
+  switch (chosenSide) {
+    case 'top':
+      adjustedNeighbor = { x: neighbor.x, y: rect.top - MARGIN };
+      break;
+    case 'bottom':
+      adjustedNeighbor = { x: neighbor.x, y: bottom + MARGIN };
+      break;
+    case 'left':
+      adjustedNeighbor = { x: rect.left - MARGIN, y: neighbor.y };
+      break;
+    case 'right':
+      adjustedNeighbor = { x: right + MARGIN, y: neighbor.y };
+      break;
+  }
+
+  return { side: chosenSide, neighborAdjusted: adjustedNeighbor };
+}
+
+/**
+ * Chooses bar position when dragging a segment between two shapes.
+ * If the bar would be inside either shape, pushes it outside both shapes
+ * on the side closest to the pointer.
+ *
+ * @param sourceRect - Source shape rectangle
+ * @param targetRect - Target shape rectangle
+ * @param barCoord - The coordinate of the bar (y for horizontal bar, x for vertical bar)
+ * @param orientation - 'horizontal' or 'vertical'
+ * @returns Adjusted bar coordinate outside both shapes
+ */
+export function chooseBarPosition(
+  sourceRect: Rect,
+  targetRect: Rect,
+  barCoord: number,
+  orientation: 'horizontal' | 'vertical'
+): number {
+  if (orientation === 'horizontal') {
+    // Bar is horizontal: check if barCoord (y) intersects either shape
+    const sourceBottom = sourceRect.top + sourceRect.height;
+    const targetBottom = targetRect.top + targetRect.height;
+
+    const sourceRange = { min: sourceRect.top, max: sourceBottom };
+    const targetRange = { min: targetRect.top, max: targetBottom };
+
+    // Find the overall range covered by both shapes
+    const minTop = Math.min(sourceRange.min, targetRange.min);
+    const maxBottom = Math.max(sourceRange.max, targetRange.max);
+
+    // If bar is outside both shapes, return as-is
+    if (barCoord < minTop || barCoord > maxBottom) {
+      return barCoord;
+    }
+
+    // Bar is inside or intersects one/both shapes
+    // Choose to place it above or below based on proximity
+    const distAbove = Math.abs(barCoord - minTop);
+    const distBelow = Math.abs(barCoord - maxBottom);
+
+    if (distAbove <= distBelow) {
+      return minTop; // Place above
+    } else {
+      return maxBottom; // Place below
+    }
+  } else {
+    // Bar is vertical: check if barCoord (x) intersects either shape
+    const sourceRight = sourceRect.left + sourceRect.width;
+    const targetRight = targetRect.left + targetRect.width;
+
+    const sourceRange = { min: sourceRect.left, max: sourceRight };
+    const targetRange = { min: targetRect.left, max: targetRight };
+
+    const minLeft = Math.min(sourceRange.min, targetRange.min);
+    const maxRight = Math.max(sourceRange.max, targetRange.max);
+
+    if (barCoord < minLeft || barCoord > maxRight) {
+      return barCoord;
+    }
+
+    const distLeft = Math.abs(barCoord - minLeft);
+    const distRight = Math.abs(barCoord - maxRight);
+
+    if (distLeft <= distRight) {
+      return minLeft;
+    } else {
+      return maxRight;
+    }
+  }
 }
