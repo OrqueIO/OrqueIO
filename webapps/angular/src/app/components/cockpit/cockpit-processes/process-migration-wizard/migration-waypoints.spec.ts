@@ -513,7 +513,8 @@ describe('migration-waypoints (pure functions)', () => {
         { x: 300, y: 200 }  // On target right edge
       ];
 
-      const moved = moveSegment(points, 0, 20, source, target); // Move first segment down by 20px
+      const result = moveSegment(points, 0, 20, source, target, 'right', 0.5, 'left', 0.5); // Move first segment down by 20px
+      const moved = result.points;
 
       expect(moved.length).toBeGreaterThanOrEqual(4);
       // Endpoints should remain on perimeter
@@ -543,7 +544,8 @@ describe('migration-waypoints (pure functions)', () => {
         { x: 300, y: 200 }
       ];
 
-      const moved = moveSegment(points, 1, 30, source, target); // Move middle vertical segment right by 30px
+      const result = moveSegment(points, 1, 30, source, target, 'right', 0.5, 'left', 0.5); // Move middle vertical segment right by 30px
+      const moved = result.points;
 
       expect(moved.length).toBeGreaterThanOrEqual(4);
       // Verify orthogonality
@@ -558,15 +560,13 @@ describe('migration-waypoints (pure functions)', () => {
       const source: Rect = { left: 80, top: 80, width: 60, height: 60 };
       const target: Rect = { left: 180, top: 80, width: 60, height: 60 };
       const points: Point[] = [
-        { x: 140, y: 110 }, // On source right edge
-        { x: 180, y: 110 }  // On target left edge
+        { x: 140, y: 110 },
+        { x: 180, y: 110 }
       ];
 
-      const moved = moveSegment(points, 0, 30, source, target); // Move horizontal segment down by 30px
-
-      // Should create U-shape (or bridge) to keep endpoints anchored
+      const result = moveSegment(points, 0, 60, source, target, 'right', 0.5, 'left', 0.5);
+      const moved = result.points;
       expect(moved.length).toBeGreaterThanOrEqual(4);
-      // Endpoints should remain on perimeter
       const firstOnPerimeter = Math.min(
         Math.abs(moved[0].x - source.left),
         Math.abs(moved[0].x - (source.left + source.width)),
@@ -585,7 +585,8 @@ describe('migration-waypoints (pure functions)', () => {
         { x: 200, y: 100 }
       ];
 
-      const moved = moveSegment(points, 0, 20, source, target);
+      const result = moveSegment(points, 0, 20, source, target, 'right', 0.5, 'left', 0.5);
+      const moved = result.points;
 
       expect(moved.every(p => !isNaN(p.x) && !isNaN(p.y))).toBe(true);
       expect(moved.length).toBeGreaterThanOrEqual(2);
@@ -601,7 +602,8 @@ describe('migration-waypoints (pure functions)', () => {
         { x: 300, y: 250 }
       ];
 
-      const moved = moveSegment(points, 1, -40, source, target); // Move vertical segment left
+      const result = moveSegment(points, 1, -40, source, target, 'right', 0.5, 'left', 0.5);
+      const moved = result.points;
 
       for (let i = 0; i < moved.length - 1; i++) {
         const dx = Math.abs(moved[i + 1].x - moved[i].x);
@@ -621,7 +623,8 @@ describe('migration-waypoints (pure functions)', () => {
         { x: 100, y: 100 }
       ];
 
-      const moved = moveSegment(points, 0, 50, source, target);
+      const result = moveSegment(points, 0, 50, source, target, 'right', 0.5, 'left', 0.5);
+      const moved = result.points;
 
       moved.forEach(p => {
         expect(isNaN(p.x)).toBe(false);
@@ -638,7 +641,8 @@ describe('migration-waypoints (pure functions)', () => {
         { x: 200, y: 200 }
       ];
 
-      const moved = moveSegment(points, 0, 25, source, target);
+      const result = moveSegment(points, 0, 25, source, target, 'right', 0.5, 'left', 0.5);
+      const moved = result.points;
       const cleaned1 = cleanWaypoints(moved);
       const cleaned2 = cleanWaypoints(cleaned1);
 
@@ -656,7 +660,8 @@ describe('migration-waypoints (pure functions)', () => {
         { x: 200, y: 200 }
       ];
 
-      const moved = moveWaypoint(points, 1, { x: 250, y: 150 }, source, target);
+      const result = moveWaypoint(points, 1, { x: 250, y: 150 }, source, target, 'right', 0.5, 'left', 0.5);
+      const moved = result.points;
 
       expect(moved.length).toBeGreaterThanOrEqual(3);
       // Endpoints should remain on perimeter
@@ -674,6 +679,11 @@ describe('migration-waypoints (pure functions)', () => {
         const dy = Math.abs(moved[i + 1].y - moved[i].y);
         expect(dx < 0.01 || dy < 0.01).toBe(true);
       }
+
+      expect(result.startSide).toBe('right');
+      expect(result.startT).toBe(0.5);
+      expect(result.endSide).toBe('left');
+      expect(result.endT).toBe(0.5);
     });
 
     it('should insert point if neighbor is anchored endpoint', () => {
@@ -685,7 +695,8 @@ describe('migration-waypoints (pure functions)', () => {
         { x: 200, y: 200 }
       ];
 
-      const moved = moveWaypoint(points, 1, { x: 250, y: 80 }, source, target);
+      const result = moveWaypoint(points, 1, { x: 250, y: 80 }, source, target, 'right', 0.5, 'left', 0.5);
+      const moved = result.points;
 
       expect(moved.length).toBeGreaterThanOrEqual(3);
       // Endpoints should remain on perimeter
@@ -708,7 +719,8 @@ describe('migration-waypoints (pure functions)', () => {
         { x: 300, y: 200 }
       ];
 
-      const moved = moveWaypoint(points, 1, { x: 250, y: 150 }, source, target);
+      const result = moveWaypoint(points, 1, { x: 250, y: 150 }, source, target, 'right', 0.5, 'left', 0.5);
+      const moved = result.points;
 
       for (let i = 0; i < moved.length - 1; i++) {
         const dx = Math.abs(moved[i + 1].x - moved[i].x);
@@ -728,7 +740,8 @@ describe('migration-waypoints (pure functions)', () => {
         { x: 200, y: 200 }
       ];
 
-      const moved = moveWaypoint(points, 1, { x: 250, y: 150 }, source, target);
+      const result = moveWaypoint(points, 1, { x: 250, y: 150 }, source, target, 'right', 0.5, 'left', 0.5);
+      const moved = result.points;
 
       moved.forEach(p => {
         expect(isNaN(p.x)).toBe(false);
@@ -815,12 +828,16 @@ describe('migration-waypoints (pure functions)', () => {
       ];
       const pointerPoint: Point = { x: 300, y: 180 }; // On left side of target
 
-      const result = moveDock(points, 'end', source, target, pointerPoint);
+      const result = moveDock(points, 'end', source, target, pointerPoint, 'right', 0.5, 'left', 0.5);
 
-      expect(result.side).toBe('left');
-      expect(result.t).toBeGreaterThanOrEqual(0.1);
-      expect(result.t).toBeLessThanOrEqual(0.9);
+      expect(result.endSide).toBe('left');
+      expect(result.endT).toBeGreaterThanOrEqual(0.1);
+      expect(result.endT).toBeLessThanOrEqual(0.9);
       expect(result.points.length).toBeGreaterThanOrEqual(2);
+
+      // Verify start side/t are preserved
+      expect(result.startSide).toBe('right');
+      expect(result.startT).toBe(0.5);
 
       // Last point should be on target border
       const lastPoint = result.points[result.points.length - 1];
@@ -843,10 +860,10 @@ describe('migration-waypoints (pure functions)', () => {
       const anchorPoint: Point = { x: 300, y: 180 }; // Left anchor
       const pointerPoint: Point = { x: 292, y: 182 }; // 10px from anchor
 
-      const result = moveDock(points, 'end', source, target, pointerPoint);
+      const result = moveDock(points, 'end', source, target, pointerPoint, 'right', 0.5, 'left', 0.5);
 
-      expect(result.side).toBe('left');
-      expect(result.t).toBeCloseTo(0.5, 1); // Snapped to anchor (t=0.5)
+      expect(result.endSide).toBe('left');
+      expect(result.endT).toBeCloseTo(0.5, 1); // Snapped to anchor (t=0.5)
     });
 
     it('should clamp t to [0.1, 0.9]', () => {
@@ -858,10 +875,10 @@ describe('migration-waypoints (pure functions)', () => {
       ];
       const pointerPoint: Point = { x: 300, y: 145 }; // Near top-left corner
 
-      const result = moveDock(points, 'end', source, target, pointerPoint);
+      const result = moveDock(points, 'end', source, target, pointerPoint, 'right', 0.5, 'left', 0.5);
 
-      expect(result.t).toBeGreaterThanOrEqual(0.1);
-      expect(result.t).toBeLessThanOrEqual(0.9);
+      expect(result.endT).toBeGreaterThanOrEqual(0.1);
+      expect(result.endT).toBeLessThanOrEqual(0.9);
     });
 
     it('should preserve corners when possible (repairWaypoints)', () => {
@@ -875,7 +892,7 @@ describe('migration-waypoints (pure functions)', () => {
       ];
       const pointerPoint: Point = { x: 400, y: 180 };
 
-      const result = moveDock(points, 'end', source, target, pointerPoint);
+      const result = moveDock(points, 'end', source, target, pointerPoint, 'right', 0.5, 'left', 0.5);
 
       // Should preserve at least some of the original corners
       expect(result.points.length).toBeGreaterThanOrEqual(2);
@@ -892,10 +909,14 @@ describe('migration-waypoints (pure functions)', () => {
       ];
       const pointerPoint: Point = { x: 140, y: 100 }; // Top side
 
-      const result = moveDock(points, 'start', source, target, pointerPoint);
+      const result = moveDock(points, 'start', source, target, pointerPoint, 'right', 0.5, 'left', 0.5);
 
-      expect(result.side).toBe('top');
+      expect(result.startSide).toBe('top');
       expect(result.points.length).toBeGreaterThanOrEqual(2);
+
+      // Verify end side/t are preserved
+      expect(result.endSide).toBe('left');
+      expect(result.endT).toBe(0.5);
 
       // First point should be on source border
       const firstPoint = result.points[0];
@@ -917,7 +938,7 @@ describe('migration-waypoints (pure functions)', () => {
       ];
       const pointerPoint: Point = { x: 340, y: 190 };
 
-      const result = moveDock(points, 'end', source, target, pointerPoint);
+      const result = moveDock(points, 'end', source, target, pointerPoint, 'right', 0.5, 'left', 0.5);
 
       for (let i = 0; i < result.points.length - 1; i++) {
         const dx = Math.abs(result.points[i + 1].x - result.points[i].x);
@@ -937,7 +958,7 @@ describe('migration-waypoints (pure functions)', () => {
       ];
       const pointerPoint: Point = { x: 200, y: 25 };
 
-      const result = moveDock(points, 'end', source, target, pointerPoint);
+      const result = moveDock(points, 'end', source, target, pointerPoint, 'right', 0.5, 'left', 0.5);
 
       result.points.forEach(p => {
         expect(isNaN(p.x)).toBe(false);

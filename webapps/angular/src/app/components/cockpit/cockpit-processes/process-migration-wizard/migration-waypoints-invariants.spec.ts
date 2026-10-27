@@ -10,8 +10,10 @@ import {
   moveDock,
   repairWaypoints,
   normalizeToPerimeter,
+  extractDockSides,
   Point,
-  Rect
+  Rect,
+  Side
 } from './migration-waypoints';
 
 /**
@@ -152,6 +154,13 @@ describe('migration-waypoints-invariants (property-based)', () => {
         // Start with initial waypoints
         let points = initialWaypoints(source, target);
 
+        // Track dock sides and t parameters - extract actual values from initial points
+        const dockInfo = extractDockSides(points, source, target);
+        let startSide: Side = dockInfo.startSide;
+        let startT = dockInfo.startT;
+        let endSide: Side = dockInfo.endSide;
+        let endT = dockInfo.endT;
+
         // Check invariants after initialWaypoints
         let inv = checkInvariants(points, source, target);
         if (!inv.I1 || !inv.I3 || !inv.I4 || !inv.I5) {
@@ -185,21 +194,35 @@ describe('migration-waypoints-invariants (property-based)', () => {
                 delta = rng.range(-50, 50);
             }
 
-            points = moveSegment(points, segIdx, delta, source, target);
+            const segResult = moveSegment(points, segIdx, delta, source, target, startSide, startT, endSide, endT);
+            points = segResult.points;
+            startSide = segResult.startSide;
+            startT = segResult.startT;
+            endSide = segResult.endSide;
+            endT = segResult.endT;
           } else if (opType === 1 && points.length >= 3) {
             // moveWaypoint on random interior point
             const wpIdx = Math.floor(rng.range(1, points.length - 1));
             const newX = rng.range(Math.min(source.left, target.left) - 50, Math.max(source.left + source.width, target.left + target.width) + 50);
             const newY = rng.range(Math.min(source.top, target.top) - 50, Math.max(source.top + source.height, target.top + target.height) + 50);
-            points = moveWaypoint(points, wpIdx, { x: newX, y: newY }, source, target);
+            const wpResult = moveWaypoint(points, wpIdx, { x: newX, y: newY }, source, target, startSide, startT, endSide, endT);
+            points = wpResult.points;
+            startSide = wpResult.startSide;
+            startT = wpResult.startT;
+            endSide = wpResult.endSide;
+            endT = wpResult.endT;
           } else if (opType === 2) {
             // moveDock on random endpoint
             const whichEnd = rng.next() < 0.5 ? 'start' : 'end';
             const movingRect = whichEnd === 'start' ? source : target;
             const pointerX = movingRect.left + rng.range(0, movingRect.width);
             const pointerY = movingRect.top + rng.range(0, movingRect.height);
-            const result = moveDock(points, whichEnd, source, target, { x: pointerX, y: pointerY });
+            const result = moveDock(points, whichEnd, source, target, { x: pointerX, y: pointerY }, startSide, startT, endSide, endT);
             points = result.points;
+            startSide = result.startSide;
+            startT = result.startT;
+            endSide = result.endSide;
+            endT = result.endT;
           } else if (opType === 3) {
             // repairWaypoints (simulate shape movement)
             const newSourceLeft = source.left + rng.range(-30, 30);
@@ -255,7 +278,8 @@ describe('migration-waypoints-invariants (property-based)', () => {
       expect(horizontalSegIdx).toBeGreaterThanOrEqual(0);
 
       // Move segment up
-      points = moveSegment(points, horizontalSegIdx, -140, source, target);
+      const result = moveSegment(points, horizontalSegIdx, -140, source, target, 'right', 0.5, 'left', 0.5);
+      points = result.points;
 
       // Check invariants
       const inv = checkInvariants(points, source, target);
@@ -293,7 +317,8 @@ describe('migration-waypoints-invariants (property-based)', () => {
       // Simulate drag in small increments (like pointer move events)
       // Each moveSegment call uses the INITIAL waypoints and cumulative delta
       for (let delta = 0; delta >= -140; delta -= 10) {
-        const points = moveSegment(initialPoints, horizontalSegIdx, delta, source, target);
+        const result = moveSegment(initialPoints, horizontalSegIdx, delta, source, target, 'right', 0.5, 'left', 0.5);
+        const points = result.points;
 
         // Check invariants at each frame
         const inv = checkInvariants(points, source, target);

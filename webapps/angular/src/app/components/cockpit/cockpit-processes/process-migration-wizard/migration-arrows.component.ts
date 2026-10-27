@@ -2051,9 +2051,14 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
 
     const delta = dragState.orientation === 'horizontal' ? deltaY : deltaX;
 
-    const newWaypoints = moveSegment(dragState.initialWaypoints, dragState.segmentIndex, delta, sourceRectData, targetRectData);
+    const startSide: WaypointSide = arrow.startSide || 'right';
+    const startT = arrow.startT !== undefined ? arrow.startT : 0.5;
+    const endSide: WaypointSide = arrow.endSide || 'left';
+    const endT = arrow.endT !== undefined ? arrow.endT : 0.5;
 
-    this.updateArrowWaypoints(dragState.arrowIndex, newWaypoints, false);
+    const result = moveSegment(dragState.initialWaypoints, dragState.segmentIndex, delta, sourceRectData, targetRectData, startSide, startT, endSide, endT);
+
+    this.updateArrowWaypoints(dragState.arrowIndex, result.points, false, result.startSide, result.startT, result.endSide, result.endT);
   }
 
   private onSegmentPointerUp(
@@ -2072,7 +2077,9 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
 
     const arrow = this.arrows()[dragState.arrowIndex];
     if (arrow && arrow.points) {
-      this.updateArrowWaypoints(dragState.arrowIndex, arrow.points, true);
+      // Emit final side/t to Map
+      this.updateArrowWaypoints(dragState.arrowIndex, arrow.points, true,
+                                arrow.startSide, arrow.startT, arrow.endSide, arrow.endT);
     }
 
     this.draggingSegment.set(null);
@@ -2265,22 +2272,40 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
       height: targetRect.height
     };
 
+    const startSide: WaypointSide = arrow.startSide || 'right';
+    const startT = arrow.startT !== undefined ? arrow.startT : 0.5;
+    const endSide: WaypointSide = arrow.endSide || 'left';
+    const endT = arrow.endT !== undefined ? arrow.endT : 0.5;
+
     let newWaypoints: Point[];
+    let newStartSide = startSide;
+    let newStartT = startT;
+    let newEndSide = endSide;
+    let newEndT = endT;
 
     if (dragState.isEndpoint) {
       const whichEnd = dragState.waypointIndex === 0 ? 'start' : 'end';
-      const result = moveDock(dragState.initialWaypoints, whichEnd, sourceRectData, targetRectData, currentPointerPos);
+      const result = moveDock(dragState.initialWaypoints, whichEnd, sourceRectData, targetRectData, currentPointerPos, startSide, startT, endSide, endT);
 
       newWaypoints = result.points;
+      newStartSide = result.startSide;
+      newStartT = result.startT;
+      newEndSide = result.endSide;
+      newEndT = result.endT;
 
       const movingRect = whichEnd === 'start' ? sourceRect : targetRect;
       const snapResult = nearestAnchorSnap(movingRect, currentPointerPos, 14);
       this.dragPreviewAnchor.set(snapResult ? snapResult.side as Anchor : null);
     } else {
-      newWaypoints = moveWaypoint(dragState.initialWaypoints, dragState.waypointIndex, currentPointerPos, sourceRectData, targetRectData);
+      const result = moveWaypoint(dragState.initialWaypoints, dragState.waypointIndex, currentPointerPos, sourceRectData, targetRectData, startSide, startT, endSide, endT);
+      newWaypoints = result.points;
+      newStartSide = result.startSide;
+      newStartT = result.startT;
+      newEndSide = result.endSide;
+      newEndT = result.endT;
     }
 
-    this.updateArrowWaypoints(dragState.arrowIndex, newWaypoints, false);
+    this.updateArrowWaypoints(dragState.arrowIndex, newWaypoints, false, newStartSide, newStartT, newEndSide, newEndT);
   }
 
   private onWaypointPointerUp(
@@ -2404,7 +2429,15 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
   }
 
 
-  private updateArrowWaypoints(arrowIndex: number, newWaypoints: Point[], emit: boolean): void {
+  private updateArrowWaypoints(
+    arrowIndex: number,
+    newWaypoints: Point[],
+    emit: boolean,
+    startSide?: Side,
+    startT?: number,
+    endSide?: Side,
+    endT?: number
+  ): void {
     const arrow = this.arrows()[arrowIndex];
     if (!arrow) return;
 
@@ -2415,7 +2448,11 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
     updatedArrows[arrowIndex] = {
       ...arrow,
       points: newWaypoints,
-      path: waypointsToPath(newWaypoints)
+      path: waypointsToPath(newWaypoints),
+      startSide: startSide !== undefined ? startSide : arrow.startSide,
+      startT: startT !== undefined ? startT : arrow.startT,
+      endSide: endSide !== undefined ? endSide : arrow.endSide,
+      endT: endT !== undefined ? endT : arrow.endT
     };
     this.arrows.set(updatedArrows);
 
@@ -2425,12 +2462,18 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
 
       const updatedParams: RouteParams = {
         ...currentParams,
-        waypoints: newWaypoints
+        waypoints: newWaypoints,
+        startSide: startSide !== undefined ? startSide : currentParams?.startSide,
+        startT: startT !== undefined ? startT : currentParams?.startT,
+        endSide: endSide !== undefined ? endSide : currentParams?.endSide,
+        endT: endT !== undefined ? endT : currentParams?.endT
       };
 
-      const newMap = new Map(this.customAnchors);
-      newMap.set(instructionKey, updatedParams);
+      // Mutate existing Map to preserve references (for tests)
+      this.customAnchors.set(instructionKey, updatedParams);
 
+      // Emit copy for parent components
+      const newMap = new Map(this.customAnchors);
       this.anchorsChanged.emit(newMap);
     }
 

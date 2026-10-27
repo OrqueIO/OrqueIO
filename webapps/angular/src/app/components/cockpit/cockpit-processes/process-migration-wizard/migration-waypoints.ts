@@ -80,7 +80,55 @@ export function initialWaypoints(
 
   const waypoints = ManhattanLayout.connectRectangles(sourceBox, targetBox);
 
-  return normalizeToPerimeter(cleanWaypoints(waypoints), sourceRect, targetRect);
+  let result = cleanWaypoints(waypoints);
+
+  rebuildEnd(result, true, sourceRect, startSide, startT);
+  rebuildEnd(result, false, targetRect, endSide, endT);
+
+  return normalizeToPerimeter(result, sourceRect, targetRect);
+}
+
+/**
+ * Rebuilds an endpoint (start or end) and adjusts its neighbor to maintain orthogonality.
+ *
+ * @param points
+ * @param isStart
+ * @param rect
+ * @param side
+ * @param t
+ */
+function rebuildEnd(points: Point[], isStart: boolean, rect: Rect, side: Side, t: number): void {
+  if (points.length < 2) return;
+
+  const endpointIdx = isStart ? 0 : points.length - 1;
+  const neighborIdx = isStart ? 1 : points.length - 2;
+  const endpoint = dockPoint(rect, side, t);
+  points[endpointIdx] = endpoint;
+
+  const neighbor = points[neighborIdx];
+  const newNeighbor = (side === 'top' || side === 'bottom')
+    ? { x: endpoint.x, y: neighbor.y }
+    : { x: neighbor.x, y: endpoint.y };
+
+  const adjacentIdx = isStart ? 2 : points.length - 3;
+  if (adjacentIdx >= 0 && adjacentIdx < points.length) {
+    const adjacent = points[adjacentIdx];
+    const dx = Math.abs(adjacent.x - newNeighbor.x);
+    const dy = Math.abs(adjacent.y - newNeighbor.y);
+    const isOrthogonal = (dx < 0.01 || dy < 0.01);
+
+    if (!isOrthogonal) {
+      if (isStart) {
+        points.splice(1, 0, newNeighbor);
+      } else {
+        points.splice(neighborIdx + 1, 0, newNeighbor);
+      }
+    } else {
+      points[neighborIdx] = newNeighbor;
+    }
+  } else {
+    points[neighborIdx] = newNeighbor;
+  }
 }
 
 /**
@@ -155,7 +203,36 @@ export function cleanWaypoints(points: Point[]): Point[] {
  * @param targetRect - Target shape rectangle
  * @returns Normalized waypoints with endpoints on perimeters
  */
-export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRect: Rect): Point[] {
+/**
+ * Converts side and t parameter to absolute point on rectangle perimeter.
+ *
+ * @param rect
+ * @param side
+ * @param t
+ * @returns
+ */
+export function sideAndTToPoint(rect: Rect, side: Side, t: number): Point {
+  switch (side) {
+    case 'top':
+      return { x: rect.left + rect.width * t, y: rect.top };
+    case 'bottom':
+      return { x: rect.left + rect.width * t, y: rect.top + rect.height };
+    case 'left':
+      return { x: rect.left, y: rect.top + rect.height * t };
+    case 'right':
+      return { x: rect.left + rect.width, y: rect.top + rect.height * t };
+  }
+}
+
+export function normalizeToPerimeter(
+  points: Point[],
+  sourceRect: Rect,
+  targetRect: Rect,
+  startSide?: Side,
+  startT?: number,
+  endSide?: Side,
+  endT?: number
+): Point[] {
   if (points.length < 2) {
     return points;
   }
@@ -226,9 +303,43 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
 
   while (result.length > 2 && isInside(result[1], sourceRect)) {
     result.splice(1, 1);
+    if (result.length >= 2) {
+      const dx = Math.abs(result[1].x - result[0].x);
+      const dy = Math.abs(result[1].y - result[0].y);
+      if (dx > 0.01 && dy > 0.01) {
+        const corner: Point = { x: result[0].x, y: result[1].y };
+        if (!isInside(corner, sourceRect) && !isInside(corner, targetRect)) {
+          result.splice(1, 0, corner);
+        } else {
+          const altCorner: Point = { x: result[1].x, y: result[0].y };
+          if (!isInside(altCorner, sourceRect) && !isInside(altCorner, targetRect)) {
+            result.splice(1, 0, altCorner);
+          }
+        }
+      }
+    }
   }
+
   while (result.length > 2 && isInside(result[result.length - 2], targetRect)) {
-    result.splice(result.length - 2, 1);
+    const removedIdx = result.length - 2;
+    result.splice(removedIdx, 1);
+    if (result.length >= 2) {
+      const lastIdx = result.length - 1;
+      const secondLastIdx = result.length - 2;
+      const dx = Math.abs(result[lastIdx].x - result[secondLastIdx].x);
+      const dy = Math.abs(result[lastIdx].y - result[secondLastIdx].y);
+      if (dx > 0.01 && dy > 0.01) {
+        const corner: Point = { x: result[secondLastIdx].x, y: result[lastIdx].y };
+        if (!isInside(corner, sourceRect) && !isInside(corner, targetRect)) {
+          result.splice(lastIdx, 0, corner);
+        } else {
+          const altCorner: Point = { x: result[lastIdx].x, y: result[secondLastIdx].y };
+          if (!isInside(altCorner, sourceRect) && !isInside(altCorner, targetRect)) {
+            result.splice(lastIdx, 0, altCorner);
+          }
+        }
+      }
+    }
   }
 
   if (result.length < 2) {
@@ -291,28 +402,58 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
       }
     }
   } else {
-    // Endpoint IS on perimeter - recalculate side based on neighbor position
+    // Endpoint IS on perimeter - adjust if segment not orthogonal OR if explicit side/t provided
     const dx = Math.abs(second.x - first.x);
     const dy = Math.abs(second.y - first.y);
-    const isVertical = dy > dx;
+    const isOrthogonal = (dx < 0.01 || dy < 0.01);
 
-    if (isVertical) {
-      const x = first.x;
-      const inXRange = x >= sourceRect.left && x <= sourceRect.left + sourceRect.width;
-      if (inXRange) {
-        const currentSide: Side = first.y <= sourceRect.top + 0.5 ? 'top' : 'bottom';
-        const { side: startSide } = dockSideFromNeighbor(sourceRect, second, currentSide);
-        const newY = (startSide === 'top' || startSide === 'left') ? sourceRect.top : sourceRect.top + sourceRect.height;
-        result[0] = { x, y: newY };
-      }
-    } else {
-      const y = first.y;
-      const inYRange = y >= sourceRect.top && y <= sourceRect.top + sourceRect.height;
-      if (inYRange) {
-        const currentSide: Side = first.x <= sourceRect.left + 0.5 ? 'left' : 'right';
-        const { side: startSide } = dockSideFromNeighbor(sourceRect, second, currentSide);
-        const newX = (startSide === 'left' || startSide === 'top') ? sourceRect.left : sourceRect.left + sourceRect.width;
-        result[0] = { x: newX, y };
+    const needsSideChange = startSide !== undefined && startT !== undefined;
+
+    if (!isOrthogonal || needsSideChange) {
+      const isVertical = dy > dx;
+
+      if (isVertical) {
+        const x = first.x;
+        const inXRange = x >= sourceRect.left && x <= sourceRect.left + sourceRect.width;
+        if (inXRange) {
+          let targetSide: Side;
+          let targetT: number;
+          if (startSide !== undefined && startT !== undefined) {
+            targetSide = startSide;
+            targetT = startT;
+          } else {
+            const currentSide: Side = first.y <= sourceRect.top + 0.5 ? 'top' : 'bottom';
+            const dockResult = dockSideFromNeighbor(sourceRect, second, currentSide);
+            targetSide = dockResult.side;
+            targetT = 0.5;
+          }
+          const newPoint = sideAndTToPoint(sourceRect, targetSide, targetT);
+          result[0] = newPoint;
+          result[1] = (targetSide === 'top' || targetSide === 'bottom')
+            ? { x: newPoint.x, y: second.y }
+            : { x: second.x, y: newPoint.y };
+        }
+      } else {
+        const y = first.y;
+        const inYRange = y >= sourceRect.top && y <= sourceRect.top + sourceRect.height;
+        if (inYRange) {
+          let targetSide: Side;
+          let targetT: number;
+          if (startSide !== undefined && startT !== undefined) {
+            targetSide = startSide;
+            targetT = startT;
+          } else {
+            const currentSide: Side = first.x <= sourceRect.left + 0.5 ? 'left' : 'right';
+            const dockResult = dockSideFromNeighbor(sourceRect, second, currentSide);
+            targetSide = dockResult.side;
+            targetT = 0.5;
+          }
+          const newPoint = sideAndTToPoint(sourceRect, targetSide, targetT);
+          result[0] = newPoint;
+          result[1] = (targetSide === 'top' || targetSide === 'bottom')
+            ? { x: newPoint.x, y: second.y }
+            : { x: second.x, y: newPoint.y };
+        }
       }
     }
   }
@@ -386,19 +527,43 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
       const x = last.x;
       const inXRange = x >= targetRect.left && x <= targetRect.left + targetRect.width;
       if (inXRange) {
-        const currentSide: Side = last.y <= targetRect.top + 0.5 ? 'top' : 'bottom';
-        const { side: endSide } = dockSideFromNeighbor(targetRect, secondLast, currentSide);
-        const newY = (endSide === 'top' || endSide === 'left') ? targetRect.top : targetRect.top + targetRect.height;
-        result[result.length - 1] = { x, y: newY };
+        let targetSide: Side;
+        let targetT: number;
+        if (endSide !== undefined && endT !== undefined) {
+          targetSide = endSide;
+          targetT = endT;
+        } else {
+          const currentSide: Side = last.y <= targetRect.top + 0.5 ? 'top' : 'bottom';
+          const dockResult = dockSideFromNeighbor(targetRect, secondLast, currentSide);
+          targetSide = dockResult.side;
+          targetT = 0.5;
+        }
+        const newPoint = sideAndTToPoint(targetRect, targetSide, targetT);
+        result[result.length - 1] = newPoint;
+        result[result.length - 2] = (targetSide === 'top' || targetSide === 'bottom')
+          ? { x: newPoint.x, y: secondLast.y }
+          : { x: secondLast.x, y: newPoint.y };
       }
     } else {
       const y = last.y;
       const inYRange = y >= targetRect.top && y <= targetRect.top + targetRect.height;
       if (inYRange) {
-        const currentSide: Side = last.x <= targetRect.left + 0.5 ? 'left' : 'right';
-        const { side: endSide } = dockSideFromNeighbor(targetRect, secondLast, currentSide);
-        const newX = (endSide === 'left' || endSide === 'top') ? targetRect.left : targetRect.left + targetRect.width;
-        result[result.length - 1] = { x: newX, y };
+        let targetSide: Side;
+        let targetT: number;
+        if (endSide !== undefined && endT !== undefined) {
+          targetSide = endSide;
+          targetT = endT;
+        } else {
+          const currentSide: Side = last.x <= targetRect.left + 0.5 ? 'left' : 'right';
+          const dockResult = dockSideFromNeighbor(targetRect, secondLast, currentSide);
+          targetSide = dockResult.side;
+          targetT = 0.5;
+        }
+        const newPoint = sideAndTToPoint(targetRect, targetSide, targetT);
+        result[result.length - 1] = newPoint;
+        result[result.length - 2] = (targetSide === 'top' || targetSide === 'bottom')
+          ? { x: newPoint.x, y: secondLast.y }
+          : { x: secondLast.x, y: newPoint.y };
       }
     }
   }
@@ -409,8 +574,41 @@ export function normalizeToPerimeter(points: Point[], sourceRect: Rect, targetRe
     return !isInside(p, sourceRect) && !isInside(p, targetRect);
   });
 
-  // STEP 6: Clean waypoints
-  return cleanWaypoints(result);
+  for (let i = 0; i < result.length - 1; i++) {
+    const dx = Math.abs(result[i + 1].x - result[i].x);
+    const dy = Math.abs(result[i + 1].y - result[i].y);
+
+    if (dx > 0.01 && dy > 0.01) {
+      const corner1: Point = { x: result[i + 1].x, y: result[i].y };
+      const isCorner1Inside = isInside(corner1, sourceRect) || isInside(corner1, targetRect);
+
+      if (!isCorner1Inside) {
+        result.splice(i + 1, 0, corner1);
+        continue;
+      }
+
+      const corner2: Point = { x: result[i].x, y: result[i + 1].y };
+      const isCorner2Inside = isInside(corner2, sourceRect) || isInside(corner2, targetRect);
+
+      if (!isCorner2Inside) {
+        result.splice(i + 1, 0, corner2);
+        continue;
+      }
+      return initialWaypoints(sourceRect, targetRect);
+    }
+  }
+
+  let cleaned = cleanWaypoints(result);
+  let prevLength = -1;
+  let cleanIterations = 0;
+
+  while (cleaned.length !== prevLength && cleanIterations < 3) {
+    prevLength = cleaned.length;
+    cleaned = cleanWaypoints(cleaned);
+    cleanIterations++;
+  }
+
+  return cleaned;
 }
 
 /**
@@ -559,44 +757,52 @@ export function repairWaypoints(
     oldWaypoints
   );
 
-  const cleaned = cleanWaypoints(repairedWaypoints);
+  let withEndpoints = [...repairedWaypoints];
+  if (withEndpoints.length >= 2) {
+    withEndpoints[0] = newStart;
+    withEndpoints[withEndpoints.length - 1] = newEnd;
+  }
 
-  // Adjust endpoints to be exactly on shape borders while preserving orthogonality
-  if (cleaned.length >= 2) {
-    // Adjust start point
-    cleaned[0] = newStart;
-    if (cleaned.length > 1) {
-      const secondPoint = cleaned[1];
-      const dx = Math.abs(secondPoint.x - newStart.x);
-      const dy = Math.abs(secondPoint.y - newStart.y);
-      // Snap to make first segment orthogonal
-      if (dx < dy) {
-        // Vertical segment: align X
-        cleaned[1] = { x: newStart.x, y: secondPoint.y };
-      } else {
-        // Horizontal segment: align Y
-        cleaned[1] = { x: secondPoint.x, y: newStart.y };
-      }
-    }
+  let result = normalizeToPerimeter(withEndpoints, newSourceRect, newTargetRect);
 
-    // Adjust end point
-    cleaned[cleaned.length - 1] = newEnd;
-    if (cleaned.length > 1) {
-      const secondLastPoint = cleaned[cleaned.length - 2];
-      const dx = Math.abs(newEnd.x - secondLastPoint.x);
-      const dy = Math.abs(newEnd.y - secondLastPoint.y);
-      // Snap to make last segment orthogonal
-      if (dx < dy) {
-        // Vertical segment: align X
-        cleaned[cleaned.length - 2] = { x: newEnd.x, y: secondLastPoint.y };
-      } else {
-        // Horizontal segment: align Y
-        cleaned[cleaned.length - 2] = { x: secondLastPoint.x, y: newEnd.y };
+  for (let i = 0; i < result.length - 1; i++) {
+    const dx = Math.abs(result[i + 1].x - result[i].x);
+    const dy = Math.abs(result[i + 1].y - result[i].y);
+
+    if (dx > 0.01 && dy > 0.01) {
+      const corner1: Point = { x: result[i + 1].x, y: result[i].y };
+      const isCorner1Inside = (
+        corner1.x > newSourceRect.left + 0.5 && corner1.x < newSourceRect.left + newSourceRect.width - 0.5 &&
+        corner1.y > newSourceRect.top + 0.5 && corner1.y < newSourceRect.top + newSourceRect.height - 0.5
+      ) || (
+        corner1.x > newTargetRect.left + 0.5 && corner1.x < newTargetRect.left + newTargetRect.width - 0.5 &&
+        corner1.y > newTargetRect.top + 0.5 && corner1.y < newTargetRect.top + newTargetRect.height - 0.5
+      );
+
+      if (!isCorner1Inside) {
+        result.splice(i + 1, 0, corner1);
+        continue;
       }
+
+      const corner2: Point = { x: result[i].x, y: result[i + 1].y };
+      const isCorner2Inside = (
+        corner2.x > newSourceRect.left + 0.5 && corner2.x < newSourceRect.left + newSourceRect.width - 0.5 &&
+        corner2.y > newSourceRect.top + 0.5 && corner2.y < newSourceRect.top + newSourceRect.height - 0.5
+      ) || (
+        corner2.x > newTargetRect.left + 0.5 && corner2.x < newTargetRect.left + newTargetRect.width - 0.5 &&
+        corner2.y > newTargetRect.top + 0.5 && corner2.y < newTargetRect.top + newTargetRect.height - 0.5
+      );
+
+      if (!isCorner2Inside) {
+        result.splice(i + 1, 0, corner2);
+        continue; // Check this new segment next iteration
+      }
+
+      return initialWaypoints(newSourceRect, newTargetRect, startSide, startT, endSide, endT);
     }
   }
 
-  return cleanWaypoints(cleaned);
+  return result;
 }
 
 /**
@@ -683,59 +889,189 @@ export function nearestAnchorSnap(rect: Rect, point: Point, radius: number = 14)
  * @param targetRect - Target shape rectangle (for endpoint normalization)
  * @returns New waypoints with segment moved and endpoints normalized
  */
-export function moveSegment(points: Point[], segmentIndex: number, delta: number, sourceRect: Rect, targetRect: Rect): Point[] {
+export function moveSegment(
+  points: Point[],
+  segmentIndex: number,
+  delta: number,
+  sourceRect: Rect,
+  targetRect: Rect,
+  startSide?: Side,
+  startT?: number,
+  endSide?: Side,
+  endT?: number
+): { points: Point[]; startSide: Side; startT: number; endSide: Side; endT: number } {
   if (points.length < 2 || segmentIndex < 0 || segmentIndex >= points.length - 1) {
-    return points;
+    return {
+      points,
+      startSide: startSide ?? 'right',
+      startT: startT ?? 0.5,
+      endSide: endSide ?? 'left',
+      endT: endT ?? 0.5
+    };
   }
 
   const segs = segments(points);
   if (segmentIndex >= segs.length) {
-    return points;
+    return {
+      points,
+      startSide: startSide ?? 'right',
+      startT: startT ?? 0.5,
+      endSide: endSide ?? 'left',
+      endT: endT ?? 0.5
+    };
   }
 
   const seg = segs[segmentIndex];
-  const newPoints = [...points];
+  let newPoints = [...points];
 
-  // Determine if this is an endpoint segment (first or last) AND it's a simple 2-point path
-  const isFirstSegment = segmentIndex === 0 && points.length === 2;
-  const isLastSegment = segmentIndex === points.length - 2 && points.length === 2;
+  // Current sides/t with defaults
+  let currentStartSide = startSide ?? 'right';
+  let currentStartT = startT ?? 0.5;
+  let currentEndSide = endSide ?? 'left';
+  let currentEndT = endT ?? 0.5;
 
-  if (isFirstSegment || isLastSegment) {
-    // Endpoint segment on simple 2-point path: create bridge (U-shape) to keep endpoint anchored
-    // Strategy: insert two points to form perpendicular offset
+  const affectsStart = segmentIndex === 0;
+  const affectsEnd = segmentIndex === points.length - 2;
 
+  if (points.length === 2 && (affectsStart || affectsEnd)) {
     if (seg.orientation === 'horizontal') {
-      // Horizontal segment: move perpendicular = change Y
       const newY = seg.a.y + delta;
-
-      // Insert bridge at start: [a, corner1, corner2, b]
       newPoints.splice(1, 0,
         { x: seg.a.x, y: newY },
         { x: seg.b.x, y: newY }
       );
     } else {
-      // Vertical segment: move perpendicular = change X
       const newX = seg.a.x + delta;
-
       newPoints.splice(1, 0,
         { x: newX, y: seg.a.y },
         { x: newX, y: seg.b.y }
       );
     }
+  }
+
+  if (seg.orientation === 'horizontal') {
+    const newY = seg.a.y + delta;
+
+    if (affectsStart) {
+      const direction = 'horizontal';
+      const barCoord = newY;
+
+      let defaultStartSide: Side;
+      if (direction === 'horizontal') {
+        defaultStartSide = 'right';
+      } else {
+        const neighbor = newPoints[1];
+        const centerY = sourceRect.top + sourceRect.height / 2;
+        defaultStartSide = neighbor.y < centerY ? 'top' : 'bottom';
+      }
+
+      const sideResult = dockSideFromBar(sourceRect, barCoord, direction, defaultStartSide, currentStartSide);
+      const newStartSide = sideResult.side;
+
+      let newStartT = currentStartT;
+      if (newStartSide !== currentStartSide) {
+        newStartT = recenterOnSideChange(currentStartSide, newStartSide, currentStartT);
+      }
+
+      currentStartSide = newStartSide;
+      currentStartT = newStartT;
+    }
+
+    if (affectsEnd) {
+      const direction = 'horizontal';
+      const barCoord = newY;
+
+      let defaultEndSide: Side;
+      if (direction === 'horizontal') {
+        defaultEndSide = 'left';
+      } else {
+        const neighbor = newPoints[newPoints.length - 2];
+        const centerY = targetRect.top + targetRect.height / 2;
+        defaultEndSide = neighbor.y < centerY ? 'top' : 'bottom';
+      }
+
+      const sideResult = dockSideFromBar(targetRect, barCoord, direction, defaultEndSide, currentEndSide);
+      const newEndSide = sideResult.side;
+
+      let newEndT = currentEndT;
+      if (newEndSide !== currentEndSide) {
+        newEndT = recenterOnSideChange(currentEndSide, newEndSide, currentEndT);
+      }
+
+      currentEndSide = newEndSide;
+      currentEndT = newEndT;
+    }
+
+    if (!affectsStart && !affectsEnd) {
+      newPoints[segmentIndex] = { x: seg.a.x, y: newY };
+      newPoints[segmentIndex + 1] = { x: seg.b.x, y: newY };
+    }
   } else {
-    // Interior segment OR multi-segment path: simply move both endpoints
-    if (seg.orientation === 'horizontal') {
-      // Move vertically
-      newPoints[segmentIndex] = { x: seg.a.x, y: seg.a.y + delta };
-      newPoints[segmentIndex + 1] = { x: seg.b.x, y: seg.b.y + delta };
-    } else {
-      // Move horizontally
-      newPoints[segmentIndex] = { x: seg.a.x + delta, y: seg.a.y };
-      newPoints[segmentIndex + 1] = { x: seg.b.x + delta, y: seg.b.y };
+    const newX = seg.a.x + delta;
+
+    if (affectsStart) {
+      const direction = 'vertical';
+      const barCoord = newX;
+
+      const neighbor = newPoints[1];
+      const centerY = sourceRect.top + sourceRect.height / 2;
+      const defaultStartSide: Side = neighbor.y < centerY ? 'top' : 'bottom';
+
+      const sideResult = dockSideFromBar(sourceRect, barCoord, direction, defaultStartSide, currentStartSide);
+      const newStartSide = sideResult.side;
+
+      let newStartT = currentStartT;
+      if (newStartSide !== currentStartSide) {
+        newStartT = recenterOnSideChange(currentStartSide, newStartSide, currentStartT);
+      }
+
+      currentStartSide = newStartSide;
+      currentStartT = newStartT;
+    }
+
+    if (affectsEnd) {
+      const direction = 'vertical';
+      const barCoord = newX;
+
+      const neighbor = newPoints[newPoints.length - 2];
+      const centerY = targetRect.top + targetRect.height / 2;
+      const defaultEndSide: Side = neighbor.y < centerY ? 'top' : 'bottom';
+
+      const sideResult = dockSideFromBar(targetRect, barCoord, direction, defaultEndSide, currentEndSide);
+      const newEndSide = sideResult.side;
+
+      let newEndT = currentEndT;
+      if (newEndSide !== currentEndSide) {
+        newEndT = recenterOnSideChange(currentEndSide, newEndSide, currentEndT);
+      }
+
+      currentEndSide = newEndSide;
+      currentEndT = newEndT;
+    }
+
+    if (!affectsStart && !affectsEnd) {
+      newPoints[segmentIndex] = { x: newX, y: seg.a.y };
+      newPoints[segmentIndex + 1] = { x: newX, y: seg.b.y };
     }
   }
 
-  return normalizeToPerimeter(cleanWaypoints(newPoints), sourceRect, targetRect);
+  const sidesChanged = (currentStartSide !== startSide) || (currentEndSide !== endSide);
+
+  let finalPoints: Point[];
+  if (sidesChanged) {
+    finalPoints = initialWaypoints(sourceRect, targetRect, currentStartSide, currentStartT, currentEndSide, currentEndT);
+  } else {
+    finalPoints = normalizeToPerimeter(cleanWaypoints(newPoints), sourceRect, targetRect,
+                                       currentStartSide, currentStartT, currentEndSide, currentEndT);
+  }
+
+  return {
+    points: finalPoints,
+    startSide: currentStartSide,
+    startT: currentStartT,
+    endSide: currentEndSide,
+    endT: currentEndT
+  };
 }
 
 /**
@@ -754,77 +1090,75 @@ export function moveSegment(points: Point[], segmentIndex: number, delta: number
  * @param targetRect - Target shape rectangle (for endpoint normalization)
  * @returns New waypoints with corner moved and endpoints normalized
  */
-export function moveWaypoint(points: Point[], index: number, newPoint: Point, sourceRect: Rect, targetRect: Rect): Point[] {
+export function moveWaypoint(
+  points: Point[],
+  index: number,
+  newPoint: Point,
+  sourceRect: Rect,
+  targetRect: Rect,
+  startSide: Side,
+  startT: number,
+  endSide: Side,
+  endT: number
+): { points: Point[]; startSide: Side; startT: number; endSide: Side; endT: number } {
   if (points.length < 3 || index <= 0 || index >= points.length - 1) {
-    return points;
+    return { points, startSide, startT, endSide, endT };
   }
 
-  const newPoints = [...points];
+  const currentPoint = points[index];
+  const dx = newPoint.x - currentPoint.x;
+  const dy = newPoint.y - currentPoint.y;
 
-  // Move the corner
-  newPoints[index] = newPoint;
 
-  // Adjust neighbors to maintain orthogonality
-  // Previous point (index - 1)
-  if (index === 1) {
-    // Previous is endpoint - insert new corner instead of moving it
-    const prev = newPoints[0];
-    const dx = Math.abs(newPoint.x - prev.x);
-    const dy = Math.abs(newPoint.y - prev.y);
+  let result = { points: [...points], startSide, startT, endSide, endT };
 
-    if (dx > dy) {
-      // Segment is more horizontal: insert corner that aligns Y with newPoint
-      newPoints.splice(1, 0, { x: prev.x, y: newPoint.y });
-    } else {
-      // Segment is more vertical: insert corner that aligns X with newPoint
-      newPoints.splice(1, 0, { x: newPoint.x, y: prev.y });
+  const segBefore = points[index - 1];
+  const dxBefore = Math.abs(currentPoint.x - segBefore.x);
+  const dyBefore = Math.abs(currentPoint.y - segBefore.y);
+  const isHorizontalBefore = dxBefore > dyBefore;
+
+  if (isHorizontalBefore) {
+    if (Math.abs(dy) > 0.01) {
+      result = moveSegment(result.points, index - 1, dy, sourceRect, targetRect, result.startSide, result.startT, result.endSide, result.endT);
     }
   } else {
-    // Previous is not endpoint - can move it
-    const prev = newPoints[index - 1];
-    const dx = Math.abs(newPoint.x - prev.x);
-    const dy = Math.abs(newPoint.y - prev.y);
-
-    if (dx > dy) {
-      // Segment is more horizontal: align Y
-      newPoints[index - 1] = { x: prev.x, y: newPoint.y };
-    } else {
-      // Segment is more vertical: align X
-      newPoints[index - 1] = { x: newPoint.x, y: prev.y };
+    if (Math.abs(dx) > 0.01) {
+      result = moveSegment(result.points, index - 1, dx, sourceRect, targetRect, result.startSide, result.startT, result.endSide, result.endT);
     }
   }
 
-  // Next point (index + 1) - need to adjust index if we inserted
-  const actualNextIndex = index === 1 ? index + 2 : index + 1;
-  if (actualNextIndex === newPoints.length - 1) {
-    // Next is endpoint - insert new corner instead of moving it
-    const next = newPoints[actualNextIndex];
-    const dx = Math.abs(next.x - newPoint.x);
-    const dy = Math.abs(next.y - newPoint.y);
-
-    if (dx > dy) {
-      // Segment is more horizontal: insert corner that aligns Y with newPoint
-      newPoints.splice(actualNextIndex, 0, { x: next.x, y: newPoint.y });
-    } else {
-      // Segment is more vertical: insert corner that aligns X with newPoint
-      newPoints.splice(actualNextIndex, 0, { x: newPoint.x, y: next.y });
+  let newIndex = -1;
+  let minDist = Number.MAX_VALUE;
+  for (let i = 1; i < result.points.length - 1; i++) {
+    const p = result.points[i];
+    const dist = Math.abs(p.x - (currentPoint.x + (isHorizontalBefore ? 0 : dx))) +
+                 Math.abs(p.y - (currentPoint.y + (isHorizontalBefore ? dy : 0)));
+    if (dist < minDist) {
+      minDist = dist;
+      newIndex = i;
     }
-  } else if (actualNextIndex < newPoints.length) {
-    // Next is not endpoint - can move it
-    const next = newPoints[actualNextIndex];
-    const dx = Math.abs(next.x - newPoint.x);
-    const dy = Math.abs(next.y - newPoint.y);
+  }
+  if (newIndex < 0) newIndex = Math.min(index, result.points.length - 2);
 
-    if (dx > dy) {
-      // Segment is more horizontal: align Y
-      newPoints[actualNextIndex] = { x: next.x, y: newPoint.y };
+  if (newIndex + 1 < result.points.length) {
+    const segAfter = result.points[newIndex + 1];
+    const currentAfter = result.points[newIndex];
+    const dxAfter = Math.abs(segAfter.x - currentAfter.x);
+    const dyAfter = Math.abs(segAfter.y - currentAfter.y);
+    const isHorizontalAfter = dxAfter > dyAfter;
+
+    if (isHorizontalAfter) {
+      if (Math.abs(dy) > 0.01) {
+        result = moveSegment(result.points, newIndex, dy, sourceRect, targetRect, result.startSide, result.startT, result.endSide, result.endT);
+      }
     } else {
-      // Segment is more vertical: align X
-      newPoints[actualNextIndex] = { x: newPoint.x, y: next.y };
+      if (Math.abs(dx) > 0.01) {
+        result = moveSegment(result.points, newIndex, dx, sourceRect, targetRect, result.startSide, result.startT, result.endSide, result.endT);
+      }
     }
   }
 
-  return normalizeToPerimeter(cleanWaypoints(newPoints), sourceRect, targetRect);
+  return result;
 }
 
 /**
@@ -846,8 +1180,12 @@ export function moveDock(
   whichEnd: 'start' | 'end',
   sourceRect: Rect,
   targetRect: Rect,
-  pointerPoint: Point
-): { side: Side; t: number; points: Point[] } {
+  pointerPoint: Point,
+  startSide: Side,
+  startT: number,
+  endSide: Side,
+  endT: number
+): { startSide: Side; startT: number; endSide: Side; endT: number; points: Point[] } {
   // Determine which rect we're working with
   const movingRect = whichEnd === 'start' ? sourceRect : targetRect;
   const otherRect = whichEnd === 'start' ? targetRect : sourceRect;
@@ -859,28 +1197,71 @@ export function moveDock(
     // Snapped to anchor
     const newDockPoint = dockPoint(movingRect, anchorSnap.side, anchorSnap.t);
 
-    // Use repairWaypoints to update path
+    // Use repairWaypoints to update path, preserving the other endpoint's side/t
     let newPoints: Point[];
+    let newStartSide: Side;
+    let newStartT: number;
+    let newEndSide: Side;
+    let newEndT: number;
+
     if (whichEnd === 'start') {
-      // Moving start endpoint
-      const endPoint = points[points.length - 1];
-      const endSide = findNearestSide(targetRect, endPoint);
-      const endT = 0.5;
-
-      newPoints = repairWaypoints(points, sourceRect, targetRect, anchorSnap.side, anchorSnap.t, endSide, endT);
+      // Moving start endpoint, preserve end
+      newStartSide = anchorSnap.side;
+      newStartT = anchorSnap.t;
+      newEndSide = endSide;
+      newEndT = endT;
+      newPoints = repairWaypoints(points, sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
     } else {
-      // Moving end endpoint
-      const startPoint = points[0];
-      const startSide = findNearestSide(sourceRect, startPoint);
-      const startT = 0.5;
+      // Moving end endpoint, preserve start
+      newStartSide = startSide;
+      newStartT = startT;
+      newEndSide = anchorSnap.side;
+      newEndT = anchorSnap.t;
+      newPoints = repairWaypoints(points, sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
+    }
 
-      newPoints = repairWaypoints(points, sourceRect, targetRect, startSide, startT, anchorSnap.side, anchorSnap.t);
+    // Call normalizeToPerimeter then ensure orthogonality
+    let finalPoints = normalizeToPerimeter(newPoints, sourceRect, targetRect);
+    for (let i = 0; i < finalPoints.length - 1; i++) {
+      const dx = Math.abs(finalPoints[i + 1].x - finalPoints[i].x);
+      const dy = Math.abs(finalPoints[i + 1].y - finalPoints[i].y);
+      if (dx > 0.01 && dy > 0.01) {
+        const corner1: Point = { x: finalPoints[i + 1].x, y: finalPoints[i].y };
+        const isCorner1Inside = (
+          corner1.x > sourceRect.left + 0.5 && corner1.x < sourceRect.left + sourceRect.width - 0.5 &&
+          corner1.y > sourceRect.top + 0.5 && corner1.y < sourceRect.top + sourceRect.height - 0.5
+        ) || (
+          corner1.x > targetRect.left + 0.5 && corner1.x < targetRect.left + targetRect.width - 0.5 &&
+          corner1.y > targetRect.top + 0.5 && corner1.y < targetRect.top + targetRect.height - 0.5
+        );
+        if (!isCorner1Inside) {
+          finalPoints.splice(i + 1, 0, corner1);
+          continue;
+        }
+        const corner2: Point = { x: finalPoints[i].x, y: finalPoints[i + 1].y };
+        const isCorner2Inside = (
+          corner2.x > sourceRect.left + 0.5 && corner2.x < sourceRect.left + sourceRect.width - 0.5 &&
+          corner2.y > sourceRect.top + 0.5 && corner2.y < sourceRect.top + sourceRect.height - 0.5
+        ) || (
+          corner2.x > targetRect.left + 0.5 && corner2.x < targetRect.left + targetRect.width - 0.5 &&
+          corner2.y > targetRect.top + 0.5 && corner2.y < targetRect.top + targetRect.height - 0.5
+        );
+        if (!isCorner2Inside) {
+          finalPoints.splice(i + 1, 0, corner2);
+          continue;
+        }
+        // Both corners inside - use initialWaypoints
+        finalPoints = initialWaypoints(sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
+        break;
+      }
     }
 
     return {
-      side: anchorSnap.side,
-      t: anchorSnap.t,
-      points: normalizeToPerimeter(newPoints, sourceRect, targetRect)
+      startSide: newStartSide,
+      startT: newStartT,
+      endSide: newEndSide,
+      endT: newEndT,
+      points: finalPoints
     };
   }
 
@@ -888,26 +1269,71 @@ export function moveDock(
   const nearest = findNearestPerimeterPoint(movingRect, pointerPoint);
   const newDockPoint = dockPoint(movingRect, nearest.side, nearest.t);
 
-  // Use repairWaypoints
+  // Use repairWaypoints, preserving the other endpoint's side/t
   let newPoints: Point[];
+  let newStartSide: Side;
+  let newStartT: number;
+  let newEndSide: Side;
+  let newEndT: number;
+
   if (whichEnd === 'start') {
-    const endPoint = points[points.length - 1];
-    const endSide = findNearestSide(targetRect, endPoint);
-    const endT = 0.5;
-
-    newPoints = repairWaypoints(points, sourceRect, targetRect, nearest.side, nearest.t, endSide, endT);
+    // Moving start endpoint, preserve end
+    newStartSide = nearest.side;
+    newStartT = nearest.t;
+    newEndSide = endSide;
+    newEndT = endT;
+    newPoints = repairWaypoints(points, sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
   } else {
-    const startPoint = points[0];
-    const startSide = findNearestSide(sourceRect, startPoint);
-    const startT = 0.5;
+    // Moving end endpoint, preserve start
+    newStartSide = startSide;
+    newStartT = startT;
+    newEndSide = nearest.side;
+    newEndT = nearest.t;
+    newPoints = repairWaypoints(points, sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
+  }
 
-    newPoints = repairWaypoints(points, sourceRect, targetRect, startSide, startT, nearest.side, nearest.t);
+  // Call normalizeToPerimeter then ensure orthogonality
+  let finalPoints = normalizeToPerimeter(newPoints, sourceRect, targetRect);
+  for (let i = 0; i < finalPoints.length - 1; i++) {
+    const dx = Math.abs(finalPoints[i + 1].x - finalPoints[i].x);
+    const dy = Math.abs(finalPoints[i + 1].y - finalPoints[i].y);
+    if (dx > 0.01 && dy > 0.01) {
+      const corner1: Point = { x: finalPoints[i + 1].x, y: finalPoints[i].y };
+      const isCorner1Inside = (
+        corner1.x > sourceRect.left + 0.5 && corner1.x < sourceRect.left + sourceRect.width - 0.5 &&
+        corner1.y > sourceRect.top + 0.5 && corner1.y < sourceRect.top + sourceRect.height - 0.5
+      ) || (
+        corner1.x > targetRect.left + 0.5 && corner1.x < targetRect.left + targetRect.width - 0.5 &&
+        corner1.y > targetRect.top + 0.5 && corner1.y < targetRect.top + targetRect.height - 0.5
+      );
+      if (!isCorner1Inside) {
+        finalPoints.splice(i + 1, 0, corner1);
+        continue;
+      }
+      const corner2: Point = { x: finalPoints[i].x, y: finalPoints[i + 1].y };
+      const isCorner2Inside = (
+        corner2.x > sourceRect.left + 0.5 && corner2.x < sourceRect.left + sourceRect.width - 0.5 &&
+        corner2.y > sourceRect.top + 0.5 && corner2.y < sourceRect.top + sourceRect.height - 0.5
+      ) || (
+        corner2.x > targetRect.left + 0.5 && corner2.x < targetRect.left + targetRect.width - 0.5 &&
+        corner2.y > targetRect.top + 0.5 && corner2.y < targetRect.top + targetRect.height - 0.5
+      );
+      if (!isCorner2Inside) {
+        finalPoints.splice(i + 1, 0, corner2);
+        continue;
+      }
+      // Both corners inside - use initialWaypoints
+      finalPoints = initialWaypoints(sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
+      break;
+    }
   }
 
   return {
-    side: nearest.side,
-    t: nearest.t,
-    points: normalizeToPerimeter(newPoints, sourceRect, targetRect)
+    startSide: newStartSide,
+    startT: newStartT,
+    endSide: newEndSide,
+    endT: newEndT,
+    points: finalPoints
   };
 }
 
@@ -1052,6 +1478,126 @@ export function extractDockSides(
 }
 
 /**
+ * Determines the dock side based on the position of a bar (horizontal or vertical segment)
+ * relative to a shape rectangle. Used for automatic side switching when dragging the middle bar.
+ *
+ * RULES (with MARGIN = 12px):
+ * - For horizontal bar (direction='horizontal'):
+ *   - barCoord (y) < rect.top - MARGIN        → 'top'
+ *   - barCoord (y) > rect.bottom + MARGIN     → 'bottom'
+ *   - Otherwise (bar in vertical band)        → previousSide (default)
+ * - For vertical bar (direction='vertical'):
+ *   - barCoord (x) < rect.left - MARGIN       → 'left'
+ *   - barCoord (x) > rect.right + MARGIN      → 'right'
+ *   - Otherwise (bar in horizontal band)      → previousSide (default)
+ *
+ * Hysteresis: When bar crosses a threshold, it must move hysteresisMargin pixels
+ * beyond the threshold before the side changes. This prevents flickering when the
+ * bar oscillates around the threshold.
+ *
+ * @param rect - Shape rectangle
+ * @param barCoord - The coordinate of the bar (y for horizontal, x for vertical)
+ * @param direction - 'horizontal' or 'vertical'
+ * @param previousSide - Previous dock side (default for in-band, and for hysteresis)
+ * @param hysteresisMargin - Additional margin for hysteresis (default: 4px)
+ * @returns { side } - The determined dock side
+ */
+export function dockSideFromBar(
+  rect: Rect,
+  barCoord: number,
+  direction: 'horizontal' | 'vertical',
+  defaultSide: Side,
+  previousSide?: Side,
+  hysteresisMargin: number = 4
+): { side: Side } {
+  const MARGIN = 12;
+  const right = rect.left + rect.width;
+  const bottom = rect.top + rect.height;
+  const currentSide = previousSide ?? defaultSide;
+
+  if (direction === 'horizontal') {
+    // Horizontal bar: check y coordinate
+    const topThreshold = rect.top - MARGIN;
+    const bottomThreshold = bottom + MARGIN;
+
+    // Entry thresholds (without hysteresis)
+    if (barCoord < topThreshold) {
+      return { side: 'top' };
+    }
+    if (barCoord > bottomThreshold) {
+      return { side: 'bottom' };
+    }
+
+    // Hysteresis zones: stay on edge side if within hysteresis margin
+    if (currentSide === 'top' && barCoord < topThreshold + hysteresisMargin) {
+      return { side: 'top' };
+    }
+    if (currentSide === 'bottom' && barCoord > bottomThreshold - hysteresisMargin) {
+      return { side: 'bottom' };
+    }
+
+    // In middle band: preserve currentSide if it's left/right, else use defaultSide
+    if (currentSide === 'left' || currentSide === 'right') {
+      return { side: currentSide };
+    }
+    return { side: defaultSide };
+  } else {
+    // Vertical bar: check x coordinate
+    const leftThreshold = rect.left - MARGIN;
+    const rightThreshold = right + MARGIN;
+
+    // Entry thresholds (without hysteresis)
+    if (barCoord < leftThreshold) {
+      return { side: 'left' };
+    }
+    if (barCoord > rightThreshold) {
+      return { side: 'right' };
+    }
+
+    // Hysteresis zones: stay on edge side if within hysteresis margin
+    if (currentSide === 'left' && barCoord < leftThreshold + hysteresisMargin) {
+      return { side: 'left' };
+    }
+    if (currentSide === 'right' && barCoord > rightThreshold - hysteresisMargin) {
+      return { side: 'right' };
+    }
+
+    // In middle band: preserve currentSide if it's top/bottom, else use defaultSide
+    if (currentSide === 'top' || currentSide === 'bottom') {
+      return { side: currentSide };
+    }
+    return { side: defaultSide };
+  }
+}
+
+/**
+ * Determines the new t (parameter along side) when the dock side changes.
+ *
+ * RULE:
+ * - If prevSide === newSide: return prevT (preserve custom position)
+ * - If prevSide !== newSide: return 0.5 (recenter to middle of new side)
+ *
+ * This ensures that:
+ * - User's manual adjustments are preserved when the side doesn't change
+ * - Endpoints are centered when the side changes automatically
+ *
+ * @param prevSide - Previous dock side
+ * @param newSide - New dock side
+ * @param prevT - Previous t parameter [0, 1]
+ * @returns New t parameter [0, 1]
+ */
+export function recenterOnSideChange(
+  prevSide: Side,
+  newSide: Side,
+  prevT: number
+): number {
+  if (prevSide === newSide) {
+    return prevT; // Side didn't change: preserve t
+  }
+  return 0.5; // Side changed: recenter to middle
+}
+
+/**
  * Determines the dock side based on the position of the neighbor point relative to the rect.
  * Pushes neighbor away from rect if it's too close (< 12px).
  * Uses hysteresis: when distances are equal, preserves previousSide.
@@ -1153,11 +1699,14 @@ export function dockSideFromNeighbor(
  * If the bar would be inside either shape, pushes it outside both shapes
  * on the side closest to the pointer.
  *
+ * Returns a position OUTSIDE the margin zones (≤ top-24 or ≥ bottom+24)
+ * so that dockSideFromBar will return top/bottom (not in-band).
+ *
  * @param sourceRect - Source shape rectangle
  * @param targetRect - Target shape rectangle
  * @param barCoord - The coordinate of the bar (y for horizontal bar, x for vertical bar)
  * @param orientation - 'horizontal' or 'vertical'
- * @returns Adjusted bar coordinate outside both shapes
+ * @returns Adjusted bar coordinate outside both shapes and their margin zones
  */
 export function chooseBarPosition(
   sourceRect: Rect,
@@ -1165,6 +1714,9 @@ export function chooseBarPosition(
   barCoord: number,
   orientation: 'horizontal' | 'vertical'
 ): number {
+  const MARGIN = 12;
+  const OUTER_MARGIN = 24; // 2 * MARGIN to be clearly outside both shapes
+
   if (orientation === 'horizontal') {
     // Bar is horizontal: check if barCoord (y) intersects either shape
     const sourceBottom = sourceRect.top + sourceRect.height;
@@ -1184,13 +1736,14 @@ export function chooseBarPosition(
 
     // Bar is inside or intersects one/both shapes
     // Choose to place it above or below based on proximity
+    // Place OUTER_MARGIN away to ensure dockSideFromBar sees it as top/bottom
     const distAbove = Math.abs(barCoord - minTop);
     const distBelow = Math.abs(barCoord - maxBottom);
 
     if (distAbove <= distBelow) {
-      return minTop; // Place above
+      return minTop - OUTER_MARGIN; // Place above, outside margin zone
     } else {
-      return maxBottom; // Place below
+      return maxBottom + OUTER_MARGIN; // Place below, outside margin zone
     }
   } else {
     // Bar is vertical: check if barCoord (x) intersects either shape
@@ -1211,9 +1764,9 @@ export function chooseBarPosition(
     const distRight = Math.abs(barCoord - maxRight);
 
     if (distLeft <= distRight) {
-      return minLeft;
+      return minLeft - OUTER_MARGIN; // Place left, outside margin zone
     } else {
-      return maxRight;
+      return maxRight + OUTER_MARGIN; // Place right, outside margin zone
     }
   }
 }
