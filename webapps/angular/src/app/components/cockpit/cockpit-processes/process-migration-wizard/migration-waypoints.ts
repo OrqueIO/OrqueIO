@@ -238,6 +238,7 @@ export function normalizeToPerimeter(
   }
 
   let result = [...points];
+  const originalLength = result.length;
 
   const isInside = (p: Point, rect: Rect): boolean => {
     const EPSILON = 0.5;
@@ -429,9 +430,16 @@ export function normalizeToPerimeter(
           }
           const newPoint = sideAndTToPoint(sourceRect, targetSide, targetT);
           result[0] = newPoint;
-          result[1] = (targetSide === 'top' || targetSide === 'bottom')
-            ? { x: newPoint.x, y: second.y }
-            : { x: second.x, y: newPoint.y };
+          if (originalLength === 2) {
+            const bendPoint = (targetSide === 'top' || targetSide === 'bottom')
+              ? { x: newPoint.x, y: second.y }
+              : { x: second.x, y: newPoint.y };
+            result.splice(1, 0, bendPoint);
+          } else {
+            result[1] = (targetSide === 'top' || targetSide === 'bottom')
+              ? { x: newPoint.x, y: second.y }
+              : { x: second.x, y: newPoint.y };
+          }
         }
       } else {
         const y = first.y;
@@ -450,16 +458,21 @@ export function normalizeToPerimeter(
           }
           const newPoint = sideAndTToPoint(sourceRect, targetSide, targetT);
           result[0] = newPoint;
-          result[1] = (targetSide === 'top' || targetSide === 'bottom')
-            ? { x: newPoint.x, y: second.y }
-            : { x: second.x, y: newPoint.y };
+          if (originalLength === 2) {
+            const bendPoint = (targetSide === 'top' || targetSide === 'bottom')
+              ? { x: newPoint.x, y: second.y }
+              : { x: second.x, y: newPoint.y };
+            result.splice(1, 0, bendPoint);
+          } else {
+            result[1] = (targetSide === 'top' || targetSide === 'bottom')
+              ? { x: newPoint.x, y: second.y }
+              : { x: second.x, y: newPoint.y };
+          }
         }
       }
     }
   }
 
-  // STEP 4: Normalize end point
-  // Recalculate dock side when endpoint is on perimeter
   const last = result[result.length - 1];
   const secondLast = result[result.length - 2];
 
@@ -471,21 +484,16 @@ export function normalizeToPerimeter(
     const endIsVertical = endDy > endDx;
 
     if (endIsVertical) {
-      // Vertical segment: intersect line x = last.x with top/bottom edge
       const x = last.x;
       const inXRange = x >= targetRect.left && x <= targetRect.left + targetRect.width;
 
       if (inXRange) {
-        // Choose top or bottom based on direction of arrival
         const comingFromAbove = last.y > secondLast.y;
         const newY = comingFromAbove ? targetRect.top : targetRect.top + targetRect.height;
         result[result.length - 1] = { x, y: newY };
       } else {
-        // Segment shifted outside: re-dock and insert bend
         const docked = nearestPerimeterPoint(last, targetRect);
         result[result.length - 1] = docked;
-
-        // Insert orthogonal bend to reach secondLast point
         const insertIndex = result.length - 1;
         if (Math.abs(docked.x - secondLast.x) > 0.5) {
           result.splice(insertIndex, 0, { x: docked.x, y: secondLast.y });
@@ -494,21 +502,17 @@ export function normalizeToPerimeter(
         }
       }
     } else {
-      // Horizontal segment: intersect line y = last.y with left/right edge
       const y = last.y;
       const inYRange = y >= targetRect.top && y <= targetRect.top + targetRect.height;
 
       if (inYRange) {
-        // Choose left or right based on direction of arrival
         const comingFromLeft = last.x > secondLast.x;
         const newX = comingFromLeft ? targetRect.left : targetRect.left + targetRect.width;
         result[result.length - 1] = { x: newX, y };
       } else {
-        // Segment shifted outside: re-dock and insert bend
         const docked = nearestPerimeterPoint(last, targetRect);
         result[result.length - 1] = docked;
 
-        // Insert orthogonal bend to reach secondLast point
         const insertIndex = result.length - 1;
         if (Math.abs(docked.y - secondLast.y) > 0.5) {
           result.splice(insertIndex, 0, { x: secondLast.x, y: docked.y });
@@ -518,7 +522,6 @@ export function normalizeToPerimeter(
       }
     }
   } else {
-    // Endpoint IS on perimeter - recalculate side based on neighbor position
     const endDx = Math.abs(last.x - secondLast.x);
     const endDy = Math.abs(last.y - secondLast.y);
     const endIsVertical = endDy > endDx;
@@ -540,9 +543,16 @@ export function normalizeToPerimeter(
         }
         const newPoint = sideAndTToPoint(targetRect, targetSide, targetT);
         result[result.length - 1] = newPoint;
-        result[result.length - 2] = (targetSide === 'top' || targetSide === 'bottom')
-          ? { x: newPoint.x, y: secondLast.y }
-          : { x: secondLast.x, y: newPoint.y };
+        if (originalLength === 2) {
+          const bendPoint = (targetSide === 'top' || targetSide === 'bottom')
+            ? { x: newPoint.x, y: secondLast.y }
+            : { x: secondLast.x, y: newPoint.y };
+          result.splice(result.length - 1, 0, bendPoint);
+        } else {
+          result[result.length - 2] = (targetSide === 'top' || targetSide === 'bottom')
+            ? { x: newPoint.x, y: secondLast.y }
+            : { x: secondLast.x, y: newPoint.y };
+        }
       }
     } else {
       const y = last.y;
@@ -561,14 +571,20 @@ export function normalizeToPerimeter(
         }
         const newPoint = sideAndTToPoint(targetRect, targetSide, targetT);
         result[result.length - 1] = newPoint;
-        result[result.length - 2] = (targetSide === 'top' || targetSide === 'bottom')
-          ? { x: newPoint.x, y: secondLast.y }
-          : { x: secondLast.x, y: newPoint.y };
+        if (originalLength === 2) {
+          const bendPoint = (targetSide === 'top' || targetSide === 'bottom')
+            ? { x: newPoint.x, y: secondLast.y }
+            : { x: secondLast.x, y: newPoint.y };
+          result.splice(result.length - 1, 0, bendPoint);
+        } else {
+          result[result.length - 2] = (targetSide === 'top' || targetSide === 'bottom')
+            ? { x: newPoint.x, y: secondLast.y }
+            : { x: secondLast.x, y: newPoint.y };
+        }
       }
     }
   }
 
-  // STEP 5: Remove any points that ended up inside shapes
   result = result.filter((p, i) => {
     if (i === 0 || i === result.length - 1) return true; // Keep endpoints
     return !isInside(p, sourceRect) && !isInside(p, targetRect);
@@ -763,7 +779,7 @@ export function repairWaypoints(
     withEndpoints[withEndpoints.length - 1] = newEnd;
   }
 
-  let result = normalizeToPerimeter(withEndpoints, newSourceRect, newTargetRect);
+  let result = normalizeToPerimeter(withEndpoints, newSourceRect, newTargetRect, startSide, startT, endSide, endT);
 
   for (let i = 0; i < result.length - 1; i++) {
     const dx = Math.abs(result[i + 1].x - result[i].x);
@@ -795,10 +811,9 @@ export function repairWaypoints(
 
       if (!isCorner2Inside) {
         result.splice(i + 1, 0, corner2);
-        continue; // Check this new segment next iteration
+        continue;
       }
-
-      return initialWaypoints(newSourceRect, newTargetRect, startSide, startT, endSide, endT);
+      break;
     }
   }
 
@@ -842,8 +857,64 @@ export function dockPoint(rect: Rect, side: Side, t: number): Point {
 }
 
 /**
+ * Finds nearest point on rectangle perimeter to given point.
+ * Returns { side, t, x, y } where t is parameter [0, 1] along side.
+ *
+ * @param rect
+ * @param point
+ * @param clampRange
+ * @returns { side, t, x, y }
+ */
+export function nearestPerimeterPoint(
+  rect: Rect,
+  point: Point,
+  clampRange = false
+): { side: Side; t: number; x: number; y: number } {
+  const sides: Side[] = ['top', 'right', 'bottom', 'left'];
+  let nearest: { side: Side; t: number; x: number; y: number; distance: number } | null = null;
+
+  for (const side of sides) {
+    // Find closest point on this side
+    let closestT: number;
+    let closestPoint: Point;
+
+    switch (side) {
+      case 'top':
+        closestT = (point.x - rect.left) / rect.width;
+        break;
+      case 'right':
+        closestT = (point.y - rect.top) / rect.height;
+        break;
+      case 'bottom':
+        closestT = (point.x - rect.left) / rect.width;
+        break;
+      case 'left':
+        closestT = (point.y - rect.top) / rect.height;
+        break;
+    }
+
+    closestT = clampRange
+      ? Math.max(0.1, Math.min(0.9, closestT))
+      : Math.max(0, Math.min(1, closestT));
+
+    closestPoint = dockPoint(rect, side, closestT);
+
+    const dx = point.x - closestPoint.x;
+    const dy = point.y - closestPoint.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (!nearest || distance < nearest.distance) {
+      nearest = { side, t: closestT, x: closestPoint.x, y: closestPoint.y, distance };
+    }
+  }
+
+  return { side: nearest!.side, t: nearest!.t, x: nearest!.x, y: nearest!.y };
+}
+
+/**
  * Finds nearest anchor (middle of side) within snap radius.
  * Returns { side, t: 0.5 } if within radius, null otherwise.
+ * Alias: snapToSideMiddle
  *
  * @param rect - Shape rectangle
  * @param point - Pointer position
@@ -874,6 +945,12 @@ export function nearestAnchorSnap(rect: Rect, point: Point, radius: number = 14)
 
   return nearest ? { side: nearest.side, t: 0.5 } : null;
 }
+
+/**
+ * Alias for nearestAnchorSnap - finds nearest side middle within snap radius.
+ * Preferred name for P2+ perimeter dragging feature.
+ */
+export const snapToSideMiddle = nearestAnchorSnap;
 
 /**
  * Moves a segment perpendicular to its direction.
@@ -1270,41 +1347,7 @@ export function moveDock(
       newPoints = repairWaypoints(points, sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
     }
 
-    // Call normalizeToPerimeter then ensure orthogonality
-    let finalPoints = normalizeToPerimeter(newPoints, sourceRect, targetRect);
-    for (let i = 0; i < finalPoints.length - 1; i++) {
-      const dx = Math.abs(finalPoints[i + 1].x - finalPoints[i].x);
-      const dy = Math.abs(finalPoints[i + 1].y - finalPoints[i].y);
-      if (dx > 0.01 && dy > 0.01) {
-        const corner1: Point = { x: finalPoints[i + 1].x, y: finalPoints[i].y };
-        const isCorner1Inside = (
-          corner1.x > sourceRect.left + 0.5 && corner1.x < sourceRect.left + sourceRect.width - 0.5 &&
-          corner1.y > sourceRect.top + 0.5 && corner1.y < sourceRect.top + sourceRect.height - 0.5
-        ) || (
-          corner1.x > targetRect.left + 0.5 && corner1.x < targetRect.left + targetRect.width - 0.5 &&
-          corner1.y > targetRect.top + 0.5 && corner1.y < targetRect.top + targetRect.height - 0.5
-        );
-        if (!isCorner1Inside) {
-          finalPoints.splice(i + 1, 0, corner1);
-          continue;
-        }
-        const corner2: Point = { x: finalPoints[i].x, y: finalPoints[i + 1].y };
-        const isCorner2Inside = (
-          corner2.x > sourceRect.left + 0.5 && corner2.x < sourceRect.left + sourceRect.width - 0.5 &&
-          corner2.y > sourceRect.top + 0.5 && corner2.y < sourceRect.top + sourceRect.height - 0.5
-        ) || (
-          corner2.x > targetRect.left + 0.5 && corner2.x < targetRect.left + targetRect.width - 0.5 &&
-          corner2.y > targetRect.top + 0.5 && corner2.y < targetRect.top + targetRect.height - 0.5
-        );
-        if (!isCorner2Inside) {
-          finalPoints.splice(i + 1, 0, corner2);
-          continue;
-        }
-        // Both corners inside - use initialWaypoints
-        finalPoints = initialWaypoints(sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
-        break;
-      }
-    }
+    const finalPoints = normalizeToPerimeter(newPoints, sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
 
     return {
       startSide: newStartSide,
@@ -1315,11 +1358,9 @@ export function moveDock(
     };
   }
 
-  // No snap: find nearest perimeter point
-  const nearest = findNearestPerimeterPoint(movingRect, pointerPoint);
-  const newDockPoint = dockPoint(movingRect, nearest.side, nearest.t);
+  const nearest = nearestPerimeterPoint(movingRect, pointerPoint, true);
+  const newDockPoint = { x: nearest.x, y: nearest.y };
 
-  // Use repairWaypoints, preserving the other endpoint's side/t
   let newPoints: Point[];
   let newStartSide: Side;
   let newStartT: number;
@@ -1327,14 +1368,12 @@ export function moveDock(
   let newEndT: number;
 
   if (whichEnd === 'start') {
-    // Moving start endpoint, preserve end
     newStartSide = nearest.side;
     newStartT = nearest.t;
     newEndSide = endSide;
     newEndT = endT;
     newPoints = repairWaypoints(points, sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
   } else {
-    // Moving end endpoint, preserve start
     newStartSide = startSide;
     newStartT = startT;
     newEndSide = nearest.side;
@@ -1342,41 +1381,7 @@ export function moveDock(
     newPoints = repairWaypoints(points, sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
   }
 
-  // Call normalizeToPerimeter then ensure orthogonality
-  let finalPoints = normalizeToPerimeter(newPoints, sourceRect, targetRect);
-  for (let i = 0; i < finalPoints.length - 1; i++) {
-    const dx = Math.abs(finalPoints[i + 1].x - finalPoints[i].x);
-    const dy = Math.abs(finalPoints[i + 1].y - finalPoints[i].y);
-    if (dx > 0.01 && dy > 0.01) {
-      const corner1: Point = { x: finalPoints[i + 1].x, y: finalPoints[i].y };
-      const isCorner1Inside = (
-        corner1.x > sourceRect.left + 0.5 && corner1.x < sourceRect.left + sourceRect.width - 0.5 &&
-        corner1.y > sourceRect.top + 0.5 && corner1.y < sourceRect.top + sourceRect.height - 0.5
-      ) || (
-        corner1.x > targetRect.left + 0.5 && corner1.x < targetRect.left + targetRect.width - 0.5 &&
-        corner1.y > targetRect.top + 0.5 && corner1.y < targetRect.top + targetRect.height - 0.5
-      );
-      if (!isCorner1Inside) {
-        finalPoints.splice(i + 1, 0, corner1);
-        continue;
-      }
-      const corner2: Point = { x: finalPoints[i].x, y: finalPoints[i + 1].y };
-      const isCorner2Inside = (
-        corner2.x > sourceRect.left + 0.5 && corner2.x < sourceRect.left + sourceRect.width - 0.5 &&
-        corner2.y > sourceRect.top + 0.5 && corner2.y < sourceRect.top + sourceRect.height - 0.5
-      ) || (
-        corner2.x > targetRect.left + 0.5 && corner2.x < targetRect.left + targetRect.width - 0.5 &&
-        corner2.y > targetRect.top + 0.5 && corner2.y < targetRect.top + targetRect.height - 0.5
-      );
-      if (!isCorner2Inside) {
-        finalPoints.splice(i + 1, 0, corner2);
-        continue;
-      }
-      // Both corners inside - use initialWaypoints
-      finalPoints = initialWaypoints(sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
-      break;
-    }
-  }
+  const finalPoints = normalizeToPerimeter(newPoints, sourceRect, targetRect, newStartSide, newStartT, newEndSide, newEndT);
 
   return {
     startSide: newStartSide,
@@ -1391,50 +1396,6 @@ export function moveDock(
  * Finds nearest perimeter point on rect to given point.
  * Returns { side, t } with t clamped to [0.1, 0.9].
  */
-function findNearestPerimeterPoint(rect: Rect, point: Point): { side: Side; t: number } {
-  const sides: Side[] = ['top', 'right', 'bottom', 'left'];
-  let nearest: { side: Side; t: number; distance: number } | null = null;
-
-  for (const side of sides) {
-    // Find closest point on this side
-    let closestT: number;
-    let closestPoint: Point;
-
-    switch (side) {
-      case 'top':
-        closestT = (point.x - rect.left) / rect.width;
-        closestPoint = { x: rect.left + closestT * rect.width, y: rect.top };
-        break;
-      case 'right':
-        closestT = (point.y - rect.top) / rect.height;
-        closestPoint = { x: rect.left + rect.width, y: rect.top + closestT * rect.height };
-        break;
-      case 'bottom':
-        closestT = (point.x - rect.left) / rect.width;
-        closestPoint = { x: rect.left + closestT * rect.width, y: rect.top + rect.height };
-        break;
-      case 'left':
-        closestT = (point.y - rect.top) / rect.height;
-        closestPoint = { x: rect.left, y: rect.top + closestT * rect.height };
-        break;
-    }
-
-    // Clamp t to [0.1, 0.9]
-    closestT = Math.max(0.1, Math.min(0.9, closestT));
-    closestPoint = dockPoint(rect, side, closestT);
-
-    const dx = point.x - closestPoint.x;
-    const dy = point.y - closestPoint.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (!nearest || distance < nearest.distance) {
-      nearest = { side, t: closestT, distance };
-    }
-  }
-
-  return { side: nearest!.side, t: nearest!.t };
-}
-
 /**
  * Finds which side of rect a point is nearest to.
  */
