@@ -38,6 +38,8 @@ import {
   moveDock,
   nearestAnchorSnap,
   dockPoint,
+  startMarkerPosition,
+  endArrowhead,
   Point as WaypointPoint,
   Rect as WaypointRect,
   Side as WaypointSide
@@ -121,6 +123,31 @@ interface ArrowPath {
               [class.migration-arrow--valid]="arrow.valid"
               [class.migration-arrow--invalid]="!arrow.valid">
             </path>
+            <!-- Start marker: small circle at arrow origin -->
+            @if (arrow.points && arrow.points.length > 0) {
+              @let startMarker = getStartMarker(arrow.points);
+              <circle
+                [attr.cx]="startMarker.x"
+                [attr.cy]="startMarker.y"
+                r="3"
+                class="migration-arrow-start-marker"
+                [class.migration-arrow-start-marker--valid]="arrow.valid"
+                [class.migration-arrow-start-marker--invalid]="!arrow.valid"
+                style="pointer-events: none">
+              </circle>
+            }
+            <!-- End arrowhead: triangle pointing in direction of last segment -->
+            @if (arrow.points && arrow.points.length > 0) {
+              @let arrowhead = getEndArrowhead(arrow.points);
+              <polygon
+                points="-8,-4 0,0 -8,4"
+                [attr.transform]="'translate(' + arrowhead.x + ',' + arrowhead.y + ') rotate(' + arrowhead.angleDeg + ')'"
+                class="migration-arrow-end-marker"
+                [class.migration-arrow-end-marker--valid]="arrow.valid"
+                [class.migration-arrow-end-marker--invalid]="!arrow.valid"
+                style="pointer-events: none">
+              </polygon>
+            }
             <!-- Selection handles: always in DOM, visibility controlled by CSS -->
             @if (!mappingMode) {
               @let handles = getSelectionHandles(arrow);
@@ -263,6 +290,32 @@ interface ArrowPath {
 
     .migration-arrow--invalid {
       stroke: var(--color-danger, #ef4444);
+    }
+
+    .migration-arrow-start-marker {
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .migration-arrow-start-marker--valid {
+      fill: var(--color-success, #22c55e);
+    }
+
+    .migration-arrow-start-marker--invalid {
+      fill: var(--color-danger, #ef4444);
+    }
+
+    .migration-arrow-end-marker {
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .migration-arrow-end-marker--valid {
+      fill: var(--color-success, #22c55e);
+    }
+
+    .migration-arrow-end-marker--invalid {
+      fill: var(--color-danger, #ef4444);
     }
 
     .anchor-handle {
@@ -749,6 +802,14 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
         };
       }
     });
+  }
+
+  getStartMarker(points: WaypointPoint[]): { x: number; y: number } {
+    return startMarkerPosition(points);
+  }
+
+  getEndArrowhead(points: WaypointPoint[]): { x: number; y: number; angleDeg: number } {
+    return endArrowhead(points);
   }
 
 

@@ -952,18 +952,45 @@ export function moveSegment(
   if (seg.orientation === 'horizontal') {
     const newY = seg.a.y + delta;
 
+    if (!affectsStart && !affectsEnd) {
+      const direction = 'horizontal';
+      const barCoord = newY;
+      const defaultStartSide: Side = 'right';
+      const defaultEndSide: Side = 'left';
+
+      const startSideResult = dockSideFromBar(sourceRect, barCoord, direction, defaultStartSide, currentStartSide);
+      const newStartSide = startSideResult.side;
+
+      let newStartT = currentStartT;
+      if (newStartSide !== currentStartSide) {
+        newStartT = recenterOnSideChange(currentStartSide, newStartSide, currentStartT);
+      }
+
+      currentStartSide = newStartSide;
+      currentStartT = newStartT;
+
+      const endSideResult = dockSideFromBar(targetRect, barCoord, direction, defaultEndSide, currentEndSide);
+      const newEndSide = endSideResult.side;
+
+      let newEndT = currentEndT;
+      if (newEndSide !== currentEndSide) {
+        newEndT = recenterOnSideChange(currentEndSide, newEndSide, currentEndT);
+      }
+
+      currentEndSide = newEndSide;
+      currentEndT = newEndT;
+
+      newPoints[segmentIndex] = { x: seg.a.x, y: newY };
+      newPoints[segmentIndex + 1] = { x: seg.b.x, y: newY };
+    }
+
     if (affectsStart) {
       const direction = 'horizontal';
       const barCoord = newY;
 
-      let defaultStartSide: Side;
-      if (direction === 'horizontal') {
-        defaultStartSide = 'right';
-      } else {
-        const neighbor = newPoints[1];
-        const centerY = sourceRect.top + sourceRect.height / 2;
-        defaultStartSide = neighbor.y < centerY ? 'top' : 'bottom';
-      }
+      const neighbor = newPoints[1];
+      const centerY = sourceRect.top + sourceRect.height / 2;
+      const defaultStartSide: Side = neighbor.y < centerY ? 'top' : 'bottom';
 
       const sideResult = dockSideFromBar(sourceRect, barCoord, direction, defaultStartSide, currentStartSide);
       const newStartSide = sideResult.side;
@@ -981,14 +1008,9 @@ export function moveSegment(
       const direction = 'horizontal';
       const barCoord = newY;
 
-      let defaultEndSide: Side;
-      if (direction === 'horizontal') {
-        defaultEndSide = 'left';
-      } else {
-        const neighbor = newPoints[newPoints.length - 2];
-        const centerY = targetRect.top + targetRect.height / 2;
-        defaultEndSide = neighbor.y < centerY ? 'top' : 'bottom';
-      }
+      const neighbor = newPoints[newPoints.length - 2];
+      const centerY = targetRect.top + targetRect.height / 2;
+      const defaultEndSide: Side = neighbor.y < centerY ? 'top' : 'bottom';
 
       const sideResult = dockSideFromBar(targetRect, barCoord, direction, defaultEndSide, currentEndSide);
       const newEndSide = sideResult.side;
@@ -1001,13 +1023,46 @@ export function moveSegment(
       currentEndSide = newEndSide;
       currentEndT = newEndT;
     }
-
-    if (!affectsStart && !affectsEnd) {
-      newPoints[segmentIndex] = { x: seg.a.x, y: newY };
-      newPoints[segmentIndex + 1] = { x: seg.b.x, y: newY };
-    }
   } else {
     const newX = seg.a.x + delta;
+
+    if (!affectsStart && !affectsEnd) {
+      const direction = 'vertical';
+      const barCoord = newX;
+
+      const startNeighbor = newPoints[1];
+      const startCenterY = sourceRect.top + sourceRect.height / 2;
+      const defaultStartSide: Side = startNeighbor.y < startCenterY ? 'top' : 'bottom';
+
+      const startSideResult = dockSideFromBar(sourceRect, barCoord, direction, defaultStartSide, currentStartSide);
+      const newStartSide = startSideResult.side;
+
+      let newStartT = currentStartT;
+      if (newStartSide !== currentStartSide) {
+        newStartT = recenterOnSideChange(currentStartSide, newStartSide, currentStartT);
+      }
+
+      currentStartSide = newStartSide;
+      currentStartT = newStartT;
+
+      const endNeighbor = newPoints[newPoints.length - 2];
+      const endCenterY = targetRect.top + targetRect.height / 2;
+      const defaultEndSide: Side = endNeighbor.y < endCenterY ? 'top' : 'bottom';
+
+      const endSideResult = dockSideFromBar(targetRect, barCoord, direction, defaultEndSide, currentEndSide);
+      const newEndSide = endSideResult.side;
+
+      let newEndT = currentEndT;
+      if (newEndSide !== currentEndSide) {
+        newEndT = recenterOnSideChange(currentEndSide, newEndSide, currentEndT);
+      }
+
+      currentEndSide = newEndSide;
+      currentEndT = newEndT;
+
+      newPoints[segmentIndex] = { x: newX, y: seg.a.y };
+      newPoints[segmentIndex + 1] = { x: newX, y: seg.b.y };
+    }
 
     if (affectsStart) {
       const direction = 'vertical';
@@ -1047,11 +1102,6 @@ export function moveSegment(
 
       currentEndSide = newEndSide;
       currentEndT = newEndT;
-    }
-
-    if (!affectsStart && !affectsEnd) {
-      newPoints[segmentIndex] = { x: newX, y: seg.a.y };
-      newPoints[segmentIndex + 1] = { x: newX, y: seg.b.y };
     }
   }
 
@@ -1734,19 +1784,15 @@ export function chooseBarPosition(
       return barCoord;
     }
 
-    // Bar is inside or intersects one/both shapes
-    // Choose to place it above or below based on proximity
-    // Place OUTER_MARGIN away to ensure dockSideFromBar sees it as top/bottom
     const distAbove = Math.abs(barCoord - minTop);
     const distBelow = Math.abs(barCoord - maxBottom);
 
     if (distAbove <= distBelow) {
-      return minTop - OUTER_MARGIN; // Place above, outside margin zone
+      return minTop - OUTER_MARGIN;
     } else {
-      return maxBottom + OUTER_MARGIN; // Place below, outside margin zone
+      return maxBottom + OUTER_MARGIN;
     }
   } else {
-    // Bar is vertical: check if barCoord (x) intersects either shape
     const sourceRight = sourceRect.left + sourceRect.width;
     const targetRight = targetRect.left + targetRect.width;
 
@@ -1764,9 +1810,54 @@ export function chooseBarPosition(
     const distRight = Math.abs(barCoord - maxRight);
 
     if (distLeft <= distRight) {
-      return minLeft - OUTER_MARGIN; // Place left, outside margin zone
+      return minLeft - OUTER_MARGIN;
     } else {
-      return maxRight + OUTER_MARGIN; // Place right, outside margin zone
+      return maxRight + OUTER_MARGIN;
     }
   }
+}
+
+/**
+ * Calculates position for start marker (small circle at arrow start).
+ *
+ * @param points
+ * @returns
+ */
+export function startMarkerPosition(points: Point[]): Point {
+  if (points.length === 0) {
+    return { x: 0, y: 0 };
+  }
+  return { x: points[0].x, y: points[0].y };
+}
+
+/**
+ * Calculates position and angle for end arrowhead.
+ * Angle is determined by the direction of the last segment.
+ *
+ * @param points
+ * @returns
+ */
+export function endArrowhead(points: Point[]): { x: number; y: number; angleDeg: number } {
+  if (points.length === 0) {
+    return { x: 0, y: 0, angleDeg: 0 };
+  }
+
+  const lastPoint = points[points.length - 1];
+
+  if (points.length === 1) {
+    return { x: lastPoint.x, y: lastPoint.y, angleDeg: 0 };
+  }
+
+  const secondLastPoint = points[points.length - 2];
+  const dx = lastPoint.x - secondLastPoint.x;
+  const dy = lastPoint.y - secondLastPoint.y;
+
+  const angleRad = Math.atan2(dy, dx);
+  const angleDeg = angleRad * 180 / Math.PI;
+
+  return {
+    x: lastPoint.x,
+    y: lastPoint.y,
+    angleDeg
+  };
 }
