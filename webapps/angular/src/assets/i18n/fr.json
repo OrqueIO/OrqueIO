@@ -2121,5 +2121,16 @@
   "migration.viewMappingErrors": "Voir les erreurs de mapping",
   "migration.errorGeneratingPlan": "Échec de la génération du plan de migration",
   "migration.anchorStart": "Point d'ancrage de départ",
-  "migration.anchorEnd": "Point d'ancrage d'arrivée"
+  "migration.anchorEnd": "Point d'ancrage d'arrivée",
+  "migration.variablesDescription": "Ajoutez les variables qui seront définies dans la portée des instances de processus.",
+  "migration.addVariable": "Ajouter une variable",
+  "migration.back": "Retour",
+  "migration.backButton": "Revenir à l'étape précédente",
+  "migration.selectInstances": "Sélectionner les instances",
+  "migration.selectInstancesButton": "Passer à la sélection des instances",
+  "migration.selectSourceAndTarget": "Sélectionnez un processus source et un processus cible",
+  "migration.sourceDifferentFromTarget": "La source et la cible doivent être différentes",
+  "migration.loading": "Chargement\u2026",
+  "migration.addAtLeastOneMapping": "Ajoutez au moins un mapping",
+  "migration.fixInvalidMappings": "Corrigez les mappings invalides"
 }

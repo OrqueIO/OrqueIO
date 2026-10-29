@@ -35,9 +35,9 @@
 }
 
 .step--done .step__circle {
-  border-color: var(--color-success, #16a34a);
-  background: var(--color-success, #16a34a);
-  color: #fff;
+  border-color: var(--color-primary);
+  background: #fff;
+  color: var(--color-primary);
 }
 
 .step__label {
@@ -53,7 +53,7 @@
 }
 
 .step--done .step__label {
-  color: var(--text-secondary);
+  color: var(--color-primary);
 }
 
 .step-connector {
@@ -65,7 +65,7 @@
 }
 
 .step-connector--done {
-  background: var(--color-success, #16a34a);
+  background: var(--color-primary);
 }
 
 /* ── Responsive stepper ─────────────────────────────────────────────────────── */

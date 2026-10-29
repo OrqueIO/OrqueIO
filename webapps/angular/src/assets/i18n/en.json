@@ -2139,5 +2139,16 @@
   "migration.viewMappingErrors": "View mapping errors",
   "migration.errorGeneratingPlan": "Failed to generate migration plan",
   "migration.anchorStart": "Anchor start point",
-  "migration.anchorEnd": "Anchor end point"
+  "migration.anchorEnd": "Anchor end point",
+  "migration.variablesDescription": "Add variables that will be set into the process instances' scope.",
+  "migration.addVariable": "Add Variable",
+  "migration.back": "Back",
+  "migration.backButton": "Go back to previous step",
+  "migration.selectInstances": "Select Instances",
+  "migration.selectInstancesButton": "Proceed to select instances",
+  "migration.selectSourceAndTarget": "Select a source and a target process",
+  "migration.sourceDifferentFromTarget": "Source and target must be different",
+  "migration.loading": "Loading\u2026",
+  "migration.addAtLeastOneMapping": "Add at least one mapping",
+  "migration.fixInvalidMappings": "Fix invalid mappings"
 }

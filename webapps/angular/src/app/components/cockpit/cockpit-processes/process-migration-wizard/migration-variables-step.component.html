@@ -1,0 +1,36 @@
+<div class="variables-step-container">
+  <div class="step-header">
+    <p class="info-text">{{ 'migration.variablesDescription' | translate }}</p>
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="addVariable.emit()"
+      [attr.aria-label]="'migration.addVariable' | translate">
+      + {{ 'migration.addVariable' | translate }}
+    </button>
+  </div>
+
+  <!-- Empty state: no table shown for screen 1 -->
+
+  <div class="step-footer">
+    <div class="footer-left">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="back.emit()"
+        [attr.aria-label]="'migration.backButton' | translate">
+        ← {{ 'migration.back' | translate }}
+      </button>
+    </div>
+    <div class="footer-right">
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="!canProceed()"
+        (click)="next.emit()"
+        [attr.aria-label]="'migration.selectInstancesButton' | translate">
+        {{ 'migration.selectInstances' | translate }} →
+      </button>
+    </div>
+  </div>
+</div>

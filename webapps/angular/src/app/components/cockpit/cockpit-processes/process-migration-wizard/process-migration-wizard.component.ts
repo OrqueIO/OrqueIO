@@ -22,6 +22,7 @@ import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { BatchWizardStepperComponent, WizardStep } from '../../cockpit-batch/batch-wizard-stepper/batch-wizard-stepper';
 import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { MigrationArrowsComponent, RouteParams } from './migration-arrows.component';
+import { MigrationVariablesStepComponent } from './migration-variables-step.component';
 import { Anchor, getAnchorKey } from './migration-arrow-anchors';
 import { MigrationUndoToastService } from './migration-undo-toast.service';
 import { snapshotMapping, restoreMapping, MigrationState } from './migration-undo-utils';
@@ -43,7 +44,8 @@ const ENABLE_CONNECTION_EDITOR_SPIKE = false;
     TranslatePipe,
     BatchWizardStepperComponent,
     BpmnViewerComponent,
-    MigrationArrowsComponent
+    MigrationArrowsComponent,
+    MigrationVariablesStepComponent
   ],
   templateUrl: './process-migration-wizard.component.html',
   styleUrl: './process-migration-wizard.component.css',
@@ -228,6 +230,44 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     if (!report) return false;
     return !report.instructionReports || report.instructionReports.every(r => !r.failures || r.failures.length === 0);
   });
+
+  variables = signal<any[]>([]);
+
+  setVariablesDisabledReason = computed<string | null>(() => {
+    const sourceId = this.sourceDefinitionId();
+    const targetId = this.targetDefinitionId();
+    const loadingState = this.loadingState();
+    const planLoading = this.planLoading();
+    const plan = this.migrationPlan();
+
+    if (!sourceId || !targetId) {
+      return 'migration.selectSourceAndTarget';
+    }
+
+    if (this.isSourceTargetIdentical()) {
+      return 'migration.sourceDifferentFromTarget';
+    }
+
+    if (loadingState === 'loading' || planLoading) {
+      return 'migration.loading';
+    }
+
+    if (loadingState === 'error') {
+      return 'migration.errorLoadingDefinitions';
+    }
+
+    if (!plan || plan.instructions.length === 0) {
+      return 'migration.addAtLeastOneMapping';
+    }
+
+    if (!this.isPlanValid()) {
+      return 'migration.fixInvalidMappings';
+    }
+
+    return null;
+  });
+
+  canGoToSetVariables = computed(() => this.setVariablesDisabledReason() === null);
 
   // UI controls
   showMigrationPlan = true;
@@ -430,6 +470,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
    */
   private resetDownstream(): void {
     this.currentStep.set(1);
+    this.variables.set([]);
   }
 
   /**
@@ -873,6 +914,21 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         this.hoveredTargetActivityId.set(null);
       }
     }
+  }
+
+  onGoToSetVariables(): void {
+    this.currentStep.set(2);
+  }
+
+  onVariablesBack(): void {
+    this.currentStep.set(1);
+  }
+
+  onVariablesNext(): void {
+    this.currentStep.set(3);
+  }
+
+  onAddVariable(): void {
   }
 
   @HostListener('document:keydown', ['$event'])

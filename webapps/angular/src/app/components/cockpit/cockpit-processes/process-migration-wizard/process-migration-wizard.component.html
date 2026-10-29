@@ -222,12 +222,30 @@
               </label>
             </div>
             <div class="footer-right">
-              <button class="btn btn-primary" [disabled]="!isPlanValid() || planLoading()">
+              <button
+                class="btn btn-primary"
+                [disabled]="!canGoToSetVariables()"
+                (click)="onGoToSetVariables()"
+                [attr.aria-describedby]="setVariablesDisabledReason() ? 'set-variables-disabled-reason' : null"
+                [title]="setVariablesDisabledReason() ? (setVariablesDisabledReason()! | translate) : ''">
                 {{ 'migration.setVariables' | translate }} →
               </button>
+              @if (setVariablesDisabledReason()) {
+                <span id="set-variables-disabled-reason" class="sr-only">{{ setVariablesDisabledReason()! | translate }}</span>
+              }
             </div>
           </div>
         }
+        </div>
+      }
+
+      @if (currentStep() === 2) {
+        <div class="step-content step-2">
+          <app-migration-variables-step
+            (back)="onVariablesBack()"
+            (next)="onVariablesNext()"
+            (addVariable)="onAddVariable()">
+          </app-migration-variables-step>
         </div>
       }
         </div>
