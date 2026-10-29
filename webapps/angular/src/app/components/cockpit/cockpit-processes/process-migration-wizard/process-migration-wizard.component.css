@@ -334,3 +334,108 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+/* =====================================================
+   UNDO TOAST
+   ===================================================== */
+
+.undo-toast {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: rgba(31, 41, 55, 0.95);
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+  font-weight: 500;
+  animation: slideUp 0.2s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.undo-toast__message {
+  color: white;
+}
+
+.undo-toast__button {
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-height: 36px;
+}
+
+.undo-toast__button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.undo-toast__button:active {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* =====================================================
+   REMOVE MAPPING BUTTONS
+   ===================================================== */
+
+.remove-buttons-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 150;
+}
+
+.remove-mapping-btn {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(220, 38, 38, 0.95);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  padding: 0;
+}
+
+.remove-mapping-btn:hover {
+  background: rgba(185, 28, 28, 1);
+  transform: translate(-50%, -50%) scale(1.15);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.remove-mapping-btn:active {
+  transform: translate(-50%, -50%) scale(0.9);
+}

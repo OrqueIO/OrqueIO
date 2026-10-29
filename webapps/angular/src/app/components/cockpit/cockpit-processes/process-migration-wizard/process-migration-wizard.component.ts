@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef,
-  DestroyRef, inject, signal, computed
+  DestroyRef, inject, signal, computed, effect, untracked, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -23,6 +23,9 @@ import { BatchWizardStepperComponent, WizardStep } from '../../cockpit-batch/bat
 import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { MigrationArrowsComponent, RouteParams } from './migration-arrows.component';
 import { Anchor, getAnchorKey } from './migration-arrow-anchors';
+import { MigrationUndoToastService } from './migration-undo-toast.service';
+import { snapshotMapping, restoreMapping, MigrationState } from './migration-undo-utils';
+import { ViewChild } from '@angular/core';
 
 type LoadingState = 'idle' | 'loading' | 'loaded' | 'error';
 
@@ -44,15 +47,19 @@ const ENABLE_CONNECTION_EDITOR_SPIKE = false;
   ],
   templateUrl: './process-migration-wizard.component.html',
   styleUrl: './process-migration-wizard.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [MigrationUndoToastService]
 })
 export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
+  @ViewChild(MigrationArrowsComponent) migrationArrowsComponent?: MigrationArrowsComponent;
+
   private destroyRef = inject(DestroyRef);
   private navMenuService = inject(NavMenuService);
   private cockpitService = inject(CockpitService);
   private processDefinitionService = inject(ProcessDefinitionService);
   private migrationService = inject(MigrationService);
   private cdr = inject(ChangeDetectorRef);
+  undoToastService = inject(MigrationUndoToastService);
 
   faExchangeAlt = faExchangeAlt;
 
@@ -184,6 +191,14 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   customAnchors = signal<Map<string, RouteParams>>(new Map());
 
+  // Hovered mapping for remove button visibility - split by side to prevent leaks
+  hoveredSourceActivityId = signal<string | null>(null);
+  hoveredTargetActivityId = signal<string | null>(null);
+
+  // Set of activity IDs whose remove buttons should be visible - split by side
+  hoveredRemoveButtonSource = signal<Set<string>>(new Set());
+  hoveredRemoveButtonTarget = signal<Set<string>>(new Set());
+
   // Mapping mode state
   mappingMode = signal(false);
   mappingSourceActivityId = signal<string | null>(null);
@@ -223,6 +238,21 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   // Computed for enabling mapping buttons
   enableMappingButtons = computed(() => !!(this.sourceDefinitionId() && this.targetDefinitionId()));
+
+  // Effect to dismiss toast when context changes (source/target/step)
+  private dismissToastOnContextChange = effect(() => {
+    // Track these signals to trigger effect on change
+    this.sourceDefinitionId();
+    this.targetDefinitionId();
+    this.currentStep();
+
+    // Dismiss toast if visible (untracked to avoid circular dependency)
+    untracked(() => {
+      if (this.undoToastService.toastState().visible) {
+        this.undoToastService.dismiss();
+      }
+    });
+  });
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
@@ -385,6 +415,12 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.migrationPlan.set(null);
     this.migrationReport.set(null);
     this.planGenerationError.set(null);
+
+    // Reset hover state (prevents leaks when changing versions)
+    this.hoveredSourceActivityId.set(null);
+    this.hoveredTargetActivityId.set(null);
+    this.hoveredRemoveButtonSource.set(new Set());
+    this.hoveredRemoveButtonTarget.set(new Set());
 
     // Reset downstream wizard steps
     this.resetDownstream();
@@ -579,6 +615,14 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     return mapped;
   });
 
+  mappedTargetActivityIds = computed(() => {
+    const mapped = new Set<string>();
+    this.editableInstructions().forEach(instr => {
+      instr.targetActivityIds.forEach(id => mapped.add(id));
+    });
+    return mapped;
+  });
+
   onCreateMapping(sourceActivityId: string): void {
     this.mappingMode.set(true);
     this.mappingSourceActivityId.set(sourceActivityId);
@@ -644,18 +688,33 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   onDeleteMapping(sourceActivityId: string): void {
     const current = this.editableInstructions();
+    const instruction = current.find(instr => instr.sourceActivityIds.includes(sourceActivityId));
+
+    if (!instruction) {
+      return;
+    }
+
+    // Create snapshot before deletion for undo
+    const key = this.getInstructionKey(instruction);
+    const state: MigrationState = {
+      editableInstructions: current,
+      customAnchors: this.customAnchors()
+    };
+    const snapshot = snapshotMapping(state, key);
+
+    if (!snapshot) {
+      return;
+    }
+
+    // Perform deletion
     const filtered = current.filter(instr => !instr.sourceActivityIds.includes(sourceActivityId));
     this.editableInstructions.set(filtered);
 
-    const instruction = current.find(instr => instr.sourceActivityIds.includes(sourceActivityId));
-    if (instruction) {
-      const key = this.getInstructionKey(instruction);
-      const anchors = this.customAnchors();
-      if (anchors.has(key)) {
-        const newAnchors = new Map(anchors);
-        newAnchors.delete(key);
-        this.customAnchors.set(newAnchors);
-      }
+    const anchors = this.customAnchors();
+    if (anchors.has(key)) {
+      const newAnchors = new Map(anchors);
+      newAnchors.delete(key);
+      this.customAnchors.set(newAnchors);
     }
 
     const plan = this.migrationPlan();
@@ -667,6 +726,46 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       this.migrationPlan.set(updatedPlan);
       this.validateSubject.next(updatedPlan);
     }
+    this.hoveredSourceActivityId.set(null);
+    this.hoveredTargetActivityId.set(null);
+    this.hoveredRemoveButtonSource.set(new Set());
+    this.hoveredRemoveButtonTarget.set(new Set());
+
+    this.undoToastService.show(snapshot);
+  }
+
+  onUndoDeleteMapping(): void {
+    const snapshot = this.undoToastService.getCurrentSnapshot();
+    if (!snapshot) {
+      return;
+    }
+
+    const state: MigrationState = {
+      editableInstructions: [...this.editableInstructions()],
+      customAnchors: new Map(this.customAnchors())
+    };
+
+    restoreMapping(state, snapshot);
+
+    this.editableInstructions.set(state.editableInstructions);
+    this.customAnchors.set(state.customAnchors);
+
+    const plan = this.migrationPlan();
+    if (plan) {
+      const updatedPlan = {
+        ...plan,
+        instructions: state.editableInstructions
+      };
+      this.migrationPlan.set(updatedPlan);
+      this.validateSubject.next(updatedPlan);
+    }
+
+    this.hoveredSourceActivityId.set(null);
+    this.hoveredTargetActivityId.set(null);
+    this.hoveredRemoveButtonSource.set(new Set());
+    this.hoveredRemoveButtonTarget.set(new Set());
+
+    this.undoToastService.dismiss();
   }
 
   /**
@@ -682,5 +781,137 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
    */
   onAnchorsChanged(newMap: Map<string, RouteParams>): void {
     this.customAnchors.set(newMap);
+  }
+
+  onSelectMappedActivity(sourceActivityId: string): void {
+    if (this.migrationArrowsComponent) {
+      this.migrationArrowsComponent.selectArrowBySourceActivity(sourceActivityId);
+    }
+  }
+
+  onArrowHover(event: string | null): void {
+    if (event) {
+      // When hovering arrow, show both remove buttons (source and target)
+      const instruction = this.editableInstructions().find((instr: any) => {
+        return instr.sourceActivityIds?.[0] === event;
+      });
+
+      if (instruction) {
+        const sourceId = instruction.sourceActivityIds?.[0];
+        const targetId = instruction.targetActivityIds?.[0];
+
+        // Set hovered activity IDs for both sides
+        this.hoveredSourceActivityId.set(sourceId || null);
+        this.hoveredTargetActivityId.set(targetId || null);
+
+        // Show remove buttons on both sides
+        const sourceSet = new Set<string>();
+        const targetSet = new Set<string>();
+        if (sourceId) sourceSet.add(sourceId);
+        if (targetId) targetSet.add(targetId);
+        this.hoveredRemoveButtonSource.set(sourceSet);
+        this.hoveredRemoveButtonTarget.set(targetSet);
+      } else {
+        this.hoveredSourceActivityId.set(null);
+        this.hoveredTargetActivityId.set(null);
+        this.hoveredRemoveButtonSource.set(new Set());
+        this.hoveredRemoveButtonTarget.set(new Set());
+      }
+    } else {
+      this.hoveredSourceActivityId.set(null);
+      this.hoveredTargetActivityId.set(null);
+      this.hoveredRemoveButtonSource.set(new Set());
+      this.hoveredRemoveButtonTarget.set(new Set());
+    }
+  }
+
+  onElementHover(event: any): void {
+    // Handle both old format (BpmnElement | null) and new format ({side, element})
+    // Migration wizard receives new format, but we need to handle backward compatibility
+    if (!event || typeof event !== 'object') {
+      return;
+    }
+
+    // Check if event has 'side' property (new format from migration context)
+    const isNewFormat = 'side' in event && 'element' in event;
+    if (!isNewFormat) {
+      // Old format: event is BpmnElement directly - shouldn't happen in wizard but be defensive
+      return;
+    }
+
+    const { side, element } = event as { side: 'source' | 'target'; element: { id: string; type: string; name?: string } | null };
+
+    if (!element || this.mappingMode()) {
+      // Clear hover state for the relevant side
+      if (side === 'source') {
+        this.hoveredSourceActivityId.set(null);
+        this.hoveredRemoveButtonSource.set(new Set());
+      } else {
+        this.hoveredTargetActivityId.set(null);
+        this.hoveredRemoveButtonTarget.set(new Set());
+      }
+      return;
+    }
+
+    // Find if this element is part of a mapping (either source or target)
+    const instruction = this.editableInstructions().find((instr: any) => {
+      return instr.sourceActivityIds?.includes(element.id) ||
+             instr.targetActivityIds?.includes(element.id);
+    });
+
+    if (instruction) {
+      const sourceId = instruction.sourceActivityIds?.[0];
+      const targetId = instruction.targetActivityIds?.[0];
+
+      // Set hovered activity ID for this side only
+      if (side === 'source') {
+        this.hoveredSourceActivityId.set(sourceId || null);
+        this.hoveredRemoveButtonSource.set(new Set([element.id]));
+        // Don't modify target side
+      } else {
+        this.hoveredTargetActivityId.set(targetId || null);
+        this.hoveredRemoveButtonTarget.set(new Set([element.id]));
+        // Don't modify source side
+      }
+    } else {
+      // Not mapped - clear hover state for this side only
+      if (side === 'source') {
+        this.hoveredSourceActivityId.set(null);
+        this.hoveredRemoveButtonSource.set(new Set());
+      } else {
+        this.hoveredTargetActivityId.set(null);
+        this.hoveredRemoveButtonTarget.set(new Set());
+      }
+    }
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent): void {
+    if (event.key !== 'Delete' && event.key !== 'Suppr') return;
+
+    // Don't trigger if focus is in an input element
+    const activeElement = document.activeElement;
+    if (activeElement && (
+      activeElement.tagName === 'INPUT' ||
+      activeElement.tagName === 'TEXTAREA' ||
+      activeElement.tagName === 'SELECT' ||
+      activeElement.getAttribute('contenteditable') === 'true'
+    )) {
+      return;
+    }
+
+    // Check if an arrow is selected via migration arrows component
+    const selectedIndex = this.migrationArrowsComponent?.selectedArrowIndex();
+    if (selectedIndex !== null && selectedIndex !== undefined && selectedIndex >= 0) {
+      const instructions = this.editableInstructions();
+      if (instructions && instructions[selectedIndex]) {
+        const instruction = instructions[selectedIndex];
+        const sourceActivityId = instruction.sourceActivityIds[0];
+        if (sourceActivityId) {
+          event.preventDefault();
+          this.onDeleteMapping(sourceActivityId);
+        }
+      }
+    }
   }
 }

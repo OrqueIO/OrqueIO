@@ -2132,6 +2132,8 @@
   "migration.mapping": "Mapping",
   "migration.mappingError": "Mapping Error",
   "migration.removeMapping": "Remove mapping",
+  "migration.mappingRemoved": "Mapping removed",
+  "migration.undo": "Undo",
   "migration.updateEventTrigger": "Update event trigger",
   "migration.manageMapping": "Manage mapping",
   "migration.viewMappingErrors": "View mapping errors",

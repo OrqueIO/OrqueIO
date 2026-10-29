@@ -133,8 +133,12 @@
                   [migrationReport]="migrationReport()"
                   [editableInstructions]="editableInstructions()"
                   [isSourceViewer]="true"
+                  [hoveredMappingSourceId]="hoveredSourceActivityId()"
+                  [hoveredRemoveButtonActivityIds]="hoveredRemoveButtonSource()"
                   (createMapping)="onCreateMapping($event)"
                   (deleteMapping)="onDeleteMapping($event)"
+                  (selectMappedActivity)="onSelectMappedActivity($event)"
+                  (elementHover)="onElementHover($event)"
                   (backgroundClick)="onCancelMapping()">
                 </app-bpmn-viewer>
               } @else {
@@ -153,7 +157,12 @@
                   [highlightTargets]="mappingMode()"
                   [migrationReport]="migrationReport()"
                   [editableInstructions]="editableInstructions()"
+                  [enableMappingButtons]="enableMappingButtons()"
+                  [mappedActivityIds]="mappedTargetActivityIds()"
+                  [hoveredMappingSourceId]="hoveredTargetActivityId()"
+                  [hoveredRemoveButtonActivityIds]="hoveredRemoveButtonTarget()"
                   (selectTarget)="onSelectTarget($event)"
+                  (elementHover)="onElementHover($event)"
                   (backgroundClick)="onCancelMapping()">
                 </app-bpmn-viewer>
               } @else {
@@ -169,7 +178,8 @@
                 [mappingMode]="mappingMode()"
                 [mappingSourceActivityId]="mappingSourceActivityId()"
                 [customAnchors]="customAnchors()"
-                (anchorsChanged)="onAnchorsChanged($event)">
+                (anchorsChanged)="onAnchorsChanged($event)"
+                (arrowHover)="onArrowHover($event)">
               </app-migration-arrows>
             }
             @if (mappingMode() && (!migrationPlan() || migrationPlan()!.instructions.length === 0)) {
@@ -180,10 +190,21 @@
                 [mappingMode]="mappingMode()"
                 [mappingSourceActivityId]="mappingSourceActivityId()"
                 [customAnchors]="customAnchors()"
-                (anchorsChanged)="onAnchorsChanged($event)">
+                (anchorsChanged)="onAnchorsChanged($event)"
+                (arrowHover)="onArrowHover($event)">
               </app-migration-arrows>
             }
           </div>
+
+          <!-- Undo toast -->
+          @if (undoToastService.toastState().visible) {
+            <div class="undo-toast" role="status" aria-live="polite">
+              <span class="undo-toast__message">{{ 'migration.mappingRemoved' | translate }}</span>
+              <button type="button" class="undo-toast__button" (click)="onUndoDeleteMapping()">
+                {{ 'migration.undo' | translate }}
+              </button>
+            </div>
+          }
 
           <div class="migration-footer">
             <div class="footer-left">

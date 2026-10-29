@@ -756,8 +756,16 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     // Could add hover highlight here if needed
   }
 
-  onDiagramElementHover(_element: BpmnElement | null): void {
-    // Could add hover feedback here
+  onDiagramElementHover(event: any): void {
+    if (!event || typeof event !== 'object') {
+      return;
+    }
+
+    const isNewFormat = 'side' in event && 'element' in event;
+    if (isNewFormat) {
+      return;
+    }
+
   }
 
   // Call Activity Navigation

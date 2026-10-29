@@ -436,6 +436,7 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
   @Input() customAnchors: Map<string, RouteParams> = new Map();
 
   @Output() anchorsChanged = new EventEmitter<Map<string, RouteParams>>();
+  @Output() arrowHover = new EventEmitter<string | null>();
 
   arrows = signal<ArrowPath[]>([]);
   viewBox = signal<string>('0 0 1920 1080');
@@ -2540,5 +2541,21 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
     }
 
     this.cdr.markForCheck();
+  }
+
+
+  /**
+   * Selects an arrow by source activity ID.
+   * Called when user clicks on a mapped activity badge to select its arrow.
+   * @param sourceActivityId - Source activity ID of the mapping
+   */
+  selectArrowBySourceActivity(sourceActivityId: string): void {
+    const arrowIndex = this.arrows().findIndex(arrow =>
+      arrow.sourceIds.includes(sourceActivityId)
+    );
+
+    if (arrowIndex >= 0) {
+      this.selectedArrowIndex.set(arrowIndex);
+    }
   }
 }

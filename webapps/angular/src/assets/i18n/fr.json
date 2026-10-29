@@ -2114,6 +2114,8 @@
   "migration.mapping": "Mapping",
   "migration.mappingError": "Erreur de mapping",
   "migration.removeMapping": "Supprimer le mapping",
+  "migration.mappingRemoved": "Mapping supprimé",
+  "migration.undo": "Annuler",
   "migration.updateEventTrigger": "Mettre à jour le déclencheur d'événement",
   "migration.manageMapping": "Gérer le mapping",
   "migration.viewMappingErrors": "Voir les erreurs de mapping",
