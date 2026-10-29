@@ -32,6 +32,58 @@ const DOUBLE_RE = /^-?\d+(\.\d+)?$/;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
 
 /**
+ *
+ * @param type - Variable type (Integer, Long, Short, Double)
+ * @param currentValue - Current value in the field
+ * @param selectionStart - Start of selection range
+ * @param selectionEnd - End of selection range
+ * @param insertedText - Text being inserted
+ * @returns Sanitized text to insert, or null if rejected
+ */
+export function sanitizeNumericInput(
+  type: string,
+  currentValue: string,
+  selectionStart: number,
+  selectionEnd: number,
+  insertedText: string
+): string | null {
+  if (!insertedText) return null;
+
+  const isInteger = INTEGER_VARIABLE_TYPES.includes(type as any);
+  const isDouble = type === 'Double';
+
+  if (!isInteger && !isDouble) {
+    return insertedText;
+  }
+
+  const before = currentValue.slice(0, selectionStart);
+  const after = currentValue.slice(selectionEnd);
+
+  let cleaned = '';
+  for (let i = 0; i < insertedText.length; i++) {
+    const char = insertedText[i];
+
+    if (/\d/.test(char)) {
+      cleaned += char;
+    } else if (char === '-') {
+      if (selectionStart === 0 && !before.includes('-') && !after.includes('-')) {
+        cleaned += char;
+      }
+    } else if (char === '.' && isDouble) {
+      if (!before.includes('.') && !after.includes('.')) {
+        cleaned += char;
+      }
+    }
+  }
+
+  if (cleaned.length === 0) {
+    return null;
+  }
+
+  return cleaned;
+}
+
+/**
  * Validates a variable draft and returns field errors.
  *
  * @param draft - The variable draft to validate

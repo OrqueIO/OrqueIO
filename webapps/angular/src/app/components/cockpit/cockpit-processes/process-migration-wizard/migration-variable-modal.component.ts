@@ -8,6 +8,7 @@ import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import {
   validateVariableDraft,
   toPlanVariable,
+  sanitizeNumericInput,
   VariableDraft,
   PlanVariable,
   ValidationErrors
@@ -351,48 +352,77 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
   }
 
   /**
-   * Keydown handler for integer input fields.
-   * Prevents non-numeric input (except minus sign at start and navigation keys).
+   * Boolean value as a boolean primitive for checkbox binding (C1-1 CORRECTIF C1).
    */
-  onIntegerKeydown(event: KeyboardEvent, currentValue: string): void {
-    const allowedControlKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Tab', 'Home', 'End'];
-    if (allowedControlKeys.includes(event.key)) {
-      return;
-    }
+  get booleanValue(): boolean {
+    return this.draft.value === 'true';
+  }
 
-    if (event.key === '-') {
-      const selectionStart = (event.target as HTMLInputElement).selectionStart ?? 0;
-      if (selectionStart === 0 && !currentValue.includes('-')) {
-        return; // Allow minus at start
-      }
-      event.preventDefault();
-      return;
-    }
-
-    if (!/^[0-9]$/.test(event.key)) {
-      event.preventDefault();
-    }
+  set booleanValue(value: boolean) {
+    this.draft.value = value ? 'true' : 'false';
   }
 
   /**
-   * Paste handler for integer input fields.
-   * Extracts only valid integer characters from pasted text.
+   * Called when Boolean checkbox changes (C1-1 CORRECTIF C1).
    */
-  onIntegerPaste(event: ClipboardEvent): void {
-    event.preventDefault();
-    const pasted = event.clipboardData?.getData('text') ?? '';
-    const cleaned = pasted.match(/^-?\d+/)?.[0] ?? '';
+  onBooleanChange(): void {
+    this.onValueChange();
+  }
+
+  onNumericBeforeInput(event: Event): void {
+    const inputEvent = event as InputEvent;
     const input = event.target as HTMLInputElement;
-    const start = input.selectionStart ?? 0;
-    const end = input.selectionEnd ?? 0;
-    const newValue = input.value.slice(0, start) + cleaned + input.value.slice(end);
-    input.value = newValue;
-    input.dispatchEvent(new Event('input', { bubbles: true }));
+
+    if (!inputEvent.inputType?.startsWith('insert')) {
+      return;
+    }
+
+    let insertedText = inputEvent.data;
+
+    if (inputEvent.inputType === 'insertFromPaste' || inputEvent.inputType === 'insertFromDrop') {
+      const dataTransfer = (inputEvent as any).dataTransfer;
+      if (dataTransfer) {
+        insertedText = dataTransfer.getData('text/plain');
+      }
+    }
+
+    if (!insertedText) {
+      return;
+    }
+
+    const selectionStart = input.selectionStart ?? 0;
+    const selectionEnd = input.selectionEnd ?? 0;
+
+    const sanitized = sanitizeNumericInput(
+      this.draft.type,
+      this.draft.value,
+      selectionStart,
+      selectionEnd,
+      insertedText
+    );
+
+    if (sanitized === null) {
+      event.preventDefault();
+      return;
+    }
+
+    if (sanitized !== insertedText) {
+      event.preventDefault();
+
+      const before = this.draft.value.slice(0, selectionStart);
+      const after = this.draft.value.slice(selectionEnd);
+      this.draft.value = before + sanitized + after;
+
+      const newCursorPos = selectionStart + sanitized.length;
+      input.value = this.draft.value;
+      input.setSelectionRange(newCursorPos, newCursorPos);
+
+      this.onValueChange();
+      this.cdr.markForCheck();
+    }
   }
 
   get canSave(): boolean {
-    // Validate draft on the fly to enable/disable save button
-    // Errors are only DISPLAYED after interaction or clicking Add
     const existingNames = this.existingVariables
       .filter(v => v.name !== this.editingVariable?.name)
       .map(v => v.name);

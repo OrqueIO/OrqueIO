@@ -94,24 +94,23 @@
             [attr.aria-invalid]="fieldErrors?.value ? 'true' : null"></textarea>
         }
 
-        <!-- Boolean: Select dropdown with true/false -->
+        <!-- Boolean: Checkbox with true/false label (C1-1 CORRECTIF C1) -->
         @if (draft.type === 'Boolean') {
-          <select
-            id="variableValue"
-            class="form-control"
-            [(ngModel)]="draft.value"
-            (ngModelChange)="onValueChange()"
-            (blur)="onValueBlur()"
-            (keydown.enter)="onFieldEnter($event)"
-            [class.is-invalid]="fieldErrors && fieldErrors.value"
-            [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
-            [attr.aria-invalid]="fieldErrors?.value ? 'true' : null">
-            <option value="true">true</option>
-            <option value="false">false</option>
-          </select>
+          <label class="checkbox-label">
+            <input
+              id="variableValue"
+              type="checkbox"
+              [(ngModel)]="booleanValue"
+              (ngModelChange)="onBooleanChange()"
+              (blur)="onValueBlur()"
+              [class.is-invalid]="fieldErrors && fieldErrors.value"
+              [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
+              [attr.aria-invalid]="fieldErrors?.value ? 'true' : null">
+            {{ booleanValue ? 'true' : 'false' }}
+          </label>
         }
 
-        <!-- Integer/Long/Short: Text input with numeric inputmode and validation -->
+        <!-- Integer/Long/Short: Text input with numeric inputmode (C1-1 CORRECTIF C1) -->
         @if (isIntegerType(draft.type)) {
           <input
             id="variableValue"
@@ -121,15 +120,14 @@
             [(ngModel)]="draft.value"
             (ngModelChange)="onValueChange()"
             (blur)="onValueBlur()"
-            (keydown)="onIntegerKeydown($event, draft.value)"
-            (paste)="onIntegerPaste($event)"
+            (beforeinput)="onNumericBeforeInput($event)"
             (keydown.enter)="onFieldEnter($event)"
             [class.is-invalid]="fieldErrors && fieldErrors.value"
             [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
             [attr.aria-invalid]="fieldErrors?.value ? 'true' : null">
         }
 
-        <!-- Double: Text input with decimal inputmode -->
+        <!-- Double: Text input with decimal inputmode (C1-1 CORRECTIF C1) -->
         @if (draft.type === 'Double') {
           <input
             id="variableValue"
@@ -139,6 +137,7 @@
             [(ngModel)]="draft.value"
             (ngModelChange)="onValueChange()"
             (blur)="onValueBlur()"
+            (beforeinput)="onNumericBeforeInput($event)"
             (keydown.enter)="onFieldEnter($event)"
             [class.is-invalid]="fieldErrors && fieldErrors.value"
             [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
