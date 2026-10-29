@@ -191,13 +191,10 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   customAnchors = signal<Map<string, RouteParams>>(new Map());
 
-  // Hovered mapping for remove button visibility - split by side to prevent leaks
   hoveredSourceActivityId = signal<string | null>(null);
   hoveredTargetActivityId = signal<string | null>(null);
 
-  // Set of activity IDs whose remove buttons should be visible - split by side
   hoveredRemoveButtonSource = signal<Set<string>>(new Set());
-  hoveredRemoveButtonTarget = signal<Set<string>>(new Set());
 
   // Mapping mode state
   mappingMode = signal(false);
@@ -420,7 +417,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.hoveredSourceActivityId.set(null);
     this.hoveredTargetActivityId.set(null);
     this.hoveredRemoveButtonSource.set(new Set());
-    this.hoveredRemoveButtonTarget.set(new Set());
 
     // Reset downstream wizard steps
     this.resetDownstream();
@@ -729,7 +725,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.hoveredSourceActivityId.set(null);
     this.hoveredTargetActivityId.set(null);
     this.hoveredRemoveButtonSource.set(new Set());
-    this.hoveredRemoveButtonTarget.set(new Set());
 
     this.undoToastService.show(snapshot);
   }
@@ -763,7 +758,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.hoveredSourceActivityId.set(null);
     this.hoveredTargetActivityId.set(null);
     this.hoveredRemoveButtonSource.set(new Set());
-    this.hoveredRemoveButtonTarget.set(new Set());
 
     this.undoToastService.dismiss();
   }
@@ -791,7 +785,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   onArrowHover(event: string | null): void {
     if (event) {
-      // When hovering arrow, show both remove buttons (source and target)
+      // When hovering arrow, show remove button on SOURCE only (never on target)
       const instruction = this.editableInstructions().find((instr: any) => {
         return instr.sourceActivityIds?.[0] === event;
       });
@@ -800,28 +794,23 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         const sourceId = instruction.sourceActivityIds?.[0];
         const targetId = instruction.targetActivityIds?.[0];
 
-        // Set hovered activity IDs for both sides
+        // Set hovered activity IDs for both sides (for visual feedback - blue halo)
         this.hoveredSourceActivityId.set(sourceId || null);
         this.hoveredTargetActivityId.set(targetId || null);
 
-        // Show remove buttons on both sides
+        // Show remove button on SOURCE only
         const sourceSet = new Set<string>();
-        const targetSet = new Set<string>();
         if (sourceId) sourceSet.add(sourceId);
-        if (targetId) targetSet.add(targetId);
         this.hoveredRemoveButtonSource.set(sourceSet);
-        this.hoveredRemoveButtonTarget.set(targetSet);
       } else {
         this.hoveredSourceActivityId.set(null);
         this.hoveredTargetActivityId.set(null);
         this.hoveredRemoveButtonSource.set(new Set());
-        this.hoveredRemoveButtonTarget.set(new Set());
       }
     } else {
       this.hoveredSourceActivityId.set(null);
       this.hoveredTargetActivityId.set(null);
       this.hoveredRemoveButtonSource.set(new Set());
-      this.hoveredRemoveButtonTarget.set(new Set());
     }
   }
 
@@ -847,8 +836,8 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         this.hoveredSourceActivityId.set(null);
         this.hoveredRemoveButtonSource.set(new Set());
       } else {
+        // Target side: clear halo, no remove button ever
         this.hoveredTargetActivityId.set(null);
-        this.hoveredRemoveButtonTarget.set(new Set());
       }
       return;
     }
@@ -863,15 +852,16 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       const sourceId = instruction.sourceActivityIds?.[0];
       const targetId = instruction.targetActivityIds?.[0];
 
-      // Set hovered activity ID for this side only
+      // Set hovered activity ID for visual feedback (blue halo)
+      // Remove button appears ONLY on SOURCE, never on TARGET
       if (side === 'source') {
         this.hoveredSourceActivityId.set(sourceId || null);
         this.hoveredRemoveButtonSource.set(new Set([element.id]));
         // Don't modify target side
       } else {
+        // Target side: show blue halo on linked source, but NO remove button
         this.hoveredTargetActivityId.set(targetId || null);
-        this.hoveredRemoveButtonTarget.set(new Set([element.id]));
-        // Don't modify source side
+        // hoveredRemoveButtonSource stays unchanged (no button on target)
       }
     } else {
       // Not mapped - clear hover state for this side only
@@ -879,8 +869,8 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         this.hoveredSourceActivityId.set(null);
         this.hoveredRemoveButtonSource.set(new Set());
       } else {
+        // Target side: just clear halo, no remove button to clear
         this.hoveredTargetActivityId.set(null);
-        this.hoveredRemoveButtonTarget.set(new Set());
       }
     }
   }
