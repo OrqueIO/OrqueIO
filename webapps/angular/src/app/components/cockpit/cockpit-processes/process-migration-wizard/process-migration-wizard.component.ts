@@ -23,9 +23,11 @@ import { BatchWizardStepperComponent, WizardStep } from '../../cockpit-batch/bat
 import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { MigrationArrowsComponent, RouteParams } from './migration-arrows.component';
 import { MigrationVariablesStepComponent } from './migration-variables-step.component';
+import { MigrationVariableModalComponent } from './migration-variable-modal.component';
 import { Anchor, getAnchorKey } from './migration-arrow-anchors';
 import { MigrationUndoToastService } from './migration-undo-toast.service';
 import { snapshotMapping, restoreMapping, MigrationState } from './migration-undo-utils';
+import { PlanVariable } from './migration-variables.utils';
 import { ViewChild } from '@angular/core';
 
 type LoadingState = 'idle' | 'loading' | 'loaded' | 'error';
@@ -45,7 +47,8 @@ const ENABLE_CONNECTION_EDITOR_SPIKE = false;
     BatchWizardStepperComponent,
     BpmnViewerComponent,
     MigrationArrowsComponent,
-    MigrationVariablesStepComponent
+    MigrationVariablesStepComponent,
+    MigrationVariableModalComponent
   ],
   templateUrl: './process-migration-wizard.component.html',
   styleUrl: './process-migration-wizard.component.css',
@@ -231,7 +234,10 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     return !report.instructionReports || report.instructionReports.every(r => !r.failures || r.failures.length === 0);
   });
 
-  variables = signal<any[]>([]);
+  variables = signal<PlanVariable[]>([]);
+
+  isVariableModalOpen = signal(false);
+  editingVariableIndex = signal<number | null>(null);
 
   setVariablesDisabledReason = computed<string | null>(() => {
     const sourceId = this.sourceDefinitionId();
@@ -772,7 +778,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   onUndoDeleteMapping(): void {
     const snapshot = this.undoToastService.getCurrentSnapshot();
-    if (!snapshot) {
+    if (!snapshot || snapshot.type === 'variable-delete') {
       return;
     }
 
@@ -929,6 +935,59 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   }
 
   onAddVariable(): void {
+    this.editingVariableIndex.set(null);
+    this.isVariableModalOpen.set(true);
+  }
+
+  onEditVariable(index: number): void {
+    this.editingVariableIndex.set(index);
+    this.isVariableModalOpen.set(true);
+  }
+
+  onDeleteVariable(index: number): void {
+    const deletedVariable = this.variables()[index];
+    const newVariables = this.variables().filter((_, i) => i !== index);
+    this.variables.set(newVariables);
+
+    this.undoToastService.show(
+      {
+        type: 'variable-delete',
+        variable: deletedVariable,
+        index
+      },
+      6000
+    );
+  }
+
+  onSaveVariable(variable: PlanVariable): void {
+    const editingIndex = this.editingVariableIndex();
+
+    if (editingIndex !== null) {
+      const updated = [...this.variables()];
+      updated[editingIndex] = variable;
+      this.variables.set(updated);
+    } else {
+      this.variables.set([...this.variables(), variable]);
+    }
+
+    this.isVariableModalOpen.set(false);
+    this.editingVariableIndex.set(null);
+  }
+
+  onCloseVariableModal(): void {
+    this.isVariableModalOpen.set(false);
+    this.editingVariableIndex.set(null);
+  }
+
+  onUndoVariableDelete(): void {
+    const snapshot = this.undoToastService.getCurrentSnapshot();
+    if (!snapshot || snapshot.type !== 'variable-delete') return;
+
+    const newVariables = [...this.variables()];
+    newVariables.splice(snapshot.index, 0, snapshot.variable);
+    this.variables.set(newVariables);
+
+    this.undoToastService.dismiss();
   }
 
   @HostListener('document:keydown', ['$event'])

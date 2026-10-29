@@ -1,0 +1,206 @@
+<div class="modal-backdrop" (click)="onOverlayClick($event)">
+  <div
+    class="modal-dialog"
+    #dialogEl
+    tabindex="-1"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-labelledby]="'modal-title-' + (editingVariable ? 'edit' : 'add')"
+    (keydown.enter)="onModalEnter($event)">
+
+    <div class="modal-header">
+      <h3
+        class="modal-title"
+        [id]="'modal-title-' + (editingVariable ? 'edit' : 'add')">
+        {{ modalTitle | translate }}
+      </h3>
+      <button
+        type="button"
+        class="close-btn"
+        (click)="onClose()"
+        [attr.aria-label]="'migration.variables.close' | translate">
+        &#x2715;
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Variable Name -->
+      <div class="form-group">
+        <label for="variableName" class="form-label">
+          {{ 'migration.variables.variableName' | translate }}*
+        </label>
+        <input
+          #nameInput
+          id="variableName"
+          type="text"
+          class="form-control"
+          [(ngModel)]="draft.name"
+          (ngModelChange)="onNameChange()"
+          (blur)="onNameBlur()"
+          (keydown.enter)="onFieldEnter($event)"
+          [class.is-invalid]="fieldErrors && fieldErrors.name"
+          [attr.aria-describedby]="fieldErrors?.name ? 'variableName-error' : null"
+          [attr.aria-invalid]="fieldErrors?.name ? 'true' : null">
+        @if (fieldErrors && fieldErrors.name) {
+          <div id="variableName-error" class="error-message" role="alert">
+            {{ fieldErrors.name | translate }}
+          </div>
+        }
+      </div>
+
+      <!-- Variable Type -->
+      <div class="form-group">
+        <label for="variableType" class="form-label">
+          {{ 'migration.variables.variableType' | translate }}*
+        </label>
+        <select
+          id="variableType"
+          class="form-control"
+          [(ngModel)]="draft.type"
+          (ngModelChange)="onTypeChange($event)"
+          (keydown.enter)="onFieldEnter($event)"
+          [class.is-invalid]="fieldErrors && fieldErrors.type"
+          [attr.aria-describedby]="fieldErrors?.type ? 'variableType-error' : null"
+          [attr.aria-invalid]="fieldErrors?.type ? 'true' : null">
+          @for (type of variableTypes; track type) {
+            <option [value]="type">{{ type }}</option>
+          }
+        </select>
+        @if (fieldErrors && fieldErrors.type) {
+          <div id="variableType-error" class="error-message" role="alert">
+            {{ fieldErrors.type | translate }}
+          </div>
+        }
+      </div>
+
+      <!-- Variable Value - Type-Specific Inputs -->
+      <div class="form-group">
+        <label for="variableValue" class="form-label">
+          {{ 'migration.variables.variableValue' | translate }}*
+        </label>
+
+        <!-- String: Multi-line textarea -->
+        @if (draft.type === 'String') {
+          <textarea
+            id="variableValue"
+            class="form-control"
+            rows="4"
+            [(ngModel)]="draft.value"
+            (ngModelChange)="onValueChange()"
+            (blur)="onValueBlur()"
+            (keydown.enter)="onFieldEnter($event)"
+            [class.is-invalid]="fieldErrors && fieldErrors.value"
+            [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
+            [attr.aria-invalid]="fieldErrors?.value ? 'true' : null"></textarea>
+        }
+
+        <!-- Boolean: Select dropdown with true/false -->
+        @if (draft.type === 'Boolean') {
+          <select
+            id="variableValue"
+            class="form-control"
+            [(ngModel)]="draft.value"
+            (ngModelChange)="onValueChange()"
+            (blur)="onValueBlur()"
+            (keydown.enter)="onFieldEnter($event)"
+            [class.is-invalid]="fieldErrors && fieldErrors.value"
+            [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
+            [attr.aria-invalid]="fieldErrors?.value ? 'true' : null">
+            <option value="true">true</option>
+            <option value="false">false</option>
+          </select>
+        }
+
+        <!-- Integer/Long/Short: Text input with numeric inputmode and validation -->
+        @if (isIntegerType(draft.type)) {
+          <input
+            id="variableValue"
+            type="text"
+            inputmode="numeric"
+            class="form-control"
+            [(ngModel)]="draft.value"
+            (ngModelChange)="onValueChange()"
+            (blur)="onValueBlur()"
+            (keydown)="onIntegerKeydown($event, draft.value)"
+            (paste)="onIntegerPaste($event)"
+            (keydown.enter)="onFieldEnter($event)"
+            [class.is-invalid]="fieldErrors && fieldErrors.value"
+            [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
+            [attr.aria-invalid]="fieldErrors?.value ? 'true' : null">
+        }
+
+        <!-- Double: Text input with decimal inputmode -->
+        @if (draft.type === 'Double') {
+          <input
+            id="variableValue"
+            type="text"
+            inputmode="decimal"
+            class="form-control"
+            [(ngModel)]="draft.value"
+            (ngModelChange)="onValueChange()"
+            (blur)="onValueBlur()"
+            (keydown.enter)="onFieldEnter($event)"
+            [class.is-invalid]="fieldErrors && fieldErrors.value"
+            [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
+            [attr.aria-invalid]="fieldErrors?.value ? 'true' : null">
+        }
+
+        <!-- Date: datetime-local with seconds -->
+        @if (draft.type === 'Date') {
+          <input
+            id="variableValue"
+            type="datetime-local"
+            step="1"
+            class="form-control"
+            [(ngModel)]="draft.value"
+            (ngModelChange)="onValueChange()"
+            (blur)="onValueBlur()"
+            (keydown.enter)="onFieldEnter($event)"
+            [class.is-invalid]="fieldErrors && fieldErrors.value"
+            [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
+            [attr.aria-invalid]="fieldErrors?.value ? 'true' : null">
+        }
+
+        <!-- Json: Textarea with fixed-width font and placeholder -->
+        @if (draft.type === 'Json') {
+          <textarea
+            id="variableValue"
+            class="form-control form-control-code"
+            rows="6"
+            [(ngModel)]="draft.value"
+            (ngModelChange)="onValueChange()"
+            (blur)="onValueBlur()"
+            (keydown.enter)="onFieldEnter($event)"
+            [class.is-invalid]="fieldErrors && fieldErrors.value"
+            [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
+            [attr.aria-invalid]="fieldErrors?.value ? 'true' : null"
+            placeholder='{"key": "value"}'></textarea>
+        }
+
+        @if (fieldErrors && fieldErrors.value) {
+          <div id="variableValue-error" class="error-message" role="alert">
+            {{ fieldErrors.value.startsWith('migration.') ? (fieldErrors.value | translate) : fieldErrors.value }}
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onClose()">
+        {{ 'migration.variables.close' | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        [class.btn-disabled]="!canSave"
+        [attr.aria-disabled]="!canSave ? 'true' : null"
+        (click)="onSave()">
+        {{ saveButtonLabel | translate }}
+      </button>
+    </div>
+
+  </div>
+</div>

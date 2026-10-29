@@ -1,16 +1,88 @@
 <div class="variables-step-container">
   <div class="step-header">
     <p class="info-text">{{ 'migration.variablesDescription' | translate }}</p>
+  </div>
+
+  <!-- Variables Table -->
+  @if (variables().length > 0) {
+    <div class="variables-table-wrapper">
+      <table class="variables-table">
+        <thead>
+          <tr>
+            <th>{{ 'migration.variables.colName' | translate }}</th>
+            <th>{{ 'migration.variables.colType' | translate }}</th>
+            <th>{{ 'migration.variables.colValue' | translate }}</th>
+            <th class="actions-column">{{ 'migration.variables.colActions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (variable of variables(); track variable.name; let i = $index) {
+            <tr>
+              <td class="name-cell">{{ variable.name }}</td>
+              <td class="type-cell">{{ variable.type }}</td>
+              <td class="value-cell">
+                @if (isStructuredType(variable.type)) {
+                  <div class="value-with-popover">
+                    <button
+                      type="button"
+                      class="value-link"
+                      (click)="toggleJsonPopover(i, $event)"
+                      [title]="getFullValue(variable)">
+                      {{ getDisplayValue(variable) }}
+                    </button>
+                    @if (openPopoverIndex() === i) {
+                      <div class="json-popover" (click)="$event.stopPropagation()">
+                        <div class="popover-header">
+                          <span>{{ 'migration.variables.jsonPreview' | translate }}</span>
+                          <button
+                            type="button"
+                            class="popover-close"
+                            (click)="closePopover()"
+                            [attr.aria-label]="'migration.variables.close' | translate">
+                            &#x2715;
+                          </button>
+                        </div>
+                        <pre class="popover-content">{{ getFormattedJson(variable) }}</pre>
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <span [title]="getFullValue(variable)">{{ getDisplayValue(variable) }}</span>
+                }
+              </td>
+              <td class="actions-cell">
+                <button
+                  type="button"
+                  class="action-btn edit-btn"
+                  (click)="editVariable.emit(i)"
+                  [attr.aria-label]="'migration.variables.editVariable' | translate">
+                  <fa-icon [icon]="faPencilAlt"></fa-icon>
+                </button>
+                <button
+                  type="button"
+                  class="action-btn delete-btn"
+                  (click)="deleteVariable.emit(i)"
+                  [attr.aria-label]="'migration.variables.deleteVariable' | translate">
+                  <fa-icon [icon]="faTrash"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Add Variable Button (shown below table or in header if no variables) -->
+  <div class="add-variable-section">
     <button
       type="button"
-      class="btn btn-secondary"
+      class="btn btn-secondary add-variable-btn"
       (click)="addVariable.emit()"
       [attr.aria-label]="'migration.addVariable' | translate">
       + {{ 'migration.addVariable' | translate }}
     </button>
   </div>
-
-  <!-- Empty state: no table shown for screen 1 -->
 
   <div class="step-footer">
     <div class="footer-left">

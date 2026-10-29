@@ -43,7 +43,7 @@ describe('MigrationVariablesStepComponent - Screen 1: Empty State', () => {
 
   it('should display Add Variable button', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('button.btn-primary');
+    const button = compiled.querySelector('button.add-variable-btn');
     expect(button).toBeTruthy();
     expect(button?.textContent?.trim()).toBe('+ migration.addVariable');
   });
@@ -53,7 +53,7 @@ describe('MigrationVariablesStepComponent - Screen 1: Empty State', () => {
     component.addVariable.subscribe(() => { emitted = true; });
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('button.btn-primary') as HTMLButtonElement;
+    const button = compiled.querySelector('button.add-variable-btn') as HTMLButtonElement;
     button?.click();
 
     expect(emitted).toBe(true);
@@ -112,7 +112,7 @@ describe('MigrationVariablesStepComponent - Screen 1: Empty State', () => {
 
   it('should have proper aria-label on Add Variable button', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('button.btn-primary') as HTMLButtonElement;
+    const button = compiled.querySelector('button.add-variable-btn') as HTMLButtonElement;
     expect(button?.getAttribute('aria-label')).toBe('migration.addVariable');
   });
 
@@ -126,5 +126,56 @@ describe('MigrationVariablesStepComponent - Screen 1: Empty State', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const nextButton = compiled.querySelector('.footer-right button.btn-primary') as HTMLButtonElement;
     expect(nextButton?.getAttribute('aria-label')).toBe('migration.selectInstancesButton');
+  });
+
+  it('should have "+ Add Variable" button with secondary style (btn-secondary)', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const addButton = compiled.querySelector('button.add-variable-btn') as HTMLButtonElement;
+
+    expect(addButton).toBeTruthy();
+    expect(addButton.classList.contains('btn')).toBe(true);
+    expect(addButton.classList.contains('btn-secondary')).toBe(true);
+    expect(addButton.classList.contains('btn-primary')).toBe(false);
+  });
+
+  it('should have "Select Instances" button with primary style (btn-primary)', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const nextButton = compiled.querySelector('.footer-right button.btn-primary') as HTMLButtonElement;
+
+    expect(nextButton).toBeTruthy();
+    expect(nextButton.classList.contains('btn')).toBe(true);
+    expect(nextButton.classList.contains('btn-primary')).toBe(true);
+    expect(nextButton.classList.contains('btn-secondary')).toBe(false);
+  });
+
+  it('should have "Back" button with secondary style (btn-secondary)', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const backButton = compiled.querySelector('.footer-left button.btn-secondary') as HTMLButtonElement;
+
+    expect(backButton).toBeTruthy();
+    expect(backButton.classList.contains('btn')).toBe(true);
+    expect(backButton.classList.contains('btn-secondary')).toBe(true);
+    expect(backButton.classList.contains('btn-primary')).toBe(false);
+  });
+
+  it('should have distinct button styles: Add and Back as secondary, Select as primary', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const addButton = compiled.querySelector('button.add-variable-btn') as HTMLButtonElement;
+    const backButton = compiled.querySelector('.footer-left button') as HTMLButtonElement;
+    const selectButton = compiled.querySelector('.footer-right button') as HTMLButtonElement;
+
+    // Add and Back should both be secondary
+    expect(addButton.classList.contains('btn-secondary')).toBe(true);
+    expect(backButton.classList.contains('btn-secondary')).toBe(true);
+
+    // Select should be primary
+    expect(selectButton.classList.contains('btn-primary')).toBe(true);
+
+    // Add and Back should NOT be primary
+    expect(addButton.classList.contains('btn-primary')).toBe(false);
+    expect(backButton.classList.contains('btn-primary')).toBe(false);
+
+    // Select should NOT be secondary
+    expect(selectButton.classList.contains('btn-secondary')).toBe(false);
   });
 });

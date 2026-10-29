@@ -12,6 +12,7 @@ export interface MigrationState {
 }
 
 export interface MappingSnapshot {
+  type: 'mapping-delete';
   anchorKey: string;
   instruction: MigrationInstructionDto;
   routeParams?: RouteParams;
@@ -56,6 +57,7 @@ export function snapshotMapping(
   }
 
   return {
+    type: 'mapping-delete',
     anchorKey,
     instruction: instructionCopy,
     routeParams: routeParamsCopy

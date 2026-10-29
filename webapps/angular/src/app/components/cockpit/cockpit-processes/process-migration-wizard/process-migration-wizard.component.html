@@ -242,9 +242,12 @@
       @if (currentStep() === 2) {
         <div class="step-content step-2">
           <app-migration-variables-step
+            [variables]="variables()"
             (back)="onVariablesBack()"
             (next)="onVariablesNext()"
-            (addVariable)="onAddVariable()">
+            (addVariable)="onAddVariable()"
+            (editVariable)="onEditVariable($event)"
+            (deleteVariable)="onDeleteVariable($event)">
           </app-migration-variables-step>
         </div>
       }
@@ -252,4 +255,34 @@
       </div>
     </div>
   </main>
+
+  <!-- Variable Modal -->
+  @if (isVariableModalOpen()) {
+    <app-migration-variable-modal
+      [existingVariables]="variables()"
+      [editingVariable]="editingVariableIndex() !== null ? variables()[editingVariableIndex()!] : null"
+      (save)="onSaveVariable($event)"
+      (closeModal)="onCloseVariableModal()">
+    </app-migration-variable-modal>
+  }
+
+  <!-- Undo Toast for Variable Deletion -->
+  @if (undoToastService.toastState().visible && undoToastService.toastState().snapshot?.type === 'variable-delete') {
+    <div class="undo-toast">
+      <span class="undo-toast__message">{{ 'migration.variables.variableDeleted' | translate }}</span>
+      <button
+        type="button"
+        class="undo-toast__button"
+        (click)="onUndoVariableDelete()">
+        {{ 'migration.variables.undo' | translate }}
+      </button>
+      <button
+        type="button"
+        class="undo-toast__close"
+        (click)="undoToastService.dismiss()"
+        [attr.aria-label]="'migration.variables.close' | translate">
+        &#x2715;
+      </button>
+    </div>
+  }
 </div>
