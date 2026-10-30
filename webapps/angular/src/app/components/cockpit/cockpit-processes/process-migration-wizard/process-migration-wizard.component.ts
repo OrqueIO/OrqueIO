@@ -28,6 +28,7 @@ import { Anchor, getAnchorKey } from './migration-arrow-anchors';
 import { MigrationUndoToastService } from './migration-undo-toast.service';
 import { snapshotMapping, restoreMapping, MigrationState } from './migration-undo-utils';
 import { PlanVariable } from './migration-variables.utils';
+import { MigrationValidationService } from './migration-validation.service';
 import { ViewChild } from '@angular/core';
 
 type LoadingState = 'idle' | 'loading' | 'loaded' | 'error';
@@ -53,7 +54,7 @@ const ENABLE_CONNECTION_EDITOR_SPIKE = false;
   templateUrl: './process-migration-wizard.component.html',
   styleUrl: './process-migration-wizard.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [MigrationUndoToastService]
+  providers: [MigrationUndoToastService, MigrationValidationService]
 })
 export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   @ViewChild(MigrationArrowsComponent) migrationArrowsComponent?: MigrationArrowsComponent;
@@ -65,6 +66,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   private migrationService = inject(MigrationService);
   private cdr = inject(ChangeDetectorRef);
   undoToastService = inject(MigrationUndoToastService);
+  validationService = inject(MigrationValidationService);
 
   faExchangeAlt = faExchangeAlt;
 
@@ -175,7 +177,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   targetActivityBadges = computed<ActivityBadge[]>(() => {
     const plan = this.migrationPlan();
     const report = this.migrationReport();
-    const stats = this.sourceActivityStats(); // needed for calculation
+    const stats = this.sourceActivityStats();
 
     const migrationBadges = calculateMigrationBadges(plan, report, stats);
 
@@ -275,6 +277,27 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   canGoToSetVariables = computed(() => this.setVariablesDisabledReason() === null);
 
+  // V4: Can proceed from Variables step to Select Instances step
+  canProceedFromVariables = computed(() => {
+    return this.validationService.areAllVariablesValid() &&
+           !this.validationService.isValidationPending() &&
+           !this.validationService.hasValidationErrors();
+  });
+
+  // V4: Reason why cannot proceed from Variables step
+  variablesDisabledReason = computed<string | null>(() => {
+    if (this.validationService.isValidationPending()) {
+      return 'migration.variables.validating';
+    }
+    if (this.validationService.hasValidationErrors()) {
+      return 'migration.variables.couldNotValidateRetry';
+    }
+    if (!this.validationService.areAllVariablesValid()) {
+      return 'migration.variables.fixInvalidVariables';
+    }
+    return null;
+  });
+
   // UI controls
   showMigrationPlan = true;
   linkDiagramsNavigation = false;
@@ -295,6 +318,18 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         this.undoToastService.dismiss();
       }
     });
+  });
+
+  private validateVariablesEffect = effect(() => {
+    const step = this.currentStep();
+    const vars = this.variables();
+    const plan = this.migrationPlan();
+
+    if (step >= 2) {
+      untracked(() => {
+        this.validationService.validateVariables(plan, vars);
+      });
+    }
   });
 
   ngOnInit(): void {
@@ -972,6 +1007,12 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     this.isVariableModalOpen.set(false);
     this.editingVariableIndex.set(null);
+  }
+
+  onRetryValidation(): void {
+    const plan = this.migrationPlan();
+    const vars = this.variables();
+    this.validationService.validateVariables(plan, vars);
   }
 
   onCloseVariableModal(): void {

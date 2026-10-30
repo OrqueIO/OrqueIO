@@ -2161,5 +2161,16 @@
   "migration.variables.errorShortRange": "Short doit être entre -32768 et 32767",
   "migration.variables.errorIntegerRange": "Integer doit être entre -2147483648 et 2147483647",
   "migration.variables.errorLongRange": "Long doit être dans la plage d'entiers sûrs de JavaScript",
-  "migration.variables.jsonPreview": "Aperçu JSON"
+  "migration.variables.jsonPreview": "Aperçu JSON",
+  "migration.variables.colValid": "Valide",
+  "migration.variables.validating": "Validation en cours...",
+  "migration.variables.valid": "Valide",
+  "migration.variables.invalid": "Invalide - Cliquez pour voir les erreurs",
+  "migration.variables.validationError": "Erreur de validation",
+  "migration.variables.validationErrors": "Erreurs de validation",
+  "migration.variables.validationErrorsTitle": "Erreurs de validation",
+  "migration.variables.couldNotValidate": "Impossible de valider",
+  "migration.variables.retry": "Réessayer",
+  "migration.variables.fixInvalidVariables": "Corriger les variables invalides",
+  "migration.variables.couldNotValidateRetry": "Impossible de valider les variables, réessayez"
 }

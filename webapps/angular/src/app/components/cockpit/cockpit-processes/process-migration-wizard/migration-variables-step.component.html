@@ -12,6 +12,7 @@
             <th>{{ 'migration.variables.colName' | translate }}</th>
             <th>{{ 'migration.variables.colType' | translate }}</th>
             <th>{{ 'migration.variables.colValue' | translate }}</th>
+            <th class="valid-column">{{ 'migration.variables.colValid' | translate }}</th>
             <th class="actions-column">{{ 'migration.variables.colActions' | translate }}</th>
           </tr>
         </thead>
@@ -30,14 +31,14 @@
                       [title]="getFullValue(variable)">
                       {{ getDisplayValue(variable) }}
                     </button>
-                    @if (openPopoverIndex() === i) {
+                    @if (openJsonPopoverIndex() === i) {
                       <div class="json-popover" (click)="$event.stopPropagation()">
                         <div class="popover-header">
                           <span>{{ 'migration.variables.jsonPreview' | translate }}</span>
                           <button
                             type="button"
                             class="popover-close"
-                            (click)="closePopover()"
+                            (click)="closeJsonPopover()"
                             [attr.aria-label]="'migration.variables.close' | translate">
                             &#x2715;
                           </button>
@@ -48,6 +49,80 @@
                   </div>
                 } @else {
                   <span [title]="getFullValue(variable)">{{ getDisplayValue(variable) }}</span>
+                }
+              </td>
+              <td class="valid-cell">
+                @if (getValidationState(variable); as state) {
+                  @if (state.status === 'pending') {
+                    <fa-icon
+                      [icon]="faSpinner"
+                      [animation]="'spin'"
+                      class="validation-icon validation-pending"
+                      [attr.aria-label]="'migration.variables.validating' | translate"
+                      [title]="'migration.variables.validating' | translate">
+                    </fa-icon>
+                  } @else if (state.status === 'valid') {
+                    <fa-icon
+                      [icon]="faCheck"
+                      class="validation-icon validation-valid"
+                      [attr.aria-label]="'migration.variables.valid' | translate"
+                      [title]="'migration.variables.valid' | translate">
+                    </fa-icon>
+                  } @else if (state.status === 'invalid') {
+                    <div class="validation-error-container">
+                      <button
+                        type="button"
+                        class="validation-icon-btn"
+                        [attr.data-error-icon]="i"
+                        (click)="toggleErrorPopover(i, $event)"
+                        (keydown.enter)="toggleErrorPopover(i, $event)"
+                        [attr.aria-label]="'migration.variables.invalid' | translate"
+                        [title]="'migration.variables.invalid' | translate">
+                        <fa-icon
+                          [icon]="faTimes"
+                          class="validation-icon validation-invalid">
+                        </fa-icon>
+                      </button>
+                      @if (openErrorPopoverIndex() === i) {
+                        <div
+                          class="error-popover"
+                          (click)="$event.stopPropagation()"
+                          (keydown)="onErrorPopoverKeydown($event, i)"
+                          tabindex="-1">
+                          <div class="popover-header">
+                            <span>{{ 'migration.variables.validationErrors' | translate }}</span>
+                            <button
+                              type="button"
+                              class="popover-close"
+                              (click)="closeErrorPopover()"
+                              [attr.aria-label]="'migration.variables.close' | translate">
+                              &#x2715;
+                            </button>
+                          </div>
+                          <ul class="popover-content error-list">
+                            @for (message of state.messages; track message) {
+                              <li>{{ message }}</li>
+                            }
+                          </ul>
+                        </div>
+                      }
+                    </div>
+                  } @else if (state.status === 'error') {
+                    <div class="validation-error-container">
+                      <fa-icon
+                        [icon]="faExclamationCircle"
+                        class="validation-icon validation-error"
+                        [attr.aria-label]="'migration.variables.validationError' | translate"
+                        [title]="'migration.variables.couldNotValidate' | translate">
+                      </fa-icon>
+                      <button
+                        type="button"
+                        class="retry-link"
+                        (click)="retryValidation.emit()">
+                        {{ 'migration.variables.retry' | translate }}
+                      </button>
+                    </div>
+                  }
                 }
               </td>
               <td class="actions-cell">
@@ -71,6 +146,25 @@
         </tbody>
       </table>
     </div>
+
+    <!-- Validation Errors Summary (V3) -->
+    @if (hasInvalidVariables()) {
+      <div class="validation-errors-summary" role="alert">
+        <h4 class="summary-title">{{ 'migration.variables.validationErrorsTitle' | translate }}</h4>
+        <ul class="summary-list">
+          @for (invalidVar of getInvalidVariables(); track invalidVar.name) {
+            <li>
+              <strong>{{ invalidVar.name }}:</strong>
+              <ul class="error-messages">
+                @for (message of invalidVar.messages; track message) {
+                  <li>{{ message }}</li>
+                }
+              </ul>
+            </li>
+          }
+        </ul>
+      </div>
+    }
   }
 
   <!-- Add Variable Button (shown below table or in header if no variables) -->
@@ -95,14 +189,22 @@
       </button>
     </div>
     <div class="footer-right">
-      <button
-        type="button"
-        class="btn btn-primary"
-        [disabled]="!canProceed()"
-        (click)="next.emit()"
-        [attr.aria-label]="'migration.selectInstancesButton' | translate">
-        {{ 'migration.selectInstances' | translate }} →
-      </button>
+      <div class="next-button-container">
+        @if (disabledReason(); as reason) {
+          <div class="disabled-reason" role="status">
+            {{ reason | translate }}
+          </div>
+        }
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="!canProceed()"
+          [attr.aria-disabled]="!canProceed() ? 'true' : null"
+          (click)="canProceed() ? next.emit() : null"
+          [attr.aria-label]="'migration.selectInstancesButton' | translate">
+          {{ 'migration.selectInstances' | translate }} →
+        </button>
+      </div>
     </div>
   </div>
 </div>

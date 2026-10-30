@@ -2179,5 +2179,16 @@
   "migration.variables.errorShortRange": "Short must be between -32768 and 32767",
   "migration.variables.errorIntegerRange": "Integer must be between -2147483648 and 2147483647",
   "migration.variables.errorLongRange": "Long must be within JavaScript safe integer range",
-  "migration.variables.jsonPreview": "JSON Preview"
+  "migration.variables.jsonPreview": "JSON Preview",
+  "migration.variables.colValid": "Valid",
+  "migration.variables.validating": "Validating...",
+  "migration.variables.valid": "Valid",
+  "migration.variables.invalid": "Invalid - Click to see errors",
+  "migration.variables.validationError": "Validation error",
+  "migration.variables.validationErrors": "Validation Errors",
+  "migration.variables.validationErrorsTitle": "Validation Errors",
+  "migration.variables.couldNotValidate": "Could not validate",
+  "migration.variables.retry": "Retry",
+  "migration.variables.fixInvalidVariables": "Fix invalid variables",
+  "migration.variables.couldNotValidateRetry": "Could not validate variables, retry"
 }

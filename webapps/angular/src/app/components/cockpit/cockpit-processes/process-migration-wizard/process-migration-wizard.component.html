@@ -243,11 +243,15 @@
         <div class="step-content step-2">
           <app-migration-variables-step
             [variables]="variables()"
+            [validationStates]="validationService.variableValidationStates()"
+            [canProceed]="canProceedFromVariables()"
+            [disabledReason]="variablesDisabledReason()"
             (back)="onVariablesBack()"
             (next)="onVariablesNext()"
             (addVariable)="onAddVariable()"
             (editVariable)="onEditVariable($event)"
-            (deleteVariable)="onDeleteVariable($event)">
+            (deleteVariable)="onDeleteVariable($event)"
+            (retryValidation)="onRetryValidation()">
           </app-migration-variables-step>
         </div>
       }

@@ -2,8 +2,9 @@ import { Component, ChangeDetectionStrategy, output, input, signal } from '@angu
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faTrash, faSpinner, faCheck, faTimes, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { PlanVariable, displayValue } from './migration-variables.utils';
+import type { VariableValidationState } from './migration-engine-validation.utils';
 
 /**
  * Step 2: Set Variables
@@ -25,17 +26,21 @@ export class MigrationVariablesStepComponent {
   readonly back = output<void>();
   readonly next = output<void>();
   readonly addVariable = output<void>();
-  readonly editVariable = output<number>(); // emits index
-  readonly deleteVariable = output<number>(); // emits index
+  readonly editVariable = output<number>();
+  readonly deleteVariable = output<number>();
+  readonly retryValidation = output<void>();
   readonly canProceed = input(true);
+  readonly disabledReason = input<string | null>(null);
   readonly variables = input<PlanVariable[]>([]);
-
-  // Icons
+  readonly validationStates = input<VariableValidationState[]>([]);
   readonly faPencilAlt = faPencilAlt;
   readonly faTrash = faTrash;
-
-  // Popover state: tracks which variable index has open popover (null if none)
-  readonly openPopoverIndex = signal<number | null>(null);
+  readonly faSpinner = faSpinner;
+  readonly faCheck = faCheck;
+  readonly faTimes = faTimes;
+  readonly faExclamationCircle = faExclamationCircle;
+  readonly openJsonPopoverIndex = signal<number | null>(null);
+  readonly openErrorPopoverIndex = signal<number | null>(null);
 
   /**
    * Returns truncated display value for a variable
@@ -63,10 +68,10 @@ export class MigrationVariablesStepComponent {
    */
   toggleJsonPopover(index: number, event: Event): void {
     event.stopPropagation();
-    if (this.openPopoverIndex() === index) {
-      this.openPopoverIndex.set(null);
+    if (this.openJsonPopoverIndex() === index) {
+      this.openJsonPopoverIndex.set(null);
     } else {
-      this.openPopoverIndex.set(index);
+      this.openJsonPopoverIndex.set(index);
     }
   }
 
@@ -82,10 +87,52 @@ export class MigrationVariablesStepComponent {
     }
   }
 
-  /**
-   * Closes the popover
-   */
-  closePopover(): void {
-    this.openPopoverIndex.set(null);
+  closeJsonPopover(): void {
+    this.openJsonPopoverIndex.set(null);
+  }
+
+
+  getValidationState(variable: PlanVariable): VariableValidationState | undefined {
+    const states = this.validationStates();
+    return states.find(s => s.name === variable.name);
+  }
+
+
+  toggleErrorPopover(index: number, event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+    if (this.openErrorPopoverIndex() === index) {
+      this.openErrorPopoverIndex.set(null);
+    } else {
+      this.openErrorPopoverIndex.set(index);
+    }
+  }
+
+  closeErrorPopover(): void {
+    this.openErrorPopoverIndex.set(null);
+  }
+
+  onErrorPopoverKeydown(event: KeyboardEvent, index: number): void {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.closeErrorPopover();
+      const iconBtn = document.querySelector(`button[data-error-icon="${index}"]`) as HTMLButtonElement;
+      if (iconBtn) {
+        iconBtn.focus();
+      }
+    }
+  }
+
+  hasInvalidVariables(): boolean {
+    const states = this.validationStates();
+    return states.some(s => s.status === 'invalid');
+  }
+
+
+  getInvalidVariables(): Array<{ name: string; messages: string[] }> {
+    const states = this.validationStates();
+    return states
+      .filter(s => s.status === 'invalid')
+      .map(s => ({ name: s.name, messages: s.messages }));
   }
 }
