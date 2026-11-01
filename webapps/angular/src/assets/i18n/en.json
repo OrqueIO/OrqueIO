@@ -2199,5 +2199,8 @@
   "migration.variables.errorSerializationDataFormatRequired": "Serialization data format is required",
   "migration.variables.value.placeholder.json": "Enter a JSON value",
   "migration.variables.value.placeholder.xml": "Enter an XML value",
-  "migration.variables.value.placeholder.serialized": "Enter a serialized value"
+  "migration.variables.value.placeholder.serialized": "Enter a serialized value",
+  "migration.variables.tableLabel": "Variables table",
+  "migration.variables.validationErrorsWithCount": "Validation Errors ({{count}})",
+  "migration.variables.errorListLabel": "Error list"
 }

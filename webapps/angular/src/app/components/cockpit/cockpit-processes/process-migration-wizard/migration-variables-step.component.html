@@ -6,6 +6,7 @@
   <!-- Variables Table -->
   @if (variables().length > 0) {
     <div class="variables-table-wrapper">
+      <div class="variables-table-scroll-container" tabindex="0" role="region" [attr.aria-label]="'migration.variables.tableLabel' | translate">
       <table class="variables-table">
         <thead>
           <tr>
@@ -149,12 +150,14 @@
           }
         </tbody>
       </table>
+      </div>
     </div>
 
     <!-- Validation Errors Summary (V3) -->
     @if (hasInvalidVariables()) {
       <div class="validation-errors-summary" role="alert">
-        <h4 class="summary-title">{{ 'migration.variables.validationErrorsTitle' | translate }}</h4>
+        <h4 class="summary-title">{{ 'migration.variables.validationErrorsWithCount' | translate: { count: '' + getInvalidVariables().length } }}</h4>
+        <div class="summary-list-container" tabindex="0" role="region" [attr.aria-label]="'migration.variables.errorListLabel' | translate">
         <ul class="summary-list">
           @for (invalidVar of getInvalidVariables(); track invalidVar.name) {
             <li>
@@ -167,6 +170,7 @@
             </li>
           }
         </ul>
+        </div>
       </div>
     }
   }

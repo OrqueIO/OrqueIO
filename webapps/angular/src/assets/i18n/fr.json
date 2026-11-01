@@ -2181,5 +2181,8 @@
   "migration.variables.errorSerializationDataFormatRequired": "Le format de sérialisation des données est requis",
   "migration.variables.value.placeholder.json": "Saisir une valeur JSON",
   "migration.variables.value.placeholder.xml": "Saisir une valeur XML",
-  "migration.variables.value.placeholder.serialized": "Saisir une valeur sérialisée"
+  "migration.variables.value.placeholder.serialized": "Saisir une valeur sérialisée",
+  "migration.variables.tableLabel": "Tableau des variables",
+  "migration.variables.validationErrorsWithCount": "Erreurs de validation ({{count}})",
+  "migration.variables.errorListLabel": "Liste d'erreurs"
 }

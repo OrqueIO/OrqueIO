@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, output, input, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, output, input, signal, effect, afterNextRender, Injector, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -23,6 +23,7 @@ import type { VariableValidationState } from './migration-engine-validation.util
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MigrationVariablesStepComponent {
+  private injector = inject(Injector);
   readonly back = output<void>();
   readonly next = output<void>();
   readonly addVariable = output<void>();
@@ -41,6 +42,35 @@ export class MigrationVariablesStepComponent {
   readonly faExclamationCircle = faExclamationCircle;
   readonly openJsonPopoverIndex = signal<number | null>(null);
   readonly openErrorPopoverIndex = signal<number | null>(null);
+
+  private previousVariablesCount = 0;
+
+  constructor() {
+    effect(() => {
+      const currentVariables = this.variables();
+      const currentCount = currentVariables.length;
+
+      if (currentCount > this.previousVariablesCount && this.previousVariablesCount > 0) {
+        afterNextRender(() => {
+          this.scrollToLastVariable();
+        }, { injector: this.injector });
+      }
+
+      this.previousVariablesCount = currentCount;
+    });
+  }
+
+  private scrollToLastVariable(): void {
+    const container = document.querySelector('.variables-table-scroll-container');
+    if (!container) return;
+
+    const rows = container.querySelectorAll('.variables-table tbody tr');
+    const lastRow = rows[rows.length - 1] as HTMLElement;
+
+    if (lastRow) {
+      lastRow.scrollIntoView({ block: 'nearest' });
+    }
+  }
 
   /**
    * Returns truncated display value for a variable
