@@ -33,11 +33,15 @@ export interface ValidationErrors {
   value?: string;
   objectTypeName?: string;
   serializationDataFormat?: string;
+  customFormat?: string;
 }
 
 const INTEGER_RE = /^-?\d+$/;
 const DOUBLE_RE = /^-?\d+(\.\d+)?$/;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
+
+// Maximum length for variable name (from ACT_RU_VARIABLE.NAME_ column)
+export const MAX_VARIABLE_NAME_LENGTH = 255;
 
 /**
  *
@@ -109,6 +113,8 @@ export function validateVariableDraft(
   const trimmedName = draft.name.trim();
   if (!trimmedName) {
     errors.name = 'migration.variables.errorNameRequired';
+  } else if (trimmedName.length > MAX_VARIABLE_NAME_LENGTH) {
+    errors.name = 'migration.variables.errorNameTooLong';
   } else {
     const isDuplicate = existingNames.some(existing => {
       const trimmedExisting = existing.trim();

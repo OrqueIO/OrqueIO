@@ -78,7 +78,6 @@
           <label for="objectTypeName" class="form-label">
             {{ 'migration.variables.objectTypeName' | translate }}*
           </label>
-          <div class="hint-text">{{ 'migration.variables.objectTypeNameHint' | translate }}</div>
           <input
             id="objectTypeName"
             type="text"
@@ -104,23 +103,16 @@
           <label for="serializationDataFormat" class="form-label">
             {{ 'migration.variables.serializationDataFormat' | translate }}*
           </label>
-          <input
-            id="serializationDataFormat"
-            type="text"
-            class="form-control"
-            [(ngModel)]="draft.serializationDataFormat"
-            (ngModelChange)="onSerializationDataFormatChange()"
-            (blur)="onSerializationDataFormatBlur()"
-            (keydown.enter)="onFieldEnter($event)"
-            [class.is-invalid]="fieldErrors && fieldErrors.serializationDataFormat"
-            [attr.aria-describedby]="fieldErrors?.serializationDataFormat ? 'serializationDataFormat-error' : null"
-            [attr.aria-invalid]="fieldErrors?.serializationDataFormat ? 'true' : null"
-            list="serializationFormats"
-            placeholder="application/json">
-          <datalist id="serializationFormats">
-            <option value="application/json"></option>
-            <option value="application/xml"></option>
-          </datalist>
+          <app-combobox
+            inputId="serializationDataFormat"
+            [value]="draft.serializationDataFormat || ''"
+            [options]="serializationFormats"
+            [placeholder]="'migration.variables.serializationFormatPlaceholder' | translate"
+            [invalid]="!!(fieldErrors && fieldErrors.serializationDataFormat)"
+            [describedBy]="fieldErrors?.serializationDataFormat ? 'serializationDataFormat-error' : ''"
+            (valueChange)="onSerializationDataFormatChange($event)"
+            (blurred)="onSerializationDataFormatBlur()">
+          </app-combobox>
           @if (fieldErrors && fieldErrors.serializationDataFormat) {
             <div id="serializationDataFormat-error" class="error-message" role="alert">
               {{ fieldErrors.serializationDataFormat.startsWith('migration.') ? (fieldErrors.serializationDataFormat | translate) : fieldErrors.serializationDataFormat }}
@@ -218,7 +210,6 @@
 
         <!-- Json: Textarea with fixed-width font and placeholder -->
         @if (draft.type === 'Json') {
-          <div class="hint-text">{{ 'migration.variables.jsonValueHint' | translate }}</div>
           <textarea
             id="variableValue"
             class="form-control form-control-code"

@@ -2161,6 +2161,7 @@
   "migration.variables.save": "Save",
   "migration.variables.errorNameRequired": "Variable name is required",
   "migration.variables.errorNameDuplicate": "A variable with this name already exists",
+  "migration.variables.errorNameTooLong": "Variable name is too long (max {{maxLength}} characters)",
   "migration.variables.errorTypeRequired": "Variable type is required",
   "migration.variables.errorValueRequired": "Variable value is required",
   "migration.variables.errorIntegerInvalid": "Please enter a valid integer",
@@ -2193,8 +2194,7 @@
   "migration.variables.couldNotValidateRetry": "Could not validate variables, retry",
   "migration.variables.objectTypeName": "Object Type Name",
   "migration.variables.serializationDataFormat": "Serialization Data Format",
+  "migration.variables.serializationFormatPlaceholder": "Select or type a format",
   "migration.variables.errorObjectTypeNameRequired": "Object type name is required",
-  "migration.variables.errorSerializationDataFormatRequired": "Serialization data format is required",
-  "migration.variables.objectTypeNameHint": "The class is not checked until the variable is read",
-  "migration.variables.jsonValueHint": "The syntax is checked here; the engine does not check it"
+  "migration.variables.errorSerializationDataFormatRequired": "Serialization data format is required"
 }

@@ -2143,6 +2143,7 @@
   "migration.variables.save": "Enregistrer",
   "migration.variables.errorNameRequired": "Le nom de la variable est requis",
   "migration.variables.errorNameDuplicate": "Une variable avec ce nom existe déjà",
+  "migration.variables.errorNameTooLong": "Le nom de la variable est trop long (max {{maxLength}} caractères)",
   "migration.variables.errorTypeRequired": "Le type de la variable est requis",
   "migration.variables.errorValueRequired": "La valeur de la variable est requise",
   "migration.variables.errorIntegerInvalid": "Veuillez entrer un entier valide",
@@ -2175,8 +2176,7 @@
   "migration.variables.couldNotValidateRetry": "Impossible de valider les variables, réessayez",
   "migration.variables.objectTypeName": "Nom du type d'objet",
   "migration.variables.serializationDataFormat": "Format de sérialisation des données",
+  "migration.variables.serializationFormatPlaceholder": "Sélectionner ou saisir un format",
   "migration.variables.errorObjectTypeNameRequired": "Le nom du type d'objet est requis",
-  "migration.variables.errorSerializationDataFormatRequired": "Le format de sérialisation des données est requis",
-  "migration.variables.objectTypeNameHint": "La classe n'est pas vérifiée tant que la variable n'est pas lue",
-  "migration.variables.jsonValueHint": "La syntaxe est vérifiée ici ; le moteur ne la vérifie pas"
+  "migration.variables.errorSerializationDataFormatRequired": "Le format de sérialisation des données est requis"
 }

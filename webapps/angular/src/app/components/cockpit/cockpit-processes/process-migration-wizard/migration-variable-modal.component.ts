@@ -5,13 +5,16 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
+import { ComboboxComponent } from '../../../../shared/combobox/combobox.component';
 import {
   validateVariableDraft,
   toPlanVariable,
   sanitizeNumericInput,
   VariableDraft,
   PlanVariable,
-  ValidationErrors
+  ValidationErrors,
+  MAX_VARIABLE_NAME_LENGTH
 } from './migration-variables.utils';
 import {
   MIGRATION_VARIABLE_TYPES,
@@ -21,6 +24,13 @@ import {
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
+// Serialization format options for Object type
+export const SERIALIZATION_FORMATS = [
+  'application/json',
+  'application/xml',
+  'application/x-java-serialized-object'
+] as const;
+
 /**
  * Modal for adding or editing a migration variable.
  * Conforms to the design mockup step2-modal.png.
@@ -29,13 +39,14 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-migration-variable-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslatePipe],
+  imports: [CommonModule, FormsModule, TranslatePipe, ComboboxComponent],
   templateUrl: './migration-variable-modal.component.html',
   styleUrls: ['./migration-variable-modal.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MigrationVariableModalComponent implements OnInit, AfterViewInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
+  private translateService = inject(TranslateService);
 
   @Input() existingVariables: PlanVariable[] = [];
   @Input() editingVariable: PlanVariable | null = null;
@@ -61,6 +72,9 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
   // Supported variable types (shared constant from utils)
   readonly variableTypes = [...MIGRATION_VARIABLE_TYPES];
 
+  // Serialization format options for combobox
+  readonly serializationFormats = [...SERIALIZATION_FORMATS];
+
   // Element that opened the modal (for focus return)
   private previouslyFocusedElement: HTMLElement | null = null;
 
@@ -78,10 +92,14 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
       this.draft = {
         name: this.editingVariable.name,
         type: this.editingVariable.type,
-        value: String(this.editingVariable.value),
-        objectTypeName: this.editingVariable.valueInfo?.objectTypeName,
-        serializationDataFormat: this.editingVariable.valueInfo?.serializationDataFormat
+        value: String(this.editingVariable.value)
       };
+
+      // Add Object-specific fields if editing an Object variable
+      if (this.editingVariable.type === 'Object' && this.editingVariable.valueInfo) {
+        this.draft.objectTypeName = this.editingVariable.valueInfo.objectTypeName;
+        this.draft.serializationDataFormat = this.editingVariable.valueInfo.serializationDataFormat;
+      }
     } else {
       // Default to String with empty value
       this.draft = { name: '', type: 'String', value: '' };
@@ -179,7 +197,13 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
     } else {
       const displayedErrors: ValidationErrors = {};
       if (allErrors.name && this.touchedFields.has('name')) {
-        displayedErrors.name = allErrors.name;
+        if (allErrors.name === 'migration.variables.errorNameTooLong') {
+          displayedErrors.name = this.translateService.instant(allErrors.name, {
+            maxLength: String(MAX_VARIABLE_NAME_LENGTH)
+          });
+        } else {
+          displayedErrors.name = allErrors.name;
+        }
       }
       if (allErrors.type && this.touchedFields.has('type')) {
         displayedErrors.type = allErrors.type;
@@ -265,11 +289,13 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
     this.updateErrors();
   }
 
-  onSerializationDataFormatChange(): void {
-    this.serializationDataFormatChange$.next(this.draft.serializationDataFormat || '');
+  onSerializationDataFormatChange(value: string): void {
+    this.draft.serializationDataFormat = value;
+    this.serializationDataFormatChange$.next(value);
     if (this.touchedFields.has('serializationDataFormat')) {
       this.updateErrors();
     }
+    this.cdr.markForCheck();
   }
 
   onSerializationDataFormatBlur(): void {
@@ -280,11 +306,13 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
   getObjectValuePlaceholder(): string {
     const format = this.draft.serializationDataFormat?.toLowerCase().trim() || '';
     if (format === 'application/json') {
-      return '{"key": "value"}';
+      return '["accounting","sales"]';
     } else if (format === 'application/xml') {
-      return '<root><key>value</key></root>';
+      return '<list><item>accounting</item></list>';
+    } else if (format === 'application/x-java-serialized-object') {
+      return 'Base64 of the serialized Java object';
     }
-    return 'Serialized value';
+    return 'Serialized value in the chosen format';
   }
 
   onTypeChange(newType: string): void {
