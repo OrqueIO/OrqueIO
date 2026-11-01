@@ -286,7 +286,7 @@
             [class.is-invalid]="fieldErrors && fieldErrors.value"
             [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
             [attr.aria-invalid]="fieldErrors?.value ? 'true' : null"
-            placeholder='{"key": "value"}'></textarea>
+            [placeholder]="'migration.variables.value.placeholder.json' | translate"></textarea>
         }
 
         <!-- O2: Object: Textarea with fixed-width font for serialized value -->

@@ -306,13 +306,11 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
   getObjectValuePlaceholder(): string {
     const format = this.draft.serializationDataFormat?.toLowerCase().trim() || '';
     if (format === 'application/json') {
-      return '["accounting","sales"]';
+      return this.translateService.instant('migration.variables.value.placeholder.json');
     } else if (format === 'application/xml') {
-      return '<list><item>accounting</item></list>';
-    } else if (format === 'application/x-java-serialized-object') {
-      return 'Base64 of the serialized Java object';
+      return this.translateService.instant('migration.variables.value.placeholder.xml');
     }
-    return 'Serialized value in the chosen format';
+    return this.translateService.instant('migration.variables.value.placeholder.serialized');
   }
 
   onTypeChange(newType: string): void {

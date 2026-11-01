@@ -2196,5 +2196,8 @@
   "migration.variables.serializationDataFormat": "Serialization Data Format",
   "migration.variables.serializationFormatPlaceholder": "Select or type a format",
   "migration.variables.errorObjectTypeNameRequired": "Object type name is required",
-  "migration.variables.errorSerializationDataFormatRequired": "Serialization data format is required"
+  "migration.variables.errorSerializationDataFormatRequired": "Serialization data format is required",
+  "migration.variables.value.placeholder.json": "Enter a JSON value",
+  "migration.variables.value.placeholder.xml": "Enter an XML value",
+  "migration.variables.value.placeholder.serialized": "Enter a serialized value"
 }
