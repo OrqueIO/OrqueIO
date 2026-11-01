@@ -1,7 +1,7 @@
 /**
  * Camunda 7 variable types for process instance migration.
  * Aligned with batch "Set process variables" operation.
- * Order: String (default), Integer, Long, Short, Double, Boolean, Date, Json.
+ * Order: String (default), Integer, Long, Short, Double, Boolean, Date, Object, Json.
  */
 export const MIGRATION_VARIABLE_TYPES = [
   'String',
@@ -11,6 +11,7 @@ export const MIGRATION_VARIABLE_TYPES = [
   'Double',
   'Boolean',
   'Date',
+  'Object',
   'Json'
 ] as const;
 
@@ -19,10 +20,12 @@ export type MigrationVariableType = typeof MIGRATION_VARIABLE_TYPES[number];
 /**
  * Variable types that use textual representation (multi-line content).
  * When switching between these types, the value field is preserved.
+ * Includes: String, Json, Object (serialized value)
  */
 export const TEXTUAL_VARIABLE_TYPES: readonly string[] = [
   'String',
-  'Json'
+  'Json',
+  'Object'
 ];
 
 /**

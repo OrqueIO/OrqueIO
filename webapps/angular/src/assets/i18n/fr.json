@@ -2172,5 +2172,11 @@
   "migration.variables.couldNotValidate": "Impossible de valider",
   "migration.variables.retry": "Réessayer",
   "migration.variables.fixInvalidVariables": "Corriger les variables invalides",
-  "migration.variables.couldNotValidateRetry": "Impossible de valider les variables, réessayez"
+  "migration.variables.couldNotValidateRetry": "Impossible de valider les variables, réessayez",
+  "migration.variables.objectTypeName": "Nom du type d'objet",
+  "migration.variables.serializationDataFormat": "Format de sérialisation des données",
+  "migration.variables.errorObjectTypeNameRequired": "Le nom du type d'objet est requis",
+  "migration.variables.errorSerializationDataFormatRequired": "Le format de sérialisation des données est requis",
+  "migration.variables.objectTypeNameHint": "La classe n'est pas vérifiée tant que la variable n'est pas lue",
+  "migration.variables.jsonValueHint": "La syntaxe est vérifiée ici ; le moteur ne la vérifie pas"
 }

@@ -13,18 +13,26 @@ export interface VariableDraft {
   name: string;
   type: string;
   value: string;
+  objectTypeName?: string;
+  serializationDataFormat?: string;
 }
 
 export interface PlanVariable {
   name: string;
   type: string;
   value: any;
+  valueInfo?: {
+    objectTypeName: string;
+    serializationDataFormat: string;
+  };
 }
 
 export interface ValidationErrors {
   name?: string;
   type?: string;
   value?: string;
+  objectTypeName?: string;
+  serializationDataFormat?: string;
 }
 
 const INTEGER_RE = /^-?\d+$/;
@@ -159,6 +167,22 @@ export function validateVariableDraft(
       } catch (e) {
         errors.value = 'migration.variables.errorJsonInvalid';
       }
+    } else if (draft.type === 'Object') {
+      const trimmedObjectTypeName = draft.objectTypeName?.trim() || '';
+      if (!trimmedObjectTypeName) {
+        errors.objectTypeName = 'migration.variables.errorObjectTypeNameRequired';
+      }
+
+      const trimmedSerializationDataFormat = draft.serializationDataFormat?.trim() || '';
+      if (!trimmedSerializationDataFormat) {
+        errors.serializationDataFormat = 'migration.variables.errorSerializationDataFormatRequired';
+      } else if (trimmedSerializationDataFormat.toLowerCase() === 'application/json') {
+        try {
+          JSON.parse(trimmedValue);
+        } catch (e) {
+          errors.value = 'migration.variables.errorJsonInvalid';
+        }
+      }
     }
   }
 
@@ -186,6 +210,18 @@ export function toPlanVariable(draft: VariableDraft): PlanVariable {
     value = draft.value === 'true';
   } else if (draft.type === 'Date') {
     value = convertDateToCamundaFormat(draft.value);
+  }
+
+  if (draft.type === 'Object') {
+    return {
+      name: trimmedName,
+      type: draft.type,
+      value,
+      valueInfo: {
+        objectTypeName: draft.objectTypeName!,
+        serializationDataFormat: draft.serializationDataFormat!
+      }
+    };
   }
 
   return {

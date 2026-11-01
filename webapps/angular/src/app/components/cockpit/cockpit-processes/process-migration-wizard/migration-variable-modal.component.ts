@@ -54,6 +54,8 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
   // Subjects for debounced validation
   private nameChange$ = new Subject<string>();
   private valueChange$ = new Subject<string>();
+  private objectTypeNameChange$ = new Subject<string>();
+  private serializationDataFormatChange$ = new Subject<string>();
   private destroy$ = new Subject<void>();
 
   // Supported variable types (shared constant from utils)
@@ -76,7 +78,9 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
       this.draft = {
         name: this.editingVariable.name,
         type: this.editingVariable.type,
-        value: String(this.editingVariable.value)
+        value: String(this.editingVariable.value),
+        objectTypeName: this.editingVariable.valueInfo?.objectTypeName,
+        serializationDataFormat: this.editingVariable.valueInfo?.serializationDataFormat
       };
     } else {
       // Default to String with empty value
@@ -97,6 +101,22 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
       takeUntil(this.destroy$)
     ).subscribe(() => {
       this.touchedFields.add('value');
+      this.updateErrors();
+    });
+
+    this.objectTypeNameChange$.pipe(
+      debounceTime(400),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.touchedFields.add('objectTypeName');
+      this.updateErrors();
+    });
+
+    this.serializationDataFormatChange$.pipe(
+      debounceTime(400),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.touchedFields.add('serializationDataFormat');
       this.updateErrors();
     });
   }
@@ -172,9 +192,21 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
           } catch (e: any) {
             displayedErrors.value = `Invalid JSON: ${e.message}`;
           }
+        } else if (this.draft.type === 'Object' && allErrors.value === 'migration.variables.errorJsonInvalid') {
+          try {
+            JSON.parse(this.draft.value.trim());
+          } catch (e: any) {
+            displayedErrors.value = `Invalid JSON: ${e.message}`;
+          }
         } else {
           displayedErrors.value = allErrors.value;
         }
+      }
+      if (allErrors.objectTypeName && this.touchedFields.has('objectTypeName')) {
+        displayedErrors.objectTypeName = allErrors.objectTypeName;
+      }
+      if (allErrors.serializationDataFormat && this.touchedFields.has('serializationDataFormat')) {
+        displayedErrors.serializationDataFormat = allErrors.serializationDataFormat;
       }
       this.fieldErrors = Object.keys(displayedErrors).length > 0 ? displayedErrors : null;
     }
@@ -220,13 +252,45 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
     this.updateErrors();
   }
 
+  onObjectTypeNameChange(): void {
+    this.objectTypeNameChange$.next(this.draft.objectTypeName || '');
+    // Also update errors immediately if already touched
+    if (this.touchedFields.has('objectTypeName')) {
+      this.updateErrors();
+    }
+  }
+
+  onObjectTypeNameBlur(): void {
+    this.touchedFields.add('objectTypeName');
+    this.updateErrors();
+  }
+
+  onSerializationDataFormatChange(): void {
+    this.serializationDataFormatChange$.next(this.draft.serializationDataFormat || '');
+    if (this.touchedFields.has('serializationDataFormat')) {
+      this.updateErrors();
+    }
+  }
+
+  onSerializationDataFormatBlur(): void {
+    this.touchedFields.add('serializationDataFormat');
+    this.updateErrors();
+  }
+
+  getObjectValuePlaceholder(): string {
+    const format = this.draft.serializationDataFormat?.toLowerCase().trim() || '';
+    if (format === 'application/json') {
+      return '{"key": "value"}';
+    } else if (format === 'application/xml') {
+      return '<root><key>value</key></root>';
+    }
+    return 'Serialized value';
+  }
+
   onTypeChange(newType: string): void {
     const oldType = this.draft.type;
     this.draft.type = newType;
 
-    // Value clearing logic:
-    // Preserve value when switching between String and Json
-    // Clear value otherwise
     const oldIsTextual = TEXTUAL_VARIABLE_TYPES.includes(oldType);
     const newIsTextual = TEXTUAL_VARIABLE_TYPES.includes(newType);
 
@@ -239,6 +303,15 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
       }
       // Reset touched state for value field when type changes
       this.touchedFields.delete('value');
+    }
+
+    if (newType === 'Object') {
+      if (!this.draft.objectTypeName) {
+        this.draft.objectTypeName = '';
+      }
+      if (!this.draft.serializationDataFormat) {
+        this.draft.serializationDataFormat = 'application/json';
+      }
     }
 
     // Clear all errors when type changes
@@ -257,6 +330,11 @@ export class MigrationVariableModalComponent implements OnInit, AfterViewInit, O
       this.touchedFields.add('name');
       this.touchedFields.add('type');
       this.touchedFields.add('value');
+
+      if (this.draft.type === 'Object') {
+        this.touchedFields.add('objectTypeName');
+        this.touchedFields.add('serializationDataFormat');
+      }
       this.updateErrors();
       this.cdr.markForCheck();
 

@@ -56,13 +56,13 @@ describe('MigrationVariableModalComponent', () => {
     });
   });
 
-  it('should display all 8 variable types in select', () => {
+  it('should display all 9 variable types in select (including Object)', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
     const options = compiled.querySelectorAll('#variableType option');
 
-    expect(options.length).toBe(8);
+    expect(options.length).toBe(9);
     expect(options[0].textContent).toBe('String');
     expect(options[1].textContent).toBe('Integer');
     expect(options[2].textContent).toBe('Long');
@@ -70,7 +70,8 @@ describe('MigrationVariableModalComponent', () => {
     expect(options[4].textContent).toBe('Double');
     expect(options[5].textContent).toBe('Boolean');
     expect(options[6].textContent).toBe('Date');
-    expect(options[7].textContent).toBe('Json');
+    expect(options[7].textContent).toBe('Object');
+    expect(options[8].textContent).toBe('Json');
   });
 
   it('should emit save event with valid variable', () => {

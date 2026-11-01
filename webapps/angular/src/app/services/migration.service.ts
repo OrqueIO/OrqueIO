@@ -26,11 +26,11 @@ export class MigrationService {
     ).pipe(catchError((err: unknown) => of(null)));
   }
 
-  validateMigrationPlan(plan: MigrationPlanDto): Observable<MigrationPlanReportDto | null> {
+  validateMigrationPlan(plan: MigrationPlanDto): Observable<MigrationPlanReportDto> {
     return this.http.post<MigrationPlanReportDto>(
       `${this.baseUrl}/migration/validate`,
       plan,
       { headers: this.csrfService.buildHeaders() }
-    ).pipe(catchError((err: unknown) => of(null)));
+    );
   }
 }

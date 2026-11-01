@@ -2190,5 +2190,11 @@
   "migration.variables.couldNotValidate": "Could not validate",
   "migration.variables.retry": "Retry",
   "migration.variables.fixInvalidVariables": "Fix invalid variables",
-  "migration.variables.couldNotValidateRetry": "Could not validate variables, retry"
+  "migration.variables.couldNotValidateRetry": "Could not validate variables, retry",
+  "migration.variables.objectTypeName": "Object Type Name",
+  "migration.variables.serializationDataFormat": "Serialization Data Format",
+  "migration.variables.errorObjectTypeNameRequired": "Object type name is required",
+  "migration.variables.errorSerializationDataFormatRequired": "Serialization data format is required",
+  "migration.variables.objectTypeNameHint": "The class is not checked until the variable is read",
+  "migration.variables.jsonValueHint": "The syntax is checked here; the engine does not check it"
 }

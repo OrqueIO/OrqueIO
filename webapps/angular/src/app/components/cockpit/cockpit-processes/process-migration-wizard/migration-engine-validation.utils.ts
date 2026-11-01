@@ -24,10 +24,16 @@ export function buildValidationPayload(
   const variablesMap: Record<string, VariableValueDto> = {};
 
   for (const variable of variables) {
-    variablesMap[variable.name] = {
+    const variableDto: VariableValueDto = {
       type: variable.type,
       value: variable.value
     };
+
+    if (variable.valueInfo) {
+      variableDto.valueInfo = variable.valueInfo;
+    }
+
+    variablesMap[variable.name] = variableDto;
   }
 
   return {

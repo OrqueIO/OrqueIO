@@ -20,7 +20,11 @@
           @for (variable of variables(); track variable.name; let i = $index) {
             <tr>
               <td class="name-cell">{{ variable.name }}</td>
-              <td class="type-cell">{{ variable.type }}</td>
+              <td class="type-cell">
+                {{ variable.type }}@if (variable.type === 'Object' && variable.valueInfo?.objectTypeName) {
+                  <span class="object-type-info" [title]="variable.valueInfo?.objectTypeName"> · {{ variable.valueInfo?.objectTypeName }}</span>
+                }
+              </td>
               <td class="value-cell">
                 @if (isStructuredType(variable.type)) {
                   <div class="value-with-popover">

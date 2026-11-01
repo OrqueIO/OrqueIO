@@ -56,11 +56,8 @@ export class MigrationVariablesStepComponent {
     return String(variable.value);
   }
 
-  /**
-   * Checks if value is a structured type (Json)
-   */
   isStructuredType(type: string): boolean {
-    return type === 'Json';
+    return type === 'Json' || type === 'Object';
   }
 
   /**

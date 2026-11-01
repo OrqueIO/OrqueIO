@@ -73,6 +73,62 @@
         }
       </div>
 
+      @if (draft.type === 'Object') {
+        <div class="form-group">
+          <label for="objectTypeName" class="form-label">
+            {{ 'migration.variables.objectTypeName' | translate }}*
+          </label>
+          <div class="hint-text">{{ 'migration.variables.objectTypeNameHint' | translate }}</div>
+          <input
+            id="objectTypeName"
+            type="text"
+            class="form-control"
+            [(ngModel)]="draft.objectTypeName"
+            (ngModelChange)="onObjectTypeNameChange()"
+            (blur)="onObjectTypeNameBlur()"
+            (keydown.enter)="onFieldEnter($event)"
+            [class.is-invalid]="fieldErrors && fieldErrors.objectTypeName"
+            [attr.aria-describedby]="fieldErrors?.objectTypeName ? 'objectTypeName-error' : null"
+            [attr.aria-invalid]="fieldErrors?.objectTypeName ? 'true' : null"
+            placeholder="java.util.HashMap">
+          @if (fieldErrors && fieldErrors.objectTypeName) {
+            <div id="objectTypeName-error" class="error-message" role="alert">
+              {{ fieldErrors.objectTypeName | translate }}
+            </div>
+          }
+        </div>
+      }
+
+      @if (draft.type === 'Object') {
+        <div class="form-group">
+          <label for="serializationDataFormat" class="form-label">
+            {{ 'migration.variables.serializationDataFormat' | translate }}*
+          </label>
+          <input
+            id="serializationDataFormat"
+            type="text"
+            class="form-control"
+            [(ngModel)]="draft.serializationDataFormat"
+            (ngModelChange)="onSerializationDataFormatChange()"
+            (blur)="onSerializationDataFormatBlur()"
+            (keydown.enter)="onFieldEnter($event)"
+            [class.is-invalid]="fieldErrors && fieldErrors.serializationDataFormat"
+            [attr.aria-describedby]="fieldErrors?.serializationDataFormat ? 'serializationDataFormat-error' : null"
+            [attr.aria-invalid]="fieldErrors?.serializationDataFormat ? 'true' : null"
+            list="serializationFormats"
+            placeholder="application/json">
+          <datalist id="serializationFormats">
+            <option value="application/json"></option>
+            <option value="application/xml"></option>
+          </datalist>
+          @if (fieldErrors && fieldErrors.serializationDataFormat) {
+            <div id="serializationDataFormat-error" class="error-message" role="alert">
+              {{ fieldErrors.serializationDataFormat.startsWith('migration.') ? (fieldErrors.serializationDataFormat | translate) : fieldErrors.serializationDataFormat }}
+            </div>
+          }
+        </div>
+      }
+
       <!-- Variable Value - Type-Specific Inputs -->
       <div class="form-group">
         <label for="variableValue" class="form-label">
@@ -162,6 +218,7 @@
 
         <!-- Json: Textarea with fixed-width font and placeholder -->
         @if (draft.type === 'Json') {
+          <div class="hint-text">{{ 'migration.variables.jsonValueHint' | translate }}</div>
           <textarea
             id="variableValue"
             class="form-control form-control-code"
@@ -174,6 +231,22 @@
             [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
             [attr.aria-invalid]="fieldErrors?.value ? 'true' : null"
             placeholder='{"key": "value"}'></textarea>
+        }
+
+        <!-- O2: Object: Textarea with fixed-width font for serialized value -->
+        @if (draft.type === 'Object') {
+          <textarea
+            id="variableValue"
+            class="form-control form-control-code"
+            rows="6"
+            [(ngModel)]="draft.value"
+            (ngModelChange)="onValueChange()"
+            (blur)="onValueBlur()"
+            (keydown.enter)="onFieldEnter($event)"
+            [class.is-invalid]="fieldErrors && fieldErrors.value"
+            [attr.aria-describedby]="fieldErrors?.value ? 'variableValue-error' : null"
+            [attr.aria-invalid]="fieldErrors?.value ? 'true' : null"
+            [placeholder]="getObjectValuePlaceholder()"></textarea>
         }
 
         @if (fieldErrors && fieldErrors.value) {
@@ -194,6 +267,7 @@
       <button
         type="button"
         class="btn btn-primary"
+        [disabled]="!canSave"
         [class.btn-disabled]="!canSave"
         [attr.aria-disabled]="!canSave ? 'true' : null"
         (click)="onSave()">
