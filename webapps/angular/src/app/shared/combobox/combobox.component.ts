@@ -85,20 +85,18 @@ export class ComboboxComponent implements OnInit, OnDestroy {
   }
 
   onArrowMouseDown(event: Event): void {
-    this.isArrowClick = true;
-  }
-
-  onArrowClick(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
+
+    this.isArrowClick = true;
 
     if (this.isOpen) {
       this.isOpen = false;
     } else {
       this.isOpen = true;
       this.updateActiveIndex();
-      this.inputEl?.nativeElement?.focus();
     }
+
     this.isArrowClick = false;
     this.cdr.markForCheck();
   }

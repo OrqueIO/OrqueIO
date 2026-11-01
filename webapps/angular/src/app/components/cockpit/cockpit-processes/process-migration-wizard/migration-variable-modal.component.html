@@ -9,11 +9,27 @@
     (keydown.enter)="onModalEnter($event)">
 
     <div class="modal-header">
-      <h3
-        class="modal-title"
-        [id]="'modal-title-' + (editingVariable ? 'edit' : 'add')">
-        {{ modalTitle | translate }}
-      </h3>
+      <div class="header-content">
+        <div class="icon-badge" aria-hidden="true">
+          @if (editingVariable) {
+            <!-- Edit mode: pencil icon -->
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14.5 2.5l3 3L7 16H4v-3L14.5 2.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M13 4l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          } @else {
+            <!-- Add mode: plus icon -->
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          }
+        </div>
+        <h3
+          class="modal-title"
+          [id]="'modal-title-' + (editingVariable ? 'edit' : 'add')">
+          {{ modalTitle | translate }}
+        </h3>
+      </div>
       <button
         type="button"
         class="close-btn"
@@ -27,7 +43,7 @@
       <!-- Variable Name -->
       <div class="form-group">
         <label for="variableName" class="form-label">
-          {{ 'migration.variables.variableName' | translate }}*
+          {{ 'migration.variables.variableName' | translate }}<span class="required">*</span>
         </label>
         <input
           #nameInput
@@ -43,56 +59,101 @@
           [attr.aria-invalid]="fieldErrors?.name ? 'true' : null">
         @if (fieldErrors && fieldErrors.name) {
           <div id="variableName-error" class="error-message" role="alert">
-            {{ fieldErrors.name | translate }}
+            <svg class="error-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7 4v3M7 10h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span>{{ fieldErrors.name | translate }}</span>
           </div>
         }
       </div>
 
-      <!-- Variable Type -->
-      <div class="form-group">
-        <label for="variableType" class="form-label">
-          {{ 'migration.variables.variableType' | translate }}*
-        </label>
-        <select
-          id="variableType"
-          class="form-control"
-          [(ngModel)]="draft.type"
-          (ngModelChange)="onTypeChange($event)"
-          (keydown.enter)="onFieldEnter($event)"
-          [class.is-invalid]="fieldErrors && fieldErrors.type"
-          [attr.aria-describedby]="fieldErrors?.type ? 'variableType-error' : null"
-          [attr.aria-invalid]="fieldErrors?.type ? 'true' : null">
-          @for (type of variableTypes; track type) {
-            <option [value]="type">{{ type }}</option>
-          }
-        </select>
-        @if (fieldErrors && fieldErrors.type) {
-          <div id="variableType-error" class="error-message" role="alert">
-            {{ fieldErrors.type | translate }}
-          </div>
-        }
-      </div>
-
+      <!-- Variable Type and Object Type Name Grid -->
       @if (draft.type === 'Object') {
+        <div class="form-grid">
+          <!-- Variable Type -->
+          <div class="form-group">
+            <label for="variableType" class="form-label">
+              {{ 'migration.variables.variableType' | translate }}<span class="required">*</span>
+            </label>
+            <select
+              id="variableType"
+              class="form-control"
+              [(ngModel)]="draft.type"
+              (ngModelChange)="onTypeChange($event)"
+              (keydown.enter)="onFieldEnter($event)"
+              [class.is-invalid]="fieldErrors && fieldErrors.type"
+              [attr.aria-describedby]="fieldErrors?.type ? 'variableType-error' : null"
+              [attr.aria-invalid]="fieldErrors?.type ? 'true' : null">
+              @for (type of variableTypes; track type) {
+                <option [value]="type">{{ type }}</option>
+              }
+            </select>
+            @if (fieldErrors && fieldErrors.type) {
+              <div id="variableType-error" class="error-message" role="alert">
+                <svg class="error-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M7 4v3M7 10h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span>{{ fieldErrors.type | translate }}</span>
+              </div>
+            }
+          </div>
+
+          <!-- Object Type Name -->
+          <div class="form-group">
+            <label for="objectTypeName" class="form-label">
+              {{ 'migration.variables.objectTypeName' | translate }}<span class="required">*</span>
+            </label>
+            <input
+              id="objectTypeName"
+              type="text"
+              class="form-control form-control-monospace"
+              [(ngModel)]="draft.objectTypeName"
+              (ngModelChange)="onObjectTypeNameChange()"
+              (blur)="onObjectTypeNameBlur()"
+              (keydown.enter)="onFieldEnter($event)"
+              [class.is-invalid]="fieldErrors && fieldErrors.objectTypeName"
+              [attr.aria-describedby]="fieldErrors?.objectTypeName ? 'objectTypeName-error' : null"
+              [attr.aria-invalid]="fieldErrors?.objectTypeName ? 'true' : null"
+              placeholder="java.util.HashMap">
+            @if (fieldErrors && fieldErrors.objectTypeName) {
+              <div id="objectTypeName-error" class="error-message" role="alert">
+                <svg class="error-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M7 4v3M7 10h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span>{{ fieldErrors.objectTypeName | translate }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      } @else {
+        <!-- Variable Type (non-Object) -->
         <div class="form-group">
-          <label for="objectTypeName" class="form-label">
-            {{ 'migration.variables.objectTypeName' | translate }}*
+          <label for="variableType" class="form-label">
+            {{ 'migration.variables.variableType' | translate }}<span class="required">*</span>
           </label>
-          <input
-            id="objectTypeName"
-            type="text"
+          <select
+            id="variableType"
             class="form-control"
-            [(ngModel)]="draft.objectTypeName"
-            (ngModelChange)="onObjectTypeNameChange()"
-            (blur)="onObjectTypeNameBlur()"
+            [(ngModel)]="draft.type"
+            (ngModelChange)="onTypeChange($event)"
             (keydown.enter)="onFieldEnter($event)"
-            [class.is-invalid]="fieldErrors && fieldErrors.objectTypeName"
-            [attr.aria-describedby]="fieldErrors?.objectTypeName ? 'objectTypeName-error' : null"
-            [attr.aria-invalid]="fieldErrors?.objectTypeName ? 'true' : null"
-            placeholder="java.util.HashMap">
-          @if (fieldErrors && fieldErrors.objectTypeName) {
-            <div id="objectTypeName-error" class="error-message" role="alert">
-              {{ fieldErrors.objectTypeName | translate }}
+            [class.is-invalid]="fieldErrors && fieldErrors.type"
+            [attr.aria-describedby]="fieldErrors?.type ? 'variableType-error' : null"
+            [attr.aria-invalid]="fieldErrors?.type ? 'true' : null">
+            @for (type of variableTypes; track type) {
+              <option [value]="type">{{ type }}</option>
+            }
+          </select>
+          @if (fieldErrors && fieldErrors.type) {
+            <div id="variableType-error" class="error-message" role="alert">
+              <svg class="error-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M7 4v3M7 10h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span>{{ fieldErrors.type | translate }}</span>
             </div>
           }
         </div>
@@ -101,7 +162,7 @@
       @if (draft.type === 'Object') {
         <div class="form-group">
           <label for="serializationDataFormat" class="form-label">
-            {{ 'migration.variables.serializationDataFormat' | translate }}*
+            {{ 'migration.variables.serializationDataFormat' | translate }}<span class="required">*</span>
           </label>
           <app-combobox
             inputId="serializationDataFormat"
@@ -115,7 +176,11 @@
           </app-combobox>
           @if (fieldErrors && fieldErrors.serializationDataFormat) {
             <div id="serializationDataFormat-error" class="error-message" role="alert">
-              {{ fieldErrors.serializationDataFormat.startsWith('migration.') ? (fieldErrors.serializationDataFormat | translate) : fieldErrors.serializationDataFormat }}
+              <svg class="error-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M7 4v3M7 10h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span>{{ fieldErrors.serializationDataFormat.startsWith('migration.') ? (fieldErrors.serializationDataFormat | translate) : fieldErrors.serializationDataFormat }}</span>
             </div>
           }
         </div>
@@ -124,7 +189,7 @@
       <!-- Variable Value - Type-Specific Inputs -->
       <div class="form-group">
         <label for="variableValue" class="form-label">
-          {{ 'migration.variables.variableValue' | translate }}*
+          {{ 'migration.variables.variableValue' | translate }}<span class="required">*</span>
         </label>
 
         <!-- String: Multi-line textarea -->
@@ -144,7 +209,7 @@
 
         <!-- Boolean: Checkbox with true/false label (C1-1 CORRECTIF C1) -->
         @if (draft.type === 'Boolean') {
-          <label class="checkbox-label">
+          <label class="checkbox-label checkbox-container">
             <input
               id="variableValue"
               type="checkbox"
@@ -212,7 +277,7 @@
         @if (draft.type === 'Json') {
           <textarea
             id="variableValue"
-            class="form-control form-control-code"
+            class="form-control form-control-code form-control-monospace"
             rows="6"
             [(ngModel)]="draft.value"
             (ngModelChange)="onValueChange()"
@@ -228,7 +293,7 @@
         @if (draft.type === 'Object') {
           <textarea
             id="variableValue"
-            class="form-control form-control-code"
+            class="form-control form-control-code form-control-monospace form-control-object"
             rows="6"
             [(ngModel)]="draft.value"
             (ngModelChange)="onValueChange()"
@@ -242,7 +307,11 @@
 
         @if (fieldErrors && fieldErrors.value) {
           <div id="variableValue-error" class="error-message" role="alert">
-            {{ fieldErrors.value.startsWith('migration.') ? (fieldErrors.value | translate) : fieldErrors.value }}
+            <svg class="error-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M7 4v3M7 10h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span>{{ fieldErrors.value.startsWith('migration.') ? (fieldErrors.value | translate) : fieldErrors.value }}</span>
           </div>
         }
       </div>
