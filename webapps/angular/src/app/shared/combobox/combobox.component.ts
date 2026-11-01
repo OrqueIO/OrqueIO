@@ -41,6 +41,7 @@ export class ComboboxComponent implements OnInit, OnDestroy {
 
   isOpen = false;
   activeIndex = -1;
+  private isArrowClick = false;
 
   constructor(
     private elementRef: ElementRef,
@@ -62,8 +63,10 @@ export class ComboboxComponent implements OnInit, OnDestroy {
   }
 
   onInputFocus(): void {
-    this.isOpen = true;
-    this.updateActiveIndex();
+    if (!this.isArrowClick) {
+      this.isOpen = true;
+      this.updateActiveIndex();
+    }
     this.cdr.markForCheck();
   }
 
@@ -81,6 +84,10 @@ export class ComboboxComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
+  onArrowMouseDown(event: Event): void {
+    this.isArrowClick = true;
+  }
+
   onArrowClick(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
@@ -92,7 +99,12 @@ export class ComboboxComponent implements OnInit, OnDestroy {
       this.updateActiveIndex();
       this.inputEl?.nativeElement?.focus();
     }
+    this.isArrowClick = false;
     this.cdr.markForCheck();
+  }
+
+  onListMouseDown(event: Event): void {
+    event.preventDefault();
   }
 
   onOptionClick(option: string): void {

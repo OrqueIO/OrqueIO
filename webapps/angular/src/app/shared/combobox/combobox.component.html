@@ -22,6 +22,7 @@
     />
     <button
       type="button"
+      (mousedown)="onArrowMouseDown($event)"
       (click)="onArrowClick($event)"
       tabindex="-1"
       class="combobox-arrow"
@@ -34,6 +35,7 @@
     <ul
       [id]="listboxId"
       role="listbox"
+      (mousedown)="onListMouseDown($event)"
       class="combobox-listbox">
       @for (option of options; track option; let i = $index) {
         <li
