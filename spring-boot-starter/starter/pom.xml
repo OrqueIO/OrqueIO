@@ -81,10 +81,10 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
     </dependency>
+    <!-- For JPA auto-configuration -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
-      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -135,11 +135,6 @@
       <version>${version.spring-boot}</version>
       <scope>provided</scope>
       <optional>true</optional>
-    </dependency>
-    <!-- For JPA auto-configuration -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
     <!-- For health indicators -->
