@@ -52,6 +52,17 @@
       </div>
     </div>
 
+  <!-- Pagination (visible when not loading/error and has instances) -->
+  <app-pagination
+    *ngIf="!loading() && !error() && instances().length > 0"
+    [current]="currentPage()"
+    [size]="pageSize"
+    [total]="totalCount()"
+    [showSizeSelector]="true"
+    [availableSizes]="[10, 25, 50, 100]"
+    (pageChange)="onPaginationChange($event)">
+  </app-pagination>
+
   <!-- Query mode warning banner -->
   @if (mode() === 'query') {
     <div class="query-warning-banner" role="alert">
@@ -90,20 +101,29 @@
           </p>
         </div>
       } @else {
+        <!-- Selection bar (Instance mode only) -->
+        @if (mode() === 'instance') {
+          <div class="select-all-bar">
+            <label class="select-all-label">
+              <input type="checkbox"
+                     [checked]="allOnPageSelected()"
+                     [indeterminate]="isIndeterminate()"
+                     (change)="toggleSelectAll()">
+              <span>{{ 'cockpit.batchOps.suspend.selectAllOnPage' | translate: { count: instances().length.toString() } }}</span>
+            </label>
+            <span class="selection-count"
+                  [class.selection-count--empty]="selectedIds().size === 0">
+              {{ 'cockpit.batchOps.selectedCount' | translate: { count: selectedIds().size.toString() } }}
+            </span>
+          </div>
+        }
+
         <div class="instances-table-container">
           <table class="instances-table" role="grid">
             <thead>
               <tr>
                 @if (mode() === 'instance') {
-                  <th scope="col" class="col-checkbox">
-                    <input
-                      type="checkbox"
-                      [checked]="allOnPageSelected()"
-                      [indeterminate]="selectedIds().size > 0 && !allOnPageSelected()"
-                      (change)="toggleSelectAll()"
-                      [attr.aria-label]="'migration.instances.selectAll' | translate"
-                      class="checkbox-input">
-                  </th>
+                  <th scope="col" class="col-checkbox"></th>
                 }
                 <th scope="col" class="col-id">{{ 'migration.instances.columnId' | translate }}</th>
                 <th scope="col" class="col-business-key">{{ 'migration.instances.columnBusinessKey' | translate }}</th>

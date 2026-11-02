@@ -13,6 +13,7 @@ import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { CockpitService, MultiValueFilter, ProcessInstance } from '../../../../services/cockpit.service';
 import { InstanceFilterPanelComponent, FilterPanelChange } from '../../../../shared/instance-filter-panel/instance-filter-panel';
+import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
 
 export type SelectionMode = 'instance' | 'query';
 
@@ -33,7 +34,8 @@ export interface InstancesStepState {
     FormsModule,
     FontAwesomeModule,
     TranslatePipe,
-    InstanceFilterPanelComponent
+    InstanceFilterPanelComponent,
+    PaginationComponent
   ],
   templateUrl: './migration-instances-step.component.html',
   styleUrl: './migration-instances-step.component.css',
@@ -78,6 +80,13 @@ export class MigrationInstancesStepComponent {
     const instances = this.instances();
     const selectedIds = this.selectedIds();
     return instances.length > 0 && instances.every(inst => selectedIds.has(inst.id));
+  });
+
+  readonly isIndeterminate = computed(() => {
+    const instances = this.instances();
+    const selectedIds = this.selectedIds();
+    const selectedOnPage = instances.filter(inst => selectedIds.has(inst.id)).length;
+    return selectedOnPage > 0 && selectedOnPage < instances.length;
   });
 
   private readonly loadInstances$ = new Subject<void>();
@@ -203,6 +212,13 @@ export class MigrationInstancesStepComponent {
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
+    this.loadInstances$.next();
+  }
+
+  onPaginationChange(event: PageChangeEvent): void {
+    this.currentPage.set(event.current);
+    if (event.size !== this.pageSize) {
+    }
     this.loadInstances$.next();
   }
 
