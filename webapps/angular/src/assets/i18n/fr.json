@@ -2205,7 +2205,7 @@
   "migration.instances.back": "Retour",
   "migration.instances.migrateSelectedInstances": "Migrer les instances sélectionnées ({{count}})",
   "migration.instances.noRunningInstances": "Aucune instance en cours d'exécution pour cette version",
-  "migration.instances.noRunningInstancesForVersion": "Aucune instance en cours d'exécution pour la version {{version}} de {{processKey}}",
+  "migration.instances.noRunningInstancesFound": "Aucune instance en cours d'exécution trouvée",
   "migration.instances.selectedLabel": "{{count}} instances sélectionnées",
   "migration.instances.linkCopied": "Lien copié dans le presse-papiers",
   "migration.instances.linkCopyFailed": "Échec de la copie du lien dans le presse-papiers",

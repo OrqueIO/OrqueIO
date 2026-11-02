@@ -158,13 +158,7 @@
     @if (!loading() && !error()) {
       @if (instances().length === 0) {
         <div class="empty-state">
-          <div class="empty-state-icon">📭</div>
-          <p class="empty-state-text">
-            {{ 'migration.instances.noRunningInstancesForVersion' | translate: {
-              version: sourceVersion().toString(),
-              processKey: getProcessKeyFromDefinitionId()
-            } }}
-          </p>
+          {{ 'migration.instances.noRunningInstancesFound' | translate }}
         </div>
       } @else {
         <!-- Selection bar (Instance mode only) -->

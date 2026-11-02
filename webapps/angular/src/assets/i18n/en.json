@@ -2223,7 +2223,7 @@
   "migration.instances.back": "Back",
   "migration.instances.migrateSelectedInstances": "Migrate Selected Instances ({{count}})",
   "migration.instances.noRunningInstances": "No running instances for this version",
-  "migration.instances.noRunningInstancesForVersion": "No running instances for version {{version}} of {{processKey}}",
+  "migration.instances.noRunningInstancesFound": "No running instances found",
   "migration.instances.selectedLabel": "{{count}} selected instances",
   "migration.instances.linkCopied": "Link copied to clipboard",
   "migration.instances.linkCopyFailed": "Failed to copy link to clipboard",
