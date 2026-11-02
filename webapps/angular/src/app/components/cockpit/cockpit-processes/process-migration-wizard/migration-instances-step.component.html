@@ -37,20 +37,86 @@
         <button
           type="button"
           class="filter-action-btn"
+          (click)="copyFilterLink()"
           [attr.aria-label]="'migration.instances.copyFilterLink' | translate"
           [title]="'migration.instances.copyFilterLink' | translate">
           <fa-icon [icon]="faLink"></fa-icon>
         </button>
-        <button
-          type="button"
-          class="filter-action-btn filter-save-btn"
-          [attr.aria-label]="'migration.instances.saveFilter' | translate"
-          [title]="'migration.instances.saveFilter' | translate">
-          <fa-icon [icon]="faSave"></fa-icon>
-          <fa-icon [icon]="faChevronDown" class="chevron"></fa-icon>
-        </button>
+        <div class="filter-save-dropdown-wrapper">
+          <button
+            type="button"
+            class="filter-action-btn filter-save-btn"
+            (click)="toggleSaveDropdown($event)"
+            [attr.aria-label]="'migration.instances.saveFilter' | translate"
+            [title]="'migration.instances.saveFilter' | translate"
+            [attr.aria-expanded]="showSaveDropdown()">
+            <fa-icon [icon]="faSave"></fa-icon>
+            <fa-icon [icon]="faChevronDown" class="chevron"></fa-icon>
+          </button>
+          @if (showSaveDropdown()) {
+            <div class="save-dropdown" (click)="$event.stopPropagation()">
+              <div class="save-dropdown-section">
+                <label class="save-dropdown-label">{{ 'migration.instances.saveFilterPrompt' | translate }}</label>
+                <input
+                  type="text"
+                  class="save-dropdown-input"
+                  [placeholder]="'migration.instances.filterNamePlaceholder' | translate"
+                  [value]="filterNameInput()"
+                  (input)="filterNameInput.set($any($event.target).value)"
+                  (keydown.enter)="saveCurrentFilter()"
+                  (keydown.escape)="closeSaveDropdown()">
+                <button
+                  type="button"
+                  class="save-dropdown-btn save-dropdown-btn-primary"
+                  (click)="saveCurrentFilter()"
+                  [disabled]="!filterNameInput().trim()">
+                  {{ 'migration.instances.save' | translate }}
+                </button>
+              </div>
+              <div class="save-dropdown-divider"></div>
+              <div class="save-dropdown-section">
+                <div class="save-dropdown-label">{{ 'migration.instances.loadFilter' | translate }}</div>
+                @if (savedFilters().length === 0) {
+                  <div class="save-dropdown-empty">{{ 'migration.instances.noSavedFilters' | translate }}</div>
+                } @else {
+                  <div class="saved-filters-list">
+                    @for (filter of savedFilters(); track filter.name) {
+                      <div class="saved-filter-item">
+                        <button
+                          type="button"
+                          class="saved-filter-load-btn"
+                          (click)="loadFilter(filter)">
+                          {{ filter.name }}
+                        </button>
+                        <button
+                          type="button"
+                          class="saved-filter-delete-btn"
+                          (click)="deleteFilter(filter, $event)"
+                          [attr.aria-label]="'migration.instances.deleteFilter' | translate">
+                          ×
+                        </button>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
       </div>
     </div>
+
+    <!-- Status message (overlay - does not shift content) -->
+    @if (statusMessage(); as msg) {
+      <div class="filter-status-message"
+           [class.filter-status-error]="msg.type === 'error'"
+           [class.filter-status-success]="msg.type === 'success'"
+           role="status"
+           aria-live="polite">
+        <span class="filter-status-icon">✓</span>
+        <span class="filter-status-text">{{ msg.text }}</span>
+      </div>
+    }
 
   <!-- Pagination (visible when not loading/error and has instances) -->
   <app-pagination

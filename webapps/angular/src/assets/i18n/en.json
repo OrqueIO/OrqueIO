@@ -2224,5 +2224,19 @@
   "migration.instances.migrateSelectedInstances": "Migrate Selected Instances ({{count}})",
   "migration.instances.noRunningInstances": "No running instances for this version",
   "migration.instances.noRunningInstancesForVersion": "No running instances for version {{version}} of {{processKey}}",
-  "migration.instances.selectedLabel": "{{count}} selected instances"
+  "migration.instances.selectedLabel": "{{count}} selected instances",
+  "migration.instances.linkCopied": "Link copied to clipboard",
+  "migration.instances.linkCopyFailed": "Failed to copy link to clipboard",
+  "migration.instances.saveFilterPrompt": "Save current filter",
+  "migration.instances.filterNamePlaceholder": "Filter name",
+  "migration.instances.save": "Save",
+  "migration.instances.cancel": "Cancel",
+  "migration.instances.loadFilter": "Load saved filter",
+  "migration.instances.deleteFilter": "Delete filter",
+  "migration.instances.noSavedFilters": "No saved filters",
+  "migration.instances.filterSaved": "Filter saved successfully",
+  "migration.instances.filterLoaded": "Filter loaded successfully",
+  "migration.instances.filterDeleted": "Filter deleted successfully",
+  "migration.fallbackBanner.message": "Opened from a shared link. Source, target and filter were restored. Review the mapping, then continue.",
+  "migration.fallbackBanner.dismiss": "Dismiss"
 }

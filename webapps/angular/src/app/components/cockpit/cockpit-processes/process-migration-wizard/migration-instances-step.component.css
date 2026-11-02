@@ -56,13 +56,14 @@
 }
 
 .filter-panel-wrapper {
-  border: 1px solid #cbd5e1;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 8px 12px;
   background-color: var(--bg-surface, #fff);
   display: flex;
   align-items: center;
   gap: 12px;
+  overflow: visible;
 }
 
 .filter-panel-wrapper app-instance-filter-panel {
@@ -396,10 +397,207 @@ app-pagination {
 }
 
 /* Scoped styles for filter panel component within this step */
-/* Remove internal border from criteria-zone to avoid double framing */
+/* Remove internal border from criteria-zone - keep only outer wrapper frame */
 .filter-panel-wrapper ::ng-deep .criteria-zone {
   border: none !important;
   padding: 0 !important;
   background: transparent !important;
   border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+/* Filter save dropdown */
+.filter-save-dropdown-wrapper {
+  position: relative;
+}
+
+.save-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 280px;
+  max-width: 320px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  padding: 12px;
+}
+
+.save-dropdown-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.save-dropdown-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #1a1a1a);
+}
+
+.save-dropdown-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+}
+
+.save-dropdown-input:focus {
+  border-color: var(--color-primary, #1976d2);
+}
+
+.save-dropdown-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.save-dropdown-btn-primary {
+  background: var(--color-primary, #1976d2);
+  color: white;
+}
+
+.save-dropdown-btn-primary:hover:not(:disabled) {
+  background: var(--color-primary-dark, #1565c0);
+}
+
+.save-dropdown-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.save-dropdown-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 8px 0;
+}
+
+.save-dropdown-empty {
+  font-size: 13px;
+  color: var(--text-muted, #999);
+  padding: 8px;
+  text-align: center;
+}
+
+.saved-filters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.saved-filter-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.saved-filter-load-btn {
+  flex: 1;
+  text-align: left;
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.saved-filter-load-btn:hover {
+  background: #f8fafc;
+  border-color: var(--color-primary, #1976d2);
+}
+
+.saved-filter-delete-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  background: white;
+  font-size: 18px;
+  line-height: 1;
+  color: #dc2626;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.saved-filter-delete-btn:hover {
+  background: #fee2e2;
+  border-color: #dc2626;
+}
+
+/* Filter status message - overlay positioned (no content shift) */
+.filter-status-message {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  color: #166534;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-width: 400px;
+  animation: slideInUp 0.3s ease-out;
+}
+
+.filter-status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: #16a34a;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.filter-status-text {
+  flex: 1;
+}
+
+.filter-status-success {
+  /* Default styles already applied */
+}
+
+.filter-status-error {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.filter-status-error .filter-status-icon {
+  background: #dc2626;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

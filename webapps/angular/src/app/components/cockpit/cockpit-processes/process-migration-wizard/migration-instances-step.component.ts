@@ -1,6 +1,6 @@
 import {
   Component, ChangeDetectionStrategy, output, input, signal, computed,
-  inject, DestroyRef, effect, untracked
+  inject, DestroyRef, effect, untracked, HostListener, OnDestroy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -25,6 +25,25 @@ export interface InstancesStepState {
   label: string;
 }
 
+export interface SavedFilter {
+  name: string;
+  criteria: MultiValueFilter[];
+  processDefinitionId?: string;
+  savedAt: string;
+}
+
+export interface MigrationWizardSnapshot {
+  sourceDefinitionId: string;
+  targetDefinitionId: string;
+  instructions: any[];
+  variables: any[];
+  filterCriteria: MultiValueFilter[];
+  vnIgnoreCase: boolean;
+  vvIgnoreCase: boolean;
+  mode: SelectionMode;
+  createdAt: string;
+}
+
 
 @Component({
   selector: 'app-migration-instances-step',
@@ -41,7 +60,7 @@ export interface InstancesStepState {
   styleUrl: './migration-instances-step.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MigrationInstancesStepComponent {
+export class MigrationInstancesStepComponent implements OnDestroy {
   private cockpitService = inject(CockpitService);
   private translateService = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
@@ -51,6 +70,14 @@ export class MigrationInstancesStepComponent {
 
   readonly sourceDefinitionId = input.required<string>();
   readonly sourceVersion = input.required<number>();
+  readonly targetDefinitionId = input.required<string>();
+
+  readonly instructions = input<any[]>([]);
+  readonly variables = input<any[]>([]);
+
+  readonly initialCriteria = input<MultiValueFilter[] | null>(null);
+  readonly initialVnIgnoreCase = input<boolean>(false);
+  readonly initialVvIgnoreCase = input<boolean>(false);
 
   readonly faQuestionCircle = faQuestionCircle;
   readonly faSpinner = faSpinner;
@@ -89,11 +116,23 @@ export class MigrationInstancesStepComponent {
     return selectedOnPage > 0 && selectedOnPage < instances.length;
   });
 
+  readonly showSaveDropdown = signal(false);
+  readonly savedFilters = signal<SavedFilter[]>([]);
+  readonly statusMessage = signal<{ type: 'success' | 'error'; text: string } | null>(null);
+  readonly filterNameInput = signal('');
+
   private readonly loadInstances$ = new Subject<void>();
+  private readonly SAVED_FILTERS_KEY = 'cockpit-saved-filters';
+  private readonly SNAPSHOT_KEY_PREFIX = 'migration-wizard-link:';
+  private readonly SNAPSHOT_MAX_COUNT = 10;
+  private readonly SNAPSHOT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+  private statusMessageTimeout: ReturnType<typeof setTimeout> | null = null;
 
   readonly showExtendedCriteria = true;
 
   constructor() {
+    this.loadSavedFilters();
+
     this.loadInstances$.pipe(
       switchMap(() => {
         this.loading.set(true);
@@ -132,8 +171,26 @@ export class MigrationInstancesStepComponent {
 
     effect(() => {
       const defId = this.sourceDefinitionId();
-      if (defId) {
+      const initialCriteria = this.initialCriteria();
+
+      if (defId && (!initialCriteria || initialCriteria.length === 0)) {
         untracked(() => {
+          this.loadInstances$.next();
+        });
+      }
+    });
+
+    effect(() => {
+      const criteria = this.initialCriteria();
+      const defId = this.sourceDefinitionId();
+
+      if (criteria && criteria.length > 0 && defId) {
+        untracked(() => {
+          const filtered = criteria.filter(c => c.field !== 'processDefinition' && c.field !== 'state');
+          this.filterCriteria.set(filtered);
+          this.vnIgnoreCase.set(this.initialVnIgnoreCase());
+          this.vvIgnoreCase.set(this.initialVvIgnoreCase());
+
           this.loadInstances$.next();
         });
       }
@@ -353,5 +410,217 @@ export class MigrationInstancesStepComponent {
     if (!defId) return '';
     const parts = defId.split(':');
     return parts.length > 0 ? parts[0] : '';
+  }
+
+  async copyFilterLink(): Promise<void> {
+    try {
+      const url = this.buildFilterUrl();
+      await navigator.clipboard.writeText(url);
+      this.showStatusMessage('success', this.translateService.instant('migration.instances.linkCopied'));
+    } catch (error) {
+      this.showStatusMessage('error', this.translateService.instant('migration.instances.linkCopyFailed'));
+    }
+  }
+
+  private buildFilterUrl(): string {
+    const baseUrl = window.location.origin + '/cockpit/processes/migration';
+    const params = new URLSearchParams();
+
+    const snapshotId = this.saveSnapshot();
+    if (snapshotId) {
+      params.append('restore', snapshotId);
+    }
+
+    const sourceDefId = this.sourceDefinitionId();
+    const targetDefId = this.targetDefinitionId();
+    if (sourceDefId) {
+      params.append('source', sourceDefId);
+    }
+    if (targetDefId) {
+      params.append('target', targetDefId);
+    }
+
+    const criteria = this.filterCriteria().filter(c =>
+      c.field !== 'processDefinition' && c.field !== 'state'
+    );
+    if (criteria.length > 0) {
+      params.append('criteria', JSON.stringify(criteria));
+    }
+
+    if (this.vnIgnoreCase()) {
+      params.append('vnIgnoreCase', 'true');
+    }
+
+    if (this.vvIgnoreCase()) {
+      params.append('vvIgnoreCase', 'true');
+    }
+
+    return `${baseUrl}?${params.toString()}`;
+  }
+
+  private saveSnapshot(): string | null {
+    try {
+      const snapshotId = crypto.randomUUID();
+      const snapshot: MigrationWizardSnapshot = {
+        sourceDefinitionId: this.sourceDefinitionId(),
+        targetDefinitionId: this.targetDefinitionId(),
+        instructions: this.instructions(),
+        variables: this.variables(),
+        filterCriteria: this.filterCriteria().filter(c =>
+          c.field !== 'processDefinition' && c.field !== 'state'
+        ),
+        vnIgnoreCase: this.vnIgnoreCase(),
+        vvIgnoreCase: this.vvIgnoreCase(),
+        mode: this.mode(),
+        createdAt: new Date().toISOString()
+      };
+
+      const key = this.SNAPSHOT_KEY_PREFIX + snapshotId;
+      localStorage.setItem(key, JSON.stringify(snapshot));
+
+      this.cleanupSnapshots();
+
+      return snapshotId;
+    } catch (error) {
+      console.warn('Failed to save migration snapshot to localStorage:', error);
+      return null;
+    }
+  }
+
+  private cleanupSnapshots(): void {
+    try {
+      const now = Date.now();
+      const snapshots: { key: string; createdAt: number }[] = [];
+
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key?.startsWith(this.SNAPSHOT_KEY_PREFIX)) {
+          try {
+            const data = JSON.parse(localStorage.getItem(key)!);
+            const createdAt = new Date(data.createdAt).getTime();
+
+            if (now - createdAt > this.SNAPSHOT_MAX_AGE_MS) {
+              localStorage.removeItem(key);
+            } else {
+              snapshots.push({ key, createdAt });
+            }
+          } catch {
+            localStorage.removeItem(key);
+          }
+        }
+      }
+
+      if (snapshots.length > this.SNAPSHOT_MAX_COUNT) {
+        snapshots.sort((a, b) => b.createdAt - a.createdAt);
+        for (let i = this.SNAPSHOT_MAX_COUNT; i < snapshots.length; i++) {
+          localStorage.removeItem(snapshots[i].key);
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to cleanup snapshots:', error);
+    }
+  }
+
+  toggleSaveDropdown(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.showSaveDropdown.update(show => !show);
+  }
+
+  closeSaveDropdown(): void {
+    this.showSaveDropdown.set(false);
+    this.filterNameInput.set('');
+  }
+
+  saveCurrentFilter(): void {
+    const name = this.filterNameInput().trim();
+    if (!name) {
+      return;
+    }
+
+    const newFilter: SavedFilter = {
+      name,
+      criteria: [...this.filterCriteria()],
+      processDefinitionId: this.sourceDefinitionId(),
+      savedAt: new Date().toISOString()
+    };
+
+    const filters = this.savedFilters();
+    const existingIndex = filters.findIndex(f => f.name === name);
+
+    if (existingIndex >= 0) {
+      filters[existingIndex] = newFilter;
+    } else {
+      filters.push(newFilter);
+    }
+
+    this.savedFilters.set([...filters]);
+    this.persistFilters();
+    this.closeSaveDropdown();
+    this.showStatusMessage('success', this.translateService.instant('migration.instances.filterSaved'));
+  }
+
+  loadFilter(filter: SavedFilter): void {
+    const criteriaWithoutProcDef = filter.criteria.filter(c => c.field !== 'processDefinition');
+    this.filterCriteria.set(criteriaWithoutProcDef);
+    this.currentPage.set(1);
+    this.loadInstances$.next();
+    this.closeSaveDropdown();
+    this.showStatusMessage('success', this.translateService.instant('migration.instances.filterLoaded'));
+  }
+
+  deleteFilter(filter: SavedFilter, event: Event): void {
+    event.stopPropagation();
+    const filters = this.savedFilters().filter(f => f.name !== filter.name);
+    this.savedFilters.set(filters);
+    this.persistFilters();
+    this.showStatusMessage('success', this.translateService.instant('migration.instances.filterDeleted'));
+  }
+
+  private loadSavedFilters(): void {
+    try {
+      const stored = localStorage.getItem(this.SAVED_FILTERS_KEY);
+      if (stored) {
+        const filters = JSON.parse(stored) as SavedFilter[];
+        this.savedFilters.set(filters);
+      }
+    } catch (error) {
+      console.error('Failed to load saved filters:', error);
+    }
+  }
+
+  private persistFilters(): void {
+    try {
+      localStorage.setItem(this.SAVED_FILTERS_KEY, JSON.stringify(this.savedFilters()));
+    } catch (error) {
+      console.error('Failed to persist filters:', error);
+    }
+  }
+
+  private showStatusMessage(type: 'success' | 'error', text: string): void {
+    if (this.statusMessageTimeout) {
+      clearTimeout(this.statusMessageTimeout);
+    }
+
+    this.statusMessage.set({ type, text });
+    this.statusMessageTimeout = setTimeout(() => {
+      this.statusMessage.set(null);
+      this.statusMessageTimeout = null;
+    }, 3000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.statusMessageTimeout) {
+      clearTimeout(this.statusMessageTimeout);
+      this.statusMessageTimeout = null;
+    }
+  }
+
+  @HostListener('document:click')
+  onDocumentClick(): void {
+    if (this.showSaveDropdown()) {
+      this.closeSaveDropdown();
+    }
   }
 }

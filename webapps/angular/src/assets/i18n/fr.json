@@ -2206,5 +2206,19 @@
   "migration.instances.migrateSelectedInstances": "Migrer les instances sélectionnées ({{count}})",
   "migration.instances.noRunningInstances": "Aucune instance en cours d'exécution pour cette version",
   "migration.instances.noRunningInstancesForVersion": "Aucune instance en cours d'exécution pour la version {{version}} de {{processKey}}",
-  "migration.instances.selectedLabel": "{{count}} instances sélectionnées"
+  "migration.instances.selectedLabel": "{{count}} instances sélectionnées",
+  "migration.instances.linkCopied": "Lien copié dans le presse-papiers",
+  "migration.instances.linkCopyFailed": "Échec de la copie du lien dans le presse-papiers",
+  "migration.instances.saveFilterPrompt": "Enregistrer le filtre actuel",
+  "migration.instances.filterNamePlaceholder": "Nom du filtre",
+  "migration.instances.save": "Enregistrer",
+  "migration.instances.cancel": "Annuler",
+  "migration.instances.loadFilter": "Charger un filtre enregistré",
+  "migration.instances.deleteFilter": "Supprimer le filtre",
+  "migration.instances.noSavedFilters": "Aucun filtre enregistré",
+  "migration.instances.filterSaved": "Filtre enregistré avec succès",
+  "migration.instances.filterLoaded": "Filtre chargé avec succès",
+  "migration.instances.filterDeleted": "Filtre supprimé avec succès",
+  "migration.fallbackBanner.message": "Ouvert depuis un lien partagé. La source, la cible et le filtre ont été restaurés. Vérifiez le mapping, puis continuez.",
+  "migration.fallbackBanner.dismiss": "Fermer"
 }

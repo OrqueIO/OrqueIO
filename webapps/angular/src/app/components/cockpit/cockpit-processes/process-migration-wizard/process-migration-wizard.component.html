@@ -40,6 +40,23 @@
         </app-batch-wizard-stepper>
       </div>
 
+      @if (currentStep() === 1 && showFallbackBanner()) {
+        <div class="fallback-banner" role="status">
+          <svg class="fallback-banner-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+            <text x="12" y="16" text-anchor="middle" font-size="14" font-weight="bold" fill="currentColor">i</text>
+          </svg>
+          <span class="fallback-banner-message">{{ 'migration.fallbackBanner.message' | translate }}</span>
+          <button
+            type="button"
+            class="fallback-banner-close"
+            (click)="dismissFallbackBanner()"
+            [attr.aria-label]="'migration.fallbackBanner.dismiss' | translate">
+            &#x2715;
+          </button>
+        </div>
+      }
+
       @if (currentStep() === 1) {
         <div class="step-content step-1">
         @if (loadingState() === 'loading') {
@@ -261,6 +278,12 @@
           <app-migration-instances-step
             [sourceDefinitionId]="sourceDefinitionId()!"
             [sourceVersion]="sourceVersion()!"
+            [targetDefinitionId]="targetDefinitionId()!"
+            [instructions]="editableInstructions()"
+            [variables]="variables()"
+            [initialCriteria]="linkFilterCriteria()"
+            [initialVnIgnoreCase]="linkVnIgnoreCase()"
+            [initialVvIgnoreCase]="linkVvIgnoreCase()"
             (back)="onSelectInstancesBack()"
             (next)="onSelectInstancesNext($event)">
           </app-migration-instances-step>

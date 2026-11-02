@@ -3,7 +3,7 @@ import {
   DestroyRef, inject, signal, computed, effect, untracked, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -13,7 +13,7 @@ import { forkJoin, switchMap, of, Subject, debounceTime, catchError, filter, tap
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
 import { NavMenuService } from '../../../../services/nav-menu.service';
-import { CockpitService, ActivityStatistics } from '../../../../services/cockpit.service';
+import { CockpitService, ActivityStatistics, MultiValueFilter } from '../../../../services/cockpit.service';
 import { ProcessDefinitionService, ProcessDefinition } from '../../../../services/process-definition.service';
 import { MigrationService } from '../../../../services/migration.service';
 import { MigrationPlanDto, MigrationPlanReportDto, MigrationInstructionDto } from '../../../../services/migration.model';
@@ -23,7 +23,7 @@ import { BatchWizardStepperComponent, WizardStep } from '../../cockpit-batch/bat
 import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { MigrationArrowsComponent, RouteParams } from './migration-arrows.component';
 import { MigrationVariablesStepComponent } from './migration-variables-step.component';
-import { MigrationInstancesStepComponent, InstancesStepState } from './migration-instances-step.component';
+import { MigrationInstancesStepComponent, InstancesStepState, MigrationWizardSnapshot } from './migration-instances-step.component';
 import { MigrationVariableModalComponent } from './migration-variable-modal.component';
 import { Anchor, getAnchorKey } from './migration-arrow-anchors';
 import { MigrationUndoToastService } from './migration-undo-toast.service';
@@ -62,6 +62,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   @ViewChild(MigrationArrowsComponent) migrationArrowsComponent?: MigrationArrowsComponent;
 
   private destroyRef = inject(DestroyRef);
+  private route = inject(ActivatedRoute);
   private navMenuService = inject(NavMenuService);
   private cockpitService = inject(CockpitService);
   private processDefinitionService = inject(ProcessDefinitionService);
@@ -88,7 +89,15 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   loadingState = signal<LoadingState>('loading');
   errorMessage = signal<string | null>(null);
 
-  // All process definitions loaded
+  linkRestoreId = signal<string | null>(null);
+  linkSourceDefId = signal<string | null>(null);
+  linkTargetDefId = signal<string | null>(null);
+  linkFilterCriteria = signal<MultiValueFilter[] | null>(null);
+  linkVnIgnoreCase = signal(false);
+  linkVvIgnoreCase = signal(false);
+
+  showFallbackBanner = signal(false);
+
   private allDefinitions = signal<ProcessDefinition[]>([]);
 
   // Available unique keys sorted
@@ -338,6 +347,9 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
+
+    this.loadFilterFromUrl();
+
     this.loadProcessDefinitions();
 
     // Setup debounced validation
@@ -469,6 +481,40 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.removeEscapeKeyListener();
   }
 
+  private loadFilterFromUrl(): void {
+    try {
+      const params = this.route.snapshot.queryParams;
+
+      const restoreParam = params['restore'];
+      if (restoreParam && typeof restoreParam === 'string') {
+        this.linkRestoreId.set(restoreParam);
+      }
+
+      const sourceParam = params['source'];
+      const targetParam = params['target'];
+      if (sourceParam && typeof sourceParam === 'string') {
+        this.linkSourceDefId.set(sourceParam);
+      }
+      if (targetParam && typeof targetParam === 'string') {
+        this.linkTargetDefId.set(targetParam);
+      }
+
+      const criteriaJson = params['criteria'];
+      if (criteriaJson) {
+        const criteria = JSON.parse(criteriaJson) as MultiValueFilter[];
+        if (Array.isArray(criteria)) {
+          const filtered = criteria.filter(c => c.field !== 'processDefinition' && c.field !== 'state');
+          this.linkFilterCriteria.set(filtered);
+        }
+      }
+
+      this.linkVnIgnoreCase.set(params['vnIgnoreCase'] === 'true');
+      this.linkVvIgnoreCase.set(params['vvIgnoreCase'] === 'true');
+    } catch (error) {
+      console.warn('Failed to parse URL params, ignoring:', error);
+    }
+  }
+
   private loadProcessDefinitions(): void {
     this.loadingState.set('loading');
     this.processDefinitionService.getProcessDefinitionsStatisticsRaw()
@@ -478,6 +524,9 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
           const defs = stats.map(s => s.definition);
           this.allDefinitions.set(defs);
           this.loadingState.set('loaded');
+
+          this.applyUrlPreFill();
+
           this.cdr.markForCheck();
         },
         error: (err) => {
@@ -486,6 +535,206 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
           this.cdr.markForCheck();
         }
       });
+  }
+
+  private applyUrlPreFill(): void {
+    const restoreId = this.linkRestoreId();
+
+    if (restoreId) {
+      const restored = this.applySnapshotRestore(restoreId);
+      if (restored) {
+        return;
+      }
+    }
+
+    const sourceDefId = this.linkSourceDefId();
+    const targetDefId = this.linkTargetDefId();
+
+    if (!sourceDefId && !targetDefId) {
+      return;
+    }
+
+    this.showFallbackBanner.set(true);
+
+    const allDefs = this.allDefinitions();
+
+    let sourceKey: string | null = null;
+    let sourceVersion: number | null = null;
+    if (sourceDefId) {
+      const sourceDef = allDefs.find(d => d.id === sourceDefId);
+      if (sourceDef) {
+        sourceKey = sourceDef.key;
+        sourceVersion = sourceDef.version;
+      } else {
+        console.warn('Source definition ID from URL not found:', sourceDefId);
+      }
+    }
+
+    let targetKey: string | null = null;
+    let targetVersion: number | null = null;
+    if (targetDefId) {
+      const targetDef = allDefs.find(d => d.id === targetDefId);
+      if (targetDef) {
+        targetKey = targetDef.key;
+        targetVersion = targetDef.version;
+      } else {
+        console.warn('Target definition ID from URL not found:', targetDefId);
+      }
+    }
+
+    if (sourceKey && sourceVersion !== null) {
+      this.sourceKey.set(sourceKey);
+      this.onSourceVersionChange(sourceVersion);
+    }
+
+    if (targetKey && targetVersion !== null) {
+      this.targetKey.set(targetKey);
+      this.onTargetVersionChange(targetVersion);
+    }
+
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * @param snapshotId
+   * @returns
+   */
+  private applySnapshotRestore(snapshotId: string): boolean {
+    try {
+      const snapshot = this.loadSnapshot(snapshotId);
+      if (!snapshot) {
+        return false;
+      }
+
+      const allDefs = this.allDefinitions();
+
+      const sourceDef = allDefs.find(d => d.id === snapshot.sourceDefinitionId);
+      if (!sourceDef) {
+        console.warn('Snapshot source definition no longer exists:', snapshot.sourceDefinitionId);
+        return false;
+      }
+
+      const targetDef = allDefs.find(d => d.id === snapshot.targetDefinitionId);
+      if (!targetDef) {
+        console.warn('Snapshot target definition no longer exists:', snapshot.targetDefinitionId);
+        return false;
+      }
+
+      this.sourceKey.set(sourceDef.key);
+      this.sourceVersion.set(sourceDef.version);
+      this.sourceDefinitionId.set(sourceDef.id);
+
+      this.targetKey.set(targetDef.key);
+      this.targetVersion.set(targetDef.version);
+      this.targetDefinitionId.set(targetDef.id);
+
+      this.editableInstructions.set(snapshot.instructions);
+      this.variables.set(snapshot.variables);
+
+      this.linkFilterCriteria.set(snapshot.filterCriteria);
+      this.linkVnIgnoreCase.set(snapshot.vnIgnoreCase);
+      this.linkVvIgnoreCase.set(snapshot.vvIgnoreCase);
+
+      const planValid = this.validateRestoredPlan(snapshot);
+      if (!planValid) {
+        console.warn('Snapshot validation failed - plan no longer valid');
+        return false;
+      }
+
+      this.currentStep.set(3);
+      this.cdr.markForCheck();
+
+      return true;
+    } catch (error) {
+      console.warn('Failed to restore snapshot:', error);
+      return false;
+    }
+  }
+
+
+  private loadSnapshot(snapshotId: string): MigrationWizardSnapshot | null {
+    try {
+      const key = 'migration-wizard-link:' + snapshotId;
+      const data = localStorage.getItem(key);
+      if (!data) {
+        return null;
+      }
+
+      const snapshot = JSON.parse(data) as MigrationWizardSnapshot;
+
+      this.cleanupSnapshots();
+
+      const createdAt = new Date(snapshot.createdAt).getTime();
+      const now = Date.now();
+      if (now - createdAt > 24 * 60 * 60 * 1000) {
+        localStorage.removeItem(key);
+        return null;
+      }
+
+      if (!this.validateSnapshotSchema(snapshot)) {
+        localStorage.removeItem(key);
+        return null;
+      }
+
+      return snapshot;
+    } catch (error) {
+      console.warn('Failed to load snapshot:', error);
+      return null;
+    }
+  }
+
+  private validateSnapshotSchema(snapshot: any): snapshot is MigrationWizardSnapshot {
+    return snapshot &&
+      typeof snapshot.sourceDefinitionId === 'string' &&
+      typeof snapshot.targetDefinitionId === 'string' &&
+      Array.isArray(snapshot.instructions) &&
+      Array.isArray(snapshot.variables) &&
+      Array.isArray(snapshot.filterCriteria) &&
+      typeof snapshot.vnIgnoreCase === 'boolean' &&
+      typeof snapshot.vvIgnoreCase === 'boolean' &&
+      (snapshot.mode === 'instance' || snapshot.mode === 'query') &&
+      typeof snapshot.createdAt === 'string';
+  }
+
+
+  private cleanupSnapshots(): void {
+    try {
+      const now = Date.now();
+      const prefix = 'migration-wizard-link:';
+      const snapshots: { key: string; createdAt: number }[] = [];
+
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key?.startsWith(prefix)) {
+          try {
+            const data = JSON.parse(localStorage.getItem(key)!);
+            const createdAt = new Date(data.createdAt).getTime();
+
+            if (now - createdAt > 24 * 60 * 60 * 1000) {
+              localStorage.removeItem(key);
+            } else {
+              snapshots.push({ key, createdAt });
+            }
+          } catch {
+            localStorage.removeItem(key);
+          }
+        }
+      }
+
+      if (snapshots.length > 10) {
+        snapshots.sort((a, b) => b.createdAt - a.createdAt);
+        for (let i = 10; i < snapshots.length; i++) {
+          localStorage.removeItem(snapshots[i].key);
+        }
+      }
+    } catch (error) {
+      console.warn('Failed to cleanup snapshots:', error);
+    }
+  }
+
+
+  private validateRestoredPlan(snapshot: MigrationWizardSnapshot): boolean {
+    return true;
   }
 
   private resetDerivedState(): void {
@@ -578,6 +827,8 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.showFallbackBanner.set(false);
+
     this.sourceKey.set(key);
     this.sourceVersion.set(null);
     const prevDefId = this.sourceDefinitionId();
@@ -620,6 +871,8 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.showFallbackBanner.set(false);
+
     this.targetKey.set(key);
     this.targetVersion.set(null);
     const prevDefId = this.targetDefinitionId();
@@ -652,6 +905,10 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.resetDerivedState();
     this.targetDefinitionChangeSubject.next(defId);
     this.triggerPlanGeneration();
+  }
+
+  dismissFallbackBanner(): void {
+    this.showFallbackBanner.set(false);
   }
 
   private triggerPlanGeneration(): void {

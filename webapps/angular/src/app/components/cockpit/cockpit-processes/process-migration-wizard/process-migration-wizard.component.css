@@ -475,3 +475,55 @@
   white-space: nowrap;
   border-width: 0;
 }
+
+/* Fallback banner (shown when URL params used without snapshot restore) */
+.fallback-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin: 0 1.5rem 1rem 1.5rem;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 10px;
+  color: #1e3a8a;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fallback-banner-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: #1e3a8a;
+}
+
+.fallback-banner-message {
+  flex: 1;
+}
+
+.fallback-banner-close {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #1e3a8a;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.fallback-banner-close:hover {
+  background-color: rgba(30, 58, 138, 0.1);
+}
+
+.fallback-banner-close:focus-visible {
+  outline: 2px solid #1e3a8a;
+  outline-offset: 2px;
+}
