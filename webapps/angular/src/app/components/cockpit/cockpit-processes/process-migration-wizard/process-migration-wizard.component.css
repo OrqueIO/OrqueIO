@@ -136,6 +136,11 @@
   padding: var(--space-4);
 }
 
+/* Step 3: Reduced top padding to minimize vertical space above mode toggle */
+.step-3 {
+  padding-top: 0.5rem; /* 8px instead of var(--space-4) */
+}
+
 .info-text {
   color: var(--text-secondary);
   font-size: var(--font-size-base);

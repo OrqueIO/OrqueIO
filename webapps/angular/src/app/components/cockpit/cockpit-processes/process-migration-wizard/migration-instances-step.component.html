@@ -1,0 +1,163 @@
+<div class="instances-step">
+  <div class="instances-step-content">
+    <!-- Mode toggle (matching batch operations design) -->
+    <div class="mode-toggle" role="group" [attr.aria-label]="'migration.instances.selectionMode' | translate">
+      <button type="button"
+              class="mode-btn"
+              [class.mode-btn--active]="mode() === 'instance'"
+              (click)="onModeChange('instance')">
+        {{ 'cockpit.batchOps.suspend.modeInstances' | translate }}
+      </button>
+      <button type="button"
+              class="mode-btn"
+              [class.mode-btn--active]="mode() === 'query'"
+              (click)="onModeChange('query')">
+        {{ 'cockpit.batchOps.suspend.modeQuery' | translate }}
+      </button>
+    </div>
+
+    <!-- Filter section label -->
+    <h3 class="filter-section-label">
+      {{ 'migration.instances.filterLabel' | translate }}
+    </h3>
+
+    <!-- Filter panel wrapper -->
+    <div class="filter-panel-wrapper">
+      <app-instance-filter-panel
+        [criteriaSet]="'process'"
+        [showExtendedCriteria]="showExtendedCriteria"
+        [lockedState]="'unfinished'"
+        [showStateNarrowing]="true"
+        [initialPills]="filterCriteria()"
+        (criteriaChange)="onFilterChange($event)">
+      </app-instance-filter-panel>
+
+      <div class="filter-actions">
+        <div class="filter-total">{{ totalCount() }}</div>
+        <button
+          type="button"
+          class="filter-action-btn"
+          [attr.aria-label]="'migration.instances.copyFilterLink' | translate"
+          [title]="'migration.instances.copyFilterLink' | translate">
+          <fa-icon [icon]="faLink"></fa-icon>
+        </button>
+        <button
+          type="button"
+          class="filter-action-btn filter-save-btn"
+          [attr.aria-label]="'migration.instances.saveFilter' | translate"
+          [title]="'migration.instances.saveFilter' | translate">
+          <fa-icon [icon]="faSave"></fa-icon>
+          <fa-icon [icon]="faChevronDown" class="chevron"></fa-icon>
+        </button>
+      </div>
+    </div>
+
+  <!-- Query mode warning banner -->
+  @if (mode() === 'query') {
+    <div class="query-warning-banner" role="alert">
+      {{ 'migration.instances.queryWarning' | translate }}
+    </div>
+  }
+
+  <!-- Loading state -->
+  @if (loading()) {
+    <div class="loading-state">
+      <fa-icon [icon]="faSpinner" [animation]="'spin'" class="loading-spinner"></fa-icon>
+      <span>{{ 'migration.instances.loading' | translate }}</span>
+    </div>
+  }
+
+  <!-- Error state -->
+  @if (error() && !loading()) {
+    <div class="error-state">
+      <p class="error-message">{{ 'migration.instances.errorLoading' | translate }}</p>
+      <button type="button" class="btn-secondary" (click)="retry()">
+        {{ 'migration.instances.retry' | translate }}
+      </button>
+    </div>
+  }
+
+    <!-- Instances table -->
+    @if (!loading() && !error()) {
+      @if (instances().length === 0) {
+        <div class="empty-state">
+          <div class="empty-state-icon">📭</div>
+          <p class="empty-state-text">
+            {{ 'migration.instances.noRunningInstancesForVersion' | translate: {
+              version: sourceVersion().toString(),
+              processKey: getProcessKeyFromDefinitionId()
+            } }}
+          </p>
+        </div>
+      } @else {
+        <div class="instances-table-container">
+          <table class="instances-table" role="grid">
+            <thead>
+              <tr>
+                @if (mode() === 'instance') {
+                  <th scope="col" class="col-checkbox">
+                    <input
+                      type="checkbox"
+                      [checked]="allOnPageSelected()"
+                      [indeterminate]="selectedIds().size > 0 && !allOnPageSelected()"
+                      (change)="toggleSelectAll()"
+                      [attr.aria-label]="'migration.instances.selectAll' | translate"
+                      class="checkbox-input">
+                  </th>
+                }
+                <th scope="col" class="col-id">{{ 'migration.instances.columnId' | translate }}</th>
+                <th scope="col" class="col-business-key">{{ 'migration.instances.columnBusinessKey' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (instance of instances(); track instance.id) {
+                <tr [class.selected]="selectedIds().has(instance.id)">
+                  @if (mode() === 'instance') {
+                    <td class="col-checkbox">
+                      <input
+                        type="checkbox"
+                        [checked]="selectedIds().has(instance.id)"
+                        (change)="toggleInstanceSelection(instance.id)"
+                        [attr.aria-label]="'migration.instances.selectInstance' | translate: { id: instance.id }"
+                        class="checkbox-input">
+                    </td>
+                  }
+                  <td class="col-id">
+                    <a [href]="'/cockpit/processes/instance/' + instance.id" class="instance-link">
+                      {{ instance.id }}
+                    </a>
+                  </td>
+                  <td class="col-business-key">{{ instance.businessKey || '—' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    }
+
+  </div>
+
+  <!-- Footer buttons (always visible) -->
+  <div class="step-footer">
+    <div class="footer-left">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onBackClick()"
+        [attr.aria-label]="'migration.backButton' | translate">
+        ← {{ 'migration.back' | translate }}
+      </button>
+    </div>
+    <div class="footer-right">
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="isPrimaryButtonDisabled()"
+        [attr.aria-disabled]="isPrimaryButtonDisabled() ? 'true' : 'false'"
+        (click)="onNextClick()">
+        {{ getPrimaryButtonLabel() }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -23,6 +23,7 @@ import { BatchWizardStepperComponent, WizardStep } from '../../cockpit-batch/bat
 import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { MigrationArrowsComponent, RouteParams } from './migration-arrows.component';
 import { MigrationVariablesStepComponent } from './migration-variables-step.component';
+import { MigrationInstancesStepComponent, InstancesStepState } from './migration-instances-step.component';
 import { MigrationVariableModalComponent } from './migration-variable-modal.component';
 import { Anchor, getAnchorKey } from './migration-arrow-anchors';
 import { MigrationUndoToastService } from './migration-undo-toast.service';
@@ -49,6 +50,7 @@ const ENABLE_CONNECTION_EDITOR_SPIKE = false;
     BpmnViewerComponent,
     MigrationArrowsComponent,
     MigrationVariablesStepComponent,
+    MigrationInstancesStepComponent,
     MigrationVariableModalComponent
   ],
   templateUrl: './process-migration-wizard.component.html',
@@ -240,6 +242,8 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   isVariableModalOpen = signal(false);
   editingVariableIndex = signal<number | null>(null);
+
+  instancesStepState = signal<InstancesStepState | null>(null);
 
   setVariablesDisabledReason = computed<string | null>(() => {
     const sourceId = this.sourceDefinitionId();
@@ -967,6 +971,15 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   onVariablesNext(): void {
     this.currentStep.set(3);
+  }
+
+  onSelectInstancesBack(): void {
+    this.currentStep.set(2);
+  }
+
+  onSelectInstancesNext(state: InstancesStepState): void {
+    this.instancesStepState.set(state);
+    this.currentStep.set(4);
   }
 
   onAddVariable(): void {

@@ -255,6 +255,17 @@
           </app-migration-variables-step>
         </div>
       }
+
+      @if (currentStep() === 3) {
+        <div class="step-content step-3">
+          <app-migration-instances-step
+            [sourceDefinitionId]="sourceDefinitionId()!"
+            [sourceVersion]="sourceVersion()!"
+            (back)="onSelectInstancesBack()"
+            (next)="onSelectInstancesNext($event)">
+          </app-migration-instances-step>
+        </div>
+      }
         </div>
       </div>
     </div>

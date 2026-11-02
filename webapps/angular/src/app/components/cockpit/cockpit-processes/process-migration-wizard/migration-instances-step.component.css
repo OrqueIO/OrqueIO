@@ -1,0 +1,371 @@
+.instances-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.instances-step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0 1.5rem;
+  padding-bottom: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Mode toggle (matching batch operations design) */
+.mode-toggle {
+  display: flex;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  width: fit-content;
+  margin-top: 0;
+}
+
+.mode-btn {
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.mode-btn:not(:last-child) {
+  border-right: 1px solid var(--border-color);
+}
+
+.mode-btn--active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* Filter section */
+.filter-section-label {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+  color: var(--text-secondary, #666);
+}
+
+.filter-panel-wrapper {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 8px 12px;
+  background-color: var(--bg-surface, #fff);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-panel-wrapper app-instance-filter-panel {
+  flex: 1;
+}
+
+.filter-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-total {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary, #1a1a1a);
+  padding: 0 4px;
+}
+
+.filter-action-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: #64748b;
+  min-width: 32px;
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.filter-action-btn:hover {
+  color: #475569;
+  background-color: #f1f5f9;
+}
+
+.filter-action-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #1976d2);
+  outline-offset: 2px;
+}
+
+.filter-save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.filter-save-btn .chevron {
+  font-size: 0.65rem;
+}
+
+/* Query warning banner */
+.query-warning-banner {
+  padding: 0.875rem 1rem;
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  color: #856404;
+  font-size: 0.9375rem;
+}
+
+/* Loading state */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  color: var(--text-secondary, #666);
+}
+
+.loading-spinner {
+  font-size: 1.25rem;
+}
+
+/* Error state */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.error-message {
+  color: var(--color-danger, #d32f2f);
+  margin: 0;
+}
+
+/* Instances table */
+.instances-table-container {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: calc(44px * 6 + 44px);
+  overflow-y: auto;
+  position: relative;
+}
+
+.instances-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--bg-surface, #fff);
+}
+
+.instances-table thead {
+  background-color: #f8fafc;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.instances-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+  white-space: nowrap;
+}
+
+.instances-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  height: 44px;
+}
+
+.instances-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.instances-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.instances-table tbody tr.selected {
+  background-color: #eff6ff;
+}
+
+.instances-table tbody tr.selected:hover {
+  background-color: #dbeafe;
+}
+
+.col-checkbox {
+  width: 48px;
+  text-align: left;
+  padding-left: 16px !important;
+}
+
+.checkbox-input {
+  cursor: pointer;
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  vertical-align: middle;
+}
+
+.col-id {
+  width: 50%;
+}
+
+.col-business-key {
+  width: 50%;
+}
+
+.instance-link {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  color: #2563eb;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.instance-link:hover {
+  text-decoration: underline;
+}
+
+.instance-link:focus-visible {
+  outline: 2px solid var(--color-primary, #1976d2);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  color: #64748b;
+  gap: 0.75rem;
+}
+
+.empty-state-icon {
+  font-size: 2rem;
+  opacity: 0.5;
+}
+
+.empty-state-text {
+  font-size: 15px;
+  text-align: center;
+  margin: 0;
+}
+
+/* Pagination */
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.page-info {
+  font-size: 0.9375rem;
+  color: var(--text-secondary, #666);
+}
+
+/* Footer buttons */
+.step-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  background-color: var(--bg-surface, #fff);
+  flex-shrink: 0;
+}
+
+.footer-left,
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Button styles - matching Step 2 exactly */
+.btn {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(var(--color-primary-rgb, 37, 99, 235), 0.05);
+  border-color: var(--color-primary);
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Scoped styles for filter panel component within this step */
+.filter-panel-wrapper ::ng-deep app-instance-filter-panel {
+  /* Remove any internal borders/paddings that create double framing */
+}
+
+.filter-panel-wrapper ::ng-deep .filter-panel-controls {
+  border: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.filter-panel-wrapper ::ng-deep .add-criteria-btn {
+  /* Ensure "Add criteria" button aligns with filter actions */
+}
