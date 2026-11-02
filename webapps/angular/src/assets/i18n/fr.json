@@ -2176,6 +2176,7 @@
   "migration.variables.objectTypeName": "Nom du type d'objet",
   "migration.variables.serializationDataFormat": "Format de sérialisation des données",
   "migration.variables.serializationFormatPlaceholder": "Sélectionner ou saisir un format",
+  "migration.variables.format": "Format",
   "migration.variables.errorObjectTypeNameRequired": "Le nom du type d'objet est requis",
   "migration.variables.errorSerializationDataFormatRequired": "Le format de sérialisation des données est requis",
   "migration.variables.value.placeholder.json": "Saisir une valeur JSON",

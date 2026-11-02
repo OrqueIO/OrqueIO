@@ -23,7 +23,10 @@
               <td class="name-cell">{{ variable.name }}</td>
               <td class="type-cell">
                 {{ variable.type }}@if (variable.type === 'Object' && variable.valueInfo?.objectTypeName) {
-                  <span class="object-type-info" [title]="variable.valueInfo?.objectTypeName"> · {{ variable.valueInfo?.objectTypeName }}</span>
+                  <span
+                    class="type-class-badge"
+                    [title]="getObjectTypeBadgeTitle(variable)"
+                    [attr.aria-label]="'Object type ' + variable.valueInfo?.objectTypeName">{{ variable.valueInfo?.objectTypeName }}</span>
                 }
               </td>
               <td class="value-cell">

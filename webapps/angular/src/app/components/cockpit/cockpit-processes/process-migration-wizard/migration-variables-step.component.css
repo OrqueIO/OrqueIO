@@ -164,6 +164,22 @@
   font-size: 13px;
 }
 
+.type-class-badge {
+  display: inline-block;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12.5px;
+  background: #f1f5f9;
+  color: #475569;
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin-left: 8px;
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+
 .value-cell {
   font-family: 'Courier New', Courier, monospace;
   font-size: 13px;

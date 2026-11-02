@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, output, input, signal, effect, afterNextRender, Injector, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPencilAlt, faTrash, faSpinner, faCheck, faTimes, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { PlanVariable, displayValue } from './migration-variables.utils';
@@ -24,6 +25,7 @@ import type { VariableValidationState } from './migration-engine-validation.util
 })
 export class MigrationVariablesStepComponent {
   private injector = inject(Injector);
+  private translateService = inject(TranslateService);
   readonly back = output<void>();
   readonly next = output<void>();
   readonly addVariable = output<void>();
@@ -87,6 +89,21 @@ export class MigrationVariablesStepComponent {
 
   isStructuredType(type: string): boolean {
     return type === 'Json' || type === 'Object';
+  }
+
+  /**
+   * Returns title for Object type class badge
+   */
+  getObjectTypeBadgeTitle(variable: PlanVariable): string {
+    const className = variable.valueInfo?.objectTypeName || '';
+    const format = variable.valueInfo?.serializationDataFormat;
+
+    if (format) {
+      const formatLabel = this.translateService.instant('migration.variables.format');
+      return `${className}\n${formatLabel}: ${format}`;
+    }
+
+    return className;
   }
 
   /**
