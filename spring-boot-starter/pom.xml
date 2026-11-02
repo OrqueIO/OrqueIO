@@ -17,7 +17,9 @@
 
   <packaging>pom</packaging>
 
-
+  <properties>
+    <version.spring-ai>2.0.0</version.spring-ai>
+  </properties>
 
   <dependencyManagement>
     <dependencies>
@@ -47,6 +49,14 @@
         <scope>import</scope>
         <type>pom</type>
       </dependency>
+      <dependency>
+        <!-- Spring AI 2.0 requires Spring Boot 4.0+ -->
+        <groupId>org.springframework.ai</groupId>
+        <artifactId>spring-ai-bom</artifactId>
+        <version>${version.spring-ai}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -60,6 +70,7 @@
         <module>starter</module>
         <module>starter-rest</module>
         <module>starter-security</module>
+        <module>starter-ai</module>
         <module>starter-test</module>
         <module>starter-client/spring</module>
         <module>starter-client/spring-boot</module>
@@ -93,6 +104,7 @@
         <module>starter</module>
         <module>starter-rest</module>
         <module>starter-security</module>
+        <module>starter-ai</module>
         <module>starter-client/spring-boot</module>
         <module>starter-webapp-core</module>
       </modules>
