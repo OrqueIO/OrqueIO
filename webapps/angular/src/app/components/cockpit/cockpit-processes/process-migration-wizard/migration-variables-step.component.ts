@@ -41,7 +41,6 @@ export class MigrationVariablesStepComponent {
   readonly faTimes = faTimes;
   readonly faExclamationCircle = faExclamationCircle;
   readonly openJsonPopoverIndex = signal<number | null>(null);
-  readonly openErrorPopoverIndex = signal<number | null>(null);
 
   private previousVariablesCount = 0;
 
@@ -122,32 +121,6 @@ export class MigrationVariablesStepComponent {
   getValidationState(variable: PlanVariable): VariableValidationState | undefined {
     const states = this.validationStates();
     return states.find(s => s.name === variable.name);
-  }
-
-
-  toggleErrorPopover(index: number, event: Event): void {
-    event.stopPropagation();
-    event.preventDefault();
-    if (this.openErrorPopoverIndex() === index) {
-      this.openErrorPopoverIndex.set(null);
-    } else {
-      this.openErrorPopoverIndex.set(index);
-    }
-  }
-
-  closeErrorPopover(): void {
-    this.openErrorPopoverIndex.set(null);
-  }
-
-  onErrorPopoverKeydown(event: KeyboardEvent, index: number): void {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      this.closeErrorPopover();
-      const iconBtn = document.querySelector(`button[data-error-icon="${index}"]`) as HTMLButtonElement;
-      if (iconBtn) {
-        iconBtn.focus();
-      }
-    }
   }
 
   hasInvalidVariables(): boolean {

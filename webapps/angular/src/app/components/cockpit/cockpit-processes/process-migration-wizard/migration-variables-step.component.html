@@ -74,44 +74,12 @@
                       [title]="'migration.variables.valid' | translate">
                     </fa-icon>
                   } @else if (state.status === 'invalid') {
-                    <div class="validation-error-container">
-                      <button
-                        type="button"
-                        class="validation-icon-btn"
-                        [attr.data-error-icon]="i"
-                        (click)="toggleErrorPopover(i, $event)"
-                        (keydown.enter)="toggleErrorPopover(i, $event)"
-                        [attr.aria-label]="'migration.variables.invalid' | translate"
-                        [title]="'migration.variables.invalid' | translate">
-                        <fa-icon
-                          [icon]="faTimes"
-                          class="validation-icon validation-invalid">
-                        </fa-icon>
-                      </button>
-                      @if (openErrorPopoverIndex() === i) {
-                        <div
-                          class="error-popover"
-                          (click)="$event.stopPropagation()"
-                          (keydown)="onErrorPopoverKeydown($event, i)"
-                          tabindex="-1">
-                          <div class="popover-header">
-                            <span>{{ 'migration.variables.validationErrors' | translate }}</span>
-                            <button
-                              type="button"
-                              class="popover-close"
-                              (click)="closeErrorPopover()"
-                              [attr.aria-label]="'migration.variables.close' | translate">
-                              &#x2715;
-                            </button>
-                          </div>
-                          <ul class="popover-content error-list">
-                            @for (message of state.messages; track message) {
-                              <li>{{ message }}</li>
-                            }
-                          </ul>
-                        </div>
-                      }
-                    </div>
+                    <fa-icon
+                      [icon]="faTimes"
+                      class="validation-icon validation-invalid"
+                      [attr.aria-label]="state.messages[0] || ('migration.variables.invalid' | translate)"
+                      [title]="state.messages[0] || ('migration.variables.invalid' | translate)">
+                    </fa-icon>
                   } @else if (state.status === 'error') {
                     <div class="validation-error-container">
                       <fa-icon
