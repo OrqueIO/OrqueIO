@@ -1,12 +1,11 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth';
 import { NotificationsService } from '../../services/notifications.service';
-import { TranslateService, Language } from '../../i18n/translate.service';
+import { TranslateService } from '../../i18n/translate.service';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 import { OAuth2ButtonsComponent } from './oauth2-buttons/oauth2-buttons.component';
 import { InitialUserService } from '../../services/initial-user.service';
@@ -20,16 +19,14 @@ type LoginStatus = 'INIT' | 'LOADING' | 'ERROR' | 'DONE';
   templateUrl: './login.html',
   styleUrls: ['./login.css']
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   status: LoginStatus = 'INIT';
   showPassword = false;
   showFirstLogin = false;
   showSetupLink = false;
-  currentLang: Language = 'fr';
 
   private readonly FIRST_VISIT_KEY = 'orqueio_firstVisit';
-  private langSubscription?: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -46,11 +43,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(3)]]
-    });
-
-    // Subscribe to language changes
-    this.langSubscription = this.translateService.currentLang$.subscribe(lang => {
-      this.currentLang = lang;
     });
 
     // CRITICAL: Check for OAuth2 successful callback FIRST
@@ -83,10 +75,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.langSubscription?.unsubscribe();
-  }
-
   private checkFirstVisit(): void {
     const isFirstVisit = localStorage.getItem(this.FIRST_VISIT_KEY) !== 'false';
     if (isFirstVisit) {
@@ -106,11 +94,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   dismissFirstLogin(): void {
     this.showFirstLogin = false;
     localStorage.setItem(this.FIRST_VISIT_KEY, 'false');
-  }
-
-  toggleLanguage(): void {
-    const newLang = this.currentLang === 'fr' ? 'en' : 'fr';
-    this.translateService.setLanguage(newLang);
   }
 
   get username() {
