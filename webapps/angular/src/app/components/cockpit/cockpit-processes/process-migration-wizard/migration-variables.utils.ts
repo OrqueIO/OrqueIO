@@ -96,6 +96,26 @@ export function sanitizeNumericInput(
 }
 
 /**
+ * @param value
+ * @returns
+ */
+export function isWellFormedXml(value: string): boolean {
+  if (!value || typeof value !== 'string') {
+    return false;
+  }
+
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(value, 'application/xml');
+
+    const parseErrors = doc.getElementsByTagName('parsererror');
+    return parseErrors.length === 0;
+  } catch (e) {
+    return false;
+  }
+}
+
+/**
  * Validates a variable draft and returns field errors.
  *
  * @param draft - The variable draft to validate
@@ -187,6 +207,10 @@ export function validateVariableDraft(
           JSON.parse(trimmedValue);
         } catch (e) {
           errors.value = 'migration.variables.errorJsonInvalid';
+        }
+      } else if (trimmedSerializationDataFormat.toLowerCase() === 'application/xml') {
+        if (!isWellFormedXml(trimmedValue)) {
+          errors.value = 'migration.variables.errorXmlInvalid';
         }
       }
     }

@@ -2151,6 +2151,7 @@
   "migration.variables.errorBooleanInvalid": "Veuillez entrer 'true' ou 'false'",
   "migration.variables.errorDateInvalid": "Veuillez entrer une date valide",
   "migration.variables.errorJsonInvalid": "Veuillez entrer un JSON valide",
+  "migration.variables.errorXmlInvalid": "La valeur n'est pas un XML bien formé",
   "migration.variables.colName": "Nom",
   "migration.variables.colType": "Type",
   "migration.variables.colValue": "Valeur",
