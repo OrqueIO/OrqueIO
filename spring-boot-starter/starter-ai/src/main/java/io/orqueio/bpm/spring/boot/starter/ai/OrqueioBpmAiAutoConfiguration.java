@@ -19,6 +19,7 @@ package io.orqueio.bpm.spring.boot.starter.ai;
 import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
 import io.orqueio.bpm.spring.boot.starter.ai.property.OrqueioBpmAiProperties;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
+import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskProcessEnginePlugin;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -42,6 +43,12 @@ public class OrqueioBpmAiAutoConfiguration {
   @ConditionalOnMissingBean
   public ChatModelRegistry chatModelRegistry(ObjectProvider<ChatModel> chatModels, OrqueioBpmAiProperties properties) {
     return new ChatModelRegistry(() -> chatModels.orderedStream().toList(), properties.getDefaultProvider());
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public LlmTaskProcessEnginePlugin llmTaskProcessEnginePlugin(ChatModelRegistry chatModelRegistry) {
+    return new LlmTaskProcessEnginePlugin(chatModelRegistry);
   }
 
 }

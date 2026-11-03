@@ -23,6 +23,7 @@ import static org.mockito.Mockito.mock;
 import io.orqueio.bpm.spring.boot.starter.ai.property.OrqueioBpmAiProperties;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.LlmProviderException;
+import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskProcessEnginePlugin;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.ollama.OllamaChatModel;
@@ -62,6 +63,7 @@ class OrqueioBpmAiAutoConfigurationTest {
           assertThat(context).doesNotHaveBean(ChatModel.class);
           assertThat(context).hasSingleBean(OrqueioBpmAiAutoConfiguration.class);
           assertThat(context).hasSingleBean(ChatModelRegistry.class);
+          assertThat(context).hasSingleBean(LlmTaskProcessEnginePlugin.class);
         });
   }
 
@@ -108,6 +110,7 @@ class OrqueioBpmAiAutoConfigurationTest {
           assertThat(context).doesNotHaveBean(OrqueioBpmAiAutoConfiguration.class);
           assertThat(context).doesNotHaveBean(OrqueioBpmAiProperties.class);
           assertThat(context).doesNotHaveBean(ChatModelRegistry.class);
+          assertThat(context).doesNotHaveBean(LlmTaskProcessEnginePlugin.class);
         });
   }
 
