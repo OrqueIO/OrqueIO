@@ -20,16 +20,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.spring.boot.starter.ai.property.OrqueioBpmAiProperties;
+import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
 import io.orqueio.bpm.spring.boot.starter.ai.test.TestAiApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
 /**
  * Full application: process engine, the AI starter and the Ollama provider
- * starter. Startup makes no call to the model.
+ * starter, with no API key configured. Startup makes no call to the model.
  */
 @SpringBootTest(classes = TestAiApplication.class)
 class OrqueioBpmAiAutoConfigurationIT {
@@ -37,12 +39,21 @@ class OrqueioBpmAiAutoConfigurationIT {
   @Autowired
   private ApplicationContext context;
 
+  @Autowired
+  private ChatModelRegistry registry;
+
   @Test
   void shouldLoadAlongsideEngineAndProvider() {
     assertThat(context.getBeansOfType(ProcessEngine.class)).hasSize(1);
     assertThat(context.getBeansOfType(ChatModel.class)).hasSize(1);
     assertThat(context.getBeansOfType(OrqueioBpmAiAutoConfiguration.class)).hasSize(1);
     assertThat(context.getBean(OrqueioBpmAiProperties.class).isEnabled()).isTrue();
+  }
+
+  @Test
+  void shouldResolveOllamaWithoutApiKey() {
+    assertThat(registry.getChatModel("ollama")).isInstanceOf(OllamaChatModel.class);
+    assertThat(registry.getDefaultChatModel()).isSameAs(registry.getChatModel("ollama"));
   }
 
 }

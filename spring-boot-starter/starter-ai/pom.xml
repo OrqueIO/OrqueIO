@@ -43,10 +43,15 @@
       <version>${version.h2}</version>
       <scope>test</scope>
     </dependency>
-    <!-- A real provider starter, to check the starter alongside one. No model call is made. -->
+    <!-- Real provider starters, to check the starter alongside them. No model call is made. -->
     <dependency>
       <groupId>org.springframework.ai</groupId>
       <artifactId>spring-ai-starter-model-ollama</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-starter-model-openai</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

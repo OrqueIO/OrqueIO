@@ -18,9 +18,14 @@ package io.orqueio.bpm.spring.boot.starter.ai;
 
 import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
 import io.orqueio.bpm.spring.boot.starter.ai.property.OrqueioBpmAiProperties;
+import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -32,5 +37,11 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = OrqueioBpmAiProperties.PREFIX, name = "enabled", matchIfMissing = true)
 @EnableConfigurationProperties(OrqueioBpmAiProperties.class)
 public class OrqueioBpmAiAutoConfiguration {
+
+  @Bean
+  @ConditionalOnMissingBean
+  public ChatModelRegistry chatModelRegistry(ObjectProvider<ChatModel> chatModels, OrqueioBpmAiProperties properties) {
+    return new ChatModelRegistry(() -> chatModels.orderedStream().toList(), properties.getDefaultProvider());
+  }
 
 }
