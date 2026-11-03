@@ -20,6 +20,7 @@ import { CockpitService, MultiValueFilter, ProcessInstance } from '../../../../s
 import { InstanceFilterPanelComponent, FilterPanelChange } from '../../../../shared/instance-filter-panel/instance-filter-panel';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
 import { SavedFiltersMenuComponent, SavedFilter } from './saved-filters-menu.component';
+import { CamDatePipe } from '../../../../pipes/cam-date.pipe';
 
 export type SelectionMode = 'instance' | 'query';
 
@@ -53,6 +54,7 @@ export interface MigrationWizardSnapshot {
     FormsModule,
     FontAwesomeModule,
     TranslatePipe,
+    CamDatePipe,
     InstanceFilterPanelComponent,
     PaginationComponent,
     SavedFiltersMenuComponent

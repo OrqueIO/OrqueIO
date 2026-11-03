@@ -201,6 +201,15 @@
 
       <div class="instances-table-container">
         <table class="instances-table" role="grid">
+          <colgroup>
+            @if (mode() === 'instance') {
+              <col style="width: 56px">
+            }
+            <col style="width: 150px">
+            <col style="width: 340px">
+            <col style="width: 28%">
+            <col>
+          </colgroup>
           <thead>
             <tr>
               @if (mode() === 'instance') {
@@ -209,6 +218,7 @@
               <th scope="col" class="col-state">{{ 'migration.instances.columnState' | translate }}</th>
               <th scope="col" class="col-id">{{ 'migration.instances.columnId' | translate }}</th>
               <th scope="col" class="col-business-key">{{ 'migration.instances.columnBusinessKey' | translate }}</th>
+              <th scope="col" class="col-starttime">{{ 'cockpit.processes.columns.startTime' | translate }}</th>
             </tr>
           </thead>
           <tbody>
@@ -235,11 +245,14 @@
                   }
                 </td>
                 <td class="col-id">
-                  <a [href]="'/cockpit/processes/instance/' + instance.id" class="instance-link">
+                  <a [href]="'/cockpit/processes/instance/' + instance.id"
+                     class="instance-link"
+                     [title]="instance.id">
                     {{ instance.id }}
                   </a>
                 </td>
-                <td class="col-business-key">{{ instance.businessKey || '—' }}</td>
+                <td class="col-business-key" [title]="instance.businessKey || ''">{{ instance.businessKey || '—' }}</td>
+                <td class="col-starttime">{{ instance.startTime | camDate }}</td>
               </tr>
             }
           </tbody>

@@ -260,8 +260,11 @@ app-pagination {
 
 .instances-table {
   width: 100%;
-  border-collapse: collapse;
+  min-width: 960px;
+  table-layout: fixed;
   background-color: var(--bg-surface, #fff);
+  border-spacing: 0;
+  border-collapse: collapse;
 }
 
 .instances-table thead {
@@ -272,19 +275,22 @@ app-pagination {
 }
 
 .instances-table th {
-  padding: 12px 16px;
+  padding: 0 16px;
   text-align: left;
   font-weight: 600;
   font-size: 14px;
   color: #475569;
   border-bottom: 1px solid #e2e8f0;
   white-space: nowrap;
+  vertical-align: middle;
+  height: 44px;
 }
 
 .instances-table td {
-  padding: 12px 16px;
+  padding: 0 16px;
   border-bottom: 1px solid #f1f5f9;
   font-size: 14px;
+  vertical-align: middle;
   height: 44px;
 }
 
@@ -304,10 +310,9 @@ app-pagination {
   background-color: #dbeafe;
 }
 
+/* Column-specific styles (widths defined in colgroup) */
 .col-checkbox {
-  width: 48px;
   text-align: left;
-  padding-left: 16px !important;
 }
 
 .checkbox-input {
@@ -318,17 +323,19 @@ app-pagination {
   vertical-align: middle;
 }
 
-.col-state {
-  width: 140px;
-  min-width: 140px;
-}
-
 .col-id {
-  width: auto;
+  white-space: nowrap;
 }
 
 .col-business-key {
-  width: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-starttime {
+  white-space: nowrap;
+  min-width: 300px;
 }
 
 /* State badges - Copied from batch-operations-wizard.css:570-587 (EXACT styles) */
@@ -377,6 +384,10 @@ app-pagination {
   text-decoration: none;
   font-size: 13px;
   font-weight: 400;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .instance-link:hover {
