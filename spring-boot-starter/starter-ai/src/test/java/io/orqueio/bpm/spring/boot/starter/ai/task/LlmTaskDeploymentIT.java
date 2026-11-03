@@ -61,11 +61,41 @@ class LlmTaskDeploymentIT {
     LlmTaskConfiguration configuration = deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
         property("orqueio.llm.provider", "ollama")
             + property("orqueio.llm.model", "qwen2.5:7b")
+            + property("orqueio.llm.inputs", " emailBody , customer,,emailBody")
             + property("orqueio.llm.prompt", "Classify: {{emailBody}}")));
 
     assertThat(configuration.getProvider()).isEqualTo("ollama");
     assertThat(configuration.getModel()).isEqualTo("qwen2.5:7b");
     assertThat(configuration.getPrompt()).isEqualTo("Classify: {{emailBody}}");
+    assertThat(configuration.getInputs()).containsExactly("emailBody", "customer");
+  }
+
+  @Test
+  void shouldHaveNoInputsWhenNoneDeclared() {
+    assertThat(deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Summarize")))
+        .getInputs()).isEmpty();
+  }
+
+  @Test
+  void shouldRejectUndeclaredPlaceholder() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.inputs", "emailBody")
+                + property("orqueio.llm.prompt", "From {{customer}}: {{emailBody}} {{iban}}")),
+        "LLM task 'Task_Llm' uses variables [customer, iban] in its prompt that are not declared in orqueio.llm.inputs");
+  }
+
+  @Test
+  void shouldRejectMalformedPlaceholder() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.inputs", "customer") + property("orqueio.llm.prompt", "Hello {{customer.name}}")),
+        "LLM task 'Task_Llm' has a malformed placeholder {{customer.name}} in orqueio.llm.prompt");
+  }
+
+  @Test
+  void shouldRejectInvalidInputName() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.inputs", "email-body") + property("orqueio.llm.prompt", "Summarize")),
+        "LLM task 'Task_Llm' has an invalid variable name 'email-body' in orqueio.llm.inputs");
   }
 
   @Test

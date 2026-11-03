@@ -17,13 +17,18 @@
 package io.orqueio.bpm.spring.boot.starter.ai.task;
 
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.DELEGATE_EXPRESSION;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.INPUTS_PROPERTY;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.KNOWN_PROPERTIES;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.MODEL_PROPERTY;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROMPT_PROPERTY;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROPERTY_PREFIX;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROVIDER_PROPERTY;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import io.orqueio.bpm.engine.BpmnParseException;
@@ -72,8 +77,44 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
           + "the transaction that reaches the task", serviceTaskElement);
     }
 
+    List<String> inputs = parseInputs(llmProperties.get(INPUTS_PROPERTY), activity, serviceTaskElement);
+    validatePlaceholders(prompt, inputs, activity, serviceTaskElement);
+
     activity.getProperties().set(LlmTaskConfiguration.KEY, new LlmTaskConfiguration(
-        trimToNull(llmProperties.get(PROVIDER_PROPERTY)), trimToNull(llmProperties.get(MODEL_PROPERTY)), prompt));
+        trimToNull(llmProperties.get(PROVIDER_PROPERTY)), trimToNull(llmProperties.get(MODEL_PROPERTY)), prompt, inputs));
+  }
+
+  protected List<String> parseInputs(String value, ActivityImpl activity, Element element) {
+    Set<String> inputs = new LinkedHashSet<>();
+    if (value != null) {
+      for (String name : value.split(",")) {
+        String input = name.trim();
+        if (input.isEmpty()) {
+          continue;
+        }
+        if (!PromptTemplate.isVariableName(input)) {
+          throw error(activity, "has an invalid variable name '" + input + "' in " + INPUTS_PROPERTY, element);
+        }
+        inputs.add(input);
+      }
+    }
+    return new ArrayList<>(inputs);
+  }
+
+  protected void validatePlaceholders(String prompt, List<String> inputs, ActivityImpl activity, Element element) {
+    Set<String> placeholders;
+    try {
+      placeholders = PromptTemplate.placeholders(prompt);
+    }
+    catch (IllegalArgumentException e) {
+      throw error(activity, "has a " + e.getMessage() + " in " + PROMPT_PROPERTY, element);
+    }
+    TreeSet<String> undeclared = new TreeSet<>(placeholders);
+    undeclared.removeAll(inputs);
+    if (!undeclared.isEmpty()) {
+      throw error(activity, "uses variables " + undeclared + " in its prompt that are not declared in "
+          + INPUTS_PROPERTY + "; only declared variables are sent to the model", element);
+    }
   }
 
   // Other elements also accept camunda:delegateExpression; only service tasks can be LLM tasks
