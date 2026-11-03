@@ -26,31 +26,12 @@
 
       <!-- Filter panel wrapper -->
       <div class="filter-panel-wrapper">
-        <!-- Custom pills display (source of truth: filterCriteria) -->
-        <div class="migration-pills-area">
-          <div class="migration-pills-scroll">
-            <div class="migration-pills-row">
-              @for (pill of filterCriteria(); track $index) {
-                <div class="pill-wrapper">
-                  <div class="pill">
-                    <fa-icon [icon]="getPillIcon(pill)" class="pill-icon"></fa-icon>
-                    <span class="pill-text">{{ getPillLabel(pill) }}</span>
-                    <button class="pill-remove" (click)="removePill($index)" type="button">
-                      <fa-icon [icon]="faTimes"></fa-icon>
-                    </button>
-                  </div>
-                </div>
-              }
-            </div>
-          </div>
-        </div>
-
         <app-instance-filter-panel
           [criteriaSet]="'process'"
           [showExtendedCriteria]="showExtendedCriteria"
           [lockedState]="'unfinished'"
           [showStateNarrowing]="true"
-          [initialPills]="[]"
+          [initialPills]="filterCriteria()"
           [excludedCriteria]="['processDefinition']"
           [availableActivities]="availableActivities()"
           (criteriaChange)="onFilterChange($event)">

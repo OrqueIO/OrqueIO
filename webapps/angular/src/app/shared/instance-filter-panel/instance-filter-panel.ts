@@ -375,10 +375,18 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     const pills = changes['initialPills'];
-    if (pills && !pills.firstChange && pills.currentValue?.length === 0) {
-      this.activePills = [];
-      this.cancelCriterion();
-      this.cdr.markForCheck();
+    if (pills && !pills.firstChange) {
+      if (pills.currentValue?.length === 0) {
+        this.activePills = [];
+        this.cancelCriterion();
+        this.cdr.markForCheck();
+      } else if (pills.currentValue?.length > 0) {
+        const newPills = pills.currentValue.map((p: MultiValueFilter) => ({ ...p, values: [...p.values] }));
+        this.activePills = this.lockedState && this.lockedState !== 'finished'
+          ? newPills.filter(p => p.field !== 'finishedAfter' && p.field !== 'finishedBefore')
+          : newPills;
+        this.cdr.markForCheck();
+      }
     }
   }
 
