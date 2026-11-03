@@ -2191,6 +2191,8 @@
   "migration.instances.copyFilterLink": "Copier le lien du filtre",
   "migration.instances.saveFilter": "Enregistrer le filtre",
   "migration.instances.queryWarning": "Mode requête : la sélection de toutes les instances peut créer une charge élevée sur la base de données et le serveur lorsqu'il y a de nombreux résultats.",
+  "migration.instances.queryWarningTitle": "Mode requête :",
+  "migration.instances.queryWarningMessage": "la sélection de toutes les instances peut créer une charge élevée sur la base de données et le serveur lorsqu'il y a de nombreux résultats.",
   "migration.instances.loading": "Chargement des instances...",
   "migration.instances.errorLoading": "Échec du chargement des instances",
   "migration.instances.retry": "Réessayer",

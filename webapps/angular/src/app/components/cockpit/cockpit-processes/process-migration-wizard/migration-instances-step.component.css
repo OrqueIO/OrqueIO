@@ -160,12 +160,54 @@
 
 /* Query warning banner */
 .query-warning-banner {
-  padding: 0.875rem 1rem;
-  background-color: #fff3cd;
-  border: 1px solid #ffc107;
-  border-radius: 4px;
-  color: #856404;
-  font-size: 0.9375rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  margin: 12px 0;
+  background-color: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 3px solid #f59e0b;
+  border-radius: 10px;
+  color: #92400e;
+  font-size: 13px;
+  line-height: 1.4;
+  min-height: 40px;
+}
+
+.query-warning-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: #d97706;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.query-warning-content {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em;
+}
+
+.query-warning-title {
+  font-weight: 600;
+}
+
+.query-warning-message {
+  font-weight: 400;
+}
+
+/* Responsive: text wraps on small screens */
+@media (max-width: 700px) {
+  .query-warning-banner {
+    align-items: flex-start;
+  }
+
+  .query-warning-content {
+    display: block;
+  }
 }
 
 /* Pagination (no background, matching batch operations) */

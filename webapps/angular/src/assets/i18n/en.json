@@ -2209,6 +2209,8 @@
   "migration.instances.copyFilterLink": "Copy filter link",
   "migration.instances.saveFilter": "Save filter",
   "migration.instances.queryWarning": "Query mode: selecting all instances may create a high load on the database and server when there are many results.",
+  "migration.instances.queryWarningTitle": "Query mode:",
+  "migration.instances.queryWarningMessage": "selecting all instances may create a high load on the database and server when there are many results.",
   "migration.instances.loading": "Loading instances...",
   "migration.instances.errorLoading": "Failed to load instances",
   "migration.instances.retry": "Retry",
