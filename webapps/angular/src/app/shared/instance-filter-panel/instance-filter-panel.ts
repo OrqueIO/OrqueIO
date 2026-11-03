@@ -1262,7 +1262,13 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'incidentId':             return t('cockpit.processes.globalSearch.pill.incidentId',             { value: pill.values[0] ?? '' });
       case 'incidentType':           return t('cockpit.processes.globalSearch.pill.incidentType',           { value: pill.values[0] ?? '' });
       case 'incidentMessage':        return t('cockpit.processes.globalSearch.pill.incidentMessage',        { value: pill.values[0] ?? '' });
-      case 'activityId':             return t('cockpit.processes.globalSearch.pill.activityId',             { value: pill.values[0] ?? '' });
+      case 'activityId': {
+        const activityIds = pill.values.map(id => {
+          const activity = this.availableActivities.find(a => a.id === id);
+          return activity?.name || id;
+        });
+        return t('cockpit.processes.globalSearch.pill.activityId', { value: activityIds.join(', ') });
+      }
       case 'batchId':                return t('cockpit.batchOps.removalTimeBatch.pills.batchId',            { value: pill.values.join(', ') });
       case 'type': {
         const typeLabels = pill.values.map(v => {

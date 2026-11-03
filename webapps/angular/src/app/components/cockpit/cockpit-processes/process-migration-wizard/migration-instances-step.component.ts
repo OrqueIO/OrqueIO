@@ -447,7 +447,7 @@ export class MigrationInstancesStepComponent implements OnDestroy {
           break;
         case 'activityId':
           if (filter.values.length > 0) {
-            params['activityIdIn'] = filter.values;
+            params['activeActivityIdIn'] = filter.values;
           }
           break;
         case 'incidentId':

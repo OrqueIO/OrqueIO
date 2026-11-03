@@ -426,7 +426,7 @@
   "cockpit.processes.globalSearch.pill.incidentId": "ID Incident : {{value}}",
   "cockpit.processes.globalSearch.pill.incidentType": "Type incident : {{value}}",
   "cockpit.processes.globalSearch.pill.incidentMessage": "Message incident : {{value}}",
-  "cockpit.processes.globalSearch.pill.activityId": "Activité : {{value}}",
+  "cockpit.processes.globalSearch.pill.activityId": "ID activité : {{value}}",
   "cockpit.processes.globalSearch.pill.stateActive": "Instances actives",
   "cockpit.processes.globalSearch.pill.stateSuspended": "Instances suspendues",
   "cockpit.processes.globalSearch.pill.stateCompleted": "Instances terminées normalement",

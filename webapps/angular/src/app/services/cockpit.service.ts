@@ -1333,6 +1333,9 @@ export class CockpitService {
         case 'incidentMessage':
           if (filter.values[0]) base.incidentMessageLike = `%${filter.values[0]}%`;
           break;
+        case 'activityId':
+          if (filter.values.length > 0) base.activeActivityIdIn = filter.values;
+          break;
         case 'variable':
           if (filter.variableName && filter.values.length > 0) {
             const op = filter.variableOperator || 'eq';
