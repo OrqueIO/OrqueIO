@@ -2199,6 +2199,7 @@
   "migration.instances.selectAll": "Sélectionner tout sur cette page",
   "migration.instances.selectInstance": "Sélectionner l'instance {{id}}",
   "migration.instances.columnId": "ID",
+  "migration.instances.columnInstanceId": "ID d'instance",
   "migration.instances.columnBusinessKey": "Clé métier",
   "migration.instances.columnState": "État",
   "migration.instances.noInstances": "Aucune instance trouvée",

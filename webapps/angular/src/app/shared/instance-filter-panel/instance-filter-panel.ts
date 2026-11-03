@@ -383,7 +383,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       } else if (pills.currentValue?.length > 0) {
         const newPills = pills.currentValue.map((p: MultiValueFilter) => ({ ...p, values: [...p.values] }));
         this.activePills = this.lockedState && this.lockedState !== 'finished'
-          ? newPills.filter(p => p.field !== 'finishedAfter' && p.field !== 'finishedBefore')
+          ? newPills.filter((p: MultiValueFilter) => p.field !== 'finishedAfter' && p.field !== 'finishedBefore')
           : newPills;
         this.cdr.markForCheck();
       }

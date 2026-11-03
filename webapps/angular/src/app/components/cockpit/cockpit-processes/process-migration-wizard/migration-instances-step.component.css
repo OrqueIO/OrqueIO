@@ -317,11 +317,11 @@ app-pagination {
 }
 
 .instances-table th {
-  padding: 0 16px;
+  padding: var(--space-3) var(--space-4);
   text-align: left;
-  font-weight: 600;
-  font-size: 14px;
-  color: #475569;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
   border-bottom: 1px solid #e2e8f0;
   white-space: nowrap;
   vertical-align: middle;
@@ -329,9 +329,10 @@ app-pagination {
 }
 
 .instances-table td {
-  padding: 0 16px;
+  padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid #f1f5f9;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
   vertical-align: middle;
   height: 44px;
 }
@@ -424,7 +425,7 @@ app-pagination {
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   color: #2563eb;
   text-decoration: none;
-  font-size: 13px;
+  font-size: var(--font-size-sm);
   font-weight: 400;
   display: block;
   overflow: hidden;
