@@ -2237,6 +2237,14 @@
   "migration.instances.filterSaved": "Filter saved successfully",
   "migration.instances.filterLoaded": "Filter loaded successfully",
   "migration.instances.filterDeleted": "Filter deleted successfully",
+  "migration.instances.filterLoadedWithIgnored": "Filter loaded. Some criteria are not available here and were ignored: {{fields}}",
+  "migration.instances.filterNoApplicableCriteria": "This filter has no applicable criteria",
+  "migration.instances.filterEmpty": "This filter is empty",
+  "migration.instances.savedFilters": "Saved filters",
+  "migration.instances.noSavedFiltersYet": "No saved filters yet",
+  "migration.instances.deleteFilterConfirm": "Delete \"{{name}}\"?",
+  "migration.instances.deleteFilterAriaLabel": "Delete saved filter {{name}}",
+  "migration.instances.delete": "Delete",
   "migration.fallbackBanner.message": "Opened from a shared link. Source, target and filter were restored. Review the mapping, then continue.",
   "migration.fallbackBanner.dismiss": "Dismiss"
 }

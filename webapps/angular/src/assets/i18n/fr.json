@@ -2219,6 +2219,14 @@
   "migration.instances.filterSaved": "Filtre enregistré avec succès",
   "migration.instances.filterLoaded": "Filtre chargé avec succès",
   "migration.instances.filterDeleted": "Filtre supprimé avec succès",
+  "migration.instances.filterLoadedWithIgnored": "Filtre chargé. Certains critères ne sont pas disponibles ici et ont été ignorés : {{fields}}",
+  "migration.instances.filterNoApplicableCriteria": "Ce filtre n'a aucun critère applicable",
+  "migration.instances.filterEmpty": "Ce filtre est vide",
+  "migration.instances.savedFilters": "Filtres enregistrés",
+  "migration.instances.noSavedFiltersYet": "Aucun filtre enregistré pour le moment",
+  "migration.instances.deleteFilterConfirm": "Supprimer « {{name}} » ?",
+  "migration.instances.deleteFilterAriaLabel": "Supprimer le filtre enregistré {{name}}",
+  "migration.instances.delete": "Supprimer",
   "migration.fallbackBanner.message": "Ouvert depuis un lien partagé. La source, la cible et le filtre ont été restaurés. Vérifiez le mapping, puis continuez.",
   "migration.fallbackBanner.dismiss": "Fermer"
 }

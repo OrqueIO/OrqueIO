@@ -1,12 +1,17 @@
 import {
   Component, ChangeDetectionStrategy, output, input, signal, computed,
-  inject, DestroyRef, effect, untracked, HostListener, OnDestroy
+  inject, DestroyRef, effect, untracked, HostListener, OnDestroy,
+  ViewChild, ElementRef, afterNextRender, Injector
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faQuestionCircle, faSpinner, faSearch, faLink, faSave, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import {
+  faQuestionCircle, faSpinner, faSearch, faLink, faSave, faChevronDown, faTimes,
+  faKey, faHashtag, faExclamationTriangle, faSync, faPlay, faPauseCircle,
+  faCheckCircle, faTimesCircle, faSitemap, faCalendarAlt, faCode, faCircleDot, faFilter
+} from '@fortawesome/free-solid-svg-icons';
 import { Subject, switchMap, catchError, of, forkJoin } from 'rxjs';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
@@ -14,6 +19,7 @@ import { TranslateService } from '../../../../i18n/translate.service';
 import { CockpitService, MultiValueFilter, ProcessInstance } from '../../../../services/cockpit.service';
 import { InstanceFilterPanelComponent, FilterPanelChange } from '../../../../shared/instance-filter-panel/instance-filter-panel';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
+import { SavedFiltersMenuComponent, SavedFilter } from './saved-filters-menu.component';
 
 export type SelectionMode = 'instance' | 'query';
 
@@ -25,12 +31,6 @@ export interface InstancesStepState {
   label: string;
 }
 
-export interface SavedFilter {
-  name: string;
-  criteria: MultiValueFilter[];
-  processDefinitionId?: string;
-  savedAt: string;
-}
 
 export interface MigrationWizardSnapshot {
   sourceDefinitionId: string;
@@ -54,7 +54,8 @@ export interface MigrationWizardSnapshot {
     FontAwesomeModule,
     TranslatePipe,
     InstanceFilterPanelComponent,
-    PaginationComponent
+    PaginationComponent,
+    SavedFiltersMenuComponent
   ],
   templateUrl: './migration-instances-step.component.html',
   styleUrl: './migration-instances-step.component.css',
@@ -64,6 +65,10 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   private cockpitService = inject(CockpitService);
   private translateService = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
+  private injector = inject(Injector);
+
+  @ViewChild('saveMenuButton', { read: ElementRef }) saveMenuButton?: ElementRef<HTMLButtonElement>;
+  @ViewChild('savedFiltersMenuContainer', { read: ElementRef }) savedFiltersMenuContainer?: ElementRef<HTMLDivElement>;
 
   readonly back = output<void>();
   readonly next = output<InstancesStepState>();
@@ -85,6 +90,20 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   readonly faLink = faLink;
   readonly faSave = faSave;
   readonly faChevronDown = faChevronDown;
+  readonly faTimes = faTimes;
+  readonly faKey = faKey;
+  readonly faHashtag = faHashtag;
+  readonly faExclamationTriangle = faExclamationTriangle;
+  readonly faSync = faSync;
+  readonly faPlay = faPlay;
+  readonly faPauseCircle = faPauseCircle;
+  readonly faCheckCircle = faCheckCircle;
+  readonly faTimesCircle = faTimesCircle;
+  readonly faSitemap = faSitemap;
+  readonly faCalendarAlt = faCalendarAlt;
+  readonly faCode = faCode;
+  readonly faCircleDot = faCircleDot;
+  readonly faFilter = faFilter;
 
   readonly mode = signal<SelectionMode>('instance');
 
@@ -117,9 +136,9 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   });
 
   readonly showSaveDropdown = signal(false);
-  readonly savedFilters = signal<SavedFilter[]>([]);
+  readonly showNewSaveMenu = signal(false);
+  readonly saveMenuPosition = signal<{ top: number; left: number; maxHeight?: number | null } | null>(null);
   readonly statusMessage = signal<{ type: 'success' | 'error'; text: string } | null>(null);
-  readonly filterNameInput = signal('');
 
   private readonly loadInstances$ = new Subject<void>();
   private readonly SAVED_FILTERS_KEY = 'cockpit-saved-filters';
@@ -128,10 +147,12 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   private readonly SNAPSHOT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
   private statusMessageTimeout: ReturnType<typeof setTimeout> | null = null;
 
+  private scrollListener?: () => void;
+  private resizeListener?: () => void;
+
   readonly showExtendedCriteria = true;
 
   constructor() {
-    this.loadSavedFilters();
 
     this.loadInstances$.pipe(
       switchMap(() => {
@@ -528,74 +549,234 @@ export class MigrationInstancesStepComponent implements OnDestroy {
     this.showSaveDropdown.update(show => !show);
   }
 
-  closeSaveDropdown(): void {
-    this.showSaveDropdown.set(false);
-    this.filterNameInput.set('');
+  toggleNewSaveMenu(event?: Event): void {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    const isOpening = !this.showNewSaveMenu();
+    this.showNewSaveMenu.update(show => !show);
+
+    if (isOpening) {
+      afterNextRender(() => {
+        this.calculateMenuPosition();
+        this.attachPositionListeners();
+      }, { injector: this.injector });
+    } else {
+      this.detachPositionListeners();
+    }
   }
 
-  saveCurrentFilter(): void {
-    const name = this.filterNameInput().trim();
-    if (!name) {
+  private calculateMenuPosition(): void {
+    const button = this.saveMenuButton?.nativeElement;
+    const menuContainer = this.savedFiltersMenuContainer?.nativeElement;
+
+    if (!button || !menuContainer) {
+      this.saveMenuPosition.set({ top: 100, left: 20 });
       return;
     }
 
-    const newFilter: SavedFilter = {
-      name,
-      criteria: [...this.filterCriteria()],
-      processDefinitionId: this.sourceDefinitionId(),
-      savedAt: new Date().toISOString()
-    };
+    const rect = button.getBoundingClientRect();
+    const menuRect = menuContainer.getBoundingClientRect();
+    const menuHeight = menuRect.height || 300;
+    const menuWidth = menuRect.width || 300;
 
-    const filters = this.savedFilters();
-    const existingIndex = filters.findIndex(f => f.name === name);
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
 
-    if (existingIndex >= 0) {
-      filters[existingIndex] = newFilter;
-    } else {
-      filters.push(newFilter);
+    const spaceBelow = viewportHeight - rect.bottom - 8;
+    const spaceAbove = rect.top - 8;
+
+    const MARGIN = 8;
+
+    let left = rect.right - menuWidth;
+
+    if (left < MARGIN) {
+      left = MARGIN;
+    }
+    if (left + menuWidth > viewportWidth - MARGIN) {
+      left = viewportWidth - menuWidth - MARGIN;
     }
 
-    this.savedFilters.set([...filters]);
-    this.persistFilters();
-    this.closeSaveDropdown();
+    let top: number;
+    let maxHeight: number | null = null;
+
+    if (spaceBelow >= menuHeight || spaceBelow > spaceAbove) {
+      top = rect.bottom + 8;
+
+      if (top + menuHeight > viewportHeight - MARGIN) {
+        maxHeight = viewportHeight - top - MARGIN;
+      }
+    } else {
+      top = rect.top - 8 - menuHeight;
+      if (top < MARGIN) {
+        top = MARGIN;
+        maxHeight = rect.top - MARGIN - 8;
+      }
+    }
+
+    if (top < MARGIN) {
+      top = MARGIN;
+    }
+
+    this.saveMenuPosition.set({ top, left, maxHeight });
+  }
+
+  private attachPositionListeners(): void {
+    this.detachPositionListeners();
+
+    this.scrollListener = () => this.calculateMenuPosition();
+    this.resizeListener = () => this.calculateMenuPosition();
+
+    window.addEventListener('scroll', this.scrollListener, { capture: true });
+    window.addEventListener('resize', this.resizeListener);
+  }
+
+  private detachPositionListeners(): void {
+    if (this.scrollListener) {
+      window.removeEventListener('scroll', this.scrollListener, { capture: true });
+      this.scrollListener = undefined;
+    }
+    if (this.resizeListener) {
+      window.removeEventListener('resize', this.resizeListener);
+      this.resizeListener = undefined;
+    }
+  }
+
+  closeNewSaveMenu(): void {
+    this.showNewSaveMenu.set(false);
+    this.detachPositionListeners();
+  }
+
+  onFilterSaved(filter: SavedFilter): void {
     this.showStatusMessage('success', this.translateService.instant('migration.instances.filterSaved'));
   }
 
-  loadFilter(filter: SavedFilter): void {
+  onFilterLoaded(filter: SavedFilter): void {
     const criteriaWithoutProcDef = filter.criteria.filter(c => c.field !== 'processDefinition');
-    this.filterCriteria.set(criteriaWithoutProcDef);
+
+    const knownFields: Set<string> = new Set([
+      'businessKey', 'instanceId', 'state', 'stateActive', 'stateSuspended',
+      'withIncidents', 'withJobsRetrying', 'startedAfter', 'startedBefore',
+      'finishedAfter', 'finishedBefore', 'variable', 'variables'
+    ]);
+
+    const applicableCriteria: MultiValueFilter[] = [];
+    const ignoredCriteria: MultiValueFilter[] = [];
+
+    for (const criterion of criteriaWithoutProcDef) {
+      if (knownFields.has(criterion.field)) {
+        applicableCriteria.push(criterion);
+      } else {
+        ignoredCriteria.push(criterion);
+      }
+    }
+
+    if (applicableCriteria.length === 0 && criteriaWithoutProcDef.length > 0) {
+      this.closeNewSaveMenu();
+      this.showStatusMessage('error', this.translateService.instant('migration.instances.filterNoApplicableCriteria'));
+      return;
+    }
+
+    if (applicableCriteria.length === 0 && criteriaWithoutProcDef.length === 0) {
+      this.closeNewSaveMenu();
+      this.showStatusMessage('error', this.translateService.instant('migration.instances.filterEmpty'));
+      return;
+    }
+
+    this.filterCriteria.set(applicableCriteria);
     this.currentPage.set(1);
     this.loadInstances$.next();
-    this.closeSaveDropdown();
-    this.showStatusMessage('success', this.translateService.instant('migration.instances.filterLoaded'));
+    this.closeNewSaveMenu();
+
+    if (ignoredCriteria.length > 0) {
+      const ignoredNames = ignoredCriteria.map(c => c.field).join(', ');
+      this.showStatusMessage(
+        'success',
+        this.translateService.instant('migration.instances.filterLoadedWithIgnored', { fields: ignoredNames })
+      );
+    } else {
+      this.showStatusMessage('success', this.translateService.instant('migration.instances.filterLoaded'));
+    }
   }
 
-  deleteFilter(filter: SavedFilter, event: Event): void {
-    event.stopPropagation();
-    const filters = this.savedFilters().filter(f => f.name !== filter.name);
-    this.savedFilters.set(filters);
-    this.persistFilters();
+  onFilterDeleted(filter: SavedFilter): void {
     this.showStatusMessage('success', this.translateService.instant('migration.instances.filterDeleted'));
   }
 
-  private loadSavedFilters(): void {
-    try {
-      const stored = localStorage.getItem(this.SAVED_FILTERS_KEY);
-      if (stored) {
-        const filters = JSON.parse(stored) as SavedFilter[];
-        this.savedFilters.set(filters);
-      }
-    } catch (error) {
-      console.error('Failed to load saved filters:', error);
+  getPillIcon(pill: MultiValueFilter): any {
+    switch (pill.field) {
+      case 'businessKey':       return this.faKey;
+      case 'instanceId':        return this.faHashtag;
+      case 'withIncidents':     return this.faExclamationTriangle;
+      case 'withJobsRetrying':  return this.faSync;
+      case 'stateActive':       return this.faPlay;
+      case 'stateSuspended':    return this.faPauseCircle;
+      case 'stateCompleted':    return this.faCheckCircle;
+      case 'stateTerminated':   return this.faTimesCircle;
+      case 'processDefinition': return this.faSitemap;
+      case 'startedAfter':
+      case 'startedBefore':
+      case 'finishedAfter':
+      case 'finishedBefore':    return this.faCalendarAlt;
+      case 'variable':
+      case 'variables':         return this.faCode;
+      case 'state':             return this.faCircleDot;
+      default:                  return this.faFilter;
     }
   }
 
-  private persistFilters(): void {
-    try {
-      localStorage.setItem(this.SAVED_FILTERS_KEY, JSON.stringify(this.savedFilters()));
-    } catch (error) {
-      console.error('Failed to persist filters:', error);
+  getPillLabel(pill: MultiValueFilter): string {
+    const t = (key: string, params?: Record<string, string>) => this.translateService.instant(key, params);
+
+    switch (pill.field) {
+      case 'businessKey':
+        return t('cockpit.processes.globalSearch.pill.businessKey', { value: pill.values.join(', ') });
+      case 'instanceId':
+        return t('cockpit.processes.globalSearch.pill.instanceId', { value: pill.values.join(', ') });
+      case 'withIncidents':
+        return t('cockpit.processes.globalSearch.pill.withIncidents');
+      case 'withJobsRetrying':
+        return t('cockpit.processes.globalSearch.pill.withJobsRetrying');
+      case 'stateActive':
+        return t('cockpit.processes.globalSearch.pill.stateActive');
+      case 'stateSuspended':
+        return t('cockpit.processes.globalSearch.pill.stateSuspended');
+      case 'stateCompleted':
+        return t('cockpit.processes.globalSearch.pill.stateCompleted');
+      case 'stateTerminated':
+        return t('cockpit.processes.globalSearch.pill.stateTerminated');
+      case 'startedAfter':
+        return t('cockpit.processes.globalSearch.pill.startedAfter', { value: pill.values.join(', ') });
+      case 'startedBefore':
+        return t('cockpit.processes.globalSearch.pill.startedBefore', { value: pill.values.join(', ') });
+      case 'finishedAfter':
+        return t('cockpit.processes.globalSearch.pill.finishedAfter', { value: pill.values.join(', ') });
+      case 'finishedBefore':
+        return t('cockpit.processes.globalSearch.pill.finishedBefore', { value: pill.values.join(', ') });
+      case 'variable':
+      case 'variables':
+        if (pill.variableName) {
+          return t('cockpit.processes.globalSearch.pill.variable', { name: pill.variableName, value: pill.values.join(', ') });
+        }
+        return t('cockpit.processes.globalSearch.pill.variables', { count: pill.values.length.toString() });
+      default:
+        return `${pill.field}: ${pill.values.join(', ')}`;
     }
+  }
+
+  removePill(index: number): void {
+    const current = this.filterCriteria();
+    const updated = current.filter((_, i) => i !== index);
+    this.filterCriteria.set(updated);
+    this.currentPage.set(1);
+    this.loadInstances$.next();
+  }
+
+  clearAllPills(): void {
+    this.filterCriteria.set([]);
+    this.currentPage.set(1);
+    this.loadInstances$.next();
   }
 
   private showStatusMessage(type: 'success' | 'error', text: string): void {
@@ -615,12 +796,16 @@ export class MigrationInstancesStepComponent implements OnDestroy {
       clearTimeout(this.statusMessageTimeout);
       this.statusMessageTimeout = null;
     }
+    this.detachPositionListeners();
   }
 
   @HostListener('document:click')
   onDocumentClick(): void {
     if (this.showSaveDropdown()) {
-      this.closeSaveDropdown();
+      this.showSaveDropdown.set(false);
+    }
+    if (this.showNewSaveMenu()) {
+      this.closeNewSaveMenu();
     }
   }
 }
