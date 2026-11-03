@@ -12,14 +12,16 @@ import {
   faKey, faHashtag, faExclamationTriangle, faSync, faPlay, faPauseCircle, faPlayCircle,
   faCheckCircle, faTimesCircle, faSitemap, faCalendarAlt, faCode, faCircleDot, faFilter
 } from '@fortawesome/free-solid-svg-icons';
-import { Subject, switchMap, catchError, of, forkJoin } from 'rxjs';
+import { Subject, switchMap, catchError, of, forkJoin, map } from 'rxjs';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { CockpitService, MultiValueFilter, ProcessInstance } from '../../../../services/cockpit.service';
+import { ProcessDefinitionService } from '../../../../services/process-definition.service';
 import { InstanceFilterPanelComponent, FilterPanelChange } from '../../../../shared/instance-filter-panel/instance-filter-panel';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
 import { SavedFiltersMenuComponent, SavedFilter } from './saved-filters-menu.component';
+import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { CamDatePipe } from '../../../../pipes/cam-date.pipe';
 
 export type SelectionMode = 'instance' | 'query';
@@ -66,6 +68,7 @@ export interface MigrationWizardSnapshot {
 export class MigrationInstancesStepComponent implements OnDestroy {
   private cockpitService = inject(CockpitService);
   private translateService = inject(TranslateService);
+  private processDefinitionService = inject(ProcessDefinitionService);
   private destroyRef = inject(DestroyRef);
   private injector = inject(Injector);
 
@@ -119,6 +122,8 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   readonly loading = signal(false);
   readonly error = signal(false);
 
+  readonly availableActivities = signal<BpmnElement[]>([]);
+
   readonly currentPage = signal(1);
   readonly pageSize = 10;
 
@@ -144,6 +149,7 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   readonly statusMessage = signal<{ type: 'success' | 'error'; text: string } | null>(null);
 
   private readonly loadInstances$ = new Subject<void>();
+  private readonly loadActivities$ = new Subject<string>();
   private readonly SAVED_FILTERS_KEY = 'cockpit-saved-filters';
   private readonly SNAPSHOT_KEY_PREFIX = 'migration-wizard-link:';
   private readonly SNAPSHOT_MAX_COUNT = 10;
@@ -210,12 +216,43 @@ export class MigrationInstancesStepComponent implements OnDestroy {
 
       if (criteria && criteria.length > 0 && defId) {
         untracked(() => {
+          const hadProcessDefinition = criteria.some(c => c.field === 'processDefinition');
           const filtered = criteria.filter(c => c.field !== 'processDefinition' && c.field !== 'state');
           this.filterCriteria.set(filtered);
           this.vnIgnoreCase.set(this.initialVnIgnoreCase());
           this.vvIgnoreCase.set(this.initialVvIgnoreCase());
 
+          if (hadProcessDefinition) {
+            const processDefLabel = this.translateService.instant('cockpit.processes.filters.processDefinition');
+            this.showStatusMessage(
+              'success',
+              this.translateService.instant('migration.instances.filterLoadedWithIgnored', { fields: processDefLabel })
+            );
+          }
+
           this.loadInstances$.next();
+        });
+      }
+    });
+
+    this.loadActivities$.pipe(
+      switchMap(defId => {
+        if (!defId) return of([]);
+        return this.processDefinitionService.getBpmn20Xml(defId).pipe(
+          map(res => res ? this.parseBpmnActivities(res.bpmn20Xml) : []),
+          catchError(() => of([]))
+        );
+      }),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(activities => {
+      this.availableActivities.set(activities);
+    });
+
+    effect(() => {
+      const defId = this.sourceDefinitionId();
+      if (defId) {
+        untracked(() => {
+          this.loadActivities$.next(defId);
         });
       }
     });
@@ -656,6 +693,7 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   }
 
   onFilterLoaded(filter: SavedFilter): void {
+    const hadProcessDefinition = filter.criteria.some(c => c.field === 'processDefinition');
     const criteriaWithoutProcDef = filter.criteria.filter(c => c.field !== 'processDefinition');
 
     const knownFields: Set<string> = new Set([
@@ -665,13 +703,17 @@ export class MigrationInstancesStepComponent implements OnDestroy {
     ]);
 
     const applicableCriteria: MultiValueFilter[] = [];
-    const ignoredCriteria: MultiValueFilter[] = [];
+    const ignoredCriteria: string[] = [];
+
+    if (hadProcessDefinition) {
+      ignoredCriteria.push(this.translateService.instant('cockpit.processes.filters.processDefinition'));
+    }
 
     for (const criterion of criteriaWithoutProcDef) {
       if (knownFields.has(criterion.field)) {
         applicableCriteria.push(criterion);
       } else {
-        ignoredCriteria.push(criterion);
+        ignoredCriteria.push(criterion.field);
       }
     }
 
@@ -693,7 +735,7 @@ export class MigrationInstancesStepComponent implements OnDestroy {
     this.closeNewSaveMenu();
 
     if (ignoredCriteria.length > 0) {
-      const ignoredNames = ignoredCriteria.map(c => c.field).join(', ');
+      const ignoredNames = ignoredCriteria.join(', ');
       this.showStatusMessage(
         'success',
         this.translateService.instant('migration.instances.filterLoadedWithIgnored', { fields: ignoredNames })
@@ -820,6 +862,43 @@ export class MigrationInstancesStepComponent implements OnDestroy {
     if (state === 'COMPLETED') return 'completed';
     if (state === 'EXTERNALLY_TERMINATED' || state === 'INTERNALLY_TERMINATED') return 'terminated';
     return 'running';  // ACTIVE or any other state
+  }
+
+  private parseBpmnActivities(xml: string): BpmnElement[] {
+    const FLOW_NODE_TYPES = new Set([
+      'task', 'userTask', 'serviceTask', 'manualTask', 'businessRuleTask',
+      'scriptTask', 'sendTask', 'receiveTask', 'callActivity',
+      'subProcess', 'transaction', 'adHocSubProcess',
+      'startEvent', 'endEvent',
+      'intermediateThrowEvent', 'intermediateCatchEvent', 'boundaryEvent',
+      'exclusiveGateway', 'inclusiveGateway', 'parallelGateway',
+      'eventBasedGateway', 'complexGateway'
+    ]);
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xml, 'text/xml');
+      const result: BpmnElement[] = [];
+      const processElements = Array.from(doc.getElementsByTagName('*'))
+        .filter(el => el.localName === 'process');
+      for (const processEl of processElements) {
+        const walker = doc.createTreeWalker(processEl, NodeFilter.SHOW_ELEMENT);
+        let node: Node | null = walker.nextNode();
+        while (node) {
+          const el = node as Element;
+          if (FLOW_NODE_TYPES.has(el.localName)) {
+            const id = el.getAttribute('id');
+            if (id) {
+              const pascal = el.localName.charAt(0).toUpperCase() + el.localName.slice(1);
+              result.push({ id, type: `bpmn:${pascal}`, name: el.getAttribute('name') || undefined });
+            }
+          }
+          node = walker.nextNode();
+        }
+      }
+      return result;
+    } catch {
+      return [];
+    }
   }
 
   private showStatusMessage(type: 'success' | 'error', text: string): void {

@@ -81,7 +81,12 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   @Input() finishedScope = false;
   @Input() showWithJobsRetrying = true;
   @Input() availableActivities: BpmnElement[] = [];
+  @Input() excludedCriteria: string[] = [];
   @Output() criteriaChange = new EventEmitter<FilterPanelChange>();
+
+  isCriterionAvailable(field: GlobalSearchField): boolean {
+    return this.availableCriteria.some(c => c.field === field);
+  }
 
   private cdr = inject(ChangeDetectorRef);
   private translateService = inject(TranslateService);
@@ -333,7 +338,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
           { field: 'variables' as const }
         );
       }
-      this.availableCriteria = processCriteria;
+      this.availableCriteria = processCriteria.filter(c => !this.excludedCriteria.includes(c.field));
     }
 
     if (this.criteriaSet === 'decision') {

@@ -51,6 +51,8 @@
           [lockedState]="'unfinished'"
           [showStateNarrowing]="true"
           [initialPills]="[]"
+          [excludedCriteria]="['processDefinition']"
+          [availableActivities]="availableActivities()"
           (criteriaChange)="onFilterChange($event)">
         </app-instance-filter-panel>
 

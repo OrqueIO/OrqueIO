@@ -82,7 +82,7 @@
                 </span>
               </button>
 
-              <button class="criteria-option" (click)="selectCriteriaType('processDefinition')" type="button" role="menuitem">
+              <button *ngIf="isCriterionAvailable('processDefinition')" class="criteria-option" (click)="selectCriteriaType('processDefinition')" type="button" role="menuitem">
                 <span class="criteria-icon-wrap criteria-icon-wrap--orange">
                   <fa-icon [icon]="faSitemap"></fa-icon>
                 </span>
