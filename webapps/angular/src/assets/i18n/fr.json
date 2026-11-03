@@ -2198,6 +2198,7 @@
   "migration.instances.selectInstance": "Sélectionner l'instance {{id}}",
   "migration.instances.columnId": "ID",
   "migration.instances.columnBusinessKey": "Clé métier",
+  "migration.instances.columnState": "État",
   "migration.instances.noInstances": "Aucune instance trouvée",
   "migration.instances.previousPage": "Précédent",
   "migration.instances.nextPage": "Suivant",

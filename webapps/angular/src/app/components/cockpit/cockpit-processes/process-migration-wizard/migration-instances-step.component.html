@@ -206,6 +206,7 @@
               @if (mode() === 'instance') {
                 <th scope="col" class="col-checkbox"></th>
               }
+              <th scope="col" class="col-state">{{ 'migration.instances.columnState' | translate }}</th>
               <th scope="col" class="col-id">{{ 'migration.instances.columnId' | translate }}</th>
               <th scope="col" class="col-business-key">{{ 'migration.instances.columnBusinessKey' | translate }}</th>
             </tr>
@@ -223,6 +224,16 @@
                       class="checkbox-input">
                   </td>
                 }
+                <td class="col-state">
+                  @if (instance.state) {
+                    <span class="state-badge" [class]="getStateBadgeClass(instance.state)">
+                      <fa-icon [icon]="getStateBadgeIcon(instance.state)"></fa-icon>
+                      {{ getStateLabel(instance.state) | translate }}
+                    </span>
+                  } @else {
+                    <span class="state-badge-empty">—</span>
+                  }
+                </td>
                 <td class="col-id">
                   <a [href]="'/cockpit/processes/instance/' + instance.id" class="instance-link">
                     {{ instance.id }}

@@ -9,7 +9,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faQuestionCircle, faSpinner, faSearch, faLink, faSave, faChevronDown, faTimes,
-  faKey, faHashtag, faExclamationTriangle, faSync, faPlay, faPauseCircle,
+  faKey, faHashtag, faExclamationTriangle, faSync, faPlay, faPauseCircle, faPlayCircle,
   faCheckCircle, faTimesCircle, faSitemap, faCalendarAlt, faCode, faCircleDot, faFilter
 } from '@fortawesome/free-solid-svg-icons';
 import { Subject, switchMap, catchError, of, forkJoin } from 'rxjs';
@@ -97,6 +97,7 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   readonly faSync = faSync;
   readonly faPlay = faPlay;
   readonly faPauseCircle = faPauseCircle;
+  readonly faPlayCircle = faPlayCircle;
   readonly faCheckCircle = faCheckCircle;
   readonly faTimesCircle = faTimesCircle;
   readonly faSitemap = faSitemap;
@@ -777,6 +778,46 @@ export class MigrationInstancesStepComponent implements OnDestroy {
     this.filterCriteria.set([]);
     this.currentPage.set(1);
     this.loadInstances$.next();
+  }
+
+  getStateBadgeClass(state: string): string {
+    const computedState = this.computeInstanceState(state);
+    switch (computedState) {
+      case 'running':    return 'state-active';
+      case 'suspended':  return 'state-suspended';
+      case 'completed':  return 'state-completed';
+      case 'terminated': return 'state-terminated';
+      default:           return '';
+    }
+  }
+
+  getStateBadgeIcon(state: string): any {
+    const computedState = this.computeInstanceState(state);
+    switch (computedState) {
+      case 'running':    return this.faPlayCircle;
+      case 'suspended':  return this.faPauseCircle;
+      case 'completed':  return this.faCheckCircle;
+      case 'terminated': return this.faTimesCircle;
+      default:           return this.faPlayCircle;
+    }
+  }
+
+  getStateLabel(state: string): string {
+    const computedState = this.computeInstanceState(state);
+    switch (computedState) {
+      case 'running':    return 'cockpit.processes.globalSearch.instanceStateRunning';
+      case 'suspended':  return 'cockpit.processes.filters.stateSuspended';
+      case 'completed':  return 'cockpit.processes.filters.stateCompleted';
+      case 'terminated': return 'cockpit.processes.filters.stateTerminated';
+      default:           return '';
+    }
+  }
+
+  private computeInstanceState(state: string): string {
+    if (state === 'SUSPENDED') return 'suspended';
+    if (state === 'COMPLETED') return 'completed';
+    if (state === 'EXTERNALLY_TERMINATED' || state === 'INTERNALLY_TERMINATED') return 'terminated';
+    return 'running';  // ACTIVE or any other state
   }
 
   private showStatusMessage(type: 'success' | 'error', text: string): void {

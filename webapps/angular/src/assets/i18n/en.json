@@ -2216,6 +2216,7 @@
   "migration.instances.selectInstance": "Select instance {{id}}",
   "migration.instances.columnId": "ID",
   "migration.instances.columnBusinessKey": "Business Key",
+  "migration.instances.columnState": "State",
   "migration.instances.noInstances": "No instances found",
   "migration.instances.previousPage": "Previous",
   "migration.instances.nextPage": "Next",
