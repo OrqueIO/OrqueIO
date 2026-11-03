@@ -18,9 +18,8 @@ package io.orqueio.bpm.spring.boot.starter.ai.task;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * The {@code {{variable}}} placeholders of an LLM task prompt. Every <code>{{</code> in a
@@ -28,7 +27,9 @@ import java.util.regex.Pattern;
  */
 final class PromptTemplate {
 
-  private static final Pattern PLACEHOLDER = Pattern.compile("\\{\\{(.*?)}}", Pattern.DOTALL);
+  private static final String OPEN = "{{";
+  private static final String CLOSE = "}}";
+  private static final int MAX_QUOTED_LENGTH = 40;
 
   private PromptTemplate() {
   }
@@ -39,18 +40,7 @@ final class PromptTemplate {
    */
   static Set<String> placeholders(String template) {
     Set<String> names = new LinkedHashSet<>();
-    Matcher matcher = PLACEHOLDER.matcher(template);
-    int end = 0;
-    while (matcher.find()) {
-      checkNoOpening(template, end, matcher.start());
-      String name = matcher.group(1).trim();
-      if (!isVariableName(name)) {
-        throw new IllegalArgumentException("malformed placeholder " + matcher.group());
-      }
-      names.add(name);
-      end = matcher.end();
-    }
-    checkNoOpening(template, end, template.length());
+    scan(template, names::add, null);
     return names;
   }
 
@@ -59,27 +49,53 @@ final class PromptTemplate {
    * {@code {{...}}} is inserted as text and not resolved again.
    */
   static String resolve(String template, Function<String, String> values) {
-    Matcher matcher = PLACEHOLDER.matcher(template);
-    StringBuilder result = new StringBuilder();
-    while (matcher.find()) {
-      matcher.appendReplacement(result, Matcher.quoteReplacement(values.apply(matcher.group(1).trim())));
-    }
-    matcher.appendTail(result);
+    StringBuilder result = new StringBuilder(template.length());
+    scan(template, name -> result.append(values.apply(name)), result);
     return result.toString();
   }
 
   static boolean isVariableName(String name) {
-    if (name.isEmpty() || !Character.isJavaIdentifierStart(name.charAt(0))) {
+    if (name.isEmpty() || !Character.isJavaIdentifierStart(name.codePointAt(0))) {
       return false;
     }
     return name.codePoints().skip(1).allMatch(Character::isJavaIdentifierPart);
   }
 
-  private static void checkNoOpening(String template, int from, int to) {
-    int opening = template.indexOf("{{", from);
-    if (opening >= 0 && opening < to) {
-      throw new IllegalArgumentException("unclosed placeholder at position " + opening);
+  /**
+   * Walks the template once with {@code indexOf}, so the cost stays linear in its length.
+   *
+   * @param placeholder receives each placeholder name in order
+   * @param text receives the text around placeholders, or {@code null} to skip it
+   */
+  private static void scan(String template, Consumer<String> placeholder, StringBuilder text) {
+    int position = 0;
+    while (true) {
+      int open = template.indexOf(OPEN, position);
+      if (open < 0) {
+        break;
+      }
+      int close = template.indexOf(CLOSE, open + OPEN.length());
+      if (close < 0) {
+        throw new IllegalArgumentException("unclosed placeholder at position " + open);
+      }
+      String name = template.substring(open + OPEN.length(), close).trim();
+      if (!isVariableName(name)) {
+        throw new IllegalArgumentException("malformed placeholder "
+            + quote(template.substring(open, close + CLOSE.length())) + " at position " + open);
+      }
+      if (text != null) {
+        text.append(template, position, open);
+      }
+      placeholder.accept(name);
+      position = close + CLOSE.length();
     }
+    if (text != null) {
+      text.append(template, position, template.length());
+    }
+  }
+
+  private static String quote(String placeholder) {
+    return placeholder.length() <= MAX_QUOTED_LENGTH ? placeholder : placeholder.substring(0, MAX_QUOTED_LENGTH) + "...";
   }
 
 }

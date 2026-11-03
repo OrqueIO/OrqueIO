@@ -88,7 +88,7 @@ class LlmTaskDeploymentIT {
   void shouldRejectMalformedPlaceholder() {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
             property("orqueio.llm.inputs", "customer") + property("orqueio.llm.prompt", "Hello {{customer.name}}")),
-        "LLM task 'Task_Llm' has a malformed placeholder {{customer.name}} in orqueio.llm.prompt");
+        "LLM task 'Task_Llm' has a malformed placeholder {{customer.name}} at position 6 in orqueio.llm.prompt");
   }
 
   @Test

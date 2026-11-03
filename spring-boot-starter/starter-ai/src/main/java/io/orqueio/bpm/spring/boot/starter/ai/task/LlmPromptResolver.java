@@ -16,16 +16,22 @@
  */
 package io.orqueio.bpm.spring.boot.starter.ai.task;
 
-import java.time.temporal.TemporalAccessor;
+import java.time.Instant;
 import java.util.Date;
+import java.util.Set;
 
 import io.orqueio.bpm.engine.delegate.VariableScope;
+import io.orqueio.bpm.engine.variable.type.ValueType;
+import io.orqueio.bpm.engine.variable.value.TypedValue;
 
 /**
  * Builds the prompt sent to the model from an LLM task's template and the process
  * variables it declares in {@code orqueio.llm.inputs}. No other variable is read.
  */
 public class LlmPromptResolver {
+
+  protected static final Set<ValueType> TEXT_TYPES = Set.of(ValueType.STRING, ValueType.BOOLEAN,
+      ValueType.SHORT, ValueType.INTEGER, ValueType.LONG, ValueType.DOUBLE, ValueType.NUMBER);
 
   public String resolve(LlmTaskConfiguration configuration, VariableScope variables) {
     return PromptTemplate.resolve(configuration.getPrompt(), name -> valueOf(name, configuration, variables));
@@ -40,22 +46,25 @@ public class LlmPromptResolver {
     if (!variables.hasVariable(name)) {
       throw new LlmTaskException("Variable '" + name + "' used by the prompt is not set");
     }
-    Object value = variables.getVariable(name);
-    if (value == null) {
+    // Not deserialized: objects, JSON and files are rejected without being opened
+    TypedValue value = variables.getVariableTyped(name, false);
+    // getValue() is only read on primitive types: on an object it would deserialize
+    if (value == null || ValueType.NULL.equals(value.getType())
+        || (value.getType() != null && value.getType().isPrimitiveValueType() && value.getValue() == null)) {
       throw new LlmTaskException("Variable '" + name + "' used by the prompt is null");
     }
     return toText(name, value);
   }
 
-  protected String toText(String name, Object value) {
-    if (value instanceof CharSequence || value instanceof Number || value instanceof Boolean
-        || value instanceof Character || value instanceof Enum<?> || value instanceof TemporalAccessor) {
-      return value.toString();
+  protected String toText(String name, TypedValue value) {
+    ValueType type = value.getType();
+    if (TEXT_TYPES.contains(type)) {
+      return value.getValue().toString();
     }
-    if (value instanceof Date date) {
-      return date.toInstant().toString();
+    if (ValueType.DATE.equals(type)) {
+      return Instant.ofEpochMilli(((Date) value.getValue()).getTime()).toString();
     }
-    throw new LlmTaskException("Variable '" + name + "' has type " + value.getClass().getName()
+    throw new LlmTaskException("Variable '" + name + "' has type " + (type != null ? type.getName() : "unknown")
         + ", which cannot be used in a prompt");
   }
 
