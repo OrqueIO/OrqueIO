@@ -111,6 +111,16 @@
   gap: var(--space-4);
 }
 
+/* Step 3: Remove horizontal padding from panel-body to allow full-width gray panel */
+.panel-body.step-3-flush {
+  padding-inline: 0;
+}
+
+/* Step 3: Preserve stepper padding when panel-body has no horizontal padding */
+.panel-body.step-3-flush .migration-wizard-header {
+  padding-inline: var(--space-5);
+}
+
 .criteria-zone {
   background: var(--bg-card);
   border: 1px solid var(--border-color-light);
@@ -139,6 +149,11 @@
 /* Step 3: Reduced top padding to minimize vertical space above mode toggle */
 .step-3 {
   padding-top: 0.5rem; /* 8px instead of var(--space-4) */
+}
+
+/* Step 3: Remove horizontal padding for full-width gray panel */
+.step-content.step-flush {
+  padding-inline: 0;
 }
 
 .info-text {

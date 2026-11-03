@@ -32,7 +32,7 @@
           <span class="panel-header-title">{{ 'migration.title' | translate }}</span>
         </div>
 
-        <div class="panel-body">
+        <div class="panel-body" [class.step-3-flush]="currentStep() === 3">
       <div class="migration-wizard-header">
         <app-batch-wizard-stepper
           [steps]="wizardSteps"
@@ -274,7 +274,7 @@
       }
 
       @if (currentStep() === 3) {
-        <div class="step-content step-3">
+        <div class="step-content step-3 step-flush">
           <app-migration-instances-step
             [sourceDefinitionId]="sourceDefinitionId()!"
             [sourceVersion]="sourceVersion()!"

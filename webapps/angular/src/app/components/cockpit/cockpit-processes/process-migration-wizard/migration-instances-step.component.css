@@ -7,14 +7,39 @@
   overflow: hidden;
 }
 
+/* Gray panel wrapping all step 3 content (matching batch operations page background) */
+.instances-step-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  background: var(--bg-page); /* #f8fafc - exact match to batch operations page background */
+  padding: var(--space-4); /* 16px internal padding for cards */
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl); /* Bottom corners match wizard card */
+}
+
 .instances-step-content {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  padding: 0 1.5rem;
+  padding: 0;
   padding-bottom: 0;
   overflow-y: auto;
   flex: 1;
+}
+
+/* Criteria card (matching batch operations .operation-card) */
+.criteria-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: visible;
 }
 
 /* Mode toggle (matching batch operations design) */
@@ -129,11 +154,12 @@
   font-size: 0.9375rem;
 }
 
-/* Pagination (matching batch operations design) */
+/* Pagination (no background, matching batch operations) */
 app-pagination {
   display: block;
   padding: var(--space-3) var(--space-4);
   background: transparent;
+  border: none;
 }
 
 /* Selection bar (Instance mode only) */
@@ -168,14 +194,15 @@ app-pagination {
   color: var(--text-muted);
 }
 
-/* Loading state */
+/* Loading state (matching batch operations) */
 .loading-state {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 2rem;
-  color: var(--text-secondary, #666);
+  gap: var(--space-3);
+  padding: var(--space-8);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
 }
 
 .loading-spinner {
@@ -196,14 +223,25 @@ app-pagination {
   margin: 0;
 }
 
-/* Instances table */
+/* Instances card (matching batch operations .operation-card) */
+.instances-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Instances table container (matching batch operations .table-container) */
 .instances-table-container {
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  overflow: hidden;
-  max-height: calc(44px * 6 + 44px);
+  overflow-x: auto;
   overflow-y: auto;
-  position: relative;
+  max-height: calc(100vh - 350px);
+  border: 1px solid var(--border-color-light);
+  border-radius: var(--radius-md);
 }
 
 .instances-table {
@@ -316,14 +354,14 @@ app-pagination {
   color: var(--text-secondary, #666);
 }
 
-/* Footer buttons */
+/* Footer buttons (inside gray panel, no background) */
 .step-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-top: 1px solid #e2e8f0;
-  background-color: var(--bg-surface, #fff);
+  padding-top: var(--space-4);
+  background: transparent;
   flex-shrink: 0;
 }
 
@@ -588,5 +626,20 @@ app-pagination {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* =====================================================
+   RESPONSIVE: Reduce margins on small screens
+   ===================================================== */
+@media (max-width: 768px) {
+  .instances-step-panel {
+    /* Mobile: reduced internal padding */
+    padding: var(--space-3); /* 12px internal padding (reduced from 16px) */
+  }
+
+  .instances-table-container {
+    /* Ensure table is horizontally scrollable on mobile */
+    overflow-x: auto;
   }
 }
