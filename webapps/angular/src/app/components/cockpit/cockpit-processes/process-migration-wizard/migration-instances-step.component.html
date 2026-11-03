@@ -41,11 +41,6 @@
                   </div>
                 </div>
               }
-              @if (filterCriteria().length > 0) {
-                <button class="btn-clear-all-pills" (click)="clearAllPills()" type="button">
-                  {{ 'search.clearAll' | translate }}
-                </button>
-              }
             </div>
           </div>
         </div>
@@ -61,55 +56,68 @@
 
         <div class="filter-actions">
           <div class="filter-total">{{ totalCount() }}</div>
-          <button
-            type="button"
-            class="filter-action-btn"
-            (click)="copyFilterLink()"
-            [attr.aria-label]="'migration.instances.copyFilterLink' | translate"
-            [title]="'migration.instances.copyFilterLink' | translate">
-            <fa-icon [icon]="faLink"></fa-icon>
-          </button>
-          <!-- Old dropdown (hidden via CSS) -->
-          <div class="filter-save-dropdown-wrapper migration-wizard-hide-old-dropdown">
-            <button
-              type="button"
-              class="filter-action-btn filter-save-btn"
-              (click)="toggleSaveDropdown($event)"
-              [attr.aria-label]="'migration.instances.saveFilter' | translate"
-              [title]="'migration.instances.saveFilter' | translate"
-              [attr.aria-expanded]="showSaveDropdown()">
-              <fa-icon [icon]="faSave"></fa-icon>
-              <fa-icon [icon]="faChevronDown" class="chevron"></fa-icon>
-            </button>
-          </div>
-          <!-- New save menu button and component -->
-          <div class="filter-new-save-menu-wrapper">
+          <div class="filter-actions-right">
+            @if (filterCriteria().length > 0) {
+              <button class="btn-clear-all-pills"
+                      (click)="clearAllPills()"
+                      type="button"
+                      role="button"
+                      [attr.aria-label]="'migration.instances.clearAllCriteria' | translate">
+                <fa-icon [icon]="faTimes" class="btn-clear-all-pills-icon"></fa-icon>
+                {{ 'search.clearAll' | translate }}
+              </button>
+              <div class="filter-actions-separator"></div>
+            }
             <button
               type="button"
               class="filter-action-btn"
-              (click)="toggleNewSaveMenu($event)"
-              [attr.aria-label]="'migration.instances.saveFilter' | translate"
-              [title]="'migration.instances.saveFilter' | translate"
-              [attr.aria-expanded]="showNewSaveMenu()"
-              #saveMenuButton>
-              <fa-icon [icon]="faSave"></fa-icon>
+              (click)="copyFilterLink()"
+              [attr.aria-label]="'migration.instances.copyFilterLink' | translate"
+              [title]="'migration.instances.copyFilterLink' | translate">
+              <fa-icon [icon]="faLink"></fa-icon>
             </button>
-            @if (showNewSaveMenu()) {
-              <div class="new-save-menu-positioner"
-                   #savedFiltersMenuContainer
-                   [style.top.px]="saveMenuPosition()?.top ?? 0"
-                   [style.left.px]="saveMenuPosition()?.left ?? 0"
-                   [style.max-height.px]="saveMenuPosition()?.maxHeight">
-                <app-saved-filters-menu
-                  [currentCriteria]="filterCriteria()"
-                  [processDefinitionId]="sourceDefinitionId()"
-                  (close)="closeNewSaveMenu()"
-                  (filterSaved)="onFilterSaved($event)"
-                  (filterLoaded)="onFilterLoaded($event)"
-                  (filterDeleted)="onFilterDeleted($event)">
-                </app-saved-filters-menu>
-              </div>
-            }
+            <!-- Old dropdown (hidden via CSS) -->
+            <div class="filter-save-dropdown-wrapper migration-wizard-hide-old-dropdown">
+              <button
+                type="button"
+                class="filter-action-btn filter-save-btn"
+                (click)="toggleSaveDropdown($event)"
+                [attr.aria-label]="'migration.instances.saveFilter' | translate"
+                [title]="'migration.instances.saveFilter' | translate"
+                [attr.aria-expanded]="showSaveDropdown()">
+                <fa-icon [icon]="faSave"></fa-icon>
+                <fa-icon [icon]="faChevronDown" class="chevron"></fa-icon>
+              </button>
+            </div>
+            <!-- New save menu button and component -->
+            <div class="filter-new-save-menu-wrapper">
+              <button
+                type="button"
+                class="filter-action-btn"
+                (click)="toggleNewSaveMenu($event)"
+                [attr.aria-label]="'migration.instances.saveFilter' | translate"
+                [title]="'migration.instances.saveFilter' | translate"
+                [attr.aria-expanded]="showNewSaveMenu()"
+                #saveMenuButton>
+                <fa-icon [icon]="faSave"></fa-icon>
+              </button>
+              @if (showNewSaveMenu()) {
+                <div class="new-save-menu-positioner"
+                     #savedFiltersMenuContainer
+                     [style.top.px]="saveMenuPosition()?.top ?? 0"
+                     [style.left.px]="saveMenuPosition()?.left ?? 0"
+                     [style.max-height.px]="saveMenuPosition()?.maxHeight">
+                  <app-saved-filters-menu
+                    [currentCriteria]="filterCriteria()"
+                    [processDefinitionId]="sourceDefinitionId()"
+                    (close)="closeNewSaveMenu()"
+                    (filterSaved)="onFilterSaved($event)"
+                    (filterLoaded)="onFilterLoaded($event)"
+                    (filterDeleted)="onFilterDeleted($event)">
+                  </app-saved-filters-menu>
+                </div>
+              }
+            </div>
           </div>
         </div>
       </div>

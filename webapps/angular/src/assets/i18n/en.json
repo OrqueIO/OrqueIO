@@ -2245,6 +2245,7 @@
   "migration.instances.deleteFilterConfirm": "Delete \"{{name}}\"?",
   "migration.instances.deleteFilterAriaLabel": "Delete saved filter {{name}}",
   "migration.instances.delete": "Delete",
+  "migration.instances.clearAllCriteria": "Clear all criteria",
   "migration.fallbackBanner.message": "Opened from a shared link. Source, target and filter were restored. Review the mapping, then continue.",
   "migration.fallbackBanner.dismiss": "Dismiss"
 }

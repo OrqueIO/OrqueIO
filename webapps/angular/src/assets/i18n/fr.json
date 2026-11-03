@@ -2227,6 +2227,7 @@
   "migration.instances.deleteFilterConfirm": "Supprimer « {{name}} » ?",
   "migration.instances.deleteFilterAriaLabel": "Supprimer le filtre enregistré {{name}}",
   "migration.instances.delete": "Supprimer",
+  "migration.instances.clearAllCriteria": "Effacer tous les critères",
   "migration.fallbackBanner.message": "Ouvert depuis un lien partagé. La source, la cible et le filtre ont été restaurés. Vérifiez le mapping, puis continuez.",
   "migration.fallbackBanner.dismiss": "Fermer"
 }

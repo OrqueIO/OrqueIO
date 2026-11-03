@@ -98,7 +98,21 @@
 .filter-actions {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
+}
+
+.filter-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-actions-separator {
+  width: 1px;
+  height: 20px;
+  background-color: #e2e8f0;
+  margin: 0 8px;
 }
 
 .filter-total {
@@ -648,6 +662,18 @@ app-pagination {
 /* =====================================================
    RESPONSIVE: Reduce margins on small screens
    ===================================================== */
+@media (max-width: 700px) {
+  .filter-actions {
+    flex-wrap: wrap;
+  }
+
+  .filter-actions-right {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+}
+
 @media (max-width: 768px) {
   .instances-step-panel {
     /* Mobile: reduced internal padding */
@@ -748,20 +774,31 @@ app-pagination {
 .btn-clear-all-pills {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: 6px;
+  /* Match pill height (pill padding: var(--space-1) var(--space-2)) */
   padding: var(--space-1) var(--space-2);
+  min-height: 32px; /* Same as pills */
   background: transparent;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
+  border: none; /* No border at rest */
+  border-radius: 999px; /* Will be visible on hover */
+  font-size: 13px;
+  color: #64748b; /* Medium gray */
+  font-weight: 500;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  font-weight: var(--font-weight-medium);
+  transition: all 120ms ease-in-out;
+}
+
+.btn-clear-all-pills-icon {
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
 .btn-clear-all-pills:hover {
-  background: var(--bg-hover);
-  border-color: var(--border-color-hover);
-  color: var(--text-primary);
+  background: #f1f5f9; /* Light gray background */
+  color: #0f172a; /* Dark text */
+}
+
+.btn-clear-all-pills:focus-visible {
+  outline: 2px solid #3b82f6; /* Blue focus ring */
+  outline-offset: 2px;
 }

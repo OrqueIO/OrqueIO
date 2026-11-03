@@ -3,7 +3,7 @@ import {
   DestroyRef, inject, signal, computed, effect, untracked, HostListener
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -63,6 +63,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private navMenuService = inject(NavMenuService);
   private cockpitService = inject(CockpitService);
   private processDefinitionService = inject(ProcessDefinitionService);
@@ -643,6 +644,14 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
       this.currentStep.set(3);
       this.cdr.markForCheck();
+
+      const currentParams = { ...this.route.snapshot.queryParams };
+      delete currentParams['restore'];
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: currentParams,
+        replaceUrl: true
+      });
 
       return true;
     } catch (error) {
