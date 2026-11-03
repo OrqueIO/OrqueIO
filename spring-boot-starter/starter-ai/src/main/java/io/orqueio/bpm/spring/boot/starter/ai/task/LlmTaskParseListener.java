@@ -20,6 +20,7 @@ import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.DE
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.INPUTS_PROPERTY;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.KNOWN_PROPERTIES;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.MODEL_PROPERTY;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.OUTPUTS_PROPERTY;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROMPT_PROPERTY;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROPERTY_PREFIX;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROVIDER_PROPERTY;
@@ -79,9 +80,41 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
 
     List<String> inputs = parseInputs(llmProperties.get(INPUTS_PROPERTY), activity, serviceTaskElement);
     validatePlaceholders(prompt, inputs, activity, serviceTaskElement);
+    List<LlmOutputField> outputs = parseOutputs(llmProperties.get(OUTPUTS_PROPERTY), activity, serviceTaskElement);
 
     activity.getProperties().set(LlmTaskConfiguration.KEY, new LlmTaskConfiguration(
-        trimToNull(llmProperties.get(PROVIDER_PROPERTY)), trimToNull(llmProperties.get(MODEL_PROPERTY)), prompt, inputs));
+        trimToNull(llmProperties.get(PROVIDER_PROPERTY)), trimToNull(llmProperties.get(MODEL_PROPERTY)), prompt,
+        inputs, outputs));
+  }
+
+  protected List<LlmOutputField> parseOutputs(String value, ActivityImpl activity, Element element) {
+    List<LlmOutputField> outputs = new ArrayList<>();
+    Set<String> names = new LinkedHashSet<>();
+    if (value != null) {
+      for (String declaration : value.split(",")) {
+        if (declaration.isBlank()) {
+          continue;
+        }
+        String[] parts = declaration.split(":", -1);
+        String name = parts[0].trim();
+        if (parts.length != 2 || !PromptTemplate.isVariableName(name)) {
+          throw error(activity, "has an invalid output '" + declaration.trim() + "' in " + OUTPUTS_PROPERTY
+              + "; expected name:type", element);
+        }
+        String typeId = parts[1].trim();
+        LlmOutputField.Type type = LlmOutputField.Type.fromId(typeId).orElseThrow(() -> error(activity,
+            "has an unsupported output type '" + typeId + "' for '" + name + "' in " + OUTPUTS_PROPERTY
+                + "; supported: string, integer, number, boolean", element));
+        if (!names.add(name)) {
+          throw error(activity, "declares output '" + name + "' twice in " + OUTPUTS_PROPERTY, element);
+        }
+        outputs.add(new LlmOutputField(name, type));
+      }
+    }
+    if (outputs.isEmpty()) {
+      throw error(activity, "requires a " + OUTPUTS_PROPERTY + " property declaring the fields the model returns", element);
+    }
+    return outputs;
   }
 
   protected List<String> parseInputs(String value, ActivityImpl activity, Element element) {

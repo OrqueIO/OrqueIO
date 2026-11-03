@@ -140,7 +140,7 @@ class LlmPromptResolverTest {
   }
 
   private static LlmTaskConfiguration task(String prompt, String... inputs) {
-    return new LlmTaskConfiguration(null, null, prompt, List.of(inputs));
+    return new LlmTaskConfiguration(null, null, prompt, List.of(inputs), List.of());
   }
 
   private static VariableScope variables(Map<String, TypedValue> values) {

@@ -40,6 +40,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class LlmTaskDeploymentIT {
 
   static final String LLM_DELEGATE = "${orqueioLlmTask}";
+  static final String OUTPUTS = property("orqueio.llm.outputs", "answer:string");
 
   @Autowired
   private RepositoryService repositoryService;
@@ -62,7 +63,7 @@ class LlmTaskDeploymentIT {
         property("orqueio.llm.provider", "ollama")
             + property("orqueio.llm.model", "qwen2.5:7b")
             + property("orqueio.llm.inputs", " emailBody , customer,,emailBody")
-            + property("orqueio.llm.prompt", "Classify: {{emailBody}}")));
+            + property("orqueio.llm.prompt", "Classify: {{emailBody}}") + OUTPUTS));
 
     assertThat(configuration.getProvider()).isEqualTo("ollama");
     assertThat(configuration.getModel()).isEqualTo("qwen2.5:7b");
@@ -72,7 +73,7 @@ class LlmTaskDeploymentIT {
 
   @Test
   void shouldHaveNoInputsWhenNoneDeclared() {
-    assertThat(deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Summarize")))
+    assertThat(deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Summarize") + OUTPUTS))
         .getInputs()).isEmpty();
   }
 
@@ -101,7 +102,7 @@ class LlmTaskDeploymentIT {
   @Test
   void shouldKeepLineBreaksOfMultiLinePrompt() {
     LlmTaskConfiguration configuration = deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
-        property("orqueio.llm.prompt", "First line&#10;Second line")));
+        property("orqueio.llm.prompt", "First line&#10;Second line") + OUTPUTS));
 
     assertThat(configuration.getPrompt()).isEqualTo("First line\nSecond line");
   }
@@ -109,7 +110,7 @@ class LlmTaskDeploymentIT {
   @Test
   void shouldDeployWithoutProviderOrModelWhenDefaultResolves() {
     LlmTaskConfiguration configuration = deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
-        property("orqueio.llm.prompt", "Summarize")));
+        property("orqueio.llm.prompt", "Summarize") + OUTPUTS));
 
     // Resolved from application configuration when the task runs
     assertThat(configuration.getProvider()).isNull();
@@ -118,10 +119,50 @@ class LlmTaskDeploymentIT {
 
   @Test
   void shouldReloadDefinitionFromCache() {
-    deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Summarize")));
+    deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Summarize") + OUTPUTS));
     processEngineConfiguration.getDeploymentCache().discardProcessDefinitionCache();
 
     assertThat(getConfiguration().getPrompt()).isEqualTo("Summarize");
+  }
+
+  @Test
+  void shouldReadOutputs() {
+    LlmTaskConfiguration configuration = deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
+        property("orqueio.llm.prompt", "Classify")
+            + property("orqueio.llm.outputs", " category:string, urgency : integer,score:number,complete:boolean ")));
+
+    assertThat(configuration.getOutputs()).containsExactly(
+        new LlmOutputField("category", LlmOutputField.Type.STRING),
+        new LlmOutputField("urgency", LlmOutputField.Type.INTEGER),
+        new LlmOutputField("score", LlmOutputField.Type.NUMBER),
+        new LlmOutputField("complete", LlmOutputField.Type.BOOLEAN));
+  }
+
+  @Test
+  void shouldRejectMissingOutputs() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Classify")),
+        "LLM task 'Task_Llm' requires a orqueio.llm.outputs property");
+  }
+
+  @Test
+  void shouldRejectMalformedOutput() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", "category")),
+        "LLM task 'Task_Llm' has an invalid output 'category' in orqueio.llm.outputs; expected name:type");
+  }
+
+  @Test
+  void shouldRejectUnsupportedOutputType() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", "tags:array")),
+        "LLM task 'Task_Llm' has an unsupported output type 'array' for 'tags'");
+  }
+
+  @Test
+  void shouldRejectDuplicateOutput() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", "a:string, a:integer")),
+        "LLM task 'Task_Llm' declares output 'a' twice");
   }
 
   @Test
@@ -139,14 +180,14 @@ class LlmTaskDeploymentIT {
   @Test
   void shouldRejectUnknownProvider() {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
-            property("orqueio.llm.provider", "foo") + property("orqueio.llm.prompt", "Summarize")),
+            property("orqueio.llm.provider", "foo") + property("orqueio.llm.prompt", "Summarize") + OUTPUTS),
         "LLM task 'Task_Llm' in process 'llmTaskProcess': Unknown LLM provider 'foo'");
   }
 
   @Test
   void shouldRejectProviderThatIsNotConfigured() {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
-            property("orqueio.llm.provider", "anthropic") + property("orqueio.llm.prompt", "Summarize")),
+            property("orqueio.llm.provider", "anthropic") + property("orqueio.llm.prompt", "Summarize") + OUTPUTS),
         "LLM task 'Task_Llm' in process 'llmTaskProcess': LLM provider 'anthropic' is not configured. "
             + "Add the spring-ai-starter-model-anthropic dependency");
   }
