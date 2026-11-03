@@ -29,6 +29,12 @@ public class OrqueioBpmAiProperties {
    */
   private boolean enabled = true;
 
+  /**
+   * Provider used by LLM tasks that do not name one, for example {@code openai} or
+   * {@code ollama}. Not needed when the application configures a single provider.
+   */
+  private String defaultProvider;
+
   public boolean isEnabled() {
     return enabled;
   }
@@ -37,9 +43,17 @@ public class OrqueioBpmAiProperties {
     this.enabled = enabled;
   }
 
+  public String getDefaultProvider() {
+    return defaultProvider;
+  }
+
+  public void setDefaultProvider(String defaultProvider) {
+    this.defaultProvider = defaultProvider;
+  }
+
   @Override
   public String toString() {
-    return "OrqueioBpmAiProperties[enabled=" + enabled + "]";
+    return "OrqueioBpmAiProperties[enabled=" + enabled + ", defaultProvider=" + defaultProvider + "]";
   }
 
 }

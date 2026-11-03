@@ -17,10 +17,16 @@
 package io.orqueio.bpm.spring.boot.starter.ai;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
 
 import io.orqueio.bpm.spring.boot.starter.ai.property.OrqueioBpmAiProperties;
+import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
+import io.orqueio.bpm.spring.boot.starter.ai.provider.LlmProviderException;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.ollama.OllamaChatModel;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.context.annotation.ImportCandidates;
@@ -49,12 +55,48 @@ class OrqueioBpmAiAutoConfigurationTest {
 
   @Test
   void shouldStartWithoutModelProvider() {
-    // Hide the provider that the test classpath carries for the IT
-    contextRunner.withClassLoader(new FilteredClassLoader("org.springframework.ai.ollama")).run(context -> {
-      assertThat(context).hasNotFailed();
-      assertThat(context).doesNotHaveBean(ChatModel.class);
-      assertThat(context).hasSingleBean(OrqueioBpmAiAutoConfiguration.class);
-    });
+    // Hide the providers that the test classpath carries for the ITs
+    contextRunner.withClassLoader(new FilteredClassLoader("org.springframework.ai.ollama", "org.springframework.ai.openai"))
+        .run(context -> {
+          assertThat(context).hasNotFailed();
+          assertThat(context).doesNotHaveBean(ChatModel.class);
+          assertThat(context).hasSingleBean(OrqueioBpmAiAutoConfiguration.class);
+          assertThat(context).hasSingleBean(ChatModelRegistry.class);
+        });
+  }
+
+  @Test
+  void shouldSelectDefaultProviderAmongSeveralModelBeans() {
+    ChatModel ollama = mock(OllamaChatModel.class);
+    ChatModel openAi = mock(OpenAiChatModel.class);
+
+    contextRunner
+        .withBean("ollamaChatModel", ChatModel.class, () -> ollama)
+        .withBean("openAiChatModel", ChatModel.class, () -> openAi)
+        .withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".default-provider=openai")
+        .run(context -> {
+          ChatModelRegistry registry = context.getBean(ChatModelRegistry.class);
+          assertThat(registry.getDefaultChatModel()).isSameAs(openAi);
+          assertThat(registry.getChatModel("ollama")).isSameAs(ollama);
+        });
+  }
+
+  @Test
+  void shouldRequireDefaultProviderAmongSeveralModelBeans() {
+    contextRunner
+        .withBean("ollamaChatModel", ChatModel.class, () -> mock(OllamaChatModel.class))
+        .withBean("openAiChatModel", ChatModel.class, () -> mock(OpenAiChatModel.class))
+        .run(context -> assertThatThrownBy(() -> context.getBean(ChatModelRegistry.class).getDefaultChatModel())
+            .isInstanceOf(LlmProviderException.class)
+            .hasMessageContaining(ChatModelRegistry.DEFAULT_PROVIDER_PROPERTY));
+  }
+
+  @Test
+  void shouldFailStartupOnUnknownDefaultProvider() {
+    contextRunner
+        .withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".default-provider=open-ai")
+        .run(context -> assertThat(context).hasFailed()
+            .getFailure().rootCause().hasMessageContaining("'open-ai'"));
   }
 
   @Test
@@ -65,6 +107,7 @@ class OrqueioBpmAiAutoConfigurationTest {
           assertThat(context).hasNotFailed();
           assertThat(context).doesNotHaveBean(OrqueioBpmAiAutoConfiguration.class);
           assertThat(context).doesNotHaveBean(OrqueioBpmAiProperties.class);
+          assertThat(context).doesNotHaveBean(ChatModelRegistry.class);
         });
   }
 
