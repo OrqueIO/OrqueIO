@@ -26,6 +26,12 @@ import tools.jackson.databind.JsonNode;
  */
 public record LlmOutputField(String name, Type type) {
 
+  /**
+   * Longest string the engine stores in a string variable on every supported
+   * database (the TEXT_ column is 4000 characters).
+   */
+  public static final int MAX_STRING_LENGTH = 4000;
+
   public enum Type {
 
     STRING("string"),
@@ -48,14 +54,15 @@ public record LlmOutputField(String name, Type type) {
     }
 
     /**
-     * @return the value as a process variable value, or {@code null} if the node does not have this type
+     * @return the value as a process variable value, or {@code null} if the node does not have this
+     *         type or cannot be stored (a string over {@link #MAX_STRING_LENGTH}, an infinite number)
      */
     Object convert(JsonNode node) {
       return switch (this) {
-        case STRING -> node.isString() ? node.stringValue() : null;
+        case STRING -> node.isString() && node.stringValue().length() <= MAX_STRING_LENGTH ? node.stringValue() : null;
         // Models sometimes write integers as 3.0; a fraction is still rejected
         case INTEGER -> node.isNumber() && isIntegral(node) ? node.longValue() : null;
-        case NUMBER -> node.isNumber() ? node.doubleValue() : null;
+        case NUMBER -> node.isNumber() && Double.isFinite(node.doubleValue()) ? node.doubleValue() : null;
         case BOOLEAN -> node.isBoolean() ? node.booleanValue() : null;
       };
     }

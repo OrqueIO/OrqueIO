@@ -39,7 +39,9 @@ import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.ollama.api.OllamaChatOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -100,7 +102,7 @@ class LlmTaskDelegateIT {
   }
 
   @Test
-  void shouldRequestModelNamedOnTask() {
+  void shouldRequestModelNamedOnTaskWithProviderOptions() {
     deploy(property("orqueio.llm.model", "qwen2.5:7b")
         + property("orqueio.llm.prompt", "Summarize")
         + property("orqueio.llm.outputs", "summary:string"));
@@ -108,7 +110,11 @@ class LlmTaskDelegateIT {
 
     startAndRunLlmTask(Map.of());
 
-    assertThat(model.prompts.get(0).getOptions().getModel()).isEqualTo("qwen2.5:7b");
+    // Providers cast prompt options to their own class: it must be kept, with its other settings
+    ChatOptions options = model.prompts.get(0).getOptions();
+    assertThat(options).isInstanceOf(OllamaChatOptions.class);
+    assertThat(options.getModel()).isEqualTo("qwen2.5:7b");
+    assertThat(options.getTemperature()).isEqualTo(0.0);
   }
 
   @Test
@@ -133,7 +139,7 @@ class LlmTaskDelegateIT {
 
     assertThatThrownBy(() -> managementService.executeJob(job.getId()))
         .isInstanceOf(LlmTaskException.class)
-        .hasMessage("Field 'urgency' of the model's answer is not of type integer");
+        .hasMessage("Field 'urgency' of the model's answer is not a valid integer");
     assertThat(runtimeService.getVariables(instance.getId())).doesNotContainKeys("category", "urgency");
   }
 
@@ -159,6 +165,12 @@ class LlmTaskDelegateIT {
 
     final List<Prompt> prompts = new ArrayList<>();
     String answer;
+
+    // Like a configured provider: its own options class, with settings from application configuration
+    @Override
+    public ChatOptions getOptions() {
+      return OllamaChatOptions.builder().model("default-model").temperature(0.0).build();
+    }
 
     @Override
     public ChatResponse call(Prompt prompt) {

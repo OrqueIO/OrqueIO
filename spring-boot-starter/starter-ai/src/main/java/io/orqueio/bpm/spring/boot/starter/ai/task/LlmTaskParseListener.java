@@ -81,10 +81,27 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
     List<String> inputs = parseInputs(llmProperties.get(INPUTS_PROPERTY), activity, serviceTaskElement);
     validatePlaceholders(prompt, inputs, activity, serviceTaskElement);
     List<LlmOutputField> outputs = parseOutputs(llmProperties.get(OUTPUTS_PROPERTY), activity, serviceTaskElement);
+    validateOutputNames(outputs, inputs, activity, serviceTaskElement);
 
     activity.getProperties().set(LlmTaskConfiguration.KEY, new LlmTaskConfiguration(
         trimToNull(llmProperties.get(PROVIDER_PROPERTY)), trimToNull(llmProperties.get(MODEL_PROPERTY)), prompt,
         inputs, outputs));
+  }
+
+  /** Multi-instance bookkeeping variables, which an output would overwrite. */
+  protected static final Set<String> RESERVED_OUTPUT_NAMES =
+      Set.of("loopCounter", "nrOfInstances", "nrOfActiveInstances", "nrOfCompletedInstances");
+
+  protected void validateOutputNames(List<LlmOutputField> outputs, List<String> inputs, ActivityImpl activity, Element element) {
+    for (LlmOutputField output : outputs) {
+      if (inputs.contains(output.name())) {
+        throw error(activity, "declares '" + output.name() + "' both as input and output; the answer would "
+            + "overwrite the data sent to the model", element);
+      }
+      if (RESERVED_OUTPUT_NAMES.contains(output.name())) {
+        throw error(activity, "cannot write output '" + output.name() + "': the engine uses this variable", element);
+      }
+    }
   }
 
   protected List<LlmOutputField> parseOutputs(String value, ActivityImpl activity, Element element) {

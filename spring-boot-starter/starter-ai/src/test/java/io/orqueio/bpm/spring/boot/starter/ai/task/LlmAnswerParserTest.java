@@ -65,15 +65,15 @@ class LlmAnswerParserTest {
   void shouldRejectFractionForInteger() {
     assertThatThrownBy(() -> parser.parse("{\"urgency\":2.5}", List.of(new LlmOutputField("urgency", INTEGER))))
         .isInstanceOf(LlmTaskException.class)
-        .hasMessage("Field 'urgency' of the model's answer is not of type integer");
+        .hasMessage("Field 'urgency' of the model's answer is not a valid integer");
   }
 
   @Test
   void shouldRejectWrongType() {
     assertThatThrownBy(() -> parser.parse("{\"category\":42}", List.of(new LlmOutputField("category", STRING))))
-        .hasMessage("Field 'category' of the model's answer is not of type string");
+        .hasMessage("Field 'category' of the model's answer is not a valid string");
     assertThatThrownBy(() -> parser.parse("{\"complete\":\"yes\"}", List.of(new LlmOutputField("complete", BOOLEAN))))
-        .hasMessage("Field 'complete' of the model's answer is not of type boolean");
+        .hasMessage("Field 'complete' of the model's answer is not a valid boolean");
   }
 
   @Test
@@ -99,6 +99,36 @@ class LlmAnswerParserTest {
     assertThatThrownBy(() -> parser.parse("{\"category\":\"Ada Lovelace, IBAN FR76...\", \"urgency\":\"high\"}",
         List.of(new LlmOutputField("category", STRING), new LlmOutputField("urgency", INTEGER))))
         .message().doesNotContain("Ada").doesNotContain("FR76").doesNotContain("high");
+  }
+
+  @Test
+  void shouldRejectStringLongerThanTheEngineStores() {
+    String tooLong = "a".repeat(LlmOutputField.MAX_STRING_LENGTH + 1);
+
+    assertThat(parser.parse("{\"s\":\"" + "a".repeat(LlmOutputField.MAX_STRING_LENGTH) + "\"}",
+        List.of(new LlmOutputField("s", STRING)))).containsKey("s");
+    assertThatThrownBy(() -> parser.parse("{\"s\":\"" + tooLong + "\"}", List.of(new LlmOutputField("s", STRING))))
+        .hasMessage("Field 's' of the model's answer is not a valid string");
+  }
+
+  @Test
+  void shouldRejectInfiniteNumber() {
+    assertThatThrownBy(() -> parser.parse("{\"score\":1e400}", List.of(new LlmOutputField("score", NUMBER))))
+        .hasMessage("Field 'score' of the model's answer is not a valid number");
+  }
+
+  @Test
+  void shouldRejectDuplicateKeys() {
+    assertThatThrownBy(() -> parser.parse("{\"category\":\"A\",\"category\":\"B\"}",
+        List.of(new LlmOutputField("category", STRING))))
+        .hasMessage("The model's answer is not valid JSON");
+  }
+
+  @Test
+  void shouldRejectOneLineCodeFence() {
+    // Only a fence opening the answer on its own line is removed; the instructions ask for no Markdown
+    assertThatThrownBy(() -> parser.parse("```{\"category\":\"A\"}```", List.of(new LlmOutputField("category", STRING))))
+        .hasMessage("The model's answer is not valid JSON");
   }
 
   @Test

@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import tools.jackson.core.JacksonException;
+import tools.jackson.core.StreamReadFeature;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -33,7 +34,10 @@ import tools.jackson.databind.json.JsonMapper;
  */
 public class LlmAnswerParser {
 
-  private final JsonMapper jsonMapper = JsonMapper.builder().build();
+  // A key given twice makes the answer ambiguous: rejected rather than last one wins
+  private final JsonMapper jsonMapper = JsonMapper.builder()
+      .enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION)
+      .build();
 
   /**
    * @return the instructions telling the model how to answer
@@ -73,7 +77,7 @@ public class LlmAnswerParser {
       }
       Object value = field.type().convert(node);
       if (value == null) {
-        throw new LlmTaskException("Field '" + field.name() + "' of the model's answer is not of type "
+        throw new LlmTaskException("Field '" + field.name() + "' of the model's answer is not a valid "
             + field.type().getId());
       }
       values.put(field.name(), value);

@@ -139,6 +139,21 @@ class LlmTaskDeploymentIT {
   }
 
   @Test
+  void shouldRejectOutputThatIsAlsoAnInput() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.inputs", "emailBody") + property("orqueio.llm.prompt", "Fix {{emailBody}}")
+                + property("orqueio.llm.outputs", "emailBody:string")),
+        "LLM task 'Task_Llm' declares 'emailBody' both as input and output");
+  }
+
+  @Test
+  void shouldRejectOutputUsedByTheEngine() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.prompt", "Count") + property("orqueio.llm.outputs", "loopCounter:integer")),
+        "LLM task 'Task_Llm' cannot write output 'loopCounter': the engine uses this variable");
+  }
+
+  @Test
   void shouldRejectMissingOutputs() {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Classify")),
         "LLM task 'Task_Llm' requires a orqueio.llm.outputs property");

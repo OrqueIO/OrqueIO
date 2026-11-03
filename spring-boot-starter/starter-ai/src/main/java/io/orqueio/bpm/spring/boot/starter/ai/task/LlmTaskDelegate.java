@@ -59,18 +59,35 @@ public class LlmTaskDelegate implements JavaDelegate {
     String userPrompt = promptResolver.resolve(configuration, execution);
     ChatModel chatModel = chatModelRegistry.getChatModel(configuration.getProvider());
 
-    // Instructions and process data stay in separate messages
+    // The answer format goes in the system message, the resolved prompt in the user message
     List<Message> messages = List.of(
         new SystemMessage(answerParser.formatInstructions(configuration.getOutputs())),
         new UserMessage(userPrompt));
-    Prompt prompt = configuration.getModel() == null
-        ? new Prompt(messages)
-        : new Prompt(messages, ChatOptions.builder().model(configuration.getModel()).build());
+    ChatOptions options = optionsFor(chatModel, configuration.getModel());
+    Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 
     ChatResponse response = chatModel.call(prompt);
 
+    // Every field is validated before any variable is written
     Map<String, Object> values = answerParser.parse(textOf(response), configuration.getOutputs());
     values.forEach(execution::setVariable);
+  }
+
+  /**
+   * Spring AI 2.0 providers neither merge nor convert the options of a prompt: they
+   * cast them to their own options class. The task's model is therefore set on a copy
+   * of the provider's configured options, which keeps its class and its other settings.
+   *
+   * @return the options to send, or {@code null} to use the provider's configuration as is
+   */
+  protected ChatOptions optionsFor(ChatModel chatModel, String model) {
+    if (model == null) {
+      return null;
+    }
+    ChatOptions defaults = chatModel.getOptions();
+    return defaults != null
+        ? defaults.mutate().model(model).build()
+        : ChatOptions.builder().model(model).build();
   }
 
   protected LlmTaskConfiguration configurationOf(DelegateExecution execution) {
