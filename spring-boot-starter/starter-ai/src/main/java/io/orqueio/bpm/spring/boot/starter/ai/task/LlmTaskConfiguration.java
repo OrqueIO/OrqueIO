@@ -16,6 +16,7 @@
  */
 package io.orqueio.bpm.spring.boot.starter.ai.task;
 
+import java.util.List;
 import java.util.Set;
 
 import io.orqueio.bpm.engine.impl.core.model.PropertyKey;
@@ -36,19 +37,22 @@ public final class LlmTaskConfiguration {
   public static final String PROVIDER_PROPERTY = PROPERTY_PREFIX + "provider";
   public static final String MODEL_PROPERTY = PROPERTY_PREFIX + "model";
   public static final String PROMPT_PROPERTY = PROPERTY_PREFIX + "prompt";
+  public static final String INPUTS_PROPERTY = PROPERTY_PREFIX + "inputs";
 
-  static final Set<String> KNOWN_PROPERTIES = Set.of(PROVIDER_PROPERTY, MODEL_PROPERTY, PROMPT_PROPERTY);
+  static final Set<String> KNOWN_PROPERTIES = Set.of(PROVIDER_PROPERTY, MODEL_PROPERTY, PROMPT_PROPERTY, INPUTS_PROPERTY);
 
   static final PropertyKey<LlmTaskConfiguration> KEY = new PropertyKey<>("orqueioLlmTaskConfiguration");
 
   private final String provider;
   private final String model;
   private final String prompt;
+  private final List<String> inputs;
 
-  LlmTaskConfiguration(String provider, String model, String prompt) {
+  LlmTaskConfiguration(String provider, String model, String prompt, List<String> inputs) {
     this.provider = provider;
     this.model = model;
     this.prompt = prompt;
+    this.inputs = List.copyOf(inputs);
   }
 
   /**
@@ -79,9 +83,16 @@ public final class LlmTaskConfiguration {
     return prompt;
   }
 
+  /**
+   * @return the variables the task may send to the model, in declaration order; empty if none
+   */
+  public List<String> getInputs() {
+    return inputs;
+  }
+
   @Override
   public String toString() {
-    return "LlmTaskConfiguration[provider=" + provider + ", model=" + model + "]";
+    return "LlmTaskConfiguration[provider=" + provider + ", model=" + model + ", inputs=" + inputs + "]";
   }
 
 }
