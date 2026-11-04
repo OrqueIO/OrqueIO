@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSpinner, faCheck, faTimes, faExclamationTriangle, faCopy, faArrowRight, faArrowDown, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faCheck, faTimes, faExclamationTriangle, faArrowRight, faArrowDown, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
@@ -69,7 +69,6 @@ export class MigrationConfirmStepComponent {
   readonly faCheck = faCheck;
   readonly faTimes = faTimes;
   readonly faExclamationTriangle = faExclamationTriangle;
-  readonly faCopy = faCopy;
   readonly faArrowRight = faArrowRight;
   readonly faArrowDown = faArrowDown;
   readonly faChevronDown = faChevronDown;
@@ -86,7 +85,6 @@ export class MigrationConfirmStepComponent {
   readonly executionError = signal<string | null>(null);
 
   readonly showTechnicalDetails = signal(false);
-  readonly payloadCopied = signal(false);
 
   readonly countVerifying = signal(false);
   readonly verifiedCount = signal<number | null>(null);
@@ -191,14 +189,6 @@ export class MigrationConfirmStepComponent {
 
   onToggleTechnicalDetails(): void {
     this.showTechnicalDetails.set(!this.showTechnicalDetails());
-  }
-
-  onCopyPayload(): void {
-    const json = this.payloadJson();
-    navigator.clipboard.writeText(json).then(() => {
-      this.payloadCopied.set(true);
-      setTimeout(() => this.payloadCopied.set(false), 2000);
-    });
   }
 
   getProcessName(side: 'source' | 'target'): string {
