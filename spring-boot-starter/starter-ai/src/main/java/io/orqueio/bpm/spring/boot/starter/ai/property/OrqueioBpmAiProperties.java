@@ -16,6 +16,8 @@
  */
 package io.orqueio.bpm.spring.boot.starter.ai.property;
 
+import java.time.Duration;
+
 import io.orqueio.bpm.spring.boot.starter.property.OrqueioBpmProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -35,6 +37,13 @@ public class OrqueioBpmAiProperties {
    */
   private String defaultProvider;
 
+  /**
+   * How long an LLM task waits for the model when it does not set orqueio.llm.timeout.
+   * Includes the provider's own retries. Keep it below the job executor's lock time, or
+   * another job executor may run the task again while the first call is still running.
+   */
+  private Duration timeout = Duration.ofMinutes(2);
+
   public boolean isEnabled() {
     return enabled;
   }
@@ -51,9 +60,18 @@ public class OrqueioBpmAiProperties {
     this.defaultProvider = defaultProvider;
   }
 
+  public Duration getTimeout() {
+    return timeout;
+  }
+
+  public void setTimeout(Duration timeout) {
+    this.timeout = timeout;
+  }
+
   @Override
   public String toString() {
-    return "OrqueioBpmAiProperties[enabled=" + enabled + ", defaultProvider=" + defaultProvider + "]";
+    return "OrqueioBpmAiProperties[enabled=" + enabled + ", defaultProvider=" + defaultProvider
+        + ", timeout=" + timeout + "]";
   }
 
 }

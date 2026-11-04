@@ -17,6 +17,7 @@
 package io.orqueio.bpm.spring.boot.starter.ai.task;
 
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.DELEGATE_EXPRESSION;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.ERROR_CODE_PROPERTY;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.INPUTS_PROPERTY;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.KNOWN_PROPERTIES;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.MODEL_PROPERTY;
@@ -24,7 +25,10 @@ import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.OU
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROMPT_PROPERTY;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROPERTY_PREFIX;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROVIDER_PROPERTY;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.TIMEOUT_PROPERTY;
 
+import java.time.Duration;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -85,9 +89,11 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
     List<LlmOutputField> outputs = parseOutputs(trimToNull(llmProperties.get(OUTPUTS_PROPERTY)), activity, serviceTaskElement);
     validateOutputNames(outputs, inputs, activity, serviceTaskElement);
 
+    Duration timeout = parseTimeout(trimToNull(llmProperties.get(TIMEOUT_PROPERTY)), activity, serviceTaskElement);
+
     activity.getProperties().set(LlmTaskConfiguration.KEY, new LlmTaskConfiguration(
         trimToNull(llmProperties.get(PROVIDER_PROPERTY)), trimToNull(llmProperties.get(MODEL_PROPERTY)), prompt,
-        inputs, outputs));
+        inputs, outputs, timeout, trimToNull(llmProperties.get(ERROR_CODE_PROPERTY))));
   }
 
   /** Multi-instance bookkeeping variables, which an output would overwrite. */
@@ -134,6 +140,24 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
       throw error(activity, "requires a " + OUTPUTS_PROPERTY + " property declaring the fields the model returns", element);
     }
     return outputs;
+  }
+
+  protected Duration parseTimeout(String value, ActivityImpl activity, Element element) {
+    if (value == null) {
+      return null;
+    }
+    Duration timeout;
+    try {
+      timeout = Duration.parse(value);
+    }
+    catch (DateTimeParseException e) {
+      timeout = null;
+    }
+    if (timeout == null || timeout.isNegative() || timeout.isZero()) {
+      throw error(activity, "has an invalid " + TIMEOUT_PROPERTY + " '" + value + "'; expected a positive "
+          + "ISO-8601 duration such as PT30S", element);
+    }
+    return timeout;
   }
 
   protected List<String> parseInputs(String value, ActivityImpl activity, Element element) {

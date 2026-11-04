@@ -19,6 +19,8 @@ package io.orqueio.bpm.spring.boot.starter.ai.task;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.time.Duration;
+
 import io.orqueio.bpm.engine.ProcessEngineException;
 import io.orqueio.bpm.engine.RepositoryService;
 import io.orqueio.bpm.engine.impl.RepositoryServiceImpl;
@@ -162,6 +164,34 @@ class LlmTaskDeploymentIT {
     processEngineConfiguration.getDeploymentCache().discardProcessDefinitionCache();
 
     assertThat(getConfiguration().getPrompt()).isEqualTo("Summarize");
+  }
+
+  @Test
+  void shouldReadTimeoutAndErrorCode() {
+    LlmTaskConfiguration configuration = deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
+        property("orqueio.llm.prompt", "Summarize") + OUTPUTS
+            + property("orqueio.llm.timeout", " PT30S ") + property("orqueio.llm.errorCode", " LLM_INVALID_ANSWER ")));
+
+    assertThat(configuration.getTimeout()).isEqualTo(Duration.ofSeconds(30));
+    assertThat(configuration.getErrorCode()).isEqualTo("LLM_INVALID_ANSWER");
+  }
+
+  @Test
+  void shouldLeaveTimeoutAndErrorCodeUnsetWhenNotDeclared() {
+    LlmTaskConfiguration configuration = deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
+        property("orqueio.llm.prompt", "Summarize") + OUTPUTS));
+
+    assertThat(configuration.getTimeout()).isNull();
+    assertThat(configuration.getErrorCode()).isNull();
+  }
+
+  @Test
+  void shouldRejectInvalidTimeout() {
+    for (String timeout : new String[] {"30s", "PT0S", "-PT5S"}) {
+      assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+              property("orqueio.llm.prompt", "Summarize") + OUTPUTS + property("orqueio.llm.timeout", timeout)),
+          "LLM task 'Task_Llm' has an invalid orqueio.llm.timeout '" + timeout + "'; expected a positive ISO-8601 duration");
+    }
   }
 
   @Test

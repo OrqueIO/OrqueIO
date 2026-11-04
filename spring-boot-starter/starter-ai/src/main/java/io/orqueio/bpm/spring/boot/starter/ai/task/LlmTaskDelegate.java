@@ -16,8 +16,15 @@
  */
 package io.orqueio.bpm.spring.boot.starter.ai.task;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import io.orqueio.bpm.engine.delegate.BpmnError;
 
 import io.orqueio.bpm.engine.delegate.DelegateExecution;
 import io.orqueio.bpm.engine.delegate.JavaDelegate;
@@ -36,6 +43,10 @@ import org.springframework.ai.chat.prompt.Prompt;
  * Runs an LLM task: resolves its prompt, calls the configured model and writes the
  * declared output fields as process variables. Referenced from BPMN as
  * {@value LlmTaskConfiguration#DELEGATE_EXPRESSION}.
+ * <p>
+ * Failures are thrown as {@link LlmTaskException}s that tell whether a retry may help;
+ * see {@link LlmFailedJobCommandFactory}. An invalid answer becomes a BPMN error when
+ * the task declares {@value LlmTaskConfiguration#ERROR_CODE_PROPERTY}.
  */
 public class LlmTaskDelegate implements JavaDelegate {
 
@@ -44,12 +55,17 @@ public class LlmTaskDelegate implements JavaDelegate {
   private final ChatModelRegistry chatModelRegistry;
   private final LlmPromptResolver promptResolver;
   private final LlmAnswerParser answerParser;
+  private final LlmFailureClassifier failureClassifier;
+  private final Duration defaultTimeout;
 
   public LlmTaskDelegate(ChatModelRegistry chatModelRegistry, LlmPromptResolver promptResolver,
-                         LlmAnswerParser answerParser) {
+                         LlmAnswerParser answerParser, LlmFailureClassifier failureClassifier,
+                         Duration defaultTimeout) {
     this.chatModelRegistry = chatModelRegistry;
     this.promptResolver = promptResolver;
     this.answerParser = answerParser;
+    this.failureClassifier = failureClassifier;
+    this.defaultTimeout = defaultTimeout;
   }
 
   @Override
@@ -66,11 +82,45 @@ public class LlmTaskDelegate implements JavaDelegate {
     ChatOptions options = optionsFor(chatModel, configuration.getModel());
     Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 
-    ChatResponse response = chatModel.call(prompt);
+    Duration timeout = configuration.getTimeout() != null ? configuration.getTimeout() : defaultTimeout;
+    ChatResponse response = call(chatModel, prompt, timeout);
 
     // Every field is validated before any variable is written
-    Map<String, Object> values = answerParser.parse(textOf(response), configuration.getOutputs());
+    Map<String, Object> values;
+    try {
+      values = answerParser.parse(textOf(response), configuration.getOutputs());
+    }
+    catch (LlmInvalidAnswerException e) {
+      if (configuration.getErrorCode() == null) {
+        throw e;
+      }
+      throw new BpmnError(configuration.getErrorCode(), e.getMessage());
+    }
     values.forEach(execution::setVariable);
+  }
+
+  /**
+   * Calls the model on its own thread, so the job stops waiting when the timeout
+   * elapses even if the provider's client does not.
+   */
+  protected ChatResponse call(ChatModel chatModel, Prompt prompt, Duration timeout) {
+    FutureTask<ChatResponse> call = new FutureTask<>(() -> chatModel.call(prompt));
+    Thread.ofVirtual().name("orqueio-llm-call").start(call);
+    try {
+      return call.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
+    }
+    catch (TimeoutException e) {
+      call.cancel(true);
+      throw new LlmTransientException("The model did not answer within " + timeout, e);
+    }
+    catch (InterruptedException e) {
+      call.cancel(true);
+      Thread.currentThread().interrupt();
+      throw new LlmTransientException("Interrupted while waiting for the model", e);
+    }
+    catch (ExecutionException e) {
+      throw failureClassifier.classify(e.getCause());
+    }
   }
 
   /**

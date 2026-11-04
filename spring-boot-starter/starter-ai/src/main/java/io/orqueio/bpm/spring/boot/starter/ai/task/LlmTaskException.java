@@ -19,7 +19,8 @@ package io.orqueio.bpm.spring.boot.starter.ai.task;
 import io.orqueio.bpm.engine.ProcessEngineException;
 
 /**
- * Thrown when an LLM task cannot run with the data of its process instance.
+ * Thrown when an LLM task fails. Unless {@link #isRetryable() retryable}, the failure
+ * cannot go away by itself: the job is not retried and an incident is raised at once.
  */
 public class LlmTaskException extends ProcessEngineException {
 
@@ -27,6 +28,17 @@ public class LlmTaskException extends ProcessEngineException {
 
   public LlmTaskException(String message) {
     super(message);
+  }
+
+  public LlmTaskException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  /**
+   * @return {@code true} if running the task again may succeed, for example after a timeout
+   */
+  public boolean isRetryable() {
+    return false;
   }
 
 }

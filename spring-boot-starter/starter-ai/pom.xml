@@ -26,6 +26,11 @@
       <groupId>org.springframework.ai</groupId>
       <artifactId>spring-ai-model</artifactId>
     </dependency>
+    <!-- Exceptions through which Spring AI providers tell transient from permanent failures -->
+    <dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-retry</artifactId>
+    </dependency>
     <!-- Parses the model's answer; the Jackson 3 that Spring Boot 4 and Spring AI 2.0 use -->
     <dependency>
       <groupId>tools.jackson.core</groupId>

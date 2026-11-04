@@ -52,32 +52,32 @@ public class LlmAnswerParser {
 
   /**
    * @return the value of each declared field, in declaration order
-   * @throws LlmTaskException if the answer is not a JSON object with every field of the right type
+   * @throws LlmInvalidAnswerException if the answer is not a JSON object with every field of the right type
    */
   public Map<String, Object> parse(String answer, List<LlmOutputField> outputs) {
     if (answer == null || answer.isBlank()) {
-      throw new LlmTaskException("The model returned an empty answer");
+      throw new LlmInvalidAnswerException("The model returned an empty answer");
     }
     JsonNode root;
     try {
       root = jsonMapper.readTree(stripCodeFence(answer.trim()));
     }
     catch (JacksonException e) {
-      throw new LlmTaskException("The model's answer is not valid JSON");
+      throw new LlmInvalidAnswerException("The model's answer is not valid JSON");
     }
     if (root == null || !root.isObject()) {
-      throw new LlmTaskException("The model's answer is not a JSON object");
+      throw new LlmInvalidAnswerException("The model's answer is not a JSON object");
     }
 
     Map<String, Object> values = new LinkedHashMap<>();
     for (LlmOutputField field : outputs) {
       JsonNode node = root.get(field.name());
       if (node == null || node.isNull()) {
-        throw new LlmTaskException("The model's answer has no value for field '" + field.name() + "'");
+        throw new LlmInvalidAnswerException("The model's answer has no value for field '" + field.name() + "'");
       }
       Object value = field.type().convert(node);
       if (value == null) {
-        throw new LlmTaskException("Field '" + field.name() + "' of the model's answer is not a valid "
+        throw new LlmInvalidAnswerException("Field '" + field.name() + "' of the model's answer is not a valid "
             + field.type().getId());
       }
       values.put(field.name(), value);
