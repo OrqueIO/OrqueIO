@@ -126,7 +126,7 @@ class LlmPromptResolverIT {
   }
 
   private static LlmTaskConfiguration task(String prompt, String... inputs) {
-    return new LlmTaskConfiguration(null, null, prompt, List.of(inputs));
+    return new LlmTaskConfiguration(null, null, prompt, List.of(inputs), List.of());
   }
 
   static class PromptProbe implements JavaDelegate {

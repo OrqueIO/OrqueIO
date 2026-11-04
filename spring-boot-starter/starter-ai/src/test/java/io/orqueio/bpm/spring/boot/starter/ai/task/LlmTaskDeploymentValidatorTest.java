@@ -97,7 +97,7 @@ class LlmTaskDeploymentValidatorTest {
   }
 
   private static void llmTask(ActivityImpl activity, String provider) {
-    activity.getProperties().set(LlmTaskConfiguration.KEY, new LlmTaskConfiguration(provider, null, "Summarize", List.of()));
+    activity.getProperties().set(LlmTaskConfiguration.KEY, new LlmTaskConfiguration(provider, null, "Summarize", List.of(), List.of()));
   }
 
 }
