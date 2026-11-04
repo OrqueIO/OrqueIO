@@ -187,10 +187,10 @@ class LlmTaskDeploymentIT {
 
   @Test
   void shouldRejectInvalidTimeout() {
-    for (String timeout : new String[] {"30s", "PT0S", "-PT5S"}) {
+    for (String timeout : new String[] {"30s", "PT0S", "-PT5S", "PT0.0001S", "P2D", "PT9999999999999H"}) {
       assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
               property("orqueio.llm.prompt", "Summarize") + OUTPUTS + property("orqueio.llm.timeout", timeout)),
-          "LLM task 'Task_Llm' has an invalid orqueio.llm.timeout '" + timeout + "'; expected a positive ISO-8601 duration");
+          "LLM task 'Task_Llm' has an invalid orqueio.llm.timeout '" + timeout + "'; expected an ISO-8601 duration between 1 millisecond and 24 hours");
     }
   }
 

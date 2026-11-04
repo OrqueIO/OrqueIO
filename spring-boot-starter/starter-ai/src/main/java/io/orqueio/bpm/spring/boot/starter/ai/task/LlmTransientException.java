@@ -24,6 +24,10 @@ public class LlmTransientException extends LlmTaskException {
 
   private static final long serialVersionUID = 1L;
 
+  public LlmTransientException(String message) {
+    super(message);
+  }
+
   public LlmTransientException(String message, Throwable cause) {
     super(message, cause);
   }

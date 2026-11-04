@@ -81,6 +81,7 @@ class LlmTaskDelegateIT {
     model.prompts.clear();
     model.failure = null;
     model.delay = null;
+    model.interrupted = false;
   }
 
   @AfterEach
@@ -155,15 +156,41 @@ class LlmTaskDelegateIT {
   @Test
   void shouldRaiseIncidentAtOnceWhenProviderRejectsRequest() {
     deploy(property("orqueio.llm.prompt", "Summarize") + property("orqueio.llm.outputs", "summary:string"));
-    model.failure = new NonTransientAiException("HTTP 401 - invalid api key for prompt 'Summarize'");
+    model.failure = new NonTransientAiException("HTTP 401 - invalid api key for prompt 'Summarize: IBAN FR76'");
 
     Job job = startAndFailLlmTask();
 
     // No retry left: the incident is raised on the first failure, and the model is called once
     assertThat(job.getRetries()).isZero();
     assertThat(job.getExceptionMessage()).isEqualTo("The model provider rejected the request (HTTP 401)");
+    assertThat(managementService.getJobExceptionStacktrace(job.getId())).doesNotContain("FR76");
     assertThat(runtimeService.createIncidentQuery().configuration(job.getId()).count()).isEqualTo(1);
     assertThat(model.prompts).hasSize(1);
+  }
+
+  @Test
+  void shouldRaiseIncidentAtOnceWithCustomRetryCycle() {
+    deploy(property("orqueio.llm.prompt", "Summarize") + property("orqueio.llm.outputs", "summary:string"), "",
+        "<camunda:failedJobRetryTimeCycle>R5/PT1H</camunda:failedJobRetryTimeCycle>");
+    model.failure = new NonTransientAiException("HTTP 400 - bad request");
+
+    Job job = startAndFailLlmTask();
+
+    assertThat(job.getRetries()).isZero();
+    // Runs at once when an operator sets retries again, not an hour later
+    assertThat(job.getDuedate()).isNull();
+  }
+
+  @Test
+  void shouldRetryWithCustomRetryCycle() {
+    deploy(property("orqueio.llm.prompt", "Summarize") + property("orqueio.llm.outputs", "summary:string"), "",
+        "<camunda:failedJobRetryTimeCycle>R5/PT1H</camunda:failedJobRetryTimeCycle>");
+    model.failure = new TransientAiException("HTTP 503 - overloaded");
+
+    Job job = startAndFailLlmTask();
+
+    assertThat(job.getRetries()).isEqualTo(4);
+    assertThat(job.getDuedate()).isNotNull();
   }
 
   @Test
@@ -192,6 +219,12 @@ class LlmTaskDelegateIT {
     assertThat(job.getRetries()).isEqualTo(2);
     assertThat(job.getExceptionMessage()).isEqualTo("The model did not answer within PT0.2S");
     assertThat(runtimeService.createProcessInstanceQuery().singleResult()).isNotNull();
+    // The abandoned call is interrupted
+    long deadline = System.nanoTime() + Duration.ofSeconds(3).toNanos();
+    while (!model.interrupted && System.nanoTime() < deadline) {
+      Thread.onSpinWait();
+    }
+    assertThat(model.interrupted).isTrue();
   }
 
   @Test
@@ -226,19 +259,37 @@ class LlmTaskDelegateIT {
         .containsEntry("llmError", "Field 'urgency' of the model's answer is not a valid integer");
   }
 
+  @Test
+  void shouldRaiseIncidentWhenNothingCatchesTheErrorCode() {
+    // Otherwise the engine would end the execution silently
+    deploy(property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", "urgency:integer")
+        + property("orqueio.llm.errorCode", "LLM_INVALID_ANSWER"));
+    model.answer = "{\"urgency\":\"high\"}";
+
+    Job job = startAndFailLlmTask();
+
+    assertThat(job.getRetries()).isZero();
+    assertThat(job.getExceptionMessage()).isEqualTo("Field 'urgency' of the model's answer is not a valid integer");
+  }
+
   private void deploy(String properties) {
     deploy(properties, "");
   }
 
   private void deploy(String properties, String otherElements) {
+    deploy(properties, otherElements, "");
+  }
+
+  private void deploy(String properties, String otherElements, String otherExtensions) {
     String bpmn = process("""
         <bpmn:serviceTask id="Task_Llm" camunda:delegateExpression="${orqueioLlmTask}" camunda:asyncBefore="true">
           <bpmn:extensionElements>
             <camunda:properties>%s</camunda:properties>
+            %s
           </bpmn:extensionElements>
         </bpmn:serviceTask>
         %s
-        """.formatted(properties, otherElements)).replace("<bpmn:endEvent id=\"End\" />", "<bpmn:userTask id=\"End\" />");
+        """.formatted(properties, otherExtensions, otherElements)).replace("<bpmn:endEvent id=\"End\" />", "<bpmn:userTask id=\"End\" />");
     if (!otherElements.isEmpty()) {
       bpmn = bpmn.replace("<bpmn:process ", "<bpmn:error id=\"Error_Invalid\" errorCode=\"LLM_INVALID_ANSWER\" />\n<bpmn:process ");
     }
@@ -265,6 +316,7 @@ class LlmTaskDelegateIT {
     String answer;
     RuntimeException failure;
     Duration delay;
+    volatile boolean interrupted;
 
     // Like a configured provider: its own options class, with settings from application configuration
     @Override
@@ -283,6 +335,7 @@ class LlmTaskDelegateIT {
           Thread.sleep(delay);
         }
         catch (InterruptedException e) {
+          interrupted = true;
           Thread.currentThread().interrupt();
         }
       }

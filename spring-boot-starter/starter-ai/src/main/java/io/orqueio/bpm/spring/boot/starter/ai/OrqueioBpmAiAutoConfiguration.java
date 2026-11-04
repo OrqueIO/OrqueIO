@@ -16,6 +16,8 @@
  */
 package io.orqueio.bpm.spring.boot.starter.ai;
 
+import java.time.Duration;
+
 import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
 import io.orqueio.bpm.spring.boot.starter.ai.property.OrqueioBpmAiProperties;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
@@ -58,8 +60,12 @@ public class OrqueioBpmAiAutoConfiguration {
   @Bean(LlmTaskDelegate.BEAN_NAME)
   @ConditionalOnMissingBean(name = LlmTaskDelegate.BEAN_NAME)
   public LlmTaskDelegate orqueioLlmTask(ChatModelRegistry chatModelRegistry, OrqueioBpmAiProperties properties) {
+    Duration timeout = properties.getTimeout();
+    if (timeout == null || timeout.toMillis() < 1) {
+      throw new IllegalStateException(OrqueioBpmAiProperties.PREFIX + ".timeout must be at least 1 millisecond, was " + timeout);
+    }
     return new LlmTaskDelegate(chatModelRegistry, new LlmPromptResolver(), new LlmAnswerParser(),
-        new LlmFailureClassifier(), properties.getTimeout());
+        new LlmFailureClassifier(), timeout);
   }
 
 }

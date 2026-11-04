@@ -44,6 +44,8 @@ public class LlmFailedJobCommandFactory implements FailedJobCommandFactory {
       JobEntity job = commandContext.getJobManager().findJobById(jobId);
       if (job != null && job.getRetries() > 0) {
         job.setRetries(0);
+        // Set by a retry cycle; when an operator sets retries again, the job runs at once
+        job.setDuedate(null);
       }
       return result;
     };

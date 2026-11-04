@@ -58,6 +58,18 @@ class LlmTaskDelegateTest {
     verify(execution, never()).setVariable(anyString(), any());
   }
 
+  @Test
+  void shouldNotRetryWhenProviderIsNotConfiguredAtRuntime() {
+    LlmTaskDelegate delegate = new LlmTaskDelegate(new ChatModelRegistry(List::of, null),
+        new LlmPromptResolver(), new LlmAnswerParser(), new LlmFailureClassifier(), Duration.ofSeconds(5));
+    ExecutionEntity execution = executionOf(new LlmTaskConfiguration(null, null, "Classify", List.of(),
+        List.of(new LlmOutputField("category", STRING))));
+
+    assertThatThrownBy(() -> delegate.execute(execution))
+        .isInstanceOf(LlmTaskException.class)
+        .matches(e -> !((LlmTaskException) e).isRetryable());
+  }
+
   private static ExecutionEntity executionOf(LlmTaskConfiguration configuration) {
     ActivityImpl activity = new ProcessDefinitionImpl("llmTaskProcess").createActivity("Task_Llm");
     activity.getProperties().set(LlmTaskConfiguration.KEY, configuration);

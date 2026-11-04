@@ -39,8 +39,10 @@ public class OrqueioBpmAiProperties {
 
   /**
    * How long an LLM task waits for the model when it does not set orqueio.llm.timeout.
-   * Includes the provider's own retries. Keep it below the job executor's lock time, or
-   * another job executor may run the task again while the first call is still running.
+   * Includes the provider's own retries (spring.ai.retry.*, 10 attempts by default):
+   * lower them, or a provider that keeps failing is reported as a timeout. Keep the
+   * timeout below the job executor's lock time, or another job executor may run the
+   * task again while the first call is still running.
    */
   private Duration timeout = Duration.ofMinutes(2);
 

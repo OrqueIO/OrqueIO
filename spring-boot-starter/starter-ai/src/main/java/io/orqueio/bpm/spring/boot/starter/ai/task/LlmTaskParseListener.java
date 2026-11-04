@@ -142,6 +142,9 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
     return outputs;
   }
 
+  protected static final Duration MIN_TIMEOUT = Duration.ofMillis(1);
+  protected static final Duration MAX_TIMEOUT = Duration.ofHours(24);
+
   protected Duration parseTimeout(String value, ActivityImpl activity, Element element) {
     if (value == null) {
       return null;
@@ -153,9 +156,9 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
     catch (DateTimeParseException e) {
       timeout = null;
     }
-    if (timeout == null || timeout.isNegative() || timeout.isZero()) {
-      throw error(activity, "has an invalid " + TIMEOUT_PROPERTY + " '" + value + "'; expected a positive "
-          + "ISO-8601 duration such as PT30S", element);
+    if (timeout == null || timeout.compareTo(MIN_TIMEOUT) < 0 || timeout.compareTo(MAX_TIMEOUT) > 0) {
+      throw error(activity, "has an invalid " + TIMEOUT_PROPERTY + " '" + value + "'; expected an ISO-8601 "
+          + "duration between 1 millisecond and 24 hours, such as PT30S", element);
     }
     return timeout;
   }
