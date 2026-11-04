@@ -23,8 +23,8 @@ import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
 
 /**
- * Registers the {@link LlmTaskParseListener} and the {@link LlmTaskDeploymentValidator}
- * with the process engine.
+ * Registers the {@link LlmTaskParseListener}, the {@link LlmTaskDeploymentValidator} and
+ * the {@link LlmFailedJobCommandFactory} with the process engine.
  */
 public class LlmTaskProcessEnginePlugin extends AbstractProcessEnginePlugin {
 
@@ -46,6 +46,15 @@ public class LlmTaskProcessEnginePlugin extends AbstractProcessEnginePlugin {
       processEngineConfiguration.setCustomPostDeployers(new ArrayList<>());
     }
     processEngineConfiguration.getCustomPostDeployers().add(new LlmTaskDeploymentValidator(chatModelRegistry));
+  }
+
+  @Override
+  public void postInit(ProcessEngineConfigurationImpl processEngineConfiguration) {
+    // The engine and other plugins set their factory before or during init: wrap whichever is in place
+    if (!(processEngineConfiguration.getFailedJobCommandFactory() instanceof LlmFailedJobCommandFactory)) {
+      processEngineConfiguration.setFailedJobCommandFactory(
+          new LlmFailedJobCommandFactory(processEngineConfiguration.getFailedJobCommandFactory()));
+    }
   }
 
 }

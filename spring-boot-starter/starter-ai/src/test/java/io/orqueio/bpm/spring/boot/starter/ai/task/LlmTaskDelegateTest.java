@@ -26,6 +26,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.Duration;
 import java.util.List;
 
 import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
@@ -47,7 +48,7 @@ class LlmTaskDelegateTest {
     when(model.call(any(Prompt.class))).thenReturn(
         new ChatResponse(List.of(new Generation(new AssistantMessage("{\"category\":\"Theft\",\"urgency\":\"high\"}")))));
     LlmTaskDelegate delegate = new LlmTaskDelegate(new ChatModelRegistry(() -> List.of(model), null),
-        new LlmPromptResolver(), new LlmAnswerParser());
+        new LlmPromptResolver(), new LlmAnswerParser(), new LlmFailureClassifier(), Duration.ofSeconds(5));
     ExecutionEntity execution = executionOf(new LlmTaskConfiguration(null, null, "Classify", List.of(),
         List.of(new LlmOutputField("category", STRING), new LlmOutputField("urgency", INTEGER))));
 
@@ -55,6 +56,18 @@ class LlmTaskDelegateTest {
 
     // The first field is valid, but nothing is written because the second one is not
     verify(execution, never()).setVariable(anyString(), any());
+  }
+
+  @Test
+  void shouldNotRetryWhenProviderIsNotConfiguredAtRuntime() {
+    LlmTaskDelegate delegate = new LlmTaskDelegate(new ChatModelRegistry(List::of, null),
+        new LlmPromptResolver(), new LlmAnswerParser(), new LlmFailureClassifier(), Duration.ofSeconds(5));
+    ExecutionEntity execution = executionOf(new LlmTaskConfiguration(null, null, "Classify", List.of(),
+        List.of(new LlmOutputField("category", STRING))));
+
+    assertThatThrownBy(() -> delegate.execute(execution))
+        .isInstanceOf(LlmTaskException.class)
+        .matches(e -> !((LlmTaskException) e).isRetryable());
   }
 
   private static ExecutionEntity executionOf(LlmTaskConfiguration configuration) {

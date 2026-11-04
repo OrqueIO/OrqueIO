@@ -16,8 +16,20 @@
  */
 package io.orqueio.bpm.spring.boot.starter.ai.task;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.slf4j.MDC;
+
+import io.orqueio.bpm.engine.delegate.BpmnError;
+import io.orqueio.bpm.engine.impl.bpmn.helper.ErrorDeclarationForProcessInstanceFinder;
+import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
+import io.orqueio.bpm.engine.impl.tree.ActivityExecutionHierarchyWalker;
 
 import io.orqueio.bpm.engine.delegate.DelegateExecution;
 import io.orqueio.bpm.engine.delegate.JavaDelegate;
@@ -36,6 +48,10 @@ import org.springframework.ai.chat.prompt.Prompt;
  * Runs an LLM task: resolves its prompt, calls the configured model and writes the
  * declared output fields as process variables. Referenced from BPMN as
  * {@value LlmTaskConfiguration#DELEGATE_EXPRESSION}.
+ * <p>
+ * Failures are thrown as {@link LlmTaskException}s that tell whether a retry may help;
+ * see {@link LlmFailedJobCommandFactory}. An invalid answer becomes a BPMN error when
+ * the task declares {@value LlmTaskConfiguration#ERROR_CODE_PROPERTY}.
  */
 public class LlmTaskDelegate implements JavaDelegate {
 
@@ -44,12 +60,17 @@ public class LlmTaskDelegate implements JavaDelegate {
   private final ChatModelRegistry chatModelRegistry;
   private final LlmPromptResolver promptResolver;
   private final LlmAnswerParser answerParser;
+  private final LlmFailureClassifier failureClassifier;
+  private final Duration defaultTimeout;
 
   public LlmTaskDelegate(ChatModelRegistry chatModelRegistry, LlmPromptResolver promptResolver,
-                         LlmAnswerParser answerParser) {
+                         LlmAnswerParser answerParser, LlmFailureClassifier failureClassifier,
+                         Duration defaultTimeout) {
     this.chatModelRegistry = chatModelRegistry;
     this.promptResolver = promptResolver;
     this.answerParser = answerParser;
+    this.failureClassifier = failureClassifier;
+    this.defaultTimeout = defaultTimeout;
   }
 
   @Override
@@ -57,20 +78,98 @@ public class LlmTaskDelegate implements JavaDelegate {
     LlmTaskConfiguration configuration = configurationOf(execution);
 
     String userPrompt = promptResolver.resolve(configuration, execution);
-    ChatModel chatModel = chatModelRegistry.getChatModel(configuration.getProvider());
+    ChatModel chatModel = chatModelOf(configuration);
 
     // The answer format goes in the system message, the resolved prompt in the user message
     List<Message> messages = List.of(
         new SystemMessage(answerParser.formatInstructions(configuration.getOutputs())),
         new UserMessage(userPrompt));
-    ChatOptions options = optionsFor(chatModel, configuration.getModel());
+    ChatOptions options = optionsOf(chatModel, configuration);
     Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 
-    ChatResponse response = chatModel.call(prompt);
+    Duration timeout = configuration.getTimeout() != null ? configuration.getTimeout() : defaultTimeout;
+    ChatResponse response = call(chatModel, prompt, timeout);
 
     // Every field is validated before any variable is written
-    Map<String, Object> values = answerParser.parse(textOf(response), configuration.getOutputs());
+    Map<String, Object> values;
+    try {
+      values = answerParser.parse(textOf(response), configuration.getOutputs());
+    }
+    catch (LlmInvalidAnswerException e) {
+      // An uncaught BPMN error would end the execution silently: raise an incident instead
+      if (configuration.getErrorCode() == null || !hasErrorHandler(execution, configuration.getErrorCode())) {
+        throw e;
+      }
+      throw new BpmnError(configuration.getErrorCode(), e.getMessage());
+    }
     values.forEach(execution::setVariable);
+  }
+
+  /**
+   * @return {@code true} if an error event in an enclosing scope, or in a calling process, catches the error code
+   */
+  protected boolean hasErrorHandler(DelegateExecution execution, String errorCode) {
+    if (!(execution instanceof ActivityExecution activityExecution)) {
+      return true;
+    }
+    ErrorDeclarationForProcessInstanceFinder finder =
+        new ErrorDeclarationForProcessInstanceFinder(null, errorCode, activityExecution.getActivity());
+    ActivityExecutionHierarchyWalker walker = new ActivityExecutionHierarchyWalker(activityExecution);
+    walker.addScopePreVisitor(finder);
+    walker.walkUntil(element -> finder.getErrorEventDefinition() != null || element == null);
+    return finder.getErrorHandlerActivity() != null;
+  }
+
+  // A provider that is not configured on this node will not appear by itself: no retry
+  protected ChatModel chatModelOf(LlmTaskConfiguration configuration) {
+    try {
+      return chatModelRegistry.getChatModel(configuration.getProvider());
+    }
+    catch (RuntimeException e) {
+      throw new LlmTaskException(e.getMessage(), e);
+    }
+  }
+
+  protected ChatOptions optionsOf(ChatModel chatModel, LlmTaskConfiguration configuration) {
+    try {
+      return optionsFor(chatModel, configuration.getModel());
+    }
+    catch (RuntimeException e) {
+      throw new LlmTaskException("Cannot set model '" + configuration.getModel() + "' on the provider's options", e);
+    }
+  }
+
+  /**
+   * Calls the model on its own thread, so the job stops waiting when the timeout
+   * elapses even if the provider's client does not. That thread runs outside the
+   * engine's command and transaction; only the logging context is carried over.
+   * A call that times out is interrupted, but a client that ignores interrupts keeps
+   * running until its own timeout.
+   */
+  protected ChatResponse call(ChatModel chatModel, Prompt prompt, Duration timeout) {
+    Map<String, String> loggingContext = MDC.getCopyOfContextMap();
+    FutureTask<ChatResponse> call = new FutureTask<>(() -> {
+      if (loggingContext != null) {
+        MDC.setContextMap(loggingContext);
+      }
+      return chatModel.call(prompt);
+    });
+    Thread.ofVirtual().name("orqueio-llm-call").start(call);
+    try {
+      return call.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
+    }
+    catch (TimeoutException e) {
+      call.cancel(true);
+      throw new LlmTransientException("The model did not answer within " + timeout, e);
+    }
+    catch (InterruptedException e) {
+      call.cancel(true);
+      Thread.currentThread().interrupt();
+      throw new LlmTransientException("Interrupted while waiting for the model", e);
+    }
+    catch (ExecutionException e) {
+      throw failureClassifier.classify(e.getCause());
+    }
   }
 
   /**

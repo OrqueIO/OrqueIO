@@ -55,6 +55,13 @@ class OrqueioBpmAiAutoConfigurationTest {
   }
 
   @Test
+  void shouldRejectTimeoutBelowOneMillisecond() {
+    contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".timeout=0s")
+        .run(context -> assertThat(context).hasFailed()
+            .getFailure().rootCause().hasMessageContaining(OrqueioBpmAiProperties.PREFIX + ".timeout must be at least 1 millisecond"));
+  }
+
+  @Test
   void shouldStartWithoutModelProvider() {
     // Hide the providers that the test classpath carries for the ITs
     contextRunner.withClassLoader(new FilteredClassLoader("org.springframework.ai.ollama", "org.springframework.ai.openai"))

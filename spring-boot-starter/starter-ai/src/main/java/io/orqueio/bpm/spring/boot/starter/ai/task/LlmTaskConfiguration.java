@@ -16,6 +16,7 @@
  */
 package io.orqueio.bpm.spring.boot.starter.ai.task;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
@@ -39,9 +40,11 @@ public final class LlmTaskConfiguration {
   public static final String PROMPT_PROPERTY = PROPERTY_PREFIX + "prompt";
   public static final String INPUTS_PROPERTY = PROPERTY_PREFIX + "inputs";
   public static final String OUTPUTS_PROPERTY = PROPERTY_PREFIX + "outputs";
+  public static final String TIMEOUT_PROPERTY = PROPERTY_PREFIX + "timeout";
+  public static final String ERROR_CODE_PROPERTY = PROPERTY_PREFIX + "errorCode";
 
-  static final Set<String> KNOWN_PROPERTIES =
-      Set.of(PROVIDER_PROPERTY, MODEL_PROPERTY, PROMPT_PROPERTY, INPUTS_PROPERTY, OUTPUTS_PROPERTY);
+  static final Set<String> KNOWN_PROPERTIES = Set.of(PROVIDER_PROPERTY, MODEL_PROPERTY, PROMPT_PROPERTY,
+      INPUTS_PROPERTY, OUTPUTS_PROPERTY, TIMEOUT_PROPERTY, ERROR_CODE_PROPERTY);
 
   static final PropertyKey<LlmTaskConfiguration> KEY = new PropertyKey<>("orqueioLlmTaskConfiguration");
 
@@ -50,13 +53,22 @@ public final class LlmTaskConfiguration {
   private final String prompt;
   private final List<String> inputs;
   private final List<LlmOutputField> outputs;
+  private final Duration timeout;
+  private final String errorCode;
 
   LlmTaskConfiguration(String provider, String model, String prompt, List<String> inputs, List<LlmOutputField> outputs) {
+    this(provider, model, prompt, inputs, outputs, null, null);
+  }
+
+  LlmTaskConfiguration(String provider, String model, String prompt, List<String> inputs, List<LlmOutputField> outputs,
+                       Duration timeout, String errorCode) {
     this.provider = provider;
     this.model = model;
     this.prompt = prompt;
     this.inputs = List.copyOf(inputs);
     this.outputs = List.copyOf(outputs);
+    this.timeout = timeout;
+    this.errorCode = errorCode;
   }
 
   /**
@@ -101,9 +113,24 @@ public final class LlmTaskConfiguration {
     return outputs;
   }
 
+  /**
+   * @return how long the task waits for the model, or {@code null} to use the application default
+   */
+  public Duration getTimeout() {
+    return timeout;
+  }
+
+  /**
+   * @return the BPMN error code thrown when the answer is invalid, or {@code null} to raise an incident
+   */
+  public String getErrorCode() {
+    return errorCode;
+  }
+
   @Override
   public String toString() {
-    return "LlmTaskConfiguration[provider=" + provider + ", model=" + model + ", inputs=" + inputs + ", outputs=" + outputs + "]";
+    return "LlmTaskConfiguration[provider=" + provider + ", model=" + model + ", inputs=" + inputs + ", outputs=" + outputs
+        + ", timeout=" + timeout + ", errorCode=" + errorCode + "]";
   }
 
 }
