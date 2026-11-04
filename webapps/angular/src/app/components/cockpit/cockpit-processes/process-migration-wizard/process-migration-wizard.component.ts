@@ -25,6 +25,7 @@ import { MigrationArrowsComponent, RouteParams } from './migration-arrows.compon
 import { MigrationVariablesStepComponent } from './migration-variables-step.component';
 import { MigrationInstancesStepComponent, InstancesStepState, MigrationWizardSnapshot } from './migration-instances-step.component';
 import { MigrationVariableModalComponent } from './migration-variable-modal.component';
+import { MigrationConfirmStepComponent, MigrationExecutionResult } from './migration-confirm-step.component';
 import { Anchor, getAnchorKey } from './migration-arrow-anchors';
 import { MigrationUndoToastService } from './migration-undo-toast.service';
 import { snapshotMapping, restoreMapping, MigrationState } from './migration-undo-utils';
@@ -51,7 +52,8 @@ const ENABLE_CONNECTION_EDITOR_SPIKE = false;
     MigrationArrowsComponent,
     MigrationVariablesStepComponent,
     MigrationInstancesStepComponent,
-    MigrationVariableModalComponent
+    MigrationVariableModalComponent,
+    MigrationConfirmStepComponent
   ],
   templateUrl: './process-migration-wizard.component.html',
   styleUrl: './process-migration-wizard.component.css',
@@ -1246,6 +1248,14 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   onSelectInstancesNext(state: InstancesStepState): void {
     this.instancesStepState.set(state);
     this.currentStep.set(4);
+  }
+
+  onConfirmBack(): void {
+    this.currentStep.set(3);
+  }
+
+  onConfirmNext(result: MigrationExecutionResult): void {
+    console.log('Migration execution result:', result);
   }
 
   onAddVariable(): void {

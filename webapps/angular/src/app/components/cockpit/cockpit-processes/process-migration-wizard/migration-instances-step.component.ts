@@ -32,6 +32,7 @@ export interface InstancesStepState {
   processInstanceQuery?: Record<string, unknown>;
   totalCount: number;
   label: string;
+  filterCriteria?: MultiValueFilter[];
 }
 
 
@@ -402,7 +403,8 @@ export class MigrationInstancesStepComponent implements OnDestroy {
         totalCount: totalCount,
         label: this.translateService.instant('migration.instances.selectedLabel', {
           count: totalCount.toString()
-        })
+        }),
+        filterCriteria: this.filterCriteria()
       };
     } else {
       state = {
@@ -411,7 +413,8 @@ export class MigrationInstancesStepComponent implements OnDestroy {
         totalCount: selectedCount,
         label: this.translateService.instant('migration.instances.selectedLabel', {
           count: selectedCount.toString()
-        })
+        }),
+        filterCriteria: this.filterCriteria()
       };
     }
 

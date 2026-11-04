@@ -33,4 +33,20 @@ export class MigrationService {
       { headers: this.csrfService.buildHeaders() }
     );
   }
+
+  executeMigration(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}/migration/execute`,
+      payload,
+      { headers: this.csrfService.buildHeaders() }
+    );
+  }
+
+  executeMigrationAsync(payload: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.baseUrl}/migration/executeAsync`,
+      payload,
+      { headers: this.csrfService.buildHeaders() }
+    );
+  }
 }

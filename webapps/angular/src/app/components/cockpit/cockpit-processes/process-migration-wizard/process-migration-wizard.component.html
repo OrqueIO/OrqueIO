@@ -289,6 +289,20 @@
           </app-migration-instances-step>
         </div>
       }
+
+      @if (currentStep() === 4) {
+        <div class="step-content step-4">
+          <app-migration-confirm-step
+            [migrationPlan]="migrationPlan()!"
+            [variables]="variables()"
+            [instancesState]="instancesStepState()!"
+            [sourceXml]="sourceXml()"
+            [targetXml]="targetXml()"
+            (back)="onConfirmBack()"
+            (next)="onConfirmNext($event)">
+          </app-migration-confirm-step>
+        </div>
+      }
         </div>
       </div>
     </div>

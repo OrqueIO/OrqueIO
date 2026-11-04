@@ -1,0 +1,274 @@
+<div class="confirm-step-wrapper">
+  <div class="confirm-card">
+    <!-- Options Section (FIRST - tiles) -->
+    <div class="options-section">
+      <h3 class="section-title">{{ 'migration.confirm.options' | translate }}</h3>
+
+      <div class="options-tiles">
+        <!-- Asynchronous tile (checked by default, recommended) -->
+        <label class="option-tile" [class.option-tile--checked]="asyncMode()">
+          <input
+            type="checkbox"
+            class="option-tile-checkbox"
+            [checked]="asyncMode()"
+            (change)="asyncMode.set(!asyncMode())"
+            [disabled]="executing()"
+          />
+          <div class="option-tile-content">
+            <div class="option-tile-header">
+              <span class="option-tile-title">{{ 'migration.confirm.asynchronous' | translate }}</span>
+              <span class="option-tile-badge">{{ 'migration.confirm.recommended' | translate }}</span>
+            </div>
+            <p class="option-tile-description">{{ 'migration.confirm.asyncDescription' | translate }}</p>
+          </div>
+        </label>
+
+        <!-- Skip Custom Listeners tile -->
+        <label class="option-tile" [class.option-tile--checked]="skipCustomListeners()">
+          <input
+            type="checkbox"
+            class="option-tile-checkbox"
+            [checked]="skipCustomListeners()"
+            (change)="skipCustomListeners.set(!skipCustomListeners())"
+            [disabled]="executing()"
+          />
+          <div class="option-tile-content">
+            <div class="option-tile-header">
+              <span class="option-tile-title">{{ 'migration.confirm.skipCustomListeners' | translate }}</span>
+            </div>
+            <p class="option-tile-description">{{ 'migration.confirm.skipListenersDescription' | translate }}</p>
+          </div>
+        </label>
+
+        <!-- Skip IO Mappings tile -->
+        <label class="option-tile" [class.option-tile--checked]="skipIoMappings()">
+          <input
+            type="checkbox"
+            class="option-tile-checkbox"
+            [checked]="skipIoMappings()"
+            (change)="skipIoMappings.set(!skipIoMappings())"
+            [disabled]="executing()"
+          />
+          <div class="option-tile-content">
+            <div class="option-tile-header">
+              <span class="option-tile-title">{{ 'migration.confirm.skipIoMappings' | translate }}</span>
+            </div>
+            <p class="option-tile-description">{{ 'migration.confirm.skipIoDescription' | translate }}</p>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="section-divider"></div>
+
+    <!-- Information Banner -->
+    <div class="info-banner">
+      <fa-icon [icon]="faCheck" class="info-icon"></fa-icon>
+      <div class="info-content">
+        <span>{{ 'migration.confirm.reviewSummary' | translate }}</span>
+      </div>
+    </div>
+
+    <!-- Query mode warning banner -->
+    @if (instancesState().mode === 'query') {
+      <div class="query-warning-banner">
+        <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+        <span>{{ 'migration.confirm.queryModeWarning' | translate }}</span>
+      </div>
+    }
+
+    <!-- Unsupported criteria banner -->
+    @if (hasQueryUnsupportedCriteria()) {
+      <div class="danger-warning" role="alert">
+        <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+        <div>
+          <strong>{{ 'migration.confirm.unsupportedCriteria' | translate }}</strong>
+          <p>{{ 'migration.confirm.unsupportedCriteriaMessage' | translate }}</p>
+          <ul class="criteria-list">
+            @for (criterion of unsupportedCriteriaNames(); track criterion) {
+              <li>{{ criterion }}</li>
+            }
+          </ul>
+        </div>
+      </div>
+    }
+
+    <!-- Validation Error Banner -->
+    @if (validationState() === 'error' || validationState() === 'invalid') {
+      <div class="danger-warning" role="alert">
+        <fa-icon [icon]="faTimes"></fa-icon>
+        <div>
+          @if (validationState() === 'error') {
+            <strong>{{ 'migration.confirm.validationError' | translate }}</strong>
+          }
+          @if (validationState() === 'invalid') {
+            <strong>{{ 'migration.confirm.planInvalid' | translate }}</strong>
+            <ul class="errors-list">
+              @for (error of validationErrors(); track $index) {
+                <li class="error-item">
+                  @if (error.activity) {
+                    <span class="error-label">{{ 'migration.confirm.activity' | translate }}: {{ error.activity }}</span>
+                  }
+                  @if (error.variable) {
+                    <span class="error-label">{{ 'migration.confirm.variable' | translate }}: {{ error.variable }}</span>
+                  }
+                  <span class="error-message">{{ error.message }}</span>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Execution Error -->
+    @if (executionError()) {
+      <div class="danger-warning" role="alert">
+        <fa-icon [icon]="faTimes"></fa-icon>
+        <div>
+          <strong>{{ 'migration.confirm.executionFailed' | translate }}</strong>
+          <p>{{ executionError() }}</p>
+        </div>
+      </div>
+    }
+
+    <!-- Summary Section -->
+    <div class="summary-section">
+      <p class="summary-text">
+        {{ 'migration.confirm.summaryIntro' | translate }}
+        <strong class="count-highlight">{{ instancesState().totalCount }}</strong>
+        {{ instancesState().mode === 'query' ? ('migration.confirm.instancesMatchingFilter' | translate) : ('migration.confirm.instanceWord' | translate) }}.
+      </p>
+
+      <!-- From -> To Block -->
+      <div class="process-flow">
+        <div class="process-card">
+          <div class="process-name">{{ getProcessName('source') }}</div>
+          <div class="process-version">v{{ getProcessVersion('source') }}</div>
+          <div class="process-id" [title]="migrationPlan().sourceProcessDefinitionId">
+            {{ migrationPlan().sourceProcessDefinitionId }}
+          </div>
+        </div>
+        <fa-icon [icon]="faArrowRight" class="process-arrow process-arrow--horizontal"></fa-icon>
+        <fa-icon [icon]="faArrowDown" class="process-arrow process-arrow--vertical"></fa-icon>
+        <div class="process-card">
+          <div class="process-name">{{ getProcessName('target') }}</div>
+          <div class="process-version">v{{ getProcessVersion('target') }}</div>
+          <div class="process-id" [title]="migrationPlan().targetProcessDefinitionId">
+            {{ migrationPlan().targetProcessDefinitionId }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="section-divider"></div>
+
+    <!-- Migration Plan Section -->
+    <div class="plan-section">
+      <h3 class="section-title">{{ 'migration.confirm.migrationPlan' | translate }}</h3>
+      <p class="section-help">{{ 'migration.confirm.flowNodesWillBeMapped' | translate }}</p>
+
+      <table class="plan-table">
+        <thead>
+          <tr>
+            <th>{{ 'migration.confirm.sourceActivity' | translate }}</th>
+            <th class="arrow-col"></th>
+            <th>{{ 'migration.confirm.targetActivity' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (instruction of migrationPlan().instructions; track $index) {
+            <tr>
+              <td>
+                <div class="activity-name">{{ getActivityName(instruction.sourceActivityIds[0], 'source') }}</div>
+                <div class="activity-id">{{ instruction.sourceActivityIds[0] }}</div>
+              </td>
+              <td class="arrow-col">→</td>
+              <td>
+                <div class="activity-name">{{ getActivityName(instruction.targetActivityIds[0], 'target') }}</div>
+                <div class="activity-id">{{ instruction.targetActivityIds[0] }}</div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Variables Section -->
+    @if (variables().length > 0) {
+      <div class="section-divider"></div>
+      <div class="variables-section">
+        <h3 class="section-title">{{ 'migration.confirm.variablesCount' | translate: { count: variables().length.toString() } }}</h3>
+        <div class="variables-pills">
+          @for (variable of variables(); track $index) {
+            <div class="variable-pill" [title]="getVariableValueString(variable)">
+              <span class="variable-name">{{ variable.name }}</span>:
+              <span class="variable-type">{{ variable.type }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Technical Details Section -->
+    <div class="section-divider"></div>
+    <div class="technical-details">
+      <button
+        type="button"
+        class="tech-toggle"
+        (click)="onToggleTechnicalDetails()"
+        [attr.aria-expanded]="showTechnicalDetails()">
+        <fa-icon [icon]="showTechnicalDetails() ? faChevronUp : faChevronDown"></fa-icon>
+        {{ 'migration.confirm.showTechnicalDetails' | translate }}
+      </button>
+
+      @if (showTechnicalDetails()) {
+        <div class="tech-content">
+          <div class="tech-row">
+            <span class="tech-label">{{ 'migration.confirm.endpoint' | translate }}</span>
+            <code class="tech-value">{{ getEndpoint() }}</code>
+          </div>
+          <div class="tech-row">
+            <div class="tech-row-header">
+              <span class="tech-label">{{ 'migration.confirm.payload' | translate }}</span>
+              <button
+                type="button"
+                class="btn-copy-small"
+                (click)="onCopyPayload()"
+                [disabled]="payloadCopied()">
+                <fa-icon [icon]="faCopy"></fa-icon>
+                {{ payloadCopied() ? ('migration.confirm.copied' | translate) : ('migration.confirm.copy' | translate) }}
+              </button>
+            </div>
+            <pre class="tech-value">{{ payloadJson() }}</pre>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Footer (outside card, on gray background) -->
+  <div class="step-footer">
+    <button
+      type="button"
+      class="btn-back"
+      (click)="onBack()"
+      [disabled]="executing()">
+      ← {{ 'migration.confirm.back' | translate }}
+    </button>
+
+    <button
+      type="button"
+      class="btn-primary"
+      (click)="onExecute()"
+      [disabled]="!canExecute() || executing() || hasQueryUnsupportedCriteria()"
+      [attr.aria-disabled]="!canExecute() || executing() || hasQueryUnsupportedCriteria()">
+      @if (executing()) {
+        <fa-icon [icon]="faSpinner" [animation]="'spin'"></fa-icon>
+      }
+      <span>{{ 'migration.confirm.executeMigration' | translate }}</span>
+    </button>
+  </div>
+</div>
