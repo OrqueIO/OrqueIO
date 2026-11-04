@@ -111,13 +111,19 @@
   gap: var(--space-4);
 }
 
-/* Step 3: Remove horizontal padding from panel-body to allow full-width gray panel */
 .panel-body.step-3-flush {
   padding-inline: 0;
 }
 
-/* Step 3: Preserve stepper padding when panel-body has no horizontal padding */
 .panel-body.step-3-flush .migration-wizard-header {
+  padding-inline: var(--space-5);
+}
+
+.panel-body.step-4-flush {
+  padding-inline: 0;
+}
+
+.panel-body.step-4-flush .migration-wizard-header {
   padding-inline: var(--space-5);
 }
 
