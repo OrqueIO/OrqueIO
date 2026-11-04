@@ -62,7 +62,7 @@ class LlmTaskDeploymentIT {
     LlmTaskConfiguration configuration = deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
         property("orqueio.llm.provider", "ollama")
             + property("orqueio.llm.model", "qwen2.5:7b")
-            + property("orqueio.llm.inputs", " emailBody , customer,,emailBody")
+            + property("orqueio.llm.inputs", " emailBody , customer ")
             + property("orqueio.llm.prompt", "Classify: {{emailBody}}") + OUTPUTS));
 
     assertThat(configuration.getProvider()).isEqualTo("ollama");
@@ -97,6 +97,27 @@ class LlmTaskDeploymentIT {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
             property("orqueio.llm.inputs", "email-body") + property("orqueio.llm.prompt", "Summarize")),
         "LLM task 'Task_Llm' has an invalid variable name 'email-body' in orqueio.llm.inputs");
+  }
+
+  @Test
+  void shouldRejectEmptyInputEntry() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.inputs", "emailBody,,customer") + property("orqueio.llm.prompt", "Summarize") + OUTPUTS),
+        "LLM task 'Task_Llm' has an empty entry in orqueio.llm.inputs");
+  }
+
+  @Test
+  void shouldRejectTrailingCommaInInputs() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.inputs", "emailBody,") + property("orqueio.llm.prompt", "Summarize") + OUTPUTS),
+        "LLM task 'Task_Llm' has an empty entry in orqueio.llm.inputs");
+  }
+
+  @Test
+  void shouldRejectDuplicateInput() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.inputs", "emailBody, emailBody") + property("orqueio.llm.prompt", "Summarize") + OUTPUTS),
+        "LLM task 'Task_Llm' declares input 'emailBody' twice in orqueio.llm.inputs");
   }
 
   @Test
@@ -171,6 +192,20 @@ class LlmTaskDeploymentIT {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
             property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", "tags:array")),
         "LLM task 'Task_Llm' has an unsupported output type 'array' for 'tags'");
+  }
+
+  @Test
+  void shouldRejectEmptyOutputEntry() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", "a:string,,b:integer")),
+        "LLM task 'Task_Llm' has an empty entry in orqueio.llm.outputs");
+  }
+
+  @Test
+  void shouldRejectTrailingCommaInOutputs() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", "a:string, ")),
+        "LLM task 'Task_Llm' has an empty entry in orqueio.llm.outputs");
   }
 
   @Test

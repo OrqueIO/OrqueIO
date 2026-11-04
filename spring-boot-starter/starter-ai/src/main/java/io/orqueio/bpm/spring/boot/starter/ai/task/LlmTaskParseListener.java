@@ -108,9 +108,10 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
     List<LlmOutputField> outputs = new ArrayList<>();
     Set<String> names = new LinkedHashSet<>();
     if (value != null) {
-      for (String declaration : value.split(",")) {
+      // -1 keeps trailing empty entries, so "a:string," is rejected like "a:string,,b:integer"
+      for (String declaration : value.split(",", -1)) {
         if (declaration.isBlank()) {
-          continue;
+          throw error(activity, "has an empty entry in " + OUTPUTS_PROPERTY, element);
         }
         String[] parts = declaration.split(":", -1);
         String name = parts[0].trim();
@@ -137,15 +138,17 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
   protected List<String> parseInputs(String value, ActivityImpl activity, Element element) {
     Set<String> inputs = new LinkedHashSet<>();
     if (value != null) {
-      for (String name : value.split(",")) {
+      for (String name : value.split(",", -1)) {
         String input = name.trim();
         if (input.isEmpty()) {
-          continue;
+          throw error(activity, "has an empty entry in " + INPUTS_PROPERTY, element);
         }
         if (!PromptTemplate.isVariableName(input)) {
           throw error(activity, "has an invalid variable name '" + input + "' in " + INPUTS_PROPERTY, element);
         }
-        inputs.add(input);
+        if (!inputs.add(input)) {
+          throw error(activity, "declares input '" + input + "' twice in " + INPUTS_PROPERTY, element);
+        }
       }
     }
     return new ArrayList<>(inputs);
