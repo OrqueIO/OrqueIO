@@ -2213,6 +2213,7 @@
   "migration.instances.queryWarningMessage": "selecting all instances may create a high load on the database and server when there are many results.",
   "migration.instances.loading": "Loading instances...",
   "migration.instances.errorLoading": "Failed to load instances",
+  "migration.instances.couldNotLoadInstances": "Could not load instances.",
   "migration.instances.retry": "Retry",
   "migration.instances.selectAll": "Select all on this page",
   "migration.instances.selectInstance": "Select instance {{id}}",
@@ -2286,5 +2287,8 @@
   "migration.confirm.copied": "Copied!",
   "migration.confirm.executionFailed": "Migration execution failed",
   "migration.confirm.back": "Back",
-  "migration.confirm.executeMigration": "Execute Migration"
+  "migration.confirm.executeMigration": "Execute Migration",
+  "migration.confirm.countMismatch": "Instance count has changed since step 3.",
+  "migration.confirm.previousCount": "Previous count",
+  "migration.confirm.currentCount": "Current count"
 }

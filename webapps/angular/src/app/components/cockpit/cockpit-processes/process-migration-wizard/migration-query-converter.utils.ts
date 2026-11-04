@@ -1,108 +1,157 @@
 import type { MultiValueFilter } from '../../../../services/cockpit.service';
 
-export interface ConversionResult {
-  query: Record<string, unknown>;
-  unsupportedCriteria: string[];
-  hasUnsupportedCriteria: boolean;
+export interface ProcessInstanceQueryDto {
+  [key: string]: unknown;
+  processDefinitionId: string;
+  processInstanceIds?: string[];
+  businessKeyLike?: string;
+  incidentMessageLike?: string;
+  incidentId?: string;
+  incidentType?: string;
+  withIncident?: boolean;
+  active?: boolean;
+  suspended?: boolean;
+  activityIdIn?: string[];
+  variables?: Array<{
+    name: string;
+    operator: string;
+    value: any;
+  }>;
+  superProcessInstanceId?: string;
+  subProcessInstanceId?: string;
+  sortBy?: string;
+  sortOrder?: string;
+  firstResult?: number;
+  maxResults?: number;
 }
-
-
-const CRITERIA_MAPPING: Record<string, string | null> = {
-  'instanceId': 'processInstanceIds',
-  'businessKey': 'businessKey',
-  'state': 'state',
-  'withIncidents': 'withIncident',
-  'incidentId': 'incidentId',
-  'incidentType': 'incidentType',
-  'incidentMessage': 'incidentMessage',
-  'activityId': 'activityIdIn',
-  'variable': 'variables',
-  'variables': 'variables',
-  'processDefinition': 'processDefinitionId',
-  'subProcessInstance': 'subProcessInstance',
-  'superProcessInstance': 'superProcessInstance',
-
-  'startedAfter': null,
-  'startedBefore': null,
-  'finishedAfter': null,
-  'finishedBefore': null,
-  'withJobsRetrying': null
-};
 
 /**
- * Converts history filter criteria to runtime process instance query.
- *
- * @param criteria
- * @param sourceProcessDefinitionId
- * @returns
+ * Whitelist of supported criteria fields for Runtime API.
+ * Unknown fields are ignored (not sent to engine).
  */
-export function convertCriteriaToRuntimeQuery(
+const SUPPORTED_CRITERIA: ReadonlySet<string> = new Set([
+  'instanceId',
+  'businessKey',
+  'state',
+  'withIncidents',
+  'incidentId',
+  'incidentType',
+  'incidentMessage',
+  'activityId',
+  'variable',
+  'variables',
+  'subProcessInstance',
+  'superProcessInstance'
+]);
+
+/**
+ * @param criteria
+ * @param
+ * @return
+ */
+export function buildRuntimeProcessInstanceQuery(
   criteria: MultiValueFilter[],
-  sourceProcessDefinitionId: string
-): ConversionResult {
-  const query: Record<string, unknown> = {
-    processDefinitionId: sourceProcessDefinitionId
+  sourceDefinitionId: string
+): ProcessInstanceQueryDto {
+  const query: ProcessInstanceQueryDto = {
+    processDefinitionId: sourceDefinitionId
   };
 
-  const unsupportedCriteria: string[] = [];
+  let hasActiveState = false;
+  let hasSuspendedState = false;
 
   for (const criterion of criteria) {
-    const runtimeField = CRITERIA_MAPPING[criterion.field];
-
-    if (runtimeField === null) {
-      unsupportedCriteria.push(criterion.field);
+    if (!SUPPORTED_CRITERIA.has(criterion.field)) {
       continue;
     }
 
-    if (runtimeField === undefined) {
-      console.warn(`Unknown criterion field: ${criterion.field}`);
-      unsupportedCriteria.push(criterion.field);
-      continue;
-    }
+    switch (criterion.field as string) {
+      case 'instanceId':
+        if (criterion.values && criterion.values.length > 0) {
+          query.processInstanceIds = criterion.values;
+        }
+        break;
 
-    if (criterion.field === 'state') {
-      handleStateCriterion(query, criterion);
-    } else if (criterion.field === 'instanceId') {
-      query['processInstanceIds'] = criterion.values;
-    } else if (criterion.field === 'activityId') {
-      query['activityIdIn'] = criterion.values;
-    } else if (criterion.field === 'withIncidents') {
-      query['withIncident'] = true;
-    } else if (criterion.field === 'variable' || criterion.field === 'variables') {
-      handleVariableCriteria(query, criterion);
-    } else {
-      if (criterion.values && criterion.values.length > 0) {
-        query[runtimeField] = criterion.values[0];
-      }
+      case 'businessKey':
+        // Use LIKE with %value%
+        if (criterion.values && criterion.values.length > 0) {
+          query.businessKeyLike = `%${criterion.values[0]}%`;
+        }
+        break;
+
+      case 'state':
+        if (criterion.values) {
+          hasActiveState = criterion.values.includes('ACTIVE');
+          hasSuspendedState = criterion.values.includes('SUSPENDED');
+        }
+        break;
+
+      case 'withIncidents':
+        query.withIncident = true;
+        break;
+
+      case 'incidentId':
+        if (criterion.values && criterion.values.length > 0) {
+          query.incidentId = criterion.values[0];
+        }
+        break;
+
+      case 'incidentType':
+        if (criterion.values && criterion.values.length > 0) {
+          query.incidentType = criterion.values[0];
+        }
+        break;
+
+      case 'incidentMessage':
+        if (criterion.values && criterion.values.length > 0) {
+          query.incidentMessageLike = `%${criterion.values[0]}%`;
+        }
+        break;
+
+      case 'activityId':
+        if (criterion.values && criterion.values.length > 0) {
+          query.activityIdIn = criterion.values;
+        }
+        break;
+
+      case 'variable':
+      case 'variables':
+        handleVariableCriteria(query, criterion);
+        break;
+
+      case 'subProcessInstance':
+        if (criterion.values && criterion.values.length > 0) {
+          query.subProcessInstanceId = criterion.values[0];
+        }
+        break;
+
+      case 'superProcessInstance':
+        if (criterion.values && criterion.values.length > 0) {
+          query.superProcessInstanceId = criterion.values[0];
+        }
+        break;
     }
   }
 
-  return {
-    query,
-    unsupportedCriteria,
-    hasUnsupportedCriteria: unsupportedCriteria.length > 0
-  };
-}
-
-
-function handleStateCriterion(query: Record<string, unknown>, criterion: MultiValueFilter): void {
-  if (criterion.values.includes('ACTIVE')) {
-    query['active'] = true;
-  } else if (criterion.values.includes('SUSPENDED')) {
-    query['suspended'] = true;
+  if (hasActiveState && !hasSuspendedState) {
+    query.active = true;
+  } else if (hasSuspendedState && !hasActiveState) {
+    query.suspended = true;
   }
+
+  return query;
 }
 
 
-function handleVariableCriteria(query: Record<string, unknown>, criterion: MultiValueFilter): void {
+function handleVariableCriteria(query: ProcessInstanceQueryDto, criterion: MultiValueFilter): void {
   if (!criterion.variableLines || criterion.variableLines.length === 0) {
     return;
   }
 
-  const existingVariables = (query['variables'] as any[]) || [];
+  const existingVariables = query.variables || [];
 
   for (const line of criterion.variableLines) {
-    const variableParam: Record<string, unknown> = {
+    const variableParam: { name: string; operator: string; value: any } = {
       name: line.variableName,
       operator: line.variableOperator,
       value: line.values && line.values.length > 0 ? line.values[0] : ''
@@ -111,16 +160,5 @@ function handleVariableCriteria(query: Record<string, unknown>, criterion: Multi
     existingVariables.push(variableParam);
   }
 
-  query['variables'] = existingVariables;
-}
-
-
-export function hasUnsupportedCriteria(criteria: MultiValueFilter[]): boolean {
-  return criteria.some(c => CRITERIA_MAPPING[c.field] === null);
-}
-
-export function getUnsupportedCriteriaNames(criteria: MultiValueFilter[]): string[] {
-  return criteria
-    .filter(c => CRITERIA_MAPPING[c.field] === null)
-    .map(c => c.field);
+  query.variables = existingVariables;
 }

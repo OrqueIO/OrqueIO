@@ -78,21 +78,21 @@
       </div>
     }
 
-    <!-- Unsupported criteria banner -->
-    @if (hasQueryUnsupportedCriteria()) {
-      <div class="danger-warning" role="alert">
+    <!-- Count verification mismatch (non-blocking) -->
+    @if (countMismatch()) {
+      <div class="info-banner info-banner--warning">
         <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-        <div>
-          <strong>{{ 'migration.confirm.unsupportedCriteria' | translate }}</strong>
-          <p>{{ 'migration.confirm.unsupportedCriteriaMessage' | translate }}</p>
-          <ul class="criteria-list">
-            @for (criterion of unsupportedCriteriaNames(); track criterion) {
-              <li>{{ criterion }}</li>
-            }
-          </ul>
+        <div class="info-content">
+          <span>
+            {{ 'migration.confirm.countMismatch' | translate }}
+            {{ 'migration.confirm.previousCount' | translate }}: <strong>{{ instancesState().totalCount }}</strong>,
+            {{ 'migration.confirm.currentCount' | translate }}: <strong>{{ verifiedCount() }}</strong>
+          </span>
         </div>
       </div>
     }
+
+    <!-- Unsupported criteria are now excluded from the filter menu in step 3 -->
 
     <!-- Validation Error Banner -->
     @if (validationState() === 'error' || validationState() === 'invalid') {
@@ -263,8 +263,8 @@
       type="button"
       class="btn-primary"
       (click)="onExecute()"
-      [disabled]="!canExecute() || executing() || hasQueryUnsupportedCriteria()"
-      [attr.aria-disabled]="!canExecute() || executing() || hasQueryUnsupportedCriteria()">
+      [disabled]="!canExecute() || executing()"
+      [attr.aria-disabled]="!canExecute() || executing()">
       @if (executing()) {
         <fa-icon [icon]="faSpinner" [animation]="'spin'"></fa-icon>
       }

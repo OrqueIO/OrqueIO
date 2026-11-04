@@ -18,11 +18,13 @@ import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { CockpitService, MultiValueFilter, ProcessInstance } from '../../../../services/cockpit.service';
 import { ProcessDefinitionService } from '../../../../services/process-definition.service';
+import { ProcessInstanceService } from '../../../../services/process-instance.service';
 import { InstanceFilterPanelComponent, FilterPanelChange } from '../../../../shared/instance-filter-panel/instance-filter-panel';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
 import { SavedFiltersMenuComponent, SavedFilter } from './saved-filters-menu.component';
 import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { CamDatePipe } from '../../../../pipes/cam-date.pipe';
+import { buildRuntimeProcessInstanceQuery, type ProcessInstanceQueryDto } from './migration-query-converter.utils';
 
 export type SelectionMode = 'instance' | 'query';
 
@@ -70,6 +72,7 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   private cockpitService = inject(CockpitService);
   private translateService = inject(TranslateService);
   private processDefinitionService = inject(ProcessDefinitionService);
+  private processInstanceService = inject(ProcessInstanceService);
   private destroyRef = inject(DestroyRef);
   private injector = inject(Injector);
 
@@ -169,21 +172,21 @@ export class MigrationInstancesStepComponent implements OnDestroy {
         this.loading.set(true);
         this.error.set(false);
 
-        const criteria = this.buildQueryCriteria();
+        const runtimeQuery = buildRuntimeProcessInstanceQuery(
+          this.filterCriteria(),
+          this.sourceDefinitionId()
+        );
+
         const firstResult = (this.currentPage() - 1) * this.pageSize;
 
         return forkJoin({
-          results: this.cockpitService.searchProcessInstancesGlobal(
-            criteria,
-            this.vnIgnoreCase(),
-            this.vvIgnoreCase(),
+          results: this.processInstanceService.queryRuntimeProcessInstances(
+            runtimeQuery,
             firstResult,
             this.pageSize
           ),
-          count: this.cockpitService.searchProcessInstancesGlobalCount(
-            criteria,
-            this.vnIgnoreCase(),
-            this.vvIgnoreCase()
+          count: this.processInstanceService.queryRuntimeProcessInstancesCount(
+            runtimeQuery
           )
         }).pipe(
           catchError(() => {
@@ -195,9 +198,23 @@ export class MigrationInstancesStepComponent implements OnDestroy {
       }),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(({ results, count }) => {
-      this.instances.set(results);
+      const instances: ProcessInstance[] = results.map((r: any) => ({
+        id: r.id,
+        processDefinitionId: r.definitionId,
+        processDefinitionKey: r.definitionId ? r.definitionId.split(':')[0] : '',
+        businessKey: r.businessKey,
+        startTime: '',
+        state: r.suspended ? 'SUSPENDED' : 'ACTIVE',
+        tenantId: r.tenantId
+      }));
+
+      this.instances.set(instances);
       this.totalCount.set(count);
       this.loading.set(false);
+
+      if (instances.length > 0) {
+        this.loadStartTimesForPage(instances);
+      }
     });
 
     effect(() => {
@@ -260,32 +277,6 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   }
 
 
-  private buildQueryCriteria(): MultiValueFilter[] {
-    const criteria: MultiValueFilter[] = [...this.filterCriteria()];
-
-    const defId = this.sourceDefinitionId();
-    if (defId) {
-      criteria.unshift({
-        field: 'processDefinition' as const,
-        values: [],
-        processDefinitionIds: [defId]
-      });
-    }
-
-    const hasStateActive = criteria.some(f => f.field === 'stateActive');
-    const hasStateSuspended = criteria.some(f => f.field === 'stateSuspended');
-
-    const stateValue = (hasStateActive && !hasStateSuspended) ? 'active'
-      : (hasStateSuspended && !hasStateActive) ? 'suspended'
-      : 'unfinished';
-
-    criteria.unshift({
-      field: 'state' as const,
-      values: [stateValue]
-    });
-
-    return criteria;
-  }
 
 
   onModeChange(newMode: SelectionMode): void {
@@ -422,46 +413,12 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   }
 
   private buildQueryParamsForApi(): Record<string, unknown> {
-    const params: Record<string, unknown> = {
-      processDefinitionId: this.sourceDefinitionId()
-    };
+    const query = buildRuntimeProcessInstanceQuery(
+      this.filterCriteria(),
+      this.sourceDefinitionId()
+    );
 
-    this.filterCriteria().forEach(filter => {
-      switch (filter.field) {
-        case 'businessKey':
-          if (filter.values.length > 0) {
-            params['businessKey'] = filter.values[0];
-          }
-          break;
-        case 'instanceId':
-          if (filter.values.length > 0) {
-            params['processInstanceIds'] = filter.values;
-          }
-          break;
-        case 'startedAfter':
-          if (filter.values.length > 0) {
-            params['startedAfter'] = filter.values[0];
-          }
-          break;
-        case 'startedBefore':
-          if (filter.values.length > 0) {
-            params['startedBefore'] = filter.values[0];
-          }
-          break;
-        case 'activityId':
-          if (filter.values.length > 0) {
-            params['activeActivityIdIn'] = filter.values;
-          }
-          break;
-        case 'incidentId':
-          if (filter.values.length > 0) {
-            params['incidentId'] = filter.values[0];
-          }
-          break;
-      }
-    });
-
-    return params;
+    return query as Record<string, unknown>;
   }
 
 
@@ -789,6 +746,29 @@ export class MigrationInstancesStepComponent implements OnDestroy {
       case 'terminated': return 'cockpit.processes.filters.stateTerminated';
       default:           return '';
     }
+  }
+
+  private loadStartTimesForPage(instances: ProcessInstance[]): void {
+    const instanceIds = instances.map(inst => inst.id);
+
+    const query = {
+      processInstanceIds: instanceIds
+    };
+
+    this.processInstanceService.queryProcessInstances(query, 0, instanceIds.length).pipe(
+      catchError(() => of([]))
+    ).subscribe((historyInstances: ProcessInstance[]) => {
+      const startTimeMap = new Map<string, string>(
+        historyInstances.map((h: ProcessInstance) => [h.id, h.startTime || '—'])
+      );
+
+      const updated = this.instances().map(inst => ({
+        ...inst,
+        startTime: startTimeMap.get(inst.id) || '—'
+      }));
+
+      this.instances.set(updated);
+    });
   }
 
   private computeInstanceState(state: string): string {

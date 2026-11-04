@@ -11,11 +11,12 @@ import { faSpinner, faCheck, faTimes, faExclamationTriangle, faCopy, faArrowRigh
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { MigrationService } from '../../../../services/migration.service';
+import { ProcessInstanceService } from '../../../../services/process-instance.service';
 import { MigrationPlanDto, MigrationPlanReportDto, MigrationInstructionDto } from '../../../../services/migration.model';
 import { PlanVariable } from './migration-variables.utils';
 import { buildValidationPayload } from './migration-engine-validation.utils';
 import { InstancesStepState } from './migration-instances-step.component';
-import { convertCriteriaToRuntimeQuery, hasUnsupportedCriteria, getUnsupportedCriteriaNames } from './migration-query-converter.utils';
+import { buildRuntimeProcessInstanceQuery } from './migration-query-converter.utils';
 import { MultiValueFilter } from '../../../../services/cockpit.service';
 
 export interface MigrationExecutionResult {
@@ -51,6 +52,7 @@ type ValidationState = 'idle' | 'validating' | 'valid' | 'invalid' | 'error';
 })
 export class MigrationConfirmStepComponent {
   private migrationService = inject(MigrationService);
+  private processInstanceService = inject(ProcessInstanceService);
   private translateService = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
 
@@ -86,6 +88,15 @@ export class MigrationConfirmStepComponent {
   readonly showTechnicalDetails = signal(false);
   readonly payloadCopied = signal(false);
 
+  readonly countVerifying = signal(false);
+  readonly verifiedCount = signal<number | null>(null);
+  readonly countMismatch = computed(() => {
+    const state = this.instancesState();
+    const verified = this.verifiedCount();
+    if (state.mode !== 'query' || verified === null) return false;
+    return verified !== state.totalCount;
+  });
+
   private readonly activityNamesCache = signal<Map<string, { source: string; target: string }>>(new Map());
 
   readonly canExecute = computed(() => {
@@ -102,18 +113,8 @@ export class MigrationConfirmStepComponent {
     return JSON.stringify(this.executionPayload(), null, 2);
   });
 
-  readonly hasQueryUnsupportedCriteria = computed(() => {
-    const state = this.instancesState();
-    if (state.mode === 'instance') return false;
-    const criteria = state.filterCriteria || [];
-    return hasUnsupportedCriteria(criteria);
-  });
-
-  readonly unsupportedCriteriaNames = computed(() => {
-    const state = this.instancesState();
-    const criteria = state.filterCriteria || [];
-    return getUnsupportedCriteriaNames(criteria);
-  });
+  // Unsupported criteria are now excluded from the filter menu in step 3,
+  // so no need to track them here anymore
 
   constructor() {
     effect(() => {
@@ -132,6 +133,17 @@ export class MigrationConfirmStepComponent {
       untracked(() => {
         if (sourceXml && targetXml) {
           this.parseActivityNames(sourceXml, targetXml);
+        }
+      });
+    });
+
+    effect(() => {
+      const state = this.instancesState();
+      const plan = this.migrationPlan();
+
+      untracked(() => {
+        if (state.mode === 'query') {
+          this.verifyCount(state.filterCriteria || [], plan.sourceProcessDefinitionId);
         }
       });
     });
@@ -304,8 +316,7 @@ export class MigrationConfirmStepComponent {
       payload.processInstanceIds = state.processInstanceIds;
     } else {
       const criteria = state.filterCriteria || [];
-      const conversion = convertCriteriaToRuntimeQuery(criteria, plan.sourceProcessDefinitionId);
-      payload.processInstanceQuery = conversion.query;
+      payload.processInstanceQuery = buildRuntimeProcessInstanceQuery(criteria, plan.sourceProcessDefinitionId);
     }
 
     return payload;
@@ -338,5 +349,25 @@ export class MigrationConfirmStepComponent {
     } catch {
       return null;
     }
+  }
+
+  private verifyCount(criteria: MultiValueFilter[], sourceDefinitionId: string): void {
+    this.countVerifying.set(true);
+    this.verifiedCount.set(null);
+
+    const query = buildRuntimeProcessInstanceQuery(criteria, sourceDefinitionId);
+
+    this.processInstanceService.queryRuntimeProcessInstancesCount(query)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (count) => {
+          this.verifiedCount.set(count);
+          this.countVerifying.set(false);
+        },
+        error: () => {
+          this.verifiedCount.set(null);
+          this.countVerifying.set(false);
+        }
+      });
   }
 }

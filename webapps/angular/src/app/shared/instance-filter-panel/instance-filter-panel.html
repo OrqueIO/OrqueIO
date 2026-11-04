@@ -230,7 +230,7 @@
                 </span>
               </button>
 
-              <button class="criteria-option" (click)="selectCriteriaType('startedAfter')" type="button" role="menuitem">
+              <button *ngIf="isCriterionAvailable('startedAfter')" class="criteria-option" (click)="selectCriteriaType('startedAfter')" type="button" role="menuitem">
                 <span class="criteria-icon-wrap criteria-icon-wrap--teal">
                   <fa-icon [icon]="faCalendarAlt"></fa-icon>
                 </span>
@@ -240,7 +240,7 @@
                 </span>
               </button>
 
-              <button class="criteria-option" (click)="selectCriteriaType('startedBefore')" type="button" role="menuitem">
+              <button *ngIf="isCriterionAvailable('startedBefore')" class="criteria-option" (click)="selectCriteriaType('startedBefore')" type="button" role="menuitem">
                 <span class="criteria-icon-wrap criteria-icon-wrap--teal">
                   <fa-icon [icon]="faCalendarAlt"></fa-icon>
                 </span>

@@ -32,7 +32,7 @@
           [lockedState]="'unfinished'"
           [showStateNarrowing]="true"
           [initialPills]="filterCriteria()"
-          [excludedCriteria]="['processDefinition']"
+          [excludedCriteria]="['processDefinition', 'startedAfter', 'startedBefore', 'withJobsRetrying']"
           [availableActivities]="availableActivities()"
           (criteriaChange)="onFilterChange($event)">
         </app-instance-filter-panel>
@@ -154,8 +154,8 @@
 
     <!-- Error state -->
     @if (error() && !loading()) {
-      <div class="error-state">
-        <p class="error-message">{{ 'migration.instances.errorLoading' | translate }}</p>
+      <div class="error-state" role="alert">
+        <p class="error-message">{{ 'migration.instances.couldNotLoadInstances' | translate }}</p>
         <button type="button" class="btn-secondary" (click)="retry()">
           {{ 'migration.instances.retry' | translate }}
         </button>
@@ -241,7 +241,7 @@
                   </a>
                 </td>
                 <td class="col-business-key" [title]="instance.businessKey || ''">{{ instance.businessKey || '—' }}</td>
-                <td class="col-starttime">{{ instance.startTime | camDate }}</td>
+                <td class="col-starttime">{{ (instance.startTime | camDate) || '—' }}</td>
               </tr>
             }
           </tbody>

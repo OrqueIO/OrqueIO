@@ -2195,6 +2195,7 @@
   "migration.instances.queryWarningMessage": "la sélection de toutes les instances peut créer une charge élevée sur la base de données et le serveur lorsqu'il y a de nombreux résultats.",
   "migration.instances.loading": "Chargement des instances...",
   "migration.instances.errorLoading": "Échec du chargement des instances",
+  "migration.instances.couldNotLoadInstances": "Impossible de charger les instances.",
   "migration.instances.retry": "Réessayer",
   "migration.instances.selectAll": "Sélectionner tout sur cette page",
   "migration.instances.selectInstance": "Sélectionner l'instance {{id}}",
@@ -2268,5 +2269,8 @@
   "migration.confirm.copied": "Copié !",
   "migration.confirm.executionFailed": "L'exécution de la migration a échoué",
   "migration.confirm.back": "Retour",
-  "migration.confirm.executeMigration": "Exécuter la migration"
+  "migration.confirm.executeMigration": "Exécuter la migration",
+  "migration.confirm.countMismatch": "Le nombre d'instances a changé depuis l'étape 3.",
+  "migration.confirm.previousCount": "Nombre précédent",
+  "migration.confirm.currentCount": "Nombre actuel"
 }
