@@ -1,0 +1,334 @@
+/* Saved Filters Menu - Canvas Design Implementation (Compact Version) */
+
+.saved-filters-menu {
+  width: 300px;
+  background: #ffffff;
+  border: 1px solid #dbe2ec;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: min(60vh, 360px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Responsive: under 360px screen width */
+@media (max-width: 360px) {
+  .saved-filters-menu {
+    width: calc(100vw - 24px);
+  }
+}
+
+/* Section */
+.menu-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Label */
+.menu-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #1a1a1a);
+  line-height: 1.2;
+}
+
+/* Save row: input + button on same line */
+.save-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Input field */
+.menu-input {
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  padding: 0 12px;
+  font-size: 13px;
+  color: var(--text-primary, #1a1a1a);
+  outline: none;
+  transition: all 0.15s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-input {
+    transition: none;
+  }
+}
+
+.menu-input::placeholder {
+  color: #94a3b8;
+}
+
+.menu-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
+}
+
+/* Buttons */
+.menu-btn {
+  height: 36px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-btn {
+    transition: none;
+  }
+}
+
+.menu-btn:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Save button */
+.menu-btn-save {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.menu-btn-save:hover:not(.menu-btn-save--disabled):not(:disabled) {
+  background: #1d4ed8;
+}
+
+.menu-btn-save--disabled,
+.menu-btn-save:disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* Divider */
+.menu-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 0;
+}
+
+/* Section header with badge */
+.menu-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.menu-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 20px;
+  padding: 0 8px;
+  background: #e2e8f0;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+/* Empty state */
+.menu-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  padding: 12px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #475569;
+  text-align: center;
+}
+
+/* Filters list */
+.menu-filters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: min(40vh, 240px);
+  overflow-y: auto;
+  flex-shrink: 1;
+  min-height: 0;
+}
+
+/* Filter row (normal state) */
+.menu-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 34px;
+}
+
+.menu-filter-load-btn {
+  flex: 1;
+  text-align: left;
+  padding: 0 10px;
+  min-height: 34px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary, #1a1a1a);
+  cursor: pointer;
+  transition: all 0.15s;
+  outline: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-filter-load-btn {
+    transition: none;
+  }
+}
+
+.menu-filter-load-btn:hover {
+  background: #f1f5f9;
+}
+
+.menu-filter-load-btn:focus-visible {
+  background: #f1f5f9;
+  outline: 2px solid #2563eb;
+  outline-offset: -2px;
+}
+
+.menu-filter-delete-btn {
+  min-width: 28px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-filter-delete-btn {
+    transition: none;
+  }
+}
+
+.menu-filter-delete-btn fa-icon {
+  font-size: 14px;
+}
+
+.menu-filter-delete-btn:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.menu-filter-delete-btn:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Delete confirmation */
+.menu-filter-confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 48px;
+  padding: 8px 12px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+}
+
+.menu-filter-confirm-text {
+  font-size: 13px;
+  color: #7f1d1d;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.menu-filter-confirm-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.menu-btn-cancel,
+.menu-btn-delete {
+  height: 30px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.menu-btn-cancel {
+  background: #ffffff;
+  color: var(--text-primary, #1a1a1a);
+  border: 1px solid #cbd5e1;
+}
+
+.menu-btn-cancel:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.menu-btn-delete {
+  background: #b91c1c;
+  color: #ffffff;
+  border: none;
+}
+
+.menu-btn-delete:hover {
+  background: #991b1b;
+}
+
+/* Scrollbar styling for filters list */
+.menu-filters-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.menu-filters-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.menu-filters-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.menu-filters-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
