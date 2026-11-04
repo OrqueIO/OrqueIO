@@ -78,9 +78,11 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
           + "the transaction that reaches the task", serviceTaskElement);
     }
 
-    List<String> inputs = parseInputs(llmProperties.get(INPUTS_PROPERTY), activity, serviceTaskElement);
+    // A blank list counts as not declared. Inside a list, every entry must be filled: split(",", -1)
+    // keeps trailing empty entries, so "a," is rejected like "a,,b"
+    List<String> inputs = parseInputs(trimToNull(llmProperties.get(INPUTS_PROPERTY)), activity, serviceTaskElement);
     validatePlaceholders(prompt, inputs, activity, serviceTaskElement);
-    List<LlmOutputField> outputs = parseOutputs(llmProperties.get(OUTPUTS_PROPERTY), activity, serviceTaskElement);
+    List<LlmOutputField> outputs = parseOutputs(trimToNull(llmProperties.get(OUTPUTS_PROPERTY)), activity, serviceTaskElement);
     validateOutputNames(outputs, inputs, activity, serviceTaskElement);
 
     activity.getProperties().set(LlmTaskConfiguration.KEY, new LlmTaskConfiguration(
@@ -108,7 +110,6 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
     List<LlmOutputField> outputs = new ArrayList<>();
     Set<String> names = new LinkedHashSet<>();
     if (value != null) {
-      // -1 keeps trailing empty entries, so "a:string," is rejected like "a:string,,b:integer"
       for (String declaration : value.split(",", -1)) {
         if (declaration.isBlank()) {
           throw error(activity, "has an empty entry in " + OUTPUTS_PROPERTY, element);
@@ -139,10 +140,10 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
     Set<String> inputs = new LinkedHashSet<>();
     if (value != null) {
       for (String name : value.split(",", -1)) {
-        String input = name.trim();
-        if (input.isEmpty()) {
+        if (name.isBlank()) {
           throw error(activity, "has an empty entry in " + INPUTS_PROPERTY, element);
         }
+        String input = name.trim();
         if (!PromptTemplate.isVariableName(input)) {
           throw error(activity, "has an invalid variable name '" + input + "' in " + INPUTS_PROPERTY, element);
         }

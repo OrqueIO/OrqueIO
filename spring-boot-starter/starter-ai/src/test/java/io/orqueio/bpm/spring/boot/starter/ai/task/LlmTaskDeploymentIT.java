@@ -107,6 +107,24 @@ class LlmTaskDeploymentIT {
   }
 
   @Test
+  void shouldRejectBlankMiddleAndLeadingInputEntries() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.inputs", "emailBody, ,customer") + property("orqueio.llm.prompt", "Summarize") + OUTPUTS),
+        "LLM task 'Task_Llm' has an empty entry in orqueio.llm.inputs");
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.inputs", ",emailBody") + property("orqueio.llm.prompt", "Summarize") + OUTPUTS),
+        "LLM task 'Task_Llm' has an empty entry in orqueio.llm.inputs");
+  }
+
+  @Test
+  void shouldHaveNoInputsWhenPropertyIsBlank() {
+    // A template may write the optional field with an empty value
+    assertThat(deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
+        property("orqueio.llm.inputs", " ") + property("orqueio.llm.prompt", "Summarize") + OUTPUTS))
+        .getInputs()).isEmpty();
+  }
+
+  @Test
   void shouldRejectTrailingCommaInInputs() {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
             property("orqueio.llm.inputs", "emailBody,") + property("orqueio.llm.prompt", "Summarize") + OUTPUTS),
@@ -177,6 +195,13 @@ class LlmTaskDeploymentIT {
   @Test
   void shouldRejectMissingOutputs() {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Classify")),
+        "LLM task 'Task_Llm' requires a orqueio.llm.outputs property");
+  }
+
+  @Test
+  void shouldRejectBlankOutputsProperty() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", " ")),
         "LLM task 'Task_Llm' requires a orqueio.llm.outputs property");
   }
 
