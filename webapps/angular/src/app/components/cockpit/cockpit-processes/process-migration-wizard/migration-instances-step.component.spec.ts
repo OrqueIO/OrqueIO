@@ -171,11 +171,17 @@ describe('Migration Instances Step (Step 3)', () => {
 
       const requests = httpMock.match(() => true);
       requests.forEach(req => {
-        if (req.url.includes('/count')) {
+        if (req.request.url.includes('/count')) {
           req.flush({ count: 3 });
-        } else if (req.url.includes('/process-instance')) {
+        } else if (req.request.url.includes('/process-instance') && !req.request.url.includes('/history')) {
+          req.flush([
+            { id: 'inst-1', definitionId: 'proc-def-1', businessKey: 'BK001', suspended: false },
+            { id: 'inst-2', definitionId: 'proc-def-1', businessKey: 'BK002', suspended: false },
+            { id: 'inst-3', definitionId: 'proc-def-1', businessKey: null, suspended: false }
+          ]);
+        } else if (req.request.url.includes('/history/process-instance')) {
           req.flush(mockInstances);
-        } else if (req.url.includes('/process-definition')) {
+        } else if (req.request.url.includes('/process-definition')) {
           req.flush([]);
         }
       });
@@ -194,11 +200,17 @@ describe('Migration Instances Step (Step 3)', () => {
 
       const requests = httpMock.match(() => true);
       requests.forEach(req => {
-        if (req.url.includes('/count')) {
+        if (req.request.url.includes('/count')) {
           req.flush({ count: 5 });
-        } else if (req.url.includes('/process-instance')) {
+        } else if (req.request.url.includes('/process-instance') && !req.request.url.includes('/history')) {
+          req.flush([
+            { id: 'inst-1', definitionId: 'proc-def-1', businessKey: 'BK001', suspended: false },
+            { id: 'inst-2', definitionId: 'proc-def-1', businessKey: 'BK002', suspended: false },
+            { id: 'inst-3', definitionId: 'proc-def-1', businessKey: null, suspended: false }
+          ]);
+        } else if (req.request.url.includes('/history/process-instance')) {
           req.flush(mockInstances);
-        } else if (req.url.includes('/process-definition')) {
+        } else if (req.request.url.includes('/process-definition')) {
           req.flush([]);
         }
       });
@@ -215,11 +227,17 @@ describe('Migration Instances Step (Step 3)', () => {
 
       const requests = httpMock.match(() => true);
       requests.forEach(req => {
-        if (req.url.includes('/count')) {
+        if (req.request.url.includes('/count')) {
           req.flush({ count: 3 });
-        } else if (req.url.includes('/process-instance')) {
+        } else if (req.request.url.includes('/process-instance') && !req.request.url.includes('/history')) {
+          req.flush([
+            { id: 'inst-1', definitionId: 'proc-def-1', businessKey: 'BK001', suspended: false },
+            { id: 'inst-2', definitionId: 'proc-def-1', businessKey: 'BK002', suspended: false },
+            { id: 'inst-3', definitionId: 'proc-def-1', businessKey: null, suspended: false }
+          ]);
+        } else if (req.request.url.includes('/history/process-instance')) {
           req.flush(mockInstances);
-        } else if (req.url.includes('/process-definition')) {
+        } else if (req.request.url.includes('/process-definition')) {
           req.flush([]);
         }
       });
@@ -235,10 +253,21 @@ describe('Migration Instances Step (Step 3)', () => {
     beforeEach(() => {
       fixture.detectChanges();
 
-      const req1 = httpMock.expectOne((req) => req.url.includes('/process-instance'));
-      req1.flush(mockInstances);
+      // 1. Runtime API list request (no history)
+      const req1 = httpMock.expectOne((req) => req.url.includes('/process-instance') && !req.url.includes('/count') && !req.url.includes('/history'));
+      req1.flush([
+        { id: 'inst-1', definitionId: 'proc-def-1', businessKey: 'BK001', suspended: false },
+        { id: 'inst-2', definitionId: 'proc-def-1', businessKey: 'BK002', suspended: false },
+        { id: 'inst-3', definitionId: 'proc-def-1', businessKey: null, suspended: false }
+      ]);
+
+      // 2. Count request
       const req2 = httpMock.expectOne((req) => req.url.includes('/count'));
       req2.flush({ count: 3 });
+
+      // 3. History API enrichment request (for startTime)
+      const req3 = httpMock.expectOne((req) => req.url.includes('/history/process-instance'));
+      req3.flush(mockInstances);
 
       fixture.detectChanges();
     });
@@ -299,10 +328,16 @@ describe('Migration Instances Step (Step 3)', () => {
     it('should disable button when no instances are selected (no message)', () => {
       fixture.detectChanges();
 
-      const req1 = httpMock.expectOne((req) => req.url.includes('/process-instance'));
-      req1.flush(mockInstances);
+      const req1 = httpMock.expectOne((req) => req.url.includes('/process-instance') && !req.url.includes('/count') && !req.url.includes('/history'));
+      req1.flush([
+        { id: 'inst-1', definitionId: 'proc-def-1', businessKey: 'BK001', suspended: false },
+        { id: 'inst-2', definitionId: 'proc-def-1', businessKey: 'BK002', suspended: false },
+        { id: 'inst-3', definitionId: 'proc-def-1', businessKey: null, suspended: false }
+      ]);
       const req2 = httpMock.expectOne((req) => req.url.includes('/count'));
       req2.flush({ count: 3 });
+      const req3 = httpMock.expectOne((req) => req.url.includes('/history/process-instance'));
+      req3.flush(mockInstances);
 
       fixture.detectChanges();
 
@@ -316,10 +351,16 @@ describe('Migration Instances Step (Step 3)', () => {
     it('should enable button when at least one instance is selected', () => {
       fixture.detectChanges();
 
-      const req1 = httpMock.expectOne((req) => req.url.includes('/process-instance'));
-      req1.flush(mockInstances);
+      const req1 = httpMock.expectOne((req) => req.url.includes('/process-instance') && !req.url.includes('/count') && !req.url.includes('/history'));
+      req1.flush([
+        { id: 'inst-1', definitionId: 'proc-def-1', businessKey: 'BK001', suspended: false },
+        { id: 'inst-2', definitionId: 'proc-def-1', businessKey: 'BK002', suspended: false },
+        { id: 'inst-3', definitionId: 'proc-def-1', businessKey: null, suspended: false }
+      ]);
       const req2 = httpMock.expectOne((req) => req.url.includes('/count'));
       req2.flush({ count: 3 });
+      const req3 = httpMock.expectOne((req) => req.url.includes('/history/process-instance'));
+      req3.flush(mockInstances);
 
       fixture.detectChanges();
 

@@ -34,6 +34,7 @@
           [initialPills]="filterCriteria()"
           [excludedCriteria]="['processDefinition', 'startedAfter', 'startedBefore', 'withJobsRetrying']"
           [availableActivities]="availableActivities()"
+          [showWithJobsRetrying]="false"
           (criteriaChange)="onFilterChange($event)">
         </app-instance-filter-panel>
 
