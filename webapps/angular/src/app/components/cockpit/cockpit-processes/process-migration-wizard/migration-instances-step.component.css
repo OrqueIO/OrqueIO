@@ -15,7 +15,7 @@
   min-height: 0;
   width: 100%;
   background: var(--bg-page); /* #f8fafc - exact match to batch operations page background */
-  padding: var(--space-4); /* 16px internal padding for cards */
+  padding: var(--space-4) 0; /* 16px vertical, 0 horizontal to align with header */
   border-radius: 0 0 var(--radius-xl) var(--radius-xl); /* Bottom corners match wizard card */
 }
 

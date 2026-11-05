@@ -15,7 +15,7 @@
   min-height: 0;
   width: 100%;
   background: var(--bg-page, #f8fafc);
-  padding: var(--space-4, 16px);
+  padding: var(--space-4, 16px) 0; /* 16px vertical, 0 horizontal to align with header */
   border-radius: 0 0 var(--radius-xl) var(--radius-xl);
 }
 
