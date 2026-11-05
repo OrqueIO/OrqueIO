@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, input, output, signal } from '@angu
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSpinner, faCheckCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faCheckCircle, faExclamationTriangle, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { MigrationExecutionResult } from './migration-execution-result.model';
@@ -37,6 +37,7 @@ export class MigrationResultsStepComponent {
   readonly faSpinner = faSpinner;
   readonly faCheckCircle = faCheckCircle;
   readonly faExclamationTriangle = faExclamationTriangle;
+  readonly faPencilAlt = faPencilAlt;
 
   showTechnicalDetails = signal(false);
 

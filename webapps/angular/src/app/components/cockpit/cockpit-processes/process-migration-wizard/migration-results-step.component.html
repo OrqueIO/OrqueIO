@@ -129,17 +129,6 @@
               <p class="result-text">{{ 'migration.results.instanceFailed.subtext' | translate }}</p>
 
               <div class="instance-failed-block">
-                @if (getInstanceFailedProcessInstanceId()) {
-                  <div class="instance-failed-section">
-                    <div class="instance-failed-label">{{ 'migration.results.instanceFailed.faultyInstance' | translate }}</div>
-                    @if (getInstanceLink()) {
-                      <a [href]="getInstanceLink()" class="instance-id-link">{{ getInstanceFailedProcessInstanceId() }}</a>
-                    } @else {
-                      <code class="instance-id">{{ getInstanceFailedProcessInstanceId() }}</code>
-                    }
-                  </div>
-                }
-
                 @if (getInstanceFailedCauses().length > 0) {
                   <div class="instance-failed-section">
                     <div class="instance-failed-label">{{ 'migration.results.instanceFailed.causes' | translate }}</div>
@@ -258,7 +247,7 @@
             {{ 'migration.results.failed.backToConfirm' | translate }}
           </button>
         }
-        @if (result().kind === 'plan-invalid' || result().kind === 'instance-failed') {
+        @if (result().kind === 'plan-invalid') {
           <button
             type="button"
             class="btn btn-ghost"
@@ -284,6 +273,16 @@
             data-testid="view-migrated-instances-link">
             {{ 'migration.results.syncDone.viewMigratedInstances' | translate }}
           </a>
+        }
+        @if (result().kind === 'instance-failed') {
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="onBackToMapping()"
+            data-testid="edit-mapping-btn">
+            <fa-icon [icon]="faPencilAlt" class="btn-icon"></fa-icon>
+            {{ 'migration.results.instanceFailed.editMapping' | translate }}
+          </button>
         }
         @if (result().kind === 'failed') {
           <button
