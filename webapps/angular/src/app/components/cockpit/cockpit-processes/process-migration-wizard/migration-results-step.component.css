@@ -445,17 +445,22 @@
   gap: 12px;
 }
 
-/* Button styles */
+/* Use wizard button system from parent */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  border-radius: 8px;
-  font-size: 14px;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
   cursor: pointer;
   transition: all 0.15s;
   text-decoration: none;
+  box-sizing: border-box;
 }
 
 .btn:disabled {
@@ -465,43 +470,43 @@
 
 /* Ghost button (secondary) */
 .btn-ghost {
-  background: #fff;
-  border: 1px solid #cdd2de;
-  color: #1b2233;
-  padding: 11px 20px;
-  font-weight: 500;
+  background: white;
+  color: var(--color-primary, #3b82f6);
+  border-color: var(--color-primary, #3b82f6);
 }
 
 .btn-ghost:hover:not(:disabled) {
-  background: #f8fafc;
-  border-color: #b4bac6;
+  background: rgba(var(--color-primary-rgb, 37, 99, 235), 0.05);
+  border-color: var(--color-primary, #3b82f6);
 }
 
 /* Primary button */
 .btn-primary {
-  background: #2457d6;
-  color: #fff;
-  border: none;
-  padding: 11px 22px;
-  font-weight: 600;
+  background: var(--color-primary, #3b82f6);
+  color: white;
+  border-color: var(--color-primary, #3b82f6);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #1d4ab3;
+  background: var(--color-primary-dark, #2563eb);
+  border-color: var(--color-primary-dark, #2563eb);
 }
 
 /* Legacy btn-secondary mapped to btn-ghost for compatibility */
 .btn-secondary {
-  background: #fff;
-  border: 1px solid #cdd2de;
-  color: #1b2233;
-  padding: 11px 20px;
-  font-weight: 500;
+  background: white;
+  color: var(--color-primary, #3b82f6);
+  border-color: var(--color-primary, #3b82f6);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: #f8fafc;
-  border-color: #b4bac6;
+  background: rgba(var(--color-primary-rgb, 37, 99, 235), 0.05);
+  border-color: var(--color-primary, #3b82f6);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 /* Responsive */

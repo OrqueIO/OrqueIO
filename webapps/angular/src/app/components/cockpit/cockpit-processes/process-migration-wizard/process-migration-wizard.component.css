@@ -343,14 +343,79 @@
   justify-content: flex-end;
 }
 
-.btn {
+/* =====================================================
+   WIZARD BUTTON SYSTEM (unified height for all steps)
+   ===================================================== */
+
+/* Base wizard button - defines height and common properties */
+.wizard-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
+  line-height: 1.2;
   cursor: pointer;
   transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.wizard-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Primary variant */
+.wizard-btn--primary {
+  background: var(--color-primary, #3b82f6);
+  color: white;
+  border-color: var(--color-primary, #3b82f6);
+}
+
+.wizard-btn--primary:hover:not(:disabled) {
+  background: var(--color-primary-dark, #2563eb);
+  border-color: var(--color-primary-dark, #2563eb);
+}
+
+/* Ghost/Secondary variant */
+.wizard-btn--ghost {
+  background: white;
+  color: var(--color-primary, #3b82f6);
+  border-color: var(--color-primary, #3b82f6);
+}
+
+.wizard-btn--ghost:hover:not(:disabled) {
+  background: rgba(var(--color-primary-rgb, 37, 99, 235), 0.05);
+  border-color: var(--color-primary, #3b82f6);
+}
+
+.wizard-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Legacy classes for compatibility (mapped to wizard-btn) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-sizing: border-box;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .btn-primary {
@@ -364,9 +429,9 @@
   border-color: var(--color-primary-dark, #2563eb);
 }
 
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 /* =====================================================
    UNDO TOAST
