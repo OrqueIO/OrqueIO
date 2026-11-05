@@ -32,7 +32,7 @@
           <span class="panel-header-title">{{ 'migration.title' | translate }}</span>
         </div>
 
-        <div class="panel-body" [class.step-3-flush]="currentStep() === 3" [class.step-4-flush]="currentStep() === 4">
+        <div class="panel-body" [class.step-3-flush]="currentStep() === 3" [class.step-4-flush]="currentStep() === 4" [class.step-5-flush]="currentStep() === 5">
       <div class="migration-wizard-header">
         <app-batch-wizard-stepper
           [steps]="wizardSteps"
@@ -301,6 +301,25 @@
             (back)="onConfirmBack()"
             (next)="onConfirmNext($event)">
           </app-migration-confirm-step>
+        </div>
+      }
+
+      @if (currentStep() === 5) {
+        <div class="step-content step-5 step-flush">
+          <app-migration-results-step
+            [result]="executionResult()"
+            [sourceXml]="sourceXml()"
+            [targetXml]="targetXml()"
+            [targetKey]="targetKey()"
+            [targetVersion]="targetVersion()"
+            [sourceVersion]="sourceVersion()"
+            [isRetrying]="executing()"
+            (startNewMigration)="onStartNewMigration()"
+            (backToMapping)="onBackToMapping()"
+            (backToInstances)="onBackToInstances()"
+            (backToConfirm)="onBackToConfirm()"
+            (retryExecution)="onRetryExecution()">
+          </app-migration-results-step>
         </div>
       }
         </div>

@@ -25,7 +25,10 @@ import { MigrationArrowsComponent, RouteParams } from './migration-arrows.compon
 import { MigrationVariablesStepComponent } from './migration-variables-step.component';
 import { MigrationInstancesStepComponent, InstancesStepState, MigrationWizardSnapshot } from './migration-instances-step.component';
 import { MigrationVariableModalComponent } from './migration-variable-modal.component';
-import { MigrationConfirmStepComponent, MigrationExecutionResult } from './migration-confirm-step.component';
+import { MigrationConfirmStepComponent, MigrationExecutionResult as ConfirmResult, MigrationExecutionPayload } from './migration-confirm-step.component';
+import { MigrationResultsStepComponent } from './migration-results-step.component';
+import { MigrationExecutionResult } from './migration-execution-result.model';
+import { classifyMigrationError } from './migration-error-classifier.utils';
 import { Anchor, getAnchorKey } from './migration-arrow-anchors';
 import { MigrationUndoToastService } from './migration-undo-toast.service';
 import { snapshotMapping, restoreMapping, MigrationState } from './migration-undo-utils';
@@ -53,7 +56,8 @@ const ENABLE_CONNECTION_EDITOR_SPIKE = false;
     MigrationVariablesStepComponent,
     MigrationInstancesStepComponent,
     MigrationVariableModalComponent,
-    MigrationConfirmStepComponent
+    MigrationConfirmStepComponent,
+    MigrationResultsStepComponent
   ],
   templateUrl: './process-migration-wizard.component.html',
   styleUrl: './process-migration-wizard.component.css',
@@ -256,6 +260,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   editingVariableIndex = signal<number | null>(null);
 
   instancesStepState = signal<InstancesStepState | null>(null);
+
+  // Execution state for step 5
+  executionResult = signal<MigrationExecutionResult>({ kind: 'running' });
+  executing = signal(false);
+  lastConfirmData = signal<ConfirmResult | null>(null);
 
   setVariablesDisabledReason = computed<string | null>(() => {
     const sourceId = this.sourceDefinitionId();
@@ -1254,8 +1263,102 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.currentStep.set(3);
   }
 
-  onConfirmNext(result: MigrationExecutionResult): void {
-    console.log('Migration execution result:', result);
+  onConfirmNext(confirmData: ConfirmResult): void {
+    this.lastConfirmData.set(confirmData);
+    this.executeMigration(confirmData.payload, confirmData.mode, confirmData.totalCount);
+  }
+
+  /**
+   * @param payload
+   * @param mode
+   * @param totalCount
+   */
+  private executeMigration(
+    payload: MigrationExecutionPayload,
+    mode: 'sync' | 'async',
+    totalCount: number
+  ): void {
+    if (this.executing()) {
+      return;
+    }
+
+    this.executionResult.set({ kind: 'running' });
+    this.currentStep.set(5);
+    this.executing.set(true);
+
+    const isAsync = mode === 'async';
+    const executeObservable = isAsync
+      ? this.migrationService.executeMigrationAsync(payload)
+      : this.migrationService.executeMigration(payload);
+
+    executeObservable
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          this.executing.set(false);
+
+          if (isAsync) {
+            const batchId = response?.id || '';
+            this.executionResult.set({ kind: 'async-started', batchId });
+          } else {
+            const state = this.instancesStepState();
+            const count =
+              state?.mode === 'instance'
+                ? (state.processInstanceIds?.length ?? totalCount)
+                : (totalCount ?? null);
+            this.executionResult.set({ kind: 'sync-done', count });
+          }
+        },
+        error: (httpError) => {
+          this.executing.set(false);
+          const result = classifyMigrationError(httpError);
+          this.executionResult.set(result);
+        }
+      });
+  }
+
+  onStartNewMigration(): void {
+    this.currentStep.set(1);
+    this.sourceKey.set('');
+    this.sourceVersion.set(null);
+    this.targetKey.set('');
+    this.targetVersion.set(null);
+    this.sourceXml.set(null);
+    this.targetXml.set(null);
+    this.migrationPlan.set(null);
+    this.migrationReport.set(null);
+    this.variables.set([]);
+    this.instancesStepState.set(null);
+    this.executionResult.set({ kind: 'running' });
+    this.executing.set(false);
+    this.mappingMode.set(false);
+    this.mappingSourceActivityId.set(null);
+    this.customAnchors.set(new Map());
+    this.editableInstructions.set([]);
+    this.linkFilterCriteria.set(null);
+    this.linkVnIgnoreCase.set(false);
+    this.linkVvIgnoreCase.set(false);
+  }
+
+  onBackToMapping(): void {
+    this.currentStep.set(1);
+  }
+
+  onBackToInstances(): void {
+    this.currentStep.set(3);
+  }
+
+  onBackToConfirm(): void {
+    this.currentStep.set(4);
+  }
+
+  onRetryExecution(): void {
+    const confirmData = this.lastConfirmData();
+    if (!confirmData) {
+      console.error('Cannot retry: no previous execution data');
+      return;
+    }
+    this.executeMigration(confirmData.payload, confirmData.mode, confirmData.totalCount);
   }
 
   onAddVariable(): void {

@@ -1,0 +1,301 @@
+<div class="results-step">
+  <!-- Gray panel wrapping all content (matching steps 3 & 4) -->
+  <div class="results-step-panel">
+    <div class="results-step-content">
+      <!-- Single white card -->
+      <div class="results-card">
+        @switch (result().kind) {
+          @case ('running') {
+            <div class="result-container" data-testid="result-running">
+              <fa-icon [icon]="faSpinner" [animation]="'spin'" class="result-spinner"></fa-icon>
+              <p class="result-message">{{ 'migration.results.executing' | translate }}</p>
+            </div>
+          }
+          @case ('async-started') {
+            <div class="result-container" data-testid="result-async-started">
+              <div class="result-icon result-icon--success">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9.2"/>
+                  <path d="M8 12.4l2.8 2.8L16.2 9.6"/>
+                </svg>
+              </div>
+              <h2 class="result-title">{{ 'migration.results.asyncStarted.title' | translate }}</h2>
+              <p class="result-text">
+                {{ 'migration.results.asyncStarted.message' | translate }}
+                <code class="batch-id" data-testid="batch-id">{{ getBatchId() }}</code>{{ 'migration.results.asyncStarted.messageEnd' | translate }}
+              </p>
+              <p class="result-subtext">{{ 'migration.results.asyncStarted.subtext' | translate }}</p>
+            </div>
+          }
+          @case ('sync-done') {
+            <div class="result-container" data-testid="result-sync-done">
+              <div class="result-icon result-icon--success">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9.2"/>
+                  <path d="M8 12.4l2.8 2.8L16.2 9.6"/>
+                </svg>
+              </div>
+              <h2 class="result-title">{{ 'migration.results.syncDone.title' | translate }}</h2>
+              @if (getSyncDoneCount() !== null) {
+                <p class="result-text">
+                  {{ 'migration.results.syncDone.messageWithCount' | translate: {
+                    count: '' + getSyncDoneCount(),
+                    definitionName: targetKey() || '',
+                    sourceVersion: '' + (sourceVersion() || 0),
+                    targetVersion: '' + (targetVersion() || 0)
+                  } }}
+                </p>
+              } @else {
+                <p class="result-text">
+                  {{ 'migration.results.syncDone.messageWithoutCount' | translate: {
+                    definitionName: targetKey() || '',
+                    sourceVersion: '' + (sourceVersion() || 0),
+                    targetVersion: '' + (targetVersion() || 0)
+                  } }}
+                </p>
+              }
+              <p class="result-subtext">{{ 'migration.results.syncDone.subtext' | translate }}</p>
+            </div>
+          }
+          @case ('plan-invalid') {
+            <div class="result-container" data-testid="result-plan-invalid">
+              <div class="result-icon result-icon--warning">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 4.2l8.6 15H3.4L12 4.2zM12 10v4M12 17h.01"/>
+                </svg>
+              </div>
+              <h2 class="result-title">{{ 'migration.results.planInvalid.title' | translate }}</h2>
+              <p class="result-text">{{ 'migration.results.planInvalid.subtext' | translate }}</p>
+
+              @if (getPlanInvalidRows().length > 0) {
+                <div class="errors-section">
+                  <h3 class="errors-subtitle">{{ 'migration.results.planInvalid.validationErrors' | translate }}</h3>
+                  <div class="errors-table">
+                    <div class="errors-table-header">
+                      <div class="errors-table-header-cell">{{ 'migration.results.planInvalid.sourceActivity' | translate }}</div>
+                      <div class="errors-table-header-cell">{{ 'migration.results.planInvalid.mappedActivity' | translate }}</div>
+                      <div class="errors-table-header-cell">{{ 'migration.results.planInvalid.errors' | translate }}</div>
+                    </div>
+                    <div class="errors-table-body">
+                      @for (row of getPlanInvalidRows(); track $index) {
+                        <div class="errors-table-row">
+                          <div class="errors-table-cell">
+                            <div class="activity-name">{{ getActivityName(row.sourceActivityId, true) }}</div>
+                            <div class="activity-id">{{ row.sourceActivityId }}</div>
+                          </div>
+                          <div class="errors-table-cell">
+                            @for (targetId of row.targetActivityIds; track $index) {
+                              <div class="activity-name">{{ getActivityName(targetId, false) }}</div>
+                              <div class="activity-id">{{ targetId }}</div>
+                            }
+                          </div>
+                          <div class="errors-table-cell">
+                            @for (error of row.errors; track $index) {
+                              <div class="error-message">{{ error }}</div>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+
+              @if (getPlanInvalidVariableErrors().length > 0) {
+                <div class="errors-section">
+                  <h3 class="errors-subtitle">{{ 'migration.results.planInvalid.variableErrors' | translate }}</h3>
+                  <div class="variable-errors">
+                    @for (varError of getPlanInvalidVariableErrors(); track $index) {
+                      <div class="variable-error-item">
+                        <div class="variable-error-name">{{ varError.name }}</div>
+                        @for (error of varError.errors; track $index) {
+                          <div class="error-message">{{ error }}</div>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+          @case ('instance-failed') {
+            <div class="result-container" data-testid="result-instance-failed">
+              <div class="result-icon result-icon--warning">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 4.2l8.6 15H3.4L12 4.2zM12 10v4M12 17h.01"/>
+                </svg>
+              </div>
+              <h2 class="result-title">{{ 'migration.results.instanceFailed.title' | translate }}</h2>
+              <p class="result-text">{{ 'migration.results.instanceFailed.subtext' | translate }}</p>
+
+              <div class="instance-failed-block">
+                @if (getInstanceFailedProcessInstanceId()) {
+                  <div class="instance-failed-section">
+                    <div class="instance-failed-label">{{ 'migration.results.instanceFailed.faultyInstance' | translate }}</div>
+                    @if (getInstanceLink()) {
+                      <a [href]="getInstanceLink()" class="instance-id-link">{{ getInstanceFailedProcessInstanceId() }}</a>
+                    } @else {
+                      <code class="instance-id">{{ getInstanceFailedProcessInstanceId() }}</code>
+                    }
+                  </div>
+                }
+
+                @if (getInstanceFailedCauses().length > 0) {
+                  <div class="instance-failed-section">
+                    <div class="instance-failed-label">{{ 'migration.results.instanceFailed.causes' | translate }}</div>
+                    @for (cause of getInstanceFailedCauses(); track $index) {
+                      <div class="cause-card">
+                        <div class="cause-dot"></div>
+                        <div class="cause-content">
+                          <div class="cause-message">{{ cause }}</div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+
+                @if (getInstanceFailedActivityReports().length > 0) {
+                  <div class="instance-failed-section">
+                    @for (report of getInstanceFailedActivityReports(); track $index) {
+                      <div class="cause-card">
+                        <div class="cause-dot"></div>
+                        <div class="cause-content">
+                          <div class="cause-activity-name">{{ getActivityName(report.activityId || '', true) }}</div>
+                          @if (report.activityId && report.activityId !== getActivityName(report.activityId, true)) {
+                            <div class="cause-activity-id">{{ report.activityId }}</div>
+                          }
+                          @for (error of report.errors; track $index) {
+                            <div class="cause-message">{{ error }}</div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+
+              <p class="result-advice">{{ 'migration.results.instanceFailed.advice' | translate }}</p>
+            </div>
+          }
+          @case ('failed') {
+            <div class="result-container" data-testid="result-failed">
+              <div class="result-icon result-icon--error">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9.2"/>
+                  <path d="M9 9l6 6M15 9l-6 6"/>
+                </svg>
+              </div>
+              <h2 class="result-title">{{ 'migration.results.failed.title' | translate }}</h2>
+              <p class="result-text">{{ getFailedMessage() }}</p>
+              <p class="result-subtext">{{ 'migration.results.failed.subtext' | translate }}</p>
+
+              <div class="technical-details">
+                <button
+                  type="button"
+                  class="technical-details-toggle"
+                  (click)="toggleTechnicalDetails()"
+                  [attr.aria-expanded]="showTechnicalDetails()">
+                  <span>{{ 'migration.results.failed.showTechnicalDetails' | translate }}</span>
+                  <span class="toggle-icon" [class.expanded]="showTechnicalDetails()">▾</span>
+                </button>
+                @if (showTechnicalDetails()) {
+                  <div class="technical-details-content">
+                    <div class="technical-detail-row">
+                      <span class="technical-detail-label">{{ 'migration.results.failed.httpStatus' | translate }}:</span>
+                      <span class="technical-detail-value">{{ getFailedStatus() }}</span>
+                    </div>
+                    @if (getFailedType()) {
+                      <div class="technical-detail-row">
+                        <span class="technical-detail-label">{{ 'migration.results.failed.exceptionType' | translate }}:</span>
+                        <span class="technical-detail-value">{{ getFailedType() }}</span>
+                      </div>
+                    }
+                    <div class="technical-detail-row">
+                      <span class="technical-detail-label">{{ 'migration.results.failed.rawMessage' | translate }}:</span>
+                      <span class="technical-detail-value">{{ getFailedRawMessage() }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        }
+      </div>
+    </div>
+
+    <!-- Footer buttons (outside card, inside gray panel) -->
+    <div class="step-footer">
+      <div class="footer-left">
+        @if (result().kind === 'async-started' || result().kind === 'sync-done') {
+          <button
+            type="button"
+            class="btn btn-ghost"
+            (click)="onStartNewMigration()"
+            data-testid="start-new-migration-btn">
+            @if (result().kind === 'async-started') {
+              {{ 'migration.results.asyncStarted.startNewMigration' | translate }}
+            }
+            @if (result().kind === 'sync-done') {
+              {{ 'migration.results.syncDone.startNewMigration' | translate }}
+            }
+          </button>
+        }
+        @if (result().kind === 'instance-failed') {
+          <button
+            type="button"
+            class="btn btn-ghost"
+            (click)="onBackToInstances()"
+            data-testid="back-to-instances-btn">
+            {{ 'migration.results.instanceFailed.backToInstances' | translate }}
+          </button>
+        }
+        @if (result().kind === 'failed') {
+          <button
+            type="button"
+            class="btn btn-ghost"
+            (click)="onBackToConfirm()"
+            data-testid="back-to-confirm-btn">
+            {{ 'migration.results.failed.backToConfirm' | translate }}
+          </button>
+        }
+        @if (result().kind === 'plan-invalid' || result().kind === 'instance-failed') {
+          <button
+            type="button"
+            class="btn btn-ghost"
+            (click)="onBackToMapping()"
+            data-testid="back-to-mapping-btn">
+            {{ 'migration.results.backToMapping' | translate }}
+          </button>
+        }
+      </div>
+      <div class="footer-right">
+        @if (result().kind === 'async-started') {
+          <a
+            class="btn btn-primary"
+            [routerLink]="['/cockpit/batch']"
+            data-testid="observe-progress-link">
+            {{ 'migration.results.asyncStarted.observeProgress' | translate }}
+          </a>
+        }
+        @if (result().kind === 'sync-done') {
+          <a
+            class="btn btn-primary"
+            [routerLink]="getTargetInstancesLink()"
+            data-testid="view-migrated-instances-link">
+            {{ 'migration.results.syncDone.viewMigratedInstances' | translate }}
+          </a>
+        }
+        @if (result().kind === 'failed') {
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="isRetrying()"
+            (click)="onRetry()"
+            data-testid="retry-btn">
+            {{ 'migration.results.failed.retry' | translate }}
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>

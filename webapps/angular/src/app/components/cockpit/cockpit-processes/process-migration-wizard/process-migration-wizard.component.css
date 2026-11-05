@@ -127,6 +127,14 @@
   padding-inline: var(--space-5);
 }
 
+.panel-body.step-5-flush {
+  padding-inline: 0;
+}
+
+.panel-body.step-5-flush .migration-wizard-header {
+  padding-inline: var(--space-5);
+}
+
 .criteria-zone {
   background: var(--bg-card);
   border: 1px solid var(--border-color-light);

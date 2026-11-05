@@ -154,37 +154,16 @@ export class MigrationConfirmStepComponent {
   onExecute(): void {
     if (!this.canExecute()) return;
 
-    this.executing.set(true);
-    this.executionError.set(null);
-
     const payload = this.executionPayload();
     const asyncMode = this.asyncMode();
 
-    const executeObservable = asyncMode
-      ? this.migrationService.executeMigrationAsync(payload)
-      : this.migrationService.executeMigration(payload);
+    const result: MigrationExecutionResult = {
+      mode: asyncMode ? 'async' : 'sync',
+      totalCount: this.instancesState().totalCount,
+      payload
+    };
 
-    executeObservable
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (response) => {
-          this.executing.set(false);
-
-          const result: MigrationExecutionResult = {
-            mode: asyncMode ? 'async' : 'sync',
-            batchId: asyncMode ? response?.id : undefined,
-            totalCount: this.instancesState().totalCount,
-            payload
-          };
-
-          this.next.emit(result);
-        },
-        error: (error) => {
-          this.executing.set(false);
-          const errorMessage = error?.error?.message || error?.message || 'Unknown error occurred';
-          this.executionError.set(errorMessage);
-        }
-      });
+    this.next.emit(result);
   }
 
   onToggleTechnicalDetails(): void {
