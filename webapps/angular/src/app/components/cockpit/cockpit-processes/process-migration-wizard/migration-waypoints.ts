@@ -354,6 +354,12 @@ export function normalizeToPerimeter(
   }
 
   if (result.length < 2) {
+    if (startSide !== undefined && endSide !== undefined) {
+      return [
+        sideAndTToPoint(sourceRect, startSide, startT ?? 0.5),
+        sideAndTToPoint(targetRect, endSide, endT ?? 0.5)
+      ];
+    }
     return initialWaypoints(sourceRect, targetRect);
   }
 
@@ -619,6 +625,9 @@ export function normalizeToPerimeter(
       if (!isCorner2Inside) {
         result.splice(i + 1, 0, corner2);
         continue;
+      }
+      if (startSide !== undefined && endSide !== undefined) {
+        break;
       }
       return initialWaypoints(sourceRect, targetRect);
     }
@@ -1130,6 +1139,11 @@ export function moveSegment(
 
       currentStartSide = newStartSide;
       currentStartT = newStartT;
+
+      if (newPoints.length > 2) {
+        newPoints[segmentIndex] = { x: seg.a.x, y: newY };
+        newPoints[segmentIndex + 1] = { x: seg.b.x, y: newY };
+      }
     }
 
     if (affectsEnd) {
@@ -1150,6 +1164,12 @@ export function moveSegment(
 
       currentEndSide = newEndSide;
       currentEndT = newEndT;
+
+      // Apply delta to segment waypoints (BUGFIX: was missing)
+      if (newPoints.length > 2) {
+        newPoints[segmentIndex] = { x: seg.a.x, y: newY };
+        newPoints[segmentIndex + 1] = { x: seg.b.x, y: newY };
+      }
     }
   } else {
     const newX = seg.a.x + delta;
@@ -1210,6 +1230,11 @@ export function moveSegment(
 
       currentStartSide = newStartSide;
       currentStartT = newStartT;
+
+      if (newPoints.length > 2) {
+        newPoints[segmentIndex] = { x: newX, y: seg.a.y };
+        newPoints[segmentIndex + 1] = { x: newX, y: seg.b.y };
+      }
     }
 
     if (affectsEnd) {
@@ -1230,14 +1255,21 @@ export function moveSegment(
 
       currentEndSide = newEndSide;
       currentEndT = newEndT;
+
+      if (newPoints.length > 2) {
+        newPoints[segmentIndex] = { x: newX, y: seg.a.y };
+        newPoints[segmentIndex + 1] = { x: newX, y: seg.b.y };
+      }
     }
   }
 
   const sidesChanged = (currentStartSide !== startSide) || (currentEndSide !== endSide);
 
   let finalPoints: Point[];
-  if (sidesChanged) {
+  if (sidesChanged && newPoints.length === 2) {
     finalPoints = initialWaypoints(sourceRect, targetRect, currentStartSide, currentStartT, currentEndSide, currentEndT);
+  } else if (sidesChanged && newPoints.length > 2) {
+    finalPoints = cleanWaypoints(newPoints);
   } else {
     finalPoints = normalizeToPerimeter(cleanWaypoints(newPoints), sourceRect, targetRect,
                                        currentStartSide, currentStartT, currentEndSide, currentEndT);
