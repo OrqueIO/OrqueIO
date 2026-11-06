@@ -765,6 +765,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     if (!this.viewer || !this.overlays || !this.enableMappingButtons) return;
 
+    // SOURCE ONLY rule: mapping creation button (→) appears ONLY on source viewer
+    if (!this.isSourceViewer) return;
+
     const elementRegistry = this.viewer.get('elementRegistry');
     const eventBus = this.viewer.get('eventBus');
     const allElements = elementRegistry.getAll();
