@@ -39,21 +39,15 @@ export interface Segment {
 }
 
 /**
- * Generates initial waypoints for orthogonal arrow between two shapes.
- * Uses diagram-js ManhattanLayout.connectRectangles for production-quality routing.
- *
- * Default docking: right side of source (t=0.5), left side of target (t=0.5).
- * Endpoints are positioned on shape borders, path is orthogonal (right angles only).
- *
- * INVARIANT: Endpoints are on shape perimeters.
- *
- * @param sourceRect - Source shape in layer coordinates
- * @param targetRect - Target shape in layer coordinates
- * @param startSide - Source exit side (default: 'right')
- * @param startT - Position on source side [0, 1] (default: 0.5 = center)
- * @param endSide - Target entry side (default: 'left')
- * @param endT - Position on target side [0, 1] (default: 0.5 = center)
- * @returns Array of waypoints forming orthogonal path with normalized endpoints
+ * @param sourceRect
+ * @param targetRect
+ * @param startSide
+ * @param startT
+ * @param endSide
+ * @param endT
+ * @param sourceParentRects
+ * @param targetParentRects
+ * @returns
  */
 export function initialWaypoints(
   sourceRect: Rect,
@@ -61,7 +55,9 @@ export function initialWaypoints(
   startSide: Side = 'right',
   startT: number = 0.5,
   endSide: Side = 'left',
-  endT: number = 0.5
+  endT: number = 0.5,
+  sourceParentRects: Rect[] = [],
+  targetParentRects: Rect[] = []
 ): Point[] {
 
   const sourceBox = {
@@ -82,22 +78,28 @@ export function initialWaypoints(
 
   let result = cleanWaypoints(waypoints);
 
-  rebuildEnd(result, true, sourceRect, startSide, startT);
-  rebuildEnd(result, false, targetRect, endSide, endT);
+  rebuildEnd(result, true, sourceRect, startSide, startT, sourceParentRects);
+  rebuildEnd(result, false, targetRect, endSide, endT, targetParentRects);
 
   return normalizeToPerimeter(result, sourceRect, targetRect);
 }
 
 /**
- * Rebuilds an endpoint (start or end) and adjusts its neighbor to maintain orthogonality.
- *
  * @param points
  * @param isStart
  * @param rect
  * @param side
  * @param t
+ * @param parentRects
  */
-function rebuildEnd(points: Point[], isStart: boolean, rect: Rect, side: Side, t: number): void {
+function rebuildEnd(
+  points: Point[],
+  isStart: boolean,
+  rect: Rect,
+  side: Side,
+  t: number,
+  parentRects: Rect[] = []
+): void {
   if (points.length < 2) return;
 
   const endpointIdx = isStart ? 0 : points.length - 1;
@@ -106,9 +108,17 @@ function rebuildEnd(points: Point[], isStart: boolean, rect: Rect, side: Side, t
   points[endpointIdx] = endpoint;
 
   const neighbor = points[neighborIdx];
-  const newNeighbor = (side === 'top' || side === 'bottom')
-    ? { x: endpoint.x, y: neighbor.y }
-    : { x: neighbor.x, y: endpoint.y };
+  let newNeighbor: Point;
+
+  if (side === 'top' || side === 'bottom') {
+    const clearanceY = calculateClearanceY(rect, side, parentRects);
+    newNeighbor = {
+      x: endpoint.x,
+      y: clearanceY !== null ? clearanceY : neighbor.y
+    };
+  } else {
+    newNeighbor = { x: neighbor.x, y: endpoint.y };
+  }
 
   const adjacentIdx = isStart ? 2 : points.length - 3;
   if (adjacentIdx >= 0 && adjacentIdx < points.length) {
@@ -828,6 +838,47 @@ export function repairWaypoints(
  * @param t - Parameter [0, 1] along side (0 = start corner, 1 = end corner)
  * @returns Point on border
  */
+
+const CONTAINER_CLEARANCE_MARGIN = 16;
+
+/**
+ * @param rect
+ * @param side
+ * @param parentRects
+ * @returns
+ */
+export function calculateClearanceY(
+  rect: Rect,
+  side: Side,
+  parentRects: Rect[]
+): number | null {
+  if (side === 'left' || side === 'right') {
+    return null;
+  }
+
+  if (parentRects.length === 0) {
+    return null;
+  }
+
+  if (side === 'top') {
+    let minTop = rect.top;
+    for (const parent of parentRects) {
+      minTop = Math.min(minTop, parent.top);
+    }
+    return minTop - CONTAINER_CLEARANCE_MARGIN;
+  }
+
+  if (side === 'bottom') {
+    let maxBottom = rect.top + rect.height;
+    for (const parent of parentRects) {
+      maxBottom = Math.max(maxBottom, parent.top + parent.height);
+    }
+    return maxBottom + CONTAINER_CLEARANCE_MARGIN;
+  }
+
+  return null;
+}
+
 export function dockPoint(rect: Rect, side: Side, t: number): Point {
   // Clamp t to [0, 1]
   const clamped = Math.max(0, Math.min(1, t));
@@ -1547,8 +1598,8 @@ export function dockSideFromBar(
       return { side: 'bottom' };
     }
 
-    // In middle band: preserve currentSide if it's left/right, else use defaultSide
-    if (currentSide === 'left' || currentSide === 'right') {
+    // In middle band: preserve currentSide (including top/bottom during drag), else use defaultSide
+    if (currentSide === 'top' || currentSide === 'bottom' || currentSide === 'left' || currentSide === 'right') {
       return { side: currentSide };
     }
     return { side: defaultSide };
@@ -1573,8 +1624,8 @@ export function dockSideFromBar(
       return { side: 'right' };
     }
 
-    // In middle band: preserve currentSide if it's top/bottom, else use defaultSide
-    if (currentSide === 'top' || currentSide === 'bottom') {
+    // In middle band: preserve currentSide (including left/right during drag), else use defaultSide
+    if (currentSide === 'left' || currentSide === 'right' || currentSide === 'top' || currentSide === 'bottom') {
       return { side: currentSide };
     }
     return { side: defaultSide };

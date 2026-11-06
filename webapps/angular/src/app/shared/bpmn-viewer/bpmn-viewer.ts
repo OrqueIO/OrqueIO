@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { parseInstructionReports } from '../../services/migration-validation.utils';
 
 export const EXPAND_DIAGRAM_STATE_KEY = 'expandDiagram' as const;
 
@@ -1291,14 +1292,28 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (!this.migrationReport) return [];
 
     const instructions = this.editableInstructions || [];
-    const instructionIndex = instructions.findIndex(instr =>
-      instr.sourceActivityIds.includes(activityId) || instr.targetActivityIds.includes(activityId)
-    );
+    const validationStates = parseInstructionReports(this.migrationReport, instructions);
 
-    if (instructionIndex === -1) return [];
+    for (let i = 0; i < instructions.length; i++) {
+      const instruction = instructions[i];
+      const isSource = instruction.sourceActivityIds.includes(activityId);
+      const isTarget = instruction.targetActivityIds.includes(activityId);
 
-    const report = this.migrationReport.instructionReports?.[instructionIndex];
-    return report?.failures || [];
+      if (isSource || isTarget) {
+        const sourceId = instruction.sourceActivityIds[0];
+        const targetId = instruction.targetActivityIds[0];
+
+        const state = validationStates.find(
+          s => s.sourceActivityId === sourceId && s.targetActivityId === targetId
+        );
+
+        if (state && state.failures.length > 0) {
+          return state.failures;
+        }
+      }
+    }
+
+    return [];
   }
 
   private isEventType(type: string): boolean {

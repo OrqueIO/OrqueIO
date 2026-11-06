@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MigrationInstructionDto, MigrationPlanReportDto } from '../../../../services/migration.model';
+import { parseInstructionReports, findInstructionState, type InstructionValidationState } from '../../../../services/migration-validation.utils';
 import { Anchor, anchorPoint, nearestAnchor, buildArrowPath, getAnchorKey, Point, Rect as AnchorRect } from './migration-arrow-anchors';
 import {
   buildOrthogonalRoute,
@@ -661,12 +662,11 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
     const containerRect = container.getBoundingClientRect();
     this.viewBox.set(`0 0 ${containerRect.width} ${containerRect.height}`);
 
+    const validationStates = parseInstructionReports(this.report, this.instructions);
+
     this.instructions.forEach((instruction, index) => {
       const shouldShow = this.showAll || this.visibleInstructionIndices.has(index);
       if (!shouldShow) return;
-
-      const instrReport = this.report?.instructionReports?.[index];
-      const valid = !instrReport?.failures || instrReport.failures.length === 0;
 
       instruction.sourceActivityIds.forEach(sourceId => {
         instruction.targetActivityIds.forEach(targetId => {
@@ -674,6 +674,9 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
           const targetRect = this.getElementRect(targetId, this.targetContainerSelector, containerRect);
 
           if (sourceRect && targetRect) {
+            const validationState = findInstructionState(validationStates, sourceId, targetId);
+            const valid = validationState?.valid ?? true;
+
             const instructionKey = sourceId + '-' + targetId;
             const routeParams = this.customAnchors.get(instructionKey);
 
@@ -724,9 +727,21 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
               height: targetRect.height
             };
 
+            const sourceParentRects = this.getParentRects(sourceId, this.sourceContainerSelector, containerRect);
+            const targetParentRects = this.getParentRects(targetId, this.targetContainerSelector, containerRect);
+
             let points: WaypointPoint[];
             if (storedWaypoints === null || storedWaypoints === undefined) {
-              points = initialWaypoints(sourceRectData, targetRectData, startSide, startT, endSide, endT);
+              points = initialWaypoints(
+                sourceRectData,
+                targetRectData,
+                startSide,
+                startT,
+                endSide,
+                endT,
+                sourceParentRects,
+                targetParentRects
+              );
             } else {
               points = repairWaypoints(storedWaypoints, sourceRectData, targetRectData, startSide, startT, endSide, endT);
             }
@@ -883,6 +898,54 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
     const rect = element.getBoundingClientRect();
 
     return this.toLayerRect(rect, layerContainerRect);
+  }
+
+  /**
+   * @param elementId
+   * @param containerSelector
+   * @param layerContainerRect
+   * @returns
+   */
+  private getParentRects(elementId: string, containerSelector: string, layerContainerRect: DOMRect): Rect[] {
+    const container = document.querySelector(containerSelector);
+    if (!container) return [];
+
+    const viewer = this.findViewerInstance(container);
+    if (!viewer) return [];
+
+    try {
+      const elementRegistry = viewer.get('elementRegistry');
+      if (!elementRegistry) return [];
+
+      const element = elementRegistry.get(elementId);
+      if (!element) return [];
+
+      const parents: Rect[] = [];
+      let current = element.parent;
+
+      while (current && current.parent) {
+        if (!current.parent.parent) break;
+
+        const parentDomElement = container.querySelector(`[data-element-id="${current.id}"]`);
+        if (parentDomElement) {
+          const parentDomRect = parentDomElement.getBoundingClientRect();
+          const parentLayerRect = this.toLayerRect(parentDomRect, layerContainerRect);
+
+          parents.push({
+            left: parentLayerRect.left,
+            top: parentLayerRect.top,
+            width: parentLayerRect.width,
+            height: parentLayerRect.height
+          });
+        }
+
+        current = current.parent;
+      }
+
+      return parents;
+    } catch (e) {
+      return [];
+    }
   }
 
   /**
