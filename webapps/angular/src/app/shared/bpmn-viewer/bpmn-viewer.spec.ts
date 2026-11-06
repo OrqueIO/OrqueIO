@@ -22,6 +22,7 @@ vi.mock('bpmn-js/lib/NavigatedViewer', () => {
     const elementRegistry = {
       forEach: vi.fn(),
       get: vi.fn().mockReturnValue(null),
+      getAll: vi.fn().mockReturnValue([]),
     };
     const overlays = { add: vi.fn().mockReturnValue('ov-id'), remove: noop, clear: noop };
     const zoomScroll = { zoom: noop };
@@ -561,5 +562,668 @@ describe('BpmnViewerComponent — correlate overlay click triggers change detect
 
     expect(comp.correlateHoverListeners.length).toBe(0);
     expect(comp.correlateOverlayData.size).toBe(0);
+  });
+});
+
+describe('BpmnViewerComponent — migration mapping buttons (A4)', () => {
+  beforeAll(() => initTestEnvironment());
+
+  let component: BpmnViewerComponent;
+  let fixture: ComponentFixture<BpmnViewerComponent>;
+  let comp: any;
+  let overlays: any;
+  let elementRegistry: any;
+  let eventBus: any;
+
+  const mockUserTask = {
+    id: 'UserTask_1',
+    type: 'bpmn:UserTask',
+    businessObject: { id: 'UserTask_1', name: 'Approve' }
+  };
+
+  const mockStartEvent = {
+    id: 'StartEvent_1',
+    type: 'bpmn:StartEvent',
+    businessObject: { id: 'StartEvent_1', name: 'Start' }
+  };
+
+  const mockEndEvent = {
+    id: 'EndEvent_1',
+    type: 'bpmn:EndEvent',
+    businessObject: { id: 'EndEvent_1', name: 'End' }
+  };
+
+  const mockGateway = {
+    id: 'Gateway_1',
+    type: 'bpmn:ExclusiveGateway',
+    businessObject: { id: 'Gateway_1' }
+  };
+
+  const mockSequenceFlow = {
+    id: 'Flow_1',
+    type: 'bpmn:SequenceFlow',
+    businessObject: { id: 'Flow_1' }
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [BpmnViewerComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(BpmnViewerComponent);
+    component = fixture.componentInstance;
+    comp = component as any;
+    fixture.detectChanges();
+
+    overlays = comp.viewer?.get('overlays');
+    elementRegistry = comp.viewer?.get('elementRegistry');
+    eventBus = comp.viewer?.get('eventBus');
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    comp.buttonContainers?.clear();
+    comp.hideTimeouts?.clear();
+  });
+
+  describe('updateMappingButtons — element filtering', () => {
+    it('creates mapping button for UserTask (mappable element)', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockUserTask);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockUserTask]);
+
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      expect(overlays.add).toHaveBeenCalled();
+      const calls = overlays.add.mock.calls;
+      const userTaskOverlay = calls.find((call: any) => call[0] === 'UserTask_1');
+      expect(userTaskOverlay).toBeDefined();
+    });
+
+    it('does NOT create mapping button for StartEvent (excluded element)', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockStartEvent);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockStartEvent]);
+
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      const calls = overlays.add.mock.calls;
+      const startEventOverlay = calls.find((call: any) => call[0] === 'StartEvent_1');
+      expect(startEventOverlay).toBeUndefined();
+    });
+
+    it('does NOT create mapping button for EndEvent (excluded element)', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockEndEvent);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockEndEvent]);
+
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      const calls = overlays.add.mock.calls;
+      const endEventOverlay = calls.find((call: any) => call[0] === 'EndEvent_1');
+      expect(endEventOverlay).toBeUndefined();
+    });
+
+    it('does NOT create mapping button for SequenceFlow (excluded element)', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockSequenceFlow);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockSequenceFlow]);
+
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      const calls = overlays.add.mock.calls;
+      const flowOverlay = calls.find((call: any) => call[0] === 'Flow_1');
+      expect(flowOverlay).toBeUndefined();
+    });
+
+    it('creates mapping button for Gateway (mappable element)', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockGateway);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockGateway]);
+
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      const calls = overlays.add.mock.calls;
+      const gatewayOverlay = calls.find((call: any) => call[0] === 'Gateway_1');
+      expect(gatewayOverlay).toBeDefined();
+    });
+
+    it('filters correctly when multiple elements are present', () => {
+      const allElements = [mockUserTask, mockStartEvent, mockGateway, mockEndEvent, mockSequenceFlow];
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        allElements.forEach(callback);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue(allElements);
+
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      const calls = overlays.add.mock.calls;
+
+      // Should create overlays for UserTask and Gateway only
+      expect(calls.find((call: any) => call[0] === 'UserTask_1')).toBeDefined();
+      expect(calls.find((call: any) => call[0] === 'Gateway_1')).toBeDefined();
+
+      // Should NOT create overlays for Start/End/Flow
+      expect(calls.find((call: any) => call[0] === 'StartEvent_1')).toBeUndefined();
+      expect(calls.find((call: any) => call[0] === 'EndEvent_1')).toBeUndefined();
+      expect(calls.find((call: any) => call[0] === 'Flow_1')).toBeUndefined();
+    });
+  });
+
+  describe('updateMappingButtons — button positioning', () => {
+    it('positions button at middle-right edge (top: 50%, right: -12px)', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockUserTask);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockUserTask]);
+
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      const calls = overlays.add.mock.calls;
+      const userTaskOverlay = calls.find((call: any) => call[0] === 'UserTask_1');
+
+      expect(userTaskOverlay).toBeDefined();
+      expect(userTaskOverlay[1].position).toEqual({ top: '50%', right: -12 });
+    });
+  });
+
+  describe('updateMappingButtons — button visibility with class-level Maps', () => {
+    it('stores button container in class-level Map (buttonContainers)', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockUserTask);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockUserTask]);
+
+      comp.buttonContainers = new Map();
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      expect(comp.buttonContainers.has('UserTask_1')).toBe(true);
+      const container = comp.buttonContainers.get('UserTask_1');
+      expect(container).toBeDefined();
+      expect(container.className).toContain('bpmn-mapping-container');
+    });
+
+    it('clears buttonContainers Map when updateMappingButtons is called again', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockUserTask);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockUserTask]);
+
+      comp.buttonContainers = new Map();
+      comp.hideTimeouts = new Map();
+      comp.enableMappingButtons = true;
+
+      // First call
+      comp.updateMappingButtons();
+      expect(comp.buttonContainers.size).toBe(1);
+
+      // Second call should clear and recreate
+      comp.updateMappingButtons();
+      expect(comp.buttonContainers.size).toBe(1); // Still 1, but fresh
+    });
+
+    it('clears hideTimeouts when updateMappingButtons is called', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockUserTask);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockUserTask]);
+
+      comp.buttonContainers = new Map();
+      comp.hideTimeouts = new Map();
+      comp.hideTimeouts.set('old_task', setTimeout(() => {}, 1000));
+
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      expect(comp.hideTimeouts.has('old_task')).toBe(false);
+    });
+  });
+
+  describe('updateMappingButtons — hover event listeners', () => {
+    it('registers element.hover and element.out event listeners', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockUserTask);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockUserTask]);
+
+      comp.buttonContainers = new Map();
+      comp.hideTimeouts = new Map();
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      expect(eventBus.on).toHaveBeenCalledWith('element.hover', expect.any(Function));
+      expect(eventBus.on).toHaveBeenCalledWith('element.out', expect.any(Function));
+    });
+
+    it('hoverListener adds bpmn-mapping-visible class to container', () => {
+      const allElements = [mockUserTask];
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        allElements.forEach(callback);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue(allElements);
+
+      comp.buttonContainers = new Map();
+      comp.hideTimeouts = new Map();
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      const container = comp.buttonContainers.get('UserTask_1');
+      expect(container).toBeDefined();
+
+      // Simulate hover event
+      if (comp.hoverListener) {
+        comp.hoverListener({ element: mockUserTask });
+      }
+
+      expect(container.classList.contains('bpmn-mapping-visible')).toBe(true);
+    });
+
+    it('outListener removes bpmn-mapping-visible class after delay', async () => {
+      const allElements = [mockUserTask];
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        allElements.forEach(callback);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue(allElements);
+
+      comp.buttonContainers = new Map();
+      comp.hideTimeouts = new Map();
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      const container = comp.buttonContainers.get('UserTask_1');
+
+      // First show the container
+      container.classList.add('bpmn-mapping-visible');
+
+      // Simulate out event
+      if (comp.outListener) {
+        comp.outListener({ element: mockUserTask });
+      }
+
+      // Container should still be visible immediately
+      expect(container.classList.contains('bpmn-mapping-visible')).toBe(true);
+
+      // Wait for timeout (150ms)
+      await new Promise(resolve => setTimeout(resolve, 200));
+
+      // Now container should be hidden
+      expect(container.classList.contains('bpmn-mapping-visible')).toBe(false);
+    });
+
+    it('cancels hide timeout when hovering again before timeout expires', async () => {
+      const allElements = [mockUserTask];
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        allElements.forEach(callback);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue(allElements);
+
+      comp.buttonContainers = new Map();
+      comp.hideTimeouts = new Map();
+      comp.enableMappingButtons = true;
+      comp.updateMappingButtons();
+
+      const container = comp.buttonContainers.get('UserTask_1');
+
+      // Hover to show
+      if (comp.hoverListener) {
+        comp.hoverListener({ element: mockUserTask });
+      }
+      expect(container.classList.contains('bpmn-mapping-visible')).toBe(true);
+
+      // Out to hide (starts timeout)
+      if (comp.outListener) {
+        comp.outListener({ element: mockUserTask });
+      }
+
+      // Hover again before timeout expires
+      if (comp.hoverListener) {
+        comp.hoverListener({ element: mockUserTask });
+      }
+
+      // Wait for original timeout duration
+      await new Promise(resolve => setTimeout(resolve, 200));
+
+      // Container should still be visible (timeout was canceled)
+      expect(container.classList.contains('bpmn-mapping-visible')).toBe(true);
+    });
+  });
+
+  describe('updateMappingButtons — cleanup', () => {
+    it('removes old overlays when called again', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockUserTask);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockUserTask]);
+
+      overlays.add.mockReturnValue('overlay-id-1');
+      comp.enableMappingButtons = true;
+
+      // First call
+      comp.updateMappingButtons();
+      expect(overlays.add).toHaveBeenCalledTimes(1);
+
+      // Second call should remove old overlay
+      overlays.add.mockReturnValue('overlay-id-2');
+      comp.updateMappingButtons();
+
+      expect(overlays.remove).toHaveBeenCalledWith('overlay-id-1');
+      expect(overlays.add).toHaveBeenCalledTimes(2);
+    });
+
+    it('removes old event bus listeners when called again', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockUserTask);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockUserTask]);
+
+      comp.enableMappingButtons = true;
+
+      // First call
+      comp.updateMappingButtons();
+      const firstHoverListener = comp.hoverListener;
+      const firstOutListener = comp.outListener;
+
+      // Second call
+      comp.updateMappingButtons();
+
+      expect(eventBus.off).toHaveBeenCalledWith('element.hover', firstHoverListener);
+      expect(eventBus.off).toHaveBeenCalledWith('element.out', firstOutListener);
+    });
+  });
+
+  describe('updateMappingButtons — button click emits createMapping', () => {
+    it('emits createMapping event with element ID when button is clicked', () => {
+      elementRegistry.forEach.mockImplementation((callback: any) => {
+        callback(mockUserTask);
+      });
+      elementRegistry.getAll = vi.fn().mockReturnValue([mockUserTask]);
+
+      let capturedButton: HTMLButtonElement | null = null;
+      overlays.add.mockImplementation((_anchorId: string, config: any) => {
+        const container = config.html;
+        capturedButton = container.querySelector('button');
+        return 'overlay-id-1';
+      });
+
+      comp.enableMappingButtons = true;
+      const emitSpy = vi.spyOn(component.createMapping, 'emit');
+
+      comp.updateMappingButtons();
+
+      expect(capturedButton).not.toBeNull();
+
+      // Click the button
+      capturedButton?.click();
+
+      // Wait for NgZone.run
+      fixture.whenStable().then(() => {
+        expect(emitSpy).toHaveBeenCalledWith('UserTask_1');
+      });
+    });
+  });
+});
+
+describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)', () => {
+  beforeAll(() => initTestEnvironment());
+
+  let component: BpmnViewerComponent;
+  let fixture: ComponentFixture<BpmnViewerComponent>;
+  let comp: any;
+
+  const mockMessageBoundaryEvent = {
+    id: 'BoundaryEvent_1',
+    type: 'bpmn:BoundaryEvent',
+    businessObject: { id: 'BoundaryEvent_1', name: 'Message Boundary' }
+  };
+
+  const mockIntermediateCatchEvent = {
+    id: 'IntermediateCatchEvent_1',
+    type: 'bpmn:IntermediateCatchEvent',
+    businessObject: { id: 'IntermediateCatchEvent_1', name: 'Wait for Message' }
+  };
+
+  const mockReceiveTask = {
+    id: 'ReceiveTask_1',
+    type: 'bpmn:ReceiveTask',
+    businessObject: { id: 'ReceiveTask_1', name: 'Receive Message' }
+  };
+
+  const mockUserTask = {
+    id: 'UserTask_1',
+    type: 'bpmn:UserTask',
+    businessObject: { id: 'UserTask_1', name: 'Approve' }
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [BpmnViewerComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(BpmnViewerComponent);
+    component = fixture.componentInstance;
+    comp = component as any;
+    comp.editableInstructions = [];
+    comp.migrationReport = null;
+
+    fixture.detectChanges();
+  });
+
+  afterEach(() => vi.clearAllMocks());
+
+  describe('isSourceViewer input', () => {
+    it('defaults to false when not provided', () => {
+      expect(component.isSourceViewer).toBe(false);
+    });
+
+    it('can be set to true via @Input', () => {
+      component.isSourceViewer = true;
+      fixture.detectChanges();
+      expect(component.isSourceViewer).toBe(true);
+    });
+  });
+
+  describe('showMappingPopover — checkbox rendering based on isSourceViewer', () => {
+    let mockAnchor: HTMLElement;
+    let mockBadge: any;
+
+    beforeEach(() => {
+      mockAnchor = document.createElement('div');
+      mockAnchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100,
+        left: 100,
+        bottom: 120,
+        right: 124,
+        width: 24,
+        height: 20,
+        x: 100,
+        y: 100
+      });
+
+      const canvasElement = document.createElement('div');
+      canvasElement.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 0,
+        left: 0,
+        bottom: 600,
+        right: 800,
+        width: 800,
+        height: 600,
+        x: 0,
+        y: 0
+      });
+      document.body.appendChild(canvasElement);
+
+      comp.canvasRef = {
+        nativeElement: canvasElement
+      };
+
+      mockBadge = { activityId: 'test', migrationStatus: 'valid' };
+
+      comp.getElement = vi.fn((id: string) => {
+        if (id === 'BoundaryEvent_1') return mockMessageBoundaryEvent;
+        if (id === 'IntermediateCatchEvent_1') return mockIntermediateCatchEvent;
+        if (id === 'ReceiveTask_1') return mockReceiveTask;
+        if (id === 'UserTask_1') return mockUserTask;
+        return null;
+      });
+
+      comp.isEventType = vi.fn((type: string) => {
+        return type === 'bpmn:BoundaryEvent' ||
+               type === 'bpmn:IntermediateCatchEvent' ||
+               type === 'bpmn:ReceiveTask';
+      });
+
+      comp.getUpdateEventTriggerForActivity = vi.fn().mockReturnValue(false);
+      comp.updateEventTrigger = vi.fn();
+    });
+
+    it('renders checkbox for event type when isSourceViewer = true', () => {
+      comp.isSourceViewer = true;
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+      const checkboxLabel = popover?.querySelector('.bpmn-mapping-popover__checkbox span');
+
+      expect(checkbox).not.toBeNull();
+      expect(checkboxLabel?.textContent).toBe('Update event trigger');
+    });
+
+    it('does NOT render checkbox for event type when isSourceViewer = false', () => {
+      comp.isSourceViewer = false;
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+
+      expect(checkbox).toBeFalsy();
+    });
+
+    it('does NOT render checkbox for non-event type even when isSourceViewer = true', () => {
+      comp.isSourceViewer = true;
+      comp.showMappingPopover(mockUserTask.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+
+      expect(checkbox).toBeFalsy();
+    });
+
+    it('renders checkbox for IntermediateCatchEvent when isSourceViewer = true', () => {
+      comp.isSourceViewer = true;
+      comp.showMappingPopover(mockIntermediateCatchEvent.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+
+      expect(checkbox).toBeTruthy();
+    });
+
+    it('renders checkbox for ReceiveTask when isSourceViewer = true', () => {
+      comp.isSourceViewer = true;
+      comp.showMappingPopover(mockReceiveTask.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+
+      expect(checkbox).toBeTruthy();
+    });
+
+    it('does NOT render checkbox for ReceiveTask when isSourceViewer = false', () => {
+      comp.isSourceViewer = false;
+      comp.showMappingPopover(mockReceiveTask.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]');
+
+      expect(checkbox).toBeFalsy();
+    });
+
+    it('checkbox change calls updateEventTrigger with correct parameters', async () => {
+      comp.isSourceViewer = true;
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+
+      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      expect(checkbox).toBeTruthy();
+      expect(checkbox.checked).toBe(false);
+
+      checkbox.checked = true;
+      checkbox.dispatchEvent(new Event('change'));
+
+      await fixture.whenStable();
+      expect(comp.updateEventTrigger).toHaveBeenCalledWith(mockMessageBoundaryEvent.id, true);
+    });
+
+    it('persists updateEventTrigger flag after close and reopen - unchecked to checked', async () => {
+      delete (comp as any).updateEventTrigger;
+      delete (comp as any).getUpdateEventTriggerForActivity;
+
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BoundaryEvent_1'], targetActivityIds: ['Target_1'], updateEventTrigger: false }
+      ];
+
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+      let popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      let checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      expect(checkbox.checked).toBe(false);
+
+      checkbox.click();
+      await fixture.whenStable();
+
+      expect(comp.editableInstructions[0].updateEventTrigger).toBe(true);
+
+      comp.closeMappingPopover();
+
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+      popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      expect(checkbox.checked).toBe(true);
+    });
+
+    it('persists updateEventTrigger flag after close and reopen - checked to unchecked', async () => {
+      delete (comp as any).updateEventTrigger;
+      delete (comp as any).getUpdateEventTriggerForActivity;
+
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BoundaryEvent_1'], targetActivityIds: ['Target_1'], updateEventTrigger: true }
+      ];
+
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+      let popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      let checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      expect(checkbox.checked).toBe(true);
+
+      checkbox.click();
+      await fixture.whenStable();
+
+      expect(comp.editableInstructions[0].updateEventTrigger).toBe(false);
+
+      comp.closeMappingPopover();
+
+      comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
+      popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
+
+      expect(checkbox.checked).toBe(false);
+    });
   });
 });

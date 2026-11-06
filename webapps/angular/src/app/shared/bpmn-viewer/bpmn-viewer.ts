@@ -36,6 +36,8 @@ export interface ActivityBadge {
   activityId: string;
   instances?: number;
   incidents?: number;
+  migrationStatus?: 'valid' | 'invalid' | 'unmapped';
+  tooltip?: string;
 }
 
 export interface BpmnElement {
@@ -44,6 +46,11 @@ export interface BpmnElement {
   name?: string;
   isInEventSubprocessScope?: boolean;
   isInMultiInstanceScope?: boolean;
+}
+
+export interface BpmnElementHoverEvent {
+  side: 'source' | 'target';
+  element: BpmnElement | null;
 }
 
 export interface CallActivityClickEvent {
@@ -78,13 +85,31 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() callActivityIdsWithInstances: Set<string> = new Set();
   @Input() parentBreadcrumb: ParentBreadcrumb | null = null;
 
+  // Migration mapping mode
+  @Input() enableMappingButtons = false;
+  @Input() mappedActivityIds: Set<string> = new Set();
+  @Input() mappingMode = false;
+  @Input() highlightTargets = false;
+  @Input() migrationReport: any = null;
+  @Input() editableInstructions: any[] = [];
+  @Input() isSourceViewer = false;
+  @Input() hoveredMappingSourceId: string | null = null;
+  @Input() hoveredRemoveButtonActivityIds: Set<string> = new Set();
+
   get expandState(): Record<string, boolean> {
     return { [EXPAND_DIAGRAM_STATE_KEY]: this.isExpanded };
   }
 
   @Output() elementClick = new EventEmitter<BpmnElement>();
-  @Output() elementHover = new EventEmitter<BpmnElement | null>();
+  @Output() elementHover = new EventEmitter<BpmnElementHoverEvent | BpmnElement | null>();
   @Output() viewerReady = new EventEmitter<void>();
+
+  // Migration mapping events
+  @Output() createMapping = new EventEmitter<string>();
+  @Output() deleteMapping = new EventEmitter<string>();
+  @Output() selectMappedActivity = new EventEmitter<string>();
+  @Output() selectTarget = new EventEmitter<string>();
+  @Output() backgroundClick = new EventEmitter<void>();
   @Output() error = new EventEmitter<Error>();
   @Output() expandToggle = new EventEmitter<void>();
   @Output() focusClick = new EventEmitter<void>();
@@ -99,6 +124,21 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private correlateOverlayIds: string[] = [];
   private correlateOverlayData: Map<string, { btn: HTMLButtonElement; elementId: string; anchorId: string; hideTimer: ReturnType<typeof setTimeout> | null }> = new Map();
   private correlateHoverListeners: Array<() => void> = [];
+
+  // Migration mapping overlays
+  private mappingOverlayIds: string[] = [];
+  private targetHighlightOverlayIds: string[] = [];
+  // PERMANENT OVERLAYS FIX: Maps as class properties to prevent race conditions
+  private buttonContainers: Map<string, HTMLElement> = new Map();
+  private hideTimeouts: Map<string, ReturnType<typeof setTimeout>> = new Map();
+  // Remove button overlays (for mapped activities)
+  private removeButtonOverlayIds: string[] = [];
+  private removeButtonContainers: Map<string, HTMLElement> = new Map();
+  private removeButtonHideTimeouts: Map<string, ReturnType<typeof setTimeout>> = new Map();
+  private removeButtonHovered: Map<string, boolean> = new Map();
+  // Migration badge popover
+  private activePopover: HTMLElement | null = null;
+  private popoverCleanup: (() => void) | null = null;
   private currentXml: string | null = null;
   private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -147,6 +187,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }, 200);
   }
 
+
   ngAfterViewInit(): void {
     this.initViewer();
   }
@@ -179,6 +220,16 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (changes['callActivityIdsWithInstances'] && this.isViewerReady && this.currentXml && this.enableCallActivityNavigation) {
       this.addCallActivityOverlays();
     }
+    if ((changes['enableMappingButtons'] || changes['mappedActivityIds']) && this.isViewerReady && this.currentXml) {
+      this.updateMappingButtons();
+      this.updateRemoveButtons();
+    }
+    if ((changes['mappingMode'] || changes['highlightTargets']) && this.isViewerReady && this.currentXml) {
+      this.updateTargetHighlights();
+    }
+    if ((changes['hoveredMappingSourceId'] || changes['hoveredRemoveButtonActivityIds']) && this.isViewerReady && this.currentXml) {
+      this.updateRemoveButtonsVisibility();
+    }
   }
 
   ngOnDestroy(): void {
@@ -200,10 +251,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     this.overlays = this.viewer.get('overlays');
 
-    // Register event handlers
     const eventBus = this.viewer.get('eventBus');
 
-    // Wire import.done to apply all visual updates AFTER diagram is loaded
     eventBus.on('import.done', () => {
       this.updateHighlights();
       this.updateRunningMarkers();
@@ -211,6 +260,13 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       this.updateSelection();
       if (this.enableCallActivityNavigation) {
         this.addCallActivityOverlays();
+      }
+      if (this.enableMappingButtons) {
+        this.updateMappingButtons();
+        this.updateRemoveButtons();
+      }
+      if (this.highlightTargets) {
+        this.updateTargetHighlights();
       }
       this.styleCollapsedSubprocessOverlays();
     });
@@ -225,27 +281,53 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
           isInEventSubprocessScope: this.checkEventSubprocessScope(element),
           isInMultiInstanceScope: this.checkMultiInstanceScope(element)
         });
+      } else if (element && element.type === 'bpmn:Process') {
+        this.backgroundClick.emit();
       }
     });
 
     eventBus.on('element.hover', (event: any) => {
       const element = event.element;
       if (element && element.id && element.type !== 'bpmn:Process') {
-        this.elementHover.emit({
+        const bpmnElement: BpmnElement = {
           id: element.id,
           type: element.type,
           name: element.businessObject?.name
-        });
+        };
+
+        // Check if this viewer is used in migration wizard context (isSourceViewer explicitly set in template)
+        // Migration wizard sets [isSourceViewer]="true" for source, doesn't set it (default false) for target
+        // Process-detail doesn't set it at all, so we check if we're in a migration context
+        const inMigrationContext = this.enableMappingButtons;
+
+        if (inMigrationContext) {
+          // New format for migration wizard: {side, element}
+          this.elementHover.emit({
+            side: this.isSourceViewer ? 'source' : 'target',
+            element: bpmnElement
+          });
+        } else {
+          // Old format for process-detail: BpmnElement directly
+          this.elementHover.emit(bpmnElement);
+        }
       }
     });
 
     eventBus.on('element.out', () => {
-      this.elementHover.emit(null);
+      const inMigrationContext = this.enableMappingButtons;
+
+      if (inMigrationContext) {
+        // New format: {side, element: null}
+        this.elementHover.emit({
+          side: this.isSourceViewer ? 'source' : 'target',
+          element: null
+        });
+      } else {
+        // Old format: null directly
+        this.elementHover.emit(null);
+      }
     });
 
-    // Re-center diagram on collapsed subprocess drilldown navigation.
-    // bpmn-js fires root.set when the canvas root changes (drill-in or drill-out)
-    // without re-importing XML, so importXML / ngOnChanges never trigger the fit.
     eventBus.on('root.set', (event: any) => {
       this.updateSubprocessStack(event.element);
       this.needsZoomFit = true;
@@ -428,10 +510,40 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.callActivityErrorOverlayIds = [];
   }
 
+  private clearMappingButtonOverlays(): void {
+    this.mappingOverlayIds.forEach(id => {
+      try { this.overlays?.remove(id); } catch (_) {}
+    });
+    this.mappingOverlayIds = [];
+    this.hideTimeouts.forEach(timeout => clearTimeout(timeout));
+    this.hideTimeouts.clear();
+    this.buttonContainers.clear();
+    if (this.hoverListener) {
+      const eventBus = this.viewer?.get('eventBus');
+      eventBus?.off('element.hover', this.hoverListener);
+      eventBus?.off('element.out', this.outListener!);
+      this.hoverListener = null;
+      this.outListener = null;
+    }
+  }
+
+  private clearRemoveButtonOverlays(): void {
+    this.removeButtonOverlayIds.forEach(id => {
+      try { this.overlays?.remove(id); } catch (_) {}
+    });
+    this.removeButtonOverlayIds = [];
+    this.removeButtonHideTimeouts.forEach(timeout => clearTimeout(timeout));
+    this.removeButtonHideTimeouts.clear();
+    this.removeButtonContainers.clear();
+    this.removeButtonHovered.clear();
+  }
+
   private clearAllOverlays(): void {
     this.clearBadgeOverlays();
     this.clearCallActivityOverlays();
     this.clearCorrelateOverlays();
+    this.clearMappingButtonOverlays();
+    this.clearRemoveButtonOverlays();
   }
 
   private updateBadges(): void {
@@ -482,6 +594,63 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
           overlayIds.push(overlayId);
         } catch (e) {
           console.warn('Could not add incident badge', e);
+        }
+      }
+
+      // Migration status badge (top-right) - clickable for valid/invalid
+      if (badge.migrationStatus) {
+        const statusHtml = document.createElement('button');
+        statusHtml.type = 'button';
+        let iconSvg = '';
+        let className = 'bpmn-badge bpmn-badge-migration';
+        const isClickable = badge.migrationStatus === 'valid' || badge.migrationStatus === 'invalid';
+
+        if (badge.migrationStatus === 'valid') {
+          className += ' bpmn-badge-migration--valid';
+          iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16"><path fill="white" d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></svg>';
+        } else if (badge.migrationStatus === 'invalid') {
+          className += ' bpmn-badge-migration--invalid';
+          iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16"><path fill="white" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg>';
+        } else if (badge.migrationStatus === 'unmapped') {
+          className += ' bpmn-badge-migration--unmapped';
+          iconSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16"><path fill="white" d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path fill="white" d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>';
+        }
+
+        statusHtml.className = className;
+        statusHtml.innerHTML = iconSvg;
+        if (badge.tooltip) {
+          statusHtml.title = badge.tooltip;
+        }
+
+        if (isClickable) {
+          statusHtml.style.cursor = 'pointer';
+          statusHtml.setAttribute('aria-label', badge.migrationStatus === 'valid' ? 'Select mapping arrow' : 'View mapping errors');
+
+          statusHtml.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.ngZone.run(() => {
+              if (badge.migrationStatus === 'valid') {
+                // New behavior: emit event to select the arrow instead of opening popover
+                this.selectMappedActivity.emit(badge.activityId);
+              } else {
+                // For invalid mappings, still show the popover with errors
+                this.showMappingPopover(badge.activityId, badge.migrationStatus!, statusHtml, badge);
+              }
+            });
+          });
+        } else {
+          statusHtml.disabled = true;
+          statusHtml.style.cursor = 'default';
+        }
+
+        try {
+          const overlayId = this.overlays.add(badge.activityId, {
+            position: { top: -12, right: -12 },
+            html: statusHtml
+          });
+          overlayIds.push(overlayId);
+        } catch (e) {
+          console.warn('Could not add migration status badge', e);
         }
       }
 
@@ -573,6 +742,583 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       console.warn('Could not add error overlay to', activityId, e);
     }
   }
+  private updateMappingButtons(): void {
+    // Clear existing mapping overlays
+    this.mappingOverlayIds.forEach(id => {
+      try { this.overlays?.remove(id); } catch (_) {}
+    });
+    this.mappingOverlayIds = [];
+
+    // Clear existing class-level Maps and timeouts
+    this.hideTimeouts.forEach(timeout => clearTimeout(timeout));
+    this.hideTimeouts.clear();
+    this.buttonContainers.clear();
+
+    // Remove old event bus listeners
+    if (this.hoverListener) {
+      const eventBus = this.viewer?.get('eventBus');
+      eventBus?.off('element.hover', this.hoverListener);
+      eventBus?.off('element.out', this.outListener!);
+      this.hoverListener = null;
+      this.outListener = null;
+    }
+
+    if (!this.viewer || !this.overlays || !this.enableMappingButtons) return;
+
+    const elementRegistry = this.viewer.get('elementRegistry');
+    const eventBus = this.viewer.get('eventBus');
+    const allElements = elementRegistry.getAll();
+
+    // Add mapping button overlays to mappable flow nodes (excluding Start/End Events)
+    allElements.forEach((element: any) => {
+      if (!element.businessObject || element.type === 'label') return;
+
+      // Exclude Start/End Events, SequenceFlow, Process, Participant/Pool, labels, and annotations
+      if (element.type === 'bpmn:StartEvent' ||
+          element.type === 'bpmn:EndEvent' ||
+          element.type === 'bpmn:SequenceFlow' ||
+          element.type === 'bpmn:Process' ||
+          element.type === 'bpmn:Participant' ||
+          element.type === 'bpmn:Collaboration' ||
+          element.type.includes('Annotation')) {
+        return;
+      }
+
+      const isFlowNode = element.type && (
+        element.type.includes('Task') ||
+        element.type.includes('IntermediateCatchEvent') ||
+        element.type.includes('IntermediateThrowEvent') ||
+        element.type.includes('BoundaryEvent') ||
+        element.type.includes('Gateway') ||
+        element.type.includes('SubProcess') ||
+        element.type.includes('CallActivity')
+      );
+
+      if (!isFlowNode) return;
+
+      const isMapped = this.mappedActivityIds.has(element.id);
+
+      // Create button (only for unmapped activities - mapped will use badge click)
+      if (isMapped) return; // Mapped activities use the green badge for control
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'bpmn-mapping-button bpmn-mapping-create';
+
+      // SVG arrow-right icon from FontAwesome
+      const arrowIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 448 512"><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>';
+      btn.innerHTML = arrowIcon;
+      btn.setAttribute('aria-label', 'Map to target');
+      btn.title = ''; // Will be set via i18n
+      btn.style.cssText = 'width: 24px; height: 24px; background: white; color: #3b82f6; border: 1.5px solid #3b82f6; border-radius: 50%; cursor: pointer; pointer-events: auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.12s ease; padding: 0;';
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.ngZone.run(() => {
+          this.createMapping.emit(element.id);
+        });
+      });
+
+      // Hover effect: blue background, white icon, slight scale
+      btn.addEventListener('mouseenter', () => {
+        btn.style.background = '#3b82f6';
+        btn.style.color = 'white';
+        btn.style.transform = 'scale(1.1)';
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        btn.style.background = 'white';
+        btn.style.color = '#3b82f6';
+        btn.style.transform = 'scale(1)';
+      });
+
+      // Prevent button from hiding when mouse enters it
+      btn.addEventListener('mouseenter', () => {
+        const timeout = this.hideTimeouts.get(element.id);
+        if (timeout) {
+          clearTimeout(timeout);
+          this.hideTimeouts.delete(element.id);
+        }
+      });
+
+      // Hide with delay when mouse leaves button
+      btn.addEventListener('mouseleave', () => {
+        const timeout = setTimeout(() => {
+          container.classList.remove('bpmn-mapping-visible');
+          this.hideTimeouts.delete(element.id);
+        }, 150);
+        this.hideTimeouts.set(element.id, timeout);
+      });
+
+      // Container with pointer-events none and hidden class
+      const container = document.createElement('div');
+      container.style.cssText = 'pointer-events: none;';
+      container.className = 'bpmn-mapping-container';
+      container.appendChild(btn);
+
+      this.buttonContainers.set(element.id, container);
+
+      try {
+        const position = {
+          top: element.height - 8,
+          right: -8
+        };
+        const overlayId = this.overlays.add(element.id, {
+          position,
+          html: container
+        });
+        this.mappingOverlayIds.push(overlayId);
+      } catch (e) {
+      }
+    });
+
+    this.hoverListener = (event: any) => {
+      if (!event.element || this.mappingMode) return;
+
+      const container = this.buttonContainers.get(event.element.id);
+      if (container) {
+        const timeout = this.hideTimeouts.get(event.element.id);
+        if (timeout) {
+          clearTimeout(timeout);
+          this.hideTimeouts.delete(event.element.id);
+        }
+        container.classList.add('bpmn-mapping-visible');
+      }
+    };
+
+    this.outListener = (event: any) => {
+      if (!event.element || this.mappingMode) return;
+
+      const container = this.buttonContainers.get(event.element.id);
+      if (container) {
+        const timeout = setTimeout(() => {
+          container.classList.remove('bpmn-mapping-visible');
+          this.hideTimeouts.delete(event.element.id);
+        }, 150);
+        this.hideTimeouts.set(event.element.id, timeout);
+      }
+    };
+
+    eventBus.on('element.hover', this.hoverListener);
+    eventBus.on('element.out', this.outListener);
+  }
+
+  private hoverListener: ((event: any) => void) | null = null;
+  private outListener: ((event: any) => void) | null = null;
+  private updateRemoveButtons(): void {
+    // Clear existing remove button overlays
+    this.removeButtonOverlayIds.forEach(id => {
+      try { this.overlays?.remove(id); } catch (_) {}
+    });
+    this.removeButtonOverlayIds = [];
+
+    // Clear existing class-level Maps and timeouts
+    this.removeButtonHideTimeouts.forEach(timeout => clearTimeout(timeout));
+    this.removeButtonHideTimeouts.clear();
+    this.removeButtonContainers.clear();
+
+    if (!this.viewer || !this.overlays || !this.enableMappingButtons) return;
+
+    const elementRegistry = this.viewer.get('elementRegistry');
+    const eventBus = this.viewer.get('eventBus');
+    const allElements = elementRegistry.getAll();
+
+    // Build mapping from activityId to sourceActivityId for quick lookup
+    // (to find which sourceActivityId to emit when clicking on a target button)
+    const activityToSourceMap = new Map<string, string>();
+    if (this.editableInstructions) {
+      this.editableInstructions.forEach((instr: any) => {
+        const sourceId = instr.sourceActivityIds?.[0];
+        const targetId = instr.targetActivityIds?.[0];
+        if (sourceId && targetId) {
+          activityToSourceMap.set(sourceId, sourceId);
+          activityToSourceMap.set(targetId, sourceId);
+        }
+      });
+    }
+
+    // Add remove button overlays to mapped flow nodes (both source and target)
+    allElements.forEach((element: any) => {
+      if (!element.businessObject || element.type === 'label') return;
+
+      // Exclude Start/End Events, SequenceFlow, Process, Participant/Pool, labels, and annotations
+      if (element.type === 'bpmn:StartEvent' ||
+          element.type === 'bpmn:EndEvent' ||
+          element.type === 'bpmn:SequenceFlow' ||
+          element.type === 'bpmn:Process' ||
+          element.type === 'bpmn:Participant' ||
+          element.type === 'bpmn:Collaboration' ||
+          element.type.includes('Annotation')) {
+        return;
+      }
+
+      const isFlowNode = element.type && (
+        element.type.includes('Task') ||
+        element.type.includes('IntermediateCatchEvent') ||
+        element.type.includes('IntermediateThrowEvent') ||
+        element.type.includes('BoundaryEvent') ||
+        element.type.includes('Gateway') ||
+        element.type.includes('SubProcess') ||
+        element.type.includes('CallActivity')
+      );
+
+      if (!isFlowNode) return;
+
+      const isMapped = this.mappedActivityIds.has(element.id);
+
+      if (!isMapped) return;
+
+      const sourceActivityId = activityToSourceMap.get(element.id);
+      if (!sourceActivityId) return;
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'bpmn-mapping-button bpmn-mapping-remove';
+
+      const xIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16"><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M3 3 L13 13 M13 3 L3 13"/></svg>';
+      btn.innerHTML = xIcon;
+      btn.setAttribute('aria-label', 'Remove mapping');
+      btn.title = 'Remove mapping';
+
+      btn.style.cssText = `
+        width: 22px;
+        height: 22px;
+        background: white;
+        color: #6b7280;
+        border: 1px solid #d1d5db;
+        border-radius: 50%;
+        cursor: pointer;
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 0 2px #fff;
+        transition: all 0.2s ease;
+        padding: 0;
+        font-size: 12px;
+        line-height: 1;
+      `.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.ngZone.run(() => {
+          this.deleteMapping.emit(sourceActivityId);
+        });
+      });
+
+      btn.addEventListener('mouseenter', () => {
+        btn.style.background = '#dc2626';
+        btn.style.borderColor = '#dc2626';
+        btn.style.color = 'white';
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        btn.style.background = 'white';
+        btn.style.borderColor = '#d1d5db';
+        btn.style.color = '#6b7280';
+      });
+
+      btn.addEventListener('mousedown', () => {
+        btn.style.background = '#b91c1c';
+        btn.style.width = '20px';
+        btn.style.height = '20px';
+      });
+
+      btn.addEventListener('mouseup', () => {
+        btn.style.width = '22px';
+        btn.style.height = '22px';
+        btn.style.background = '#dc2626';
+      });
+
+      btn.addEventListener('focus', () => {
+        btn.style.boxShadow = '0 0 0 2px #2563eb';
+      });
+
+      btn.addEventListener('blur', () => {
+        btn.style.boxShadow = '0 0 0 2px #fff';
+      });
+
+      btn.addEventListener('mouseenter', () => {
+        this.removeButtonHovered.set(element.id, true);
+        this.updateRemoveButtonsVisibility();
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        this.removeButtonHovered.set(element.id, false);
+        this.updateRemoveButtonsVisibility();
+      });
+
+      const container = document.createElement('div');
+      container.style.cssText = `
+        pointer-events: none;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 120ms ease 200ms, visibility 0s linear 200ms;
+      `.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+      container.appendChild(btn);
+
+      this.removeButtonContainers.set(element.id, container);
+
+      try {
+        const position = {
+          top: element.height - 3,
+          left: element.width - 3
+        };
+        const overlayId = this.overlays.add(element.id, {
+          position,
+          html: container
+        });
+        this.removeButtonOverlayIds.push(overlayId);
+      } catch (e) {
+      }
+    });
+
+  }
+
+  private updateRemoveButtonsVisibility(): void {
+    this.removeButtonContainers.forEach((container, activityId) => {
+      const isHovered = this.hoveredRemoveButtonActivityIds.has(activityId);
+      const isButtonHovered = this.removeButtonHovered.get(activityId) === true;
+      const shouldBeVisible = isHovered || isButtonHovered;
+
+      if (shouldBeVisible) {
+        container.style.opacity = '1';
+        container.style.visibility = 'visible';
+        container.style.transition = 'opacity 120ms ease 0ms, visibility 0s linear 0ms';
+      } else {
+        container.style.opacity = '0';
+        container.style.visibility = 'hidden';
+        container.style.transition = 'opacity 120ms ease 200ms, visibility 0s linear 200ms';
+      }
+    });
+  }
+
+  private updateTargetHighlights(): void {
+    this.targetHighlightOverlayIds.forEach(id => {
+      try { this.overlays?.remove(id); } catch (_) {}
+    });
+    this.targetHighlightOverlayIds = [];
+
+    if (!this.viewer || !this.highlightTargets) return;
+
+    const canvas = this.viewer.get('canvas');
+    const elementRegistry = this.viewer.get('elementRegistry');
+    const allElements = elementRegistry.getAll();
+
+    allElements.forEach((element: any) => {
+      if (!element.businessObject || element.type === 'label') return;
+
+      if (element.type === 'bpmn:StartEvent' ||
+          element.type === 'bpmn:EndEvent' ||
+          element.type === 'bpmn:SequenceFlow' ||
+          element.type === 'bpmn:Process' ||
+          element.type === 'bpmn:Participant' ||
+          element.type === 'bpmn:Collaboration' ||
+          element.type.includes('Annotation')) {
+        return;
+      }
+
+      const isFlowNode = element.type && (
+        element.type.includes('Task') ||
+        element.type.includes('IntermediateCatchEvent') ||
+        element.type.includes('IntermediateThrowEvent') ||
+        element.type.includes('BoundaryEvent') ||
+        element.type.includes('Gateway') ||
+        element.type.includes('SubProcess') ||
+        element.type.includes('CallActivity')
+      );
+
+      if (!isFlowNode) return;
+
+      try {
+        canvas.addMarker(element.id, 'target-highlight');
+
+        const canvasContainer = this.canvasRef.nativeElement;
+        const elementNode = canvasContainer.querySelector(`[data-element-id="${element.id}"]`);
+        if (elementNode) {
+          (elementNode as HTMLElement).style.cursor = 'crosshair';
+          const clickHandler = (e: Event) => {
+            e.stopPropagation();
+            this.ngZone.run(() => {
+              this.selectTarget.emit(element.id);
+            });
+            canvas.removeMarker(element.id, 'target-highlight');
+            (elementNode as HTMLElement).style.cursor = '';
+            elementNode.removeEventListener('click', clickHandler);
+          };
+          elementNode.addEventListener('click', clickHandler);
+        }
+      } catch (e) {
+        console.warn('Could not highlight target', element.id, e);
+      }
+    });
+
+    if (this.mappingMode) {
+      const canvasContainer = this.canvasRef.nativeElement.querySelector('.djs-container');
+      if (canvasContainer) {
+        (canvasContainer as HTMLElement).style.cursor = 'crosshair';
+      }
+    }
+  }
+
+  private showMappingPopover(activityId: string, status: 'valid' | 'invalid' | 'unmapped', anchor: HTMLElement, badge: ActivityBadge): void {
+    if (status === 'unmapped') return;
+    // Close any existing popover
+    this.closeMappingPopover();
+
+    const popover = document.createElement('div');
+    popover.className = 'bpmn-mapping-popover';
+
+    const title = document.createElement('div');
+    title.className = 'bpmn-mapping-popover__title';
+    title.textContent = status === 'valid' ? 'Mapping' : 'Mapping Error';
+    popover.appendChild(title);
+
+    if (status === 'invalid') {
+      const errorList = document.createElement('div');
+      errorList.className = 'bpmn-mapping-popover__errors';
+
+      const failures = this.getFailuresForActivity(activityId);
+
+      if (failures && failures.length > 0) {
+        failures.forEach(failure => {
+          const errorItem = document.createElement('div');
+          errorItem.className = 'bpmn-mapping-popover__error-item';
+          errorItem.textContent = failure;
+          errorList.appendChild(errorItem);
+        });
+      } else {
+        const errorItem = document.createElement('div');
+        errorItem.className = 'bpmn-mapping-popover__error-item';
+        errorItem.textContent = 'Unknown validation error';
+        errorList.appendChild(errorItem);
+      }
+
+      popover.appendChild(errorList);
+    }
+
+    if (status === 'valid') {
+      const element = this.getElement(activityId);
+      if (element && this.isEventType(element.type) && this.isSourceViewer) {
+        const checkboxContainer = document.createElement('label');
+        checkboxContainer.className = 'bpmn-mapping-popover__checkbox';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = this.getUpdateEventTriggerForActivity(activityId);
+
+        checkbox.addEventListener('change', () => {
+          this.ngZone.run(() => {
+            this.updateEventTrigger(activityId, checkbox.checked);
+          });
+        });
+
+        const label = document.createElement('span');
+        label.textContent = 'Update event trigger';
+
+        checkboxContainer.appendChild(checkbox);
+        checkboxContainer.appendChild(label);
+        popover.appendChild(checkboxContainer);
+      }
+    }
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'bpmn-mapping-popover__remove-btn';
+    removeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="currentColor" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg><span>Remove mapping</span>';
+    removeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.ngZone.run(() => {
+        this.deleteMapping.emit(activityId);
+        this.closeMappingPopover();
+      });
+    });
+    popover.appendChild(removeBtn);
+
+    const anchorRect = anchor.getBoundingClientRect();
+    const containerRect = this.canvasRef.nativeElement.getBoundingClientRect();
+
+    popover.style.position = 'absolute';
+    popover.style.top = `${anchorRect.bottom - containerRect.top + 8}px`;
+    popover.style.left = `${anchorRect.left - containerRect.left}px`;
+    popover.style.zIndex = '1000';
+
+    const arrow = document.createElement('div');
+    arrow.className = 'bpmn-mapping-popover__arrow';
+    popover.appendChild(arrow);
+
+    this.canvasRef.nativeElement.appendChild(popover);
+    this.activePopover = popover;
+
+    const closeOnEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        this.ngZone.run(() => this.closeMappingPopover());
+      }
+    };
+
+    const closeOnClickOutside = (e: MouseEvent) => {
+      if (!popover.contains(e.target as Node) && !anchor.contains(e.target as Node)) {
+        this.ngZone.run(() => this.closeMappingPopover());
+      }
+    };
+
+    document.addEventListener('keydown', closeOnEsc);
+    document.addEventListener('click', closeOnClickOutside);
+
+    this.popoverCleanup = () => {
+      document.removeEventListener('keydown', closeOnEsc);
+      document.removeEventListener('click', closeOnClickOutside);
+    };
+
+    removeBtn.focus();
+  }
+
+  private closeMappingPopover(): void {
+    if (this.activePopover) {
+      this.activePopover.remove();
+      this.activePopover = null;
+    }
+    if (this.popoverCleanup) {
+      this.popoverCleanup();
+      this.popoverCleanup = null;
+    }
+  }
+
+  private getFailuresForActivity(activityId: string): string[] {
+    if (!this.migrationReport) return [];
+
+    const instructions = this.editableInstructions || [];
+    const instructionIndex = instructions.findIndex(instr =>
+      instr.sourceActivityIds.includes(activityId) || instr.targetActivityIds.includes(activityId)
+    );
+
+    if (instructionIndex === -1) return [];
+
+    const report = this.migrationReport.instructionReports?.[instructionIndex];
+    return report?.failures || [];
+  }
+
+  private isEventType(type: string): boolean {
+    return !!(type && (
+      type.includes('Event') ||
+      type === 'bpmn:ReceiveTask'
+    ));
+  }
+
+  private getUpdateEventTriggerForActivity(activityId: string): boolean {
+    const instructions = this.editableInstructions || [];
+    const instruction = instructions.find(instr => instr.sourceActivityIds.includes(activityId));
+    return instruction?.updateEventTrigger || false;
+  }
+
+  private updateEventTrigger(activityId: string, value: boolean): void {
+    const instructions = this.editableInstructions || [];
+    const instruction = instructions.find(instr => instr.sourceActivityIds.includes(activityId));
+    if (instruction) {
+      instruction.updateEventTrigger = value;
+    }
+  }
+
   private getElementDisplayName(element: any): string {
     if (element.businessObject?.name) return element.businessObject.name;
     const id = element.id || '';
@@ -606,9 +1352,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       this.windowStart = n > 5 ? Math.max(1, n - 3) : 0;
     }
 
-    // bpmn-js fires root.set via its own EventBus (not a zone.js-patched DOM event),
-    // so Angular's OnPush parent is never marked dirty automatically.
-    // detectChanges() bypasses the parent check and re-renders this component immediately.
     this.cdr.detectChanges();
   }
 
@@ -645,7 +1388,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
 
-  // Public methods for external control
   navigateToSubprocessLevel(index: number): void {
     const item = this.subprocessStack[index];
     if (!item || !this.viewer) return;
@@ -724,7 +1466,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   scrollToElement(elementId: string): void {
     if (!this.viewer) return;
 
-    // If zoom fit is pending, do it first
     if (this.needsZoomFit && this.isContainerVisible()) {
       this.onContainerVisible();
     }
@@ -767,7 +1508,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     const elementRegistry = this.viewer.get('elementRegistry');
     const eventBus = this.viewer.get('eventBus');
 
-    // Tracks how many eligible BoundaryEvents have been placed per host task (for stacking)
     const hostBoundaryCount = new Map<string, number>();
     const envelope = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 16 16"><path fill="currentColor" d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/></svg>';
 
@@ -777,7 +1517,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       let position: { top: number; right: number };
 
       if (element?.type === 'bpmn:BoundaryEvent' && element.host) {
-        // Anchor to host task so the button sits at the task's top-right, not on the small circle
         const hostId: string = element.host.id;
         const idx = hostBoundaryCount.get(hostId) ?? 0;
         hostBoundaryCount.set(hostId, idx + 1);
@@ -801,10 +1540,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         const id = this.overlays.add(anchorId, { position, html: btn });
         this.correlateOverlayIds.push(id);
 
-        // Store overlay data for hover management
         this.correlateOverlayData.set(id, { btn, elementId, anchorId, hideTimer: null });
 
-        // Setup hover listeners outside Angular zone for performance
         this.ngZone.runOutsideAngular(() => {
           this.setupCorrelateOverlayHover(id, elementId, anchorId, btn, eventBus, elementRegistry);
         });
@@ -842,7 +1579,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }, HIDE_DELAY);
     };
 
-    // Show on element hover (elementId or anchorId if different, e.g., BoundaryEvent on host task)
     const onElementHover = (event: any) => {
       const hoveredId = event.element?.id;
       if (hoveredId === elementId || hoveredId === anchorId) {
@@ -850,7 +1586,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     };
 
-    // Hide on element out
     const onElementOut = (event: any) => {
       const leftId = event.element?.id;
       if (leftId === elementId || leftId === anchorId) {
@@ -858,11 +1593,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     };
 
-    // Keep visible when hovering the button itself
     const onButtonEnter = () => showOverlay();
     const onButtonLeave = () => hideOverlay();
 
-    // Show on focus (keyboard navigation)
     const onButtonFocus = () => showOverlay();
     const onButtonBlur = () => hideOverlay();
 
@@ -873,7 +1606,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     btn.addEventListener('focus', onButtonFocus);
     btn.addEventListener('blur', onButtonBlur);
 
-    // Store cleanup functions
     this.correlateHoverListeners.push(() => {
       eventBus.off('element.hover', onElementHover);
       eventBus.off('element.out', onElementOut);
@@ -893,21 +1625,17 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     elementType: string,
     boundaryIndex: number
   ): { top: number; right: number } {
-    const BTN = 24;  // reduced from 28px to 24px
-    const GAP = 4;   // spacing between stacked buttons on the same host task
+    const BTN = 24;
+    const GAP = 4;
 
-    // BoundaryEvent: anchor on host task top-right; additional BEs on same task stack leftward
-    // Formula: right = i*(BTN+GAP) → button[i].left = host.width − i*(BTN+GAP), gap = GAP px
     if (elementType === 'bpmn:BoundaryEvent') {
       return { top: -BTN, right: boundaryIndex * (BTN + GAP) };
     }
-    // ICE, ReceiveTask, StartEvent (event subprocess): button BL exactly at element TR corner
-    // right:0 → CSS left = element.width → button.left = element.right (0-px gap)
+
     return { top: -BTN, right: 0 };
   }
 
   clearCorrelateOverlays(): void {
-    // Clean up all timers
     for (const data of this.correlateOverlayData.values()) {
       if (data.hideTimer) {
         clearTimeout(data.hideTimer);
@@ -915,13 +1643,11 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     }
 
-    // Clean up all event listeners
     for (const cleanup of this.correlateHoverListeners) {
       cleanup();
     }
     this.correlateHoverListeners = [];
 
-    // Remove overlays from DOM
     for (const id of this.correlateOverlayIds) {
       try { this.overlays?.remove(id); } catch (_) {}
     }

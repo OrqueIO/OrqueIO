@@ -1,0 +1,53 @@
+<div class="combobox-container">
+  <div class="combobox-input-wrapper">
+    <input
+      #inputEl
+      type="text"
+      [id]="inputId"
+      [(ngModel)]="value"
+      (ngModelChange)="onInputChange($event)"
+      (focus)="onInputFocus()"
+      (blur)="onInputBlur()"
+      (keydown)="onKeyDown($event)"
+      [placeholder]="placeholder"
+      [class.is-invalid]="invalid"
+      [attr.aria-describedby]="describedBy || null"
+      [attr.aria-invalid]="invalid ? 'true' : null"
+      role="combobox"
+      aria-autocomplete="none"
+      [attr.aria-expanded]="isOpen"
+      [attr.aria-controls]="listboxId"
+      [attr.aria-activedescendant]="activeDescendant"
+      class="combobox-input"
+    />
+    <button
+      type="button"
+      (mousedown)="onArrowMouseDown($event)"
+      tabindex="-1"
+      class="combobox-arrow"
+      [attr.aria-label]="'Show options'">
+      ▼
+    </button>
+  </div>
+
+  @if (isOpen) {
+    <ul
+      [id]="listboxId"
+      role="listbox"
+      (mousedown)="onListMouseDown($event)"
+      class="combobox-listbox">
+      @for (option of options; track option; let i = $index) {
+        <li
+          [id]="inputId + '-option-' + i"
+          role="option"
+          [attr.aria-selected]="isSelected(option)"
+          [class.selected]="isSelected(option)"
+          [class.active]="isActive(i)"
+          (click)="onOptionClick(option)"
+          class="combobox-option">
+          {{ option }}
+        </li>
+      }
+    </ul>
+  }
+</div>

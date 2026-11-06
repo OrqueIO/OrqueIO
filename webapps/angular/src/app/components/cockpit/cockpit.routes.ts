@@ -6,6 +6,7 @@ import { ProcessDefinitionsComponent } from './cockpit-processes/process-definit
 import { ProcessInstanceSearchComponent } from './cockpit-processes/process-instance-search/process-instance-search';
 import { ProcessListComponent } from './cockpit-processes/process-list/process-list';
 import { ProcessDetailComponent } from './cockpit-processes/process-detail/process-detail';
+import { ProcessMigrationWizardComponent } from './cockpit-processes/process-migration-wizard/process-migration-wizard.component';
 import { DecisionListComponent } from './cockpit-decisions/decision-list/decision-list';
 import { DecisionDetailComponent } from './cockpit-decisions/decision-detail/decision-detail';
 import { DecisionInstanceComponent } from './cockpit-decisions/decision-instance/decision-instance';
@@ -50,6 +51,7 @@ export const COCKPIT_ROUTES: Routes = [
       { path: 'processes', redirectTo: 'processes/definitions', pathMatch: 'full' },
       { path: 'processes/definitions', component: ProcessDefinitionsComponent, title: 'PAGE_TITLE_COCKPIT_PROCESSES' },
       { path: 'processes/search', component: ProcessInstanceSearchComponent, title: 'PAGE_TITLE_COCKPIT_PROCESSES' },
+      { path: 'processes/migration', component: ProcessMigrationWizardComponent, title: 'PAGE_TITLE_COCKPIT_MIGRATION' },
       { path: 'processes/:key/instances', component: ProcessListComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_INSTANCES' },
       { path: 'processes/:key/definition', component: ProcessListComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_DEFINITION' },
       { path: 'processes/instance/:id', component: ProcessDetailComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_DETAIL' },

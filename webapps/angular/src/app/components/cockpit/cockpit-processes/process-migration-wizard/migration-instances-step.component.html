@@ -1,0 +1,279 @@
+<div class="instances-step">
+  <div class="instances-step-panel">
+  <div class="instances-step-content">
+    <!-- Criteria card (matching batch operations design) -->
+    <div class="criteria-card">
+      <!-- Mode toggle -->
+      <div class="mode-toggle" role="group" [attr.aria-label]="'migration.instances.selectionMode' | translate">
+        <button type="button"
+                class="mode-btn"
+                [class.mode-btn--active]="mode() === 'instance'"
+                (click)="onModeChange('instance')">
+          {{ 'cockpit.batchOps.suspend.modeInstances' | translate }}
+        </button>
+        <button type="button"
+                class="mode-btn"
+                [class.mode-btn--active]="mode() === 'query'"
+                (click)="onModeChange('query')">
+          {{ 'cockpit.batchOps.suspend.modeQuery' | translate }}
+        </button>
+      </div>
+
+      <!-- Filter section label -->
+      <h3 class="filter-section-label">
+        {{ 'migration.instances.filterLabel' | translate }}
+      </h3>
+
+      <!-- Filter panel wrapper -->
+      <div class="filter-panel-wrapper">
+        <app-instance-filter-panel
+          [criteriaSet]="'process'"
+          [showExtendedCriteria]="showExtendedCriteria"
+          [lockedState]="'unfinished'"
+          [showStateNarrowing]="true"
+          [initialPills]="filterCriteria()"
+          [excludedCriteria]="['processDefinition', 'startedAfter', 'startedBefore', 'withJobsRetrying']"
+          [availableActivities]="availableActivities()"
+          [showWithJobsRetrying]="false"
+          (criteriaChange)="onFilterChange($event)">
+        </app-instance-filter-panel>
+
+        <div class="filter-actions">
+          <div class="filter-total">{{ totalCount() }}</div>
+          <div class="filter-actions-right">
+            @if (filterCriteria().length > 0) {
+              <button class="btn-clear-all-pills"
+                      (click)="clearAllPills()"
+                      type="button"
+                      role="button"
+                      [attr.aria-label]="'migration.instances.clearAllCriteria' | translate">
+                <fa-icon [icon]="faTimes" class="btn-clear-all-pills-icon"></fa-icon>
+                {{ 'search.clearAll' | translate }}
+              </button>
+              <div class="filter-actions-separator"></div>
+            }
+            <button
+              type="button"
+              class="filter-action-btn"
+              (click)="copyFilterLink()"
+              [attr.aria-label]="'migration.instances.copyFilterLink' | translate"
+              [title]="'migration.instances.copyFilterLink' | translate">
+              <fa-icon [icon]="faLink"></fa-icon>
+            </button>
+            <!-- Old dropdown (hidden via CSS) -->
+            <div class="filter-save-dropdown-wrapper migration-wizard-hide-old-dropdown">
+              <button
+                type="button"
+                class="filter-action-btn filter-save-btn"
+                (click)="toggleSaveDropdown($event)"
+                [attr.aria-label]="'migration.instances.saveFilter' | translate"
+                [title]="'migration.instances.saveFilter' | translate"
+                [attr.aria-expanded]="showSaveDropdown()">
+                <fa-icon [icon]="faSave"></fa-icon>
+                <fa-icon [icon]="faChevronDown" class="chevron"></fa-icon>
+              </button>
+            </div>
+            <!-- New save menu button and component -->
+            <div class="filter-new-save-menu-wrapper">
+              <button
+                type="button"
+                class="filter-action-btn"
+                (click)="toggleNewSaveMenu($event)"
+                [attr.aria-label]="'migration.instances.saveFilter' | translate"
+                [title]="'migration.instances.saveFilter' | translate"
+                [attr.aria-expanded]="showNewSaveMenu()"
+                #saveMenuButton>
+                <fa-icon [icon]="faSave"></fa-icon>
+              </button>
+              @if (showNewSaveMenu()) {
+                <div class="new-save-menu-positioner"
+                     #savedFiltersMenuContainer
+                     [style.top.px]="saveMenuPosition()?.top ?? 0"
+                     [style.left.px]="saveMenuPosition()?.left ?? 0"
+                     [style.max-height.px]="saveMenuPosition()?.maxHeight">
+                  <app-saved-filters-menu
+                    [currentCriteria]="filterCriteria()"
+                    [processDefinitionId]="sourceDefinitionId()"
+                    (close)="closeNewSaveMenu()"
+                    (filterSaved)="onFilterSaved($event)"
+                    (filterLoaded)="onFilterLoaded($event)"
+                    (filterDeleted)="onFilterDeleted($event)">
+                  </app-saved-filters-menu>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status message (overlay - does not shift content) -->
+    @if (statusMessage(); as msg) {
+      <div class="filter-status-message"
+           [class.filter-status-error]="msg.type === 'error'"
+           [class.filter-status-success]="msg.type === 'success'"
+           role="status"
+           aria-live="polite">
+        <span class="filter-status-icon">✓</span>
+        <span class="filter-status-text">{{ msg.text }}</span>
+      </div>
+    }
+
+  <!-- Query mode warning banner -->
+  @if (mode() === 'query') {
+    <div class="query-warning-banner" role="alert">
+      <svg class="query-warning-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+      </svg>
+      <span class="query-warning-content">
+        <strong class="query-warning-title">{{ 'migration.instances.queryWarningTitle' | translate }}</strong>
+        <span class="query-warning-message">{{ 'migration.instances.queryWarningMessage' | translate }}</span>
+      </span>
+    </div>
+  }
+
+  <!-- Pagination (visible when not loading/error and has instances) -->
+  <app-pagination
+    *ngIf="!loading() && !error() && instances().length > 0"
+    [current]="currentPage()"
+    [size]="pageSize"
+    [total]="totalCount()"
+    [showSizeSelector]="true"
+    [availableSizes]="[10, 25, 50, 100]"
+    (pageChange)="onPaginationChange($event)">
+  </app-pagination>
+
+  <!-- Instances card (matching batch operations .operation-card) -->
+  <div class="instances-card">
+    <!-- Loading state -->
+    @if (loading()) {
+      <div class="loading-state">
+        <fa-icon [icon]="faSpinner" [animation]="'spin'" class="loading-spinner"></fa-icon>
+        <span>{{ 'migration.instances.loading' | translate }}</span>
+      </div>
+    }
+
+    <!-- Error state -->
+    @if (error() && !loading()) {
+      <div class="error-state" role="alert">
+        <p class="error-message">{{ 'migration.instances.couldNotLoadInstances' | translate }}</p>
+        <button type="button" class="btn-secondary" (click)="retry()">
+          {{ 'migration.instances.retry' | translate }}
+        </button>
+      </div>
+    }
+
+    <!-- Empty state -->
+    @if (!loading() && !error() && instances().length === 0) {
+      <div class="empty-state">
+        {{ 'migration.instances.noRunningInstancesFound' | translate }}
+      </div>
+    }
+
+    <!-- Instances list -->
+    @if (!loading() && !error() && instances().length > 0) {
+      <!-- Selection bar (Instance mode only) -->
+      @if (mode() === 'instance') {
+        <div class="select-all-bar">
+          <label class="select-all-label">
+            <input type="checkbox"
+                   [checked]="allOnPageSelected()"
+                   [indeterminate]="isIndeterminate()"
+                   (change)="toggleSelectAll()">
+            <span>{{ 'cockpit.batchOps.suspend.selectAllOnPage' | translate: { count: instances().length.toString() } }}</span>
+          </label>
+          <span class="selection-count"
+                [class.selection-count--empty]="selectedIds().size === 0">
+            {{ 'cockpit.batchOps.selectedCount' | translate: { count: selectedIds().size.toString() } }}
+          </span>
+        </div>
+      }
+
+      <div class="instances-table-container">
+        <table class="instances-table" role="grid">
+          <colgroup>
+            @if (mode() === 'instance') {
+              <col style="width: 56px">
+            }
+            <col style="width: 150px">
+            <col style="width: 340px">
+            <col style="width: 28%">
+            <col>
+          </colgroup>
+          <thead>
+            <tr>
+              @if (mode() === 'instance') {
+                <th scope="col" class="col-checkbox"></th>
+              }
+              <th scope="col" class="col-state">{{ 'migration.instances.columnState' | translate }}</th>
+              <th scope="col" class="col-id">{{ 'migration.instances.columnInstanceId' | translate }}</th>
+              <th scope="col" class="col-business-key">{{ 'migration.instances.columnBusinessKey' | translate }}</th>
+              <th scope="col" class="col-starttime">{{ 'cockpit.processes.columns.startTime' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (instance of instances(); track instance.id) {
+              <tr [class.selected]="selectedIds().has(instance.id)">
+                @if (mode() === 'instance') {
+                  <td class="col-checkbox">
+                    <input
+                      type="checkbox"
+                      [checked]="selectedIds().has(instance.id)"
+                      (change)="toggleInstanceSelection(instance.id)"
+                      [attr.aria-label]="'migration.instances.selectInstance' | translate: { id: instance.id }"
+                      class="checkbox-input">
+                  </td>
+                }
+                <td class="col-state">
+                  @if (instance.state) {
+                    <span class="state-badge" [class]="getStateBadgeClass(instance.state)">
+                      <fa-icon [icon]="getStateBadgeIcon(instance.state)"></fa-icon>
+                      {{ getStateLabel(instance.state) | translate }}
+                    </span>
+                  } @else {
+                    <span class="state-badge-empty">—</span>
+                  }
+                </td>
+                <td class="col-id">
+                  <a [href]="'/cockpit/processes/instance/' + instance.id"
+                     class="instance-link"
+                     [title]="instance.id">
+                    {{ instance.id }}
+                  </a>
+                </td>
+                <td class="col-business-key" [title]="instance.businessKey || ''">{{ instance.businessKey || '—' }}</td>
+                <td class="col-starttime">{{ (instance.startTime | camDate) || '—' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </div>
+
+  </div>
+
+  <!-- Footer buttons (always visible) -->
+  <div class="step-footer">
+    <div class="footer-left">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="onBackClick()"
+        [attr.aria-label]="'migration.backButton' | translate">
+        ← {{ 'migration.back' | translate }}
+      </button>
+    </div>
+    <div class="footer-right">
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="isPrimaryButtonDisabled()"
+        [attr.aria-disabled]="isPrimaryButtonDisabled() ? 'true' : 'false'"
+        (click)="onNextClick()">
+        {{ getPrimaryButtonLabel() }}
+      </button>
+    </div>
+  </div>
+  </div>
+</div>

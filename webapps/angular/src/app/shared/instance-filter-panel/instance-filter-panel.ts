@@ -81,7 +81,12 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
   @Input() finishedScope = false;
   @Input() showWithJobsRetrying = true;
   @Input() availableActivities: BpmnElement[] = [];
+  @Input() excludedCriteria: string[] = [];
   @Output() criteriaChange = new EventEmitter<FilterPanelChange>();
+
+  isCriterionAvailable(field: GlobalSearchField): boolean {
+    return this.availableCriteria.some(c => c.field === field);
+  }
 
   private cdr = inject(ChangeDetectorRef);
   private translateService = inject(TranslateService);
@@ -333,7 +338,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
           { field: 'variables' as const }
         );
       }
-      this.availableCriteria = processCriteria;
+      this.availableCriteria = processCriteria.filter(c => !this.excludedCriteria.includes(c.field));
     }
 
     if (this.criteriaSet === 'decision') {
@@ -370,10 +375,18 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     const pills = changes['initialPills'];
-    if (pills && !pills.firstChange && pills.currentValue?.length === 0) {
-      this.activePills = [];
-      this.cancelCriterion();
-      this.cdr.markForCheck();
+    if (pills && !pills.firstChange) {
+      if (pills.currentValue?.length === 0) {
+        this.activePills = [];
+        this.cancelCriterion();
+        this.cdr.markForCheck();
+      } else if (pills.currentValue?.length > 0) {
+        const newPills = pills.currentValue.map((p: MultiValueFilter) => ({ ...p, values: [...p.values] }));
+        this.activePills = this.lockedState && this.lockedState !== 'finished'
+          ? newPills.filter((p: MultiValueFilter) => p.field !== 'finishedAfter' && p.field !== 'finishedBefore')
+          : newPills;
+        this.cdr.markForCheck();
+      }
     }
   }
 
@@ -1257,7 +1270,13 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
       case 'incidentId':             return t('cockpit.processes.globalSearch.pill.incidentId',             { value: pill.values[0] ?? '' });
       case 'incidentType':           return t('cockpit.processes.globalSearch.pill.incidentType',           { value: pill.values[0] ?? '' });
       case 'incidentMessage':        return t('cockpit.processes.globalSearch.pill.incidentMessage',        { value: pill.values[0] ?? '' });
-      case 'activityId':             return t('cockpit.processes.globalSearch.pill.activityId',             { value: pill.values[0] ?? '' });
+      case 'activityId': {
+        const activityIds = pill.values.map(id => {
+          const activity = this.availableActivities.find(a => a.id === id);
+          return activity?.name || id;
+        });
+        return t('cockpit.processes.globalSearch.pill.activityId', { value: activityIds.join(', ') });
+      }
       case 'batchId':                return t('cockpit.batchOps.removalTimeBatch.pills.batchId',            { value: pill.values.join(', ') });
       case 'type': {
         const typeLabels = pill.values.map(v => {

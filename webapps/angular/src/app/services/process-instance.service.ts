@@ -414,6 +414,38 @@ export class ProcessInstanceService {
     );
   }
 
+  /**
+   * @param query
+   * @param firstResult
+   * @param maxResults
+   * @returns
+   */
+  queryRuntimeProcessInstances(query: any, firstResult = 0, maxResults = 100): Observable<any[]> {
+    const cappedMax = Math.min(maxResults, ProcessInstanceService.MAX_RESULTS_CAP);
+    return this.http.post<any[]>(
+      `${this.baseUrl}/process-instance`,
+      query,
+      { params: { firstResult: firstResult.toString(), maxResults: cappedMax.toString() } }
+    ).pipe(
+      catchError(() => of([]))
+    );
+  }
+
+  /**
+   * @param query
+   * @returns
+   */
+  queryRuntimeProcessInstancesCount(query: any): Observable<number> {
+    const { firstResult, maxResults, sortBy, sortOrder, ...countQuery } = query;
+    return this.http.post<{ count: number }>(
+      `${this.baseUrl}/process-instance/count`,
+      countQuery
+    ).pipe(
+      map(res => res.count),
+      catchError(() => of(0))
+    );
+  }
+
   // ============================================
   // Variables
   // ============================================

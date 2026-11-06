@@ -19,6 +19,12 @@
            [routerLinkActiveOptions]="{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}">
           {{ 'cockpit.processes.tabs.searchInstances' | translate }}
         </a>
+        <a class="process-tab"
+           routerLink="/cockpit/processes/migration"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'}">
+          {{ 'cockpit.processes.tabs.migration' | translate }}
+        </a>
       </nav>
     </div>
 

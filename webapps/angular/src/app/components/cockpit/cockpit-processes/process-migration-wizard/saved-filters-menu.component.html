@@ -1,0 +1,95 @@
+<div class="saved-filters-menu"
+     role="dialog"
+     [attr.aria-label]="'migration.instances.savedFilters' | translate"
+     (click)="$event.stopPropagation()">
+
+  <!-- Section: Save current filter -->
+  <div class="menu-section">
+    <label class="menu-label">
+      {{ 'migration.instances.saveFilterPrompt' | translate }}
+    </label>
+    <div class="save-row">
+      <input
+        type="text"
+        class="menu-input"
+        [placeholder]="'migration.instances.filterNamePlaceholder' | translate"
+        [value]="filterNameInput()"
+        (input)="filterNameInput.set($any($event.target).value)"
+        (keydown.escape)="onEscape()"
+        #filterInput>
+      <button
+        type="button"
+        class="menu-btn menu-btn-save"
+        [class.menu-btn-save--disabled]="isSaveDisabled()"
+        [attr.aria-disabled]="isSaveDisabled() ? 'true' : 'false'"
+        [disabled]="isSaveDisabled()"
+        (click)="saveFilter()">
+        {{ 'migration.instances.save' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="menu-divider"></div>
+
+  <!-- Section: Saved filters -->
+  <div class="menu-section">
+    <div class="menu-section-header">
+      <span class="menu-section-title">{{ 'migration.instances.savedFilters' | translate }}</span>
+      <span class="menu-badge">{{ filterCount() }}</span>
+    </div>
+
+    @if (savedFilters().length === 0) {
+      <!-- Empty state -->
+      <div class="menu-empty-state">
+        {{ 'migration.instances.noSavedFiltersYet' | translate }}
+      </div>
+    } @else {
+      <!-- Filters list -->
+      <div class="menu-filters-list">
+        @for (filter of savedFilters(); track filter.name) {
+          @if (filterToDelete() && filterToDelete()!.name === filter.name) {
+            <!-- Delete confirmation -->
+            <div class="menu-filter-confirm">
+              <span class="menu-filter-confirm-text">
+                {{ 'migration.instances.deleteFilterConfirm' | translate: { name: filter.name } }}
+              </span>
+              <div class="menu-filter-confirm-actions">
+                <button
+                  type="button"
+                  class="menu-btn menu-btn-cancel"
+                  (click)="cancelDelete()"
+                  #cancelButton>
+                  {{ 'migration.instances.cancel' | translate }}
+                </button>
+                <button
+                  type="button"
+                  class="menu-btn menu-btn-delete"
+                  (click)="confirmDelete()">
+                  {{ 'migration.instances.delete' | translate }}
+                </button>
+              </div>
+            </div>
+          } @else {
+            <!-- Normal filter row -->
+            <div class="menu-filter-row">
+              <button
+                type="button"
+                class="menu-filter-load-btn"
+                (click)="loadFilter(filter)">
+                {{ filter.name }}
+              </button>
+              <button
+                type="button"
+                class="menu-filter-delete-btn"
+                (click)="showDeleteConfirmation(filter, $event)"
+                [attr.aria-label]="'migration.instances.deleteFilterAriaLabel' | translate: { name: filter.name }">
+                <fa-icon [icon]="faTrash"></fa-icon>
+              </button>
+            </div>
+          }
+        }
+      </div>
+    }
+  </div>
+</div>
