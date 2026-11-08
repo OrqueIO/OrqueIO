@@ -1926,14 +1926,15 @@ export function detectSimpleRoute(
     const xDiff = Math.abs(p0.x - p1.x);
     const yDiff = Math.abs(p0.y - p1.y);
 
-    if (xDiff >= MIN_Z_RUN && yDiff > 16) {
-      return { kind: 'z-route', middleRunAxis: 'horizontal', anchorAxis: 'vertical' };
-    } else if (yDiff <= 1) {
-      return { kind: 'straight-line', middleRunAxis: 'horizontal', anchorAxis: 'vertical' };
-    } else if (xDiff < MIN_Z_RUN) {
+    if (xDiff >= MIN_Z_RUN) {
+      if (yDiff > 16) {
+        return { kind: 'z-route', middleRunAxis: 'horizontal', anchorAxis: 'vertical' };
+      } else {
+        return { kind: 'straight-line', middleRunAxis: 'horizontal', anchorAxis: 'vertical' };
+      }
+    } else {
       return { kind: 'straight-line', middleRunAxis: 'vertical', anchorAxis: 'vertical' };
     }
-    return null;
   }
 
   return null;
