@@ -178,6 +178,7 @@
                   [mappedActivityIds]="mappedTargetActivityIds()"
                   [hoveredMappingSourceId]="hoveredTargetActivityId()"
                   (selectTarget)="onSelectTarget($event)"
+                  (deleteMapping)="onDeleteMapping($event)"
                   (elementHover)="onElementHover($event)"
                   (backgroundClick)="onCancelMapping()">
                 </app-bpmn-viewer>

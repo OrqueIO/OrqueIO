@@ -1226,6 +1226,19 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     }
 
+    const instructions = this.editableInstructions || [];
+    let sourceActivityIdToDelete: string | null = null;
+
+    for (const instruction of instructions) {
+      const isSource = instruction.sourceActivityIds.includes(activityId);
+      const isTarget = instruction.targetActivityIds.includes(activityId);
+
+      if (isSource || isTarget) {
+        sourceActivityIdToDelete = instruction.sourceActivityIds[0];
+        break;
+      }
+    }
+
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.className = 'bpmn-mapping-popover__remove-btn';
@@ -1233,7 +1246,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     removeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       this.ngZone.run(() => {
-        this.deleteMapping.emit(activityId);
+        if (sourceActivityIdToDelete) {
+          this.deleteMapping.emit(sourceActivityIdToDelete);
+        }
         this.closeMappingPopover();
       });
     });
