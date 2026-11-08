@@ -1090,35 +1090,23 @@ export function moveSegment(
     const newY = seg.a.y + delta;
 
     if (!affectsStart && !affectsEnd) {
-      const direction = 'horizontal';
-      const barCoord = newY;
-      const defaultStartSide: Side = 'right';
-      const defaultEndSide: Side = 'left';
+      const prevPoint = newPoints[segmentIndex];
+      const nextPoint = newPoints[segmentIndex + 1];
 
-      const startSideResult = dockSideFromBar(sourceRect, barCoord, direction, defaultStartSide, currentStartSide);
-      const newStartSide = startSideResult.side;
+      const needsPrevBend = Math.abs(prevPoint.y - newY) > 0.01;
+      const needsNextBend = Math.abs(nextPoint.y - newY) > 0.01;
 
-      let newStartT = currentStartT;
-      if (newStartSide !== currentStartSide) {
-        newStartT = recenterOnSideChange(currentStartSide, newStartSide, currentStartT);
+      if (needsPrevBend && needsNextBend) {
+        newPoints.splice(segmentIndex + 1, 0,
+          { x: seg.a.x, y: newY },
+          { x: seg.b.x, y: newY }
+        );
+        newPoints[segmentIndex] = { x: seg.a.x, y: prevPoint.y };
+        newPoints[segmentIndex + 3] = { x: seg.b.x, y: nextPoint.y };
+      } else {
+        newPoints[segmentIndex] = { x: seg.a.x, y: newY };
+        newPoints[segmentIndex + 1] = { x: seg.b.x, y: newY };
       }
-
-      currentStartSide = newStartSide;
-      currentStartT = newStartT;
-
-      const endSideResult = dockSideFromBar(targetRect, barCoord, direction, defaultEndSide, currentEndSide);
-      const newEndSide = endSideResult.side;
-
-      let newEndT = currentEndT;
-      if (newEndSide !== currentEndSide) {
-        newEndT = recenterOnSideChange(currentEndSide, newEndSide, currentEndT);
-      }
-
-      currentEndSide = newEndSide;
-      currentEndT = newEndT;
-
-      newPoints[segmentIndex] = { x: seg.a.x, y: newY };
-      newPoints[segmentIndex + 1] = { x: seg.b.x, y: newY };
     }
 
     if (affectsStart) {
@@ -1175,41 +1163,23 @@ export function moveSegment(
     const newX = seg.a.x + delta;
 
     if (!affectsStart && !affectsEnd) {
-      const direction = 'vertical';
-      const barCoord = newX;
+      const prevPoint = newPoints[segmentIndex];
+      const nextPoint = newPoints[segmentIndex + 1];
 
-      const startNeighbor = newPoints[1];
-      const startCenterY = sourceRect.top + sourceRect.height / 2;
-      const defaultStartSide: Side = startNeighbor.y < startCenterY ? 'top' : 'bottom';
+      const needsPrevBend = Math.abs(prevPoint.x - newX) > 0.01;
+      const needsNextBend = Math.abs(nextPoint.x - newX) > 0.01;
 
-      const startSideResult = dockSideFromBar(sourceRect, barCoord, direction, defaultStartSide, currentStartSide);
-      const newStartSide = startSideResult.side;
-
-      let newStartT = currentStartT;
-      if (newStartSide !== currentStartSide) {
-        newStartT = recenterOnSideChange(currentStartSide, newStartSide, currentStartT);
+      if (needsPrevBend && needsNextBend) {
+        newPoints.splice(segmentIndex + 1, 0,
+          { x: newX, y: seg.a.y },
+          { x: newX, y: seg.b.y }
+        );
+        newPoints[segmentIndex] = { x: prevPoint.x, y: seg.a.y };
+        newPoints[segmentIndex + 3] = { x: nextPoint.x, y: seg.b.y };
+      } else {
+        newPoints[segmentIndex] = { x: newX, y: seg.a.y };
+        newPoints[segmentIndex + 1] = { x: newX, y: seg.b.y };
       }
-
-      currentStartSide = newStartSide;
-      currentStartT = newStartT;
-
-      const endNeighbor = newPoints[newPoints.length - 2];
-      const endCenterY = targetRect.top + targetRect.height / 2;
-      const defaultEndSide: Side = endNeighbor.y < endCenterY ? 'top' : 'bottom';
-
-      const endSideResult = dockSideFromBar(targetRect, barCoord, direction, defaultEndSide, currentEndSide);
-      const newEndSide = endSideResult.side;
-
-      let newEndT = currentEndT;
-      if (newEndSide !== currentEndSide) {
-        newEndT = recenterOnSideChange(currentEndSide, newEndSide, currentEndT);
-      }
-
-      currentEndSide = newEndSide;
-      currentEndT = newEndT;
-
-      newPoints[segmentIndex] = { x: newX, y: seg.a.y };
-      newPoints[segmentIndex + 1] = { x: newX, y: seg.b.y };
     }
 
     if (affectsStart) {
@@ -1903,5 +1873,348 @@ export function endArrowhead(points: Point[]): { x: number; y: number; angleDeg:
     x: lastPoint.x,
     y: lastPoint.y,
     angleDeg
+  };
+}
+
+const STUB_LENGTH = 24;
+const ANCHOR_MARGIN = 8;
+const SNAP_THRESHOLD = 6;
+
+export type RouteKind = 'z-route' | 'straight-line' | 'complex';
+
+export interface SimpleRouteInfo {
+  kind: RouteKind;
+  middleRunAxis: 'horizontal' | 'vertical';
+  anchorAxis: 'horizontal' | 'vertical';
+}
+
+/**
+ * @param points Current waypoints
+ * @param startSide Source exit side
+ * @param endSide Target entry side
+ * @returns SimpleRouteInfo with correct middle run orientation, or null if complex
+ */
+export function detectSimpleRoute(
+  points: Point[],
+  startSide: Side,
+  endSide: Side
+): SimpleRouteInfo | null {
+  if (points.length < 2) return null;
+
+  const p0 = points[0];
+  const p1 = points[points.length - 1];
+
+  const startHorizontal = startSide === 'left' || startSide === 'right';
+  const endHorizontal = endSide === 'left' || endSide === 'right';
+  const startVertical = startSide === 'top' || startSide === 'bottom';
+  const endVertical = endSide === 'top' || endSide === 'bottom';
+
+  if (startHorizontal && endHorizontal) {
+    const yDiff = Math.abs(p0.y - p1.y);
+    const xSpacing = p1.x - p0.x;
+
+    if (yDiff > 1 && xSpacing > 16) {
+      return { kind: 'z-route', middleRunAxis: 'vertical', anchorAxis: 'horizontal' };
+    } else if (yDiff <= 1) {
+      return { kind: 'straight-line', middleRunAxis: 'horizontal', anchorAxis: 'horizontal' };
+    }
+    return null;
+  }
+
+  if (startVertical && endVertical) {
+    const xDiff = Math.abs(p0.x - p1.x);
+    const yDiff = Math.abs(p0.y - p1.y);
+
+    if (xDiff > 1 && yDiff > 16) {
+      return { kind: 'z-route', middleRunAxis: 'horizontal', anchorAxis: 'vertical' };
+    } else if (yDiff <= 1) {
+      return { kind: 'straight-line', middleRunAxis: 'horizontal', anchorAxis: 'vertical' };
+    } else if (xDiff <= 1) {
+      return { kind: 'straight-line', middleRunAxis: 'vertical', anchorAxis: 'vertical' };
+    }
+    return null;
+  }
+
+  return null;
+}
+
+/**
+ * @param p0 Start point (original anchor position)
+ * @param side0 Source side (original)
+ * @param p1 End point (original anchor position)
+ * @param side1 Target side (original)
+ * @param bend Bend coordinate (x for vertical middle run, y for horizontal middle run)
+ * @param routeInfo Route classification
+ * @param rect0 Source activity rectangle
+ * @param rect1 Target activity rectangle
+ * @returns Object with {points, startSide, endSide, startT, endT} or null if not supported
+ */
+export function routeWithBend(
+  p0: Point,
+  side0: Side,
+  p1: Point,
+  side1: Side,
+  bend: number,
+  routeInfo: SimpleRouteInfo,
+  rect0: Rect,
+  rect1: Rect
+): { points: Point[], startSide: Side, endSide: Side, startT: number, endT: number } | null {
+  if (routeInfo.kind === 'z-route') {
+    if (routeInfo.middleRunAxis === 'vertical') {
+      const clampedBend = Math.max(p0.x + 8, Math.min(bend, p1.x - 8));
+      const rawPoints: Point[] = [
+        p0,
+        { x: clampedBend, y: p0.y },
+        { x: clampedBend, y: p1.y },
+        p1
+      ];
+      return {
+        points: cleanWaypoints(rawPoints),
+        startSide: side0,
+        endSide: side1,
+        startT: 0.5,
+        endT: 0.5
+      };
+    } else {
+      let clampedBend = bend;
+      if (side0 === 'top' || side1 === 'top') {
+        const minY = Math.min(p0.y, p1.y);
+        clampedBend = Math.min(bend, minY - 8);
+      }
+      if (side0 === 'bottom' || side1 === 'bottom') {
+        const maxY = Math.max(p0.y, p1.y);
+        clampedBend = Math.max(bend, maxY + 8);
+      }
+      const rawPoints: Point[] = [
+        p0,
+        { x: p0.x, y: clampedBend },
+        { x: p1.x, y: clampedBend },
+        p1
+      ];
+      return {
+        points: cleanWaypoints(rawPoints),
+        startSide: side0,
+        endSide: side1,
+        startT: 0.5,
+        endT: 0.5
+      };
+    }
+  }
+
+  if (routeInfo.kind === 'straight-line') {
+    if (routeInfo.middleRunAxis === 'horizontal') {
+      let newSide0 = side0;
+      let newSide1 = side1;
+      let newP0 = p0;
+      let newP1 = p1;
+      const newT0 = 0.5;
+      const newT1 = 0.5;
+
+      if (bend < rect0.top - ANCHOR_MARGIN) {
+        newSide0 = 'top';
+        newP0 = sideAndTToPoint(rect0, 'top', 0.5);
+      } else if (bend > rect0.top + rect0.height + ANCHOR_MARGIN) {
+        newSide0 = 'bottom';
+        newP0 = sideAndTToPoint(rect0, 'bottom', 0.5);
+      } else {
+        const rect0Right = rect0.left + rect0.width;
+        const rect1Right = rect1.left + rect1.width;
+
+        if (rect0Right <= rect1.left) {
+          newSide0 = 'right';
+        } else if (rect1Right <= rect0.left) {
+          newSide0 = 'left';
+        } else {
+          const center0Y = rect0.top + rect0.height / 2;
+          newSide0 = bend < center0Y ? 'top' : 'bottom';
+        }
+        newP0 = sideAndTToPoint(rect0, newSide0, 0.5);
+      }
+
+      if (bend < rect1.top - ANCHOR_MARGIN) {
+        newSide1 = 'top';
+        newP1 = sideAndTToPoint(rect1, 'top', 0.5);
+      } else if (bend > rect1.top + rect1.height + ANCHOR_MARGIN) {
+        newSide1 = 'bottom';
+        newP1 = sideAndTToPoint(rect1, 'bottom', 0.5);
+      } else {
+        const rect0Right = rect0.left + rect0.width;
+        const rect1Right = rect1.left + rect1.width;
+
+        if (rect0Right <= rect1.left) {
+          newSide1 = 'left';
+        } else if (rect1Right <= rect0.left) {
+          newSide1 = 'right';
+        } else {
+          const center1Y = rect1.top + rect1.height / 2;
+          newSide1 = bend < center1Y ? 'top' : 'bottom';
+        }
+        newP1 = sideAndTToPoint(rect1, newSide1, 0.5);
+      }
+
+      if (Math.abs(bend - newP0.y) < 1 && Math.abs(bend - newP1.y) < 1) {
+        return {
+          points: [newP0, newP1],
+          startSide: newSide0,
+          endSide: newSide1,
+          startT: newT0,
+          endT: newT1
+        };
+      }
+
+      if ((newSide0 === 'right' || newSide0 === 'left') && (newSide1 === 'right' || newSide1 === 'left')) {
+        const center0Y = rect0.top + rect0.height / 2;
+        const center1Y = rect1.top + rect1.height / 2;
+
+        if (Math.abs(bend - center0Y) <= SNAP_THRESHOLD && Math.abs(bend - center1Y) <= SNAP_THRESHOLD) {
+          const snapP0 = sideAndTToPoint(rect0, newSide0, 0.5);
+          const snapP1 = sideAndTToPoint(rect1, newSide1, 0.5);
+          return {
+            points: [snapP0, snapP1],
+            startSide: newSide0,
+            endSide: newSide1,
+            startT: 0.5,
+            endT: 0.5
+          };
+        }
+      }
+
+      const rawPoints: Point[] = [newP0];
+
+      if (newSide0 === 'right' || newSide0 === 'left') {
+        const stubX = newSide0 === 'right' ? newP0.x + STUB_LENGTH : newP0.x - STUB_LENGTH;
+        rawPoints.push({ x: stubX, y: newP0.y });
+        rawPoints.push({ x: stubX, y: bend });
+      } else {
+        rawPoints.push({ x: newP0.x, y: bend });
+      }
+
+      if (newSide1 === 'right' || newSide1 === 'left') {
+        const stubX = newSide1 === 'right' ? newP1.x + STUB_LENGTH : newP1.x - STUB_LENGTH;
+        rawPoints.push({ x: stubX, y: bend });
+        rawPoints.push({ x: stubX, y: newP1.y });
+      } else {
+        rawPoints.push({ x: newP1.x, y: bend });
+      }
+
+      rawPoints.push(newP1);
+
+      return {
+        points: cleanWaypoints(rawPoints),
+        startSide: newSide0,
+        endSide: newSide1,
+        startT: newT0,
+        endT: newT1
+      };
+    } else {
+
+      let newSide0 = side0;
+      let newSide1 = side1;
+      let newP0 = p0;
+      let newP1 = p1;
+      const newT0 = 0.5;
+      const newT1 = 0.5;
+
+      if (bend < rect0.left - ANCHOR_MARGIN) {
+        newSide0 = 'left';
+        newP0 = sideAndTToPoint(rect0, 'left', 0.5);
+      } else if (bend > rect0.left + rect0.width + ANCHOR_MARGIN) {
+        newSide0 = 'right';
+        newP0 = sideAndTToPoint(rect0, 'right', 0.5);
+      }
+
+      if (bend < rect1.left - ANCHOR_MARGIN) {
+        newSide1 = 'left';
+        newP1 = sideAndTToPoint(rect1, 'left', 0.5);
+      } else if (bend > rect1.left + rect1.width + ANCHOR_MARGIN) {
+        newSide1 = 'right';
+        newP1 = sideAndTToPoint(rect1, 'right', 0.5);
+      }
+
+      if (Math.abs(bend - newP0.x) < 1 && Math.abs(bend - newP1.x) < 1) {
+        return {
+          points: [newP0, newP1],
+          startSide: newSide0,
+          endSide: newSide1,
+          startT: newT0,
+          endT: newT1
+        };
+      }
+
+      const rawPoints: Point[] = [newP0];
+
+      if (newSide0 === 'top' || newSide0 === 'bottom') {
+        const stubY = newSide0 === 'bottom' ? newP0.y + STUB_LENGTH : newP0.y - STUB_LENGTH;
+        rawPoints.push({ x: newP0.x, y: stubY });
+        rawPoints.push({ x: bend, y: stubY });
+      } else {
+        rawPoints.push({ x: bend, y: newP0.y });
+      }
+
+      if (newSide1 === 'top' || newSide1 === 'bottom') {
+        const stubY = newSide1 === 'bottom' ? newP1.y + STUB_LENGTH : newP1.y - STUB_LENGTH;
+        rawPoints.push({ x: bend, y: stubY });
+        rawPoints.push({ x: newP1.x, y: stubY });
+      } else {
+        rawPoints.push({ x: bend, y: newP1.y });
+      }
+
+      rawPoints.push(newP1);
+
+      return {
+        points: cleanWaypoints(rawPoints),
+        startSide: newSide0,
+        endSide: newSide1,
+        startT: newT0,
+        endT: newT1
+      };
+    }
+  }
+
+  return null;
+}
+
+/**
+ * @param points Current waypoints
+ * @param routeInfo Route classification (or null for complex)
+ * @returns Midpoint coordinates
+ */
+export function middleRunMidpoint(
+  points: Point[],
+  routeInfo: SimpleRouteInfo | null
+): Point {
+  if (points.length < 2) {
+    return { x: 0, y: 0 };
+  }
+
+  if (points.length === 2) {
+    return {
+      x: (points[0].x + points[1].x) / 2,
+      y: (points[0].y + points[1].y) / 2
+    };
+  }
+
+  if (routeInfo && routeInfo.kind === 'z-route' && points.length === 4) {
+    return {
+      x: (points[1].x + points[2].x) / 2,
+      y: (points[1].y + points[2].y) / 2
+    };
+  }
+
+  const segs = segments(points);
+  if (segs.length === 0) {
+    return { x: points[0].x, y: points[0].y };
+  }
+
+  let longest = segs[0];
+  for (let i = 1; i < segs.length; i++) {
+    if (segs[i].length > longest.length) {
+      longest = segs[i];
+    }
+  }
+
+  return {
+    x: (longest.a.x + longest.b.x) / 2,
+    y: (longest.a.y + longest.b.y) / 2
   };
 }
