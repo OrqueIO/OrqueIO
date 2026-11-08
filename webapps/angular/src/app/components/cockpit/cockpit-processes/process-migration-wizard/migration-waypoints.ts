@@ -1879,6 +1879,7 @@ export function endArrowhead(points: Point[]): { x: number; y: number; angleDeg:
 const STUB_LENGTH = 24;
 const ANCHOR_MARGIN = 8;
 const SNAP_THRESHOLD = 6;
+const MIN_Z_RUN = 24;
 
 export type RouteKind = 'z-route' | 'straight-line' | 'complex';
 
@@ -1913,9 +1914,9 @@ export function detectSimpleRoute(
     const yDiff = Math.abs(p0.y - p1.y);
     const xSpacing = p1.x - p0.x;
 
-    if (yDiff > 1 && xSpacing > 16) {
+    if (yDiff >= MIN_Z_RUN && xSpacing > 16) {
       return { kind: 'z-route', middleRunAxis: 'vertical', anchorAxis: 'horizontal' };
-    } else if (yDiff <= 1) {
+    } else if (yDiff < MIN_Z_RUN) {
       return { kind: 'straight-line', middleRunAxis: 'horizontal', anchorAxis: 'horizontal' };
     }
     return null;
@@ -1925,11 +1926,11 @@ export function detectSimpleRoute(
     const xDiff = Math.abs(p0.x - p1.x);
     const yDiff = Math.abs(p0.y - p1.y);
 
-    if (xDiff > 1 && yDiff > 16) {
+    if (xDiff >= MIN_Z_RUN && yDiff > 16) {
       return { kind: 'z-route', middleRunAxis: 'horizontal', anchorAxis: 'vertical' };
     } else if (yDiff <= 1) {
       return { kind: 'straight-line', middleRunAxis: 'horizontal', anchorAxis: 'vertical' };
-    } else if (xDiff <= 1) {
+    } else if (xDiff < MIN_Z_RUN) {
       return { kind: 'straight-line', middleRunAxis: 'vertical', anchorAxis: 'vertical' };
     }
     return null;
@@ -2139,6 +2140,23 @@ export function routeWithBend(
           startT: newT0,
           endT: newT1
         };
+      }
+
+      if ((newSide0 === 'top' || newSide0 === 'bottom') && (newSide1 === 'top' || newSide1 === 'bottom')) {
+        const center0X = rect0.left + rect0.width / 2;
+        const center1X = rect1.left + rect1.width / 2;
+
+        if (Math.abs(bend - center0X) <= SNAP_THRESHOLD && Math.abs(bend - center1X) <= SNAP_THRESHOLD) {
+          const snapP0 = sideAndTToPoint(rect0, newSide0, 0.5);
+          const snapP1 = sideAndTToPoint(rect1, newSide1, 0.5);
+          return {
+            points: [snapP0, snapP1],
+            startSide: newSide0,
+            endSide: newSide1,
+            startT: 0.5,
+            endT: 0.5
+          };
+        }
       }
 
       const rawPoints: Point[] = [newP0];
