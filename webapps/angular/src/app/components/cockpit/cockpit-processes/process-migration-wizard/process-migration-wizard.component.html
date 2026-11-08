@@ -142,7 +142,7 @@
               @if (sourceXmlLoading()) {
                 <div class="diagram-empty">{{ 'migration.loadingDiagram' | translate }}</div>
               } @else if (sourceXml()) {
-                <app-bpmn-viewer
+                <app-bpmn-viewer #sourceViewer
                   [xml]="sourceXml()"
                   [activityBadges]="sourceActivityBadges()"
                   [enableMappingButtons]="enableMappingButtons()"
@@ -156,7 +156,8 @@
                   (deleteMapping)="onDeleteMapping($event)"
                   (selectMappedActivity)="onSelectMappedActivity($event)"
                   (elementHover)="onElementHover($event)"
-                  (backgroundClick)="onCancelMapping()">
+                  (backgroundClick)="onCancelMapping()"
+                  (viewerReady)="onSourceViewerReady()">
                 </app-bpmn-viewer>
               } @else {
                 <div class="diagram-empty">{{ 'migration.selectSourceDiagram' | translate }}</div>
@@ -167,7 +168,7 @@
               @if (targetXmlLoading()) {
                 <div class="diagram-empty">{{ 'migration.loadingDiagram' | translate }}</div>
               } @else if (targetXml()) {
-                <app-bpmn-viewer
+                <app-bpmn-viewer #targetViewer
                   [xml]="targetXml()"
                   [activityBadges]="targetActivityBadges()"
                   [mappingMode]="mappingMode()"
@@ -180,7 +181,8 @@
                   (selectTarget)="onSelectTarget($event)"
                   (deleteMapping)="onDeleteMapping($event)"
                   (elementHover)="onElementHover($event)"
-                  (backgroundClick)="onCancelMapping()">
+                  (backgroundClick)="onCancelMapping()"
+                  (viewerReady)="onTargetViewerReady()">
                 </app-bpmn-viewer>
               } @else {
                 <div class="diagram-empty">{{ 'migration.selectTargetDiagram' | translate }}</div>
@@ -231,7 +233,7 @@
             </div>
             <div class="footer-checkboxes">
               <label class="checkbox-label">
-                <input type="checkbox" [(ngModel)]="linkDiagramsNavigation">
+                <input type="checkbox" [checked]="linkDiagramsNavigation()" (change)="linkDiagramsNavigation.set($any($event.target).checked)">
                 <span>{{ 'migration.linkDiagramsNavigation' | translate }}</span>
               </label>
               <label class="checkbox-label">

@@ -119,6 +119,10 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private viewer: any = null;
   private overlays: any = null;
   private isViewerReady = false;
+
+  getViewerInstance(): any {
+    return this.viewer;
+  }
   private badgeOverlayIds: Map<string, string[]> = new Map();
   private callActivityOverlayIds: string[] = [];
   private callActivityErrorOverlayIds: string[] = [];
