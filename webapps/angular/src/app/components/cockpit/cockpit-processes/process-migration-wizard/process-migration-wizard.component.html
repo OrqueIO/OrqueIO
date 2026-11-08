@@ -76,8 +76,8 @@
                 <select
                   id="sourceKey"
                   class="custom-select selector-key"
-                  [value]="sourceKey()"
-                  (change)="onSourceKeyChange($any($event.target).value)"
+                  [ngModel]="sourceKey()"
+                  (ngModelChange)="onSourceKeyChange($event)"
                   [attr.aria-label]="'migration.sourceProcessKey' | translate">
                   <option value="">{{ 'migration.selectKey' | translate }}</option>
                   @for (key of availableKeys(); track key) {
@@ -110,8 +110,8 @@
                 <select
                   id="targetKey"
                   class="custom-select selector-key"
-                  [value]="targetKey()"
-                  (change)="onTargetKeyChange($any($event.target).value)"
+                  [ngModel]="targetKey()"
+                  (ngModelChange)="onTargetKeyChange($event)"
                   [attr.aria-label]="'migration.targetProcessKey' | translate">
                   <option value="">{{ 'migration.selectKey' | translate }}</option>
                   @for (key of availableKeys(); track key) {
@@ -285,6 +285,7 @@
             [initialCriteria]="linkFilterCriteria()"
             [initialVnIgnoreCase]="linkVnIgnoreCase()"
             [initialVvIgnoreCase]="linkVvIgnoreCase()"
+            [initialSelectedIds]="instancesStepState()?.processInstanceIds ?? null"
             (back)="onSelectInstancesBack()"
             (next)="onSelectInstancesNext($event)">
           </app-migration-instances-step>

@@ -785,6 +785,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   private resetDownstream(): void {
     this.currentStep.set(1);
     this.variables.set([]);
+    this.instancesStepState.set(null);
   }
 
   /**

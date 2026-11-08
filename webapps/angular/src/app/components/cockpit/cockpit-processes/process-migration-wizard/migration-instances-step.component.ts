@@ -92,6 +92,7 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   readonly initialCriteria = input<MultiValueFilter[] | null>(null);
   readonly initialVnIgnoreCase = input<boolean>(false);
   readonly initialVvIgnoreCase = input<boolean>(false);
+  readonly initialSelectedIds = input<string[] | null>(null);
 
   readonly faQuestionCircle = faQuestionCircle;
   readonly faSpinner = faSpinner;
@@ -271,6 +272,24 @@ export class MigrationInstancesStepComponent implements OnDestroy {
       if (defId) {
         untracked(() => {
           this.loadActivities$.next(defId);
+        });
+      }
+    });
+
+    effect(() => {
+      const initialIds = this.initialSelectedIds();
+
+      if (initialIds && initialIds.length > 0) {
+        untracked(() => {
+          const instances = this.instances();
+          if (instances.length === 0) return;
+
+          const instanceIds = new Set(instances.map(i => i.id));
+          const validIds = initialIds.filter(id => instanceIds.has(id));
+
+          if (validIds.length > 0) {
+            this.selectedIds.set(new Set(validIds));
+          }
         });
       }
     });
