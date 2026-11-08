@@ -20,6 +20,7 @@ import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { parseInstructionReports } from '../../services/migration-validation.utils';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 export const EXPAND_DIAGRAM_STATE_KEY = 'expandDiagram' as const;
 
@@ -62,7 +63,7 @@ export interface CallActivityClickEvent {
 @Component({
   selector: 'app-bpmn-viewer',
   standalone: true,
-  imports: [CommonModule, RouterModule, FontAwesomeModule],
+  imports: [CommonModule, RouterModule, FontAwesomeModule, TranslatePipe],
   templateUrl: './bpmn-viewer.html',
   styleUrls: ['./bpmn-viewer.css'],
   encapsulation: ViewEncapsulation.None
@@ -82,6 +83,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() isExpanded = false;
   @Input() showFocusButton = false;
   @Input() focusElementId: string | null | undefined = null;
+  @Input() showResetButton = false;
   @Input() enableCallActivityNavigation = false;
   @Input() callActivityIdsWithInstances: Set<string> = new Set();
   @Input() parentBreadcrumb: ParentBreadcrumb | null = null;

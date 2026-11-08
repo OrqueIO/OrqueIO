@@ -56,6 +56,13 @@
           <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 10-16 0c0 3 2.7 7 8 11.7z"></path>
         </svg>
       </button>
+      <button type="button" class="zoom-btn" *ngIf="showResetButton" (click)="resetZoom()" [title]="'tasklist.resetZoom' | translate" [attr.aria-label]="'tasklist.resetZoom' | translate">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"></circle>
+          <line x1="12" y1="8" x2="12" y2="16"></line>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+        </svg>
+      </button>
       <button type="button" class="zoom-btn" (click)="zoomIn()" title="Zoom in">+</button>
       <button type="button" class="zoom-btn" (click)="zoomOut()" title="Zoom out">-</button>
     </div>
