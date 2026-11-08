@@ -25,7 +25,7 @@ import { MigrationArrowsComponent, RouteParams } from './migration-arrows.compon
 import { MigrationVariablesStepComponent } from './migration-variables-step.component';
 import { MigrationInstancesStepComponent, InstancesStepState, MigrationWizardSnapshot } from './migration-instances-step.component';
 import { MigrationVariableModalComponent } from './migration-variable-modal.component';
-import { MigrationConfirmStepComponent, MigrationExecutionResult as ConfirmResult, MigrationExecutionPayload } from './migration-confirm-step.component';
+import { MigrationConfirmStepComponent, MigrationExecutionResult as ConfirmResult, MigrationExecutionPayload, ConfirmStepState } from './migration-confirm-step.component';
 import { MigrationResultsStepComponent } from './migration-results-step.component';
 import { MigrationExecutionResult } from './migration-execution-result.model';
 import { classifyMigrationError } from './migration-error-classifier.utils';
@@ -260,6 +260,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   editingVariableIndex = signal<number | null>(null);
 
   instancesStepState = signal<InstancesStepState | null>(null);
+  confirmStepState = signal<ConfirmStepState | null>(null);
 
   // Execution state for step 5
   executionResult = signal<MigrationExecutionResult>({ kind: 'running' });
@@ -786,6 +787,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.currentStep.set(1);
     this.variables.set([]);
     this.instancesStepState.set(null);
+    this.confirmStepState.set(null);
   }
 
   /**
@@ -1251,7 +1253,8 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.currentStep.set(3);
   }
 
-  onSelectInstancesBack(): void {
+  onSelectInstancesBack(state: InstancesStepState): void {
+    this.instancesStepState.set(state);
     this.currentStep.set(2);
   }
 
@@ -1260,11 +1263,19 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.currentStep.set(4);
   }
 
-  onConfirmBack(): void {
+  onConfirmBack(state: ConfirmStepState): void {
+    this.confirmStepState.set(state);
     this.currentStep.set(3);
   }
 
   onConfirmNext(confirmData: ConfirmResult): void {
+    const state: ConfirmStepState = {
+      asyncMode: confirmData.mode === 'async',
+      skipCustomListeners: confirmData.payload.skipCustomListeners,
+      skipIoMappings: confirmData.payload.skipIoMappings
+    };
+    this.confirmStepState.set(state);
+
     this.lastConfirmData.set(confirmData);
     this.executeMigration(confirmData.payload, confirmData.mode, confirmData.totalCount);
   }
@@ -1330,6 +1341,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.migrationReport.set(null);
     this.variables.set([]);
     this.instancesStepState.set(null);
+    this.confirmStepState.set(null);
     this.executionResult.set({ kind: 'running' });
     this.executing.set(false);
     this.mappingMode.set(false);

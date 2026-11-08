@@ -285,8 +285,8 @@
             [initialCriteria]="linkFilterCriteria()"
             [initialVnIgnoreCase]="linkVnIgnoreCase()"
             [initialVvIgnoreCase]="linkVvIgnoreCase()"
-            [initialSelectedIds]="instancesStepState()?.processInstanceIds ?? null"
-            (back)="onSelectInstancesBack()"
+            [initialState]="instancesStepState()"
+            (back)="onSelectInstancesBack($event)"
             (next)="onSelectInstancesNext($event)">
           </app-migration-instances-step>
         </div>
@@ -300,7 +300,8 @@
             [instancesState]="instancesStepState()!"
             [sourceXml]="sourceXml()"
             [targetXml]="targetXml()"
-            (back)="onConfirmBack()"
+            [initialState]="confirmStepState()"
+            (back)="onConfirmBack($event)"
             (next)="onConfirmNext($event)">
           </app-migration-confirm-step>
         </div>
