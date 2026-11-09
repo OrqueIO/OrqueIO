@@ -160,7 +160,8 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
   protected String promptOf(String propertyPrompt, ActivityImpl activity, Element element) {
     Element parameter = promptParameter(activity, element);
     if (parameter == null) {
-      return propertyPrompt;
+      // Stripped like the parameter, so both forms give the same prompt, reuse key and audit version
+      return propertyPrompt != null ? propertyPrompt.strip() : null;
     }
     if (propertyPrompt != null) {
       throw error(activity, "declares " + PROMPT_PROPERTY + " both as a property and as an input parameter", element);
@@ -172,8 +173,9 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
     String prompt = parameter.getText().strip();
     // The engine would evaluate an expression in an input parameter; a prompt is sent as written
     if (prompt.contains("${") || prompt.contains("#{")) {
-      throw error(activity, "has an expression in its " + PROMPT_PROPERTY + " input parameter; use "
-          + "{{name}} placeholders with " + INPUTS_PROPERTY + " instead", element);
+      throw error(activity, "has ${ or #{ in its " + PROMPT_PROPERTY + " input parameter, which the engine "
+          + "would evaluate as an expression, even before a {{name}} placeholder; write the prompt without "
+          + "them, or as a " + PROMPT_PROPERTY + " property", element);
     }
     return prompt;
   }
@@ -192,15 +194,21 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
     return parameters.isEmpty() ? null : parameters.get(0);
   }
 
-  // The engine parses the input mapping after the service task, then calls this
+  /**
+   * The engine parses the input mapping after the service task, then calls this. A
+   * mapping that only carried the prompt is dropped, and so is the scope the engine
+   * made of the task for it: the task then runs as with the property form. Boundary
+   * events and compensation, parsed later, still make it a scope when needed.
+   */
   @Override
   public void parseIoMapping(Element extensionElements, ActivityImpl activity, IoMapping inputOutput) {
     if (LlmTaskConfiguration.of(activity) == null || activity.getIoMapping() != inputOutput) {
       return;
     }
-    inputOutput.getInputParameters().removeIf(parameter -> PROMPT_PROPERTY.equals(parameter.getName()));
-    if (inputOutput.getInputParameters().isEmpty() && inputOutput.getOutputParameters().isEmpty()) {
+    boolean hadPrompt = inputOutput.getInputParameters().removeIf(parameter -> PROMPT_PROPERTY.equals(parameter.getName()));
+    if (hadPrompt && inputOutput.getInputParameters().isEmpty() && inputOutput.getOutputParameters().isEmpty()) {
       activity.setIoMapping(null);
+      activity.setScope(false);
     }
   }
 
