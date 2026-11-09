@@ -106,6 +106,10 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
         throw error(activity, "declares '" + output.name() + "' both as input and output; the answer would "
             + "overwrite the data sent to the model", element);
       }
+      if (output.name().startsWith(LlmTaskAuditor.VARIABLE_PREFIX)) {
+        throw error(activity, "cannot write output '" + output.name() + "': names starting with "
+            + LlmTaskAuditor.VARIABLE_PREFIX + " are kept for the LLM task's audit", element);
+      }
       if (RESERVED_OUTPUT_NAMES.contains(output.name())) {
         throw error(activity, "cannot write output '" + output.name() + "': the engine uses this variable", element);
       }

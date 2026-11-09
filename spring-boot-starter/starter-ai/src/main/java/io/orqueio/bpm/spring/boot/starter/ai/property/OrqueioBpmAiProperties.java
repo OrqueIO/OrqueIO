@@ -48,6 +48,8 @@ public class OrqueioBpmAiProperties {
 
   private final Cache cache = new Cache();
 
+  private final Audit audit = new Audit();
+
   public boolean isEnabled() {
     return enabled;
   }
@@ -76,10 +78,14 @@ public class OrqueioBpmAiProperties {
     return cache;
   }
 
+  public Audit getAudit() {
+    return audit;
+  }
+
   @Override
   public String toString() {
     return "OrqueioBpmAiProperties[enabled=" + enabled + ", defaultProvider=" + defaultProvider
-        + ", timeout=" + timeout + ", cache=" + cache + "]";
+        + ", timeout=" + timeout + ", cache=" + cache + ", audit=" + audit + "]";
   }
 
   /**
@@ -140,6 +146,45 @@ public class OrqueioBpmAiProperties {
     public String toString() {
       return "Cache[enabled=" + enabled + ", timeToLive=" + timeToLive + ", lockTimeToLive=" + lockTimeToLive
           + ", redis=" + redis.isEnabled() + "]";
+    }
+  }
+
+  /**
+   * The record of each LLM task execution, in the process variable orqueioLlm_ followed
+   * by the task's id: provider, model, prompt version, tokens, latency and outcome.
+   */
+  public static class Audit {
+
+    /**
+     * Record each execution. Default {@code true}.
+     */
+    private boolean enabled = true;
+
+    /**
+     * Also record the resolved prompt and the answer, which may contain personal data.
+     * Default {@code false}.
+     */
+    private boolean includeContent = false;
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    public boolean isIncludeContent() {
+      return includeContent;
+    }
+
+    public void setIncludeContent(boolean includeContent) {
+      this.includeContent = includeContent;
+    }
+
+    @Override
+    public String toString() {
+      return "Audit[enabled=" + enabled + ", includeContent=" + includeContent + "]";
     }
   }
 

@@ -101,6 +101,17 @@ public class ChatModelRegistry {
         + DEFAULT_PROVIDER_PROPERTY + " to one of: " + supportedIds());
   }
 
+  /**
+   * @return the id of the provider the model belongs to, or its class name if it is not a supported provider
+   */
+  public String providerIdOf(ChatModel model) {
+    return Arrays.stream(LlmProvider.values())
+        .filter(provider -> isInstance(model, provider))
+        .map(LlmProvider::getId)
+        .findFirst()
+        .orElse(AopUtils.getTargetClass(model).getName());
+  }
+
   protected boolean isInstance(ChatModel model, LlmProvider provider) {
     Class<?> modelClass = AopUtils.getTargetClass(model);
     try {

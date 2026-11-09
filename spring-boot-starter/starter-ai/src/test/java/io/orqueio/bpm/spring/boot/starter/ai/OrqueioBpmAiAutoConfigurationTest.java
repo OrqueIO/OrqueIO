@@ -29,6 +29,7 @@ import io.orqueio.bpm.spring.boot.starter.ai.cache.RedisLlmCallLock;
 import io.orqueio.bpm.spring.boot.starter.ai.property.OrqueioBpmAiProperties;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.LlmProviderException;
+import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskAuditor;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDelegate;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskProcessEnginePlugin;
 import org.junit.jupiter.api.Test;
@@ -121,6 +122,23 @@ class OrqueioBpmAiAutoConfigurationTest {
     contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".cache.lock-time-to-live=-PT1M")
         .run(context -> assertThat(context).hasFailed()
             .getFailure().rootCause().hasMessageContaining(".cache.lock-time-to-live must not be negative"));
+  }
+
+  @Test
+  void shouldAuditByDefaultWithoutContent() {
+    contextRunner.run(context -> {
+      assertThat(context).hasSingleBean(LlmTaskAuditor.class);
+      assertThat(context.getBean(OrqueioBpmAiProperties.class).getAudit().isIncludeContent()).isFalse();
+    });
+  }
+
+  @Test
+  void shouldNotAuditWhenDisabled() {
+    contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".audit.enabled=false")
+        .run(context -> {
+          assertThat(context).doesNotHaveBean(LlmTaskAuditor.class);
+          assertThat(context).hasSingleBean(LlmTaskDelegate.class);
+        });
   }
 
   @Test
