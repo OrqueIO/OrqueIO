@@ -323,5 +323,131 @@ describe('migration-badge.utils', () => {
       expect(result.sourceBadges[0].type).toBe('valid');
       expect(result.targetBadges[0].type).toBe('valid');
     });
+
+    describe('BUG FIX: Badge assignment by source+target IDs instead of index', () => {
+      it('should assign correct badges when A is invalid and B is valid (exact bug scenario)', () => {
+        const plan: MigrationPlanDto = {
+          sourceProcessDefinitionId: 'proc:1',
+          targetProcessDefinitionId: 'proc:2',
+          instructions: [
+            { sourceActivityIds: ['Failing Task Modified'], targetActivityIds: ['Service Task'] },  // A: invalid
+            { sourceActivityIds: ['Review Error'], targetActivityIds: ['wait'] }                     // B: valid
+          ]
+        };
+
+        const report: MigrationPlanReportDto = {
+          instructionReports: [
+            {
+              instruction: {
+                sourceActivityIds: ['Failing Task Modified'],
+                targetActivityIds: ['Service Task']
+              },
+              failures: ['Activities have incompatible types (ClassDelegateActivityBehavior is not compatible with ServiceTaskExpressionActivityBehavior)']
+            }
+          ],
+          variableReports: {}
+        };
+
+        const stats: ActivityStatistics[] = [];
+
+        const result = calculateMigrationBadges(plan, report, stats);
+
+        expect(result.sourceBadges.length).toBe(2);
+
+        const badgeFailingTask = result.sourceBadges.find(b => b.activityId === 'Failing Task Modified');
+        expect(badgeFailingTask).toBeDefined();
+        expect(badgeFailingTask!.type).toBe('invalid');
+        expect(badgeFailingTask!.tooltip).toContain('ClassDelegateActivityBehavior');
+
+        const badgeReviewError = result.sourceBadges.find(b => b.activityId === 'Review Error');
+        expect(badgeReviewError).toBeDefined();
+        expect(badgeReviewError!.type).toBe('valid');
+        expect(badgeReviewError!.tooltip).toBeUndefined();
+
+        expect(result.targetBadges.length).toBe(2);
+
+        const badgeServiceTask = result.targetBadges.find(b => b.activityId === 'Service Task');
+        expect(badgeServiceTask).toBeDefined();
+        expect(badgeServiceTask!.type).toBe('invalid');
+        expect(badgeServiceTask!.tooltip).toContain('ClassDelegateActivityBehavior');
+
+        const badgeWait = result.targetBadges.find(b => b.activityId === 'wait');
+        expect(badgeWait).toBeDefined();
+        expect(badgeWait!.type).toBe('valid');
+        expect(badgeWait!.tooltip).toBeUndefined();
+      });
+
+      it('should handle reversed order (B valid first, A invalid second)', () => {
+        const plan: MigrationPlanDto = {
+          sourceProcessDefinitionId: 'proc:1',
+          targetProcessDefinitionId: 'proc:2',
+          instructions: [
+            { sourceActivityIds: ['wait'], targetActivityIds: ['wait'] },                            // B: valid
+            { sourceActivityIds: ['Failing Task Modified'], targetActivityIds: ['Service Task'] }   // A: invalid
+          ]
+        };
+
+        const report: MigrationPlanReportDto = {
+          instructionReports: [
+            {
+              instruction: {
+                sourceActivityIds: ['Failing Task Modified'],
+                targetActivityIds: ['Service Task']
+              },
+              failures: ['Type error']
+            }
+          ],
+          variableReports: {}
+        };
+
+        const stats: ActivityStatistics[] = [];
+        const result = calculateMigrationBadges(plan, report, stats);
+
+        const badgeWaitSource = result.sourceBadges.find(b => b.activityId === 'wait');
+        expect(badgeWaitSource).toBeDefined();
+        expect(badgeWaitSource!.type).toBe('valid');
+
+        const badgeWaitTarget = result.targetBadges.find(b => b.activityId === 'wait');
+        expect(badgeWaitTarget).toBeDefined();
+        expect(badgeWaitTarget!.type).toBe('valid');
+
+        const badgeFailingTask = result.sourceBadges.find(b => b.activityId === 'Failing Task Modified');
+        expect(badgeFailingTask).toBeDefined();
+        expect(badgeFailingTask!.type).toBe('invalid');
+
+        const badgeServiceTask = result.targetBadges.find(b => b.activityId === 'Service Task');
+        expect(badgeServiceTask).toBeDefined();
+        expect(badgeServiceTask!.type).toBe('invalid');
+      });
+
+      it('should handle report for non-existent instruction (ignore it)', () => {
+        const plan: MigrationPlanDto = {
+          sourceProcessDefinitionId: 'proc:1',
+          targetProcessDefinitionId: 'proc:2',
+          instructions: [
+            { sourceActivityIds: ['Task1'], targetActivityIds: ['Task2'] }
+          ]
+        };
+
+        const report: MigrationPlanReportDto = {
+          instructionReports: [
+            {
+              instruction: {
+                sourceActivityIds: ['UnknownTask'],
+                targetActivityIds: ['AnotherUnknown']
+              },
+              failures: ['Some error']
+            }
+          ],
+          variableReports: {}
+        };
+
+        const stats: ActivityStatistics[] = [];
+        const result = calculateMigrationBadges(plan, report, stats);
+
+        const badge = result.sourceBadges.find(b => b.activityId === 'Task1');
+        expect(badge!.type).toBe('valid');
+      });
+    });
   });
 });

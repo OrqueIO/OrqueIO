@@ -1,5 +1,6 @@
-import { MigrationPlanDto, MigrationPlanReportDto, MigrationInstructionValidationReportDto } from './migration.model';
+import { MigrationPlanDto, MigrationPlanReportDto } from './migration.model';
 import { ActivityStatistics } from './cockpit.service';
+import { parseInstructionReports } from './migration-validation.utils';
 
 export type MigrationBadgeType = 'valid' | 'invalid' | 'unmapped';
 
@@ -48,31 +49,21 @@ export function calculateMigrationBadges(
     return { sourceBadges, targetBadges };
   }
 
-  // Build a map of instruction index to validation report
-  const reportMap = new Map<number, MigrationInstructionValidationReportDto>();
-  if (report?.instructionReports) {
-    report.instructionReports.forEach((instrReport, index) => {
-      reportMap.set(index, instrReport);
-    });
-  }
+  const validationStates = parseInstructionReports(report, plan.instructions);
 
-  // Track which source activities are mapped
   const mappedSourceActivities = new Set<string>();
 
-  // Process each instruction
   plan.instructions.forEach((instruction, index) => {
-    const instrReport = reportMap.get(index);
-    const hasFailures = instrReport?.failures && instrReport.failures.length > 0;
+    const state = validationStates[index];
+    const hasFailures = !state.valid;
     const badgeType: MigrationBadgeType = hasFailures ? 'invalid' : 'valid';
 
-    // Build tooltip for invalid mappings
     let tooltip: string | undefined;
-    if (hasFailures && instrReport?.failures) {
-      const failureMessages = instrReport.failures.join('; ');
+    if (hasFailures && state.failures.length > 0) {
+      const failureMessages = state.failures.join('; ');
       tooltip = `Migration validation failed: ${failureMessages}`;
     }
 
-    // Add badges to all source activities in this instruction
     instruction.sourceActivityIds.forEach(sourceId => {
       mappedSourceActivities.add(sourceId);
       sourceBadges.push({
@@ -82,7 +73,6 @@ export function calculateMigrationBadges(
       });
     });
 
-    // Add badges to all target activities in this instruction
     instruction.targetActivityIds.forEach(targetId => {
       targetBadges.push({
         activityId: targetId,
@@ -92,7 +82,6 @@ export function calculateMigrationBadges(
     });
   });
 
-  // Find unmapped source activities with instances
   const unmappedActivities = sourceStats.filter(
     stat => stat.instances > 0 && !mappedSourceActivities.has(stat.id)
   );

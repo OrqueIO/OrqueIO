@@ -34,6 +34,12 @@ export interface MigrationExecutionPayload {
   skipIoMappings: boolean;
 }
 
+export interface ConfirmStepState {
+  asyncMode: boolean;
+  skipCustomListeners: boolean;
+  skipIoMappings: boolean;
+}
+
 type ValidationState = 'idle' | 'validating' | 'valid' | 'invalid' | 'error';
 
 
@@ -56,7 +62,7 @@ export class MigrationConfirmStepComponent {
   private translateService = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
 
-  readonly back = output<void>();
+  readonly back = output<ConfirmStepState>();
   readonly next = output<MigrationExecutionResult>();
 
   readonly migrationPlan = input.required<MigrationPlanDto>();
@@ -64,6 +70,7 @@ export class MigrationConfirmStepComponent {
   readonly instancesState = input.required<InstancesStepState>();
   readonly sourceXml = input<string | null>(null);
   readonly targetXml = input<string | null>(null);
+  readonly initialState = input<ConfirmStepState | null>(null);
 
   readonly faSpinner = faSpinner;
   readonly faCheck = faCheck;
@@ -96,6 +103,7 @@ export class MigrationConfirmStepComponent {
   });
 
   private readonly activityNamesCache = signal<Map<string, { source: string; target: string }>>(new Map());
+  private restorationApplied = signal(false);
 
   readonly canExecute = computed(() => {
     const validationState = this.validationState();
@@ -145,10 +153,28 @@ export class MigrationConfirmStepComponent {
         }
       });
     });
+
+    effect(() => {
+      const state = this.initialState();
+
+      if (state && !this.restorationApplied()) {
+        untracked(() => {
+          this.asyncMode.set(state.asyncMode);
+          this.skipCustomListeners.set(state.skipCustomListeners);
+          this.skipIoMappings.set(state.skipIoMappings);
+          this.restorationApplied.set(true);
+        });
+      }
+    });
   }
 
   onBack(): void {
-    this.back.emit();
+    const state: ConfirmStepState = {
+      asyncMode: this.asyncMode(),
+      skipCustomListeners: this.skipCustomListeners(),
+      skipIoMappings: this.skipIoMappings()
+    };
+    this.back.emit(state);
   }
 
   onExecute(): void {

@@ -136,7 +136,7 @@ describe('ProcessMigrationWizardComponent', () => {
 
   it('should have link diagrams navigation checkbox unchecked by default', () => {
     fixture.detectChanges();
-    expect(component.linkDiagramsNavigation).toBe(false);
+    expect(component.linkDiagramsNavigation()).toBe(false);
   });
 
   it('should disable Set Variables button when plan is invalid', () => {

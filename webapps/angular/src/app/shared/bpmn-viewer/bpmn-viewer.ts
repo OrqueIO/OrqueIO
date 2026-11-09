@@ -19,6 +19,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { parseInstructionReports } from '../../services/migration-validation.utils';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 export const EXPAND_DIAGRAM_STATE_KEY = 'expandDiagram' as const;
 
@@ -61,7 +63,7 @@ export interface CallActivityClickEvent {
 @Component({
   selector: 'app-bpmn-viewer',
   standalone: true,
-  imports: [CommonModule, RouterModule, FontAwesomeModule],
+  imports: [CommonModule, RouterModule, FontAwesomeModule, TranslatePipe],
   templateUrl: './bpmn-viewer.html',
   styleUrls: ['./bpmn-viewer.css'],
   encapsulation: ViewEncapsulation.None
@@ -81,6 +83,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() isExpanded = false;
   @Input() showFocusButton = false;
   @Input() focusElementId: string | null | undefined = null;
+  @Input() showResetButton = false;
   @Input() enableCallActivityNavigation = false;
   @Input() callActivityIdsWithInstances: Set<string> = new Set();
   @Input() parentBreadcrumb: ParentBreadcrumb | null = null;
@@ -118,6 +121,10 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private viewer: any = null;
   private overlays: any = null;
   private isViewerReady = false;
+
+  getViewerInstance(): any {
+    return this.viewer;
+  }
   private badgeOverlayIds: Map<string, string[]> = new Map();
   private callActivityOverlayIds: string[] = [];
   private callActivityErrorOverlayIds: string[] = [];
@@ -765,6 +772,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     if (!this.viewer || !this.overlays || !this.enableMappingButtons) return;
 
+    // SOURCE ONLY rule: mapping creation button (→) appears ONLY on source viewer
+    if (!this.isSourceViewer) return;
+
     const elementRegistry = this.viewer.get('elementRegistry');
     const eventBus = this.viewer.get('eventBus');
     const allElements = elementRegistry.getAll();
@@ -1222,6 +1232,19 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     }
 
+    const instructions = this.editableInstructions || [];
+    let sourceActivityIdToDelete: string | null = null;
+
+    for (const instruction of instructions) {
+      const isSource = instruction.sourceActivityIds.includes(activityId);
+      const isTarget = instruction.targetActivityIds.includes(activityId);
+
+      if (isSource || isTarget) {
+        sourceActivityIdToDelete = instruction.sourceActivityIds[0];
+        break;
+      }
+    }
+
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.className = 'bpmn-mapping-popover__remove-btn';
@@ -1229,7 +1252,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     removeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       this.ngZone.run(() => {
-        this.deleteMapping.emit(activityId);
+        if (sourceActivityIdToDelete) {
+          this.deleteMapping.emit(sourceActivityIdToDelete);
+        }
         this.closeMappingPopover();
       });
     });
@@ -1288,14 +1313,28 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (!this.migrationReport) return [];
 
     const instructions = this.editableInstructions || [];
-    const instructionIndex = instructions.findIndex(instr =>
-      instr.sourceActivityIds.includes(activityId) || instr.targetActivityIds.includes(activityId)
-    );
+    const validationStates = parseInstructionReports(this.migrationReport, instructions);
 
-    if (instructionIndex === -1) return [];
+    for (let i = 0; i < instructions.length; i++) {
+      const instruction = instructions[i];
+      const isSource = instruction.sourceActivityIds.includes(activityId);
+      const isTarget = instruction.targetActivityIds.includes(activityId);
 
-    const report = this.migrationReport.instructionReports?.[instructionIndex];
-    return report?.failures || [];
+      if (isSource || isTarget) {
+        const sourceId = instruction.sourceActivityIds[0];
+        const targetId = instruction.targetActivityIds[0];
+
+        const state = validationStates.find(
+          s => s.sourceActivityId === sourceId && s.targetActivityId === targetId
+        );
+
+        if (state && state.failures.length > 0) {
+          return state.failures;
+        }
+      }
+    }
+
+    return [];
   }
 
   private isEventType(type: string): boolean {

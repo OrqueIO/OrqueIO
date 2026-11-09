@@ -72,68 +72,56 @@
           <div class="mapping-header">
             <div class="definition-selector">
               <span class="selector-label">{{ 'migration.source' | translate }}:</span>
-              <div class="select-wrapper">
-                <select
-                  id="sourceKey"
-                  class="custom-select selector-key"
-                  [value]="sourceKey()"
-                  (change)="onSourceKeyChange($any($event.target).value)"
-                  [attr.aria-label]="'migration.sourceProcessKey' | translate">
-                  <option value="">{{ 'migration.selectKey' | translate }}</option>
-                  @for (key of availableKeys(); track key) {
-                    <option [value]="key">{{ key }}</option>
-                  }
-                </select>
-                <span class="select-chevron" aria-hidden="true">▾</span>
-              </div>
-              <div class="select-wrapper">
-                <select
-                  id="sourceVersion"
-                  class="custom-select selector-version"
-                  [disabled]="!sourceKey()"
-                  (change)="onSourceVersionChange(+$any($event.target).value)"
-                  [attr.aria-label]="'migration.sourceVersion' | translate">
-                  <option value="">{{ 'migration.selectVersion' | translate }}</option>
-                  @for (def of sourceVersions(); track def.id) {
-                    <option [value]="def.version" [selected]="sourceVersion() === def.version">v{{ def.version }}</option>
-                  }
-                </select>
-                <span class="select-chevron" aria-hidden="true">▾</span>
-              </div>
+              <select
+                id="sourceKey"
+                class="custom-select selector-key"
+                [ngModel]="sourceKey()"
+                (ngModelChange)="onSourceKeyChange($event)"
+                [attr.aria-label]="'migration.sourceProcessKey' | translate">
+                <option value="">{{ 'migration.selectKey' | translate }}</option>
+                @for (key of availableKeys(); track key) {
+                  <option [value]="key">{{ key }}</option>
+                }
+              </select>
+              <select
+                id="sourceVersion"
+                class="custom-select selector-version"
+                [disabled]="!sourceKey()"
+                (change)="onSourceVersionChange(+$any($event.target).value)"
+                [attr.aria-label]="'migration.sourceVersion' | translate">
+                <option value="">{{ 'migration.selectVersion' | translate }}</option>
+                @for (def of sourceVersions(); track def.id) {
+                  <option [value]="def.version" [selected]="sourceVersion() === def.version">v{{ def.version }}</option>
+                }
+              </select>
             </div>
 
             <div class="selector-divider"></div>
 
             <div class="definition-selector">
               <span class="selector-label">{{ 'migration.target' | translate }}:</span>
-              <div class="select-wrapper">
-                <select
-                  id="targetKey"
-                  class="custom-select selector-key"
-                  [value]="targetKey()"
-                  (change)="onTargetKeyChange($any($event.target).value)"
-                  [attr.aria-label]="'migration.targetProcessKey' | translate">
-                  <option value="">{{ 'migration.selectKey' | translate }}</option>
-                  @for (key of availableKeys(); track key) {
-                    <option [value]="key">{{ key }}</option>
-                  }
-                </select>
-                <span class="select-chevron" aria-hidden="true">▾</span>
-              </div>
-              <div class="select-wrapper">
-                <select
-                  id="targetVersion"
-                  class="custom-select selector-version"
-                  [disabled]="!targetKey()"
-                  (change)="onTargetVersionChange(+$any($event.target).value)"
-                  [attr.aria-label]="'migration.targetVersion' | translate">
-                  <option value="">{{ 'migration.selectVersion' | translate }}</option>
-                  @for (def of targetVersions(); track def.id) {
-                    <option [value]="def.version" [selected]="targetVersion() === def.version">v{{ def.version }}</option>
-                  }
-                </select>
-                <span class="select-chevron" aria-hidden="true">▾</span>
-              </div>
+              <select
+                id="targetKey"
+                class="custom-select selector-key"
+                [ngModel]="targetKey()"
+                (ngModelChange)="onTargetKeyChange($event)"
+                [attr.aria-label]="'migration.targetProcessKey' | translate">
+                <option value="">{{ 'migration.selectKey' | translate }}</option>
+                @for (key of availableKeys(); track key) {
+                  <option [value]="key">{{ key }}</option>
+                }
+              </select>
+              <select
+                id="targetVersion"
+                class="custom-select selector-version"
+                [disabled]="!targetKey()"
+                (change)="onTargetVersionChange(+$any($event.target).value)"
+                [attr.aria-label]="'migration.targetVersion' | translate">
+                <option value="">{{ 'migration.selectVersion' | translate }}</option>
+                @for (def of targetVersions(); track def.id) {
+                  <option [value]="def.version" [selected]="targetVersion() === def.version">v{{ def.version }}</option>
+                }
+              </select>
             </div>
           </div>
 
@@ -142,7 +130,7 @@
               @if (sourceXmlLoading()) {
                 <div class="diagram-empty">{{ 'migration.loadingDiagram' | translate }}</div>
               } @else if (sourceXml()) {
-                <app-bpmn-viewer
+                <app-bpmn-viewer #sourceViewer
                   [xml]="sourceXml()"
                   [activityBadges]="sourceActivityBadges()"
                   [enableMappingButtons]="enableMappingButtons()"
@@ -152,11 +140,13 @@
                   [isSourceViewer]="true"
                   [hoveredMappingSourceId]="hoveredSourceActivityId()"
                   [hoveredRemoveButtonActivityIds]="hoveredRemoveButtonSource()"
+                  [showResetButton]="true"
                   (createMapping)="onCreateMapping($event)"
                   (deleteMapping)="onDeleteMapping($event)"
                   (selectMappedActivity)="onSelectMappedActivity($event)"
                   (elementHover)="onElementHover($event)"
-                  (backgroundClick)="onCancelMapping()">
+                  (backgroundClick)="onCancelMapping()"
+                  (viewerReady)="onSourceViewerReady()">
                 </app-bpmn-viewer>
               } @else {
                 <div class="diagram-empty">{{ 'migration.selectSourceDiagram' | translate }}</div>
@@ -167,7 +157,7 @@
               @if (targetXmlLoading()) {
                 <div class="diagram-empty">{{ 'migration.loadingDiagram' | translate }}</div>
               } @else if (targetXml()) {
-                <app-bpmn-viewer
+                <app-bpmn-viewer #targetViewer
                   [xml]="targetXml()"
                   [activityBadges]="targetActivityBadges()"
                   [mappingMode]="mappingMode()"
@@ -177,9 +167,12 @@
                   [enableMappingButtons]="enableMappingButtons()"
                   [mappedActivityIds]="mappedTargetActivityIds()"
                   [hoveredMappingSourceId]="hoveredTargetActivityId()"
+                  [showResetButton]="true"
                   (selectTarget)="onSelectTarget($event)"
+                  (deleteMapping)="onDeleteMapping($event)"
                   (elementHover)="onElementHover($event)"
-                  (backgroundClick)="onCancelMapping()">
+                  (backgroundClick)="onCancelMapping()"
+                  (viewerReady)="onTargetViewerReady()">
                 </app-bpmn-viewer>
               } @else {
                 <div class="diagram-empty">{{ 'migration.selectTargetDiagram' | translate }}</div>
@@ -230,7 +223,7 @@
             </div>
             <div class="footer-checkboxes">
               <label class="checkbox-label">
-                <input type="checkbox" [(ngModel)]="linkDiagramsNavigation">
+                <input type="checkbox" [checked]="linkDiagramsNavigation()" (change)="linkDiagramsNavigation.set($any($event.target).checked)">
                 <span>{{ 'migration.linkDiagramsNavigation' | translate }}</span>
               </label>
               <label class="checkbox-label">
@@ -284,7 +277,8 @@
             [initialCriteria]="linkFilterCriteria()"
             [initialVnIgnoreCase]="linkVnIgnoreCase()"
             [initialVvIgnoreCase]="linkVvIgnoreCase()"
-            (back)="onSelectInstancesBack()"
+            [initialState]="instancesStepState()"
+            (back)="onSelectInstancesBack($event)"
             (next)="onSelectInstancesNext($event)">
           </app-migration-instances-step>
         </div>
@@ -298,7 +292,8 @@
             [instancesState]="instancesStepState()!"
             [sourceXml]="sourceXml()"
             [targetXml]="targetXml()"
-            (back)="onConfirmBack()"
+            [initialState]="confirmStepState()"
+            (back)="onConfirmBack($event)"
             (next)="onConfirmNext($event)">
           </app-migration-confirm-step>
         </div>

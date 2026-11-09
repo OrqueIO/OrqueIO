@@ -1,6 +1,6 @@
 import {
   Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef,
-  DestroyRef, inject, signal, computed, effect, untracked, HostListener
+  DestroyRef, inject, signal, computed, effect, untracked, HostListener, ViewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
@@ -25,7 +25,7 @@ import { MigrationArrowsComponent, RouteParams } from './migration-arrows.compon
 import { MigrationVariablesStepComponent } from './migration-variables-step.component';
 import { MigrationInstancesStepComponent, InstancesStepState, MigrationWizardSnapshot } from './migration-instances-step.component';
 import { MigrationVariableModalComponent } from './migration-variable-modal.component';
-import { MigrationConfirmStepComponent, MigrationExecutionResult as ConfirmResult, MigrationExecutionPayload } from './migration-confirm-step.component';
+import { MigrationConfirmStepComponent, MigrationExecutionResult as ConfirmResult, MigrationExecutionPayload, ConfirmStepState } from './migration-confirm-step.component';
 import { MigrationResultsStepComponent } from './migration-results-step.component';
 import { MigrationExecutionResult } from './migration-execution-result.model';
 import { classifyMigrationError } from './migration-error-classifier.utils';
@@ -34,7 +34,6 @@ import { MigrationUndoToastService } from './migration-undo-toast.service';
 import { snapshotMapping, restoreMapping, MigrationState } from './migration-undo-utils';
 import { PlanVariable } from './migration-variables.utils';
 import { MigrationValidationService } from './migration-validation.service';
-import { ViewChild } from '@angular/core';
 
 type LoadingState = 'idle' | 'loading' | 'loaded' | 'error';
 
@@ -66,6 +65,8 @@ const ENABLE_CONNECTION_EDITOR_SPIKE = false;
 })
 export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   @ViewChild(MigrationArrowsComponent) migrationArrowsComponent?: MigrationArrowsComponent;
+  @ViewChild('sourceViewer') sourceViewerComponent?: BpmnViewerComponent;
+  @ViewChild('targetViewer') targetViewerComponent?: BpmnViewerComponent;
 
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
@@ -260,6 +261,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   editingVariableIndex = signal<number | null>(null);
 
   instancesStepState = signal<InstancesStepState | null>(null);
+  confirmStepState = signal<ConfirmStepState | null>(null);
 
   // Execution state for step 5
   executionResult = signal<MigrationExecutionResult>({ kind: 'running' });
@@ -325,7 +327,13 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   // UI controls
   showMigrationPlan = true;
-  linkDiagramsNavigation = false;
+  linkDiagramsNavigation = signal(false);
+
+  private isApplyingSync = false;
+  private sourceViewboxListener: (() => void) | null = null;
+  private targetViewboxListener: (() => void) | null = null;
+  private sourceViewerReady = signal(false);
+  private targetViewerReady = signal(false);
 
   // Computed for enabling mapping buttons
   enableMappingButtons = computed(() => !!(this.sourceDefinitionId() && this.targetDefinitionId()));
@@ -357,6 +365,20 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     }
   });
 
+  private linkedNavigationEffect = effect(() => {
+    const linked = this.linkDiagramsNavigation();
+    const sourceReady = this.sourceViewerReady();
+    const targetReady = this.targetViewerReady();
+
+    untracked(() => {
+      if (linked && sourceReady && targetReady) {
+        this.setupLinkedNavigation();
+      } else {
+        this.teardownLinkedNavigation();
+      }
+    });
+  });
+
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
 
@@ -381,6 +403,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
           this.sourceXmlLoading.set(true);
           this.sourceXml.set(null);
           this.sourceActivityStats.set([]);
+          this.sourceViewerReady.set(false);
         }),
         switchMap(defId =>
           defId
@@ -411,6 +434,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         tap(() => {
           this.targetXmlLoading.set(true);
           this.targetXml.set(null);
+          this.targetViewerReady.set(false);
         }),
         switchMap(defId =>
           defId
@@ -491,6 +515,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.navMenuService.clearMenuItems();
     this.removeEscapeKeyListener();
+    this.teardownLinkedNavigation();
   }
 
   private loadFilterFromUrl(): void {
@@ -785,6 +810,8 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   private resetDownstream(): void {
     this.currentStep.set(1);
     this.variables.set([]);
+    this.instancesStepState.set(null);
+    this.confirmStepState.set(null);
   }
 
   /**
@@ -1250,7 +1277,8 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.currentStep.set(3);
   }
 
-  onSelectInstancesBack(): void {
+  onSelectInstancesBack(state: InstancesStepState): void {
+    this.instancesStepState.set(state);
     this.currentStep.set(2);
   }
 
@@ -1259,11 +1287,19 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.currentStep.set(4);
   }
 
-  onConfirmBack(): void {
+  onConfirmBack(state: ConfirmStepState): void {
+    this.confirmStepState.set(state);
     this.currentStep.set(3);
   }
 
   onConfirmNext(confirmData: ConfirmResult): void {
+    const state: ConfirmStepState = {
+      asyncMode: confirmData.mode === 'async',
+      skipCustomListeners: confirmData.payload.skipCustomListeners,
+      skipIoMappings: confirmData.payload.skipIoMappings
+    };
+    this.confirmStepState.set(state);
+
     this.lastConfirmData.set(confirmData);
     this.executeMigration(confirmData.payload, confirmData.mode, confirmData.totalCount);
   }
@@ -1329,6 +1365,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.migrationReport.set(null);
     this.variables.set([]);
     this.instancesStepState.set(null);
+    this.confirmStepState.set(null);
     this.executionResult.set({ kind: 'running' });
     this.executing.set(false);
     this.mappingMode.set(false);
@@ -1451,5 +1488,87 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         }
       }
     }
+  }
+
+  onSourceViewerReady(): void {
+    this.sourceViewerReady.set(true);
+  }
+
+  onTargetViewerReady(): void {
+    this.targetViewerReady.set(true);
+  }
+
+  private setupLinkedNavigation(): void {
+    this.teardownLinkedNavigation();
+
+    const sourceViewer = this.sourceViewerComponent?.getViewerInstance();
+    const targetViewer = this.targetViewerComponent?.getViewerInstance();
+
+    if (!sourceViewer || !targetViewer) {
+      return;
+    }
+
+    try {
+      const sourceEventBus = sourceViewer.get('eventBus');
+      const targetEventBus = targetViewer.get('eventBus');
+
+      const onSourceViewboxChanged = () => {
+        if (this.isApplyingSync) return;
+
+        this.isApplyingSync = true;
+        try {
+          const sourceCanvas = sourceViewer.get('canvas');
+          const targetCanvas = targetViewer.get('canvas');
+          const sourceViewbox = sourceCanvas.viewbox();
+
+          targetCanvas.viewbox(sourceViewbox);
+        } catch (e) {
+          console.error('Error syncing source to target viewbox:', e);
+        } finally {
+          this.isApplyingSync = false;
+        }
+      };
+
+      const onTargetViewboxChanged = () => {
+        if (this.isApplyingSync) return;
+
+        this.isApplyingSync = true;
+        try {
+          const sourceCanvas = sourceViewer.get('canvas');
+          const targetCanvas = targetViewer.get('canvas');
+          const targetViewbox = targetCanvas.viewbox();
+
+          sourceCanvas.viewbox(targetViewbox);
+        } catch (e) {
+          console.error('Error syncing target to source viewbox:', e);
+        } finally {
+          this.isApplyingSync = false;
+        }
+      };
+
+      sourceEventBus.on('canvas.viewbox.changed', onSourceViewboxChanged);
+      targetEventBus.on('canvas.viewbox.changed', onTargetViewboxChanged);
+
+      this.sourceViewboxListener = () => {
+        sourceEventBus.off('canvas.viewbox.changed', onSourceViewboxChanged);
+      };
+      this.targetViewboxListener = () => {
+        targetEventBus.off('canvas.viewbox.changed', onTargetViewboxChanged);
+      };
+    } catch (e) {
+      console.error('Error setting up linked navigation:', e);
+    }
+  }
+
+  private teardownLinkedNavigation(): void {
+    if (this.sourceViewboxListener) {
+      this.sourceViewboxListener();
+      this.sourceViewboxListener = null;
+    }
+    if (this.targetViewboxListener) {
+      this.targetViewboxListener();
+      this.targetViewboxListener = null;
+    }
+    this.isApplyingSync = false;
   }
 }

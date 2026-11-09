@@ -1,6 +1,9 @@
 import type { MigrationPlanDto, MigrationPlanReportDto, VariableValueDto } from '../../../../services/migration.model';
 import type { PlanVariable } from './migration-variables.utils';
 
+export type { InstructionValidationState } from '../../../../services/migration-validation.utils';
+export { parseInstructionReports, findInstructionState } from '../../../../services/migration-validation.utils';
+
 export type VariableValidationStatus = 'valid' | 'invalid' | 'pending' | 'error';
 
 export interface VariableValidationState {

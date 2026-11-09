@@ -79,7 +79,7 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   @ViewChild('saveMenuButton', { read: ElementRef }) saveMenuButton?: ElementRef<HTMLButtonElement>;
   @ViewChild('savedFiltersMenuContainer', { read: ElementRef }) savedFiltersMenuContainer?: ElementRef<HTMLDivElement>;
 
-  readonly back = output<void>();
+  readonly back = output<InstancesStepState>();
   readonly next = output<InstancesStepState>();
 
   readonly sourceDefinitionId = input.required<string>();
@@ -92,6 +92,7 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   readonly initialCriteria = input<MultiValueFilter[] | null>(null);
   readonly initialVnIgnoreCase = input<boolean>(false);
   readonly initialVvIgnoreCase = input<boolean>(false);
+  readonly initialState = input<InstancesStepState | null>(null);
 
   readonly faQuestionCircle = faQuestionCircle;
   readonly faSpinner = faSpinner;
@@ -134,6 +135,7 @@ export class MigrationInstancesStepComponent implements OnDestroy {
   readonly Math = Math;
 
   readonly selectedIds = signal<Set<string>>(new Set());
+  private restorationApplied = signal(false);
   readonly allOnPageSelected = computed(() => {
     const instances = this.instances();
     const selectedIds = this.selectedIds();
@@ -272,6 +274,47 @@ export class MigrationInstancesStepComponent implements OnDestroy {
         untracked(() => {
           this.loadActivities$.next(defId);
         });
+      }
+    });
+
+    effect(() => {
+      const state = this.initialState();
+
+      if (state && !this.restorationApplied()) {
+        untracked(() => {
+          if (state.mode && state.mode !== this.mode()) {
+            this.mode.set(state.mode);
+          }
+
+          if (state.filterCriteria && state.filterCriteria.length > 0) {
+            const currentCriteria = this.filterCriteria();
+            if (JSON.stringify(currentCriteria) !== JSON.stringify(state.filterCriteria)) {
+              this.filterCriteria.set(state.filterCriteria);
+            }
+          }
+        });
+      }
+    });
+
+    effect(() => {
+      const state = this.initialState();
+      const instances = this.instances();
+
+      if (state && !this.restorationApplied() && instances.length > 0) {
+        if (state.mode === 'instance' && state.processInstanceIds && state.processInstanceIds.length > 0) {
+          untracked(() => {
+            const instanceIds = new Set(instances.map(i => i.id));
+            const validIds = state.processInstanceIds!.filter(id => instanceIds.has(id));
+
+            if (validIds.length > 0) {
+              this.selectedIds.set(new Set(validIds));
+            }
+
+            this.restorationApplied.set(true);
+          });
+        } else if (state.mode === 'query') {
+          this.restorationApplied.set(true);
+        }
       }
     });
   }
@@ -423,7 +466,36 @@ export class MigrationInstancesStepComponent implements OnDestroy {
 
 
   onBackClick(): void {
-    this.back.emit();
+    const mode = this.mode();
+    const selectedCount = this.selectedIds().size;
+    const totalCount = this.totalCount();
+
+    let state: InstancesStepState;
+
+    if (mode === 'query') {
+      const queryParams = this.buildQueryParamsForApi();
+      state = {
+        mode: 'query',
+        processInstanceQuery: queryParams,
+        totalCount: totalCount,
+        label: this.translateService.instant('migration.instances.selectedLabel', {
+          count: totalCount.toString()
+        }),
+        filterCriteria: this.filterCriteria()
+      };
+    } else {
+      state = {
+        mode: 'instance',
+        processInstanceIds: Array.from(this.selectedIds()),
+        totalCount: selectedCount,
+        label: this.translateService.instant('migration.instances.selectedLabel', {
+          count: selectedCount.toString()
+        }),
+        filterCriteria: this.filterCriteria()
+      };
+    }
+
+    this.back.emit(state);
   }
 
   getProcessKeyFromDefinitionId(): string {

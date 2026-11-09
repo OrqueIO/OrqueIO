@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MigrationInstructionDto, MigrationPlanReportDto } from '../../../../services/migration.model';
+import { parseInstructionReports, findInstructionState, type InstructionValidationState } from '../../../../services/migration-validation.utils';
 import { Anchor, anchorPoint, nearestAnchor, buildArrowPath, getAnchorKey, Point, Rect as AnchorRect } from './migration-arrow-anchors';
 import {
   buildOrthogonalRoute,
@@ -41,6 +42,9 @@ import {
   dockPoint,
   startMarkerPosition,
   endArrowhead,
+  detectSimpleRoute,
+  routeWithBend,
+  middleRunMidpoint,
   Point as WaypointPoint,
   Rect as WaypointRect,
   Side as WaypointSide
@@ -473,6 +477,10 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
     orientation: 'horizontal' | 'vertical';
     initialWaypoints: Point[];
     initialPointerPos: Point;
+    grabOffset: Point;
+    barMiddle: Point;
+    originalStartSide: WaypointSide;
+    originalEndSide: WaypointSide;
   } | null>(null);
 
   dragPreviewAnchor = signal<Anchor | null>(null);
@@ -661,12 +669,11 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
     const containerRect = container.getBoundingClientRect();
     this.viewBox.set(`0 0 ${containerRect.width} ${containerRect.height}`);
 
+    const validationStates = parseInstructionReports(this.report, this.instructions);
+
     this.instructions.forEach((instruction, index) => {
       const shouldShow = this.showAll || this.visibleInstructionIndices.has(index);
       if (!shouldShow) return;
-
-      const instrReport = this.report?.instructionReports?.[index];
-      const valid = !instrReport?.failures || instrReport.failures.length === 0;
 
       instruction.sourceActivityIds.forEach(sourceId => {
         instruction.targetActivityIds.forEach(targetId => {
@@ -674,6 +681,9 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
           const targetRect = this.getElementRect(targetId, this.targetContainerSelector, containerRect);
 
           if (sourceRect && targetRect) {
+            const validationState = findInstructionState(validationStates, sourceId, targetId);
+            const valid = validationState?.valid ?? true;
+
             const instructionKey = sourceId + '-' + targetId;
             const routeParams = this.customAnchors.get(instructionKey);
 
@@ -724,9 +734,21 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
               height: targetRect.height
             };
 
+            const sourceParentRects = this.getParentRects(sourceId, this.sourceContainerSelector, containerRect);
+            const targetParentRects = this.getParentRects(targetId, this.targetContainerSelector, containerRect);
+
             let points: WaypointPoint[];
             if (storedWaypoints === null || storedWaypoints === undefined) {
-              points = initialWaypoints(sourceRectData, targetRectData, startSide, startT, endSide, endT);
+              points = initialWaypoints(
+                sourceRectData,
+                targetRectData,
+                startSide,
+                startT,
+                endSide,
+                endT,
+                sourceParentRects,
+                targetParentRects
+              );
             } else {
               points = repairWaypoints(storedWaypoints, sourceRectData, targetRectData, startSide, startT, endSide, endT);
             }
@@ -883,6 +905,54 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
     const rect = element.getBoundingClientRect();
 
     return this.toLayerRect(rect, layerContainerRect);
+  }
+
+  /**
+   * @param elementId
+   * @param containerSelector
+   * @param layerContainerRect
+   * @returns
+   */
+  private getParentRects(elementId: string, containerSelector: string, layerContainerRect: DOMRect): Rect[] {
+    const container = document.querySelector(containerSelector);
+    if (!container) return [];
+
+    const viewer = this.findViewerInstance(container);
+    if (!viewer) return [];
+
+    try {
+      const elementRegistry = viewer.get('elementRegistry');
+      if (!elementRegistry) return [];
+
+      const element = elementRegistry.get(elementId);
+      if (!element) return [];
+
+      const parents: Rect[] = [];
+      let current = element.parent;
+
+      while (current && current.parent) {
+        if (!current.parent.parent) break;
+
+        const parentDomElement = container.querySelector(`[data-element-id="${current.id}"]`);
+        if (parentDomElement) {
+          const parentDomRect = parentDomElement.getBoundingClientRect();
+          const parentLayerRect = this.toLayerRect(parentDomRect, layerContainerRect);
+
+          parents.push({
+            left: parentLayerRect.left,
+            top: parentLayerRect.top,
+            width: parentLayerRect.width,
+            height: parentLayerRect.height
+          });
+        }
+
+        current = current.parent;
+      }
+
+      return parents;
+    } catch (e) {
+      return [];
+    }
   }
 
   /**
@@ -2030,12 +2100,30 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
     const initialPointerPos = this.toLayerPoint(event.clientX, event.clientY);
     if (!initialPointerPos) return;
 
+    // Store ORIGINAL anchor sides (never modified during drag)
+    const originalStartSide: WaypointSide = arrow.startSide || 'right';
+    const originalEndSide: WaypointSide = arrow.endSide || 'left';
+
+    // Calculate bar middle position for grab offset
+    const routeInfo = detectSimpleRoute(arrow.points, originalStartSide, originalEndSide);
+    const barMiddle = middleRunMidpoint(arrow.points, routeInfo);
+
+    // Calculate grab offset (position where user grabbed relative to bar center)
+    const grabOffset = {
+      x: initialPointerPos.x - barMiddle.x,
+      y: initialPointerPos.y - barMiddle.y
+    };
+
     this.draggingSegment.set({
       arrowIndex,
       segmentIndex,
       orientation,
       initialWaypoints: [...arrow.points],
-      initialPointerPos
+      initialPointerPos,
+      grabOffset,
+      barMiddle,
+      originalStartSide,
+      originalEndSide
     });
 
     const target = event.currentTarget as Element;
@@ -2085,9 +2173,16 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
     const currentPointerPos = this.toLayerPoint(event.clientX, event.clientY);
     if (!currentPointerPos) return;
 
+    // Apply 3px threshold to avoid micro-movements
+    const deltaX = currentPointerPos.x - dragState.initialPointerPos.x;
+    const deltaY = currentPointerPos.y - dragState.initialPointerPos.y;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    if (distance < 3) return;
+
     const arrow = this.arrows()[dragState.arrowIndex];
     if (!arrow) return;
 
+    // Get activity rectangles (needed for both bend-based and fallback)
     const diagramsContainer = this.hostElement.nativeElement.closest('.diagrams-container');
     if (!diagramsContainer) return;
     const containerRect = diagramsContainer.getBoundingClientRect();
@@ -2109,17 +2204,42 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
       height: targetRect.height
     };
 
-    const deltaX = currentPointerPos.x - dragState.initialPointerPos.x;
-    const deltaY = currentPointerPos.y - dragState.initialPointerPos.y;
-
-    const delta = dragState.orientation === 'horizontal' ? deltaY : deltaX;
-
-    const startSide: WaypointSide = arrow.startSide || 'right';
+    // Use ORIGINAL sides from snapshot (never use current arrow.startSide/endSide during drag)
+    const originalStartSide = dragState.originalStartSide;
+    const originalEndSide = dragState.originalEndSide;
     const startT = arrow.startT !== undefined ? arrow.startT : 0.5;
-    const endSide: WaypointSide = arrow.endSide || 'left';
     const endT = arrow.endT !== undefined ? arrow.endT : 0.5;
 
-    const result = moveSegment(dragState.initialWaypoints, dragState.segmentIndex, delta, sourceRectData, targetRectData, startSide, startT, endSide, endT);
+    // Try simple bend-based routing first (using ORIGINAL sides)
+    const routeInfo = detectSimpleRoute(dragState.initialWaypoints, originalStartSide, originalEndSide);
+
+    if (routeInfo) {
+      // Simple route: use bend-based model with side switching
+      const p0 = dragState.initialWaypoints[0];
+      const p1 = dragState.initialWaypoints[dragState.initialWaypoints.length - 1];
+
+      // Calculate bend coordinate from pointer position minus grab offset
+      let bend: number;
+      if (routeInfo.middleRunAxis === 'vertical') {
+        // Middle run is vertical: bend is X coordinate
+        bend = currentPointerPos.x - dragState.grabOffset.x;
+      } else {
+        // Middle run is horizontal: bend is Y coordinate
+        bend = currentPointerPos.y - dragState.grabOffset.y;
+      }
+
+      const result = routeWithBend(p0, originalStartSide, p1, originalEndSide, bend, routeInfo, sourceRectData, targetRectData);
+
+      if (result) {
+        this.updateArrowWaypoints(dragState.arrowIndex, result.points, false, result.startSide, result.startT, result.endSide, result.endT);
+        return;
+      }
+    }
+
+    // Fallback: use traditional moveSegment for complex routes
+    const delta = dragState.orientation === 'horizontal' ? deltaY : deltaX;
+
+    const result = moveSegment(dragState.initialWaypoints, dragState.segmentIndex, delta, sourceRectData, targetRectData, originalStartSide, startT, originalEndSide, endT);
 
     this.updateArrowWaypoints(dragState.arrowIndex, result.points, false, result.startSide, result.startT, result.endSide, result.endT);
   }
