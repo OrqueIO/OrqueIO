@@ -28,6 +28,7 @@ import java.util.Map;
 import io.orqueio.bpm.engine.delegate.DelegateExecution;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
+import org.springframework.ai.chat.metadata.EmptyUsage;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
@@ -37,15 +38,33 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * Records what each execution of an LLM task used and cost, so a decision can be
  * explained afterwards: a JSON process variable named {@value #VARIABLE_PREFIX} followed
- * by the task's id. It is visible in Cockpit, kept in the engine history (every
- * execution with history level {@code full}) and removed with the instance.
- * <p>
+ * by the task's id, set on the process instance (or the called instance in a call
+ * activity). It is visible in Cockpit, kept in the engine history (every execution with
+ * history level {@code full}) and removed with the instance.
+ * <ul>
+ *   <li>{@code promptVersion}: hash of the prompt template and the declared outputs, which
+ *       together make the instructions the model receives</li>
+ *   <li>{@code model}: the model the provider reports, else the one requested (a reused
+ *       answer has no report)</li>
+ *   <li>tokens: as reported by the provider, {@code null} when it reports none, 0 for a
+ *       reused answer, which cost nothing</li>
+ *   <li>{@code latencyMs}: how long the task waited for its answer, including any wait for
+ *       a call of the same request</li>
+ *   <li>{@code recordedAt}: when the record was written, once the answer was in</li>
+ * </ul>
  * The prompt and the answer, which may contain personal data, are recorded only when
- * {@code includeContent} is set.
+ * {@code includeContent} is set. They are then shortened so the record fits in the
+ * engine's string variable column on every supported database.
  */
 public class LlmTaskAuditor {
 
   public static final String VARIABLE_PREFIX = "orqueioLlm_";
+
+  /**
+   * Longest record: the engine stores a string variable in a column of 4000 characters,
+   * 2000 on Oracle; a longer value fails the job when the transaction is flushed.
+   */
+  public static final int MAX_RECORD_LENGTH = 2000;
 
   public enum Outcome {
     /** The answer was valid and its fields were written. */
@@ -76,9 +95,9 @@ public class LlmTaskAuditor {
   public void record(DelegateExecution execution, LlmTaskConfiguration configuration, ChatModel chatModel,
                      Prompt prompt, String userPrompt, LlmModelAnswer answer, Duration latency, Outcome outcome) {
     Map<String, Object> audit = new LinkedHashMap<>();
-    audit.put("provider", providerOf(configuration, chatModel));
+    audit.put("provider", chatModelRegistry.providerIdOf(configuration.getProvider(), chatModel));
     audit.put("model", modelOf(chatModel, prompt, answer));
-    audit.put("promptVersion", sha256(configuration.getPrompt()));
+    audit.put("promptVersion", promptVersion(configuration));
     Usage usage = usageOf(answer);
     // A reused answer cost nothing; a provider that reports no usage leaves the counts unknown
     audit.put("inputTokens", answer.fromCache() ? Integer.valueOf(0) : usage != null ? usage.getPromptTokens() : null);
@@ -86,16 +105,45 @@ public class LlmTaskAuditor {
     audit.put("latencyMs", latency.toMillis());
     audit.put("fromCache", answer.fromCache());
     audit.put("outcome", outcome.name());
-    audit.put("timestamp", clock.instant().toString());
-    if (includeContent) {
-      audit.put("prompt", userPrompt);
-      audit.put("answer", answer.text());
-    }
-    execution.setVariable(variableName(execution.getCurrentActivityId()), jsonMapper.writeValueAsString(audit));
+    audit.put("recordedAt", clock.instant().toString());
+    String record = includeContent
+        ? withContent(audit, userPrompt, answer.text())
+        : jsonMapper.writeValueAsString(audit);
+    execution.setVariable(variableName(execution.getCurrentActivityId()), record);
   }
 
-  protected String providerOf(LlmTaskConfiguration configuration, ChatModel chatModel) {
-    return configuration.getProvider() != null ? configuration.getProvider() : chatModelRegistry.providerIdOf(chatModel);
+  // Shortens prompt and answer until the record fits; escaping makes the JSON longer than the text
+  protected String withContent(Map<String, Object> audit, String userPrompt, String answer) {
+    String promptText = userPrompt != null ? userPrompt : "";
+    String answerText = answer != null ? answer : "";
+    int limit = Math.max(promptText.length(), answerText.length());
+    while (true) {
+      boolean truncated = promptText.length() > limit || answerText.length() > limit;
+      Map<String, Object> content = new LinkedHashMap<>(audit);
+      content.put("prompt", shorten(promptText, limit));
+      content.put("answer", shorten(answerText, limit));
+      if (truncated) {
+        content.put("truncated", true);
+      }
+      String record = jsonMapper.writeValueAsString(content);
+      if (record.length() <= MAX_RECORD_LENGTH || limit == 0) {
+        return record;
+      }
+      limit = Math.max(0, Math.min(limit, Math.max(promptText.length(), answerText.length()))
+          - Math.max(1, (record.length() - MAX_RECORD_LENGTH + 1) / 2));
+    }
+  }
+
+  private static String shorten(String text, int limit) {
+    return text.length() <= limit ? text : text.substring(0, limit);
+  }
+
+  protected String promptVersion(LlmTaskConfiguration configuration) {
+    StringBuilder declared = new StringBuilder(configuration.getPrompt());
+    for (LlmOutputField output : configuration.getOutputs()) {
+      declared.append('\n').append(output.name()).append(':').append(output.type().getId());
+    }
+    return sha256(declared.toString());
   }
 
   // The model the provider reports having used, else the one requested
@@ -108,10 +156,12 @@ public class LlmTaskAuditor {
     return options != null ? options.getModel() : null;
   }
 
+  // Spring AI fills a missing usage with EmptyUsage, whose counts read 0: that is unknown, not free
   protected Usage usageOf(LlmModelAnswer answer) {
-    return answer.response() != null && answer.response().getMetadata() != null
+    Usage usage = answer.response() != null && answer.response().getMetadata() != null
         ? answer.response().getMetadata().getUsage()
         : null;
+    return usage instanceof EmptyUsage ? null : usage;
   }
 
   protected static String sha256(String value) {

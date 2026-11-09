@@ -64,8 +64,40 @@ class LlmTaskAuditorTest {
 
     assertThat(audit.get("provider").asString()).isEqualTo("ollama");
     assertThat(audit.get("model").asString()).isEqualTo("qwen2.5:7b");
-    assertThat(audit.get("timestamp").asString()).isEqualTo("2026-11-09T14:02:11Z");
+    assertThat(audit.get("recordedAt").asString()).isEqualTo("2026-11-09T14:02:11Z");
     assertThat(audit.get("latencyMs").asLong()).isEqualTo(3200);
+    // No usage reported: unknown, not free
+    assertThat(audit.get("inputTokens").isNull()).isTrue();
+    assertThat(audit.get("outputTokens").isNull()).isTrue();
+  }
+
+  @Test
+  void shouldRecordProviderIdAsSupportedProvidersSpellIt() {
+    ChatModelRegistry withDefault = new ChatModelRegistry(() -> List.of(ollama), "AZURE-OpenAI");
+
+    assertThat(withDefault.providerIdOf(null, ollama)).isEqualTo("azure-openai");
+    assertThat(registry.providerIdOf("Ollama", ollama)).isEqualTo("ollama");
+    assertThat(registry.providerIdOf(null, ollama)).isEqualTo("ollama");
+  }
+
+  @Test
+  void shouldShortenContentToFitTheVariableColumn() {
+    String longPrompt = "Classify: " + "\"stolen\" bike ".repeat(400);
+    String longAnswer = "{\"category\":\"" + "Theft ".repeat(500) + "\"}";
+
+    DelegateExecution execution = mock(DelegateExecution.class);
+    when(execution.getCurrentActivityId()).thenReturn("Task_Llm");
+    new LlmTaskAuditor(registry, true, CLOCK).record(execution, configuration, ollama, prompt(null), longPrompt,
+        LlmModelAnswer.reused(longAnswer), Duration.ofMillis(3200), LlmTaskAuditor.Outcome.VALID);
+
+    ArgumentCaptor<Object> value = ArgumentCaptor.forClass(Object.class);
+    verify(execution).setVariable(eq("orqueioLlm_Task_Llm"), value.capture());
+    String record = (String) value.getValue();
+    assertThat(record).hasSizeLessThanOrEqualTo(LlmTaskAuditor.MAX_RECORD_LENGTH);
+    JsonNode audit = JsonMapper.builder().build().readTree(record);
+    assertThat(audit.get("truncated").asBoolean()).isTrue();
+    assertThat(audit.get("prompt").asString()).startsWith("Classify: \"stolen\" bike");
+    assertThat(audit.get("outcome").asString()).isEqualTo("VALID");
   }
 
   @Test
@@ -87,10 +119,17 @@ class LlmTaskAuditorTest {
   }
 
   @Test
-  void shouldGiveSamePromptVersionForSameTemplateOnly() {
-    assertThat(LlmTaskAuditor.sha256("Classify: {{text}}")).isEqualTo(LlmTaskAuditor.sha256("Classify: {{text}}"))
-        .isNotEqualTo(LlmTaskAuditor.sha256("Classify this: {{text}}"))
-        .hasSize(64);
+  void shouldChangePromptVersionWithTemplateOrOutputs() {
+    LlmTaskAuditor auditor = new LlmTaskAuditor(registry, false, CLOCK);
+    String version = auditor.promptVersion(configuration);
+
+    assertThat(auditor.promptVersion(new LlmTaskConfiguration("ollama", "other-model", "Classify: {{text}}",
+        List.of("text"), List.of(new LlmOutputField("category", STRING))))).isEqualTo(version);
+    assertThat(auditor.promptVersion(new LlmTaskConfiguration(null, null, "Classify this: {{text}}",
+        List.of("text"), List.of(new LlmOutputField("category", STRING))))).isNotEqualTo(version);
+    assertThat(auditor.promptVersion(new LlmTaskConfiguration(null, null, "Classify: {{text}}",
+        List.of("text"), List.of(new LlmOutputField("label", STRING))))).isNotEqualTo(version);
+    assertThat(version).hasSize(64);
   }
 
   private JsonNode record(LlmTaskAuditor auditor, Prompt prompt, LlmModelAnswer answer) {

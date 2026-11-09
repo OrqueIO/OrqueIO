@@ -108,13 +108,13 @@ class LlmTaskAuditIT {
     JsonNode audit = auditOf(instance);
     assertThat(audit.get("provider").asString()).isEqualTo(ReportingChatModel.class.getName());
     assertThat(audit.get("model").asString()).isEqualTo("qwen2.5:7b-reported");
-    assertThat(audit.get("promptVersion").asString()).isEqualTo(LlmTaskAuditor.sha256(PROMPT));
+    assertThat(audit.get("promptVersion").asString()).isEqualTo(LlmTaskAuditor.sha256(PROMPT + "\ncategory:string"));
     assertThat(audit.get("inputTokens").asInt()).isEqualTo(312);
     assertThat(audit.get("outputTokens").asInt()).isEqualTo(100);
     assertThat(audit.get("latencyMs").asLong()).isGreaterThanOrEqualTo(0);
     assertThat(audit.get("fromCache").asBoolean()).isFalse();
     assertThat(audit.get("outcome").asString()).isEqualTo("VALID");
-    assertThat(Instant.parse(audit.get("timestamp").asString())).isBeforeOrEqualTo(Instant.now());
+    assertThat(Instant.parse(audit.get("recordedAt").asString())).isBeforeOrEqualTo(Instant.now());
   }
 
   @Test
