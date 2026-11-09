@@ -86,6 +86,8 @@ class LlmAnswerReuseIT {
     model.calls.set(0);
     model.answer = null;
     model.delay = null;
+    model.failure = null;
+    model.failureAfterDelay = null;
     failOnce.failed = false;
   }
 
@@ -154,6 +156,27 @@ class LlmAnswerReuseIT {
   }
 
   @Test
+  void shouldKeepRetryWithinTimeoutWhenItWaitedForTheLock() {
+    // The running call fails after 1.8 s: the retry gets the lock but no answer, with part of its 1 s left
+    deploy("Classify within budget", "category:string", "", property("orqueio.llm.timeout", "PT1S"));
+    model.answer = "{\"category\":\"Fire\"}";
+    model.delay = Duration.ofMillis(1800);
+    model.failureAfterDelay = new IllegalStateException("provider unavailable");
+
+    ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess");
+    Job job = jobOf(instance);
+    assertThatThrownBy(() -> managementService.executeJob(job.getId())).hasMessage("The model did not answer within PT1S");
+    model.failureAfterDelay = null;
+
+    long start = System.nanoTime();
+    assertThatThrownBy(() -> managementService.executeJob(job.getId())).hasMessage("The model did not answer within PT1S");
+
+    // Waiting for the lock and calling the model share the task's timeout
+    assertThat(Duration.ofNanos(System.nanoTime() - start)).isLessThan(Duration.ofMillis(1300));
+    assertThat(model.calls).hasValue(2);
+  }
+
+  @Test
   void shouldNotStoreInvalidAnswer() {
     deploy("Classify with an invalid answer first", "urgency:integer", "");
     model.answer = "{\"urgency\":\"high\"}";
@@ -171,15 +194,32 @@ class LlmAnswerReuseIT {
   }
 
   @Test
-  void shouldReuseAnswerAcrossInstancesWithSameInput() {
+  void shouldNotReuseAnswerAcrossInstances() {
+    // Only a retry of the same job reuses an answer: each instance gets its own call
     deploy("Classify: {{text}}", "category:string", "", property("orqueio.llm.inputs", "text"));
     model.answer = "{\"category\":\"Theft\"}";
 
     runLlmTask(Map.of("text", "stolen bike"));
     runLlmTask(Map.of("text", "stolen bike"));
-    runLlmTask(Map.of("text", "flooded kitchen"));
 
     assertThat(model.calls).hasValue(2);
+  }
+
+  @Test
+  void shouldNotStoreProviderFailure() {
+    deploy("Classify after a provider failure", "category:string", "");
+    model.failure = new IllegalStateException("provider unavailable");
+
+    ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess");
+    Job job = jobOf(instance);
+    assertThatThrownBy(() -> managementService.executeJob(job.getId())).isInstanceOf(LlmTransientException.class);
+
+    model.failure = null;
+    model.answer = "{\"category\":\"Theft\"}";
+    managementService.executeJob(job.getId());
+
+    assertThat(model.calls).hasValue(2);
+    assertThat(runtimeService.getVariable(instance.getId(), "category")).isEqualTo("Theft");
   }
 
   private void runLlmTask(Map<String, Object> variables) {
@@ -216,18 +256,27 @@ class LlmAnswerReuseIT {
     final AtomicInteger calls = new AtomicInteger();
     volatile String answer;
     volatile Duration delay;
+    volatile RuntimeException failure;
+    volatile RuntimeException failureAfterDelay;
 
     @Override
     public ChatResponse call(Prompt prompt) {
       calls.incrementAndGet();
+      if (failure != null) {
+        throw failure;
+      }
+      RuntimeException laterFailure = failureAfterDelay;
       if (delay != null) {
         sleepIgnoringInterrupts(delay);
+      }
+      if (laterFailure != null) {
+        throw laterFailure;
       }
       return new ChatResponse(List.of(new Generation(new AssistantMessage(answer))));
     }
 
-    // Like an HTTP client that does not react to interrupts
-    private static void sleepIgnoringInterrupts(Duration duration) {
+    // Like an HTTP client that does not react to interrupts, but keeps the interrupt flag set
+    static void sleepIgnoringInterrupts(Duration duration) {
       long deadline = System.nanoTime() + duration.toNanos();
       boolean interrupted = false;
       while (System.nanoTime() < deadline) {

@@ -37,27 +37,27 @@ class LlmCallKeyTest {
   private final ChatModel ollama = mock(OllamaChatModel.class);
 
   @Test
-  void shouldGiveSameKeyForSameRequest() {
-    assertThat(LlmCallKey.of("tenant", ollama, prompt("Classify: stolen bike", "qwen")))
-        .isEqualTo(LlmCallKey.of("tenant", ollama, prompt("Classify: stolen bike", "qwen")));
+  void shouldGiveSameKeyForSameRequestOfSameJob() {
+    assertThat(LlmCallKey.of("job-1", ollama, prompt("Classify: stolen bike", "qwen")))
+        .isEqualTo(LlmCallKey.of("job-1", ollama, prompt("Classify: stolen bike", "qwen")));
   }
 
   @Test
   void shouldNotContainPromptInClear() {
-    String key = LlmCallKey.of(null, ollama, prompt("IBAN FR76 1234", null));
+    String key = LlmCallKey.of("job-1", ollama, prompt("IBAN FR76 1234", null));
 
     assertThat(key).hasSize(64).matches("[0-9a-f]+").doesNotContain("FR76");
   }
 
   @Test
   void shouldDifferWhenAnythingSentDiffers() {
-    String key = LlmCallKey.of("tenant", ollama, prompt("Classify: stolen bike", "qwen"));
+    String key = LlmCallKey.of("job-1", ollama, prompt("Classify: stolen bike", "qwen"));
 
-    assertThat(LlmCallKey.of("other", ollama, prompt("Classify: stolen bike", "qwen"))).isNotEqualTo(key);
-    assertThat(LlmCallKey.of(null, ollama, prompt("Classify: stolen bike", "qwen"))).isNotEqualTo(key);
-    assertThat(LlmCallKey.of("tenant", mock(OpenAiChatModel.class), prompt("Classify: stolen bike", "qwen"))).isNotEqualTo(key);
-    assertThat(LlmCallKey.of("tenant", ollama, prompt("Classify: stolen bike", "llama"))).isNotEqualTo(key);
-    assertThat(LlmCallKey.of("tenant", ollama, prompt("Classify: stolen car", "qwen"))).isNotEqualTo(key);
+    // Another job, for example another process instance with the same input, does not reuse the answer
+    assertThat(LlmCallKey.of("job-2", ollama, prompt("Classify: stolen bike", "qwen"))).isNotEqualTo(key);
+    assertThat(LlmCallKey.of("job-1", mock(OpenAiChatModel.class), prompt("Classify: stolen bike", "qwen"))).isNotEqualTo(key);
+    assertThat(LlmCallKey.of("job-1", ollama, prompt("Classify: stolen bike", "llama"))).isNotEqualTo(key);
+    assertThat(LlmCallKey.of("job-1", ollama, prompt("Classify: stolen car", "qwen"))).isNotEqualTo(key);
   }
 
   @Test

@@ -25,21 +25,25 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.aop.support.AopUtils;
 
 /**
- * Identifies a model request by a hash of what is sent: tenant, provider, model and
- * messages (the system message carries the declared output fields). The key never
- * contains the prompt or variable values in clear.
+ * Identifies a model request by a hash of the job that runs it and of what is sent:
+ * provider, model and messages (the system message carries the declared output
+ * fields). Only a retry of the same job, with the same request, finds the answer: two
+ * process instances, or the same task reached again in a loop, call the model anew.
+ * The key never contains the prompt or variable values in clear.
  */
 public final class LlmCallKey {
 
   private LlmCallKey() {
   }
 
-  public static String of(String tenantId, ChatModel chatModel, Prompt prompt) {
+  public static String of(String jobId, ChatModel chatModel, Prompt prompt) {
     MessageDigest digest = sha256();
-    update(digest, tenantId);
-    update(digest, chatModel.getClass().getName());
+    update(digest, jobId);
+    // The target class: proxies of different providers may share a proxy class name
+    update(digest, AopUtils.getTargetClass(chatModel).getName());
     update(digest, modelOf(chatModel, prompt));
     for (Message message : prompt.getInstructions()) {
       update(digest, message.getMessageType().name());

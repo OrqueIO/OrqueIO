@@ -96,8 +96,7 @@ public class OrqueioBpmAiAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public LlmCallLock llmCallLock(OrqueioBpmAiProperties properties) {
-      validLockTimeToLive(properties);
-      return new InMemoryLlmCallLock();
+      return new InMemoryLlmCallLock(validLockTimeToLive(properties));
     }
 
     /**
@@ -106,6 +105,7 @@ public class OrqueioBpmAiAutoConfiguration {
     @Configuration
     @ConditionalOnClass(StringRedisTemplate.class)
     @ConditionalOnBean(RedisConnectionFactory.class)
+    @ConditionalOnProperty(prefix = OrqueioBpmAiProperties.PREFIX + ".cache.redis", name = "enabled", matchIfMissing = true)
     static class RedisAnswerReuseConfiguration {
 
       @Bean
@@ -130,13 +130,10 @@ public class OrqueioBpmAiAutoConfiguration {
     return timeToLive;
   }
 
-  // A lock that expires while a call runs would let a second call start
   static Duration validLockTimeToLive(OrqueioBpmAiProperties properties) {
     Duration lockTimeToLive = properties.getCache().getLockTimeToLive();
-    Duration timeout = properties.getTimeout();
-    if (lockTimeToLive == null || timeout == null || lockTimeToLive.compareTo(timeout) <= 0) {
-      throw new IllegalStateException(OrqueioBpmAiProperties.PREFIX + ".cache.lock-time-to-live (" + lockTimeToLive
-          + ") must be longer than " + OrqueioBpmAiProperties.PREFIX + ".timeout (" + timeout + ")");
+    if (lockTimeToLive == null || lockTimeToLive.isNegative()) {
+      throw new IllegalStateException(OrqueioBpmAiProperties.PREFIX + ".cache.lock-time-to-live must not be negative, was " + lockTimeToLive);
     }
     return lockTimeToLive;
   }

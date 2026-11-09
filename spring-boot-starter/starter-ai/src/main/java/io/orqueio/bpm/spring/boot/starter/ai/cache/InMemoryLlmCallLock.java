@@ -31,33 +31,61 @@ import java.util.concurrent.TimeoutException;
  */
 public class InMemoryLlmCallLock implements LlmCallLock {
 
-  private final Map<String, CompletableFuture<Void>> held = new ConcurrentHashMap<>();
+  private final Map<String, Holder> held = new ConcurrentHashMap<>();
+  private final Duration gracePeriod;
+
+  /**
+   * @param gracePeriod how long a call may hold its lock after its timeout elapsed
+   */
+  public InMemoryLlmCallLock(Duration gracePeriod) {
+    this.gracePeriod = gracePeriod;
+  }
 
   @Override
-  public Lease tryAcquire(String key, Duration wait) throws InterruptedException {
+  public Lease tryAcquire(String key, Duration wait, Duration callTimeout) throws InterruptedException {
     long deadline = System.nanoTime() + wait.toNanos();
     while (true) {
-      CompletableFuture<Void> released = new CompletableFuture<>();
-      CompletableFuture<Void> current = held.putIfAbsent(key, released);
+      Holder holder = new Holder(System.nanoTime() + callTimeout.plus(gracePeriod).toNanos());
+      Holder current = held.putIfAbsent(key, holder);
       if (current == null) {
         return () -> {
-          held.remove(key, released);
-          released.complete(null);
+          held.remove(key, holder);
+          holder.released.complete(null);
         };
       }
-      long remaining = deadline - System.nanoTime();
-      if (remaining <= 0) {
+      if (current.isExpired()) {
+        held.remove(key, current);
+        continue;
+      }
+      long remaining = Math.min(deadline, current.expiresAt) - System.nanoTime();
+      if (remaining <= 0 && System.nanoTime() >= deadline) {
         return null;
       }
       try {
-        current.get(remaining, TimeUnit.NANOSECONDS);
+        current.released.get(Math.max(remaining, 1), TimeUnit.NANOSECONDS);
       }
       catch (TimeoutException e) {
-        return null;
+        if (System.nanoTime() >= deadline) {
+          return null;
+        }
       }
       catch (ExecutionException e) {
         // Never completed exceptionally
       }
+    }
+  }
+
+  private static final class Holder {
+
+    final CompletableFuture<Void> released = new CompletableFuture<>();
+    final long expiresAt;
+
+    Holder(long expiresAt) {
+      this.expiresAt = expiresAt;
+    }
+
+    boolean isExpired() {
+      return System.nanoTime() - expiresAt >= 0;
     }
   }
 

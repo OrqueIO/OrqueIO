@@ -26,8 +26,8 @@ import org.springframework.data.redis.core.script.RedisScript;
 
 /**
  * Locks calls across every node that shares the Redis server. The lock expires after
- * its lease time, so a node that stops while holding it does not block the others
- * forever; the lease must therefore outlast the longest call.
+ * the call's timeout plus a grace period, so a node that stops while holding it does
+ * not block the others forever.
  */
 public class RedisLlmCallLock implements LlmCallLock {
 
@@ -41,15 +41,19 @@ public class RedisLlmCallLock implements LlmCallLock {
   private static final long MAX_POLL_MILLIS = 200;
 
   private final StringRedisTemplate redis;
-  private final Duration leaseTime;
+  private final Duration gracePeriod;
 
-  public RedisLlmCallLock(StringRedisTemplate redis, Duration leaseTime) {
+  /**
+   * @param gracePeriod how long a call may hold its lock after its timeout elapsed
+   */
+  public RedisLlmCallLock(StringRedisTemplate redis, Duration gracePeriod) {
     this.redis = redis;
-    this.leaseTime = leaseTime;
+    this.gracePeriod = gracePeriod;
   }
 
   @Override
-  public Lease tryAcquire(String key, Duration wait) throws InterruptedException {
+  public Lease tryAcquire(String key, Duration wait, Duration callTimeout) throws InterruptedException {
+    Duration leaseTime = callTimeout.plus(gracePeriod);
     String redisKey = KEY_PREFIX + key;
     String token = UUID.randomUUID().toString();
     long deadline = System.nanoTime() + wait.toNanos();

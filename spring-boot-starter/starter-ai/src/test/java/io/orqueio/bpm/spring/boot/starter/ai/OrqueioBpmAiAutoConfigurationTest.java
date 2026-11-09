@@ -97,11 +97,30 @@ class OrqueioBpmAiAutoConfigurationTest {
   }
 
   @Test
-  void shouldRequireLockToOutliveTimeout() {
-    contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".timeout=PT5M",
-            OrqueioBpmAiProperties.PREFIX + ".cache.lock-time-to-live=PT5M")
+  void shouldKeepAnswersInMemoryWhenRedisIsDisabledForTheCache() {
+    contextRunner.withBean(RedisConnectionFactory.class, () -> mock(RedisConnectionFactory.class))
+        .withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".cache.redis.enabled=false")
+        .run(context -> {
+          assertThat(context).hasSingleBean(InMemoryLlmAnswerStore.class);
+          assertThat(context).hasSingleBean(InMemoryLlmCallLock.class);
+        });
+  }
+
+  @Test
+  void shouldStartWithoutRedisOnTheClasspath() {
+    contextRunner.withClassLoader(new FilteredClassLoader("org.springframework.data.redis"))
+        .run(context -> {
+          assertThat(context).hasNotFailed();
+          assertThat(context).hasSingleBean(InMemoryLlmAnswerStore.class);
+          assertThat(context).hasSingleBean(InMemoryLlmCallLock.class);
+        });
+  }
+
+  @Test
+  void shouldRejectNegativeLockTimeToLive() {
+    contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".cache.lock-time-to-live=-PT1M")
         .run(context -> assertThat(context).hasFailed()
-            .getFailure().rootCause().hasMessageContaining(".cache.lock-time-to-live (PT5M) must be longer than"));
+            .getFailure().rootCause().hasMessageContaining(".cache.lock-time-to-live must not be negative"));
   }
 
   @Test

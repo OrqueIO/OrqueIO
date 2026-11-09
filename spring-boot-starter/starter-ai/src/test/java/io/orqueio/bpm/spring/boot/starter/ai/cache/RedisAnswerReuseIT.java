@@ -38,6 +38,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers(disabledWithoutDocker = true)
 class RedisAnswerReuseIT {
 
+  private static final Duration CALL_TIMEOUT = Duration.ofMinutes(1);
+
   @Container
   static final GenericContainer<?> REDIS = new GenericContainer<>("redis:7.4-alpine").withExposedPorts(6379);
 
@@ -79,7 +81,7 @@ class RedisAnswerReuseIT {
 
   @Test
   void shouldMakeSecondCallerWaitUntilRelease() throws Exception {
-    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO);
+    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT);
     assertThat(first).isNotNull();
 
     // Released by another thread, as the call does when it ends after the task stopped waiting
@@ -88,7 +90,7 @@ class RedisAnswerReuseIT {
       first.release();
     });
     long start = System.nanoTime();
-    LlmCallLock.Lease second = otherNodeLock().tryAcquire("key", Duration.ofSeconds(5));
+    LlmCallLock.Lease second = otherNodeLock().tryAcquire("key", Duration.ofSeconds(5), CALL_TIMEOUT);
 
     assertThat(second).isNotNull();
     assertThat(Duration.ofNanos(System.nanoTime() - start)).isBetween(Duration.ofMillis(250), Duration.ofSeconds(4));
@@ -97,17 +99,17 @@ class RedisAnswerReuseIT {
 
   @Test
   void shouldGiveUpAfterWait() throws Exception {
-    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO);
+    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT);
 
-    assertThat(otherNodeLock().tryAcquire("key", Duration.ofMillis(200))).isNull();
+    assertThat(otherNodeLock().tryAcquire("key", Duration.ofMillis(200), CALL_TIMEOUT)).isNull();
     first.release();
   }
 
   @Test
   void shouldLockKeysIndependently() throws Exception {
-    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO);
+    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT);
 
-    LlmCallLock.Lease other = otherNodeLock().tryAcquire("other-key", Duration.ZERO);
+    LlmCallLock.Lease other = otherNodeLock().tryAcquire("other-key", Duration.ZERO, CALL_TIMEOUT);
 
     assertThat(other).isNotNull();
     first.release();
@@ -116,13 +118,13 @@ class RedisAnswerReuseIT {
 
   @Test
   void shouldIgnoreSecondRelease() throws Exception {
-    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO);
+    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT);
     first.release();
-    LlmCallLock.Lease second = otherNodeLock().tryAcquire("key", Duration.ZERO);
+    LlmCallLock.Lease second = otherNodeLock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT);
 
     first.release();
 
-    assertThat(lock().tryAcquire("key", Duration.ZERO)).isNull();
+    assertThat(lock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT)).isNull();
     second.release();
   }
 
@@ -138,16 +140,24 @@ class RedisAnswerReuseIT {
   @Test
   void shouldLetAnotherNodeTakeLockOnceLeaseExpired() throws Exception {
     // A node that stops while holding the lock must not block the others forever
-    LlmCallLock.Lease crashed = new RedisLlmCallLock(redisA, Duration.ofMillis(300)).tryAcquire("key", Duration.ZERO);
+    LlmCallLock.Lease crashed = new RedisLlmCallLock(redisA, Duration.ZERO).tryAcquire("key", Duration.ZERO, Duration.ofMillis(300));
     assertThat(crashed).isNotNull();
 
-    LlmCallLock.Lease taken = otherNodeLock().tryAcquire("key", Duration.ofSeconds(3));
+    LlmCallLock.Lease taken = otherNodeLock().tryAcquire("key", Duration.ofSeconds(3), CALL_TIMEOUT);
 
     assertThat(taken).isNotNull();
     // The expired lease must not free the lock the other node now holds
     crashed.release();
-    assertThat(lock().tryAcquire("key", Duration.ZERO)).isNull();
+    assertThat(lock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT)).isNull();
     taken.release();
+  }
+
+  @Test
+  void shouldHoldLeaseForCallTimeoutPlusGracePeriod() throws Exception {
+    new RedisLlmCallLock(redisA, Duration.ofMinutes(10)).tryAcquire("key", Duration.ZERO, Duration.ofMinutes(15));
+
+    // A task timeout longer than the grace period is still covered
+    assertThat(redisA.getExpire(RedisLlmCallLock.KEY_PREFIX + "key")).isBetween(24 * 60L, 25 * 60L);
   }
 
   @Test

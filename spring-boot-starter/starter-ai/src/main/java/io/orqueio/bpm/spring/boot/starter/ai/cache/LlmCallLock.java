@@ -24,14 +24,17 @@ import java.time.Duration;
  * <p>
  * The lease may be released by another thread than the one that acquired it: the
  * call that holds it releases it when it ends, even after the task stopped waiting.
+ * It expires after the call's timeout plus a grace period, so a call that never ends,
+ * or a node that stops, does not block the request forever.
  */
 public interface LlmCallLock {
 
   /**
+   * @param callTimeout how long the task waits for the call; the lease lasts longer
    * @return the lease, or {@code null} if another call still holds the lock after {@code wait}
    * @throws InterruptedException if the thread is interrupted while waiting
    */
-  Lease tryAcquire(String key, Duration wait) throws InterruptedException;
+  Lease tryAcquire(String key, Duration wait, Duration callTimeout) throws InterruptedException;
 
   interface Lease {
 

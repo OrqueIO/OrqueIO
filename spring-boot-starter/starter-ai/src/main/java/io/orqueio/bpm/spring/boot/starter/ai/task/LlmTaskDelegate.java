@@ -29,6 +29,8 @@ import org.slf4j.MDC;
 
 import io.orqueio.bpm.engine.delegate.BpmnError;
 import io.orqueio.bpm.engine.impl.bpmn.helper.ErrorDeclarationForProcessInstanceFinder;
+import io.orqueio.bpm.engine.impl.context.Context;
+import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
 import io.orqueio.bpm.engine.impl.pvm.delegate.ActivityExecution;
 import io.orqueio.bpm.engine.impl.tree.ActivityExecutionHierarchyWalker;
 
@@ -59,7 +61,9 @@ import org.springframework.ai.chat.prompt.Prompt;
  * <p>
  * With an answer store, a valid answer is kept, so a retried job reuses it instead of
  * paying for another call; the call lock makes a retry wait for a call of the same
- * request that is still running, for example one abandoned after its timeout.
+ * request that is still running, for example one abandoned after its timeout. Answer
+ * reuse saves calls but never fails the task: when the store or the lock is not
+ * available, the model is called as without them.
  */
 public class LlmTaskDelegate implements JavaDelegate {
 
@@ -81,7 +85,8 @@ public class LlmTaskDelegate implements JavaDelegate {
 
   /**
    * @param answerStore keeps valid answers for retries, or {@code null} to always call the model
-   * @param callLock runs one call at a time per request, or {@code null}; used only with an answer store
+   * @param callLock runs one call at a time per request, or {@code null}; used only with an answer store,
+   *                 and only for tasks run by a job, whose id scopes the stored answer to its retries
    */
   public LlmTaskDelegate(ChatModelRegistry chatModelRegistry, LlmPromptResolver promptResolver,
                          LlmAnswerParser answerParser, LlmFailureClassifier failureClassifier,
@@ -170,65 +175,141 @@ public class LlmTaskDelegate implements JavaDelegate {
    */
   protected String reusableAnswer(DelegateExecution execution, LlmTaskConfiguration configuration,
                                   ChatModel chatModel, Prompt prompt, Duration timeout) {
-    String key = LlmCallKey.of(execution.getTenantId(), chatModel, prompt);
-    String stored = answerStore.get(key);
-    if (stored != null || callLock == null) {
-      return stored != null ? stored : run(() -> storeIfValid(key, textOf(chatModel.call(prompt)), configuration), timeout);
+    String jobId = currentJobId();
+    if (jobId == null) {
+      return run(() -> textOf(chatModel.call(prompt)), timeout);
+    }
+    String key = LlmCallKey.of(jobId, chatModel, prompt);
+    String stored = storedAnswer(key);
+    if (stored != null) {
+      return stored;
     }
 
+    // The timeout is the task's whole budget: waiting for the lock uses part of it
+    long deadline = System.nanoTime() + timeout.toNanos();
     LlmCallLock.Lease lease = acquire(key, timeout);
-    stored = answerStore.get(key);
+    try {
+      stored = storedAnswer(key);
+    }
+    catch (RuntimeException | Error e) {
+      release(lease);
+      throw e;
+    }
     if (stored != null) {
-      lease.release();
+      release(lease);
       return stored;
+    }
+    Duration remaining = Duration.ofNanos(deadline - System.nanoTime());
+    if (remaining.toMillis() < 1) {
+      release(lease);
+      throw new LlmTransientException("The model did not answer within " + timeout);
     }
     return run(() -> {
       try {
-        return storeIfValid(key, textOf(chatModel.call(prompt)), configuration);
+        String answer = textOf(chatModel.call(prompt));
+        // A timeout interrupts this thread; the store and the lock must still be reached
+        Thread.interrupted();
+        storeIfValid(key, answer, configuration);
+        return answer;
       }
       finally {
-        lease.release();
+        release(lease);
       }
-    }, timeout, lease);
+    }, remaining, timeout, lease);
   }
 
-  protected LlmCallLock.Lease acquire(String key, Duration wait) {
+  /**
+   * @return the id of the job running the task, which stays the same across its retries, or {@code null}
+   */
+  protected String currentJobId() {
+    CommandContext commandContext = Context.getCommandContext();
+    return commandContext != null && commandContext.getCurrentJob() != null
+        ? commandContext.getCurrentJob().getId()
+        : null;
+  }
+
+  // An unavailable store is a miss: reuse saves calls, it must not fail the task
+  protected String storedAnswer(String key) {
+    try {
+      return answerStore.get(key);
+    }
+    catch (RuntimeException e) {
+      return null;
+    }
+  }
+
+  /**
+   * @return the lease, or {@code null} if there is no lock or it is not available
+   * @throws LlmTransientException if a call of the same request still runs after {@code timeout}
+   */
+  protected LlmCallLock.Lease acquire(String key, Duration timeout) {
+    if (callLock == null) {
+      return null;
+    }
     LlmCallLock.Lease lease;
     try {
-      lease = callLock.tryAcquire(key, wait);
+      lease = callLock.tryAcquire(key, timeout, timeout);
     }
     catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       throw new LlmTransientException("Interrupted while waiting for a call of the same request");
     }
     catch (RuntimeException e) {
-      throw new LlmTransientException("The call lock is not available (" + e.getClass().getName() + ")");
+      // Calling without the lock risks a second call; failing the task would block it
+      return null;
     }
     if (lease == null) {
-      throw new LlmTransientException("A call of the same request is still running after " + wait);
+      throw new LlmTransientException("A call of the same request is still running after " + timeout);
     }
     return lease;
   }
 
-  // Only valid answers are kept: an invalid one must get a fresh call on the next attempt
-  protected String storeIfValid(String key, String answer, LlmTaskConfiguration configuration) {
+  /**
+   * Releases on a thread whose interrupt flag is clear: Redis clients refuse to run a
+   * command on an interrupted thread, and a lease that is not released blocks the
+   * request until it expires.
+   */
+  protected void release(LlmCallLock.Lease lease) {
+    if (lease == null) {
+      return;
+    }
+    boolean interrupted = Thread.interrupted();
     try {
-      answerParser.parse(answer, configuration.getOutputs());
+      lease.release();
+    }
+    catch (RuntimeException e) {
+      // The lease expires by itself
+    }
+    finally {
+      if (interrupted) {
+        Thread.currentThread().interrupt();
+      }
+    }
+  }
+
+  /**
+   * Keeps only the declared fields of a valid answer: anything else the model wrote is
+   * dropped, which bounds the size of what is stored and keeps no more data than needed.
+   * An invalid answer is not kept, so the next attempt gets a fresh call.
+   */
+  protected void storeIfValid(String key, String answer, LlmTaskConfiguration configuration) {
+    String declaredFields;
+    try {
+      declaredFields = answerParser.declaredFields(answer, configuration.getOutputs());
     }
     catch (LlmInvalidAnswerException e) {
-      return answer;
+      return;
     }
     try {
-      answerStore.put(key, answer);
+      answerStore.put(key, declaredFields);
     }
     catch (RuntimeException e) {
       // The answer is still used; only its reuse on a retry is lost
     }
-    return answer;
   }
 
   protected String run(Callable<String> work, Duration timeout) {
-    return run(work, timeout, null);
+    return run(work, timeout, timeout, null);
   }
 
   /**
@@ -238,9 +319,11 @@ public class LlmTaskDelegate implements JavaDelegate {
    * A call that times out is interrupted, but a client that ignores interrupts keeps
    * running until its own timeout.
    *
+   * @param wait how long to wait for the call: the task's timeout, less any time spent waiting for the lock
+   * @param timeout the task's timeout, as reported when the call takes too long
    * @param lease released here only if the thread cannot be started; the work releases it otherwise
    */
-  protected String run(Callable<String> work, Duration timeout, LlmCallLock.Lease lease) {
+  protected String run(Callable<String> work, Duration wait, Duration timeout, LlmCallLock.Lease lease) {
     Map<String, String> loggingContext = MDC.getCopyOfContextMap();
     FutureTask<String> call = new FutureTask<>(() -> {
       if (loggingContext != null) {
@@ -252,13 +335,11 @@ public class LlmTaskDelegate implements JavaDelegate {
       Thread.ofVirtual().name("orqueio-llm-call").start(call);
     }
     catch (RuntimeException | Error e) {
-      if (lease != null) {
-        lease.release();
-      }
+      release(lease);
       throw e;
     }
     try {
-      return call.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
+      return call.get(wait.toMillis(), TimeUnit.MILLISECONDS);
     }
     catch (TimeoutException e) {
       call.cancel(true);

@@ -39,6 +39,19 @@ class LlmAnswerParserTest {
   private final LlmAnswerParser parser = new LlmAnswerParser();
 
   @Test
+  void shouldKeepOnlyDeclaredFields() {
+    String stored = parser.declaredFields("""
+        ```json
+        {"category": "Theft", "urgency": 3.0, "score": 0.5, "complete": true, "reasoning": "a long explanation"}
+        ```""", OUTPUTS);
+
+    assertThat(stored).isEqualTo("{\"category\":\"Theft\",\"urgency\":3,\"score\":0.5,\"complete\":true}");
+    // What is stored reads back to the same values
+    assertThat(parser.parse(stored, OUTPUTS)).containsExactly(
+        entry("category", "Theft"), entry("urgency", 3L), entry("score", 0.5), entry("complete", true));
+  }
+
+  @Test
   void shouldReadDeclaredFieldsAndIgnoreOthers() {
     assertThat(parser.parse("{\"category\":\"Theft\",\"urgency\":3,\"score\":0.75,\"complete\":true,\"note\":\"x\"}", OUTPUTS))
         .containsExactly(

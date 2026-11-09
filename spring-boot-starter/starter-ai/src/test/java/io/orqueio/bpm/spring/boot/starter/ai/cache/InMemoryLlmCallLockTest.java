@@ -24,7 +24,9 @@ import org.junit.jupiter.api.Test;
 
 class InMemoryLlmCallLockTest {
 
-  private final InMemoryLlmCallLock lock = new InMemoryLlmCallLock();
+  private static final Duration CALL_TIMEOUT = Duration.ofMinutes(1);
+
+  private final InMemoryLlmCallLock lock = new InMemoryLlmCallLock(Duration.ofMinutes(1));
 
   private LlmCallLock lock() {
     return lock;
@@ -37,7 +39,7 @@ class InMemoryLlmCallLockTest {
 
   @Test
   void shouldMakeSecondCallerWaitUntilRelease() throws Exception {
-    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO);
+    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT);
     assertThat(first).isNotNull();
 
     // Released by another thread, as the call does when it ends after the task stopped waiting
@@ -46,7 +48,7 @@ class InMemoryLlmCallLockTest {
       first.release();
     });
     long start = System.nanoTime();
-    LlmCallLock.Lease second = otherNodeLock().tryAcquire("key", Duration.ofSeconds(5));
+    LlmCallLock.Lease second = otherNodeLock().tryAcquire("key", Duration.ofSeconds(5), CALL_TIMEOUT);
 
     assertThat(second).isNotNull();
     assertThat(Duration.ofNanos(System.nanoTime() - start)).isBetween(Duration.ofMillis(250), Duration.ofSeconds(4));
@@ -55,17 +57,17 @@ class InMemoryLlmCallLockTest {
 
   @Test
   void shouldGiveUpAfterWait() throws Exception {
-    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO);
+    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT);
 
-    assertThat(otherNodeLock().tryAcquire("key", Duration.ofMillis(200))).isNull();
+    assertThat(otherNodeLock().tryAcquire("key", Duration.ofMillis(200), CALL_TIMEOUT)).isNull();
     first.release();
   }
 
   @Test
   void shouldLockKeysIndependently() throws Exception {
-    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO);
+    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT);
 
-    LlmCallLock.Lease other = otherNodeLock().tryAcquire("other-key", Duration.ZERO);
+    LlmCallLock.Lease other = otherNodeLock().tryAcquire("other-key", Duration.ZERO, CALL_TIMEOUT);
 
     assertThat(other).isNotNull();
     first.release();
@@ -74,14 +76,31 @@ class InMemoryLlmCallLockTest {
 
   @Test
   void shouldIgnoreSecondRelease() throws Exception {
-    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO);
+    LlmCallLock.Lease first = lock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT);
     first.release();
-    LlmCallLock.Lease second = otherNodeLock().tryAcquire("key", Duration.ZERO);
+    LlmCallLock.Lease second = otherNodeLock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT);
 
     first.release();
 
-    assertThat(lock().tryAcquire("key", Duration.ZERO)).isNull();
+    assertThat(lock().tryAcquire("key", Duration.ZERO, CALL_TIMEOUT)).isNull();
     second.release();
+  }
+
+  @Test
+  void shouldExpireLeaseAfterCallTimeoutAndGracePeriod() throws Exception {
+    // A call that never ends must not block the request until the node restarts
+    InMemoryLlmCallLock shortLock = new InMemoryLlmCallLock(Duration.ofMillis(100));
+    LlmCallLock.Lease stuck = shortLock.tryAcquire("key", Duration.ZERO, Duration.ofMillis(200));
+
+    long start = System.nanoTime();
+    LlmCallLock.Lease taken = shortLock.tryAcquire("key", Duration.ofSeconds(3), Duration.ofMillis(200));
+
+    assertThat(taken).isNotNull();
+    assertThat(Duration.ofNanos(System.nanoTime() - start)).isBetween(Duration.ofMillis(200), Duration.ofSeconds(2));
+    // The expired lease must not free the lock taken after it
+    stuck.release();
+    assertThat(shortLock.tryAcquire("key", Duration.ZERO, Duration.ofMillis(200))).isNull();
+    taken.release();
   }
 
   static void sleep(long millis) {

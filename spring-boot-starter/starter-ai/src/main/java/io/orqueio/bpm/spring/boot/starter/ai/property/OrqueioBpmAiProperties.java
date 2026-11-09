@@ -83,7 +83,7 @@ public class OrqueioBpmAiProperties {
   }
 
   /**
-   * Reuse of model answers when an LLM task is retried. Answers are kept in Redis,
+   * Reuse of model answers when an LLM task's job is retried. Answers are kept in Redis,
    * shared by every node, when the application has Redis; in memory otherwise.
    */
   public static class Cache {
@@ -100,11 +100,13 @@ public class OrqueioBpmAiProperties {
     private Duration timeToLive = Duration.ofHours(1);
 
     /**
-     * How long a call may hold its lock before another node may start the same call.
-     * Must be longer than the timeout of every LLM task, including calls that keep
-     * running after the task stopped waiting.
+     * How long a call may keep its lock after the task's timeout elapsed, for a call
+     * abandoned by the task but still running. Once it expires, a retry may start the
+     * same call again. Waiting for the lock counts against the task's timeout.
      */
     private Duration lockTimeToLive = Duration.ofMinutes(10);
+
+    private final Redis redis = new Redis();
 
     public boolean isEnabled() {
       return enabled;
@@ -130,9 +132,32 @@ public class OrqueioBpmAiProperties {
       this.lockTimeToLive = lockTimeToLive;
     }
 
+    public Redis getRedis() {
+      return redis;
+    }
+
     @Override
     public String toString() {
-      return "Cache[enabled=" + enabled + ", timeToLive=" + timeToLive + ", lockTimeToLive=" + lockTimeToLive + "]";
+      return "Cache[enabled=" + enabled + ", timeToLive=" + timeToLive + ", lockTimeToLive=" + lockTimeToLive
+          + ", redis=" + redis.isEnabled() + "]";
+    }
+  }
+
+  public static class Redis {
+
+    /**
+     * Keep answers in the application's Redis when it has one. Set to {@code false} to
+     * keep them in memory, for example when that Redis is not meant for process data.
+     * Default {@code true}.
+     */
+    private boolean enabled = true;
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
     }
   }
 
