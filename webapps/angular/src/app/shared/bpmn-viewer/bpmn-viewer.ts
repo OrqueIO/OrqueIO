@@ -636,12 +636,12 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
           statusHtml.addEventListener('click', (e) => {
             e.stopPropagation();
             this.ngZone.run(() => {
-              if (badge.migrationStatus === 'valid') {
-                // New behavior: emit event to select the arrow instead of opening popover
-                this.selectMappedActivity.emit(badge.activityId);
-              } else {
-                // For invalid mappings, still show the popover with errors
+              const shouldShowPopover = badge.migrationStatus === 'invalid' || this.shouldShowValidPopover(badge.activityId);
+              if (shouldShowPopover) {
                 this.showMappingPopover(badge.activityId, badge.migrationStatus!, statusHtml, badge);
+              }
+              if (badge.migrationStatus === 'valid') {
+                this.selectMappedActivity.emit(badge.activityId);
               }
             });
           });
@@ -1171,6 +1171,16 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
 
+  /**
+   * Determines if a valid mapping popup should be displayed.
+   * Valid popups only show for events in the source viewer (they contain the "Update event trigger" checkbox).
+   * Invalid popups always show (they contain error messages and remove button).
+   */
+  private shouldShowValidPopover(activityId: string): boolean {
+    const element = this.getElement(activityId);
+    return element !== null && this.isEventType(element.type) && this.isSourceViewer;
+  }
+
   private showMappingPopover(activityId: string, status: 'valid' | 'invalid' | 'unmapped', anchor: HTMLElement, badge: ActivityBadge): void {
     if (status === 'unmapped') return;
     // Close any existing popover
@@ -1232,33 +1242,37 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     }
 
-    const instructions = this.editableInstructions || [];
-    let sourceActivityIdToDelete: string | null = null;
+    // Only add "Remove mapping" button for invalid mappings
+    // Valid mappings can be removed via the hover cross button
+    if (status !== 'valid') {
+      const instructions = this.editableInstructions || [];
+      let sourceActivityIdToDelete: string | null = null;
 
-    for (const instruction of instructions) {
-      const isSource = instruction.sourceActivityIds.includes(activityId);
-      const isTarget = instruction.targetActivityIds.includes(activityId);
+      for (const instruction of instructions) {
+        const isSource = instruction.sourceActivityIds.includes(activityId);
+        const isTarget = instruction.targetActivityIds.includes(activityId);
 
-      if (isSource || isTarget) {
-        sourceActivityIdToDelete = instruction.sourceActivityIds[0];
-        break;
-      }
-    }
-
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.className = 'bpmn-mapping-popover__remove-btn';
-    removeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="currentColor" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg><span>Remove mapping</span>';
-    removeBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.ngZone.run(() => {
-        if (sourceActivityIdToDelete) {
-          this.deleteMapping.emit(sourceActivityIdToDelete);
+        if (isSource || isTarget) {
+          sourceActivityIdToDelete = instruction.sourceActivityIds[0];
+          break;
         }
-        this.closeMappingPopover();
+      }
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'bpmn-mapping-popover__remove-btn';
+      removeBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="currentColor" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg><span>Remove mapping</span>';
+      removeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.ngZone.run(() => {
+          if (sourceActivityIdToDelete) {
+            this.deleteMapping.emit(sourceActivityIdToDelete);
+          }
+          this.closeMappingPopover();
+        });
       });
-    });
-    popover.appendChild(removeBtn);
+      popover.appendChild(removeBtn);
+    }
 
     const anchorRect = anchor.getBoundingClientRect();
     const containerRect = this.canvasRef.nativeElement.getBoundingClientRect();
@@ -1294,8 +1308,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       document.removeEventListener('keydown', closeOnEsc);
       document.removeEventListener('click', closeOnClickOutside);
     };
-
-    removeBtn.focus();
   }
 
   private closeMappingPopover(): void {
