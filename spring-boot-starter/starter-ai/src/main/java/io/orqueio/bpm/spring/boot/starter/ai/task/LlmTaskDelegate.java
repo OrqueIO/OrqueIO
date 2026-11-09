@@ -19,6 +19,7 @@ package io.orqueio.bpm.spring.boot.starter.ai.task;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +36,9 @@ import io.orqueio.bpm.engine.delegate.DelegateExecution;
 import io.orqueio.bpm.engine.delegate.JavaDelegate;
 import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmAnswerStore;
+import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmCallKey;
+import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmCallLock;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.SystemMessage;
@@ -52,6 +56,10 @@ import org.springframework.ai.chat.prompt.Prompt;
  * Failures are thrown as {@link LlmTaskException}s that tell whether a retry may help;
  * see {@link LlmFailedJobCommandFactory}. An invalid answer becomes a BPMN error when
  * the task declares {@value LlmTaskConfiguration#ERROR_CODE_PROPERTY}.
+ * <p>
+ * With an answer store, a valid answer is kept, so a retried job reuses it instead of
+ * paying for another call; the call lock makes a retry wait for a call of the same
+ * request that is still running, for example one abandoned after its timeout.
  */
 public class LlmTaskDelegate implements JavaDelegate {
 
@@ -62,15 +70,29 @@ public class LlmTaskDelegate implements JavaDelegate {
   private final LlmAnswerParser answerParser;
   private final LlmFailureClassifier failureClassifier;
   private final Duration defaultTimeout;
+  private final LlmAnswerStore answerStore;
+  private final LlmCallLock callLock;
 
   public LlmTaskDelegate(ChatModelRegistry chatModelRegistry, LlmPromptResolver promptResolver,
                          LlmAnswerParser answerParser, LlmFailureClassifier failureClassifier,
                          Duration defaultTimeout) {
+    this(chatModelRegistry, promptResolver, answerParser, failureClassifier, defaultTimeout, null, null);
+  }
+
+  /**
+   * @param answerStore keeps valid answers for retries, or {@code null} to always call the model
+   * @param callLock runs one call at a time per request, or {@code null}; used only with an answer store
+   */
+  public LlmTaskDelegate(ChatModelRegistry chatModelRegistry, LlmPromptResolver promptResolver,
+                         LlmAnswerParser answerParser, LlmFailureClassifier failureClassifier,
+                         Duration defaultTimeout, LlmAnswerStore answerStore, LlmCallLock callLock) {
     this.chatModelRegistry = chatModelRegistry;
     this.promptResolver = promptResolver;
     this.answerParser = answerParser;
     this.failureClassifier = failureClassifier;
     this.defaultTimeout = defaultTimeout;
+    this.answerStore = answerStore;
+    this.callLock = callLock;
   }
 
   @Override
@@ -88,12 +110,14 @@ public class LlmTaskDelegate implements JavaDelegate {
     Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 
     Duration timeout = configuration.getTimeout() != null ? configuration.getTimeout() : defaultTimeout;
-    ChatResponse response = call(chatModel, prompt, timeout);
+    String answer = answerStore != null
+        ? reusableAnswer(execution, configuration, chatModel, prompt, timeout)
+        : run(() -> textOf(chatModel.call(prompt)), timeout);
 
     // Every field is validated before any variable is written
     Map<String, Object> values;
     try {
-      values = answerParser.parse(textOf(response), configuration.getOutputs());
+      values = answerParser.parse(answer, configuration.getOutputs());
     }
     catch (LlmInvalidAnswerException e) {
       // An uncaught BPMN error would end the execution silently: raise an incident instead
@@ -140,21 +164,99 @@ public class LlmTaskDelegate implements JavaDelegate {
   }
 
   /**
-   * Calls the model on its own thread, so the job stops waiting when the timeout
+   * Returns the stored answer for the request, or calls the model once. The lock is
+   * held by the call itself and released when it ends: a retry of a job whose call
+   * timed out waits for that call and reuses its answer, rather than paying again.
+   */
+  protected String reusableAnswer(DelegateExecution execution, LlmTaskConfiguration configuration,
+                                  ChatModel chatModel, Prompt prompt, Duration timeout) {
+    String key = LlmCallKey.of(execution.getTenantId(), chatModel, prompt);
+    String stored = answerStore.get(key);
+    if (stored != null || callLock == null) {
+      return stored != null ? stored : run(() -> storeIfValid(key, textOf(chatModel.call(prompt)), configuration), timeout);
+    }
+
+    LlmCallLock.Lease lease = acquire(key, timeout);
+    stored = answerStore.get(key);
+    if (stored != null) {
+      lease.release();
+      return stored;
+    }
+    return run(() -> {
+      try {
+        return storeIfValid(key, textOf(chatModel.call(prompt)), configuration);
+      }
+      finally {
+        lease.release();
+      }
+    }, timeout, lease);
+  }
+
+  protected LlmCallLock.Lease acquire(String key, Duration wait) {
+    LlmCallLock.Lease lease;
+    try {
+      lease = callLock.tryAcquire(key, wait);
+    }
+    catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new LlmTransientException("Interrupted while waiting for a call of the same request");
+    }
+    catch (RuntimeException e) {
+      throw new LlmTransientException("The call lock is not available (" + e.getClass().getName() + ")");
+    }
+    if (lease == null) {
+      throw new LlmTransientException("A call of the same request is still running after " + wait);
+    }
+    return lease;
+  }
+
+  // Only valid answers are kept: an invalid one must get a fresh call on the next attempt
+  protected String storeIfValid(String key, String answer, LlmTaskConfiguration configuration) {
+    try {
+      answerParser.parse(answer, configuration.getOutputs());
+    }
+    catch (LlmInvalidAnswerException e) {
+      return answer;
+    }
+    try {
+      answerStore.put(key, answer);
+    }
+    catch (RuntimeException e) {
+      // The answer is still used; only its reuse on a retry is lost
+    }
+    return answer;
+  }
+
+  protected String run(Callable<String> work, Duration timeout) {
+    return run(work, timeout, null);
+  }
+
+  /**
+   * Runs the model call on its own thread, so the job stops waiting when the timeout
    * elapses even if the provider's client does not. That thread runs outside the
    * engine's command and transaction; only the logging context is carried over.
    * A call that times out is interrupted, but a client that ignores interrupts keeps
    * running until its own timeout.
+   *
+   * @param lease released here only if the thread cannot be started; the work releases it otherwise
    */
-  protected ChatResponse call(ChatModel chatModel, Prompt prompt, Duration timeout) {
+  protected String run(Callable<String> work, Duration timeout, LlmCallLock.Lease lease) {
     Map<String, String> loggingContext = MDC.getCopyOfContextMap();
-    FutureTask<ChatResponse> call = new FutureTask<>(() -> {
+    FutureTask<String> call = new FutureTask<>(() -> {
       if (loggingContext != null) {
         MDC.setContextMap(loggingContext);
       }
-      return chatModel.call(prompt);
+      return work.call();
     });
-    Thread.ofVirtual().name("orqueio-llm-call").start(call);
+    try {
+      Thread.ofVirtual().name("orqueio-llm-call").start(call);
+    }
+    catch (RuntimeException | Error e) {
+      if (lease != null) {
+        lease.release();
+      }
+      throw e;
+    }
     try {
       return call.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
     }

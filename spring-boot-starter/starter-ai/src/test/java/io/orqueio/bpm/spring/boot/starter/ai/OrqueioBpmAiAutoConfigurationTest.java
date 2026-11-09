@@ -20,9 +20,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
+import io.orqueio.bpm.spring.boot.starter.ai.cache.InMemoryLlmAnswerStore;
+import io.orqueio.bpm.spring.boot.starter.ai.cache.InMemoryLlmCallLock;
+import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmAnswerStore;
+import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmCallLock;
+import io.orqueio.bpm.spring.boot.starter.ai.cache.RedisLlmAnswerStore;
+import io.orqueio.bpm.spring.boot.starter.ai.cache.RedisLlmCallLock;
 import io.orqueio.bpm.spring.boot.starter.ai.property.OrqueioBpmAiProperties;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.LlmProviderException;
+import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDelegate;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskProcessEnginePlugin;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
@@ -33,6 +40,7 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.context.annotation.ImportCandidates;
 import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 class OrqueioBpmAiAutoConfigurationTest {
 
@@ -59,6 +67,41 @@ class OrqueioBpmAiAutoConfigurationTest {
     contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".timeout=0s")
         .run(context -> assertThat(context).hasFailed()
             .getFailure().rootCause().hasMessageContaining(OrqueioBpmAiProperties.PREFIX + ".timeout must be at least 1 millisecond"));
+  }
+
+  @Test
+  void shouldReuseAnswersInMemoryByDefault() {
+    contextRunner.run(context -> {
+      assertThat(context).hasSingleBean(InMemoryLlmAnswerStore.class);
+      assertThat(context).hasSingleBean(InMemoryLlmCallLock.class);
+    });
+  }
+
+  @Test
+  void shouldNotReuseAnswersWhenCacheIsDisabled() {
+    contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".cache.enabled=false")
+        .run(context -> {
+          assertThat(context).doesNotHaveBean(LlmAnswerStore.class);
+          assertThat(context).doesNotHaveBean(LlmCallLock.class);
+          assertThat(context).hasSingleBean(LlmTaskDelegate.class);
+        });
+  }
+
+  @Test
+  void shouldReuseAnswersInRedisWhenApplicationHasRedis() {
+    contextRunner.withBean(RedisConnectionFactory.class, () -> mock(RedisConnectionFactory.class))
+        .run(context -> {
+          assertThat(context).hasSingleBean(RedisLlmAnswerStore.class);
+          assertThat(context).hasSingleBean(RedisLlmCallLock.class);
+        });
+  }
+
+  @Test
+  void shouldRequireLockToOutliveTimeout() {
+    contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".timeout=PT5M",
+            OrqueioBpmAiProperties.PREFIX + ".cache.lock-time-to-live=PT5M")
+        .run(context -> assertThat(context).hasFailed()
+            .getFailure().rootCause().hasMessageContaining(".cache.lock-time-to-live (PT5M) must be longer than"));
   }
 
   @Test

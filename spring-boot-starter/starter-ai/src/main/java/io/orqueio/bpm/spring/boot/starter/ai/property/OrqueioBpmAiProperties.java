@@ -46,6 +46,8 @@ public class OrqueioBpmAiProperties {
    */
   private Duration timeout = Duration.ofMinutes(2);
 
+  private final Cache cache = new Cache();
+
   public boolean isEnabled() {
     return enabled;
   }
@@ -70,10 +72,68 @@ public class OrqueioBpmAiProperties {
     this.timeout = timeout;
   }
 
+  public Cache getCache() {
+    return cache;
+  }
+
   @Override
   public String toString() {
     return "OrqueioBpmAiProperties[enabled=" + enabled + ", defaultProvider=" + defaultProvider
-        + ", timeout=" + timeout + "]";
+        + ", timeout=" + timeout + ", cache=" + cache + "]";
+  }
+
+  /**
+   * Reuse of model answers when an LLM task is retried. Answers are kept in Redis,
+   * shared by every node, when the application has Redis; in memory otherwise.
+   */
+  public static class Cache {
+
+    /**
+     * Reuse answers on retries, and run a single call at a time for the same request.
+     * Default {@code true}.
+     */
+    private boolean enabled = true;
+
+    /**
+     * How long a valid answer is kept. It may contain personal data from the process.
+     */
+    private Duration timeToLive = Duration.ofHours(1);
+
+    /**
+     * How long a call may hold its lock before another node may start the same call.
+     * Must be longer than the timeout of every LLM task, including calls that keep
+     * running after the task stopped waiting.
+     */
+    private Duration lockTimeToLive = Duration.ofMinutes(10);
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    public Duration getTimeToLive() {
+      return timeToLive;
+    }
+
+    public void setTimeToLive(Duration timeToLive) {
+      this.timeToLive = timeToLive;
+    }
+
+    public Duration getLockTimeToLive() {
+      return lockTimeToLive;
+    }
+
+    public void setLockTimeToLive(Duration lockTimeToLive) {
+      this.lockTimeToLive = lockTimeToLive;
+    }
+
+    @Override
+    public String toString() {
+      return "Cache[enabled=" + enabled + ", timeToLive=" + timeToLive + ", lockTimeToLive=" + lockTimeToLive + "]";
+    }
   }
 
 }
