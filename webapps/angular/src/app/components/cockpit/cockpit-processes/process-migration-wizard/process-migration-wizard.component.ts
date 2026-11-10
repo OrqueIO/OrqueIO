@@ -7,7 +7,7 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
+import { faExchangeAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin, switchMap, of, Subject, debounceTime, catchError, filter, tap } from 'rxjs';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
@@ -80,6 +80,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   validationService = inject(MigrationValidationService);
 
   faExchangeAlt = faExchangeAlt;
+  faExclamationTriangle = faExclamationTriangle;
 
   breadcrumbs: BreadcrumbItem[] = [
     { label: 'Processes', translateKey: 'cockpit.menu.processes' }
@@ -297,6 +298,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     if (!this.isPlanValid()) {
       return 'migration.fixInvalidMappings';
+    }
+
+    const unmappedWithInstances = this.unmappedActivitiesWithInstances();
+    if (unmappedWithInstances.length > 0) {
+      return 'migration.unmappedActivitiesWithInstances';
     }
 
     return null;
@@ -1001,6 +1007,34 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     return mapped;
   });
 
+  unmappedActivitiesWithInstances = computed<Array<{ activityId: string; instances: number }>>(() => {
+    const stats = this.sourceActivityStats();
+    const mapped = this.mappedSourceActivityIds();
+
+    return stats
+      .filter(stat => stat.instances > 0 && !mapped.has(stat.id))
+      .map(stat => ({
+        activityId: stat.id,
+        instances: stat.instances
+      }));
+  });
+
+  visibleUnmappedActivities = computed(() => {
+    const all = this.unmappedActivitiesWithInstances();
+    return all.length <= 3 ? all : all.slice(0, 3);
+  });
+
+  remainingUnmappedCount = computed(() => {
+    const all = this.unmappedActivitiesWithInstances();
+    return all.length > 3 ? all.length - 3 : 0;
+  });
+
+  remainingActivitiesTitle = computed(() => {
+    const all = this.unmappedActivitiesWithInstances();
+    if (all.length <= 3) return '';
+    return all.slice(3).map(a => `${a.activityId} (${a.instances})`).join(', ');
+  });
+
   mappedTargetActivityIds = computed(() => {
     const mapped = new Set<string>();
     this.editableInstructions().forEach(instr => {
@@ -1173,6 +1207,10 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     }
   }
 
+  onUnmappedActivityClick(activityId: string): void {
+    this.onSelectMappedActivity(activityId);
+  }
+
   onArrowHover(event: string | null): void {
     if (event) {
       // When hovering arrow, show remove button on SOURCE only (never on target)
@@ -1279,7 +1317,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   onSelectInstancesBack(state: InstancesStepState): void {
     this.instancesStepState.set(state);
-    this.currentStep.set(2);
+    if (this.canGoToSetVariables()) {
+      this.currentStep.set(2);
+    } else {
+      this.currentStep.set(1);
+    }
   }
 
   onSelectInstancesNext(state: InstancesStepState): void {

@@ -937,4 +937,594 @@ describe('ProcessMigrationWizardComponent', () => {
 
     expect(component.targetXml()).toBeNull();
   });
+
+  describe('unmapped activities with active instances validation', () => {
+    const validBpmnXml = '<?xml version="1.0"?><bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"><bpmn:process id="test"/></bpmn:definitions>';
+
+    it('should disable Next button when activity has instances > 0 and is not mapped', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 },
+        { id: 'Activity_2', instances: 0, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_2'], targetActivityIds: ['Activity_3'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(1);
+      expect(component.unmappedActivitiesWithInstances()[0].activityId).toBe('Activity_1');
+      expect(component.unmappedActivitiesWithInstances()[0].instances).toBe(5);
+      expect(component.canGoToSetVariables()).toBe(false);
+      expect(component.setVariablesDisabledReason()).toBe('migration.unmappedActivitiesWithInstances');
+    });
+
+    it('should enable Next button when activity is mapped', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_1'], targetActivityIds: ['Activity_2'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(0);
+      expect(component.canGoToSetVariables()).toBe(true);
+      expect(component.setVariablesDisabledReason()).toBe(null);
+    });
+
+    it('should enable Next button when activity has 0 instances and is not mapped', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 0, incidents: 0 },
+        { id: 'Activity_2', instances: 5, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_2'], targetActivityIds: ['Activity_3'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(0);
+      expect(component.canGoToSetVariables()).toBe(true);
+    });
+
+    it('should block Next when mapping is deleted and activity has instances', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_1'], targetActivityIds: ['Activity_2'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.canGoToSetVariables()).toBe(true);
+
+      component.onDeleteMapping('Activity_1');
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(1);
+      expect(component.canGoToSetVariables()).toBe(false);
+    });
+
+    it('should unblock Next when mapping is added for activity with instances', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 },
+        { id: 'Activity_2', instances: 0, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_2'], targetActivityIds: ['Activity_3'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.canGoToSetVariables()).toBe(false);
+
+      component.mappingSourceActivityId.set('Activity_1');
+      component.onSelectTarget('Activity_4');
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(0);
+      expect(component.canGoToSetVariables()).toBe(true);
+    });
+
+    it('should redirect to step 1 when going back from step 3 and validation fails', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 },
+        { id: 'Activity_2', instances: 0, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_2'], targetActivityIds: ['Activity_3'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      component.currentStep.set(3);
+      component.onSelectInstancesBack({ mode: 'query', processInstanceIds: null, queryParams: null, filterCriteria: [], vnIgnoreCase: false, vvIgnoreCase: false });
+
+      expect(component.currentStep()).toBe(1);
+    });
+
+    it('should allow step 2 when going back from step 3 and validation passes', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_1'], targetActivityIds: ['Activity_2'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      component.currentStep.set(3);
+      component.onSelectInstancesBack({ mode: 'query', processInstanceIds: null, queryParams: null, filterCriteria: [], vnIgnoreCase: false, vvIgnoreCase: false });
+
+      expect(component.currentStep()).toBe(2);
+    });
+
+    it('should not block when activity statistics are still loading', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      const statsSubject = new Subject();
+      processDefinitionService.getActivityStatistics.mockReturnValue(statsSubject.asObservable());
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_1'], targetActivityIds: ['Activity_2'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 50));
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(0);
+      expect(component.canGoToSetVariables()).toBe(true);
+    });
+
+    it('should not block when activity statistics fail to load', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(throwError(() => new Error('Failed to load')));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_1'], targetActivityIds: ['Activity_2'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(0);
+      expect(component.canGoToSetVariables()).toBe(true);
+    });
+
+    it('should list all unmapped activities with instances in warning message', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 },
+        { id: 'Activity_2', instances: 3, incidents: 0 },
+        { id: 'Activity_3', instances: 0, incidents: 0 },
+        { id: 'Activity_4', instances: 0, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_4'], targetActivityIds: ['Activity_5'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(2);
+      expect(component.unmappedActivitiesWithInstances()).toEqual([
+        { activityId: 'Activity_1', instances: 5 },
+        { activityId: 'Activity_2', instances: 3 }
+      ]);
+
+      const compiled = fixture.nativeElement;
+      const warningBanner = compiled.querySelector('#unmapped-activities-warning');
+      expect(warningBanner).toBeTruthy();
+      expect(warningBanner.classList.contains('unmapped-alert')).toBe(true);
+
+      const pills = warningBanner.querySelectorAll('.unmapped-chip');
+      expect(pills.length).toBe(2);
+    });
+
+    it('should display singular title and subtitle for 1 unmapped activity', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 3, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(1);
+
+      const compiled = fixture.nativeElement;
+      const title = compiled.querySelector('.unmapped-alert__title');
+      expect(title).toBeTruthy();
+      const hint = compiled.querySelector('.unmapped-alert__hint');
+      expect(hint).toBeTruthy();
+    });
+
+    it('should display plural title and subtitle for multiple unmapped activities', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 3, incidents: 0 },
+        { id: 'Activity_2', instances: 2, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(2);
+
+      const compiled = fixture.nativeElement;
+      const title = compiled.querySelector('.unmapped-alert__title');
+      expect(title).toBeTruthy();
+      const hint = compiled.querySelector('.unmapped-alert__hint');
+      expect(hint).toBeTruthy();
+    });
+
+    it('should show only 3 activities with "+N" pill when more than 3', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 1, incidents: 0 },
+        { id: 'Activity_2', instances: 1, incidents: 0 },
+        { id: 'Activity_3', instances: 1, incidents: 0 },
+        { id: 'Activity_4', instances: 1, incidents: 0 },
+        { id: 'Activity_5', instances: 1, incidents: 0 },
+        { id: 'Activity_6', instances: 1, incidents: 0 },
+        { id: 'Activity_7', instances: 1, incidents: 0 },
+        { id: 'Activity_8', instances: 1, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.visibleUnmappedActivities().length).toBe(3);
+      expect(component.remainingUnmappedCount()).toBe(5);
+
+      const compiled = fixture.nativeElement;
+      const chips = compiled.querySelectorAll('.unmapped-chip');
+      expect(chips.length).toBe(4); // 3 activity chips + 1 "+N" chip
+
+      const listItems = compiled.querySelectorAll('#unmapped-activities-warning ul li');
+      expect(listItems.length).toBe(4); // 3 activities + 1 "+5" item
+    });
+
+    it('should have role="status" and aria-live="polite" on banner', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 1, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement;
+      const banner = compiled.querySelector('#unmapped-activities-warning');
+      expect(banner.getAttribute('role')).toBe('status');
+      expect(banner.getAttribute('aria-live')).toBe('polite');
+    });
+
+    it('should have aria-label on activity pills', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 1, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement;
+      const chip = compiled.querySelector('.unmapped-chip');
+      const ariaLabel = chip.getAttribute('aria-label');
+      expect(ariaLabel).toBeTruthy();
+      expect(ariaLabel).toContain('Activity_1');
+    });
+
+    it('should call onUnmappedActivityClick when pill is clicked', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 1, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      const spy = vi.spyOn(component, 'onUnmappedActivityClick');
+
+      const compiled = fixture.nativeElement;
+      const chip = compiled.querySelector('.unmapped-chip');
+      chip.click();
+
+      expect(spy).toHaveBeenCalledWith('Activity_1');
+    });
+
+    it('should show 1 pill with count badge when 1 activity is unmapped', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 3, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(1);
+      expect(component.visibleUnmappedActivities().length).toBe(1);
+      expect(component.remainingUnmappedCount()).toBe(0);
+
+      const compiled = fixture.nativeElement;
+      const chips = compiled.querySelectorAll('.unmapped-chip');
+      expect(chips.length).toBe(1); // Only 1 chip, no "+N" chip
+
+      const countBadge = compiled.querySelector('.unmapped-chip__count');
+      expect(countBadge).toBeTruthy();
+      expect(countBadge.textContent?.trim()).toBe('3');
+    });
+
+    it('should show 3 pills + "+2" pill when 5 activities are unmapped', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 1, incidents: 0 },
+        { id: 'Activity_2', instances: 2, incidents: 0 },
+        { id: 'Activity_3', instances: 3, incidents: 0 },
+        { id: 'Activity_4', instances: 4, incidents: 0 },
+        { id: 'Activity_5', instances: 5, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.unmappedActivitiesWithInstances().length).toBe(5);
+      expect(component.visibleUnmappedActivities().length).toBe(3);
+      expect(component.remainingUnmappedCount()).toBe(2);
+
+      const compiled = fixture.nativeElement;
+      const listItems = compiled.querySelectorAll('#unmapped-activities-warning ul li');
+      expect(listItems.length).toBe(4); // 3 activity items + 1 "+2" item
+
+      // Check the "+2" pill exists and has correct text
+      const remainingPill = compiled.querySelector('#unmapped-activities-warning ul li:last-child .unmapped-chip');
+      expect(remainingPill).toBeTruthy();
+      expect(remainingPill.textContent?.trim()).toBe('+2');
+
+      // Verify the "+2" pill has a title attribute with remaining activities
+      const title = remainingPill.getAttribute('title');
+      expect(title).toBeTruthy();
+      expect(title).toContain('Activity_4');
+      expect(title).toContain('Activity_5');
+    });
+  });
 });
