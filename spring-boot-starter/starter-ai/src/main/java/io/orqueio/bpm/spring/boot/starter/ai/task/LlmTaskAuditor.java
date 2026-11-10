@@ -52,8 +52,9 @@ import tools.jackson.databind.json.JsonMapper;
  *       a call of the same request</li>
  *   <li>{@code recordedAt}: when the record was written, once the answer was in</li>
  * </ul>
- * The prompt and the answer, which may contain personal data, are recorded only when
- * {@code includeContent} is set. They are then shortened so the record fits in the
+ * The data sent to the model (recorded as {@code prompt}: the instructions are identified
+ * by {@code promptVersion}) and the answer, which may contain personal data, are recorded
+ * only when {@code includeContent} is set. They are then shortened so the record fits in the
  * engine's string variable column on every supported database.
  */
 public class LlmTaskAuditor {

@@ -110,9 +110,16 @@ class LlmTaskDelegateIT {
         .containsEntry("urgency", 3L);
     assertThat(model.prompts).hasSize(1);
     Prompt prompt = model.prompts.get(0);
-    assertThat(prompt.getSystemMessage().getText()).contains("\"category\" (string), \"urgency\" (integer)");
-    assertThat(prompt.getUserMessage().getText()).isEqualTo("Classify: My laptop was stolen");
-    assertThat(prompt.getInstructions()).hasSize(2);
+    assertThat(prompt.getSystemMessage().getText())
+        .startsWith("Classify: <emailBody>"+"\n\n"+LlmPromptResolver.DATA_RULE)
+        .contains("\"category\" (string), \"urgency\" (integer)")
+        .doesNotContain("My laptop was stolen");
+    // Only the data the prompt uses, as a labelled JSON object, then the reminder
+    assertThat(prompt.getUserMessage().getText())
+        .isEqualTo(LlmPromptResolver.DATA_LABEL + "\n{\"emailBody\":\"My laptop was stolen\"}");
+    assertThat(prompt.getInstructions()).extracting(message -> message.getMessageType().name())
+        .containsExactly("SYSTEM", "USER", "SYSTEM");
+    assertThat(prompt.getInstructions().get(2).getText()).isEqualTo(LlmPromptResolver.DATA_REMINDER);
     assertThat(prompt.toString()).doesNotContain("FR76");
   }
 
@@ -127,8 +134,9 @@ class LlmTaskDelegateIT {
 
     ProcessInstance instance = startAndRunLlmTask(Map.of("emailBody", "My laptop was stolen"));
 
-    assertThat(model.prompts.get(0).getUserMessage().getText())
-        .isEqualTo("Classify this email.\nAnswer in English.\n\nEmail: My laptop was stolen");
+    assertThat(model.prompts.get(0).getSystemMessage().getText())
+        .startsWith("Classify this email.\nAnswer in English.\n\nEmail: <emailBody>");
+    assertThat(model.prompts.get(0).getUserMessage().getText()).endsWith("{\"emailBody\":\"My laptop was stolen\"}");
     assertThat(runtimeService.getVariables(instance.getId()))
         .containsEntry("category", "Theft")
         .doesNotContainKey("orqueio.llm.prompt");

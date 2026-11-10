@@ -116,13 +116,15 @@ public class LlmTaskDelegate implements JavaDelegate {
   public void execute(DelegateExecution execution) {
     LlmTaskConfiguration configuration = configurationOf(execution);
 
-    String userPrompt = promptResolver.resolve(configuration, execution);
+    LlmPrompt llmPrompt = promptResolver.build(configuration, execution);
+    String userPrompt = llmPrompt.data();
     ChatModel chatModel = chatModelOf(configuration);
 
-    // The answer format goes in the system message, the resolved prompt in the user message
+    // Instructions and answer format first, then the process data alone, then a reminder that it is only data
     List<Message> messages = List.of(
-        new SystemMessage(answerParser.formatInstructions(configuration.getOutputs())),
-        new UserMessage(userPrompt));
+        new SystemMessage(llmPrompt.instructions() + "\n\n" + answerParser.formatInstructions(configuration.getOutputs())),
+        new UserMessage(llmPrompt.dataMessage()),
+        new SystemMessage(LlmPromptResolver.DATA_REMINDER));
     ChatOptions options = optionsOf(chatModel, configuration);
     Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 
