@@ -141,6 +141,169 @@ class LlmTaskDeploymentIT {
   }
 
   @Test
+  void shouldReadPromptFromInputParameter() {
+    // As the modeler's template writes it: the text between tags keeps the line breaks typed
+    LlmTaskConfiguration configuration = deployAndGetConfiguration(promptParameterTask(
+        property("orqueio.llm.inputs", "claimText") + OUTPUTS,
+        "<camunda:inputParameter name=\"orqueio.llm.prompt\">Extract the facts.\nRules:\n- amount in euros\n\nClaim: {{claimText}}</camunda:inputParameter>"));
+
+    assertThat(configuration.getPrompt()).isEqualTo("Extract the facts.\nRules:\n- amount in euros\n\nClaim: {{claimText}}");
+    assertThat(configuration.getInputs()).containsExactly("claimText");
+  }
+
+  @Test
+  void shouldKeepWindowsLineBreaksOfPromptParameter() {
+    // A carriage return written as a character reference survives XML parsing; a raw one becomes \n
+    LlmTaskConfiguration configuration = deployAndGetConfiguration(promptParameterTask(OUTPUTS,
+        "<camunda:inputParameter name=\"orqueio.llm.prompt\">First line&#13;&#10;Second line\r\nThird line</camunda:inputParameter>"));
+
+    assertThat(configuration.getPrompt()).isEqualTo("First line\r\nSecond line\nThird line");
+  }
+
+  @Test
+  void shouldGiveSameConfigurationForPropertyAndParameterPrompt() {
+    // Same prompt either way: the answer reuse key and the audit's prompt version do not change
+    LlmTaskConfiguration fromProperty = deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
+        property("orqueio.llm.prompt", "Line one&#10;Line two") + OUTPUTS));
+    repositoryService.deleteDeployment(deployment.getId(), true);
+
+    LlmTaskConfiguration fromParameter = deployAndGetConfiguration(promptParameterTask(OUTPUTS,
+        "<camunda:inputParameter name=\"orqueio.llm.prompt\">Line one\nLine two</camunda:inputParameter>"));
+
+    assertThat(fromParameter.getPrompt()).isEqualTo(fromProperty.getPrompt());
+  }
+
+  @Test
+  void shouldRemovePromptParameterFromInputMappingAndKeepOthers() {
+    deployAndGetConfiguration(promptParameterTask(OUTPUTS,
+        "<camunda:inputParameter name=\"orqueio.llm.prompt\">Summarize</camunda:inputParameter>"
+            + "<camunda:inputParameter name=\"customerTier\">gold</camunda:inputParameter>"));
+
+    assertThat(getActivity().getIoMapping().getInputParameters())
+        .extracting(parameter -> parameter.getName())
+        .containsExactly("customerTier");
+  }
+
+  @Test
+  void shouldDropInputMappingLeftEmpty() {
+    deployAndGetConfiguration(promptParameterTask(OUTPUTS,
+        "<camunda:inputParameter name=\"orqueio.llm.prompt\">Summarize</camunda:inputParameter>"));
+
+    assertThat(getActivity().getIoMapping()).isNull();
+    // Runs as with the property form: no extra scope execution
+    assertThat(getActivity().isScope()).isFalse();
+  }
+
+  @Test
+  void shouldKeepScopeWhenBoundaryEventNeedsIt() {
+    deployAndGetConfiguration(promptParameterTask(OUTPUTS,
+        "<camunda:inputParameter name=\"orqueio.llm.prompt\">Summarize</camunda:inputParameter>")
+        .replace("</bpmn:serviceTask>", """
+            </bpmn:serviceTask>
+            <bpmn:boundaryEvent id="Timeout" attachedToRef="Task_Llm">
+              <bpmn:timerEventDefinition><bpmn:timeDuration>PT1H</bpmn:timeDuration></bpmn:timerEventDefinition>
+            </bpmn:boundaryEvent>
+            """));
+
+    assertThat(getActivity().isScope()).isTrue();
+  }
+
+  @Test
+  void shouldKeepOutputParametersOfLlmTask() {
+    deployAndGetConfiguration(promptParameterTask(OUTPUTS,
+        "<camunda:inputParameter name=\"orqueio.llm.prompt\">Summarize</camunda:inputParameter>"
+            + "<camunda:outputParameter name=\"summary\">${answer}</camunda:outputParameter>"));
+
+    assertThat(getActivity().getIoMapping().getInputParameters()).isEmpty();
+    assertThat(getActivity().getIoMapping().getOutputParameters()).hasSize(1);
+  }
+
+  @Test
+  void shouldRemovePromptParameterAgainWhenReloadingFromCache() {
+    deployAndGetConfiguration(promptParameterTask(OUTPUTS,
+        "<camunda:inputParameter name=\"orqueio.llm.prompt\">Line one\nLine two</camunda:inputParameter>"));
+    processEngineConfiguration.getDeploymentCache().discardProcessDefinitionCache();
+
+    assertThat(getConfiguration().getPrompt()).isEqualTo("Line one\nLine two");
+    assertThat(getActivity().getIoMapping()).isNull();
+    assertThat(getActivity().isScope()).isFalse();
+  }
+
+  @Test
+  void shouldGiveSamePromptWhateverTheFormAndSurroundingSpaces() {
+    LlmTaskConfiguration fromProperty = deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
+        property("orqueio.llm.prompt", "  Summarize  ") + OUTPUTS));
+    repositoryService.deleteDeployment(deployment.getId(), true);
+
+    LlmTaskConfiguration fromParameter = deployAndGetConfiguration(promptParameterTask(OUTPUTS,
+        "<camunda:inputParameter name=\"orqueio.llm.prompt\">\n      Summarize\n    </camunda:inputParameter>"));
+
+    assertThat(fromProperty.getPrompt()).isEqualTo("Summarize").isEqualTo(fromParameter.getPrompt());
+  }
+
+  @Test
+  void shouldRejectPromptDeclaredAsPropertyAndParameter() {
+    assertDeploymentFails(promptParameterTask(property("orqueio.llm.prompt", "Summarize") + OUTPUTS,
+            "<camunda:inputParameter name=\"orqueio.llm.prompt\">Summarize</camunda:inputParameter>"),
+        "LLM task 'Task_Llm' declares orqueio.llm.prompt both as a property and as an input parameter");
+  }
+
+  @Test
+  void shouldRejectPromptParameterDeclaredTwice() {
+    assertDeploymentFails(promptParameterTask(OUTPUTS,
+            "<camunda:inputParameter name=\"orqueio.llm.prompt\">One</camunda:inputParameter>"
+                + "<camunda:inputParameter name=\"orqueio.llm.prompt\">Two</camunda:inputParameter>"),
+        "LLM task 'Task_Llm' declares the orqueio.llm.prompt input parameter twice");
+  }
+
+  @Test
+  void shouldRejectPromptParameterThatIsNotPlainText() {
+    assertDeploymentFails(promptParameterTask(OUTPUTS,
+            "<camunda:inputParameter name=\"orqueio.llm.prompt\"><camunda:list><camunda:value>a</camunda:value></camunda:list></camunda:inputParameter>"),
+        "LLM task 'Task_Llm' has a orqueio.llm.prompt input parameter that is not plain text");
+  }
+
+  @Test
+  void shouldRejectExpressionInPromptParameter() {
+    assertDeploymentFails(promptParameterTask(property("orqueio.llm.inputs", "claimText") + OUTPUTS,
+            "<camunda:inputParameter name=\"orqueio.llm.prompt\">Claim: ${claimText}</camunda:inputParameter>"),
+        "LLM task 'Task_Llm' has ${ or #{ in its orqueio.llm.prompt input parameter");
+    assertDeploymentFails(promptParameterTask(property("orqueio.llm.inputs", "amount") + OUTPUTS,
+            "<camunda:inputParameter name=\"orqueio.llm.prompt\">Price: ${{amount}}, total #{x}</camunda:inputParameter>"),
+        "even before a {{name}} placeholder; write the prompt without them, or as a orqueio.llm.prompt property");
+  }
+
+  @Test
+  void shouldRejectBlankPromptParameter() {
+    assertDeploymentFails(promptParameterTask(OUTPUTS,
+            "<camunda:inputParameter name=\"orqueio.llm.prompt\">  </camunda:inputParameter>"),
+        "LLM task 'Task_Llm' requires a orqueio.llm.prompt property or input parameter");
+  }
+
+  @Test
+  void shouldCheckPlaceholdersOfPromptParameter() {
+    assertDeploymentFails(promptParameterTask(property("orqueio.llm.inputs", "claimText") + OUTPUTS,
+            "<camunda:inputParameter name=\"orqueio.llm.prompt\">From {{iban}}</camunda:inputParameter>"),
+        "LLM task 'Task_Llm' uses variables [iban] in its prompt that are not declared in orqueio.llm.inputs");
+  }
+
+  @Test
+  void shouldLeavePromptParameterOfOtherServiceTasksAlone() {
+    // On a task that is not an LLM task, it is an ordinary input parameter
+    deployment = repositoryService.createDeployment().addString("llm-task.bpmn", process("""
+        <bpmn:serviceTask id="Task_Llm" camunda:expression="${true}">
+          <bpmn:extensionElements>
+            <camunda:inputOutput>
+              <camunda:inputParameter name="orqueio.llm.prompt">Hello</camunda:inputParameter>
+            </camunda:inputOutput>
+          </bpmn:extensionElements>
+        </bpmn:serviceTask>
+        """)).deploy();
+
+    assertThat(getActivity().getIoMapping().getInputParameters()).hasSize(1);
+  }
+
+  @Test
   void shouldKeepLineBreaksOfMultiLinePrompt() {
     LlmTaskConfiguration configuration = deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
         property("orqueio.llm.prompt", "First line&#10;Second line") + OUTPUTS));
@@ -227,6 +390,26 @@ class LlmTaskDeploymentIT {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
             property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", "orqueioLlm_Task_Llm:string")),
         "LLM task 'Task_Llm' cannot write output 'orqueioLlm_Task_Llm': names starting with orqueioLlm_ are kept");
+  }
+
+  @Test
+  void shouldRejectOtherImplementationLeftOnTheTask() {
+    // For example the modeler's template applied to an external task keeps camunda:type and camunda:topic
+    for (String attribute : new String[] {"camunda:type=\"external\" camunda:topic=\"llm\"",
+        "camunda:class=\"com.example.Delegate\"", "camunda:expression=\"${true}\""}) {
+      String name = attribute.substring("camunda:".length(), attribute.indexOf('='));
+      assertDeploymentFails(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Summarize") + OUTPUTS)
+              .replace("camunda:asyncBefore=", attribute + " camunda:asyncBefore="),
+          "LLM task 'Task_Llm' also sets camunda:" + name + ", which the engine would run instead of the LLM task");
+    }
+  }
+
+  @Test
+  void shouldRejectConnectorOnTheTask() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Summarize") + OUTPUTS)
+            .replace("<bpmn:extensionElements>",
+                "<bpmn:extensionElements><camunda:connector><camunda:connectorId>http-connector</camunda:connectorId></camunda:connector>"),
+        "LLM task 'Task_Llm' also declares a camunda:connector");
   }
 
   @Test
@@ -349,6 +532,26 @@ class LlmTaskDeploymentIT {
   private LlmTaskConfiguration deployAndGetConfiguration(String bpmn) {
     deployment = repositoryService.createDeployment().addString("llm-task.bpmn", bpmn).deploy();
     return getConfiguration();
+  }
+
+  private ActivityImpl getActivity() {
+    ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
+        .deploymentId(deployment.getId())
+        .singleResult();
+    return (ActivityImpl) ((RepositoryServiceImpl) repositoryService)
+        .getDeployedProcessDefinition(definition.getId())
+        .findActivity("Task_Llm");
+  }
+
+  static String promptParameterTask(String properties, String inputParameters) {
+    return process("""
+        <bpmn:serviceTask id="Task_Llm" camunda:delegateExpression="${orqueioLlmTask}" camunda:asyncBefore="true">
+          <bpmn:extensionElements>
+            <camunda:properties>%s</camunda:properties>
+            <camunda:inputOutput>%s</camunda:inputOutput>
+          </bpmn:extensionElements>
+        </bpmn:serviceTask>
+        """.formatted(properties, inputParameters));
   }
 
   private LlmTaskConfiguration getConfiguration() {

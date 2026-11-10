@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import io.orqueio.bpm.engine.HistoryService;
 import io.orqueio.bpm.engine.ManagementService;
 import io.orqueio.bpm.engine.RepositoryService;
 import io.orqueio.bpm.engine.RuntimeService;
@@ -70,6 +71,9 @@ class LlmTaskDelegateIT {
   private ManagementService managementService;
 
   @Autowired
+  private HistoryService historyService;
+
+  @Autowired
   private TaskService taskService;
 
   @Autowired
@@ -110,6 +114,27 @@ class LlmTaskDelegateIT {
     assertThat(prompt.getUserMessage().getText()).isEqualTo("Classify: My laptop was stolen");
     assertThat(prompt.getInstructions()).hasSize(2);
     assertThat(prompt.toString()).doesNotContain("FR76");
+  }
+
+  @Test
+  void shouldSendMultiLinePromptFromInputParameterWithoutCreatingAVariable() {
+    deployment = repositoryService.createDeployment().addString("llm-task.bpmn",
+        LlmTaskDeploymentIT.promptParameterTask(
+            property("orqueio.llm.inputs", "emailBody") + property("orqueio.llm.outputs", "category:string"),
+            "<camunda:inputParameter name=\"orqueio.llm.prompt\">Classify this email.\nAnswer in English.\n\nEmail: {{emailBody}}</camunda:inputParameter>")
+            .replace("<bpmn:endEvent id=\"End\" />", "<bpmn:userTask id=\"End\" />")).deploy();
+    model.answer = "{\"category\":\"Theft\"}";
+
+    ProcessInstance instance = startAndRunLlmTask(Map.of("emailBody", "My laptop was stolen"));
+
+    assertThat(model.prompts.get(0).getUserMessage().getText())
+        .isEqualTo("Classify this email.\nAnswer in English.\n\nEmail: My laptop was stolen");
+    assertThat(runtimeService.getVariables(instance.getId()))
+        .containsEntry("category", "Theft")
+        .doesNotContainKey("orqueio.llm.prompt");
+    // Not even as a variable local to the task: the engine never evaluated the parameter
+    assertThat(historyService.createHistoricVariableInstanceQuery()
+        .processInstanceId(instance.getId()).variableName("orqueio.llm.prompt").count()).isZero();
   }
 
   @Test

@@ -41,6 +41,7 @@ import io.orqueio.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 import io.orqueio.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
 import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse;
 import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseUtil;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.IoMapping;
 import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
 import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
 import io.orqueio.bpm.engine.impl.util.xml.Element;
@@ -67,12 +68,13 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
       return;
     }
 
+    validateNoOtherImplementation(activity, serviceTaskElement);
     Map<String, String> llmProperties = properties != null ? properties : Map.of();
     validateKnownProperties(llmProperties, activity, serviceTaskElement);
 
-    String prompt = llmProperties.get(PROMPT_PROPERTY);
+    String prompt = promptOf(llmProperties.get(PROMPT_PROPERTY), activity, serviceTaskElement);
     if (prompt == null || prompt.isBlank()) {
-      throw error(activity, "requires a " + PROMPT_PROPERTY + " property", serviceTaskElement);
+      throw error(activity, "requires a " + PROMPT_PROPERTY + " property or input parameter", serviceTaskElement);
     }
     if (isMultiInstance(activity)) {
       throw error(activity, "is multi-instance, which LLM tasks do not support yet", serviceTaskElement);
@@ -148,6 +150,86 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
 
   protected static final Duration MIN_TIMEOUT = Duration.ofMillis(1);
   protected static final Duration MAX_TIMEOUT = Duration.ofHours(24);
+
+  /**
+   * The prompt is a {@code camunda:property}, or a {@code camunda:inputParameter} of the
+   * same name: element templates can only offer a multi-line field for the latter, and
+   * its text keeps its line breaks. The parameter only carries the prompt: it is removed
+   * from the task's input mapping in {@link #parseIoMapping}, so the engine neither
+   * evaluates it nor turns it into a variable.
+   */
+  protected String promptOf(String propertyPrompt, ActivityImpl activity, Element element) {
+    Element parameter = promptParameter(activity, element);
+    if (parameter == null) {
+      // Stripped like the parameter, so both forms give the same prompt, reuse key and audit version
+      return propertyPrompt != null ? propertyPrompt.strip() : null;
+    }
+    if (propertyPrompt != null) {
+      throw error(activity, "declares " + PROMPT_PROPERTY + " both as a property and as an input parameter", element);
+    }
+    if (!parameter.elements().isEmpty()) {
+      throw error(activity, "has a " + PROMPT_PROPERTY + " input parameter that is not plain text; "
+          + "a script, list or map cannot be a prompt", element);
+    }
+    String prompt = parameter.getText().strip();
+    // The engine would evaluate an expression in an input parameter; a prompt is sent as written
+    if (prompt.contains("${") || prompt.contains("#{")) {
+      throw error(activity, "has ${ or #{ in its " + PROMPT_PROPERTY + " input parameter, which the engine "
+          + "would evaluate as an expression, even before a {{name}} placeholder; write the prompt without "
+          + "them, or as a " + PROMPT_PROPERTY + " property", element);
+    }
+    return prompt;
+  }
+
+  protected Element promptParameter(ActivityImpl activity, Element element) {
+    Element inputOutput = BpmnParseUtil.findOrqueioExtensionElement(element, "inputOutput");
+    if (inputOutput == null) {
+      return null;
+    }
+    List<Element> parameters = inputOutput.elementsNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "inputParameter").stream()
+        .filter(parameter -> PROMPT_PROPERTY.equals(parameter.attribute("name")))
+        .toList();
+    if (parameters.size() > 1) {
+      throw error(activity, "declares the " + PROMPT_PROPERTY + " input parameter twice", element);
+    }
+    return parameters.isEmpty() ? null : parameters.get(0);
+  }
+
+  /**
+   * The engine parses the input mapping after the service task, then calls this. A
+   * mapping that only carried the prompt is dropped, and so is the scope the engine
+   * made of the task for it: the task then runs as with the property form. Boundary
+   * events and compensation, parsed later, still make it a scope when needed.
+   */
+  @Override
+  public void parseIoMapping(Element extensionElements, ActivityImpl activity, IoMapping inputOutput) {
+    if (LlmTaskConfiguration.of(activity) == null || activity.getIoMapping() != inputOutput) {
+      return;
+    }
+    boolean hadPrompt = inputOutput.getInputParameters().removeIf(parameter -> PROMPT_PROPERTY.equals(parameter.getName()));
+    if (hadPrompt && inputOutput.getInputParameters().isEmpty() && inputOutput.getOutputParameters().isEmpty()) {
+      activity.setIoMapping(null);
+      activity.setScope(false);
+    }
+  }
+
+  /**
+   * The engine runs camunda:type and camunda:class before camunda:delegateExpression, and
+   * a connector replaces the behavior: left on the task, for example by applying the
+   * modeler's template to an external task, they would run instead of the LLM task.
+   */
+  protected void validateNoOtherImplementation(ActivityImpl activity, Element element) {
+    for (String attribute : List.of("type", "class", "expression")) {
+      String value = element.attributeNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, attribute);
+      if (value != null && !value.isBlank()) {
+        throw error(activity, "also sets camunda:" + attribute + ", which the engine would run instead of the "
+            + "LLM task; remove it", element);
+      }
+    }
+    if (BpmnParseUtil.findOrqueioExtensionElement(element, "connector") != null) {
+      throw error(activity, "also declares a camunda:connector, which would run instead of the LLM task; remove it", element);
+    }
+  }
 
   protected Duration parseTimeout(String value, ActivityImpl activity, Element element) {
     if (value == null) {
