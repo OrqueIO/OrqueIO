@@ -120,11 +120,14 @@ public class LlmTaskDelegate implements JavaDelegate {
     String data = llmPrompt.data();
     ChatModel chatModel = chatModelOf(configuration);
 
-    // One system message, first, then the process data alone: every provider accepts this order
-    List<Message> messages = List.of(
-        new SystemMessage(llmPrompt.instructions() + "\n\n" + answerParser.formatInstructions(configuration.getOutputs())
-            + "\n\n" + LlmPromptResolver.DATA_REMINDER),
-        new UserMessage(llmPrompt.dataMessage()));
+    // One system message, first, then a user message: every provider accepts this order
+    String format = answerParser.formatInstructions(configuration.getOutputs());
+    List<Message> messages = llmPrompt.hasData()
+        // Instructions apart from the process data, which comes alone in the user message
+        ? List.of(new SystemMessage(llmPrompt.instructions() + "\n\n" + format + "\n\n" + LlmPromptResolver.DATA_REMINDER),
+            new UserMessage(llmPrompt.dataMessage()))
+        // No process data: the author's prompt is the request
+        : List.of(new SystemMessage(format), new UserMessage(llmPrompt.instructions()));
     ChatOptions options = optionsOf(chatModel, configuration);
     Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 

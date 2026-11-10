@@ -50,7 +50,7 @@ class LlmPromptResolverTest {
     LlmPrompt prompt = resolver.build(task("{{customer}} claims {{amount}} EUR at {{rate}}, urgent: {{urgent}}",
         "customer", "amount", "rate", "urgent"), variables);
 
-    assertThat(prompt.instructions()).isEqualTo("<customer> claims <amount> EUR at <rate>, urgent: <urgent>"
+    assertThat(prompt.instructions()).isEqualTo("<input:customer> claims <input:amount> EUR at <input:rate>, urgent: <input:urgent>"
         + "\n\n" + LlmPromptResolver.DATA_RULE);
     // Values keep their JSON type, in the order the prompt uses them
     assertThat(prompt.data()).isEqualTo("{\"customer\":\"Ada\",\"amount\":8500,\"rate\":0.5,\"urgent\":true}");
@@ -68,6 +68,17 @@ class LlmPromptResolverTest {
     JsonNode data = JsonMapper.builder().build().readTree(prompt.data());
     assertThat(data.get("claimText").asString()).isEqualTo(attack);
     assertThat(data.propertyNames()).containsExactly("claimText");
+  }
+
+  @Test
+  void shouldSendPromptAsWrittenWhenItUsesNoData() {
+    VariableScope variables = variables(Map.of());
+
+    LlmPrompt prompt = resolver.build(task("Write a haiku about rain"), variables);
+
+    assertThat(prompt.hasData()).isFalse();
+    assertThat(prompt.instructions()).isEqualTo("Write a haiku about rain");
+    verifyNoInteractions(variables);
   }
 
   @Test
