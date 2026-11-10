@@ -117,14 +117,14 @@ public class LlmTaskDelegate implements JavaDelegate {
     LlmTaskConfiguration configuration = configurationOf(execution);
 
     LlmPrompt llmPrompt = promptResolver.build(configuration, execution);
-    String userPrompt = llmPrompt.data();
+    String data = llmPrompt.data();
     ChatModel chatModel = chatModelOf(configuration);
 
-    // Instructions and answer format first, then the process data alone, then a reminder that it is only data
+    // One system message, first, then the process data alone: every provider accepts this order
     List<Message> messages = List.of(
-        new SystemMessage(llmPrompt.instructions() + "\n\n" + answerParser.formatInstructions(configuration.getOutputs())),
-        new UserMessage(llmPrompt.dataMessage()),
-        new SystemMessage(LlmPromptResolver.DATA_REMINDER));
+        new SystemMessage(llmPrompt.instructions() + "\n\n" + answerParser.formatInstructions(configuration.getOutputs())
+            + "\n\n" + LlmPromptResolver.DATA_REMINDER),
+        new UserMessage(llmPrompt.dataMessage()));
     ChatOptions options = optionsOf(chatModel, configuration);
     Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 
@@ -148,11 +148,11 @@ public class LlmTaskDelegate implements JavaDelegate {
       if (configuration.getErrorCode() == null || !hasErrorHandler(execution, configuration.getErrorCode())) {
         throw e;
       }
-      audit(execution, configuration, chatModel, prompt, userPrompt, answer, latency, LlmTaskAuditor.Outcome.BPMN_ERROR);
+      audit(execution, configuration, chatModel, prompt, data, answer, latency, LlmTaskAuditor.Outcome.BPMN_ERROR);
       throw new BpmnError(configuration.getErrorCode(), e.getMessage());
     }
     values.forEach(execution::setVariable);
-    audit(execution, configuration, chatModel, prompt, userPrompt, answer, latency, LlmTaskAuditor.Outcome.VALID);
+    audit(execution, configuration, chatModel, prompt, data, answer, latency, LlmTaskAuditor.Outcome.VALID);
   }
 
   /**

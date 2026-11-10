@@ -32,6 +32,7 @@ import io.orqueio.bpm.engine.delegate.VariableScope;
 import io.orqueio.bpm.engine.variable.Variables;
 import io.orqueio.bpm.engine.variable.value.TypedValue;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
 class LlmPromptResolverTest {
@@ -64,8 +65,9 @@ class LlmPromptResolverTest {
     LlmPrompt prompt = resolver.build(task("Classify: {{claimText}}", "claimText"), variables);
 
     assertThat(prompt.instructions()).doesNotContain("ignore all rules").doesNotContain("stolen");
-    assertThat(JsonMapper.builder().build().readTree(prompt.data()).get("claimText").asString()).isEqualTo(attack);
-    assertThat(JsonMapper.builder().build().readTree(prompt.data()).propertyNames()).containsExactly("claimText");
+    JsonNode data = JsonMapper.builder().build().readTree(prompt.data());
+    assertThat(data.get("claimText").asString()).isEqualTo(attack);
+    assertThat(data.propertyNames()).containsExactly("claimText");
   }
 
   @Test

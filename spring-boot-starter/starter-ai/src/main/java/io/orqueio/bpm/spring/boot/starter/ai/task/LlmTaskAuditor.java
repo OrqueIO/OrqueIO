@@ -139,8 +139,12 @@ public class LlmTaskAuditor {
     return text.length() <= limit ? text : text.substring(0, limit);
   }
 
+  // Library wording included: a starter upgrade that changes what the model is told changes the version
   protected String promptVersion(LlmTaskConfiguration configuration) {
-    StringBuilder declared = new StringBuilder(configuration.getPrompt());
+    StringBuilder declared = new StringBuilder(configuration.getPrompt())
+        .append('\n').append(LlmPromptResolver.DATA_RULE)
+        .append('\n').append(LlmPromptResolver.DATA_REMINDER)
+        .append('\n').append(LlmPrompt.DATA_LABEL);
     for (LlmOutputField output : configuration.getOutputs()) {
       declared.append('\n').append(output.name()).append(':').append(output.type().getId());
     }

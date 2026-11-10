@@ -111,15 +111,16 @@ class LlmTaskDelegateIT {
     assertThat(model.prompts).hasSize(1);
     Prompt prompt = model.prompts.get(0);
     assertThat(prompt.getSystemMessage().getText())
-        .startsWith("Classify: <emailBody>"+"\n\n"+LlmPromptResolver.DATA_RULE)
+        .startsWith("Classify: <emailBody>" + "\n\n" + LlmPromptResolver.DATA_RULE)
+        .endsWith(LlmPromptResolver.DATA_REMINDER)
         .contains("\"category\" (string), \"urgency\" (integer)")
         .doesNotContain("My laptop was stolen");
-    // Only the data the prompt uses, as a labelled JSON object, then the reminder
+    // Only the data the prompt uses, as a labelled JSON object
     assertThat(prompt.getUserMessage().getText())
         .isEqualTo(LlmPromptResolver.DATA_LABEL + "\n{\"emailBody\":\"My laptop was stolen\"}");
+    // A single system message, first, and the user message last: Gemini and Mistral reject anything else
     assertThat(prompt.getInstructions()).extracting(message -> message.getMessageType().name())
-        .containsExactly("SYSTEM", "USER", "SYSTEM");
-    assertThat(prompt.getInstructions().get(2).getText()).isEqualTo(LlmPromptResolver.DATA_REMINDER);
+        .containsExactly("SYSTEM", "USER");
     assertThat(prompt.toString()).doesNotContain("FR76");
   }
 
