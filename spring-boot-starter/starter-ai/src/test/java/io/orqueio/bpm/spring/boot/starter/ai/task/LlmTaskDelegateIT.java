@@ -56,7 +56,8 @@ import org.springframework.context.annotation.Bean;
  * the prompts it receives and returns a prepared answer; no network is used.
  */
 @SpringBootTest(classes = {TestAiApplication.class, LlmTaskDelegateIT.StubModelConfiguration.class},
-    properties = "spring.ai.model.chat=none")
+    // Answer reuse has its own test: here every attempt must call the model
+    properties = {"spring.ai.model.chat=none", "camunda.bpm.ai.cache.enabled=false"})
 class LlmTaskDelegateIT {
 
   @Autowired

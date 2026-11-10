@@ -18,6 +18,7 @@ package io.orqueio.bpm.spring.boot.starter.ai.task;
 
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmOutputField.Type.INTEGER;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmOutputField.Type.STRING;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -28,10 +29,14 @@ import static org.mockito.Mockito.when;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import io.orqueio.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
 import io.orqueio.bpm.engine.impl.pvm.process.ProcessDefinitionImpl;
+import io.orqueio.bpm.spring.boot.starter.ai.cache.InMemoryLlmAnswerStore;
+import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmCallLock;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.messages.AssistantMessage;
@@ -70,12 +75,67 @@ class LlmTaskDelegateTest {
         .matches(e -> !((LlmTaskException) e).isRetryable());
   }
 
+  @Test
+  void shouldReleaseLockAfterTimeoutInterruptedTheCall() throws Exception {
+    // The model ignores the interrupt of the timeout but leaves the flag set, as HTTP clients do
+    ChatModel model = prompt -> {
+      long deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(300);
+      boolean interrupted = false;
+      while (System.nanoTime() < deadline) {
+        try {
+          Thread.sleep(10);
+        }
+        catch (InterruptedException e) {
+          interrupted = true;
+        }
+      }
+      if (interrupted) {
+        Thread.currentThread().interrupt();
+      }
+      return new ChatResponse(List.of(new Generation(new AssistantMessage("{\"category\":\"Theft\"}"))));
+    };
+    InMemoryLlmAnswerStore store = new InMemoryLlmAnswerStore(Duration.ofMinutes(1));
+    InterruptSensitiveLock lock = new InterruptSensitiveLock();
+    LlmTaskDelegate delegate = new LlmTaskDelegate(new ChatModelRegistry(() -> List.of(model), null),
+        new LlmPromptResolver(), new LlmAnswerParser(), new LlmFailureClassifier(), Duration.ofMillis(100), store, lock) {
+      @Override
+      protected String currentJobId() {
+        return "job-1";
+      }
+    };
+    ExecutionEntity execution = executionOf(new LlmTaskConfiguration(null, null, "Classify", List.of(),
+        List.of(new LlmOutputField("category", STRING))));
+
+    assertThatThrownBy(() -> delegate.execute(execution)).isInstanceOf(LlmTransientException.class);
+
+    // Like Redis clients, the lock refuses to release on an interrupted thread
+    assertThat(lock.released.await(3, TimeUnit.SECONDS)).isTrue();
+    assertThat(lock.releasedWhileInterrupted).isFalse();
+  }
+
   private static ExecutionEntity executionOf(LlmTaskConfiguration configuration) {
     ActivityImpl activity = new ProcessDefinitionImpl("llmTaskProcess").createActivity("Task_Llm");
     activity.getProperties().set(LlmTaskConfiguration.KEY, configuration);
     ExecutionEntity execution = mock(ExecutionEntity.class);
     when(execution.getActivity()).thenReturn(activity);
     return execution;
+  }
+
+  static class InterruptSensitiveLock implements LlmCallLock {
+
+    final CountDownLatch released = new CountDownLatch(1);
+    volatile boolean releasedWhileInterrupted;
+
+    @Override
+    public Lease tryAcquire(String key, Duration wait, Duration callTimeout) {
+      return () -> {
+        if (Thread.currentThread().isInterrupted()) {
+          releasedWhileInterrupted = true;
+          throw new IllegalStateException("Redis command interrupted");
+        }
+        released.countDown();
+      };
+    }
   }
 
 }

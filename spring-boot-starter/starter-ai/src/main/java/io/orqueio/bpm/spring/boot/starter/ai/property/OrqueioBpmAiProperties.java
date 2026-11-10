@@ -46,6 +46,8 @@ public class OrqueioBpmAiProperties {
    */
   private Duration timeout = Duration.ofMinutes(2);
 
+  private final Cache cache = new Cache();
+
   public boolean isEnabled() {
     return enabled;
   }
@@ -70,10 +72,93 @@ public class OrqueioBpmAiProperties {
     this.timeout = timeout;
   }
 
+  public Cache getCache() {
+    return cache;
+  }
+
   @Override
   public String toString() {
     return "OrqueioBpmAiProperties[enabled=" + enabled + ", defaultProvider=" + defaultProvider
-        + ", timeout=" + timeout + "]";
+        + ", timeout=" + timeout + ", cache=" + cache + "]";
+  }
+
+  /**
+   * Reuse of model answers when an LLM task's job is retried. Answers are kept in Redis,
+   * shared by every node, when the application has Redis; in memory otherwise.
+   */
+  public static class Cache {
+
+    /**
+     * Reuse answers on retries, and run a single call at a time for the same request.
+     * Default {@code true}.
+     */
+    private boolean enabled = true;
+
+    /**
+     * How long a valid answer is kept. It may contain personal data from the process.
+     */
+    private Duration timeToLive = Duration.ofHours(1);
+
+    /**
+     * How long a call may keep its lock after the task's timeout elapsed, for a call
+     * abandoned by the task but still running. Once it expires, a retry may start the
+     * same call again. Waiting for the lock counts against the task's timeout.
+     */
+    private Duration lockTimeToLive = Duration.ofMinutes(10);
+
+    private final Redis redis = new Redis();
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    public Duration getTimeToLive() {
+      return timeToLive;
+    }
+
+    public void setTimeToLive(Duration timeToLive) {
+      this.timeToLive = timeToLive;
+    }
+
+    public Duration getLockTimeToLive() {
+      return lockTimeToLive;
+    }
+
+    public void setLockTimeToLive(Duration lockTimeToLive) {
+      this.lockTimeToLive = lockTimeToLive;
+    }
+
+    public Redis getRedis() {
+      return redis;
+    }
+
+    @Override
+    public String toString() {
+      return "Cache[enabled=" + enabled + ", timeToLive=" + timeToLive + ", lockTimeToLive=" + lockTimeToLive
+          + ", redis=" + redis.isEnabled() + "]";
+    }
+  }
+
+  public static class Redis {
+
+    /**
+     * Keep answers in the application's Redis when it has one. Set to {@code false} to
+     * keep them in memory, for example when that Redis is not meant for process data.
+     * Default {@code true}.
+     */
+    private boolean enabled = true;
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
   }
 
 }

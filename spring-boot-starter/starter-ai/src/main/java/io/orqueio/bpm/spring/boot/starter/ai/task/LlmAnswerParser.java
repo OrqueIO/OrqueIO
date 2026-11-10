@@ -85,6 +85,14 @@ public class LlmAnswerParser {
     return values;
   }
 
+  /**
+   * @return the declared fields of the answer as a JSON object, without anything else the model wrote
+   * @throws LlmInvalidAnswerException if the answer is not valid
+   */
+  public String declaredFields(String answer, List<LlmOutputField> outputs) {
+    return jsonMapper.writeValueAsString(parse(answer, outputs));
+  }
+
   protected String stripCodeFence(String answer) {
     if (!answer.startsWith("```")) {
       return answer;
