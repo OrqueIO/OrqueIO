@@ -393,6 +393,26 @@ class LlmTaskDeploymentIT {
   }
 
   @Test
+  void shouldRejectOtherImplementationLeftOnTheTask() {
+    // For example the modeler's template applied to an external task keeps camunda:type and camunda:topic
+    for (String attribute : new String[] {"camunda:type=\"external\" camunda:topic=\"llm\"",
+        "camunda:class=\"com.example.Delegate\"", "camunda:expression=\"${true}\""}) {
+      String name = attribute.substring("camunda:".length(), attribute.indexOf('='));
+      assertDeploymentFails(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Summarize") + OUTPUTS)
+              .replace("camunda:asyncBefore=", attribute + " camunda:asyncBefore="),
+          "LLM task 'Task_Llm' also sets camunda:" + name + ", which the engine would run instead of the LLM task");
+    }
+  }
+
+  @Test
+  void shouldRejectConnectorOnTheTask() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Summarize") + OUTPUTS)
+            .replace("<bpmn:extensionElements>",
+                "<bpmn:extensionElements><camunda:connector><camunda:connectorId>http-connector</camunda:connectorId></camunda:connector>"),
+        "LLM task 'Task_Llm' also declares a camunda:connector");
+  }
+
+  @Test
   void shouldRejectMissingOutputs() {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Classify")),
         "LLM task 'Task_Llm' requires a orqueio.llm.outputs property");

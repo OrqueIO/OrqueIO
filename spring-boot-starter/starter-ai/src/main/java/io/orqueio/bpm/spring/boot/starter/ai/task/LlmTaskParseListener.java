@@ -68,6 +68,7 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
       return;
     }
 
+    validateNoOtherImplementation(activity, serviceTaskElement);
     Map<String, String> llmProperties = properties != null ? properties : Map.of();
     validateKnownProperties(llmProperties, activity, serviceTaskElement);
 
@@ -209,6 +210,24 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
     if (hadPrompt && inputOutput.getInputParameters().isEmpty() && inputOutput.getOutputParameters().isEmpty()) {
       activity.setIoMapping(null);
       activity.setScope(false);
+    }
+  }
+
+  /**
+   * The engine runs camunda:type and camunda:class before camunda:delegateExpression, and
+   * a connector replaces the behavior: left on the task, for example by applying the
+   * modeler's template to an external task, they would run instead of the LLM task.
+   */
+  protected void validateNoOtherImplementation(ActivityImpl activity, Element element) {
+    for (String attribute : List.of("type", "class", "expression")) {
+      String value = element.attributeNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, attribute);
+      if (value != null && !value.isBlank()) {
+        throw error(activity, "also sets camunda:" + attribute + ", which the engine would run instead of the "
+            + "LLM task; remove it", element);
+      }
+    }
+    if (BpmnParseUtil.findOrqueioExtensionElement(element, "connector") != null) {
+      throw error(activity, "also declares a camunda:connector, which would run instead of the LLM task; remove it", element);
     }
   }
 
