@@ -223,6 +223,13 @@ class LlmTaskDeploymentIT {
   }
 
   @Test
+  void shouldRejectOutputThatWouldOverwriteTheAudit() {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+            property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", "orqueioLlm_Task_Llm:string")),
+        "LLM task 'Task_Llm' cannot write output 'orqueioLlm_Task_Llm': names starting with orqueioLlm_ are kept");
+  }
+
+  @Test
   void shouldRejectMissingOutputs() {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.prompt", "Classify")),
         "LLM task 'Task_Llm' requires a orqueio.llm.outputs property");

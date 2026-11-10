@@ -101,6 +101,29 @@ public class ChatModelRegistry {
         + DEFAULT_PROVIDER_PROPERTY + " to one of: " + supportedIds());
   }
 
+  /**
+   * @return the id of the provider a task resolves to: the one it names, else the configured default,
+   *         else the provider the model belongs to; ids are written as {@link LlmProvider} spells them
+   */
+  public String providerIdOf(String taskProvider, ChatModel model) {
+    String named = taskProvider != null && !taskProvider.isBlank() ? taskProvider : defaultProvider;
+    if (named != null && !named.isBlank()) {
+      return LlmProvider.fromId(named).map(LlmProvider::getId).orElse(named.trim());
+    }
+    return providerIdOf(model);
+  }
+
+  /**
+   * @return the id of the provider the model belongs to, or its class name if it is not a supported provider
+   */
+  public String providerIdOf(ChatModel model) {
+    return Arrays.stream(LlmProvider.values())
+        .filter(provider -> isInstance(model, provider))
+        .map(LlmProvider::getId)
+        .findFirst()
+        .orElse(AopUtils.getTargetClass(model).getName());
+  }
+
   protected boolean isInstance(ChatModel model, LlmProvider provider) {
     Class<?> modelClass = AopUtils.getTargetClass(model);
     try {

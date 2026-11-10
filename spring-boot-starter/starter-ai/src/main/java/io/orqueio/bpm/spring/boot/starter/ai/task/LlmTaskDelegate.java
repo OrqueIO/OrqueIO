@@ -76,6 +76,7 @@ public class LlmTaskDelegate implements JavaDelegate {
   private final Duration defaultTimeout;
   private final LlmAnswerStore answerStore;
   private final LlmCallLock callLock;
+  private final LlmTaskAuditor auditor;
 
   public LlmTaskDelegate(ChatModelRegistry chatModelRegistry, LlmPromptResolver promptResolver,
                          LlmAnswerParser answerParser, LlmFailureClassifier failureClassifier,
@@ -91,6 +92,16 @@ public class LlmTaskDelegate implements JavaDelegate {
   public LlmTaskDelegate(ChatModelRegistry chatModelRegistry, LlmPromptResolver promptResolver,
                          LlmAnswerParser answerParser, LlmFailureClassifier failureClassifier,
                          Duration defaultTimeout, LlmAnswerStore answerStore, LlmCallLock callLock) {
+    this(chatModelRegistry, promptResolver, answerParser, failureClassifier, defaultTimeout, answerStore, callLock, null);
+  }
+
+  /**
+   * @param auditor records each execution in a process variable, or {@code null} to record nothing
+   */
+  public LlmTaskDelegate(ChatModelRegistry chatModelRegistry, LlmPromptResolver promptResolver,
+                         LlmAnswerParser answerParser, LlmFailureClassifier failureClassifier,
+                         Duration defaultTimeout, LlmAnswerStore answerStore, LlmCallLock callLock,
+                         LlmTaskAuditor auditor) {
     this.chatModelRegistry = chatModelRegistry;
     this.promptResolver = promptResolver;
     this.answerParser = answerParser;
@@ -98,6 +109,7 @@ public class LlmTaskDelegate implements JavaDelegate {
     this.defaultTimeout = defaultTimeout;
     this.answerStore = answerStore;
     this.callLock = callLock;
+    this.auditor = auditor;
   }
 
   @Override
@@ -115,23 +127,42 @@ public class LlmTaskDelegate implements JavaDelegate {
     Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 
     Duration timeout = configuration.getTimeout() != null ? configuration.getTimeout() : defaultTimeout;
-    String answer = answerStore != null
+    long start = System.nanoTime();
+    LlmModelAnswer answer = answerStore != null
         ? reusableAnswer(execution, configuration, chatModel, prompt, timeout)
-        : run(() -> textOf(chatModel.call(prompt)), timeout);
+        : run(() -> {
+            ChatResponse response = chatModel.call(prompt);
+            return LlmModelAnswer.called(textOf(response), response);
+          }, timeout);
+    Duration latency = Duration.ofNanos(System.nanoTime() - start);
 
     // Every field is validated before any variable is written
     Map<String, Object> values;
     try {
-      values = answerParser.parse(answer, configuration.getOutputs());
+      values = answerParser.parse(answer.text(), configuration.getOutputs());
     }
     catch (LlmInvalidAnswerException e) {
       // An uncaught BPMN error would end the execution silently: raise an incident instead
       if (configuration.getErrorCode() == null || !hasErrorHandler(execution, configuration.getErrorCode())) {
         throw e;
       }
+      audit(execution, configuration, chatModel, prompt, userPrompt, answer, latency, LlmTaskAuditor.Outcome.BPMN_ERROR);
       throw new BpmnError(configuration.getErrorCode(), e.getMessage());
     }
     values.forEach(execution::setVariable);
+    audit(execution, configuration, chatModel, prompt, userPrompt, answer, latency, LlmTaskAuditor.Outcome.VALID);
+  }
+
+  /**
+   * Records the execution. A failure that rolls the job back also rolls back its record:
+   * only executions that complete, or end in a BPMN error, are recorded.
+   */
+  protected void audit(DelegateExecution execution, LlmTaskConfiguration configuration, ChatModel chatModel,
+                       Prompt prompt, String userPrompt, LlmModelAnswer answer, Duration latency,
+                       LlmTaskAuditor.Outcome outcome) {
+    if (auditor != null) {
+      auditor.record(execution, configuration, chatModel, prompt, userPrompt, answer, latency, outcome);
+    }
   }
 
   /**
@@ -173,16 +204,19 @@ public class LlmTaskDelegate implements JavaDelegate {
    * held by the call itself and released when it ends: a retry of a job whose call
    * timed out waits for that call and reuses its answer, rather than paying again.
    */
-  protected String reusableAnswer(DelegateExecution execution, LlmTaskConfiguration configuration,
-                                  ChatModel chatModel, Prompt prompt, Duration timeout) {
+  protected LlmModelAnswer reusableAnswer(DelegateExecution execution, LlmTaskConfiguration configuration,
+                                          ChatModel chatModel, Prompt prompt, Duration timeout) {
     String jobId = currentJobId();
     if (jobId == null) {
-      return run(() -> textOf(chatModel.call(prompt)), timeout);
+      return run(() -> {
+        ChatResponse response = chatModel.call(prompt);
+        return LlmModelAnswer.called(textOf(response), response);
+      }, timeout);
     }
     String key = LlmCallKey.of(jobId, chatModel, prompt);
     String stored = storedAnswer(key);
     if (stored != null) {
-      return stored;
+      return LlmModelAnswer.reused(stored);
     }
 
     // The timeout is the task's whole budget: waiting for the lock uses part of it
@@ -197,7 +231,7 @@ public class LlmTaskDelegate implements JavaDelegate {
     }
     if (stored != null) {
       release(lease);
-      return stored;
+      return LlmModelAnswer.reused(stored);
     }
     Duration remaining = Duration.ofNanos(deadline - System.nanoTime());
     if (remaining.toMillis() < 1) {
@@ -206,11 +240,12 @@ public class LlmTaskDelegate implements JavaDelegate {
     }
     return run(() -> {
       try {
-        String answer = textOf(chatModel.call(prompt));
+        ChatResponse response = chatModel.call(prompt);
+        String answer = textOf(response);
         // A timeout interrupts this thread; the store and the lock must still be reached
         Thread.interrupted();
         storeIfValid(key, answer, configuration);
-        return answer;
+        return LlmModelAnswer.called(answer, response);
       }
       finally {
         release(lease);
@@ -308,7 +343,7 @@ public class LlmTaskDelegate implements JavaDelegate {
     }
   }
 
-  protected String run(Callable<String> work, Duration timeout) {
+  protected <T> T run(Callable<T> work, Duration timeout) {
     return run(work, timeout, timeout, null);
   }
 
@@ -323,9 +358,9 @@ public class LlmTaskDelegate implements JavaDelegate {
    * @param timeout the task's timeout, as reported when the call takes too long
    * @param lease released here only if the thread cannot be started; the work releases it otherwise
    */
-  protected String run(Callable<String> work, Duration wait, Duration timeout, LlmCallLock.Lease lease) {
+  protected <T> T run(Callable<T> work, Duration wait, Duration timeout, LlmCallLock.Lease lease) {
     Map<String, String> loggingContext = MDC.getCopyOfContextMap();
-    FutureTask<String> call = new FutureTask<>(() -> {
+    FutureTask<T> call = new FutureTask<>(() -> {
       if (loggingContext != null) {
         MDC.setContextMap(loggingContext);
       }

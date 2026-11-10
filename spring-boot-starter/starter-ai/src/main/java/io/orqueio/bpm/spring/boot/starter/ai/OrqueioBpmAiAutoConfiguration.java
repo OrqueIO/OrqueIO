@@ -30,6 +30,7 @@ import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmAnswerParser;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmFailureClassifier;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmPromptResolver;
+import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskAuditor;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDelegate;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskProcessEnginePlugin;
 import org.springframework.ai.chat.model.ChatModel;
@@ -71,13 +72,22 @@ public class OrqueioBpmAiAutoConfiguration {
   @Bean(LlmTaskDelegate.BEAN_NAME)
   @ConditionalOnMissingBean(name = LlmTaskDelegate.BEAN_NAME)
   public LlmTaskDelegate orqueioLlmTask(ChatModelRegistry chatModelRegistry, OrqueioBpmAiProperties properties,
-                                        ObjectProvider<LlmAnswerStore> answerStore, ObjectProvider<LlmCallLock> callLock) {
+                                        ObjectProvider<LlmAnswerStore> answerStore, ObjectProvider<LlmCallLock> callLock,
+                                        ObjectProvider<LlmTaskAuditor> auditor) {
     Duration timeout = properties.getTimeout();
     if (timeout == null || timeout.toMillis() < 1) {
       throw new IllegalStateException(OrqueioBpmAiProperties.PREFIX + ".timeout must be at least 1 millisecond, was " + timeout);
     }
     return new LlmTaskDelegate(chatModelRegistry, new LlmPromptResolver(), new LlmAnswerParser(),
-        new LlmFailureClassifier(), timeout, answerStore.getIfAvailable(), callLock.getIfAvailable());
+        new LlmFailureClassifier(), timeout, answerStore.getIfAvailable(), callLock.getIfAvailable(),
+        auditor.getIfAvailable());
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  @ConditionalOnProperty(prefix = OrqueioBpmAiProperties.PREFIX + ".audit", name = "enabled", matchIfMissing = true)
+  public LlmTaskAuditor llmTaskAuditor(ChatModelRegistry chatModelRegistry, OrqueioBpmAiProperties properties) {
+    return new LlmTaskAuditor(chatModelRegistry, properties.getAudit().isIncludeContent());
   }
 
   /**
