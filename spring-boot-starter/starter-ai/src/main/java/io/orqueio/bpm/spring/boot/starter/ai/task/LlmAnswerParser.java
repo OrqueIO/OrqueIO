@@ -44,7 +44,7 @@ public class LlmAnswerParser {
    */
   public String formatInstructions(List<LlmOutputField> outputs) {
     String fields = outputs.stream()
-        .map(field -> "\"" + field.name() + "\" (" + field.type().getId() + ")")
+        .map(LlmOutputField::describe)
         .collect(Collectors.joining(", "));
     return "Answer with a single JSON object and nothing else: no explanation, no Markdown. "
         + "The object must contain these fields: " + fields + ".";
@@ -52,7 +52,8 @@ public class LlmAnswerParser {
 
   /**
    * @return the value of each declared field, in declaration order
-   * @throws LlmInvalidAnswerException if the answer is not a JSON object with every field of the right type
+   * @throws LlmInvalidAnswerException if the answer is not a JSON object with every field of the right type,
+   *         within its allowed values and bounds
    */
   public Map<String, Object> parse(String answer, List<LlmOutputField> outputs) {
     if (answer == null || answer.isBlank()) {
@@ -79,6 +80,11 @@ public class LlmAnswerParser {
       if (value == null) {
         throw new LlmInvalidAnswerException("Field '" + field.name() + "' of the model's answer is not a valid "
             + field.type().getId());
+      }
+      // The message does not repeat the value: it comes from the model, and may be personal data
+      if (!field.allows(value)) {
+        throw new LlmInvalidAnswerException("Field '" + field.name() + "' of the model's answer is "
+            + (field.allowedValues().isEmpty() ? "outside the allowed range" : "not one of the allowed values"));
       }
       values.put(field.name(), value);
     }
