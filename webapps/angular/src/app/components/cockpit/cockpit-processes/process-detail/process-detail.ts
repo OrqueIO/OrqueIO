@@ -230,7 +230,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     // Tabs ordered like AngularJS: Variables, Incidents, Called Process Instances, User Tasks, Jobs, External Tasks
     this.tabs = [
       { id: 'variables', labelKey: 'cockpit.processDetail.tabs.variables', badgeCount: () => this.variables.length },
-      { id: 'incidents', labelKey: 'cockpit.processDetail.tabs.incidents', badgeCount: () => this.incidents.length },
+      { id: 'incidents', labelKey: 'cockpit.processDetail.tabs.incidents', badgeCount: () => this.openIncidentCount },
       { id: 'calledInstances', labelKey: 'cockpit.processDetail.tabs.calledInstances', badgeCount: () => this.calledInstances.length },
       { id: 'userTasks', labelKey: 'cockpit.processDetail.tabs.userTasks', badgeCount: () => this.userTasks.length },
       { id: 'jobs', labelKey: 'cockpit.processDetail.tabs.jobs', badgeCount: () => this.jobs.length },
@@ -680,9 +680,35 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   // Incident actions
   retryIncident(incident: Incident): void {
-    if (incident.configuration) {
+    if (incident.configuration && this.isIncidentOpen(incident)) {
       this.retryJob(incident.configuration);
     }
+  }
+
+  /**
+   * Runtime incidents (GET /incident) are always open and carry their creation date as incidentTimestamp;
+   * historic ones (GET /history/incident) carry it as createTime, with open, resolved, deleted and endTime.
+   */
+  incidentCreateTime(incident: Incident): string | undefined {
+    return incident.incidentTimestamp || incident.createTime;
+  }
+
+  incidentState(incident: Incident): 'open' | 'resolved' | 'deleted' {
+    if (incident.deleted) {
+      return 'deleted';
+    }
+    if (incident.resolved || (incident.open === false) || (incident.open === undefined && !!incident.endTime)) {
+      return 'resolved';
+    }
+    return 'open';
+  }
+
+  isIncidentOpen(incident: Incident): boolean {
+    return this.incidentState(incident) === 'open';
+  }
+
+  get openIncidentCount(): number {
+    return this.incidents.filter(incident => this.isIncidentOpen(incident)).length;
   }
 
   // Variable management

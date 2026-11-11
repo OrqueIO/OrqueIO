@@ -228,6 +228,93 @@ describe('ProcessDetailComponent', () => {
   });
 
   // =============================================
+  // Incident dates and states (#308)
+  // =============================================
+
+  describe('incident dates and states', () => {
+    // As GET /incident returns them: open, creation date in incidentTimestamp
+    const runtimeIncident: Incident = {
+      id: 'inc-1', processInstanceId: 'pi-1', activityId: 'ServiceTask_1',
+      incidentType: 'failedJob', incidentMessage: 'Delegate exception',
+      incidentTimestamp: '2026-11-08T10:15:00.000+0000', configuration: 'job-1',
+    } as Incident;
+
+    // As GET /history/incident returns them: creation date in createTime, with open, resolved, deleted and endTime
+    const history = (id: string, state: { open: boolean; resolved: boolean; deleted: boolean }, endTime?: string): Incident => ({
+      id, processInstanceId: 'pi-1', activityId: 'ServiceTask_1',
+      incidentType: 'failedJob', incidentMessage: 'Delegate exception',
+      createTime: '2026-11-08T10:15:00.000+0000', endTime, configuration: 'job-1', ...state,
+    });
+    const resolved = history('h-resolved', { open: false, resolved: true, deleted: false }, '2026-11-08T11:00:00.000+0000');
+    const deleted = history('h-deleted', { open: false, resolved: false, deleted: true }, '2026-11-08T12:00:00.000+0000');
+    const stillOpen = history('h-open', { open: true, resolved: false, deleted: false });
+
+    it('should read the creation date of runtime and historic incidents', () => {
+      expect(component.incidentCreateTime(runtimeIncident)).toBe('2026-11-08T10:15:00.000+0000');
+      expect(component.incidentCreateTime(resolved)).toBe('2026-11-08T10:15:00.000+0000');
+      expect(component.formatDate(component.incidentCreateTime(runtimeIncident))).not.toBe('-');
+    });
+
+    it('should tell open, resolved and deleted incidents apart', () => {
+      expect(component.incidentState(runtimeIncident)).toBe('open');
+      expect(component.incidentState(stillOpen)).toBe('open');
+      expect(component.incidentState(resolved)).toBe('resolved');
+      expect(component.incidentState(deleted)).toBe('deleted');
+      // A historic incident without flags but with an end date is no longer open
+      expect(component.incidentState({ ...runtimeIncident, endTime: '2026-11-08T11:00:00.000+0000' })).toBe('resolved');
+    });
+
+    it('should count only open incidents in the tab badge', () => {
+      component.incidents = [resolved, deleted, stillOpen];
+
+      const incidentsTab = component.tabs.find(tab => tab.id === 'incidents')!;
+
+      expect(incidentsTab.badgeCount!()).toBe(1);
+    });
+
+    it('should show no incident count after all incidents were resolved', async () => {
+      cockpitService.getProcessInstanceIncidents!.mockReturnValue(of([]));
+      cockpitService.getHistoryIncidents!.mockReturnValue(of([resolved]));
+
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+
+      expect(component.incidents).toEqual([resolved]);
+      expect(component.tabs.find(tab => tab.id === 'incidents')!.badgeCount!()).toBe(0);
+    });
+
+    it('should not retry a resolved or deleted incident', () => {
+      component.retryIncident(resolved);
+      component.retryIncident(deleted);
+
+      expect(cockpitService.retryJob).not.toHaveBeenCalled();
+
+      component.retryIncident(stillOpen);
+
+      expect(cockpitService.retryJob).toHaveBeenCalledWith('job-1');
+    });
+
+    it('should render the state, the end date and Retry only for open incidents', () => {
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+      component.incidents = [stillOpen, resolved];
+      component.setActiveTab('incidents');
+      fixture.componentRef.changeDetectorRef.markForCheck();
+      fixture.detectChanges();
+
+      const rows = Array.from(fixture.nativeElement.querySelectorAll('.incidents-tab tbody tr')) as HTMLElement[];
+
+      expect(rows.length).toBe(2);
+      expect(rows[0].querySelector('.incident-state')!.textContent).toContain('cockpit.processDetail.incidents.state.open');
+      expect(rows[0].querySelector('.incident-end-time')!.textContent!.trim()).toBe('-');
+      expect(rows[1].querySelector('.incident-state')!.textContent).toContain('cockpit.processDetail.incidents.state.resolved');
+      expect(rows[1].querySelector('.incident-end-time')!.textContent!.trim()).not.toBe('-');
+      expect(rows[0].querySelector('.actions button')).not.toBeNull();
+      expect(rows[1].querySelector('.actions button')).toBeNull();
+    });
+  });
+
+  // =============================================
   // Tabs
   // =============================================
 
