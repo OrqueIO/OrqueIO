@@ -711,6 +711,17 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     return this.incidents.filter(incident => this.isIncidentOpen(incident)).length;
   }
 
+  incidentIcon(incident: Incident) {
+    switch (this.incidentState(incident)) {
+      case 'resolved':
+        return this.faCheckCircle;
+      case 'deleted':
+        return this.faTimesCircle;
+      default:
+        return this.faExclamationTriangle;
+    }
+  }
+
   // Variable management
   startAddVariable(): void {
     this.newVariable = { name: '', type: 'String', value: '', isNew: true };

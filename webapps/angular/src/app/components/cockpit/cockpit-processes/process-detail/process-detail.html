@@ -470,8 +470,7 @@
                 <tbody>
                   <tr *ngFor="let incident of incidents" [class.incident-closed]="!isIncidentOpen(incident)">
                     <td class="incident-type">
-                      <fa-icon [icon]="isIncidentOpen(incident) ? faExclamationTriangle : faCheckCircle"
-                               [class.incident-icon]="isIncidentOpen(incident)"></fa-icon>
+                      <fa-icon [icon]="incidentIcon(incident)" class="incident-icon"></fa-icon>
                       {{ incident.incidentType }}
                     </td>
                     <td class="incident-message">

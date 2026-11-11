@@ -294,23 +294,51 @@ describe('ProcessDetailComponent', () => {
       expect(cockpitService.retryJob).toHaveBeenCalledWith('job-1');
     });
 
-    it('should render the state, the end date and Retry only for open incidents', () => {
+    it('should count a runtime incident as open', () => {
+      component.incidents = [runtimeIncident];
+
+      expect(component.tabs.find(tab => tab.id === 'incidents')!.badgeCount!()).toBe(1);
+    });
+
+    it('should render the dates, the state and Retry only for open incidents', () => {
       fixture.detectChanges();
       routeParams$.next({ id: 'pi-1' });
-      component.incidents = [stillOpen, resolved];
+      component.incidents = [runtimeIncident, resolved, deleted];
       component.setActiveTab('incidents');
       fixture.componentRef.changeDetectorRef.markForCheck();
       fixture.detectChanges();
 
       const rows = Array.from(fixture.nativeElement.querySelectorAll('.incidents-tab tbody tr')) as HTMLElement[];
+      const cell = (row: HTMLElement, name: string) => row.querySelector(name)!.textContent!.trim();
 
-      expect(rows.length).toBe(2);
-      expect(rows[0].querySelector('.incident-state')!.textContent).toContain('cockpit.processDetail.incidents.state.open');
-      expect(rows[0].querySelector('.incident-end-time')!.textContent!.trim()).toBe('-');
-      expect(rows[1].querySelector('.incident-state')!.textContent).toContain('cockpit.processDetail.incidents.state.resolved');
-      expect(rows[1].querySelector('.incident-end-time')!.textContent!.trim()).not.toBe('-');
+      expect(rows.length).toBe(3);
+      // A runtime incident: open, created at incidentTimestamp, no end, Retry offered
+      expect(cell(rows[0], '.incident-time')).toBe(new Date(runtimeIncident.incidentTimestamp!).toLocaleString());
+      expect(cell(rows[0], '.incident-state')).toBe('cockpit.processDetail.incidents.state.open');
+      expect(cell(rows[0], '.incident-end-time')).toBe('-');
+      expect(rows[0].classList.contains('incident-closed')).toBe(false);
       expect(rows[0].querySelector('.actions button')).not.toBeNull();
-      expect(rows[1].querySelector('.actions button')).toBeNull();
+      // Resolved and deleted: their end date, shown as history, no Retry
+      expect(cell(rows[1], '.incident-state')).toBe('cockpit.processDetail.incidents.state.resolved');
+      expect(cell(rows[1], '.incident-end-time')).toBe(new Date(resolved.endTime!).toLocaleString());
+      expect(cell(rows[2], '.incident-state')).toBe('cockpit.processDetail.incidents.state.deleted');
+      expect(cell(rows[2], '.incident-end-time')).toBe(new Date(deleted.endTime!).toLocaleString());
+      for (const closed of [rows[1], rows[2]]) {
+        expect(closed.classList.contains('incident-closed')).toBe(true);
+        expect(closed.querySelector('.actions button')).toBeNull();
+      }
+    });
+
+    it('should not offer Retry once the instance has ended', () => {
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+      vi.spyOn(component, 'isProcessRunning').mockReturnValue(false);
+      component.incidents = [stillOpen];
+      component.setActiveTab('incidents');
+      fixture.componentRef.changeDetectorRef.markForCheck();
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.incidents-tab tbody tr .actions')).toBeNull();
     });
   });
 
