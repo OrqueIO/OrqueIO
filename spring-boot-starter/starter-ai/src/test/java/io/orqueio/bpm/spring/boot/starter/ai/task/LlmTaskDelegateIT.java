@@ -110,9 +110,17 @@ class LlmTaskDelegateIT {
         .containsEntry("urgency", 3L);
     assertThat(model.prompts).hasSize(1);
     Prompt prompt = model.prompts.get(0);
-    assertThat(prompt.getSystemMessage().getText()).contains("\"category\" (string), \"urgency\" (integer)");
-    assertThat(prompt.getUserMessage().getText()).isEqualTo("Classify: My laptop was stolen");
-    assertThat(prompt.getInstructions()).hasSize(2);
+    assertThat(prompt.getSystemMessage().getText())
+        .startsWith("Classify: <input:emailBody>" + "\n\n" + LlmPromptResolver.DATA_RULE)
+        .endsWith(LlmPromptResolver.DATA_REMINDER)
+        .contains("\"category\" (string), \"urgency\" (integer)")
+        .doesNotContain("My laptop was stolen");
+    // Only the data the prompt uses, as a labelled JSON object
+    assertThat(prompt.getUserMessage().getText())
+        .isEqualTo(LlmPromptResolver.DATA_LABEL + "\n{\"emailBody\":\"My laptop was stolen\"}");
+    // A single system message, first, and the user message last: Gemini and Mistral reject anything else
+    assertThat(prompt.getInstructions()).extracting(message -> message.getMessageType().name())
+        .containsExactly("SYSTEM", "USER");
     assertThat(prompt.toString()).doesNotContain("FR76");
   }
 
@@ -127,8 +135,9 @@ class LlmTaskDelegateIT {
 
     ProcessInstance instance = startAndRunLlmTask(Map.of("emailBody", "My laptop was stolen"));
 
-    assertThat(model.prompts.get(0).getUserMessage().getText())
-        .isEqualTo("Classify this email.\nAnswer in English.\n\nEmail: My laptop was stolen");
+    assertThat(model.prompts.get(0).getSystemMessage().getText())
+        .startsWith("Classify this email.\nAnswer in English.\n\nEmail: <input:emailBody>");
+    assertThat(model.prompts.get(0).getUserMessage().getText()).endsWith("{\"emailBody\":\"My laptop was stolen\"}");
     assertThat(runtimeService.getVariables(instance.getId()))
         .containsEntry("category", "Theft")
         .doesNotContainKey("orqueio.llm.prompt");
@@ -151,6 +160,21 @@ class LlmTaskDelegateIT {
     assertThat(options).isInstanceOf(OllamaChatOptions.class);
     assertThat(options.getModel()).isEqualTo("qwen2.5:7b");
     assertThat(options.getTemperature()).isEqualTo(0.0);
+  }
+
+  @Test
+  void shouldSendPromptWithoutDataAsTheRequest() {
+    deploy(property("orqueio.llm.prompt", "Write a haiku about rain") + property("orqueio.llm.outputs", "haiku:string"));
+    model.answer = "{\"haiku\":\"Soft rain\"}";
+
+    startAndRunLlmTask(Map.of());
+
+    Prompt prompt = model.prompts.get(0);
+    assertThat(prompt.getInstructions()).extracting(message -> message.getMessageType().name())
+        .containsExactly("SYSTEM", "USER");
+    assertThat(prompt.getUserMessage().getText()).isEqualTo("Write a haiku about rain");
+    // No label, rule or reminder about data that does not exist
+    assertThat(prompt.toString()).doesNotContain(LlmPrompt.DATA_LABEL).doesNotContain(LlmPromptResolver.DATA_REMINDER);
   }
 
   @Test

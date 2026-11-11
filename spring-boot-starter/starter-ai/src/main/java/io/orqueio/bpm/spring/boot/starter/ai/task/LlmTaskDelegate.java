@@ -116,13 +116,18 @@ public class LlmTaskDelegate implements JavaDelegate {
   public void execute(DelegateExecution execution) {
     LlmTaskConfiguration configuration = configurationOf(execution);
 
-    String userPrompt = promptResolver.resolve(configuration, execution);
+    LlmPrompt llmPrompt = promptResolver.build(configuration, execution);
+    String data = llmPrompt.data();
     ChatModel chatModel = chatModelOf(configuration);
 
-    // The answer format goes in the system message, the resolved prompt in the user message
-    List<Message> messages = List.of(
-        new SystemMessage(answerParser.formatInstructions(configuration.getOutputs())),
-        new UserMessage(userPrompt));
+    // One system message, first, then a user message: every provider accepts this order
+    String format = answerParser.formatInstructions(configuration.getOutputs());
+    List<Message> messages = llmPrompt.hasData()
+        // Instructions apart from the process data, which comes alone in the user message
+        ? List.of(new SystemMessage(llmPrompt.instructions() + "\n\n" + format + "\n\n" + LlmPromptResolver.DATA_REMINDER),
+            new UserMessage(llmPrompt.dataMessage()))
+        // No process data: the author's prompt is the request
+        : List.of(new SystemMessage(format), new UserMessage(llmPrompt.instructions()));
     ChatOptions options = optionsOf(chatModel, configuration);
     Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 
@@ -146,11 +151,11 @@ public class LlmTaskDelegate implements JavaDelegate {
       if (configuration.getErrorCode() == null || !hasErrorHandler(execution, configuration.getErrorCode())) {
         throw e;
       }
-      audit(execution, configuration, chatModel, prompt, userPrompt, answer, latency, LlmTaskAuditor.Outcome.BPMN_ERROR);
+      audit(execution, configuration, chatModel, prompt, data, answer, latency, LlmTaskAuditor.Outcome.BPMN_ERROR);
       throw new BpmnError(configuration.getErrorCode(), e.getMessage());
     }
     values.forEach(execution::setVariable);
-    audit(execution, configuration, chatModel, prompt, userPrompt, answer, latency, LlmTaskAuditor.Outcome.VALID);
+    audit(execution, configuration, chatModel, prompt, data, answer, latency, LlmTaskAuditor.Outcome.VALID);
   }
 
   /**

@@ -161,7 +161,7 @@ public class OrqueioBpmAiProperties {
     private boolean enabled = true;
 
     /**
-     * Also record the resolved prompt and the answer, which may contain personal data.
+     * Also record the process data sent to the model and the answer, which may contain personal data.
      * Default {@code false}.
      */
     private boolean includeContent = false;

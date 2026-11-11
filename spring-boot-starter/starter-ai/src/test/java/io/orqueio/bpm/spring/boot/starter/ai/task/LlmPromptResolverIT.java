@@ -94,7 +94,7 @@ class LlmPromptResolverIT {
         .putValue("sent", new Date(0))
         .putValue("urgent", true));
 
-    assertThat(result.get("resolved")).isEqualTo("Ada claims 8500 EUR on 1970-01-01T00:00:00Z, urgent: true");
+    assertThat(result.get("resolved")).isEqualTo("{\"customer\":\"Ada\",\"amount\":8500,\"sent\":\"1970-01-01T00:00:00Z\",\"urgent\":true}");
   }
 
   @Test
@@ -137,7 +137,7 @@ class LlmPromptResolverIT {
     @Override
     public void execute(DelegateExecution execution) {
       try {
-        execution.setVariable("resolved", resolver.resolve(configuration, execution));
+        execution.setVariable("resolved", resolver.build(configuration, execution).data());
       }
       catch (LlmTaskException e) {
         execution.setVariable("error", e.getMessage());
