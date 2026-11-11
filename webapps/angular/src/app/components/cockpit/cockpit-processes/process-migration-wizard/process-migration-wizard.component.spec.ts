@@ -1855,4 +1855,221 @@ describe('ProcessMigrationWizardComponent', () => {
       expect(component.shouldShowUnmappedWarning()).toBe(false);
     });
   });
+
+  describe('applyUpdateEventTriggerFlags optimization', () => {
+    const xmlWithMixedActivities = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process id="test">
+    <bpmn2:intermediateCatchEvent id="MessageEvent_1">
+      <bpmn2:messageEventDefinition/>
+    </bpmn2:intermediateCatchEvent>
+    <bpmn2:receiveTask id="ReceiveTask_1"/>
+    <bpmn2:userTask id="UserTask_1"/>
+    <bpmn2:userTask id="UserTask_2"/>
+    <bpmn2:boundaryEvent id="BoundaryEvent_1" attachedToRef="UserTask_1">
+      <bpmn2:messageEventDefinition/>
+    </bpmn2:boundaryEvent>
+    <bpmn2:boundaryEvent id="BoundaryEvent_2" attachedToRef="UserTask_2">
+      <bpmn2:timerEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+    it('should produce identical flags for activities with message events and receive tasks', () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithMixedActivities }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['MessageEvent_1'], targetActivityIds: ['MessageEvent_1'], updateEventTrigger: false },
+          { sourceActivityIds: ['ReceiveTask_1'], targetActivityIds: ['ReceiveTask_1'], updateEventTrigger: false },
+          { sourceActivityIds: ['UserTask_1'], targetActivityIds: ['UserTask_1'], updateEventTrigger: false },
+          { sourceActivityIds: ['UserTask_2'], targetActivityIds: ['UserTask_2'], updateEventTrigger: false },
+          { sourceActivityIds: ['BoundaryEvent_1'], targetActivityIds: ['BoundaryEvent_1'], updateEventTrigger: false },
+          { sourceActivityIds: ['BoundaryEvent_2'], targetActivityIds: ['BoundaryEvent_2'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      fixture.detectChanges();
+
+      const instructions = component.editableInstructions();
+
+      const messageEvent = instructions.find(i => i.sourceActivityIds.includes('MessageEvent_1'));
+      const receiveTask = instructions.find(i => i.sourceActivityIds.includes('ReceiveTask_1'));
+      const userTask1 = instructions.find(i => i.sourceActivityIds.includes('UserTask_1'));
+      const userTask2 = instructions.find(i => i.sourceActivityIds.includes('UserTask_2'));
+      const boundaryEventMessage = instructions.find(i => i.sourceActivityIds.includes('BoundaryEvent_1'));
+      const boundaryEventTimer = instructions.find(i => i.sourceActivityIds.includes('BoundaryEvent_2'));
+
+      expect(messageEvent?.updateEventTrigger).toBe(true);
+      expect(receiveTask?.updateEventTrigger).toBe(true);
+      expect(userTask1?.updateEventTrigger).toBe(false);
+      expect(userTask2?.updateEventTrigger).toBe(false);
+      expect(boundaryEventMessage?.updateEventTrigger).toBe(true);
+      expect(boundaryEventTimer?.updateEventTrigger).toBe(false);
+    });
+
+    it('should call DOMParser.parseFromString at most once for a plan with 300 instructions', () => {
+      const largeXml = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process id="test">
+${Array.from({ length: 300 }, (_, i) => `    <bpmn2:userTask id="Task_${i + 1}"/>`).join('\n')}
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      const instructions = Array.from({ length: 300 }, (_, i) => ({
+        sourceActivityIds: [`Task_${i + 1}`],
+        targetActivityIds: [`Task_${i + 1}`],
+        updateEventTrigger: false
+      }));
+
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: largeXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      const domParserSpy = vi.spyOn(DOMParser.prototype, 'parseFromString');
+
+      fixture.detectChanges();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      fixture.detectChanges();
+
+      const parseCallCount = domParserSpy.mock.calls.filter(call =>
+        call[0].includes('bpmn2:definitions')
+      ).length;
+
+      expect(parseCallCount).toBeLessThanOrEqual(2);
+
+      domParserSpy.mockRestore();
+    });
+
+    it('should handle empty instructions array without errors', () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithMixedActivities }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      fixture.detectChanges();
+
+      expect(component.editableInstructions()).toEqual([]);
+    });
+
+    it('should handle null sourceXml gracefully', () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: null }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Task_1'], targetActivityIds: ['Task_1'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      fixture.detectChanges();
+
+      const instructions = component.editableInstructions();
+      expect(instructions.every(i => i.updateEventTrigger === false)).toBe(true);
+    });
+
+    it('should handle malformed XML gracefully', () => {
+      const malformedXml = '<?xml version="1.0"?><invalid><unclosed>';
+
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: malformedXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Task_1'], targetActivityIds: ['Task_1'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      fixture.detectChanges();
+
+      const instructions = component.editableInstructions();
+      expect(instructions).toBeDefined();
+    });
+
+    it('should handle activity ID not found in XML', () => {
+      const xmlWithOnlyOneTask = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process id="test">
+    <bpmn2:userTask id="Task_1"/>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithOnlyOneTask }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Task_1'], targetActivityIds: ['Task_1'], updateEventTrigger: false },
+          { sourceActivityIds: ['NonExistent_Task'], targetActivityIds: ['Task_2'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      fixture.detectChanges();
+
+      const instructions = component.editableInstructions();
+      const task1 = instructions.find(i => i.sourceActivityIds.includes('Task_1'));
+      const nonExistent = instructions.find(i => i.sourceActivityIds.includes('NonExistent_Task'));
+
+      expect(task1?.updateEventTrigger).toBe(false);
+      expect(nonExistent?.updateEventTrigger).toBe(false);
+    });
+  });
 });

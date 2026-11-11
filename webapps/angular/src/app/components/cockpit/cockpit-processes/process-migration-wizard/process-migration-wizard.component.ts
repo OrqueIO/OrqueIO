@@ -829,16 +829,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
    * - Message intermediate catch events
    * - Receive tasks
    */
-  private shouldUpdateEventTrigger(activityId: string, sourceXml: string): boolean {
-    if (!sourceXml) return false;
+  private shouldUpdateEventTrigger(activityId: string, elementMap: Map<string, Element>): boolean {
+    const element = elementMap.get(activityId);
+    if (!element) return false;
 
     try {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(sourceXml, 'text/xml');
-
-      const element = doc.querySelector(`[id="${activityId}"]`);
-      if (!element) return false;
-
       const tagName = element.tagName;
 
       if (tagName.includes('receiveTask')) {
@@ -859,16 +854,45 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Parse BPMN XML and build a Map of element IDs to DOM elements.
+   * @param xml The BPMN XML string to parse
+   * @returns Map of element id -> Element, or empty Map if parsing fails
+   */
+  private buildElementMap(xml: string): Map<string, Element> {
+    const elementMap = new Map<string, Element>();
+
+    if (!xml) return elementMap;
+
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xml, 'text/xml');
+
+      const allElements = doc.querySelectorAll('[id]');
+      allElements.forEach((element) => {
+        const id = element.getAttribute('id');
+        if (id) {
+          elementMap.set(id, element);
+        }
+      });
+    } catch (e) {
+    }
+
+    return elementMap;
+  }
+
+  /**
    * Apply updateEventTrigger flag to instructions based on source BPMN analysis
    */
   private applyUpdateEventTriggerFlags(instructions: MigrationInstructionDto[]): MigrationInstructionDto[] {
     const sourceXml = this.sourceXml();
     if (!sourceXml) return instructions;
 
+    const elementMap = this.buildElementMap(sourceXml);
+
     return instructions.map(instr => ({
       ...instr,
       updateEventTrigger: instr.sourceActivityIds.some(activityId =>
-        this.shouldUpdateEventTrigger(activityId, sourceXml)
+        this.shouldUpdateEventTrigger(activityId, elementMap)
       )
     }));
   }
