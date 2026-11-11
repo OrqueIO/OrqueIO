@@ -1527,4 +1527,140 @@ describe('ProcessMigrationWizardComponent', () => {
       expect(title).toContain('Activity_5');
     });
   });
+
+  describe('Start new migration reset', () => {
+    const validBpmnXml = `
+      <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL">
+        <bpmn:process id="OrderProcess">
+          <bpmn:startEvent id="StartEvent_1" />
+          <bpmn:task id="Activity_1" name="Task 1" />
+          <bpmn:endEvent id="EndEvent_1" />
+        </bpmn:process>
+      </bpmn:definitions>`;
+
+    it('should reset sourceDefinitionId, targetDefinitionId, and sourceActivityStats', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_1'], targetActivityIds: ['Activity_2'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.sourceDefinitionId()).toBe('pd1:1');
+      expect(component.targetDefinitionId()).toBe('pd1:2');
+      expect(component.sourceActivityStats().length).toBeGreaterThan(0);
+      expect(component.migrationPlan()).toBeTruthy();
+
+      component.onStartNewMigration();
+
+      expect(component.sourceDefinitionId()).toBeNull();
+      expect(component.targetDefinitionId()).toBeNull();
+      expect(component.sourceActivityStats()).toEqual([]);
+      expect(component.migrationPlan()).toBeNull();
+      expect(component.migrationReport()).toBeNull();
+      expect(component.sourceKey()).toBe('');
+      expect(component.targetKey()).toBe('');
+      expect(component.currentStep()).toBe(1);
+    });
+
+    it('should allow re-selecting the same source without auto-generating plan', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_1'], targetActivityIds: ['Activity_2'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      expect(component.migrationPlan()).toBeTruthy();
+      const planGenerationCallsBefore = migrationService.generateMigrationPlan.mock.calls.length;
+
+      component.onStartNewMigration();
+      expect(component.targetDefinitionId()).toBeNull();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      const planGenerationCallsAfter = migrationService.generateMigrationPlan.mock.calls.length;
+      expect(planGenerationCallsAfter).toBe(planGenerationCallsBefore);
+      expect(component.migrationPlan()).toBeNull();
+      expect(component.sourceActivityBadges().every(b => b.migrationStatus !== 'valid')).toBe(true);
+    });
+
+    it('should not show valid checkmarks when re-selecting source without target', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity_1'], targetActivityIds: ['Activity_2'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      const badgesWithPlan = component.sourceActivityBadges();
+      expect(badgesWithPlan.some(b => b.migrationStatus === 'valid')).toBe(true);
+
+      component.onStartNewMigration();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      const badgesAfterReset = component.sourceActivityBadges();
+      expect(badgesAfterReset.every(b => b.migrationStatus !== 'valid')).toBe(true);
+      expect(badgesAfterReset.every(b => b.migrationStatus !== 'invalid')).toBe(true);
+    });
+  });
 });

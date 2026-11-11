@@ -1396,27 +1396,29 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   }
 
   onStartNewMigration(): void {
-    this.currentStep.set(1);
     this.sourceKey.set('');
     this.sourceVersion.set(null);
+    this.sourceDefinitionId.set(null);
+    this.sourceXml.set(null);
+    this.sourceActivityStats.set([]);
     this.targetKey.set('');
     this.targetVersion.set(null);
-    this.sourceXml.set(null);
+    this.targetDefinitionId.set(null);
     this.targetXml.set(null);
-    this.migrationPlan.set(null);
-    this.migrationReport.set(null);
-    this.variables.set([]);
-    this.instancesStepState.set(null);
-    this.confirmStepState.set(null);
-    this.executionResult.set({ kind: 'running' });
-    this.executing.set(false);
-    this.mappingMode.set(false);
-    this.mappingSourceActivityId.set(null);
-    this.customAnchors.set(new Map());
-    this.editableInstructions.set([]);
+
     this.linkFilterCriteria.set(null);
     this.linkVnIgnoreCase.set(false);
     this.linkVvIgnoreCase.set(false);
+    this.linkRestoreId.set(null);
+    this.linkSourceDefId.set(null);
+    this.linkTargetDefId.set(null);
+
+    this.executionResult.set({ kind: 'running' });
+    this.executing.set(false);
+    this.lastConfirmData.set(null);
+
+    this.showFallbackBanner.set(false);
+    this.resetDerivedState();
   }
 
   onBackToMapping(): void {
