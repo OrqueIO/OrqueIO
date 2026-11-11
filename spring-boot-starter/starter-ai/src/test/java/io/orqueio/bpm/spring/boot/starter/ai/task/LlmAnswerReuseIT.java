@@ -194,6 +194,24 @@ class LlmAnswerReuseIT {
   }
 
   @Test
+  void shouldNotStoreAnswerOutsideBounds() {
+    // Well-formed, but outside the bounds: a retry must ask the model again, not reuse it
+    deploy("Rate with an out-of-range answer first", "priority:integer[1..5]", "");
+    model.answer = "{\"priority\":10}";
+
+    ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess");
+    Job job = jobOf(instance);
+    assertThatThrownBy(() -> managementService.executeJob(job.getId())).isInstanceOf(LlmInvalidAnswerException.class);
+
+    model.answer = "{\"priority\":4}";
+    managementService.setJobRetries(job.getId(), 1);
+    managementService.executeJob(job.getId());
+
+    assertThat(model.calls).hasValue(2);
+    assertThat(runtimeService.getVariable(instance.getId(), "priority")).isEqualTo(4L);
+  }
+
+  @Test
   void shouldNotReuseAnswerAcrossInstances() {
     // Only a retry of the same job reuses an answer: each instance gets its own call
     deploy("Classify: {{text}}", "category:string", "", property("orqueio.llm.inputs", "text"));
