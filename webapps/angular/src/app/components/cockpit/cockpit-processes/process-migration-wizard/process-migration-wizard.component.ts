@@ -1019,6 +1019,18 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       }));
   });
 
+  shouldShowUnmappedWarning = computed(() => {
+    if (!this.sourceDefinitionId() || !this.targetDefinitionId()) {
+      return false;
+    }
+
+    if (!this.migrationPlan()) {
+      return false;
+    }
+
+    return this.unmappedActivitiesWithInstances().length > 0;
+  });
+
   visibleUnmappedActivities = computed(() => {
     const all = this.unmappedActivitiesWithInstances();
     return all.length <= 3 ? all : all.slice(0, 3);

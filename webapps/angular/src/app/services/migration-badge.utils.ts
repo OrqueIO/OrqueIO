@@ -37,15 +37,6 @@ export function calculateMigrationBadges(
   const targetBadges: MigrationBadge[] = [];
 
   if (!plan || !plan.instructions || plan.instructions.length === 0) {
-    // No plan: check for unmapped activities with instances
-    const unmappedActivities = sourceStats.filter(stat => stat.instances > 0);
-    unmappedActivities.forEach(stat => {
-      sourceBadges.push({
-        activityId: stat.id,
-        type: 'unmapped',
-        tooltip: `${stat.instances} active instance(s), no migration mapping`
-      });
-    });
     return { sourceBadges, targetBadges };
   }
 

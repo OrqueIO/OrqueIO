@@ -1663,4 +1663,196 @@ describe('ProcessMigrationWizardComponent', () => {
       expect(badgesAfterReset.every(b => b.migrationStatus !== 'invalid')).toBe(true);
     });
   });
+
+  describe('Unmapped warning display conditions', () => {
+    const validBpmnXml = `
+      <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL">
+        <bpmn:process id="OrderProcess">
+          <bpmn:startEvent id="StartEvent_1" />
+          <bpmn:task id="Activity_1" name="Task 1" />
+          <bpmn:endEvent id="EndEvent_1" />
+        </bpmn:process>
+      </bpmn:definitions>`;
+
+    it('should not show unmapped warning banner when only source is selected', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      // Source has activity with instances, but no target selected
+      expect(component.sourceActivityStats().length).toBeGreaterThan(0);
+      expect(component.sourceActivityStats()[0].instances).toBe(5);
+      expect(component.targetDefinitionId()).toBeNull();
+      expect(component.unmappedActivitiesWithInstances().length).toBe(1); // Technical calculation
+
+      // Banner should NOT be shown
+      expect(component.shouldShowUnmappedWarning()).toBe(false);
+
+      const compiled = fixture.nativeElement;
+      const banner = compiled.querySelector('#unmapped-activities-warning');
+      expect(banner).toBeNull();
+    });
+
+    it('should not show unmapped badges when only source is selected', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      // Should have blue instance badges but NO unmapped badges
+      const badges = component.sourceActivityBadges();
+      expect(badges.some(b => b.instances && b.instances > 0)).toBe(true); // Blue badges present
+      expect(badges.every(b => b.migrationStatus !== 'unmapped')).toBe(true); // No "!" badges
+    });
+
+    it('should not show unmapped warning during plan generation', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      // Use delay to simulate plan generation loading time
+      migrationService.generateMigrationPlan.mockReturnValue(
+        of({
+          sourceProcessDefinitionId: 'pd1:1',
+          targetProcessDefinitionId: 'pd1:2',
+          instructions: []
+        }).pipe(delay(150))
+      );
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 50));
+      fixture.detectChanges();
+
+      // Plan is being generated, not loaded yet
+      expect(component.migrationPlan()).toBeNull();
+      expect(component.shouldShowUnmappedWarning()).toBe(false);
+
+      // Wait for plan to load
+      await new Promise(resolve => setTimeout(resolve, 200));
+      fixture.detectChanges();
+
+      // Now plan is loaded and warning should show
+      expect(component.migrationPlan()).toBeTruthy();
+      expect(component.shouldShowUnmappedWarning()).toBe(true);
+    });
+
+    it('should show unmapped warning when source + target + plan loaded with unmapped activities', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [] // Empty = all activities unmapped
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      // All conditions met: source + target + plan loaded + unmapped activities
+      expect(component.sourceDefinitionId()).toBeTruthy();
+      expect(component.targetDefinitionId()).toBeTruthy();
+      expect(component.migrationPlan()).toBeTruthy();
+      expect(component.unmappedActivitiesWithInstances().length).toBe(1);
+
+      // Warning should be shown
+      expect(component.shouldShowUnmappedWarning()).toBe(true);
+
+      const compiled = fixture.nativeElement;
+      const banner = compiled.querySelector('#unmapped-activities-warning');
+      expect(banner).toBeTruthy();
+    });
+
+    it('should hide unmapped warning when target is removed', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      // Warning should be shown
+      expect(component.shouldShowUnmappedWarning()).toBe(true);
+
+      // Remove target
+      component.onTargetKeyChange('');
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      // Warning should disappear
+      expect(component.targetDefinitionId()).toBeNull();
+      expect(component.shouldShowUnmappedWarning()).toBe(false);
+
+      const compiled = fixture.nativeElement;
+      const banner = compiled.querySelector('#unmapped-activities-warning');
+      expect(banner).toBeNull();
+    });
+
+    it('should maintain button blocking logic unchanged when source only selected', async () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([
+        { id: 'Activity_1', instances: 5, incidents: 0 }
+      ]));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      // Button should be blocked (no target selected)
+      expect(component.canGoToSetVariables()).toBe(false);
+      expect(component.setVariablesDisabledReason()).toBeTruthy();
+
+      // But warning should NOT be shown
+      expect(component.shouldShowUnmappedWarning()).toBe(false);
+    });
+  });
 });

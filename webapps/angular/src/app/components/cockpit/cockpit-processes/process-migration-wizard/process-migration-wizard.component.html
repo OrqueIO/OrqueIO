@@ -216,7 +216,7 @@
           }
 
           <!-- Unmapped activities with instances warning -->
-          @if (unmappedActivitiesWithInstances().length > 0) {
+          @if (shouldShowUnmappedWarning()) {
             <div id="unmapped-activities-warning" class="unmapped-alert" role="status" aria-live="polite">
               <span class="unmapped-alert__accent" aria-hidden="true"></span>
               <div class="unmapped-alert__icon" aria-hidden="true">
@@ -277,7 +277,7 @@
                 class="btn btn-primary"
                 [disabled]="!canGoToSetVariables()"
                 (click)="onGoToSetVariables()"
-                [attr.aria-describedby]="unmappedActivitiesWithInstances().length > 0 ? 'unmapped-activities-warning' : (setVariablesDisabledReason() ? 'set-variables-disabled-reason' : null)"
+                [attr.aria-describedby]="shouldShowUnmappedWarning() ? 'unmapped-activities-warning' : (setVariablesDisabledReason() ? 'set-variables-disabled-reason' : null)"
                 [title]="setVariablesDisabledReason() ? (setVariablesDisabledReason()! | translate) : ''">
                 {{ 'migration.setVariables' | translate }} →
               </button>
