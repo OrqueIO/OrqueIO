@@ -477,10 +477,62 @@ class LlmTaskDeploymentIT {
             new LlmOutputField("summary", LlmOutputField.Type.STRING),
             new LlmOutputField("urgent", LlmOutputField.Type.BOOLEAN));
     // Loan request: a decision between two values, and a probability with decimal bounds
-    assertThat(outputsOf("decision:approve|reject, risk:number[0.0..1.0], level:integer[2.0..2]")).containsExactly(
+    assertThat(outputsOf("decision:approve|reject, risk:number[0.05..0.95], level:integer[-10..1e3]")).containsExactly(
         new LlmOutputField("decision", LlmOutputField.Type.STRING, List.of("approve", "reject"), null, null),
-        new LlmOutputField("risk", LlmOutputField.Type.NUMBER, List.of(), new BigDecimal("0.0"), new BigDecimal("1.0")),
-        new LlmOutputField("level", LlmOutputField.Type.INTEGER, List.of(), new BigDecimal("2.0"), new BigDecimal("2")));
+        new LlmOutputField("risk", LlmOutputField.Type.NUMBER, List.of(), new BigDecimal("0.05"), new BigDecimal("0.95")),
+        new LlmOutputField("level", LlmOutputField.Type.INTEGER, List.of(), new BigDecimal("-10"), new BigDecimal("1000")));
+  }
+
+  @Test
+  void shouldWriteBoundsTheSameWayHoweverTheAuthorWroteThem() {
+    List<LlmOutputField> plain = outputsOf("risk:number[0..1], level:integer[2..2], amount:number[..50000]");
+    List<LlmOutputField> written = outputsOf("risk:number[0.0..1.00], level:integer[2.0..2e0], amount:number[..5E4]");
+
+    assertThat(written).isEqualTo(plain);
+    assertThat(written).extracting(LlmOutputField::describe).containsExactly(
+        "\"risk\" (number, from 0 to 1)", "\"level\" (integer, from 2 to 2)", "\"amount\" (number, at most 50000)");
+  }
+
+  @Test
+  void shouldRejectBoundTooLargeOrTooPrecise() {
+    // Bounds are written in every prompt: an exponent must not make them millions of digits long
+    assertOutputsRejected("amount:number[..1e99999999]",
+        "LLM task 'Task_Llm' has a bound '1e99999999' that is too large or too precise for 'amount'");
+    assertOutputsRejected("amount:number[..1e2147483647]",
+        "LLM task 'Task_Llm' has a bound '1e2147483647' that is too large or too precise for 'amount'");
+    assertOutputsRejected("count:integer[0..1e19]",
+        "LLM task 'Task_Llm' has a bound '1e19' that is too large or too precise for 'count'");
+    assertOutputsRejected("rate:number[0..0.0000000000000000001]",
+        "LLM task 'Task_Llm' has a bound '0.0000000000000000001' that is too large or too precise for 'rate'");
+    // The largest accepted: 18 digits each side
+    assertThat(outputsOf("count:integer[-999999999999999999..999999999999999999], rate:number[0.000000000000000001..1]"))
+        .hasSize(2);
+  }
+
+  @Test
+  void shouldRejectThreeDotsBetweenBounds() {
+    assertOutputsRejected("priority:integer[1...5]", "LLM task 'Task_Llm' has invalid bounds '[1...5]' for 'priority'");
+  }
+
+  @Test
+  void shouldExplainThatAllowedValuesCannotContainColon() {
+    assertOutputsRejected("slot:10:00|11:00",
+        "LLM task 'Task_Llm' has an allowed value containing ':' for 'slot' in orqueio.llm.outputs; "
+            + "allowed values cannot contain ',' or ':'");
+  }
+
+  @Test
+  void shouldRejectBoundsMixedWithAllowedValues() {
+    assertOutputsRejected("amount:number[0..1]|2",
+        "LLM task 'Task_Llm' mixes bounds and allowed values for 'amount'");
+    // A value that only looks like brackets is still allowed
+    assertThat(outputsOf("code:A[1]|B[2]")).extracting(LlmOutputField::allowedValues).containsExactly(List.of("A[1]", "B[2]"));
+  }
+
+  @Test
+  void shouldRejectAllowedValueTooLongToBeMatched() {
+    assertOutputsRejected("label:" + "x".repeat(LlmOutputField.MAX_STRING_LENGTH + 1) + "|short",
+        "LLM task 'Task_Llm' has an allowed value longer than 4000 characters for 'label'");
   }
 
   @Test

@@ -131,6 +131,11 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
         }
         String[] parts = declaration.split(":", -1);
         String name = parts[0].trim();
+        // Outputs are separated by commas and names by colons: an allowed value cannot contain either
+        if (parts.length > 2 && declaration.contains("|")) {
+          throw error(activity, "has an allowed value containing ':' for '" + name + "' in " + OUTPUTS_PROPERTY
+              + "; allowed values cannot contain ',' or ':'", element);
+        }
         if (parts.length != 2 || !PromptTemplate.isVariableName(name)) {
           throw error(activity, "has an invalid output '" + declaration.trim() + "' in " + OUTPUTS_PROPERTY
               + "; expected name:type", element);
@@ -149,6 +154,9 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
 
   /** The type and its bounds, for example {@code number[0..50000]} or {@code integer[1..]}. */
   protected static final Pattern BOUNDED_TYPE = Pattern.compile("(\\w+)\\s*\\[(.*)]");
+
+  /** Digits a bound may have before, and after, the decimal point; integer bounds then fit a long. */
+  protected static final int MAX_BOUND_DIGITS = 18;
 
   /**
    * Reads what follows the colon of an output: a type ({@code string}), allowed values
@@ -171,7 +179,8 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
           + "; only number and integer outputs can have bounds", element);
     }
     String[] bounds = bounded.group(2).split("\\.\\.", -1);
-    if (bounds.length != 2) {
+    // "1...5" would otherwise read as 1 and .5
+    if (bounds.length != 2 || bounded.group(2).contains("...")) {
       throw error(activity, "has invalid bounds '[" + bounded.group(2) + "]' for '" + name + "' in " + OUTPUTS_PROPERTY
           + "; expected [min..max], for example [0..50000], [1..] or [..100]", element);
     }
@@ -198,6 +207,17 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
         throw error(activity, "lists the allowed value '" + allowed + "' twice for '" + name + "' in "
             + OUTPUTS_PROPERTY, element);
       }
+      // number[0..1]|2 is a mistake, not a string field whose values are "number[0..1]" and "2"
+      Matcher bounded = BOUNDED_TYPE.matcher(allowed);
+      if (bounded.matches() && LlmOutputField.Type.fromId(bounded.group(1)).isPresent()) {
+        throw error(activity, "mixes bounds and allowed values for '" + name + "' in " + OUTPUTS_PROPERTY
+            + "; give either allowed values (A|B|C) or bounds (number[min..max])", element);
+      }
+      // A longer answer is rejected before it is compared, so such a value could never be matched
+      if (allowed.length() > LlmOutputField.MAX_STRING_LENGTH) {
+        throw error(activity, "has an allowed value longer than " + LlmOutputField.MAX_STRING_LENGTH
+            + " characters for '" + name + "' in " + OUTPUTS_PROPERTY, element);
+      }
     }
     return List.copyOf(values);
   }
@@ -217,11 +237,20 @@ public class LlmTaskParseListener extends AbstractBpmnParseListener {
     catch (NumberFormatException e) {
       throw error(activity, "has an invalid bound '" + bound + "' for '" + name + "' in " + OUTPUTS_PROPERTY, element);
     }
-    if (type == LlmOutputField.Type.INTEGER && number.stripTrailingZeros().scale() > 0) {
+    number = number.stripTrailingZeros();
+    // The bound is written in every prompt: an exponent such as 1e99999999 would make it millions of digits long.
+    // Checked on precision and scale, before anything expands the number
+    long integerDigits = (long) number.precision() - number.scale();
+    if (integerDigits > MAX_BOUND_DIGITS || number.scale() > MAX_BOUND_DIGITS) {
+      throw error(activity, "has a bound '" + bound + "' that is too large or too precise for '" + name + "' in "
+          + OUTPUTS_PROPERTY + "; use at most " + MAX_BOUND_DIGITS + " digits before and after the decimal point", element);
+    }
+    if (type == LlmOutputField.Type.INTEGER && number.scale() > 0) {
       throw error(activity, "has a bound '" + bound + "' that is not a whole number for integer output '" + name
           + "' in " + OUTPUTS_PROPERTY, element);
     }
-    return number;
+    // Written the same way however the author wrote it (2.0, 2, 2e0), so the prompt and its version do not depend on it
+    return number.scale() < 0 ? number.setScale(0) : number;
   }
 
   protected static final Duration MIN_TIMEOUT = Duration.ofMillis(1);

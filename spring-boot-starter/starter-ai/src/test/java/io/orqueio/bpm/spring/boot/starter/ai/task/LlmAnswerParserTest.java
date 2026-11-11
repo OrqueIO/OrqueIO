@@ -241,6 +241,23 @@ class LlmAnswerParserTest {
   }
 
   @Test
+  void shouldCheckBoundsOfIntegerWrittenAsWholeDecimal() {
+    assertThat(parser.parse("{\"sentiment\":\"neutral\",\"priority\":5.0}", TICKET)).containsEntry("priority", 5L);
+    assertThatThrownBy(() -> parser.parse("{\"sentiment\":\"neutral\",\"priority\":6.0}", TICKET))
+        .hasMessage("Field 'priority' of the model's answer is outside the allowed range");
+  }
+
+  @Test
+  void shouldNotBuildFieldWithBothAllowedValuesAndBounds() {
+    assertThatThrownBy(() -> new LlmOutputField("code", STRING, List.of("A", "B"), BigDecimal.ONE, null))
+        .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new LlmOutputField("code", NUMBER, List.of("1", "2"), null, null))
+        .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new LlmOutputField("label", STRING, List.of(), BigDecimal.ONE, null))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
   void shouldTellTheModelTheAllowedValuesAndBounds() {
     assertThat(parser.formatInstructions(CLAIM)).contains(
         "\"incidentType\" (string, exactly one of \"Theft\", \"Fire\", \"Water\", \"Other\"), "

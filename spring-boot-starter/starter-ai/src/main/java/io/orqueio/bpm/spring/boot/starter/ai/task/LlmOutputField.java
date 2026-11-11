@@ -46,6 +46,13 @@ public record LlmOutputField(String name, Type type, List<String> allowedValues,
 
   public LlmOutputField {
     allowedValues = allowedValues == null ? List.of() : List.copyOf(allowedValues);
+    // A field has allowed values or bounds, never both: the error message tells which one the answer broke
+    if (!allowedValues.isEmpty() && (type != Type.STRING || min != null || max != null)) {
+      throw new IllegalArgumentException("Only a string output can list allowed values, and without bounds: " + name);
+    }
+    if ((min != null || max != null) && type != Type.NUMBER && type != Type.INTEGER) {
+      throw new IllegalArgumentException("Only a number or integer output can have bounds: " + name);
+    }
   }
 
   /**
