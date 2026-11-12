@@ -38,5 +38,15 @@
         <module>assembly</module>
       </modules>
     </profile>
+    <profile>
+      <id>distro-ce</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>distro</module>
+        <module>webapp-jakarta</module>
+      </modules>
+    </profile>
   </profiles>
 </project>
