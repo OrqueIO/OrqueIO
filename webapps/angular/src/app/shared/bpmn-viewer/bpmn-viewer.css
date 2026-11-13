@@ -332,6 +332,8 @@ button.breadcrumb-parent-name {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 15;
 }
 
 .bpmn-subprocess-drilldown:hover {

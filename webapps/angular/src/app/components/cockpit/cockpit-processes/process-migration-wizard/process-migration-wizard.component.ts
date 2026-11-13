@@ -7,7 +7,7 @@ import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
+import { faExchangeAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin, switchMap, of, Subject, debounceTime, catchError, filter, tap } from 'rxjs';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
@@ -80,6 +80,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   validationService = inject(MigrationValidationService);
 
   faExchangeAlt = faExchangeAlt;
+  faExclamationTriangle = faExclamationTriangle;
 
   breadcrumbs: BreadcrumbItem[] = [
     { label: 'Processes', translateKey: 'cockpit.menu.processes' }
@@ -297,6 +298,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     if (!this.isPlanValid()) {
       return 'migration.fixInvalidMappings';
+    }
+
+    const unmappedWithInstances = this.unmappedActivitiesWithInstances();
+    if (unmappedWithInstances.length > 0) {
+      return 'migration.unmappedActivitiesWithInstances';
     }
 
     return null;
@@ -823,16 +829,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
    * - Message intermediate catch events
    * - Receive tasks
    */
-  private shouldUpdateEventTrigger(activityId: string, sourceXml: string): boolean {
-    if (!sourceXml) return false;
+  private shouldUpdateEventTrigger(activityId: string, elementMap: Map<string, Element>): boolean {
+    const element = elementMap.get(activityId);
+    if (!element) return false;
 
     try {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(sourceXml, 'text/xml');
-
-      const element = doc.querySelector(`[id="${activityId}"]`);
-      if (!element) return false;
-
       const tagName = element.tagName;
 
       if (tagName.includes('receiveTask')) {
@@ -853,16 +854,45 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Parse BPMN XML and build a Map of element IDs to DOM elements.
+   * @param xml The BPMN XML string to parse
+   * @returns Map of element id -> Element, or empty Map if parsing fails
+   */
+  private buildElementMap(xml: string): Map<string, Element> {
+    const elementMap = new Map<string, Element>();
+
+    if (!xml) return elementMap;
+
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xml, 'text/xml');
+
+      const allElements = doc.querySelectorAll('[id]');
+      allElements.forEach((element) => {
+        const id = element.getAttribute('id');
+        if (id) {
+          elementMap.set(id, element);
+        }
+      });
+    } catch (e) {
+    }
+
+    return elementMap;
+  }
+
+  /**
    * Apply updateEventTrigger flag to instructions based on source BPMN analysis
    */
   private applyUpdateEventTriggerFlags(instructions: MigrationInstructionDto[]): MigrationInstructionDto[] {
     const sourceXml = this.sourceXml();
     if (!sourceXml) return instructions;
 
+    const elementMap = this.buildElementMap(sourceXml);
+
     return instructions.map(instr => ({
       ...instr,
       updateEventTrigger: instr.sourceActivityIds.some(activityId =>
-        this.shouldUpdateEventTrigger(activityId, sourceXml)
+        this.shouldUpdateEventTrigger(activityId, elementMap)
       )
     }));
   }
@@ -999,6 +1029,46 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       instr.sourceActivityIds.forEach(id => mapped.add(id));
     });
     return mapped;
+  });
+
+  unmappedActivitiesWithInstances = computed<Array<{ activityId: string; instances: number }>>(() => {
+    const stats = this.sourceActivityStats();
+    const mapped = this.mappedSourceActivityIds();
+
+    return stats
+      .filter(stat => stat.instances > 0 && !mapped.has(stat.id))
+      .map(stat => ({
+        activityId: stat.id,
+        instances: stat.instances
+      }));
+  });
+
+  shouldShowUnmappedWarning = computed(() => {
+    if (!this.sourceDefinitionId() || !this.targetDefinitionId()) {
+      return false;
+    }
+
+    if (!this.migrationPlan()) {
+      return false;
+    }
+
+    return this.unmappedActivitiesWithInstances().length > 0;
+  });
+
+  visibleUnmappedActivities = computed(() => {
+    const all = this.unmappedActivitiesWithInstances();
+    return all.length <= 3 ? all : all.slice(0, 3);
+  });
+
+  remainingUnmappedCount = computed(() => {
+    const all = this.unmappedActivitiesWithInstances();
+    return all.length > 3 ? all.length - 3 : 0;
+  });
+
+  remainingActivitiesTitle = computed(() => {
+    const all = this.unmappedActivitiesWithInstances();
+    if (all.length <= 3) return '';
+    return all.slice(3).map(a => `${a.activityId} (${a.instances})`).join(', ');
   });
 
   mappedTargetActivityIds = computed(() => {
@@ -1173,6 +1243,10 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     }
   }
 
+  onUnmappedActivityClick(activityId: string): void {
+    this.onSelectMappedActivity(activityId);
+  }
+
   onArrowHover(event: string | null): void {
     if (event) {
       // When hovering arrow, show remove button on SOURCE only (never on target)
@@ -1279,7 +1353,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   onSelectInstancesBack(state: InstancesStepState): void {
     this.instancesStepState.set(state);
-    this.currentStep.set(2);
+    if (this.canGoToSetVariables()) {
+      this.currentStep.set(2);
+    } else {
+      this.currentStep.set(1);
+    }
   }
 
   onSelectInstancesNext(state: InstancesStepState): void {
@@ -1354,27 +1432,29 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   }
 
   onStartNewMigration(): void {
-    this.currentStep.set(1);
     this.sourceKey.set('');
     this.sourceVersion.set(null);
+    this.sourceDefinitionId.set(null);
+    this.sourceXml.set(null);
+    this.sourceActivityStats.set([]);
     this.targetKey.set('');
     this.targetVersion.set(null);
-    this.sourceXml.set(null);
+    this.targetDefinitionId.set(null);
     this.targetXml.set(null);
-    this.migrationPlan.set(null);
-    this.migrationReport.set(null);
-    this.variables.set([]);
-    this.instancesStepState.set(null);
-    this.confirmStepState.set(null);
-    this.executionResult.set({ kind: 'running' });
-    this.executing.set(false);
-    this.mappingMode.set(false);
-    this.mappingSourceActivityId.set(null);
-    this.customAnchors.set(new Map());
-    this.editableInstructions.set([]);
+
     this.linkFilterCriteria.set(null);
     this.linkVnIgnoreCase.set(false);
     this.linkVvIgnoreCase.set(false);
+    this.linkRestoreId.set(null);
+    this.linkSourceDefId.set(null);
+    this.linkTargetDefId.set(null);
+
+    this.executionResult.set({ kind: 'running' });
+    this.executing.set(false);
+    this.lastConfirmData.set(null);
+
+    this.showFallbackBanner.set(false);
+    this.resetDerivedState();
   }
 
   onBackToMapping(): void {
