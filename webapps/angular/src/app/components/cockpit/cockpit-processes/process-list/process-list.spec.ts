@@ -566,6 +566,27 @@ describe('ProcessListComponent', () => {
 
       expect(cockpitService.getIncidentsByProcessDefinitionId).toHaveBeenCalled();
     });
+
+    it('should show the creation date of open incidents (#308)', async () => {
+      // GET /incident returns the creation date as incidentTimestamp, without createTime
+      const timestamp = '2026-11-08T10:15:00.000+0000';
+      cockpitService.getIncidentsByProcessDefinitionId!.mockReturnValue(of([{
+        id: 'i1', processInstanceId: 'pi-1', activityId: 'ServiceTask_1', incidentType: 'failedJob',
+        incidentMessage: 'Delegate exception', incidentTimestamp: timestamp,
+      } as any]));
+      fixture.detectChanges();
+      routeParams$.next({ key: 'invoice' });
+      component.incidents = [];
+      component.incidentsLoading = false;
+
+      component.switchTab('incidents');
+      fixture.componentRef.changeDetectorRef.markForCheck();
+      fixture.detectChanges();
+
+      const row = fixture.nativeElement.querySelector('table.data-table tbody tr') as HTMLElement;
+      expect(row).not.toBeNull();
+      expect(row.textContent).toContain(new Date(timestamp).toLocaleString());
+    });
   });
 
   // =============================================

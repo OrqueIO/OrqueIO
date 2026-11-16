@@ -413,6 +413,11 @@
   "cockpit.processDetail.incidents.activity": "Activity",
   "cockpit.processDetail.incidents.message": "Message",
   "cockpit.processDetail.incidents.createTime": "Created",
+  "cockpit.processDetail.incidents.status": "State",
+  "cockpit.processDetail.incidents.state.open": "Open",
+  "cockpit.processDetail.incidents.state.resolved": "Resolved",
+  "cockpit.processDetail.incidents.state.deleted": "Deleted",
+  "cockpit.processDetail.incidents.endTime": "Ended",
 
   "cockpit.processDetail.tenant": "Tenant",
   "cockpit.processDetail.superProcess": "Parent Process",

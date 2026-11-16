@@ -50,6 +50,8 @@ public class OrqueioBpmAiProperties {
 
   private final Audit audit = new Audit();
 
+  private final Metrics metrics = new Metrics();
+
   public boolean isEnabled() {
     return enabled;
   }
@@ -82,10 +84,39 @@ public class OrqueioBpmAiProperties {
     return audit;
   }
 
+  public Metrics getMetrics() {
+    return metrics;
+  }
+
   @Override
   public String toString() {
     return "OrqueioBpmAiProperties[enabled=" + enabled + ", defaultProvider=" + defaultProvider
-        + ", timeout=" + timeout + ", cache=" + cache + ", audit=" + audit + "]";
+        + ", timeout=" + timeout + ", cache=" + cache + ", audit=" + audit + ", metrics=" + metrics + "]";
+  }
+
+  /**
+   * Metrics of LLM tasks, tagged with the process definition, the activity and the tenant:
+   * the orqueio.llm.task observation (a timer with Actuator) and the orqueio.llm.task.tokens counter.
+   */
+  public static class Metrics {
+
+    /**
+     * Publish the metrics, when the application has a Micrometer registry. Default {@code true}.
+     */
+    private boolean enabled = true;
+
+    public boolean isEnabled() {
+      return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+    }
+
+    @Override
+    public String toString() {
+      return "Metrics[enabled=" + enabled + "]";
+    }
   }
 
   /**
