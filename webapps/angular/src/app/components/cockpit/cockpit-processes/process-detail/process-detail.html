@@ -462,13 +462,15 @@
                     <th>{{ 'cockpit.processDetail.incidents.message' | translate }}</th>
                     <th>{{ 'cockpit.processDetail.incidents.activity' | translate }}</th>
                     <th>{{ 'cockpit.processDetail.incidents.createTime' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.incidents.status' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.incidents.endTime' | translate }}</th>
                     <th class="actions" *ngIf="isProcessRunning()"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let incident of incidents">
+                  <tr *ngFor="let incident of incidents" [class.incident-closed]="!isIncidentOpen(incident)">
                     <td class="incident-type">
-                      <fa-icon [icon]="faExclamationTriangle" class="incident-icon"></fa-icon>
+                      <fa-icon [icon]="incidentIcon(incident)" class="incident-icon"></fa-icon>
                       {{ incident.incidentType }}
                     </td>
                     <td class="incident-message">
@@ -479,10 +481,12 @@
                         {{ incident.activityId }}
                       </a>
                     </td>
-                    <td class="incident-time">{{ formatDate(incident.createTime) }}</td>
+                    <td class="incident-time">{{ formatDate(incidentCreateTime(incident)) }}</td>
+                    <td class="incident-state">{{ 'cockpit.processDetail.incidents.state.' + incidentState(incident) | translate }}</td>
+                    <td class="incident-end-time">{{ incident.endTime ? formatDate(incident.endTime) : '-' }}</td>
                     <td class="actions" *ngIf="isProcessRunning()">
                       <button class="btn btn-xs btn-default"
-                              *ngIf="incident.incidentType === 'failedJob'"
+                              *ngIf="incident.incidentType === 'failedJob' && isIncidentOpen(incident)"
                               (click)="retryIncident(incident)"
                               [title]="'cockpit.processDetail.actions.retry' | translate">
                         <fa-icon [icon]="faRedo"></fa-icon>

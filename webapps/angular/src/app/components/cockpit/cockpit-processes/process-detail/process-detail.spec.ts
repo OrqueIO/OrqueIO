@@ -228,6 +228,121 @@ describe('ProcessDetailComponent', () => {
   });
 
   // =============================================
+  // Incident dates and states (#308)
+  // =============================================
+
+  describe('incident dates and states', () => {
+    // As GET /incident returns them: open, creation date in incidentTimestamp
+    const runtimeIncident: Incident = {
+      id: 'inc-1', processInstanceId: 'pi-1', activityId: 'ServiceTask_1',
+      incidentType: 'failedJob', incidentMessage: 'Delegate exception',
+      incidentTimestamp: '2026-11-08T10:15:00.000+0000', configuration: 'job-1',
+    } as Incident;
+
+    // As GET /history/incident returns them: creation date in createTime, with open, resolved, deleted and endTime
+    const history = (id: string, state: { open: boolean; resolved: boolean; deleted: boolean }, endTime?: string): Incident => ({
+      id, processInstanceId: 'pi-1', activityId: 'ServiceTask_1',
+      incidentType: 'failedJob', incidentMessage: 'Delegate exception',
+      createTime: '2026-11-08T10:15:00.000+0000', endTime, configuration: 'job-1', ...state,
+    });
+    const resolved = history('h-resolved', { open: false, resolved: true, deleted: false }, '2026-11-08T11:00:00.000+0000');
+    const deleted = history('h-deleted', { open: false, resolved: false, deleted: true }, '2026-11-08T12:00:00.000+0000');
+    const stillOpen = history('h-open', { open: true, resolved: false, deleted: false });
+
+    it('should read the creation date of runtime and historic incidents', () => {
+      expect(component.incidentCreateTime(runtimeIncident)).toBe('2026-11-08T10:15:00.000+0000');
+      expect(component.incidentCreateTime(resolved)).toBe('2026-11-08T10:15:00.000+0000');
+      expect(component.formatDate(component.incidentCreateTime(runtimeIncident))).not.toBe('-');
+    });
+
+    it('should tell open, resolved and deleted incidents apart', () => {
+      expect(component.incidentState(runtimeIncident)).toBe('open');
+      expect(component.incidentState(stillOpen)).toBe('open');
+      expect(component.incidentState(resolved)).toBe('resolved');
+      expect(component.incidentState(deleted)).toBe('deleted');
+      // A historic incident without flags but with an end date is no longer open
+      expect(component.incidentState({ ...runtimeIncident, endTime: '2026-11-08T11:00:00.000+0000' })).toBe('resolved');
+    });
+
+    it('should count only open incidents in the tab badge', () => {
+      component.incidents = [resolved, deleted, stillOpen];
+
+      const incidentsTab = component.tabs.find(tab => tab.id === 'incidents')!;
+
+      expect(incidentsTab.badgeCount!()).toBe(1);
+    });
+
+    it('should show no incident count after all incidents were resolved', async () => {
+      cockpitService.getProcessInstanceIncidents!.mockReturnValue(of([]));
+      cockpitService.getHistoryIncidents!.mockReturnValue(of([resolved]));
+
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+
+      expect(component.incidents).toEqual([resolved]);
+      expect(component.tabs.find(tab => tab.id === 'incidents')!.badgeCount!()).toBe(0);
+    });
+
+    it('should not retry a resolved or deleted incident', () => {
+      component.retryIncident(resolved);
+      component.retryIncident(deleted);
+
+      expect(cockpitService.retryJob).not.toHaveBeenCalled();
+
+      component.retryIncident(stillOpen);
+
+      expect(cockpitService.retryJob).toHaveBeenCalledWith('job-1');
+    });
+
+    it('should count a runtime incident as open', () => {
+      component.incidents = [runtimeIncident];
+
+      expect(component.tabs.find(tab => tab.id === 'incidents')!.badgeCount!()).toBe(1);
+    });
+
+    it('should render the dates, the state and Retry only for open incidents', () => {
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+      component.incidents = [runtimeIncident, resolved, deleted];
+      component.setActiveTab('incidents');
+      fixture.componentRef.changeDetectorRef.markForCheck();
+      fixture.detectChanges();
+
+      const rows = Array.from(fixture.nativeElement.querySelectorAll('.incidents-tab tbody tr')) as HTMLElement[];
+      const cell = (row: HTMLElement, name: string) => row.querySelector(name)!.textContent!.trim();
+
+      expect(rows.length).toBe(3);
+      // A runtime incident: open, created at incidentTimestamp, no end, Retry offered
+      expect(cell(rows[0], '.incident-time')).toBe(new Date(runtimeIncident.incidentTimestamp!).toLocaleString());
+      expect(cell(rows[0], '.incident-state')).toBe('cockpit.processDetail.incidents.state.open');
+      expect(cell(rows[0], '.incident-end-time')).toBe('-');
+      expect(rows[0].classList.contains('incident-closed')).toBe(false);
+      expect(rows[0].querySelector('.actions button')).not.toBeNull();
+      // Resolved and deleted: their end date, shown as history, no Retry
+      expect(cell(rows[1], '.incident-state')).toBe('cockpit.processDetail.incidents.state.resolved');
+      expect(cell(rows[1], '.incident-end-time')).toBe(new Date(resolved.endTime!).toLocaleString());
+      expect(cell(rows[2], '.incident-state')).toBe('cockpit.processDetail.incidents.state.deleted');
+      expect(cell(rows[2], '.incident-end-time')).toBe(new Date(deleted.endTime!).toLocaleString());
+      for (const closed of [rows[1], rows[2]]) {
+        expect(closed.classList.contains('incident-closed')).toBe(true);
+        expect(closed.querySelector('.actions button')).toBeNull();
+      }
+    });
+
+    it('should not offer Retry once the instance has ended', () => {
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+      vi.spyOn(component, 'isProcessRunning').mockReturnValue(false);
+      component.incidents = [stillOpen];
+      component.setActiveTab('incidents');
+      fixture.componentRef.changeDetectorRef.markForCheck();
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.incidents-tab tbody tr .actions')).toBeNull();
+    });
+  });
+
+  // =============================================
   // Tabs
   // =============================================
 

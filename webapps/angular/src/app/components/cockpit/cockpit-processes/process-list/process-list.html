@@ -419,7 +419,8 @@
                           {{ incident.activityId }}
                         </a>
                       </td>
-                      <td>{{ formatDate(incident.createTime) || '-' }}</td>
+                      <!-- Runtime incidents carry their creation date as incidentTimestamp -->
+                      <td>{{ formatDate(incident.incidentTimestamp || incident.createTime) || '-' }}</td>
                       <td>
                         <a
                           [routerLink]="['/cockpit/processes/instance', incident.processInstanceId]"

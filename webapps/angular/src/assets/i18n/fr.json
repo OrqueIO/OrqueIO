@@ -410,6 +410,11 @@
   "cockpit.processDetail.incidents.activity": "Activité",
   "cockpit.processDetail.incidents.message": "Message",
   "cockpit.processDetail.incidents.createTime": "Créé le",
+  "cockpit.processDetail.incidents.status": "État",
+  "cockpit.processDetail.incidents.state.open": "Ouvert",
+  "cockpit.processDetail.incidents.state.resolved": "Résolu",
+  "cockpit.processDetail.incidents.state.deleted": "Supprimé",
+  "cockpit.processDetail.incidents.endTime": "Terminé le",
 
   "cockpit.decisions.title": "Définitions de décision",
   "cockpit.decisions.tableDeployed": "Table de décision déployée",
