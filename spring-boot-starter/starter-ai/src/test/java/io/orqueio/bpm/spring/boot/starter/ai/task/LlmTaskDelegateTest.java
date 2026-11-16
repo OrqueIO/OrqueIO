@@ -65,6 +65,28 @@ class LlmTaskDelegateTest {
   }
 
   @Test
+  void shouldRunTheTaskWhenItsMetricsCannotStart() {
+    ChatModel model = mock(ChatModel.class);
+    when(model.call(any(Prompt.class))).thenReturn(
+        new ChatResponse(List.of(new Generation(new AssistantMessage("{\"category\":\"Theft\"}")))));
+    LlmTaskMetrics broken = new LlmTaskMetrics(null, null) {
+      @Override
+      public Execution start(io.orqueio.bpm.engine.delegate.DelegateExecution execution, String provider, String model) {
+        throw new IllegalStateException("An observation handler failed");
+      }
+    };
+    LlmTaskDelegate delegate = new LlmTaskDelegate(new ChatModelRegistry(() -> List.of(model), null),
+        new LlmPromptResolver(), new LlmAnswerParser(), new LlmFailureClassifier(), Duration.ofSeconds(5),
+        null, null, null, broken);
+    ExecutionEntity execution = executionOf(new LlmTaskConfiguration(null, null, "Classify", List.of(),
+        List.of(new LlmOutputField("category", STRING))));
+
+    delegate.execute(execution);
+
+    verify(execution).setVariable("category", "Theft");
+  }
+
+  @Test
   void shouldReadTheAnswerAfterAnEmptyThinkingBlock() {
     // As Spring AI returns a Claude 5 answer: an empty thinking block, then the text
     ExecutionEntity execution = executeWith(

@@ -18,6 +18,8 @@ package io.orqueio.bpm.spring.boot.starter.ai;
 
 import java.time.Duration;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.observation.ObservationRegistry;
 import io.orqueio.bpm.spring.boot.starter.OrqueioBpmAutoConfiguration;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.InMemoryLlmAnswerStore;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.InMemoryLlmCallLock;
@@ -32,6 +34,7 @@ import io.orqueio.bpm.spring.boot.starter.ai.task.LlmFailureClassifier;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmPromptResolver;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskAuditor;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDelegate;
+import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskMetrics;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskProcessEnginePlugin;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.ObjectProvider;
@@ -73,14 +76,26 @@ public class OrqueioBpmAiAutoConfiguration {
   @ConditionalOnMissingBean(name = LlmTaskDelegate.BEAN_NAME)
   public LlmTaskDelegate orqueioLlmTask(ChatModelRegistry chatModelRegistry, OrqueioBpmAiProperties properties,
                                         ObjectProvider<LlmAnswerStore> answerStore, ObjectProvider<LlmCallLock> callLock,
-                                        ObjectProvider<LlmTaskAuditor> auditor) {
+                                        ObjectProvider<LlmTaskAuditor> auditor, ObjectProvider<LlmTaskMetrics> metrics) {
     Duration timeout = properties.getTimeout();
     if (timeout == null || timeout.toMillis() < 1) {
       throw new IllegalStateException(OrqueioBpmAiProperties.PREFIX + ".timeout must be at least 1 millisecond, was " + timeout);
     }
     return new LlmTaskDelegate(chatModelRegistry, new LlmPromptResolver(), new LlmAnswerParser(),
         new LlmFailureClassifier(), timeout, answerStore.getIfAvailable(), callLock.getIfAvailable(),
-        auditor.getIfAvailable());
+        auditor.getIfAvailable(), metrics.getIfAvailable());
+  }
+
+  /**
+   * Metrics tagged with the process, published to the application's Micrometer registry, if any.
+   * Several registries without a primary one publish nothing rather than stop the application.
+   */
+  @Bean
+  @ConditionalOnMissingBean
+  @ConditionalOnProperty(prefix = OrqueioBpmAiProperties.PREFIX + ".metrics", name = "enabled", matchIfMissing = true)
+  public LlmTaskMetrics llmTaskMetrics(ObjectProvider<MeterRegistry> meterRegistry,
+                                       ObjectProvider<ObservationRegistry> observationRegistry) {
+    return new LlmTaskMetrics(meterRegistry.getIfUnique(), observationRegistry.getIfUnique());
   }
 
   @Bean

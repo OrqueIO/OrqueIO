@@ -27,6 +27,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.slf4j.MDC;
 
+import io.micrometer.observation.Observation;
 import io.orqueio.bpm.engine.delegate.BpmnError;
 import io.orqueio.bpm.engine.impl.bpmn.helper.ErrorDeclarationForProcessInstanceFinder;
 import io.orqueio.bpm.engine.impl.context.Context;
@@ -78,6 +79,7 @@ public class LlmTaskDelegate implements JavaDelegate {
   private final LlmAnswerStore answerStore;
   private final LlmCallLock callLock;
   private final LlmTaskAuditor auditor;
+  private final LlmTaskMetrics metrics;
 
   public LlmTaskDelegate(ChatModelRegistry chatModelRegistry, LlmPromptResolver promptResolver,
                          LlmAnswerParser answerParser, LlmFailureClassifier failureClassifier,
@@ -103,6 +105,17 @@ public class LlmTaskDelegate implements JavaDelegate {
                          LlmAnswerParser answerParser, LlmFailureClassifier failureClassifier,
                          Duration defaultTimeout, LlmAnswerStore answerStore, LlmCallLock callLock,
                          LlmTaskAuditor auditor) {
+    this(chatModelRegistry, promptResolver, answerParser, failureClassifier, defaultTimeout, answerStore, callLock,
+        auditor, null);
+  }
+
+  /**
+   * @param metrics observes each execution and counts its tokens, or {@code null} to measure nothing
+   */
+  public LlmTaskDelegate(ChatModelRegistry chatModelRegistry, LlmPromptResolver promptResolver,
+                         LlmAnswerParser answerParser, LlmFailureClassifier failureClassifier,
+                         Duration defaultTimeout, LlmAnswerStore answerStore, LlmCallLock callLock,
+                         LlmTaskAuditor auditor, LlmTaskMetrics metrics) {
     this.chatModelRegistry = chatModelRegistry;
     this.promptResolver = promptResolver;
     this.answerParser = answerParser;
@@ -111,6 +124,7 @@ public class LlmTaskDelegate implements JavaDelegate {
     this.answerStore = answerStore;
     this.callLock = callLock;
     this.auditor = auditor;
+    this.metrics = metrics;
   }
 
   @Override
@@ -128,14 +142,72 @@ public class LlmTaskDelegate implements JavaDelegate {
     Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 
     Duration timeout = configuration.getTimeout() != null ? configuration.getTimeout() : defaultTimeout;
+    LlmTaskMetrics.Execution measured = startMeasuring(execution, configuration, chatModel, prompt);
+    if (measured == null) {
+      answer(execution, configuration, chatModel, prompt, userPrompt, timeout, null);
+      return;
+    }
+    LlmTaskMetrics.Outcome outcome = LlmTaskMetrics.Outcome.ERROR;
+    Throwable error = null;
+    try (Observation.Scope scope = measured.openScope()) {
+      answer(execution, configuration, chatModel, prompt, userPrompt, timeout, measured);
+      outcome = LlmTaskMetrics.Outcome.VALID;
+    }
+    catch (BpmnError | LlmInvalidAnswerException e) {
+      outcome = LlmTaskMetrics.Outcome.INVALID_ANSWER;
+      error = e;
+      throw e;
+    }
+    catch (LlmTaskException e) {
+      outcome = e.isRetryable() ? LlmTaskMetrics.Outcome.RETRYABLE_ERROR : LlmTaskMetrics.Outcome.ERROR;
+      error = e;
+      throw e;
+    }
+    catch (RuntimeException | Error e) {
+      error = e;
+      throw e;
+    }
+    finally {
+      measured.end(outcome, error);
+    }
+  }
+
+  /**
+   * @return the execution's metrics, or {@code null} without metrics or when they cannot start:
+   *         metrics must not fail the task
+   */
+  protected LlmTaskMetrics.Execution startMeasuring(DelegateExecution execution, LlmTaskConfiguration configuration,
+                                                    ChatModel chatModel, Prompt prompt) {
+    if (metrics == null) {
+      return null;
+    }
+    try {
+      return metrics.start(execution, chatModelRegistry.providerIdOf(configuration.getProvider(), chatModel),
+          requestedModelOf(chatModel, prompt));
+    }
+    catch (RuntimeException e) {
+      return null;
+    }
+  }
+
+  /**
+   * Gets the model's answer, validates it and writes its values.
+   *
+   * @param measured the execution's metrics, or {@code null}
+   */
+  protected void answer(DelegateExecution execution, LlmTaskConfiguration configuration, ChatModel chatModel,
+                        Prompt prompt, String userPrompt, Duration timeout, LlmTaskMetrics.Execution measured) {
     long start = System.nanoTime();
     LlmModelAnswer answer = answerStore != null
-        ? reusableAnswer(execution, configuration, chatModel, prompt, timeout)
+        ? reusableAnswer(execution, configuration, chatModel, prompt, timeout, measured)
         : run(() -> {
-            ChatResponse response = chatModel.call(prompt);
+            ChatResponse response = callModel(chatModel, prompt, measured);
             return LlmModelAnswer.called(textOf(response), response);
           }, timeout);
     Duration latency = Duration.ofNanos(System.nanoTime() - start);
+    if (measured != null) {
+      measured.reused(answer.fromCache());
+    }
 
     // Every field is validated before any variable is written
     Map<String, Object> values;
@@ -206,11 +278,12 @@ public class LlmTaskDelegate implements JavaDelegate {
    * timed out waits for that call and reuses its answer, rather than paying again.
    */
   protected LlmModelAnswer reusableAnswer(DelegateExecution execution, LlmTaskConfiguration configuration,
-                                          ChatModel chatModel, Prompt prompt, Duration timeout) {
+                                          ChatModel chatModel, Prompt prompt, Duration timeout,
+                                          LlmTaskMetrics.Execution measured) {
     String jobId = currentJobId();
     if (jobId == null) {
       return run(() -> {
-        ChatResponse response = chatModel.call(prompt);
+        ChatResponse response = callModel(chatModel, prompt, measured);
         return LlmModelAnswer.called(textOf(response), response);
       }, timeout);
     }
@@ -241,7 +314,7 @@ public class LlmTaskDelegate implements JavaDelegate {
     }
     return run(() -> {
       try {
-        ChatResponse response = chatModel.call(prompt);
+        ChatResponse response = callModel(chatModel, prompt, measured);
         String answer = textOf(response);
         // A timeout interrupts this thread; the store and the lock must still be reached
         Thread.interrupted();
@@ -344,6 +417,26 @@ public class LlmTaskDelegate implements JavaDelegate {
     }
   }
 
+  /**
+   * Calls the model and counts the tokens of its answer as soon as it arrives, even if the
+   * task stopped waiting for it.
+   *
+   * @param measured the execution's metrics, or {@code null}
+   */
+  protected ChatResponse callModel(ChatModel chatModel, Prompt prompt, LlmTaskMetrics.Execution measured) {
+    ChatResponse response = chatModel.call(prompt);
+    if (measured != null) {
+      measured.countTokens(response);
+    }
+    return response;
+  }
+
+  // The model the task asks for: its own, else the provider's configured one
+  protected String requestedModelOf(ChatModel chatModel, Prompt prompt) {
+    ChatOptions options = prompt.getOptions() != null ? prompt.getOptions() : chatModel.getOptions();
+    return options != null ? options.getModel() : null;
+  }
+
   protected <T> T run(Callable<T> work, Duration timeout) {
     return run(work, timeout, timeout, null);
   }
@@ -351,7 +444,8 @@ public class LlmTaskDelegate implements JavaDelegate {
   /**
    * Runs the model call on its own thread, so the job stops waiting when the timeout
    * elapses even if the provider's client does not. That thread runs outside the
-   * engine's command and transaction; only the logging context is carried over.
+   * engine's command and transaction; the logging context and the current observation
+   * are carried over, so the provider's chat observation keeps the task's as its parent.
    * A call that times out is interrupted, but a client that ignores interrupts keeps
    * running until its own timeout.
    *
@@ -361,11 +455,17 @@ public class LlmTaskDelegate implements JavaDelegate {
    */
   protected <T> T run(Callable<T> work, Duration wait, Duration timeout, LlmCallLock.Lease lease) {
     Map<String, String> loggingContext = MDC.getCopyOfContextMap();
+    Observation observation = metrics != null ? metrics.currentObservation() : null;
     FutureTask<T> call = new FutureTask<>(() -> {
       if (loggingContext != null) {
         MDC.setContextMap(loggingContext);
       }
-      return work.call();
+      if (observation == null) {
+        return work.call();
+      }
+      try (Observation.Scope scope = observation.openScope()) {
+        return work.call();
+      }
     });
     try {
       Thread.ofVirtual().name("orqueio-llm-call").start(call);
