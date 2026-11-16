@@ -263,7 +263,7 @@
           <container>
             <timeout>600000</timeout>
             <type>installed</type>
-            <containerId>tomcat10x</containerId>
+            <containerId>tomcat11x</containerId>
             <append>false</append>
             <home>${tomcat.runtime}</home>
             <timeout>${cargo.timeout}</timeout>
