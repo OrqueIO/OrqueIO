@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
@@ -46,6 +47,7 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.retry.NonTransientAiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -83,6 +85,8 @@ class LlmTaskMetricsIT {
     meterRegistry.clear();
     model.answer = "{\"category\":\"Theft\"}";
     model.observationDuringCall = null;
+    model.delayMillis = 0;
+    model.failure = null;
     failOnce.failed = false;
   }
 
@@ -140,6 +144,33 @@ class LlmTaskMetricsIT {
   }
 
   @Test
+  void shouldCountTokensOfACallAbandonedAfterItsTimeout() throws Exception {
+    deploy("", "", property("orqueio.llm.timeout", "PT0.2S"));
+    model.delayMillis = 1000;
+
+    assertThatThrownBy(() -> runLlmTask("stolen bike")).isInstanceOf(LlmTransientException.class);
+    assertThat(executionCount("retryable_error", "false")).isEqualTo(1);
+
+    // The provider still answers, and bills, after the task stopped waiting
+    long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+    while (tokens("input") == 0 && System.nanoTime() < deadline) {
+      Thread.sleep(50);
+    }
+    assertThat(tokens("input")).isEqualTo(312);
+  }
+
+  @Test
+  void shouldRecordAProviderErrorThatIsNotRetried() {
+    deploy("", "");
+    model.failure = new NonTransientAiException("Invalid API key");
+
+    assertThatThrownBy(() -> runLlmTask("stolen bike")).isInstanceOf(LlmTaskException.class);
+
+    assertThat(executionCount("error", "false")).isEqualTo(1);
+    assertThat(tokens("input")).isZero();
+  }
+
+  @Test
   void shouldMakeTheTaskObservationTheParentOfTheModelCall() {
     deploy("", "");
 
@@ -170,8 +201,12 @@ class LlmTaskMetricsIT {
   }
 
   private void deploy(String afterTask, String afterTaskId) {
+    deploy(afterTask, afterTaskId, "");
+  }
+
+  private void deploy(String afterTask, String afterTaskId, String extraProperties) {
     String properties = property("orqueio.llm.inputs", "text") + property("orqueio.llm.prompt", "Classify: {{text}}")
-        + property("orqueio.llm.outputs", "category:string");
+        + property("orqueio.llm.outputs", "category:string") + extraProperties;
     String bpmn = process("""
         <bpmn:serviceTask id="Task_Llm" camunda:delegateExpression="${orqueioLlmTask}" camunda:asyncBefore="true">
           <bpmn:extensionElements>
@@ -198,6 +233,8 @@ class LlmTaskMetricsIT {
     private final ObservationRegistry observationRegistry;
     volatile String answer;
     volatile Observation observationDuringCall;
+    volatile long delayMillis;
+    volatile RuntimeException failure;
 
     ObservingChatModel(ObservationRegistry observationRegistry) {
       this.observationRegistry = observationRegistry;
@@ -206,6 +243,21 @@ class LlmTaskMetricsIT {
     @Override
     public ChatResponse call(Prompt prompt) {
       observationDuringCall = observationRegistry.getCurrentObservation();
+      if (failure != null) {
+        throw failure;
+      }
+      if (delayMillis > 0) {
+        // Like an HTTP client, finishes its call even when interrupted
+        long until = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(delayMillis);
+        while (System.nanoTime() < until) {
+          try {
+            Thread.sleep(10);
+          }
+          catch (InterruptedException e) {
+            // keep going
+          }
+        }
+      }
       ChatResponseMetadata metadata = ChatResponseMetadata.builder().usage(new DefaultUsage(312, 100)).build();
       return new ChatResponse(List.of(new Generation(new AssistantMessage(answer))), metadata);
     }

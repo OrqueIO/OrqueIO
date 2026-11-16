@@ -20,6 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.InMemoryLlmAnswerStore;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.InMemoryLlmCallLock;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmAnswerStore;
@@ -145,6 +147,17 @@ class OrqueioBpmAiAutoConfigurationTest {
   @Test
   void shouldPublishMetricsByDefault() {
     contextRunner.run(context -> assertThat(context).hasSingleBean(LlmTaskMetrics.class));
+  }
+
+  @Test
+  void shouldStartWithSeveralMeterRegistriesAndNoPrimaryOne() {
+    contextRunner
+        .withBean("first", MeterRegistry.class, SimpleMeterRegistry::new)
+        .withBean("second", MeterRegistry.class, SimpleMeterRegistry::new)
+        .run(context -> {
+          assertThat(context).hasNotFailed();
+          assertThat(context).hasSingleBean(LlmTaskMetrics.class);
+        });
   }
 
   @Test

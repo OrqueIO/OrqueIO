@@ -141,12 +141,11 @@ public class LlmTaskDelegate implements JavaDelegate {
     Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 
     Duration timeout = configuration.getTimeout() != null ? configuration.getTimeout() : defaultTimeout;
-    if (metrics == null) {
+    LlmTaskMetrics.Execution measured = startMeasuring(execution, configuration, chatModel, prompt);
+    if (measured == null) {
       answer(execution, configuration, chatModel, prompt, userPrompt, timeout, null);
       return;
     }
-    LlmTaskMetrics.Execution measured = metrics.start(execution,
-        chatModelRegistry.providerIdOf(configuration.getProvider(), chatModel), requestedModelOf(chatModel, prompt));
     LlmTaskMetrics.Outcome outcome = LlmTaskMetrics.Outcome.ERROR;
     Throwable error = null;
     try (Observation.Scope scope = measured.openScope()) {
@@ -169,6 +168,24 @@ public class LlmTaskDelegate implements JavaDelegate {
     }
     finally {
       measured.end(outcome, error);
+    }
+  }
+
+  /**
+   * @return the execution's metrics, or {@code null} without metrics or when they cannot start:
+   *         metrics must not fail the task
+   */
+  protected LlmTaskMetrics.Execution startMeasuring(DelegateExecution execution, LlmTaskConfiguration configuration,
+                                                    ChatModel chatModel, Prompt prompt) {
+    if (metrics == null) {
+      return null;
+    }
+    try {
+      return metrics.start(execution, chatModelRegistry.providerIdOf(configuration.getProvider(), chatModel),
+          requestedModelOf(chatModel, prompt));
+    }
+    catch (RuntimeException e) {
+      return null;
     }
   }
 

@@ -37,7 +37,9 @@ import org.springframework.ai.chat.model.ChatResponse;
  *   Micrometer's meter handler, as Spring Boot's Actuator sets up, it is also a timer of
  *   the same name: executions and their duration, by {@value #OUTCOME} and by {@value #REUSED}
  *   answer. The model call runs inside it, so Spring AI's chat observations are its children.</li>
- *   <li>{@value #TOKENS}: the tokens the provider reports, by {@value #TOKEN_TYPE}. They are
+ *   <li>{@value #TOKENS}: the input and output tokens the provider reports, by {@value #TOKEN_TYPE}
+ *   (Spring AI's prompt and completion tokens; a provider's own extra counts, such as cached
+ *   input, are not split out). They are
  *   counted as soon as the model answers, outside the engine's transaction: tokens of an
  *   attempt that fails afterwards, or of a call abandoned after its timeout, are counted too.
  *   A reused answer cost nothing and counts no tokens.</li>

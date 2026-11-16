@@ -87,14 +87,15 @@ public class OrqueioBpmAiAutoConfiguration {
   }
 
   /**
-   * Metrics tagged with the process, published to the application's Micrometer registries, if any.
+   * Metrics tagged with the process, published to the application's Micrometer registry, if any.
+   * Several registries without a primary one publish nothing rather than stop the application.
    */
   @Bean
   @ConditionalOnMissingBean
   @ConditionalOnProperty(prefix = OrqueioBpmAiProperties.PREFIX + ".metrics", name = "enabled", matchIfMissing = true)
   public LlmTaskMetrics llmTaskMetrics(ObjectProvider<MeterRegistry> meterRegistry,
                                        ObjectProvider<ObservationRegistry> observationRegistry) {
-    return new LlmTaskMetrics(meterRegistry.getIfAvailable(), observationRegistry.getIfAvailable());
+    return new LlmTaskMetrics(meterRegistry.getIfUnique(), observationRegistry.getIfUnique());
   }
 
   @Bean
