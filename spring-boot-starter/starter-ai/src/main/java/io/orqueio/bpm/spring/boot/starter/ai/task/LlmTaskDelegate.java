@@ -47,6 +47,7 @@ import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 
@@ -417,11 +418,17 @@ public class LlmTaskDelegate implements JavaDelegate {
     return configuration;
   }
 
+  /**
+   * The answer is the last generation. A model that thinks before answering, such as the
+   * Claude 5 models on Anthropic, returns each thinking block as an earlier generation
+   * (empty, or holding the thinking text), and its answer after them.
+   */
   protected String textOf(ChatResponse response) {
-    if (response == null || response.getResult() == null || response.getResult().getOutput() == null) {
+    if (response == null || response.getResults() == null || response.getResults().isEmpty()) {
       return null;
     }
-    return response.getResult().getOutput().getText();
+    Generation answer = response.getResults().getLast();
+    return answer == null || answer.getOutput() == null ? null : answer.getOutput().getText();
   }
 
 }
