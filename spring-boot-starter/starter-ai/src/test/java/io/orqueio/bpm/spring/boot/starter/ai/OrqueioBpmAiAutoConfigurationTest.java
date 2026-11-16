@@ -31,6 +31,7 @@ import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.LlmProviderException;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskAuditor;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDelegate;
+import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskMetrics;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskProcessEnginePlugin;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
@@ -137,6 +138,20 @@ class OrqueioBpmAiAutoConfigurationTest {
     contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".audit.enabled=false")
         .run(context -> {
           assertThat(context).doesNotHaveBean(LlmTaskAuditor.class);
+          assertThat(context).hasSingleBean(LlmTaskDelegate.class);
+        });
+  }
+
+  @Test
+  void shouldPublishMetricsByDefault() {
+    contextRunner.run(context -> assertThat(context).hasSingleBean(LlmTaskMetrics.class));
+  }
+
+  @Test
+  void shouldNotPublishMetricsWhenDisabled() {
+    contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".metrics.enabled=false")
+        .run(context -> {
+          assertThat(context).doesNotHaveBean(LlmTaskMetrics.class);
           assertThat(context).hasSingleBean(LlmTaskDelegate.class);
         });
   }
