@@ -20,6 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.InMemoryLlmAnswerStore;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.InMemoryLlmCallLock;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmAnswerStore;
@@ -31,6 +33,7 @@ import io.orqueio.bpm.spring.boot.starter.ai.provider.ChatModelRegistry;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.LlmProviderException;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskAuditor;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDelegate;
+import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskMetrics;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskProcessEnginePlugin;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
@@ -137,6 +140,31 @@ class OrqueioBpmAiAutoConfigurationTest {
     contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".audit.enabled=false")
         .run(context -> {
           assertThat(context).doesNotHaveBean(LlmTaskAuditor.class);
+          assertThat(context).hasSingleBean(LlmTaskDelegate.class);
+        });
+  }
+
+  @Test
+  void shouldPublishMetricsByDefault() {
+    contextRunner.run(context -> assertThat(context).hasSingleBean(LlmTaskMetrics.class));
+  }
+
+  @Test
+  void shouldStartWithSeveralMeterRegistriesAndNoPrimaryOne() {
+    contextRunner
+        .withBean("first", MeterRegistry.class, SimpleMeterRegistry::new)
+        .withBean("second", MeterRegistry.class, SimpleMeterRegistry::new)
+        .run(context -> {
+          assertThat(context).hasNotFailed();
+          assertThat(context).hasSingleBean(LlmTaskMetrics.class);
+        });
+  }
+
+  @Test
+  void shouldNotPublishMetricsWhenDisabled() {
+    contextRunner.withPropertyValues(OrqueioBpmAiProperties.PREFIX + ".metrics.enabled=false")
+        .run(context -> {
+          assertThat(context).doesNotHaveBean(LlmTaskMetrics.class);
           assertThat(context).hasSingleBean(LlmTaskDelegate.class);
         });
   }

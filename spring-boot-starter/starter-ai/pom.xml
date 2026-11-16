@@ -31,6 +31,11 @@
       <groupId>org.springframework.ai</groupId>
       <artifactId>spring-ai-retry</artifactId>
     </dependency>
+    <!-- Metrics and observations of LLM tasks, published to the application's registries -->
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-core</artifactId>
+    </dependency>
     <!-- Parses the model's answer; the Jackson 3 that Spring Boot 4 and Spring AI 2.0 use -->
     <dependency>
       <groupId>tools.jackson.core</groupId>

@@ -1406,6 +1406,12 @@
   font-size: 0.8125rem;
 }
 
+/* A resolved or deleted incident is history: shown, but not in the colour of a problem to act on */
+.incidents-tab .incident-closed .incident-type,
+.incidents-tab .incident-closed .incident-icon {
+  color: var(--text-secondary);
+}
+
 .incidents-tab .incident-icon {
   font-size: 0.75rem;
   color: var(--danger-color);
