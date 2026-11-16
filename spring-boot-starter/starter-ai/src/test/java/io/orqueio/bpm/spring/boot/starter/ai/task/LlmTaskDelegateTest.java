@@ -29,6 +29,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -60,6 +61,41 @@ class LlmTaskDelegateTest {
     assertThatThrownBy(() -> delegate.execute(execution)).isInstanceOf(LlmTaskException.class);
 
     // The first field is valid, but nothing is written because the second one is not
+    verify(execution, never()).setVariable(anyString(), any());
+  }
+
+  @Test
+  void shouldReadTheAnswerAfterAnEmptyThinkingBlock() {
+    // As Spring AI returns a Claude 5 answer: an empty thinking block, then the text
+    ExecutionEntity execution = executeWith(
+        thinking(""),
+        new Generation(new AssistantMessage("{\"category\":\"Theft\"}")));
+
+    verify(execution).setVariable("category", "Theft");
+  }
+
+  @Test
+  void shouldNotReadTheThinkingTextAsTheAnswer() {
+    ExecutionEntity execution = executeWith(
+        thinking("{\"category\":\"Fire\"} would fit too, but the text says theft"),
+        new Generation(new AssistantMessage("{\"category\":\"Theft\"}")));
+
+    verify(execution).setVariable("category", "Theft");
+    verify(execution, never()).setVariable("category", "Fire");
+  }
+
+  @Test
+  void shouldFailWhenOnlyAThinkingBlockCameBack() {
+    ChatModel model = mock(ChatModel.class);
+    when(model.call(any(Prompt.class))).thenReturn(new ChatResponse(List.of(
+        thinking("{\"category\":\"Fire\"}"),
+        new Generation(new AssistantMessage("")))));
+    ExecutionEntity execution = executionOf(new LlmTaskConfiguration(null, null, "Classify", List.of(),
+        List.of(new LlmOutputField("category", STRING))));
+
+    assertThatThrownBy(() -> delegateFor(model).execute(execution))
+        .isInstanceOf(LlmInvalidAnswerException.class)
+        .hasMessageContaining("empty answer");
     verify(execution, never()).setVariable(anyString(), any());
   }
 
@@ -111,6 +147,30 @@ class LlmTaskDelegateTest {
     // Like Redis clients, the lock refuses to release on an interrupted thread
     assertThat(lock.released.await(3, TimeUnit.SECONDS)).isTrue();
     assertThat(lock.releasedWhileInterrupted).isFalse();
+  }
+
+  private static ExecutionEntity executeWith(Generation... generations) {
+    ChatModel model = mock(ChatModel.class);
+    when(model.call(any(Prompt.class))).thenReturn(new ChatResponse(List.of(generations)));
+    ExecutionEntity execution = executionOf(new LlmTaskConfiguration(null, null, "Classify", List.of(),
+        List.of(new LlmOutputField("category", STRING))));
+    try {
+      delegateFor(model).execute(execution);
+    }
+    catch (Exception e) {
+      throw new AssertionError(e);
+    }
+    return execution;
+  }
+
+  private static LlmTaskDelegate delegateFor(ChatModel model) {
+    return new LlmTaskDelegate(new ChatModelRegistry(() -> List.of(model), null),
+        new LlmPromptResolver(), new LlmAnswerParser(), new LlmFailureClassifier(), Duration.ofSeconds(5));
+  }
+
+  /** A thinking block, as Spring AI's Anthropic model returns it: the thinking text and its signature. */
+  private static Generation thinking(String text) {
+    return new Generation(AssistantMessage.builder().content(text).properties(Map.of("signature", "sig")).build());
   }
 
   private static ExecutionEntity executionOf(LlmTaskConfiguration configuration) {
