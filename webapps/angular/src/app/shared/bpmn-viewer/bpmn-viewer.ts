@@ -265,11 +265,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     eventBus.on('import.done', () => {
       const canvas = this.viewer!.get('canvas');
       this.initialRootElement = canvas.getRootElement();
-      console.debug('[NAVDBG] import.done: memorized initialRootElement', {
-        id: this.initialRootElement?.id,
-        type: this.initialRootElement?.type,
-        isSourceViewer: this.isSourceViewer
-      });
 
       this.updateHighlights();
       this.updateRunningMarkers();
@@ -346,7 +341,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     });
 
     eventBus.on('root.set', (event: any) => {
-      console.debug('[NAVDBG] root.set event fired', { element: event.element?.id, type: event.element?.type });
       this.updateSubprocessStack(event.element);
       this.needsZoomFit = true;
       this.scheduleFitToViewport();
@@ -1425,11 +1419,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       depth: path.length,
       breadcrumb: [...this.subprocessBreadcrumb]
     };
-    console.debug('[NAVDBG] Emitting navigationChange', {
-      path: JSON.stringify(path),
-      depth: eventPayload.depth,
-      isSourceViewer: this.isSourceViewer
-    });
     this.navigationChange.emit(eventPayload);
   }
 
@@ -1467,46 +1456,22 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   navigateToSubprocessLevel(index: number): void {
-    console.debug('[NAVDBG] navigateToSubprocessLevel called', {
-      index,
-      stackLength: this.subprocessStack.length,
-      isSourceViewer: this.isSourceViewer
-    });
-
     const item = this.subprocessStack[index];
-    if (!item) {
-      console.debug('[NAVDBG] navigateToSubprocessLevel: item not found', { index });
-      return;
-    }
-    if (!this.viewer) {
-      console.debug('[NAVDBG] navigateToSubprocessLevel: no viewer');
+    if (!item || !this.viewer) {
       return;
     }
 
     try {
       const canvas = this.viewer.get('canvas');
-      console.debug('[NAVDBG] navigateToSubprocessLevel: setting root to', {
-        itemId: item.id,
-        elementType: item.element?.type
-      });
       canvas.setRootElement(item.element);
-      console.debug('[NAVDBG] navigateToSubprocessLevel: success');
     } catch (e: any) {
-      console.debug('[NAVDBG] navigateToSubprocessLevel: exception caught', {
-        index,
-        itemId: item.id,
-        error: e?.message || e,
-        stack: e?.stack
-      });
+      // Breadcrumb navigation target may not exist in subprocess stack
     }
   }
 
   navigateToSubprocessById(activityId: string): boolean {
-    console.debug('[NAVDBG] navigateToSubprocessById called', { activityId, isSourceViewer: this.isSourceViewer });
-
     try {
       if (!this.viewer) {
-        console.debug('[NAVDBG] navigateToSubprocessById: no viewer', { activityId });
         return false;
       }
 
@@ -1515,7 +1480,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       const shapeElement = elementRegistry.get(activityId);
 
       if (!shapeElement) {
-        console.debug('[NAVDBG] navigateToSubprocessById: shape element not found', { activityId });
         return false;
       }
 
@@ -1523,7 +1487,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
                            shapeElement.type === 'bpmn:Transaction' ||
                            shapeElement.type === 'bpmn:AdHocSubProcess';
       if (!isSubprocess) {
-        console.debug('[NAVDBG] navigateToSubprocessById: element is not a subprocess', { activityId, type: shapeElement.type });
         return false;
       }
 
@@ -1531,78 +1494,45 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       const planeElement = elementRegistry.get(planeId);
 
       if (!planeElement) {
-        console.debug('[NAVDBG] navigateToSubprocessById: plane element not found, cannot drill down', { activityId, planeId });
         return false;
       }
 
       canvas.setRootElement(planeElement);
-      console.debug('[NAVDBG] navigateToSubprocessById: success', { activityId, planeId });
       return true;
 
     } catch (e: any) {
-      console.debug('[NAVDBG] navigateToSubprocessById: exception caught', {
-        activityId,
-        error: e?.message || e,
-        stack: e?.stack
-      });
+      // Subprocess navigation may fail if target definition structure differs
       return false;
     }
   }
 
   navigateToRoot(): boolean {
-    console.debug('[NAVDBG] navigateToRoot called', { isSourceViewer: this.isSourceViewer });
-
-    if (!this.viewer) {
-      console.debug('[NAVDBG] navigateToRoot: no viewer');
-      return false;
-    }
-
-    if (!this.initialRootElement) {
-      console.debug('[NAVDBG] navigateToRoot: no initialRootElement memorized');
+    if (!this.viewer || !this.initialRootElement) {
       return false;
     }
 
     try {
       const canvas = this.viewer.get('canvas');
-
-      console.debug('[NAVDBG] navigateToRoot: setting root to initialRootElement', {
-        id: this.initialRootElement.id,
-        type: this.initialRootElement.type
-      });
-
       canvas.setRootElement(this.initialRootElement);
-      console.debug('[NAVDBG] navigateToRoot: success');
       return true;
-
     } catch (e: any) {
-      console.debug('[NAVDBG] navigateToRoot: exception caught', {
-        error: e?.message || e,
-        stack: e?.stack
-      });
+      // Root navigation may fail if initial root element not set
       return false;
     }
   }
 
   navigateToPath(pathIds: string[]): number {
-    console.debug('[NAVDBG] navigateToPath called', {
-      pathIds: JSON.stringify(pathIds),
-      isSourceViewer: this.isSourceViewer
-    });
-
     try {
       if (!this.viewer) {
-        console.debug('[NAVDBG] navigateToPath: no viewer');
         return 0;
       }
 
       if (pathIds.length === 0) {
-        console.debug('[NAVDBG] navigateToPath: empty path, going to root');
         this.navigateToRoot();
         return 0;
       }
 
       const currentPath = this.getLinkedNavigationPath();
-      console.debug('[NAVDBG] navigateToPath: current path', { currentPath: JSON.stringify(currentPath) });
 
       let commonPrefixLength = 0;
       const minLength = Math.min(currentPath.length, pathIds.length);
@@ -1614,42 +1544,23 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         }
       }
 
-      console.debug('[NAVDBG] navigateToPath: common prefix length', { commonPrefixLength });
-
       if (commonPrefixLength < currentPath.length) {
-        const levelsToGoUp = currentPath.length - commonPrefixLength;
-        console.debug('[NAVDBG] navigateToPath: going up', { levelsToGoUp });
-
         if (commonPrefixLength === 0) {
           const success = this.navigateToRoot();
           if (!success) {
-            console.debug('[NAVDBG] navigateToPath: failed to navigate to root');
             return 0;
           }
         } else {
           const ancestorId = pathIds[commonPrefixLength - 1];
           const ancestorPlaneId = ancestorId + '_plane';
 
-          console.debug('[NAVDBG] navigateToPath: navigating to ancestor', {
-            level: commonPrefixLength - 1,
-            ancestorId,
-            ancestorPlaneId
-          });
-
           const elementRegistry = this.viewer.get('elementRegistry');
           const planeElement = elementRegistry.get(ancestorPlaneId);
 
           if (!planeElement) {
-            console.debug('[NAVDBG] navigateToPath: ancestor plane not found, going to root', {
-              ancestorPlaneId
-            });
             this.navigateToRoot();
           } else {
             const canvas = this.viewer.get('canvas');
-            console.debug('[NAVDBG] navigateToPath: setting root to ancestor plane', {
-              planeId: planeElement.id,
-              planeType: planeElement.type
-            });
             canvas.setRootElement(planeElement);
           }
         }
@@ -1658,51 +1569,32 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       let depth = commonPrefixLength;
       for (let i = commonPrefixLength; i < pathIds.length; i++) {
         const id = pathIds[i];
-        console.debug('[NAVDBG] navigateToPath: drilling down to', { id, depth });
         const success = this.navigateToSubprocessById(id);
         if (!success) {
-          console.debug('[NAVDBG] navigateToPath: stopped at depth', { depth, failedId: id });
           break;
         }
         depth++;
       }
 
-      console.debug('[NAVDBG] navigateToPath: finished', {
-        achievedDepth: depth,
-        requestedDepth: pathIds.length
-      });
       return depth;
 
     } catch (e: any) {
-      console.debug('[NAVDBG] navigateToPath: exception caught', {
-        pathIds: JSON.stringify(pathIds),
-        error: e?.message || e,
-        stack: e?.stack
-      });
+      // Path navigation may fail if subprocess structure differs between diagrams
       return this.getLinkedNavigationPath().length;
     }
   }
 
   navigateUp(levels: number): void {
-    const currentPath = this.getLinkedNavigationPath();
-    const currentDepth = currentPath.length;
-    console.debug('[NAVDBG] navigateUp called', {
-      levels,
-      currentDepth,
-      currentPath: JSON.stringify(currentPath),
-      isSourceViewer: this.isSourceViewer
-    });
     if (!this.viewer || levels <= 0) return;
 
+    const currentPath = this.getLinkedNavigationPath();
+    const currentDepth = currentPath.length;
     const targetDepth = Math.max(0, currentDepth - levels);
-    console.debug('[NAVDBG] navigateUp: computed target depth', { targetDepth });
 
     if (targetDepth === 0) {
-      console.debug('[NAVDBG] navigateUp: going to root');
       this.navigateToRoot();
     } else {
       const targetPath = currentPath.slice(0, targetDepth);
-      console.debug('[NAVDBG] navigateUp: navigating to path', { targetPath: JSON.stringify(targetPath) });
       this.navigateToPath(targetPath);
     }
   }

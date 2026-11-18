@@ -1597,40 +1597,18 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   }
 
   onSourceNavigationChange(event: { path: string[]; depth: number; breadcrumb: string[] }): void {
-    console.debug('[NAVDBG] onSourceNavigationChange received', {
-      path: JSON.stringify(event.path),
-      depth: event.depth,
-      linkDiagramsNavigation: this.linkDiagramsNavigation(),
-      applyingLinkedNavigation: this.applyingLinkedNavigation
-    });
-
     if (!this.linkDiagramsNavigation() || this.applyingLinkedNavigation) {
-      console.debug('[NAVDBG] onSourceNavigationChange: ignoring', {
-        reason: !this.linkDiagramsNavigation() ? 'link disabled' : 'applying linked navigation'
-      });
       return;
     }
 
-    console.debug('[NAVDBG] onSourceNavigationChange: calling syncNavigationToTarget');
     this.syncNavigationToTarget(event);
   }
 
   onTargetNavigationChange(event: { path: string[]; depth: number; breadcrumb: string[] }): void {
-    console.debug('[NAVDBG] onTargetNavigationChange received', {
-      path: JSON.stringify(event.path),
-      depth: event.depth,
-      linkDiagramsNavigation: this.linkDiagramsNavigation(),
-      applyingLinkedNavigation: this.applyingLinkedNavigation
-    });
-
     if (!this.linkDiagramsNavigation() || this.applyingLinkedNavigation) {
-      console.debug('[NAVDBG] onTargetNavigationChange: ignoring', {
-        reason: !this.linkDiagramsNavigation() ? 'link disabled' : 'applying linked navigation'
-      });
       return;
     }
 
-    console.debug('[NAVDBG] onTargetNavigationChange: calling syncNavigationToSource');
     this.syncNavigationToSource(event);
   }
 
@@ -1639,19 +1617,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     this.applyingLinkedNavigation = true;
     try {
-      console.debug('[NAVDBG] syncNavigationToTarget: navigating to source path', {
-        sourcePath: JSON.stringify(sourceNav.path),
-        sourceDepth: sourceNav.depth
-      });
-
-      const achievedDepth = this.targetViewerComponent.navigateToPath(sourceNav.path);
-
-      if (achievedDepth < sourceNav.depth) {
-        console.debug('[NAVDBG] syncNavigationToTarget: stopped at depth', {
-          achievedDepth,
-          sourceDepth: sourceNav.depth
-        });
-      }
+      this.targetViewerComponent.navigateToPath(sourceNav.path);
     } finally {
       this.applyingLinkedNavigation = false;
     }
@@ -1662,19 +1628,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     this.applyingLinkedNavigation = true;
     try {
-      console.debug('[NAVDBG] syncNavigationToSource: navigating to target path', {
-        targetPath: JSON.stringify(targetNav.path),
-        targetDepth: targetNav.depth
-      });
-
-      const achievedDepth = this.sourceViewerComponent.navigateToPath(targetNav.path);
-
-      if (achievedDepth < targetNav.depth) {
-        console.debug('[NAVDBG] syncNavigationToSource: stopped at depth', {
-          achievedDepth,
-          targetDepth: targetNav.depth
-        });
-      }
+      this.sourceViewerComponent.navigateToPath(targetNav.path);
     } finally {
       this.applyingLinkedNavigation = false;
     }
