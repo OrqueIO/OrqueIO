@@ -514,8 +514,9 @@ button.breadcrumb-parent-name {
   padding: 12px;
   min-width: 220px;
   max-width: 320px;
+  width: 280px;
   pointer-events: auto;
-  z-index: 1000;
+  font-size: 12px;
 }
 
 .bpmn-mapping-popover__arrow {

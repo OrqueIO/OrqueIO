@@ -152,6 +152,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   // Migration badge popover
   private activePopover: HTMLElement | null = null;
   private popoverCleanup: (() => void) | null = null;
+  private popoverViewboxListener: (() => void) | null = null;
   private currentXml: string | null = null;
   private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -250,6 +251,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (this.resizeTimeout) {
       clearTimeout(this.resizeTimeout);
     }
+    this.closeMappingPopover();
     this.destroyViewer();
   }
 
@@ -1302,21 +1304,69 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       popover.appendChild(removeBtn);
     }
 
-    const anchorRect = anchor.getBoundingClientRect();
-    const containerRect = this.canvasRef.nativeElement.getBoundingClientRect();
-
-    popover.style.position = 'absolute';
-    popover.style.top = `${anchorRect.bottom - containerRect.top + 8}px`;
-    popover.style.left = `${anchorRect.left - containerRect.left}px`;
-    popover.style.zIndex = '1000';
-
     const arrow = document.createElement('div');
     arrow.className = 'bpmn-mapping-popover__arrow';
     popover.appendChild(arrow);
 
-    this.canvasRef.nativeElement.appendChild(popover);
+    // Attach to document.body with position: fixed (independent of viewer zoom/transforms)
+    popover.style.position = 'fixed';
+    popover.style.zIndex = '10000';
+    document.body.appendChild(popover);
     this.activePopover = popover;
 
+    // Position popover using viewport coordinates (getBoundingClientRect returns viewport coords)
+    const anchorRect = anchor.getBoundingClientRect();
+
+    // Initial position below anchor
+    let top = anchorRect.bottom + 8;
+    let left = anchorRect.left;
+    let arrowLeft = 12;
+    let isFlippedVertically = false;
+
+    // Get popover dimensions after adding to DOM
+    const popoverRect = popover.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Flip horizontally if overflows right edge
+    if (left + popoverRect.width > viewportWidth - 10) {
+      left = anchorRect.right - popoverRect.width;
+      arrowLeft = popoverRect.width - anchorRect.width / 2 - 6;
+    }
+
+    // Flip vertically if overflows bottom edge
+    if (top + popoverRect.height > viewportHeight - 10) {
+      top = anchorRect.top - popoverRect.height - 8;
+      isFlippedVertically = true;
+    }
+
+    // Ensure popover doesn't go off left edge
+    if (left < 10) {
+      left = 10;
+      arrowLeft = anchorRect.left - 10 + anchorRect.width / 2 - 6;
+    }
+
+    // Ensure popover doesn't go off top edge
+    if (top < 10) {
+      top = 10;
+    }
+
+    popover.style.top = `${top}px`;
+    popover.style.left = `${left}px`;
+
+    // Position arrow
+    arrow.style.left = `${Math.max(6, Math.min(arrowLeft, popoverRect.width - 18))}px`;
+    if (isFlippedVertically) {
+      arrow.style.top = 'auto';
+      arrow.style.bottom = '-6px';
+      arrow.style.transform = 'rotate(225deg)';
+    } else {
+      arrow.style.top = '-6px';
+      arrow.style.bottom = 'auto';
+      arrow.style.transform = 'rotate(45deg)';
+    }
+
+    // Close on Escape
     const closeOnEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         this.ngZone.run(() => this.closeMappingPopover());
@@ -1329,8 +1379,20 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     };
 
+    const closeOnViewboxChange = () => {
+      this.ngZone.run(() => this.closeMappingPopover());
+    };
+
     document.addEventListener('keydown', closeOnEsc);
     document.addEventListener('click', closeOnClickOutside);
+
+    if (this.viewer) {
+      const eventBus = this.viewer.get('eventBus');
+      eventBus.on('canvas.viewbox.changed', closeOnViewboxChange);
+      this.popoverViewboxListener = () => {
+        eventBus.off('canvas.viewbox.changed', closeOnViewboxChange);
+      };
+    }
 
     this.popoverCleanup = () => {
       document.removeEventListener('keydown', closeOnEsc);
@@ -1346,6 +1408,10 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (this.popoverCleanup) {
       this.popoverCleanup();
       this.popoverCleanup = null;
+    }
+    if (this.popoverViewboxListener) {
+      this.popoverViewboxListener();
+      this.popoverViewboxListener = null;
     }
   }
 

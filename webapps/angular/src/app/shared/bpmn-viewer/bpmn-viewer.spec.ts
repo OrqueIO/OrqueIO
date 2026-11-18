@@ -1126,7 +1126,7 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       comp.isSourceViewer = true;
       comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
 
-      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const popover = document.querySelector('.bpmn-mapping-popover');
       const checkbox = popover?.querySelector('input[type="checkbox"]');
       const checkboxLabel = popover?.querySelector('.bpmn-mapping-popover__checkbox span');
 
@@ -1138,7 +1138,7 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       comp.isSourceViewer = false;
       comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
 
-      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const popover = document.querySelector('.bpmn-mapping-popover');
       const checkbox = popover?.querySelector('input[type="checkbox"]');
 
       expect(checkbox).toBeFalsy();
@@ -1148,7 +1148,7 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       comp.isSourceViewer = true;
       comp.showMappingPopover(mockUserTask.id, 'valid', mockAnchor, mockBadge);
 
-      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const popover = document.querySelector('.bpmn-mapping-popover');
       const checkbox = popover?.querySelector('input[type="checkbox"]');
 
       expect(checkbox).toBeFalsy();
@@ -1158,7 +1158,7 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       comp.isSourceViewer = true;
       comp.showMappingPopover(mockIntermediateCatchEvent.id, 'valid', mockAnchor, mockBadge);
 
-      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const popover = document.querySelector('.bpmn-mapping-popover');
       const checkbox = popover?.querySelector('input[type="checkbox"]');
 
       expect(checkbox).toBeTruthy();
@@ -1168,7 +1168,7 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       comp.isSourceViewer = true;
       comp.showMappingPopover(mockReceiveTask.id, 'valid', mockAnchor, mockBadge);
 
-      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const popover = document.querySelector('.bpmn-mapping-popover');
       const checkbox = popover?.querySelector('input[type="checkbox"]');
 
       expect(checkbox).toBeTruthy();
@@ -1178,7 +1178,7 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       comp.isSourceViewer = false;
       comp.showMappingPopover(mockReceiveTask.id, 'valid', mockAnchor, mockBadge);
 
-      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const popover = document.querySelector('.bpmn-mapping-popover');
       const checkbox = popover?.querySelector('input[type="checkbox"]');
 
       expect(checkbox).toBeFalsy();
@@ -1188,7 +1188,7 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       comp.isSourceViewer = true;
       comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
 
-      const popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      const popover = document.querySelector('.bpmn-mapping-popover');
       const checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
 
       expect(checkbox).toBeTruthy();
@@ -1211,7 +1211,7 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       ];
 
       comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
-      let popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      let popover = document.querySelector('.bpmn-mapping-popover');
       let checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
 
       expect(checkbox.checked).toBe(false);
@@ -1224,7 +1224,7 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       comp.closeMappingPopover();
 
       comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
-      popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      popover = document.querySelector('.bpmn-mapping-popover');
       checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
 
       expect(checkbox.checked).toBe(true);
@@ -1240,7 +1240,7 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       ];
 
       comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
-      let popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      let popover = document.querySelector('.bpmn-mapping-popover');
       let checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
 
       expect(checkbox.checked).toBe(true);
@@ -1253,7 +1253,7 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       comp.closeMappingPopover();
 
       comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
-      popover = comp.canvasRef.nativeElement.querySelector('.bpmn-mapping-popover');
+      popover = document.querySelector('.bpmn-mapping-popover');
       checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
 
       expect(checkbox.checked).toBe(false);
@@ -1575,6 +1575,339 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       expect(parseFromStringSpy).toHaveBeenCalledTimes(2);
 
       parseFromStringSpy.mockRestore();
+    });
+  });
+
+  describe('Popover detached from viewer (position: fixed)', () => {
+    beforeEach(() => {
+      const existingPopovers = document.querySelectorAll('.bpmn-mapping-popover');
+      existingPopovers.forEach(p => p.remove());
+
+      (comp as any).cachedXml = null;
+      (comp as any).cachedDocument = null;
+
+      comp.getBpmnDomElement = BpmnViewerComponent.prototype.getBpmnDomElement.bind(comp);
+      comp.getUpdateEventTriggerForActivity = BpmnViewerComponent.prototype.getUpdateEventTriggerForActivity.bind(comp);
+      comp.updateEventTrigger = BpmnViewerComponent.prototype.updateEventTrigger.bind(comp);
+
+      const canvasElement = document.createElement('div');
+      canvasElement.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 0,
+        left: 0,
+        bottom: 600,
+        right: 800,
+        width: 800,
+        height: 600,
+        x: 0,
+        y: 0
+      });
+      document.body.appendChild(canvasElement);
+      comp.canvasRef = { nativeElement: canvasElement };
+    });
+
+    afterEach(() => {
+      const popovers = document.querySelectorAll('.bpmn-mapping-popover');
+      popovers.forEach(p => p.remove());
+      (comp as any).closeMappingPopover();
+    });
+
+    it('popover should be attached to document.body, not canvas', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="Task1">
+      <bpmn2:messageEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BE1'], targetActivityIds: ['BE1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'BE1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('BE1', 'valid', anchor, badge);
+
+      const popover = document.querySelector('.bpmn-mapping-popover');
+      expect(popover).not.toBeNull();
+      expect(popover?.parentElement).toBe(document.body);
+      expect(popover?.parentElement).not.toBe(comp.canvasRef.nativeElement);
+    });
+
+    it('popover should have position: fixed', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="Task1">
+      <bpmn2:messageEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BE1'], targetActivityIds: ['BE1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'BE1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('BE1', 'valid', anchor, badge);
+
+      const popover = document.querySelector('.bpmn-mapping-popover') as HTMLElement;
+      expect(popover).not.toBeNull();
+      expect(popover.style.position).toBe('fixed');
+    });
+
+    it('popover position should be independent of viewer zoom level', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="Task1">
+      <bpmn2:messageEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BE1'], targetActivityIds: ['BE1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'BE1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+
+      // Position at zoom 1.0
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('BE1', 'valid', anchor, badge);
+
+      const popover1 = document.querySelector('.bpmn-mapping-popover') as HTMLElement;
+      const top1 = popover1.style.top;
+      const left1 = popover1.style.left;
+      const width1 = popover1.style.width;
+
+      (comp as any).closeMappingPopover();
+
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('BE1', 'valid', anchor, badge);
+
+      const popover2 = document.querySelector('.bpmn-mapping-popover') as HTMLElement;
+      const top2 = popover2.style.top;
+      const left2 = popover2.style.left;
+      const width2 = popover2.style.width;
+
+      expect(top2).toBe(top1);
+      expect(left2).toBe(left1);
+      expect(width2).toBe(width1);
+    });
+
+    it('popover should flip to left when overflowing right edge', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="Task1">
+      <bpmn2:messageEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BE1'], targetActivityIds: ['BE1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'BE1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+
+      const viewportWidth = window.innerWidth;
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: viewportWidth - 50, bottom: 120, right: viewportWidth - 26,
+        width: 24, height: 20, x: viewportWidth - 50, y: 100
+      });
+
+      (comp as any).showMappingPopover('BE1', 'valid', anchor, badge);
+
+      const popover = document.querySelector('.bpmn-mapping-popover') as HTMLElement;
+      expect(popover).not.toBeNull();
+
+      const popoverLeft = parseInt(popover.style.left, 10);
+      const popoverWidth = popover.getBoundingClientRect().width;
+
+      // Popover should not overflow right edge
+      expect(popoverLeft + popoverWidth).toBeLessThanOrEqual(viewportWidth);
+    });
+
+    it('popover should flip to top when overflowing bottom edge', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="Task1">
+      <bpmn2:messageEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BE1'], targetActivityIds: ['BE1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'BE1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+
+      const viewportHeight = window.innerHeight;
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: viewportHeight - 30, left: 100, bottom: viewportHeight - 10, right: 124,
+        width: 24, height: 20, x: 100, y: viewportHeight - 30
+      });
+
+      (comp as any).showMappingPopover('BE1', 'valid', anchor, badge);
+
+      const popover = document.querySelector('.bpmn-mapping-popover') as HTMLElement;
+      expect(popover).not.toBeNull();
+
+      const popoverTop = parseInt(popover.style.top, 10);
+      const anchorTop = viewportHeight - 30;
+
+      expect(popoverTop).toBeLessThan(anchorTop);
+    });
+
+    it('popover should close on zoom (canvas.viewbox.changed event)', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="Task1">
+      <bpmn2:messageEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BE1'], targetActivityIds: ['BE1_target'], updateEventTrigger: false }
+      ];
+
+      const mockEventBus = {
+        on: vi.fn(),
+        off: vi.fn()
+      };
+      comp.viewer = {
+        get: vi.fn((name: string) => {
+          if (name === 'eventBus') return mockEventBus;
+          return null;
+        }),
+        destroy: vi.fn()
+      };
+
+      const badge: any = { activityId: 'BE1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('BE1', 'valid', anchor, badge);
+
+      expect(mockEventBus.on).toHaveBeenCalledWith('canvas.viewbox.changed', expect.any(Function));
+
+      const popover = document.querySelector('.bpmn-mapping-popover');
+      expect(popover).not.toBeNull();
+
+      const viewboxListener = mockEventBus.on.mock.calls.find((call: any) => call[0] === 'canvas.viewbox.changed')?.[1];
+      expect(viewboxListener).toBeDefined();
+      viewboxListener();
+
+      const popoverAfterZoom = document.querySelector('.bpmn-mapping-popover');
+      expect(popoverAfterZoom).toBeNull();
+
+      expect(mockEventBus.off).toHaveBeenCalledWith('canvas.viewbox.changed', viewboxListener);
+    });
+
+    it('popover should be cleaned up on component destroy', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="Task1">
+      <bpmn2:messageEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BE1'], targetActivityIds: ['BE1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'BE1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('BE1', 'valid', anchor, badge);
+
+      const popover = document.querySelector('.bpmn-mapping-popover');
+      expect(popover).not.toBeNull();
+
+      comp.ngOnDestroy();
+
+      const popoverAfterDestroy = document.querySelector('.bpmn-mapping-popover');
+      expect(popoverAfterDestroy).toBeNull();
+    });
+
+    it('error popover should also be attached to document.body with position: fixed', () => {
+      comp.isSourceViewer = false;
+
+      comp.getFailuresForActivity = vi.fn(() => ['Cannot migrate: incompatible types']);
+
+      comp.editableInstructions = [
+        { sourceActivityIds: ['Task1'], targetActivityIds: ['Task2'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'Task1', migrationStatus: 'invalid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('Task1', 'invalid', anchor, badge);
+
+      const popover = document.querySelector('.bpmn-mapping-popover') as HTMLElement;
+      expect(popover).not.toBeNull();
+      expect(popover.parentElement).toBe(document.body);
+      expect(popover.style.position).toBe('fixed');
+
+      const errorItem = popover.querySelector('.bpmn-mapping-popover__error-item');
+      expect(errorItem).not.toBeNull();
+      expect(errorItem?.textContent).toContain('Cannot migrate');
     });
   });
 });
