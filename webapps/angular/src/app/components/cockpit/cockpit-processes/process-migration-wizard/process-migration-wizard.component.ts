@@ -838,18 +838,65 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.confirmStepState.set(null);
   }
 
-  /**
-   * Determine if an activity should have updateEventTrigger = true.
-   * According to Camunda 7.24 docs: "By default, the update event trigger flag in cockpit migration
-   * is set for activities with message references"
-   * This includes:
-   * - Message boundary events (interrupting and non-interrupting)
-   * - Message intermediate catch events
-   * - Receive tasks
-   */
-  private shouldUpdateEventTrigger(activityId: string, elementMap: Map<string, Element>): boolean {
-    const element = elementMap.get(activityId);
+
+  private hasPersistentTrigger(element: Element): boolean {
     if (!element) return false;
+
+    try {
+      const tagName = element.tagName;
+
+      if (tagName.includes('receiveTask')) {
+        const messageRef = element.getAttribute('messageRef');
+        return !!messageRef && messageRef.trim() !== '';
+      }
+
+      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
+        if (element.querySelector('timerEventDefinition')) return true;
+        if (element.querySelector('messageEventDefinition')) return true;
+        if (element.querySelector('signalEventDefinition')) return true;
+        if (element.querySelector('conditionalEventDefinition')) return true;
+
+        return false;
+      }
+
+      if (tagName.includes('startEvent')) {
+        const parentSubProcess = element.parentElement;
+        if (parentSubProcess?.tagName.includes('subProcess')) {
+          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
+          if (triggeredByEvent === 'true') {
+            if (element.querySelector('timerEventDefinition')) return true;
+            if (element.querySelector('messageEventDefinition')) return true;
+            if (element.querySelector('signalEventDefinition')) return true;
+            if (element.querySelector('conditionalEventDefinition')) return true;
+            return false;
+          }
+        }
+      }
+
+      if (tagName.includes('userTask')) {
+        const extensionElements = element.querySelector('extensionElements');
+        if (extensionElements) {
+          const taskListeners = extensionElements.querySelectorAll('*');
+          for (let i = 0; i < taskListeners.length; i++) {
+            const listener = taskListeners[i];
+            if (listener.tagName.includes('taskListener')) {
+              const eventAttr = listener.getAttribute('event');
+              if (eventAttr === 'timeout') {
+                return true;
+              }
+            }
+          }
+        }
+      }
+
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private isDefaultChecked(element: Element): boolean {
+    if (!this.hasPersistentTrigger(element)) return false;
 
     try {
       const tagName = element.tagName;
@@ -859,9 +906,43 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       }
 
       if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
-        const messageEventDef = element.querySelector('messageEventDefinition');
-        if (messageEventDef) {
-          return true;
+        return !!element.querySelector('messageEventDefinition');
+      }
+
+      if (tagName.includes('startEvent')) {
+        const parentSubProcess = element.parentElement;
+        if (parentSubProcess?.tagName.includes('subProcess')) {
+          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
+          if (triggeredByEvent === 'true') {
+            return !!element.querySelector('messageEventDefinition');
+          }
+        }
+      }
+
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+
+  private isForced(element: Element): boolean {
+    if (!element) return false;
+
+    try {
+      const tagName = element.tagName;
+
+      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
+        return !!element.querySelector('conditionalEventDefinition');
+      }
+
+      if (tagName.includes('startEvent')) {
+        const parentSubProcess = element.parentElement;
+        if (parentSubProcess?.tagName.includes('subProcess')) {
+          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
+          if (triggeredByEvent === 'true') {
+            return !!element.querySelector('conditionalEventDefinition');
+          }
         }
       }
 
@@ -898,21 +979,38 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     return elementMap;
   }
 
-  /**
-   * Apply updateEventTrigger flag to instructions based on source BPMN analysis
-   */
+
   private applyUpdateEventTriggerFlags(instructions: MigrationInstructionDto[]): MigrationInstructionDto[] {
     const sourceXml = this.sourceXml();
     if (!sourceXml) return instructions;
 
     const elementMap = this.buildElementMap(sourceXml);
 
-    return instructions.map(instr => ({
-      ...instr,
-      updateEventTrigger: instr.sourceActivityIds.some(activityId =>
-        this.shouldUpdateEventTrigger(activityId, elementMap)
-      )
-    }));
+    return instructions.map(instr => {
+      let finalFlag = instr.updateEventTrigger || false;
+
+      for (const activityId of instr.sourceActivityIds) {
+        const element = elementMap.get(activityId);
+        if (element) {
+          if (this.hasPersistentTrigger(element) && this.isDefaultChecked(element)) {
+            finalFlag = true;
+            break;
+          }
+          if (this.isForced(element)) {
+            finalFlag = true;
+            break;
+          }
+          if (!this.hasPersistentTrigger(element)) {
+            continue;
+          }
+        }
+      }
+
+      return {
+        ...instr,
+        updateEventTrigger: finalFlag
+      };
+    });
   }
 
   onSourceKeyChange(key: string): void {
@@ -1136,10 +1234,20 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     const sourceId = this.mappingSourceActivityId();
     if (!sourceId) return;
 
+    let updateEventTrigger = false;
+    const sourceXml = this.sourceXml();
+    if (sourceXml) {
+      const elementMap = this.buildElementMap(sourceXml);
+      const element = elementMap.get(sourceId);
+      if (element) {
+        updateEventTrigger = this.isDefaultChecked(element) || this.isForced(element);
+      }
+    }
+
     const newInstruction: MigrationInstructionDto = {
       sourceActivityIds: [sourceId],
       targetActivityIds: [targetActivityId],
-      updateEventTrigger: false
+      updateEventTrigger
     };
 
     const current = this.editableInstructions();

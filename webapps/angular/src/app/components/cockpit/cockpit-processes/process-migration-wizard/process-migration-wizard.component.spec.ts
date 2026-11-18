@@ -466,7 +466,7 @@ describe('ProcessMigrationWizardComponent', () => {
     expect(userTaskInstruction?.updateEventTrigger).toBe(false);
   });
 
-  it('should set updateEventTrigger=true for receive tasks', () => {
+  it('should set updateEventTrigger=false for receive tasks without messageRef (ticket #322 fix)', () => {
     const xmlWithReceiveTask = `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
   <bpmn2:process id="test">
@@ -500,7 +500,7 @@ describe('ProcessMigrationWizardComponent', () => {
     const receiveInstruction = instructions.find(i => i.sourceActivityIds.includes('ReceiveTask_1'));
     const userTaskInstruction = instructions.find(i => i.sourceActivityIds.includes('UserTask_1'));
 
-    expect(receiveInstruction?.updateEventTrigger).toBe(true);
+    expect(receiveInstruction?.updateEventTrigger).toBe(false);
     expect(userTaskInstruction?.updateEventTrigger).toBe(false);
   });
 
@@ -1856,26 +1856,224 @@ describe('ProcessMigrationWizardComponent', () => {
     });
   });
 
-  describe('applyUpdateEventTriggerFlags optimization', () => {
+  describe('updateEventTrigger flag handling (ticket #322)', () => {
     const xmlWithMixedActivities = `<?xml version="1.0" encoding="UTF-8"?>
-<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn">
+  <bpmn2:message id="Msg1" name="Message1"/>
   <bpmn2:process id="test">
     <bpmn2:intermediateCatchEvent id="MessageEvent_1">
       <bpmn2:messageEventDefinition/>
     </bpmn2:intermediateCatchEvent>
-    <bpmn2:receiveTask id="ReceiveTask_1"/>
+    <bpmn2:receiveTask id="ReceiveTask_NoRef"/>
+    <bpmn2:receiveTask id="ReceiveTask_WithRef" messageRef="Msg1"/>
     <bpmn2:userTask id="UserTask_1"/>
-    <bpmn2:userTask id="UserTask_2"/>
-    <bpmn2:boundaryEvent id="BoundaryEvent_1" attachedToRef="UserTask_1">
+    <bpmn2:userTask id="UserTask_WithTimeout">
+      <bpmn2:extensionElements>
+        <camunda:taskListener event="timeout" class="Foo"/>
+      </bpmn2:extensionElements>
+    </bpmn2:userTask>
+    <bpmn2:boundaryEvent id="BoundaryMessage_1" attachedToRef="UserTask_1">
       <bpmn2:messageEventDefinition/>
     </bpmn2:boundaryEvent>
-    <bpmn2:boundaryEvent id="BoundaryEvent_2" attachedToRef="UserTask_2">
+    <bpmn2:boundaryEvent id="BoundaryTimer_1" attachedToRef="UserTask_1">
       <bpmn2:timerEventDefinition/>
     </bpmn2:boundaryEvent>
+    <bpmn2:boundaryEvent id="BoundaryConditional_1" attachedToRef="UserTask_1">
+      <bpmn2:conditionalEventDefinition/>
+    </bpmn2:boundaryEvent>
+    <bpmn2:boundaryEvent id="BoundaryError_1" attachedToRef="UserTask_1">
+      <bpmn2:errorEventDefinition/>
+    </bpmn2:boundaryEvent>
+    <bpmn2:intermediateCatchEvent id="LinkEvent_1">
+      <bpmn2:linkEventDefinition name="Link1"/>
+    </bpmn2:intermediateCatchEvent>
   </bpmn2:process>
 </bpmn2:definitions>`;
 
-    it('should produce identical flags for activities with message events and receive tasks', () => {
+    it('receiveTask without messageRef -> updateEventTrigger=false, no instructions with true', () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithMixedActivities }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['ReceiveTask_NoRef'], targetActivityIds: ['ReceiveTask_NoRef'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+
+      const instructions = component.editableInstructions();
+      const receiveTask = instructions.find(i => i.sourceActivityIds.includes('ReceiveTask_NoRef'));
+
+      expect(receiveTask?.updateEventTrigger).toBe(false);
+      // Verify NO instruction has updateEventTrigger=true
+      expect(instructions.every(i => !i.updateEventTrigger)).toBe(true);
+    });
+
+    it('receiveTask with messageRef -> updateEventTrigger=true (default checked)', () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithMixedActivities }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+
+      const instructions = component.editableInstructions();
+      const receiveTask = instructions.find(i => i.sourceActivityIds.includes('ReceiveTask_WithRef'));
+
+      expect(receiveTask?.updateEventTrigger).toBe(true);
+    });
+
+    it('boundary timer -> updateEventTrigger=false (visible but unchecked by default)', () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithMixedActivities }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['BoundaryTimer_1'], targetActivityIds: ['BoundaryTimer_1'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+
+      const instructions = component.editableInstructions();
+      const boundaryTimer = instructions.find(i => i.sourceActivityIds.includes('BoundaryTimer_1'));
+
+      expect(boundaryTimer?.updateEventTrigger).toBe(false);
+    });
+
+    it('boundary conditional -> updateEventTrigger=true (forced by engine)', () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithMixedActivities }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['BoundaryConditional_1'], targetActivityIds: ['BoundaryConditional_1'], updateEventTrigger: true }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+
+      const instructions = component.editableInstructions();
+      const boundaryConditional = instructions.find(i => i.sourceActivityIds.includes('BoundaryConditional_1'));
+
+      // Engine returns true, wizard keeps it
+      expect(boundaryConditional?.updateEventTrigger).toBe(true);
+    });
+
+    it('boundary error/escalation/compensation and link event -> updateEventTrigger=false (no persistent trigger)', () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithMixedActivities }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['BoundaryError_1'], targetActivityIds: ['BoundaryError_1'], updateEventTrigger: false },
+          { sourceActivityIds: ['LinkEvent_1'], targetActivityIds: ['LinkEvent_1'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+
+      const instructions = component.editableInstructions();
+      const boundaryError = instructions.find(i => i.sourceActivityIds.includes('BoundaryError_1'));
+      const linkEvent = instructions.find(i => i.sourceActivityIds.includes('LinkEvent_1'));
+
+      expect(boundaryError?.updateEventTrigger).toBe(false);
+      expect(linkEvent?.updateEventTrigger).toBe(false);
+    });
+
+    it('user task with timeout listener -> updateEventTrigger=false (visible but unchecked)', () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithMixedActivities }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['UserTask_WithTimeout'], targetActivityIds: ['UserTask_WithTimeout'], updateEventTrigger: false }
+        ]
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+
+      const instructions = component.editableInstructions();
+      const userTaskWithTimeout = instructions.find(i => i.sourceActivityIds.includes('UserTask_WithTimeout'));
+
+      expect(userTaskWithTimeout?.updateEventTrigger).toBe(false);
+    });
+
+    it('manual mapping of receiveTask without messageRef -> updateEventTrigger=false', () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithMixedActivities }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+
+      // Manual mapping: user creates mapping from ReceiveTask_NoRef to Target_1
+      component.onCreateMapping('ReceiveTask_NoRef');
+      component.onSelectTarget('Target_1');
+
+      const instructions = component.editableInstructions();
+      const manualInstruction = instructions.find(i => i.sourceActivityIds.includes('ReceiveTask_NoRef'));
+
+      expect(manualInstruction?.updateEventTrigger).toBe(false);
+    });
+
+    it('message events are checked by default (message boundary, intermediate, receiveTask with ref)', () => {
       processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithMixedActivities }));
       processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
       migrationService.generateMigrationPlan.mockReturnValue(of({
@@ -1883,39 +2081,59 @@ describe('ProcessMigrationWizardComponent', () => {
         targetProcessDefinitionId: 'pd1:2',
         instructions: [
           { sourceActivityIds: ['MessageEvent_1'], targetActivityIds: ['MessageEvent_1'], updateEventTrigger: false },
-          { sourceActivityIds: ['ReceiveTask_1'], targetActivityIds: ['ReceiveTask_1'], updateEventTrigger: false },
-          { sourceActivityIds: ['UserTask_1'], targetActivityIds: ['UserTask_1'], updateEventTrigger: false },
-          { sourceActivityIds: ['UserTask_2'], targetActivityIds: ['UserTask_2'], updateEventTrigger: false },
-          { sourceActivityIds: ['BoundaryEvent_1'], targetActivityIds: ['BoundaryEvent_1'], updateEventTrigger: false },
-          { sourceActivityIds: ['BoundaryEvent_2'], targetActivityIds: ['BoundaryEvent_2'], updateEventTrigger: false }
+          { sourceActivityIds: ['BoundaryMessage_1'], targetActivityIds: ['BoundaryMessage_1'], updateEventTrigger: false },
+          { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
         ]
       }));
       migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
 
       fixture.detectChanges();
-
       component.onSourceKeyChange('OrderProcess');
       component.onSourceVersionChange(1);
       component.onTargetKeyChange('OrderProcess');
       component.onTargetVersionChange(2);
-
       fixture.detectChanges();
 
       const instructions = component.editableInstructions();
 
       const messageEvent = instructions.find(i => i.sourceActivityIds.includes('MessageEvent_1'));
-      const receiveTask = instructions.find(i => i.sourceActivityIds.includes('ReceiveTask_1'));
-      const userTask1 = instructions.find(i => i.sourceActivityIds.includes('UserTask_1'));
-      const userTask2 = instructions.find(i => i.sourceActivityIds.includes('UserTask_2'));
-      const boundaryEventMessage = instructions.find(i => i.sourceActivityIds.includes('BoundaryEvent_1'));
-      const boundaryEventTimer = instructions.find(i => i.sourceActivityIds.includes('BoundaryEvent_2'));
+      const boundaryMessage = instructions.find(i => i.sourceActivityIds.includes('BoundaryMessage_1'));
+      const receiveTaskWithRef = instructions.find(i => i.sourceActivityIds.includes('ReceiveTask_WithRef'));
 
+      // All message-related activities should be checked by default
       expect(messageEvent?.updateEventTrigger).toBe(true);
-      expect(receiveTask?.updateEventTrigger).toBe(true);
-      expect(userTask1?.updateEventTrigger).toBe(false);
-      expect(userTask2?.updateEventTrigger).toBe(false);
-      expect(boundaryEventMessage?.updateEventTrigger).toBe(true);
-      expect(boundaryEventTimer?.updateEventTrigger).toBe(false);
+      expect(boundaryMessage?.updateEventTrigger).toBe(true);
+      expect(receiveTaskWithRef?.updateEventTrigger).toBe(true);
+    });
+
+    it('generateMigrationPlan request does NOT send updateEventTriggers: true', () => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: xmlWithMixedActivities }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+
+      // Spy on generateMigrationPlan to capture request
+      const generatePlanSpy = vi.spyOn(migrationService, 'generateMigrationPlan');
+      generatePlanSpy.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+
+      // Verify generateMigrationPlan was called
+      expect(generatePlanSpy).toHaveBeenCalled();
+
+      // Get the request object
+      const request = generatePlanSpy.mock.calls[0][0];
+
+      // Verify updateEventTriggers is either undefined or false (NOT true)
+      expect(request.updateEventTriggers).not.toBe(true);
     });
 
     it('should call DOMParser.parseFromString at most once for a plan with 300 instructions', () => {

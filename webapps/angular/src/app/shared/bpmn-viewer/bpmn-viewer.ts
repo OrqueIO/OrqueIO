@@ -1233,25 +1233,35 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (status === 'valid') {
       const element = this.getElement(activityId);
       if (element && this.isEventType(element.type) && this.isSourceViewer) {
-        const checkboxContainer = document.createElement('label');
-        checkboxContainer.className = 'bpmn-mapping-popover__checkbox';
+        const bpmnDomElement = this.getBpmnDomElement(activityId);
 
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = this.getUpdateEventTriggerForActivity(activityId);
+        if (bpmnDomElement && this.hasPersistentTrigger(bpmnDomElement)) {
+          const checkboxContainer = document.createElement('label');
+          checkboxContainer.className = 'bpmn-mapping-popover__checkbox';
 
-        checkbox.addEventListener('change', () => {
-          this.ngZone.run(() => {
-            this.updateEventTrigger(activityId, checkbox.checked);
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = this.getUpdateEventTriggerForActivity(activityId);
+
+          const forced = this.isForced(bpmnDomElement);
+          if (forced) {
+            checkbox.disabled = true;
+            checkbox.checked = true;
+          }
+
+          checkbox.addEventListener('change', () => {
+            this.ngZone.run(() => {
+              this.updateEventTrigger(activityId, checkbox.checked);
+            });
           });
-        });
 
-        const label = document.createElement('span');
-        label.textContent = 'Update event trigger';
+          const label = document.createElement('span');
+          label.textContent = 'Update event trigger';
 
-        checkboxContainer.appendChild(checkbox);
-        checkboxContainer.appendChild(label);
-        popover.appendChild(checkboxContainer);
+          checkboxContainer.appendChild(checkbox);
+          checkboxContainer.appendChild(label);
+          popover.appendChild(checkboxContainer);
+        }
       }
     }
 
@@ -1367,6 +1377,134 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       type.includes('Event') ||
       type === 'bpmn:ReceiveTask'
     ));
+  }
+
+
+  private getBpmnDomElement(activityId: string): Element | null {
+    if (!this.xml) return null;
+
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(this.xml, 'text/xml');
+      const element = doc.querySelector(`[id="${activityId}"]`);
+      return element;
+    } catch (e) {
+      return null;
+    }
+  }
+
+
+  private hasPersistentTrigger(element: Element): boolean {
+    if (!element) return false;
+
+    try {
+      const tagName = element.tagName;
+
+      if (tagName.includes('receiveTask')) {
+        const messageRef = element.getAttribute('messageRef');
+        return !!messageRef && messageRef.trim() !== '';
+      }
+
+      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
+        if (element.querySelector('timerEventDefinition')) return true;
+        if (element.querySelector('messageEventDefinition')) return true;
+        if (element.querySelector('signalEventDefinition')) return true;
+        if (element.querySelector('conditionalEventDefinition')) return true;
+
+        return false;
+      }
+
+      if (tagName.includes('startEvent')) {
+        const parentSubProcess = element.parentElement;
+        if (parentSubProcess?.tagName.includes('subProcess')) {
+          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
+          if (triggeredByEvent === 'true') {
+            if (element.querySelector('timerEventDefinition')) return true;
+            if (element.querySelector('messageEventDefinition')) return true;
+            if (element.querySelector('signalEventDefinition')) return true;
+            if (element.querySelector('conditionalEventDefinition')) return true;
+            return false;
+          }
+        }
+      }
+
+      if (tagName.includes('userTask')) {
+        const extensionElements = element.querySelector('extensionElements');
+        if (extensionElements) {
+          const taskListeners = extensionElements.querySelectorAll('*');
+          for (let i = 0; i < taskListeners.length; i++) {
+            const listener = taskListeners[i];
+            if (listener.tagName.includes('taskListener')) {
+              const eventAttr = listener.getAttribute('event');
+              if (eventAttr === 'timeout') {
+                return true;
+              }
+            }
+          }
+        }
+      }
+
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+
+  private isDefaultChecked(element: Element): boolean {
+    if (!this.hasPersistentTrigger(element)) return false;
+
+    try {
+      const tagName = element.tagName;
+
+      if (tagName.includes('receiveTask')) {
+        return true;
+      }
+
+      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
+        return !!element.querySelector('messageEventDefinition');
+      }
+
+      if (tagName.includes('startEvent')) {
+        const parentSubProcess = element.parentElement;
+        if (parentSubProcess?.tagName.includes('subProcess')) {
+          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
+          if (triggeredByEvent === 'true') {
+            return !!element.querySelector('messageEventDefinition');
+          }
+        }
+      }
+
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private isForced(element: Element): boolean {
+    if (!element) return false;
+
+    try {
+      const tagName = element.tagName;
+
+      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
+        return !!element.querySelector('conditionalEventDefinition');
+      }
+
+      if (tagName.includes('startEvent')) {
+        const parentSubProcess = element.parentElement;
+        if (parentSubProcess?.tagName.includes('subProcess')) {
+          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
+          if (triggeredByEvent === 'true') {
+            return !!element.querySelector('conditionalEventDefinition');
+          }
+        }
+      }
+
+      return false;
+    } catch (e) {
+      return false;
+    }
   }
 
   private getUpdateEventTriggerForActivity(activityId: string): boolean {

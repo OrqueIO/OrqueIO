@@ -321,12 +321,15 @@ export class MigrationConfirmStepComponent {
     const plan = this.migrationPlan();
     const cache = new Map<string, { source: string; target: string }>();
 
+    const sourceIdToName = this.buildActivityNameMap(sourceXml);
+    const targetIdToName = this.buildActivityNameMap(targetXml);
+
     for (const instruction of plan.instructions) {
       const sourceId = instruction.sourceActivityIds[0];
       const targetId = instruction.targetActivityIds[0];
 
-      const sourceName = this.extractActivityName(sourceXml, sourceId) || sourceId;
-      const targetName = this.extractActivityName(targetXml, targetId) || targetId;
+      const sourceName = sourceIdToName.get(sourceId) || sourceId;
+      const targetName = targetIdToName.get(targetId) || targetId;
 
       cache.set(sourceId, { source: sourceName, target: sourceName });
       cache.set(targetId, { source: targetName, target: targetName });
@@ -335,15 +338,24 @@ export class MigrationConfirmStepComponent {
     this.activityNamesCache.set(cache);
   }
 
-  private extractActivityName(xml: string, activityId: string): string | null {
+  private buildActivityNameMap(xml: string): Map<string, string> {
+    const map = new Map<string, string>();
     try {
       const parser = new DOMParser();
       const doc = parser.parseFromString(xml, 'text/xml');
-      const element = doc.querySelector(`[id="${activityId}"]`);
-      return element?.getAttribute('name') || null;
+
+      const allElements = doc.getElementsByTagName('*');
+      for (let i = 0; i < allElements.length; i++) {
+        const element = allElements[i];
+        const id = element.getAttribute('id');
+        const name = element.getAttribute('name');
+        if (id && name) {
+          map.set(id, name);
+        }
+      }
     } catch {
-      return null;
     }
+    return map;
   }
 
   private verifyCount(criteria: MultiValueFilter[], sourceDefinitionId: string): void {
