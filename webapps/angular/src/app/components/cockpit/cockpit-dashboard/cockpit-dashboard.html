@@ -10,7 +10,7 @@
   <div class="dashboard__content">
     <!-- Deployed Stats -->
     <section class="dashboard__section">
-      <div class="stats-grid">
+      <div class="stats-grid" [class.stats-grid--llm]="llmStats">
         <a class="stat-card stat-card--blue" routerLink="/cockpit/processes">
           <div class="stat-card__icon-wrapper">
             <fa-icon [icon]="faProjectDiagram" class="stat-card__icon"></fa-icon>
@@ -70,6 +70,44 @@
             <fa-icon [icon]="faArrowRight"></fa-icon>
           </div>
         </a>
+
+        <!-- LLM tasks: shown once an LLM task has run; details in the LLM tasks chart -->
+        <ng-container *ngIf="llmStats as llm">
+          <a class="stat-card stat-card--indigo stat-card--llm-calls" href="" (click)="$event.preventDefault(); showLlmUsage()">
+            <div class="stat-card__icon-wrapper">
+              <svg class="stat-card__icon stat-card__icon--llm" viewBox="0 0 24 24" aria-hidden="true">
+                <path [attr.d]="llmBubblePath" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                <path [attr.d]="llmSparkPath" fill="currentColor" stroke="currentColor" stroke-width="0.8" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div class="stat-card__body">
+              <span class="stat-card__value">{{ llm.calls }}</span>
+              <span class="stat-card__label">{{ 'cockpit.dashboard.llmCalls' | translate:{ days: '' + llmStatsDays } }}</span>
+              <span class="stat-card__detail">
+                {{ 'cockpit.dashboard.llmTokens' | translate:{ count: (llm.inputTokens + llm.outputTokens | number) || '0' } }}
+              </span>
+            </div>
+            <div class="stat-card__arrow">
+              <fa-icon [icon]="faArrowRight"></fa-icon>
+            </div>
+          </a>
+
+          <a class="stat-card stat-card--llm-invalid" href=""
+             [class.stat-card--danger]="llm.invalidAnswers > 0"
+             [class.stat-card--neutral]="llm.invalidAnswers === 0"
+             (click)="$event.preventDefault(); showLlmUsage()">
+            <div class="stat-card__icon-wrapper">
+              <fa-icon [icon]="faExclamationTriangle" class="stat-card__icon"></fa-icon>
+            </div>
+            <div class="stat-card__body">
+              <span class="stat-card__value">{{ llm.invalidAnswers }}</span>
+              <span class="stat-card__label">{{ 'cockpit.dashboard.llmInvalidAnswers' | translate:{ days: '' + llmStatsDays } }}</span>
+            </div>
+            <div class="stat-card__arrow">
+              <fa-icon [icon]="faArrowRight"></fa-icon>
+            </div>
+          </a>
+        </ng-container>
       </div>
     </section>
 
@@ -137,6 +175,7 @@
           <div class="chart-card">
             <app-tasks-by-group-chart></app-tasks-by-group-chart>
           </div>
+          <app-llm-usage-chart class="chart-card chart-card--wide"></app-llm-usage-chart>
         </div>
       </div>
     </section>
