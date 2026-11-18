@@ -1639,24 +1639,18 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     this.applyingLinkedNavigation = true;
     try {
-      const sourceDepth = sourceNav.depth;
-      const targetPath = this.targetViewerComponent.getLinkedNavigationPath();
-      const targetDepth = targetPath.length;
+      console.debug('[NAVDBG] syncNavigationToTarget: navigating to source path', {
+        sourcePath: JSON.stringify(sourceNav.path),
+        sourceDepth: sourceNav.depth
+      });
 
-      if (sourceDepth > targetDepth) {
-        // Source drilled down - navigate target through the full path
-        const achievedDepth = this.targetViewerComponent.navigateToPath(sourceNav.path);
+      const achievedDepth = this.targetViewerComponent.navigateToPath(sourceNav.path);
 
-        // If achieved depth is less than source depth, try fallback by name
-        if (achievedDepth < sourceDepth) {
-          // Fallback not implemented yet - would need names in event
-          // For now, just log and stop at achieved depth
-          console.debug('[NAVDBG] syncNavigationToTarget: stopped at depth', { achievedDepth, sourceDepth });
-        }
-      } else if (sourceDepth < targetDepth) {
-        // Source went up - navigate target up to the same depth
-        const levelsToGoUp = targetDepth - sourceDepth;
-        this.targetViewerComponent.navigateUp(levelsToGoUp);
+      if (achievedDepth < sourceNav.depth) {
+        console.debug('[NAVDBG] syncNavigationToTarget: stopped at depth', {
+          achievedDepth,
+          sourceDepth: sourceNav.depth
+        });
       }
     } finally {
       this.applyingLinkedNavigation = false;
@@ -1668,24 +1662,18 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     this.applyingLinkedNavigation = true;
     try {
-      const targetDepth = targetNav.depth;
-      const sourcePath = this.sourceViewerComponent.getLinkedNavigationPath();
-      const sourceDepth = sourcePath.length;
+      console.debug('[NAVDBG] syncNavigationToSource: navigating to target path', {
+        targetPath: JSON.stringify(targetNav.path),
+        targetDepth: targetNav.depth
+      });
 
-      if (targetDepth > sourceDepth) {
-        // Target drilled down - navigate source through the full path
-        const achievedDepth = this.sourceViewerComponent.navigateToPath(targetNav.path);
+      const achievedDepth = this.sourceViewerComponent.navigateToPath(targetNav.path);
 
-        // If achieved depth is less than target depth, try fallback by name
-        if (achievedDepth < targetDepth) {
-          // Fallback not implemented yet - would need names in event
-          // For now, just log and stop at achieved depth
-          console.debug('[NAVDBG] syncNavigationToSource: stopped at depth', { achievedDepth, targetDepth });
-        }
-      } else if (targetDepth < sourceDepth) {
-        // Target went up - navigate source up to the same depth
-        const levelsToGoUp = sourceDepth - targetDepth;
-        this.sourceViewerComponent.navigateUp(levelsToGoUp);
+      if (achievedDepth < targetNav.depth) {
+        console.debug('[NAVDBG] syncNavigationToSource: stopped at depth', {
+          achievedDepth,
+          targetDepth: targetNav.depth
+        });
       }
     } finally {
       this.applyingLinkedNavigation = false;

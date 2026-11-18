@@ -155,6 +155,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private activeSelectionMarker: string | null = null;
   private subprocessStack: { id: string; name: string; element: any }[] = [];
   private currentRootElement: any = null;
+  private initialRootElement: any = null;
 
   faArrowUp = faArrowUp;
   loading = true;
@@ -262,6 +263,14 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     const eventBus = this.viewer.get('eventBus');
 
     eventBus.on('import.done', () => {
+      const canvas = this.viewer!.get('canvas');
+      this.initialRootElement = canvas.getRootElement();
+      console.debug('[NAVDBG] import.done: memorized initialRootElement', {
+        id: this.initialRootElement?.id,
+        type: this.initialRootElement?.type,
+        isSourceViewer: this.isSourceViewer
+      });
+
       this.updateHighlights();
       this.updateRunningMarkers();
       this.updateBadges();
@@ -399,6 +408,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.errorMessage = null;
     this.subprocessStack = [];
     this.currentRootElement = null;
+    this.initialRootElement = null;
     this.subprocessBreadcrumb = [];
     this.windowStart = 0;
     this.activeRunningMarkers.clear();
@@ -1457,10 +1467,38 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   navigateToSubprocessLevel(index: number): void {
+    console.debug('[NAVDBG] navigateToSubprocessLevel called', {
+      index,
+      stackLength: this.subprocessStack.length,
+      isSourceViewer: this.isSourceViewer
+    });
+
     const item = this.subprocessStack[index];
-    if (!item || !this.viewer) return;
-    const canvas = this.viewer.get('canvas');
-    canvas.setRootElement(item.element);
+    if (!item) {
+      console.debug('[NAVDBG] navigateToSubprocessLevel: item not found', { index });
+      return;
+    }
+    if (!this.viewer) {
+      console.debug('[NAVDBG] navigateToSubprocessLevel: no viewer');
+      return;
+    }
+
+    try {
+      const canvas = this.viewer.get('canvas');
+      console.debug('[NAVDBG] navigateToSubprocessLevel: setting root to', {
+        itemId: item.id,
+        elementType: item.element?.type
+      });
+      canvas.setRootElement(item.element);
+      console.debug('[NAVDBG] navigateToSubprocessLevel: success');
+    } catch (e: any) {
+      console.debug('[NAVDBG] navigateToSubprocessLevel: exception caught', {
+        index,
+        itemId: item.id,
+        error: e?.message || e,
+        stack: e?.stack
+      });
+    }
   }
 
   navigateToSubprocessById(activityId: string): boolean {
@@ -1511,44 +1549,138 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
 
-  navigateToRoot(): void {
-    if (!this.viewer) return;
+  navigateToRoot(): boolean {
+    console.debug('[NAVDBG] navigateToRoot called', { isSourceViewer: this.isSourceViewer });
 
-    const canvas = this.viewer.get('canvas');
-    const definitions = this.viewer.getDefinitions();
+    if (!this.viewer) {
+      console.debug('[NAVDBG] navigateToRoot: no viewer');
+      return false;
+    }
 
-    if (definitions && definitions.rootElements && definitions.rootElements.length > 0) {
-      const process = definitions.rootElements.find((el: any) =>
-        el.$type === 'bpmn:Process' || el.$type === 'bpmn:Collaboration'
-      );
-      if (process) {
-        try {
-          canvas.setRootElement(process);
-        } catch (e) {
-          // Ignore navigation errors
-        }
-      }
+    if (!this.initialRootElement) {
+      console.debug('[NAVDBG] navigateToRoot: no initialRootElement memorized');
+      return false;
+    }
+
+    try {
+      const canvas = this.viewer.get('canvas');
+
+      console.debug('[NAVDBG] navigateToRoot: setting root to initialRootElement', {
+        id: this.initialRootElement.id,
+        type: this.initialRootElement.type
+      });
+
+      canvas.setRootElement(this.initialRootElement);
+      console.debug('[NAVDBG] navigateToRoot: success');
+      return true;
+
+    } catch (e: any) {
+      console.debug('[NAVDBG] navigateToRoot: exception caught', {
+        error: e?.message || e,
+        stack: e?.stack
+      });
+      return false;
     }
   }
 
   navigateToPath(pathIds: string[]): number {
-    console.debug('[NAVDBG] navigateToPath called', { pathIds, isSourceViewer: this.isSourceViewer });
-    if (!this.viewer || pathIds.length === 0) return 0;
+    console.debug('[NAVDBG] navigateToPath called', {
+      pathIds: JSON.stringify(pathIds),
+      isSourceViewer: this.isSourceViewer
+    });
 
-    this.navigateToRoot();
-
-    let depth = 0;
-    for (const id of pathIds) {
-      const success = this.navigateToSubprocessById(id);
-      if (!success) {
-        console.debug('[NAVDBG] navigateToPath: stopped at depth', { depth, failedId: id });
-        break;
+    try {
+      if (!this.viewer) {
+        console.debug('[NAVDBG] navigateToPath: no viewer');
+        return 0;
       }
-      depth++;
-    }
 
-    console.debug('[NAVDBG] navigateToPath: finished', { achievedDepth: depth, requestedDepth: pathIds.length });
-    return depth;
+      if (pathIds.length === 0) {
+        console.debug('[NAVDBG] navigateToPath: empty path, going to root');
+        this.navigateToRoot();
+        return 0;
+      }
+
+      const currentPath = this.getLinkedNavigationPath();
+      console.debug('[NAVDBG] navigateToPath: current path', { currentPath: JSON.stringify(currentPath) });
+
+      let commonPrefixLength = 0;
+      const minLength = Math.min(currentPath.length, pathIds.length);
+      for (let i = 0; i < minLength; i++) {
+        if (currentPath[i] === pathIds[i]) {
+          commonPrefixLength++;
+        } else {
+          break;
+        }
+      }
+
+      console.debug('[NAVDBG] navigateToPath: common prefix length', { commonPrefixLength });
+
+      if (commonPrefixLength < currentPath.length) {
+        const levelsToGoUp = currentPath.length - commonPrefixLength;
+        console.debug('[NAVDBG] navigateToPath: going up', { levelsToGoUp });
+
+        if (commonPrefixLength === 0) {
+          const success = this.navigateToRoot();
+          if (!success) {
+            console.debug('[NAVDBG] navigateToPath: failed to navigate to root');
+            return 0;
+          }
+        } else {
+          const ancestorId = pathIds[commonPrefixLength - 1];
+          const ancestorPlaneId = ancestorId + '_plane';
+
+          console.debug('[NAVDBG] navigateToPath: navigating to ancestor', {
+            level: commonPrefixLength - 1,
+            ancestorId,
+            ancestorPlaneId
+          });
+
+          const elementRegistry = this.viewer.get('elementRegistry');
+          const planeElement = elementRegistry.get(ancestorPlaneId);
+
+          if (!planeElement) {
+            console.debug('[NAVDBG] navigateToPath: ancestor plane not found, going to root', {
+              ancestorPlaneId
+            });
+            this.navigateToRoot();
+          } else {
+            const canvas = this.viewer.get('canvas');
+            console.debug('[NAVDBG] navigateToPath: setting root to ancestor plane', {
+              planeId: planeElement.id,
+              planeType: planeElement.type
+            });
+            canvas.setRootElement(planeElement);
+          }
+        }
+      }
+
+      let depth = commonPrefixLength;
+      for (let i = commonPrefixLength; i < pathIds.length; i++) {
+        const id = pathIds[i];
+        console.debug('[NAVDBG] navigateToPath: drilling down to', { id, depth });
+        const success = this.navigateToSubprocessById(id);
+        if (!success) {
+          console.debug('[NAVDBG] navigateToPath: stopped at depth', { depth, failedId: id });
+          break;
+        }
+        depth++;
+      }
+
+      console.debug('[NAVDBG] navigateToPath: finished', {
+        achievedDepth: depth,
+        requestedDepth: pathIds.length
+      });
+      return depth;
+
+    } catch (e: any) {
+      console.debug('[NAVDBG] navigateToPath: exception caught', {
+        pathIds: JSON.stringify(pathIds),
+        error: e?.message || e,
+        stack: e?.stack
+      });
+      return this.getLinkedNavigationPath().length;
+    }
   }
 
   navigateUp(levels: number): void {
