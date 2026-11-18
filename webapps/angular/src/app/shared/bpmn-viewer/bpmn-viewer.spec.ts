@@ -1909,5 +1909,133 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       expect(errorItem).not.toBeNull();
       expect(errorItem?.textContent).toContain('Cannot migrate');
     });
+
+    it('note should be present for receiveTask without messageRef', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process><bpmn2:receiveTask id="RT1"/></bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['RT1'], targetActivityIds: ['RT1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'RT1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('RT1', 'valid', anchor, badge);
+
+      const popover = document.querySelector('.bpmn-mapping-popover') as HTMLElement;
+      expect(popover).not.toBeNull();
+
+      const note = popover.querySelector('.bpmn-mapping-popover__note');
+      expect(note).not.toBeNull();
+      expect(note?.textContent).toContain('Update event trigger is not available');
+      expect(note?.textContent).toContain('no message reference');
+    });
+
+    it('note should be present for boundary error event', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="Task1">
+      <bpmn2:errorEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BE1'], targetActivityIds: ['BE1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'BE1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('BE1', 'valid', anchor, badge);
+
+      const popover = document.querySelector('.bpmn-mapping-popover') as HTMLElement;
+      expect(popover).not.toBeNull();
+
+      const note = popover.querySelector('.bpmn-mapping-popover__note');
+      expect(note).not.toBeNull();
+      expect(note?.textContent).toContain('Update event trigger is not available');
+      expect(note?.textContent).toContain('persistent trigger');
+    });
+
+    it('note should NOT be present for serviceTask', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process><bpmn2:serviceTask id="ST1"/></bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['ST1'], targetActivityIds: ['ST1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'ST1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('ST1', 'valid', anchor, badge);
+
+      const popover = document.querySelector('.bpmn-mapping-popover');
+
+      expect(popover).not.toBeNull();
+
+      const note = popover?.querySelector('.bpmn-mapping-popover__note');
+      expect(note).toBeNull();
+    });
+
+    it('note should NOT be present when checkbox is displayed', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="Task1">
+      <bpmn2:timerEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BE1'], targetActivityIds: ['BE1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'BE1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('BE1', 'valid', anchor, badge);
+
+      const popover = document.querySelector('.bpmn-mapping-popover');
+      expect(popover).not.toBeNull();
+
+      const checkbox = popover?.querySelector('.bpmn-mapping-popover__checkbox input[type="checkbox"]');
+      expect(checkbox).not.toBeNull();
+
+      const note = popover?.querySelector('.bpmn-mapping-popover__note');
+      expect(note).toBeNull();
+    });
   });
 });

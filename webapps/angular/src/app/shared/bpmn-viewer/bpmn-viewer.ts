@@ -1268,6 +1268,19 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
           checkboxContainer.appendChild(checkbox);
           checkboxContainer.appendChild(label);
           popover.appendChild(checkboxContainer);
+        } else if (state.unavailableReason) {
+          const note = document.createElement('div');
+          note.className = 'bpmn-mapping-popover__note';
+
+          let noteText = '';
+          if (state.unavailableReason === 'noMessageRef') {
+            noteText = 'Update event trigger is not available: this receive task has no message reference.';
+          } else if (state.unavailableReason === 'noPersistentTrigger') {
+            noteText = 'Update event trigger is not available: this event does not have a persistent trigger to update.';
+          }
+
+          note.textContent = noteText;
+          popover.appendChild(note);
         }
       }
     }

@@ -576,6 +576,14 @@ button.breadcrumb-parent-name {
   cursor: pointer;
 }
 
+.bpmn-mapping-popover__note {
+  font-size: 11px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
 .bpmn-mapping-popover__remove-btn {
   display: flex;
   align-items: center;
