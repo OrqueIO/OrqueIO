@@ -18,6 +18,8 @@ import { CommonModule } from '@angular/common';
 // @ts-ignore - bpmn-js doesn't have types
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 
+import { llmTaskRendererModule } from './llm-task-renderer';
+
 export interface ActivityBadge {
   activityId: string;
   instances?: number;
@@ -118,7 +120,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     this.viewer = new NavigatedViewer({
       container: this.canvasRef.nativeElement,
-      keyboard: { bindTo: document }
+      keyboard: { bindTo: document },
+      additionalModules: [llmTaskRendererModule]
     });
 
     this.overlays = this.viewer.get('overlays');

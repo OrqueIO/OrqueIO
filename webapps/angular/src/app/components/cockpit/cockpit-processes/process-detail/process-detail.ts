@@ -56,8 +56,9 @@ import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockp
 import { SearchWidgetComponent, SearchType, SearchCriteria } from '../../../../shared/search-widget/search-widget';
 import { UserAutocompleteComponent } from '../../../../shared/user-autocomplete/user-autocomplete';
 import { User } from '../../../../models/admin/user.model';
+import { LlmTaskRecord, llmTaskRecords } from './llm-task-records';
 
-type TabType = 'variables' | 'incidents' | 'calledInstances' | 'userTasks' | 'jobs' | 'externalTasks';
+type TabType = 'variables' | 'llmCalls' | 'incidents' | 'calledInstances' | 'userTasks' | 'jobs' | 'externalTasks';
 type SidebarTab = 'info' | 'filter';
 
 interface VariableEdit {
@@ -211,7 +212,12 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   // UI State - Tabs
   activeTab: TabType = 'variables';
-  tabs: { id: TabType; labelKey: string; badgeCount?: () => number }[] = [];
+  tabs: { id: TabType; labelKey: string; badgeCount?: () => number; visible?: () => boolean }[] = [];
+
+  // LLM task records, read from the variables (cached per variables array)
+  private llmRecordsSource: Variable[] | null = null;
+  private llmRecordsCache: LlmTaskRecord[] = [];
+  expandedLlmRecord: string | null = null;
 
   // UI State - Activity selection (supports multi-select like AngularJS)
   selectedActivityId: string | null = null;
@@ -230,6 +236,12 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     // Tabs ordered like AngularJS: Variables, Incidents, Called Process Instances, User Tasks, Jobs, External Tasks
     this.tabs = [
       { id: 'variables', labelKey: 'cockpit.processDetail.tabs.variables', badgeCount: () => this.variables.length },
+      {
+        id: 'llmCalls',
+        labelKey: 'cockpit.processDetail.tabs.llmCalls',
+        badgeCount: () => this.llmRecords.length,
+        visible: () => this.llmRecords.length > 0
+      },
       { id: 'incidents', labelKey: 'cockpit.processDetail.tabs.incidents', badgeCount: () => this.openIncidentCount },
       { id: 'calledInstances', labelKey: 'cockpit.processDetail.tabs.calledInstances', badgeCount: () => this.calledInstances.length },
       { id: 'userTasks', labelKey: 'cockpit.processDetail.tabs.userTasks', badgeCount: () => this.userTasks.length },
@@ -1120,6 +1132,39 @@ getTasklistUrl(task: UserTask): string {
 
   getFailedJobsCount(): number {
     return this.jobs.filter(j => j.retries === 0).length;
+  }
+
+  isTabVisible(tab: { visible?: () => boolean }): boolean {
+    return !tab.visible || tab.visible();
+  }
+
+  // LLM task records
+  get llmRecords(): LlmTaskRecord[] {
+    if (this.llmRecordsSource !== this.variables) {
+      this.llmRecordsSource = this.variables;
+      this.llmRecordsCache = llmTaskRecords(this.variables);
+    }
+    return this.llmRecordsCache;
+  }
+
+  llmTaskName(record: LlmTaskRecord): string {
+    const activity = this.activities.find(a => a.activityId === record.activityId);
+    return activity?.activityName
+      || this.bpmnViewer?.getElement(record.activityId)?.name
+      || record.activityId;
+  }
+
+  formatTokens(value: number | null | undefined): string {
+    return value === null || value === undefined ? '-' : String(value);
+  }
+
+  hasLlmContent(record: LlmTaskRecord): boolean {
+    return record.prompt !== undefined || record.answer !== undefined;
+  }
+
+  toggleLlmContent(record: LlmTaskRecord, event: Event): void {
+    event.stopPropagation();
+    this.expandedLlmRecord = this.expandedLlmRecord === record.variableName ? null : record.variableName;
   }
 
   getTabBadgeCount(tab: { badgeCount?: () => number }): number | null {
