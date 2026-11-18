@@ -2570,4 +2570,55 @@ ${Array.from({ length: 300 }, (_, i) => `    <bpmn2:userTask id="Task_${i + 1}"/
       expect(mockTargetViewer.navigateToPath).not.toHaveBeenCalled();
     });
   });
+
+  describe('buildElementMap XML parsing cache', () => {
+    it('should not re-parse XML on 10 consecutive calls with same sourceXml', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:receiveTask id="RT1" messageRef="Msg1"/>
+    <bpmn2:userTask id="UT1"/>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="UT1">
+      <bpmn2:timerEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      (component as any).cachedSourceXml = null;
+      (component as any).cachedSourceElementMap = null;
+
+      const parseFromStringSpy = vi.spyOn(DOMParser.prototype, 'parseFromString');
+
+      for (let i = 0; i < 10; i++) {
+        (component as any).buildElementMap(xml);
+      }
+
+      expect(parseFromStringSpy).toHaveBeenCalledTimes(1);
+      expect(parseFromStringSpy).toHaveBeenCalledWith(xml, 'text/xml');
+
+      parseFromStringSpy.mockRestore();
+    });
+
+    it('should re-parse XML when sourceXml changes', () => {
+      const xml1 = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process><bpmn2:receiveTask id="RT1" messageRef="Msg1"/></bpmn2:process>
+</bpmn2:definitions>`;
+
+      const xml2 = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process><bpmn2:receiveTask id="RT2" messageRef="Msg2"/></bpmn2:process>
+</bpmn2:definitions>`;
+
+      const parseFromStringSpy = vi.spyOn(DOMParser.prototype, 'parseFromString');
+
+      (component as any).buildElementMap(xml1);
+      expect(parseFromStringSpy).toHaveBeenCalledTimes(1);
+
+      (component as any).buildElementMap(xml2);
+      expect(parseFromStringSpy).toHaveBeenCalledTimes(2);
+
+      parseFromStringSpy.mockRestore();
+    });
+  });
 });

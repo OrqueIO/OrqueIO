@@ -28,6 +28,7 @@ import { MigrationVariableModalComponent } from './migration-variable-modal.comp
 import { MigrationConfirmStepComponent, MigrationExecutionResult as ConfirmResult, MigrationExecutionPayload, ConfirmStepState } from './migration-confirm-step.component';
 import { MigrationResultsStepComponent } from './migration-results-step.component';
 import { MigrationExecutionResult } from './migration-execution-result.model';
+import { getEventTriggerState } from '../../../../shared/event-trigger-rules';
 import { classifyMigrationError } from './migration-error-classifier.utils';
 import { Anchor, getAnchorKey } from './migration-arrow-anchors';
 import { MigrationUndoToastService } from './migration-undo-toast.service';
@@ -341,6 +342,10 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   private targetViewboxListener: (() => void) | null = null;
   private sourceViewerReady = signal(false);
   private targetViewerReady = signal(false);
+
+  // XML parsing cache
+  private cachedSourceXml: string | null = null;
+  private cachedSourceElementMap: Map<string, Element> | null = null;
 
   // Computed for enabling mapping buttons
   enableMappingButtons = computed(() => !!(this.sourceDefinitionId() && this.targetDefinitionId()));
@@ -839,128 +844,21 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   }
 
 
-  private hasPersistentTrigger(element: Element): boolean {
-    if (!element) return false;
-
-    try {
-      const tagName = element.tagName;
-
-      if (tagName.includes('receiveTask')) {
-        const messageRef = element.getAttribute('messageRef');
-        return !!messageRef && messageRef.trim() !== '';
-      }
-
-      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
-        if (element.querySelector('timerEventDefinition')) return true;
-        if (element.querySelector('messageEventDefinition')) return true;
-        if (element.querySelector('signalEventDefinition')) return true;
-        if (element.querySelector('conditionalEventDefinition')) return true;
-
-        return false;
-      }
-
-      if (tagName.includes('startEvent')) {
-        const parentSubProcess = element.parentElement;
-        if (parentSubProcess?.tagName.includes('subProcess')) {
-          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
-          if (triggeredByEvent === 'true') {
-            if (element.querySelector('timerEventDefinition')) return true;
-            if (element.querySelector('messageEventDefinition')) return true;
-            if (element.querySelector('signalEventDefinition')) return true;
-            if (element.querySelector('conditionalEventDefinition')) return true;
-            return false;
-          }
-        }
-      }
-
-      if (tagName.includes('userTask')) {
-        const extensionElements = element.querySelector('extensionElements');
-        if (extensionElements) {
-          const taskListeners = extensionElements.querySelectorAll('*');
-          for (let i = 0; i < taskListeners.length; i++) {
-            const listener = taskListeners[i];
-            if (listener.tagName.includes('taskListener')) {
-              const eventAttr = listener.getAttribute('event');
-              if (eventAttr === 'timeout') {
-                return true;
-              }
-            }
-          }
-        }
-      }
-
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  private isDefaultChecked(element: Element): boolean {
-    if (!this.hasPersistentTrigger(element)) return false;
-
-    try {
-      const tagName = element.tagName;
-
-      if (tagName.includes('receiveTask')) {
-        return true;
-      }
-
-      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
-        return !!element.querySelector('messageEventDefinition');
-      }
-
-      if (tagName.includes('startEvent')) {
-        const parentSubProcess = element.parentElement;
-        if (parentSubProcess?.tagName.includes('subProcess')) {
-          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
-          if (triggeredByEvent === 'true') {
-            return !!element.querySelector('messageEventDefinition');
-          }
-        }
-      }
-
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
-
-  private isForced(element: Element): boolean {
-    if (!element) return false;
-
-    try {
-      const tagName = element.tagName;
-
-      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
-        return !!element.querySelector('conditionalEventDefinition');
-      }
-
-      if (tagName.includes('startEvent')) {
-        const parentSubProcess = element.parentElement;
-        if (parentSubProcess?.tagName.includes('subProcess')) {
-          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
-          if (triggeredByEvent === 'true') {
-            return !!element.querySelector('conditionalEventDefinition');
-          }
-        }
-      }
-
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
 
   /**
    * Parse BPMN XML and build a Map of element IDs to DOM elements.
+   * Uses cache to avoid re-parsing the same XML.
    * @param xml The BPMN XML string to parse
    * @returns Map of element id -> Element, or empty Map if parsing fails
    */
   private buildElementMap(xml: string): Map<string, Element> {
-    const elementMap = new Map<string, Element>();
+    if (!xml) return new Map<string, Element>();
 
-    if (!xml) return elementMap;
+    if (this.cachedSourceXml === xml && this.cachedSourceElementMap) {
+      return this.cachedSourceElementMap;
+    }
+
+    const elementMap = new Map<string, Element>();
 
     try {
       const parser = new DOMParser();
@@ -973,6 +871,9 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
           elementMap.set(id, element);
         }
       });
+
+      this.cachedSourceXml = xml;
+      this.cachedSourceElementMap = elementMap;
     } catch (e) {
     }
 
@@ -992,16 +893,14 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       for (const activityId of instr.sourceActivityIds) {
         const element = elementMap.get(activityId);
         if (element) {
-          if (this.hasPersistentTrigger(element) && this.isDefaultChecked(element)) {
+          const state = getEventTriggerState(element);
+          if (state.available && state.checkedByDefault) {
             finalFlag = true;
             break;
           }
-          if (this.isForced(element)) {
+          if (state.forced) {
             finalFlag = true;
             break;
-          }
-          if (!this.hasPersistentTrigger(element)) {
-            continue;
           }
         }
       }
@@ -1240,7 +1139,8 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       const elementMap = this.buildElementMap(sourceXml);
       const element = elementMap.get(sourceId);
       if (element) {
-        updateEventTrigger = this.isDefaultChecked(element) || this.isForced(element);
+        const state = getEventTriggerState(element);
+        updateEventTrigger = state.checkedByDefault || state.forced;
       }
     }
 

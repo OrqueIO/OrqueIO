@@ -21,6 +21,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { parseInstructionReports } from '../../services/migration-validation.utils';
 import { TranslatePipe } from '../../i18n/translate.pipe';
+import { getEventTriggerState } from '../event-trigger-rules';
 
 export const EXPAND_DIAGRAM_STATE_KEY = 'expandDiagram' as const;
 
@@ -136,6 +137,10 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   // Migration mapping overlays
   private mappingOverlayIds: string[] = [];
   private targetHighlightOverlayIds: string[] = [];
+
+  // XML parsing cache
+  private cachedXml: string | null = null;
+  private cachedDocument: Document | null = null;
   // PERMANENT OVERLAYS FIX: Maps as class properties to prevent race conditions
   private buttonContainers: Map<string, HTMLElement> = new Map();
   private hideTimeouts: Map<string, ReturnType<typeof setTimeout>> = new Map();
@@ -1230,12 +1235,13 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       popover.appendChild(errorList);
     }
 
-    if (status === 'valid') {
-      const element = this.getElement(activityId);
-      if (element && this.isEventType(element.type) && this.isSourceViewer) {
-        const bpmnDomElement = this.getBpmnDomElement(activityId);
+    if (status === 'valid' && this.isSourceViewer) {
+      const bpmnDomElement = this.getBpmnDomElement(activityId);
 
-        if (bpmnDomElement && this.hasPersistentTrigger(bpmnDomElement)) {
+      if (bpmnDomElement) {
+        const state = getEventTriggerState(bpmnDomElement);
+
+        if (state.available) {
           const checkboxContainer = document.createElement('label');
           checkboxContainer.className = 'bpmn-mapping-popover__checkbox';
 
@@ -1243,8 +1249,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
           checkbox.type = 'checkbox';
           checkbox.checked = this.getUpdateEventTriggerForActivity(activityId);
 
-          const forced = this.isForced(bpmnDomElement);
-          if (forced) {
+          if (state.forced) {
             checkbox.disabled = true;
             checkbox.checked = true;
           }
@@ -1384,8 +1389,16 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (!this.xml) return null;
 
     try {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(this.xml, 'text/xml');
+      let doc: Document;
+      if (this.cachedXml === this.xml && this.cachedDocument) {
+        doc = this.cachedDocument;
+      } else {
+        const parser = new DOMParser();
+        doc = parser.parseFromString(this.xml, 'text/xml');
+        this.cachedXml = this.xml;
+        this.cachedDocument = doc;
+      }
+
       const element = doc.querySelector(`[id="${activityId}"]`);
       return element;
     } catch (e) {
@@ -1394,118 +1407,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
 
-  private hasPersistentTrigger(element: Element): boolean {
-    if (!element) return false;
-
-    try {
-      const tagName = element.tagName;
-
-      if (tagName.includes('receiveTask')) {
-        const messageRef = element.getAttribute('messageRef');
-        return !!messageRef && messageRef.trim() !== '';
-      }
-
-      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
-        if (element.querySelector('timerEventDefinition')) return true;
-        if (element.querySelector('messageEventDefinition')) return true;
-        if (element.querySelector('signalEventDefinition')) return true;
-        if (element.querySelector('conditionalEventDefinition')) return true;
-
-        return false;
-      }
-
-      if (tagName.includes('startEvent')) {
-        const parentSubProcess = element.parentElement;
-        if (parentSubProcess?.tagName.includes('subProcess')) {
-          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
-          if (triggeredByEvent === 'true') {
-            if (element.querySelector('timerEventDefinition')) return true;
-            if (element.querySelector('messageEventDefinition')) return true;
-            if (element.querySelector('signalEventDefinition')) return true;
-            if (element.querySelector('conditionalEventDefinition')) return true;
-            return false;
-          }
-        }
-      }
-
-      if (tagName.includes('userTask')) {
-        const extensionElements = element.querySelector('extensionElements');
-        if (extensionElements) {
-          const taskListeners = extensionElements.querySelectorAll('*');
-          for (let i = 0; i < taskListeners.length; i++) {
-            const listener = taskListeners[i];
-            if (listener.tagName.includes('taskListener')) {
-              const eventAttr = listener.getAttribute('event');
-              if (eventAttr === 'timeout') {
-                return true;
-              }
-            }
-          }
-        }
-      }
-
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
-
-  private isDefaultChecked(element: Element): boolean {
-    if (!this.hasPersistentTrigger(element)) return false;
-
-    try {
-      const tagName = element.tagName;
-
-      if (tagName.includes('receiveTask')) {
-        return true;
-      }
-
-      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
-        return !!element.querySelector('messageEventDefinition');
-      }
-
-      if (tagName.includes('startEvent')) {
-        const parentSubProcess = element.parentElement;
-        if (parentSubProcess?.tagName.includes('subProcess')) {
-          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
-          if (triggeredByEvent === 'true') {
-            return !!element.querySelector('messageEventDefinition');
-          }
-        }
-      }
-
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  private isForced(element: Element): boolean {
-    if (!element) return false;
-
-    try {
-      const tagName = element.tagName;
-
-      if (tagName.includes('boundaryEvent') || tagName.includes('intermediateCatchEvent')) {
-        return !!element.querySelector('conditionalEventDefinition');
-      }
-
-      if (tagName.includes('startEvent')) {
-        const parentSubProcess = element.parentElement;
-        if (parentSubProcess?.tagName.includes('subProcess')) {
-          const triggeredByEvent = parentSubProcess.getAttribute('triggeredByEvent');
-          if (triggeredByEvent === 'true') {
-            return !!element.querySelector('conditionalEventDefinition');
-          }
-        }
-      }
-
-      return false;
-    } catch (e) {
-      return false;
-    }
-  }
 
   private getUpdateEventTriggerForActivity(activityId: string): boolean {
     const instructions = this.editableInstructions || [];

@@ -1093,6 +1093,31 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
                type === 'bpmn:ReceiveTask';
       });
 
+      comp.getBpmnDomElement = vi.fn((id: string) => {
+        const parser = new DOMParser();
+        if (id === 'BoundaryEvent_1') {
+          const xml = '<bpmn2:boundaryEvent id="BoundaryEvent_1"><bpmn2:messageEventDefinition/></bpmn2:boundaryEvent>';
+          const doc = parser.parseFromString(`<root xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">${xml}</root>`, 'text/xml');
+          return doc.querySelector('[id="BoundaryEvent_1"]');
+        }
+        if (id === 'IntermediateCatchEvent_1') {
+          const xml = '<bpmn2:intermediateCatchEvent id="IntermediateCatchEvent_1"><bpmn2:messageEventDefinition/></bpmn2:intermediateCatchEvent>';
+          const doc = parser.parseFromString(`<root xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">${xml}</root>`, 'text/xml');
+          return doc.querySelector('[id="IntermediateCatchEvent_1"]');
+        }
+        if (id === 'ReceiveTask_1') {
+          const xml = '<bpmn2:receiveTask id="ReceiveTask_1" messageRef="Msg1"/>';
+          const doc = parser.parseFromString(`<root xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">${xml}</root>`, 'text/xml');
+          return doc.querySelector('[id="ReceiveTask_1"]');
+        }
+        if (id === 'UserTask_1') {
+          const xml = '<bpmn2:userTask id="UserTask_1"/>';
+          const doc = parser.parseFromString(`<root xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">${xml}</root>`, 'text/xml');
+          return doc.querySelector('[id="UserTask_1"]');
+        }
+        return null;
+      });
+
       comp.getUpdateEventTriggerForActivity = vi.fn().mockReturnValue(false);
       comp.updateEventTrigger = vi.fn();
     });
@@ -1352,6 +1377,204 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       comp.updateMappingButtons();
 
       expect(overlays.add).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('showMappingPopover with event trigger checkbox (ticket #322)', () => {
+    beforeEach(() => {
+      const existingPopovers = document.querySelectorAll('.bpmn-mapping-popover');
+      existingPopovers.forEach(p => p.remove());
+
+      (comp as any).cachedXml = null;
+      (comp as any).cachedDocument = null;
+
+      comp.getBpmnDomElement = BpmnViewerComponent.prototype.getBpmnDomElement.bind(comp);
+      comp.getUpdateEventTriggerForActivity = BpmnViewerComponent.prototype.getUpdateEventTriggerForActivity.bind(comp);
+      comp.updateEventTrigger = BpmnViewerComponent.prototype.updateEventTrigger.bind(comp);
+
+      const canvasElement = document.createElement('div');
+      canvasElement.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 0,
+        left: 0,
+        bottom: 600,
+        right: 800,
+        width: 800,
+        height: 600,
+        x: 0,
+        y: 0
+      });
+      document.body.appendChild(canvasElement);
+      comp.canvasRef = { nativeElement: canvasElement };
+    });
+
+    it('should show checkbox for receiveTask with messageRef', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:message id="Msg1"/>
+  <bpmn2:process><bpmn2:receiveTask id="RT1" messageRef="Msg1"/></bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['RT1'], targetActivityIds: ['RT1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'RT1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('RT1', 'valid', anchor, badge);
+
+      const checkbox = document.querySelector('.bpmn-mapping-popover__checkbox input[type="checkbox"]');
+      expect(checkbox).not.toBeNull();
+    });
+
+    it('should show checkbox for userTask with timeout listener', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn">
+  <bpmn2:process>
+    <bpmn2:userTask id="UT1">
+      <bpmn2:extensionElements>
+        <camunda:taskListener event="timeout" class="Foo"/>
+      </bpmn2:extensionElements>
+    </bpmn2:userTask>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['UT1'], targetActivityIds: ['UT1_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'UT1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('UT1', 'valid', anchor, badge);
+
+      const checkbox = document.querySelector('.bpmn-mapping-popover__checkbox input[type="checkbox"]');
+      expect(checkbox).not.toBeNull();
+    });
+
+    it('should show checkbox CHECKED and DISABLED for boundary conditional', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="Task1">
+      <bpmn2:conditionalEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['BE1'], targetActivityIds: ['BE1_target'], updateEventTrigger: true }
+      ];
+
+      const badge: any = { activityId: 'BE1', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('BE1', 'valid', anchor, badge);
+
+      const checkbox = document.querySelector('.bpmn-mapping-popover__checkbox input[type="checkbox"]') as HTMLInputElement;
+      expect(checkbox).not.toBeNull();
+      expect(checkbox.checked).toBe(true);
+      expect(checkbox.disabled).toBe(true);
+    });
+
+    it('should NOT show checkbox for receiveTask without messageRef', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process><bpmn2:receiveTask id="RT2"/></bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+      comp.isSourceViewer = true;
+      comp.editableInstructions = [
+        { sourceActivityIds: ['RT2'], targetActivityIds: ['RT2_target'], updateEventTrigger: false }
+      ];
+
+      const badge: any = { activityId: 'RT2', migrationStatus: 'valid' };
+      const anchor = document.createElement('div');
+      anchor.getBoundingClientRect = vi.fn().mockReturnValue({
+        top: 100, left: 100, bottom: 120, right: 124,
+        width: 24, height: 20, x: 100, y: 100
+      });
+
+      (comp as any).showMappingPopover('RT2', 'valid', anchor, badge);
+
+      const checkbox = document.querySelector('.bpmn-mapping-popover__checkbox input[type="checkbox"]');
+      expect(checkbox).toBeNull();
+    });
+  });
+
+  describe('XML parsing cache', () => {
+    beforeEach(() => {
+      (comp as any).cachedXml = null;
+      (comp as any).cachedDocument = null;
+    });
+
+    it('should not re-parse XML on 10 consecutive calls with same XML', () => {
+      const xml = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process>
+    <bpmn2:receiveTask id="RT1" messageRef="Msg1"/>
+    <bpmn2:userTask id="UT1"/>
+    <bpmn2:boundaryEvent id="BE1" attachedToRef="UT1">
+      <bpmn2:timerEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+      comp.xml = xml;
+
+      const parseFromStringSpy = vi.spyOn(DOMParser.prototype, 'parseFromString');
+
+      for (let i = 0; i < 10; i++) {
+        (comp as any).getBpmnDomElement('RT1');
+      }
+
+      expect(parseFromStringSpy).toHaveBeenCalledTimes(1);
+      expect(parseFromStringSpy).toHaveBeenCalledWith(xml, 'text/xml');
+
+      parseFromStringSpy.mockRestore();
+    });
+
+    it('should re-parse XML when XML changes', () => {
+      const xml1 = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process><bpmn2:receiveTask id="RT1" messageRef="Msg1"/></bpmn2:process>
+</bpmn2:definitions>`;
+
+      const xml2 = `<?xml version="1.0"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process><bpmn2:receiveTask id="RT2" messageRef="Msg2"/></bpmn2:process>
+</bpmn2:definitions>`;
+
+      const parseFromStringSpy = vi.spyOn(DOMParser.prototype, 'parseFromString');
+
+      comp.xml = xml1;
+      (comp as any).getBpmnDomElement('RT1');
+      expect(parseFromStringSpy).toHaveBeenCalledTimes(1);
+
+      comp.xml = xml2;
+      (comp as any).getBpmnDomElement('RT2');
+      expect(parseFromStringSpy).toHaveBeenCalledTimes(2);
+
+      parseFromStringSpy.mockRestore();
     });
   });
 });
