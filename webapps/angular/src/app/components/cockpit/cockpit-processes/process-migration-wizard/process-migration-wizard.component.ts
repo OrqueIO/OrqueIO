@@ -336,6 +336,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   linkDiagramsNavigation = signal(false);
 
   private isApplyingSync = false;
+  private applyingLinkedNavigation = false;
   private sourceViewboxListener: (() => void) | null = null;
   private targetViewboxListener: (() => void) | null = null;
   private sourceViewerReady = signal(false);
@@ -803,8 +804,25 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.hoveredTargetActivityId.set(null);
     this.hoveredRemoveButtonSource.set(new Set());
 
+    // Reset navigation to root for both viewers when changing definitions
+    this.resetViewersNavigation();
+
     // Reset downstream wizard steps
     this.resetDownstream();
+  }
+
+  private resetViewersNavigation(): void {
+    this.applyingLinkedNavigation = true;
+    try {
+      if (this.sourceViewerComponent) {
+        this.sourceViewerComponent.navigateToRoot();
+      }
+      if (this.targetViewerComponent) {
+        this.targetViewerComponent.navigateToRoot();
+      }
+    } finally {
+      this.applyingLinkedNavigation = false;
+    }
   }
 
   /**
@@ -1576,6 +1594,118 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   onTargetViewerReady(): void {
     this.targetViewerReady.set(true);
+  }
+
+  onSourceNavigationChange(event: { path: string[]; depth: number; breadcrumb: string[] }): void {
+    console.debug('[NAVDBG] onSourceNavigationChange received', {
+      path: JSON.stringify(event.path),
+      depth: event.depth,
+      linkDiagramsNavigation: this.linkDiagramsNavigation(),
+      applyingLinkedNavigation: this.applyingLinkedNavigation
+    });
+
+    if (!this.linkDiagramsNavigation() || this.applyingLinkedNavigation) {
+      console.debug('[NAVDBG] onSourceNavigationChange: ignoring', {
+        reason: !this.linkDiagramsNavigation() ? 'link disabled' : 'applying linked navigation'
+      });
+      return;
+    }
+
+    console.debug('[NAVDBG] onSourceNavigationChange: calling syncNavigationToTarget');
+    this.syncNavigationToTarget(event);
+  }
+
+  onTargetNavigationChange(event: { path: string[]; depth: number; breadcrumb: string[] }): void {
+    console.debug('[NAVDBG] onTargetNavigationChange received', {
+      path: JSON.stringify(event.path),
+      depth: event.depth,
+      linkDiagramsNavigation: this.linkDiagramsNavigation(),
+      applyingLinkedNavigation: this.applyingLinkedNavigation
+    });
+
+    if (!this.linkDiagramsNavigation() || this.applyingLinkedNavigation) {
+      console.debug('[NAVDBG] onTargetNavigationChange: ignoring', {
+        reason: !this.linkDiagramsNavigation() ? 'link disabled' : 'applying linked navigation'
+      });
+      return;
+    }
+
+    console.debug('[NAVDBG] onTargetNavigationChange: calling syncNavigationToSource');
+    this.syncNavigationToSource(event);
+  }
+
+  private syncNavigationToTarget(sourceNav: { path: string[]; depth: number; breadcrumb: string[] }): void {
+    if (!this.targetViewerComponent) return;
+
+    this.applyingLinkedNavigation = true;
+    try {
+      const sourceDepth = sourceNav.depth;
+      const targetPath = this.targetViewerComponent.getLinkedNavigationPath();
+      const targetDepth = targetPath.length;
+
+      if (sourceDepth > targetDepth) {
+        // Source drilled down - navigate target through the full path
+        const achievedDepth = this.targetViewerComponent.navigateToPath(sourceNav.path);
+
+        // If achieved depth is less than source depth, try fallback by name
+        if (achievedDepth < sourceDepth) {
+          // Fallback not implemented yet - would need names in event
+          // For now, just log and stop at achieved depth
+          console.debug('[NAVDBG] syncNavigationToTarget: stopped at depth', { achievedDepth, sourceDepth });
+        }
+      } else if (sourceDepth < targetDepth) {
+        // Source went up - navigate target up to the same depth
+        const levelsToGoUp = targetDepth - sourceDepth;
+        this.targetViewerComponent.navigateUp(levelsToGoUp);
+      }
+    } finally {
+      this.applyingLinkedNavigation = false;
+    }
+  }
+
+  private syncNavigationToSource(targetNav: { path: string[]; depth: number; breadcrumb: string[] }): void {
+    if (!this.sourceViewerComponent) return;
+
+    this.applyingLinkedNavigation = true;
+    try {
+      const targetDepth = targetNav.depth;
+      const sourcePath = this.sourceViewerComponent.getLinkedNavigationPath();
+      const sourceDepth = sourcePath.length;
+
+      if (targetDepth > sourceDepth) {
+        // Target drilled down - navigate source through the full path
+        const achievedDepth = this.sourceViewerComponent.navigateToPath(targetNav.path);
+
+        // If achieved depth is less than target depth, try fallback by name
+        if (achievedDepth < targetDepth) {
+          // Fallback not implemented yet - would need names in event
+          // For now, just log and stop at achieved depth
+          console.debug('[NAVDBG] syncNavigationToSource: stopped at depth', { achievedDepth, targetDepth });
+        }
+      } else if (targetDepth < sourceDepth) {
+        // Target went up - navigate source up to the same depth
+        const levelsToGoUp = sourceDepth - targetDepth;
+        this.sourceViewerComponent.navigateUp(levelsToGoUp);
+      }
+    } finally {
+      this.applyingLinkedNavigation = false;
+    }
+  }
+
+  private tryFallbackNavigation(viewer: any, nav: { subprocessStack: Array<{ id: string; name: string }> }, currentDepth: number): void {
+    // Try to navigate to remaining levels using name matching
+    for (let i = currentDepth; i < nav.subprocessStack.length; i++) {
+      const item = nav.subprocessStack[i];
+      const matchedId = viewer.findSubprocessByName(item.name);
+
+      if (matchedId) {
+        const success = viewer.navigateToSubprocessById(matchedId);
+        if (!success) break;
+      } else {
+        // No match found, stop here
+        break;
+      }
+    }
   }
 
   private setupLinkedNavigation(): void {

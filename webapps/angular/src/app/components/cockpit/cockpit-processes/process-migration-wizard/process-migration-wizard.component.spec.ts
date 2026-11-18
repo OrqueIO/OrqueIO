@@ -2072,4 +2072,199 @@ ${Array.from({ length: 300 }, (_, i) => `    <bpmn2:userTask id="Task_${i + 1}"/
       expect(nonExistent?.updateEventTrigger).toBe(false);
     });
   });
+
+  describe('Linked diagrams navigation', () => {
+    const validBpmnXml = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL">
+  <bpmn2:process id="test">
+    <bpmn2:userTask id="Task_1"/>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+    beforeEach(()=> {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: validBpmnXml }));
+      processDefinitionService.getActivityStatistics.mockReturnValue(of([]));
+      migrationService.generateMigrationPlan.mockReturnValue(of({
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: []
+      }));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+    });
+
+    it('should not create ping-pong loop when applying linked navigation', () => {
+      fixture.detectChanges();
+      component.linkDiagramsNavigation.set(true);
+
+      const mockTargetViewer = { navigateToPath: vi.fn().mockReturnValue(1), getLinkedNavigationPath: vi.fn().mockReturnValue([]) };
+      component['targetViewerComponent'] = mockTargetViewer as any;
+
+      // Simulate navigation from source
+      component.onSourceNavigationChange({ path: ['Sub_1'], depth: 1, breadcrumb: ['Root', 'Sub 1'] });
+
+      expect(mockTargetViewer.navigateToPath).toHaveBeenCalledOnce();
+
+      // Simulate the navigation event emitted by target during sync - should be ignored
+      component.onTargetNavigationChange({ path: ['Sub_1'], depth: 1, breadcrumb: ['Root', 'Sub 1'] });
+
+      // navigateToPath should still have been called only once (no ping-pong)
+      expect(mockTargetViewer.navigateToPath).toHaveBeenCalledOnce();
+    });
+
+    it('should not sync when link diagrams navigation is disabled', () => {
+      fixture.detectChanges();
+      component.linkDiagramsNavigation.set(false);
+
+      const mockTargetViewer = { navigateToPath: vi.fn(), getLinkedNavigationPath: vi.fn().mockReturnValue([]) };
+      component['targetViewerComponent'] = mockTargetViewer as any;
+
+      component.onSourceNavigationChange({ path: ['Sub_1'], depth: 1, breadcrumb: ['Root', 'Sub 1'] });
+
+      expect(mockTargetViewer.navigateToPath).not.toHaveBeenCalled();
+    });
+
+    it('should sync drilldown by navigating through full path', () => {
+      fixture.detectChanges();
+      component.linkDiagramsNavigation.set(true);
+
+      const mockTargetViewer = { navigateToPath: vi.fn().mockReturnValue(2), getLinkedNavigationPath: vi.fn().mockReturnValue([]) };
+      component['targetViewerComponent'] = mockTargetViewer as any;
+
+      component.onSourceNavigationChange({
+        path: ['Sub_1', 'Sub_1_1'],
+        depth: 2,
+        breadcrumb: ['Root', 'Sub 1', 'Sub 1.1']
+      });
+
+      expect(mockTargetViewer.navigateToPath).toHaveBeenCalledWith(['Sub_1', 'Sub_1_1']);
+    });
+
+    it('should stop at achieved depth if path navigation fails partway', () => {
+      fixture.detectChanges();
+      component.linkDiagramsNavigation.set(true);
+
+      const mockTargetViewer = {
+        navigateToPath: vi.fn().mockReturnValue(1), // Only reached depth 1
+        getLinkedNavigationPath: vi.fn().mockReturnValue([])
+      };
+      component['targetViewerComponent'] = mockTargetViewer as any;
+
+      component.onSourceNavigationChange({
+        path: ['Sub_1', 'Sub_1_1'],
+        depth: 2,
+        breadcrumb: ['Root', 'Sub 1', 'Sub 1.1']
+      });
+
+      expect(mockTargetViewer.navigateToPath).toHaveBeenCalledWith(['Sub_1', 'Sub_1_1']);
+      // Should stop at depth 1 without throwing error
+    });
+
+    it('should navigate up without going through root', () => {
+      fixture.detectChanges();
+      component.linkDiagramsNavigation.set(true);
+
+      const mockTargetViewer = { navigateUp: vi.fn(), getLinkedNavigationPath: vi.fn().mockReturnValue(['Sub_1', 'Sub_2']) };
+      component['targetViewerComponent'] = mockTargetViewer as any;
+
+      component.onSourceNavigationChange({
+        path: [],
+        depth: 0,
+        breadcrumb: []
+      });
+
+      expect(mockTargetViewer.navigateUp).toHaveBeenCalledWith(2);
+    });
+
+    it('should navigate drilldown when other side is at lower depth', () => {
+      fixture.detectChanges();
+      component.linkDiagramsNavigation.set(true);
+
+      const mockTargetViewer = { navigateUp: vi.fn(), navigateToPath: vi.fn().mockReturnValue(1), getLinkedNavigationPath: vi.fn().mockReturnValue([]) };
+      component['targetViewerComponent'] = mockTargetViewer as any;
+
+      component.onSourceNavigationChange({
+        path: ['Sub_1'],
+        depth: 1,
+        breadcrumb: ['Root', 'Sub 1']
+      });
+
+      expect(mockTargetViewer.navigateUp).not.toHaveBeenCalled();
+      expect(mockTargetViewer.navigateToPath).toHaveBeenCalledWith(['Sub_1']);
+    });
+
+    it('should reset both viewers to root when definition changes', async () => {
+      fixture.detectChanges();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+      fixture.detectChanges();
+
+      const mockSourceViewer = { navigateToRoot: vi.fn() };
+      const mockTargetViewer = { navigateToRoot: vi.fn() };
+      component['sourceViewerComponent'] = mockSourceViewer as any;
+      component['targetViewerComponent'] = mockTargetViewer as any;
+
+      component.onSourceVersionChange(3);
+
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      expect(mockSourceViewer.navigateToRoot).toHaveBeenCalledOnce();
+      expect(mockTargetViewer.navigateToRoot).toHaveBeenCalledOnce();
+    });
+
+    it('should release guard after exception in syncNavigationToTarget', () => {
+      fixture.detectChanges();
+      component.linkDiagramsNavigation.set(true);
+
+      const mockTargetViewer = {
+        getLinkedNavigationPath: vi.fn().mockReturnValue([]),
+        navigateToPath: vi.fn(() => {
+          throw new Error('Navigation error');
+        })
+      };
+      component['targetViewerComponent'] = mockTargetViewer as any;
+
+      // Should not throw and guard should be released
+      expect(() => {
+        component.onSourceNavigationChange({
+          path: ['Sub_1'],
+          depth: 1,
+          breadcrumb: ['Root', 'Sub 1']
+        });
+      }).toThrow('Navigation error');
+
+      // Guard should be released, so next call should work
+      mockTargetViewer.navigateToPath.mockReturnValue(1);
+      component.onSourceNavigationChange({
+        path: ['Sub_1'],
+        depth: 1,
+        breadcrumb: ['Root', 'Sub 1']
+      });
+
+      expect(mockTargetViewer.navigateToPath).toHaveBeenCalledTimes(2);
+    });
+
+    it('should navigate through 2 levels of nested subprocesses', () => {
+      fixture.detectChanges();
+      component.linkDiagramsNavigation.set(true);
+
+      const mockTargetViewer = {
+        navigateToPath: vi.fn().mockReturnValue(2),
+        getLinkedNavigationPath: vi.fn().mockReturnValue([])
+      };
+      component['targetViewerComponent'] = mockTargetViewer as any;
+
+      component.onSourceNavigationChange({
+        path: ['Sub_1', 'Sub_1_1'],
+        depth: 2,
+        breadcrumb: ['Root', 'Sub 1', 'Sub 1.1']
+      });
+
+      expect(mockTargetViewer.navigateToPath).toHaveBeenCalledWith(['Sub_1', 'Sub_1_1']);
+    });
+  });
 });

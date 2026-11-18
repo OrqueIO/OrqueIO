@@ -117,6 +117,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() expandToggle = new EventEmitter<void>();
   @Output() focusClick = new EventEmitter<void>();
   @Output() callActivityClick = new EventEmitter<CallActivityClickEvent>();
+  @Output() navigationChange = new EventEmitter<{ path: string[]; depth: number; breadcrumb: string[] }>();
 
   private viewer: any = null;
   private overlays: any = null;
@@ -336,6 +337,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     });
 
     eventBus.on('root.set', (event: any) => {
+      console.debug('[NAVDBG] root.set event fired', { element: event.element?.id, type: event.element?.type });
       this.updateSubprocessStack(event.element);
       this.needsZoomFit = true;
       this.scheduleFitToViewport();
@@ -1382,12 +1384,14 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (element.type === 'bpmn:Process' || element.type === 'bpmn:Collaboration') {
       this.subprocessStack = [];
     } else {
-      const existingIndex = this.subprocessStack.findIndex(item => item.id === element.id);
+      const elementShapeId = element.businessObject?.id || element.id;
+      const existingIndex = this.subprocessStack.findIndex(item => item.id === elementShapeId);
       if (existingIndex >= 0) {
         this.subprocessStack = this.subprocessStack.slice(0, existingIndex);
       } else if (this.currentRootElement) {
         const name = this.getElementDisplayName(this.currentRootElement);
-        this.subprocessStack.push({ id: this.currentRootElement.id, name, element: this.currentRootElement });
+        const subprocessId = this.currentRootElement.businessObject?.id || this.currentRootElement.id;
+        this.subprocessStack.push({ id: subprocessId, name, element: this.currentRootElement });
       }
     }
 
@@ -1404,6 +1408,19 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
 
     this.cdr.detectChanges();
+
+    const path = this.getLinkedNavigationPath();
+    const eventPayload = {
+      path,
+      depth: path.length,
+      breadcrumb: [...this.subprocessBreadcrumb]
+    };
+    console.debug('[NAVDBG] Emitting navigationChange', {
+      path: JSON.stringify(path),
+      depth: eventPayload.depth,
+      isSourceViewer: this.isSourceViewer
+    });
+    this.navigationChange.emit(eventPayload);
   }
 
   private checkEventSubprocessScope(element: any): boolean {
@@ -1444,6 +1461,174 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (!item || !this.viewer) return;
     const canvas = this.viewer.get('canvas');
     canvas.setRootElement(item.element);
+  }
+
+  navigateToSubprocessById(activityId: string): boolean {
+    console.debug('[NAVDBG] navigateToSubprocessById called', { activityId, isSourceViewer: this.isSourceViewer });
+
+    try {
+      if (!this.viewer) {
+        console.debug('[NAVDBG] navigateToSubprocessById: no viewer', { activityId });
+        return false;
+      }
+
+      const elementRegistry = this.viewer.get('elementRegistry');
+      const canvas = this.viewer.get('canvas');
+      const shapeElement = elementRegistry.get(activityId);
+
+      if (!shapeElement) {
+        console.debug('[NAVDBG] navigateToSubprocessById: shape element not found', { activityId });
+        return false;
+      }
+
+      const isSubprocess = shapeElement.type === 'bpmn:SubProcess' ||
+                           shapeElement.type === 'bpmn:Transaction' ||
+                           shapeElement.type === 'bpmn:AdHocSubProcess';
+      if (!isSubprocess) {
+        console.debug('[NAVDBG] navigateToSubprocessById: element is not a subprocess', { activityId, type: shapeElement.type });
+        return false;
+      }
+
+      const planeId = activityId + '_plane';
+      const planeElement = elementRegistry.get(planeId);
+
+      if (!planeElement) {
+        console.debug('[NAVDBG] navigateToSubprocessById: plane element not found, cannot drill down', { activityId, planeId });
+        return false;
+      }
+
+      canvas.setRootElement(planeElement);
+      console.debug('[NAVDBG] navigateToSubprocessById: success', { activityId, planeId });
+      return true;
+
+    } catch (e: any) {
+      console.debug('[NAVDBG] navigateToSubprocessById: exception caught', {
+        activityId,
+        error: e?.message || e,
+        stack: e?.stack
+      });
+      return false;
+    }
+  }
+
+  navigateToRoot(): void {
+    if (!this.viewer) return;
+
+    const canvas = this.viewer.get('canvas');
+    const definitions = this.viewer.getDefinitions();
+
+    if (definitions && definitions.rootElements && definitions.rootElements.length > 0) {
+      const process = definitions.rootElements.find((el: any) =>
+        el.$type === 'bpmn:Process' || el.$type === 'bpmn:Collaboration'
+      );
+      if (process) {
+        try {
+          canvas.setRootElement(process);
+        } catch (e) {
+          // Ignore navigation errors
+        }
+      }
+    }
+  }
+
+  navigateToPath(pathIds: string[]): number {
+    console.debug('[NAVDBG] navigateToPath called', { pathIds, isSourceViewer: this.isSourceViewer });
+    if (!this.viewer || pathIds.length === 0) return 0;
+
+    this.navigateToRoot();
+
+    let depth = 0;
+    for (const id of pathIds) {
+      const success = this.navigateToSubprocessById(id);
+      if (!success) {
+        console.debug('[NAVDBG] navigateToPath: stopped at depth', { depth, failedId: id });
+        break;
+      }
+      depth++;
+    }
+
+    console.debug('[NAVDBG] navigateToPath: finished', { achievedDepth: depth, requestedDepth: pathIds.length });
+    return depth;
+  }
+
+  navigateUp(levels: number): void {
+    const currentPath = this.getLinkedNavigationPath();
+    const currentDepth = currentPath.length;
+    console.debug('[NAVDBG] navigateUp called', {
+      levels,
+      currentDepth,
+      currentPath: JSON.stringify(currentPath),
+      isSourceViewer: this.isSourceViewer
+    });
+    if (!this.viewer || levels <= 0) return;
+
+    const targetDepth = Math.max(0, currentDepth - levels);
+    console.debug('[NAVDBG] navigateUp: computed target depth', { targetDepth });
+
+    if (targetDepth === 0) {
+      console.debug('[NAVDBG] navigateUp: going to root');
+      this.navigateToRoot();
+    } else {
+      const targetPath = currentPath.slice(0, targetDepth);
+      console.debug('[NAVDBG] navigateUp: navigating to path', { targetPath: JSON.stringify(targetPath) });
+      this.navigateToPath(targetPath);
+    }
+  }
+
+  getCurrentDepth(): number {
+    return this.getLinkedNavigationPath().length;
+  }
+
+  getLinkedNavigationPath(): string[] {
+    const path: string[] = [];
+
+    for (const item of this.subprocessStack) {
+      if (item.element?.type === 'bpmn:Process' || item.element?.type === 'bpmn:Collaboration') {
+        continue;
+      }
+      if (item.id?.startsWith('__implicitroot_')) {
+        continue;
+      }
+      path.push(item.id);
+    }
+    if (this.currentRootElement &&
+        this.currentRootElement.type !== 'bpmn:Process' &&
+        this.currentRootElement.type !== 'bpmn:Collaboration') {
+      const currentId = this.currentRootElement.businessObject?.id || this.currentRootElement.id;
+
+      if (currentId && !currentId.startsWith('__implicitroot_')) {
+        path.push(currentId);
+      }
+    }
+
+    return path;
+  }
+
+  findSubprocessByName(name: string, type?: string): string | null {
+    if (!this.viewer) return null;
+
+    const elementRegistry = this.viewer.get('elementRegistry');
+    const canvas = this.viewer.get('canvas');
+    const currentRoot = canvas.getRootElement();
+
+    if (!currentRoot) return null;
+
+    const children = currentRoot.children || [];
+    const matches: any[] = [];
+
+    for (const child of children) {
+      const isSubprocess = child.type === 'bpmn:SubProcess' || child.type === 'bpmn:AdHocSubProcess';
+      if (!isSubprocess) continue;
+
+      const childName = child.businessObject?.name || child.id;
+      if (childName === name) {
+        if (!type || child.type === type) {
+          matches.push(child);
+        }
+      }
+    }
+
+    return matches.length === 1 ? matches[0].id : null;
   }
 
   shiftWindowLeft(): void {

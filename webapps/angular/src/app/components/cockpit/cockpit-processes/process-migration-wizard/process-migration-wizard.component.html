@@ -146,7 +146,8 @@
                   (selectMappedActivity)="onSelectMappedActivity($event)"
                   (elementHover)="onElementHover($event)"
                   (backgroundClick)="onCancelMapping()"
-                  (viewerReady)="onSourceViewerReady()">
+                  (viewerReady)="onSourceViewerReady()"
+                  (navigationChange)="onSourceNavigationChange($event)">
                 </app-bpmn-viewer>
               } @else {
                 <div class="diagram-empty">{{ 'migration.selectSourceDiagram' | translate }}</div>
@@ -172,7 +173,8 @@
                   (deleteMapping)="onDeleteMapping($event)"
                   (elementHover)="onElementHover($event)"
                   (backgroundClick)="onCancelMapping()"
-                  (viewerReady)="onTargetViewerReady()">
+                  (viewerReady)="onTargetViewerReady()"
+                  (navigationChange)="onTargetNavigationChange($event)">
                 </app-bpmn-viewer>
               } @else {
                 <div class="diagram-empty">{{ 'migration.selectTargetDiagram' | translate }}</div>
