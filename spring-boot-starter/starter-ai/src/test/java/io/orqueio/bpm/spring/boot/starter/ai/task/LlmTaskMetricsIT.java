@@ -21,7 +21,9 @@ import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDeploymentIT.pro
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.util.List;
+import io.orqueio.bpm.spring.boot.starter.ai.test.TestAiApplication;
+import org.springframework.boot.test.context.SpringBootTest;
+import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -36,20 +38,12 @@ import io.orqueio.bpm.engine.RepositoryService;
 import io.orqueio.bpm.engine.RuntimeService;
 import io.orqueio.bpm.engine.repository.Deployment;
 import io.orqueio.bpm.engine.runtime.ProcessInstance;
-import io.orqueio.bpm.spring.boot.starter.ai.test.TestAiApplication;
+import io.orqueio.bpm.spring.boot.starter.ai.testing.StubChatModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.metadata.ChatResponseMetadata;
-import org.springframework.ai.chat.metadata.DefaultUsage;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.retry.NonTransientAiException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -73,7 +67,12 @@ class LlmTaskMetricsIT {
   private MeterRegistry meterRegistry;
 
   @Autowired
-  private ObservingChatModel model;
+  private StubChatModel model;
+
+  @Autowired
+  private ObservationRegistry observationRegistry;
+
+  private volatile Observation observationDuringCall;
 
   @Autowired
   private LlmAnswerReuseIT.FailOnce failOnce;
@@ -83,10 +82,10 @@ class LlmTaskMetricsIT {
   @BeforeEach
   void reset() {
     meterRegistry.clear();
-    model.answer = "{\"category\":\"Theft\"}";
-    model.observationDuringCall = null;
-    model.delayMillis = 0;
-    model.failure = null;
+    // Reports token usage, as real providers do, and keeps the observation current during the call
+    observationDuringCall = null;
+    model.reset().answer("{\"category\":\"Theft\"}").reportUsage(312, 100)
+        .onCall(prompt -> observationDuringCall = observationRegistry.getCurrentObservation());
     failOnce.failed = false;
   }
 
@@ -135,7 +134,7 @@ class LlmTaskMetricsIT {
   @Test
   void shouldCountTokensOfAnInvalidAnswer() {
     deploy("", "");
-    model.answer = "not json";
+    model.answer("not json");
 
     assertThatThrownBy(() -> runLlmTask("stolen bike")).isInstanceOf(LlmInvalidAnswerException.class);
 
@@ -146,7 +145,7 @@ class LlmTaskMetricsIT {
   @Test
   void shouldCountTokensOfACallAbandonedAfterItsTimeout() throws Exception {
     deploy("", "", property("orqueio.llm.timeout", "PT0.2S"));
-    model.delayMillis = 1000;
+    model.onCall(prompt -> finishEvenWhenInterrupted(Duration.ofMillis(1000)));
 
     assertThatThrownBy(() -> runLlmTask("stolen bike")).isInstanceOf(LlmTransientException.class);
     assertThat(executionCount("retryable_error", "false")).isEqualTo(1);
@@ -162,7 +161,7 @@ class LlmTaskMetricsIT {
   @Test
   void shouldRecordAProviderErrorThatIsNotRetried() {
     deploy("", "");
-    model.failure = new NonTransientAiException("Invalid API key");
+    model.fail(new NonTransientAiException("Invalid API key"));
 
     assertThatThrownBy(() -> runLlmTask("stolen bike")).isInstanceOf(LlmTaskException.class);
 
@@ -177,7 +176,7 @@ class LlmTaskMetricsIT {
     runLlmTask("stolen bike");
 
     // The model runs on its own thread: Spring AI's chat observation would start under this one
-    Observation current = model.observationDuringCall;
+    Observation current = observationDuringCall;
     assertThat(current).isNotNull();
     assertThat(current.getContextView().getName()).isEqualTo(LlmTaskMetrics.OBSERVATION);
     assertThat(current.getContextView().getLowCardinalityKeyValue(LlmTaskMetrics.ACTIVITY_ID).getValue())
@@ -222,45 +221,22 @@ class LlmTaskMetricsIT {
     deployment = repositoryService.createDeployment().addString("llm-task.bpmn", bpmn).deploy();
   }
 
+  // Like an HTTP client, finishes its call even when interrupted
+  private static void finishEvenWhenInterrupted(Duration duration) {
+    long until = System.nanoTime() + duration.toNanos();
+    while (System.nanoTime() < until) {
+      try {
+        Thread.sleep(10);
+      }
+      catch (InterruptedException e) {
+        // keep going
+      }
+    }
+  }
+
   private void runLlmTask(String text) {
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess", Map.of("text", text));
     managementService.executeJob(managementService.createJobQuery().processInstanceId(instance.getId()).singleResult().getId());
-  }
-
-  // Reports token usage, as real providers do, and the observation current during the call
-  static class ObservingChatModel implements ChatModel {
-
-    private final ObservationRegistry observationRegistry;
-    volatile String answer;
-    volatile Observation observationDuringCall;
-    volatile long delayMillis;
-    volatile RuntimeException failure;
-
-    ObservingChatModel(ObservationRegistry observationRegistry) {
-      this.observationRegistry = observationRegistry;
-    }
-
-    @Override
-    public ChatResponse call(Prompt prompt) {
-      observationDuringCall = observationRegistry.getCurrentObservation();
-      if (failure != null) {
-        throw failure;
-      }
-      if (delayMillis > 0) {
-        // Like an HTTP client, finishes its call even when interrupted
-        long until = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(delayMillis);
-        while (System.nanoTime() < until) {
-          try {
-            Thread.sleep(10);
-          }
-          catch (InterruptedException e) {
-            // keep going
-          }
-        }
-      }
-      ChatResponseMetadata metadata = ChatResponseMetadata.builder().usage(new DefaultUsage(312, 100)).build();
-      return new ChatResponse(List.of(new Generation(new AssistantMessage(answer))), metadata);
-    }
   }
 
   @TestConfiguration
@@ -280,8 +256,8 @@ class LlmTaskMetricsIT {
     }
 
     @Bean
-    ObservingChatModel observingChatModel(ObservationRegistry observationRegistry) {
-      return new ObservingChatModel(observationRegistry);
+    StubChatModel stubChatModel() {
+      return new StubChatModel();
     }
 
     @Bean

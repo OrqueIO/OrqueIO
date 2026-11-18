@@ -22,8 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import io.orqueio.bpm.engine.ManagementService;
 import io.orqueio.bpm.engine.RepositoryService;
@@ -36,14 +34,10 @@ import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmCallLock;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.RedisLlmAnswerStore;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.RedisLlmCallLock;
 import io.orqueio.bpm.spring.boot.starter.ai.test.TestAiApplication;
+import io.orqueio.bpm.spring.boot.starter.ai.testing.StubChatModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -93,14 +87,13 @@ class LlmAnswerReuseRedisIT {
   private StringRedisTemplate redis;
 
   @Autowired
-  private CountingChatModel model;
+  private StubChatModel model;
 
   private Deployment deployment;
 
   @BeforeEach
   void reset() {
-    model.calls.set(0);
-    model.delay = null;
+    model.reset().answer("{\"category\":\"Theft\"}");
   }
 
   @AfterEach
@@ -118,7 +111,7 @@ class LlmAnswerReuseRedisIT {
 
     runLlmTask();
 
-    assertThat(model.calls).hasValue(1);
+    assertThat(model.calls()).isEqualTo(1);
     assertThat(redis.keys(RedisLlmAnswerStore.KEY_PREFIX + "*")).isNotEmpty();
     // The lock is released once the call ended
     assertThat(redis.keys(RedisLlmCallLock.KEY_PREFIX + "*")).isEmpty();
@@ -129,14 +122,14 @@ class LlmAnswerReuseRedisIT {
     // The timeout interrupts the call thread; Redis commands fail on an interrupted thread
     deploy(property("orqueio.llm.prompt", "Classify slowly through Redis") + property("orqueio.llm.outputs", "category:string")
         + property("orqueio.llm.timeout", "PT0.6S"));
-    model.delay = Duration.ofMillis(900);
+    model.onCall(prompt -> LlmAnswerReuseIT.sleepIgnoringInterrupts(Duration.ofMillis(900)));
 
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess");
     Job job = managementService.createJobQuery().processInstanceId(instance.getId()).singleResult();
     assertThatThrownBy(() -> managementService.executeJob(job.getId())).hasMessage("The model did not answer within PT0.6S");
     managementService.executeJob(job.getId());
 
-    assertThat(model.calls).hasValue(1);
+    assertThat(model.calls()).isEqualTo(1);
     assertThat(runtimeService.getVariable(instance.getId(), "category")).isEqualTo("Theft");
     assertThat(redis.keys(RedisLlmCallLock.KEY_PREFIX + "*")).isEmpty();
   }
@@ -156,27 +149,12 @@ class LlmAnswerReuseRedisIT {
     managementService.executeJob(managementService.createJobQuery().processInstanceId(instance.getId()).singleResult().getId());
   }
 
-  static class CountingChatModel implements ChatModel {
-
-    final AtomicInteger calls = new AtomicInteger();
-    volatile Duration delay;
-
-    @Override
-    public ChatResponse call(Prompt prompt) {
-      calls.incrementAndGet();
-      if (delay != null) {
-        LlmAnswerReuseIT.CountingChatModel.sleepIgnoringInterrupts(delay);
-      }
-      return new ChatResponse(List.of(new Generation(new AssistantMessage("{\"category\":\"Theft\"}"))));
-    }
-  }
-
   @TestConfiguration
   static class StubModelConfiguration {
 
     @Bean
-    CountingChatModel countingChatModel() {
-      return new CountingChatModel();
+    StubChatModel stubChatModel() {
+      return new StubChatModel();
     }
   }
 

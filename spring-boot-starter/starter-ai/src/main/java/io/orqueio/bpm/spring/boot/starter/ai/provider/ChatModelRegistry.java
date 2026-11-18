@@ -117,6 +117,9 @@ public class ChatModelRegistry {
    * @return the id of the provider the model belongs to, or its class name if it is not a supported provider
    */
   public String providerIdOf(ChatModel model) {
+    if (model instanceof LlmProviderStandIn standIn) {
+      return standIn.providerId();
+    }
     return Arrays.stream(LlmProvider.values())
         .filter(provider -> isInstance(model, provider))
         .map(LlmProvider::getId)
@@ -125,6 +128,9 @@ public class ChatModelRegistry {
   }
 
   protected boolean isInstance(ChatModel model, LlmProvider provider) {
+    if (model instanceof LlmProviderStandIn standIn) {
+      return standIn.standsFor(provider);
+    }
     Class<?> modelClass = AopUtils.getTargetClass(model);
     try {
       Class<?> providerClass = ClassUtils.forName(provider.getChatModelClassName(), modelClass.getClassLoader());

@@ -20,7 +20,6 @@ import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDeploymentIT.pro
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDeploymentIT.property;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
 
 import io.orqueio.bpm.engine.ManagementService;
 import io.orqueio.bpm.engine.RepositoryService;
@@ -30,13 +29,9 @@ import io.orqueio.bpm.engine.runtime.ProcessInstance;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmAnswerStore;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.RedisLlmAnswerStore;
 import io.orqueio.bpm.spring.boot.starter.ai.test.TestAiApplication;
+import io.orqueio.bpm.spring.boot.starter.ai.testing.StubChatModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -95,13 +90,8 @@ class LlmAnswerReuseRedisDownIT {
   static class StubModelConfiguration {
 
     @Bean
-    ChatModel stubChatModel() {
-      return new ChatModel() {
-        @Override
-        public ChatResponse call(Prompt prompt) {
-          return new ChatResponse(List.of(new Generation(new AssistantMessage("{\"category\":\"Theft\"}"))));
-        }
-      };
+    StubChatModel stubChatModel() {
+      return new StubChatModel().answer("{\"category\":\"Theft\"}");
     }
   }
 

@@ -22,6 +22,7 @@ import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
+import io.orqueio.bpm.spring.boot.starter.ai.testing.StubChatModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.ollama.OllamaChatModel;
@@ -38,6 +39,39 @@ class ChatModelRegistryTest {
 
     assertThat(registry.getChatModel("ollama")).isSameAs(ollama);
     assertThat(registry.getChatModel("openai")).isSameAs(openAi);
+  }
+
+  @Test
+  void shouldResolveEveryProviderToAStandInModel() {
+    StubChatModel stub = new StubChatModel();
+    ChatModelRegistry registry = registry(null, stub);
+
+    assertThat(registry.getChatModel("openai")).isSameAs(stub);
+    assertThat(registry.getChatModel("anthropic")).isSameAs(stub);
+    assertThat(registry.getChatModel(null)).isSameAs(stub);
+    assertThat(registry.providerIdOf("anthropic", stub)).isEqualTo("anthropic");
+    assertThat(registry.providerIdOf(null, stub)).isEqualTo(StubChatModel.PROVIDER_ID);
+  }
+
+  @Test
+  void shouldResolveOnlyTheProvidersAStandInModelIsLimitedTo() {
+    StubChatModel stub = new StubChatModel().standingFor(LlmProvider.OPENAI);
+    ChatModelRegistry registry = registry(null, stub, ollama);
+
+    assertThat(registry.getChatModel("openai")).isSameAs(stub);
+    assertThat(registry.getChatModel("ollama")).isSameAs(ollama);
+    assertThatThrownBy(() -> registry.getChatModel("anthropic"))
+        .isInstanceOf(LlmProviderException.class)
+        .hasMessageContaining("'anthropic' is not configured");
+  }
+
+  @Test
+  void shouldRejectAStandInModelNextToTheProviderItStandsFor() {
+    ChatModelRegistry registry = registry(null, new StubChatModel(), ollama);
+
+    assertThatThrownBy(() -> registry.getChatModel("ollama"))
+        .isInstanceOf(LlmProviderException.class)
+        .hasMessageContaining("define a single one");
   }
 
   @Test

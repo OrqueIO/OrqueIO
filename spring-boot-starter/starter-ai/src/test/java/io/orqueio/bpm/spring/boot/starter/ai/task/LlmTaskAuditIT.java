@@ -35,16 +35,10 @@ import io.orqueio.bpm.engine.repository.Deployment;
 import io.orqueio.bpm.engine.runtime.Job;
 import io.orqueio.bpm.engine.runtime.ProcessInstance;
 import io.orqueio.bpm.spring.boot.starter.ai.test.TestAiApplication;
+import io.orqueio.bpm.spring.boot.starter.ai.testing.StubChatModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.metadata.ChatResponseMetadata;
-import org.springframework.ai.chat.metadata.DefaultUsage;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -78,7 +72,7 @@ class LlmTaskAuditIT {
   private TaskService taskService;
 
   @Autowired
-  private ReportingChatModel model;
+  private StubChatModel model;
 
   @Autowired
   private LlmAnswerReuseIT.FailOnce failOnce;
@@ -88,7 +82,8 @@ class LlmTaskAuditIT {
 
   @BeforeEach
   void reset() {
-    model.answer = "{\"category\":\"Theft\"}";
+    // Reports a model and token usage, as real providers do
+    model.reset().answer("{\"category\":\"Theft\"}").reportUsage(312, 100).reportModel("qwen2.5:7b-reported");
     failOnce.failed = false;
   }
 
@@ -106,7 +101,7 @@ class LlmTaskAuditIT {
     ProcessInstance instance = runLlmTask("my bike was stolen");
 
     JsonNode audit = auditOf(instance);
-    assertThat(audit.get("provider").asString()).isEqualTo(ReportingChatModel.class.getName());
+    assertThat(audit.get("provider").asString()).isEqualTo(StubChatModel.PROVIDER_ID);
     assertThat(audit.get("model").asString()).isEqualTo("qwen2.5:7b-reported");
     // The author's prompt, the library's wording around the data, and the declared outputs
     assertThat(audit.get("promptVersion").asString()).isEqualTo(LlmTaskAuditor.sha256(PROMPT
@@ -150,7 +145,7 @@ class LlmTaskAuditIT {
 
   @Test
   void shouldRecordBpmnError() {
-    model.answer = "{\"category\":42}";
+    model.answer("{\"category\":42}");
     deployment = repositoryService.createDeployment().addString("llm-task.bpmn", process("""
         <bpmn:serviceTask id="Task_Llm" camunda:delegateExpression="${orqueioLlmTask}" camunda:asyncBefore="true">
           <bpmn:extensionElements>
@@ -253,27 +248,12 @@ class LlmTaskAuditIT {
     return json.readTree((String) value);
   }
 
-  // Reports a model and token usage, as real providers do
-  static class ReportingChatModel implements ChatModel {
-
-    volatile String answer;
-
-    @Override
-    public ChatResponse call(Prompt prompt) {
-      ChatResponseMetadata metadata = ChatResponseMetadata.builder()
-          .model("qwen2.5:7b-reported")
-          .usage(new DefaultUsage(312, 100))
-          .build();
-      return new ChatResponse(List.of(new Generation(new AssistantMessage(answer))), metadata);
-    }
-  }
-
   @TestConfiguration
   static class StubModelConfiguration {
 
     @Bean
-    ReportingChatModel reportingChatModel() {
-      return new ReportingChatModel();
+    StubChatModel stubChatModel() {
+      return new StubChatModel();
     }
 
     @Bean
