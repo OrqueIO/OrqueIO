@@ -789,6 +789,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     allElements.forEach((element: any) => {
       if (!element.businessObject || element.type === 'label') return;
 
+      if (!element.parent) return;
+
       // Exclude Start/End Events, SequenceFlow, Process, Participant/Pool, labels, and annotations
       if (element.type === 'bpmn:StartEvent' ||
           element.type === 'bpmn:EndEvent' ||
@@ -957,6 +959,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     allElements.forEach((element: any) => {
       if (!element.businessObject || element.type === 'label') return;
 
+      if (!element.parent) return;
+
       // Exclude Start/End Events, SequenceFlow, Process, Participant/Pool, labels, and annotations
       if (element.type === 'bpmn:StartEvent' ||
           element.type === 'bpmn:EndEvent' ||
@@ -1123,6 +1127,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     allElements.forEach((element: any) => {
       if (!element.businessObject || element.type === 'label') return;
+
+      // Exclude root elements (planes) - they have no parent and represent diagram roots
+      if (!element.parent) return;
 
       if (element.type === 'bpmn:StartEvent' ||
           element.type === 'bpmn:EndEvent' ||

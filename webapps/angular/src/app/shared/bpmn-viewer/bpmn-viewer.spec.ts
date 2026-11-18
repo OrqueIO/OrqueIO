@@ -578,31 +578,38 @@ describe('BpmnViewerComponent — migration mapping buttons (A4)', () => {
   const mockUserTask = {
     id: 'UserTask_1',
     type: 'bpmn:UserTask',
-    businessObject: { id: 'UserTask_1', name: 'Approve' }
+    businessObject: { id: 'UserTask_1', name: 'Approve' },
+    parent: { id: 'Process_1' },
+    width: 100,
+    height: 80
   };
 
   const mockStartEvent = {
     id: 'StartEvent_1',
     type: 'bpmn:StartEvent',
-    businessObject: { id: 'StartEvent_1', name: 'Start' }
+    businessObject: { id: 'StartEvent_1', name: 'Start' },
+    parent: { id: 'Process_1' }
   };
 
   const mockEndEvent = {
     id: 'EndEvent_1',
     type: 'bpmn:EndEvent',
-    businessObject: { id: 'EndEvent_1', name: 'End' }
+    businessObject: { id: 'EndEvent_1', name: 'End' },
+    parent: { id: 'Process_1' }
   };
 
   const mockGateway = {
     id: 'Gateway_1',
     type: 'bpmn:ExclusiveGateway',
-    businessObject: { id: 'Gateway_1' }
+    businessObject: { id: 'Gateway_1' },
+    parent: { id: 'Process_1' }
   };
 
   const mockSequenceFlow = {
     id: 'Flow_1',
     type: 'bpmn:SequenceFlow',
-    businessObject: { id: 'Flow_1' }
+    businessObject: { id: 'Flow_1' },
+    parent: { id: 'Process_1' }
   };
 
   beforeEach(async () => {
@@ -613,6 +620,7 @@ describe('BpmnViewerComponent — migration mapping buttons (A4)', () => {
     fixture = TestBed.createComponent(BpmnViewerComponent);
     component = fixture.componentInstance;
     comp = component as any;
+    comp.isSourceViewer = true;
     fixture.detectChanges();
 
     overlays = comp.viewer?.get('overlays');
@@ -722,7 +730,7 @@ describe('BpmnViewerComponent — migration mapping buttons (A4)', () => {
   });
 
   describe('updateMappingButtons — button positioning', () => {
-    it('positions button at middle-right edge (top: 50%, right: -12px)', () => {
+    it('positions button at bottom-right edge (top: element.height - 8, right: -8)', () => {
       elementRegistry.forEach.mockImplementation((callback: any) => {
         callback(mockUserTask);
       });
@@ -735,7 +743,7 @@ describe('BpmnViewerComponent — migration mapping buttons (A4)', () => {
       const userTaskOverlay = calls.find((call: any) => call[0] === 'UserTask_1');
 
       expect(userTaskOverlay).toBeDefined();
-      expect(userTaskOverlay[1].position).toEqual({ top: '50%', right: -12 });
+      expect(userTaskOverlay[1].position).toEqual({ top: 72, right: -8 });
     });
   });
 
@@ -1224,6 +1232,126 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
 
       expect(checkbox.checked).toBe(false);
+    });
+  });
+
+  describe('updateMappingButtons — root element exclusion', () => {
+    it('excludes root elements (planes without parent) from receiving mapping buttons', () => {
+      const mockRootPlane = {
+        id: 'SubProcess_1_plane',
+        type: 'bpmn:SubProcess',
+        businessObject: { id: 'SubProcess_1_plane' },
+        parent: undefined
+      };
+      const mockTask = {
+        id: 'Task_1',
+        type: 'bpmn:Task',
+        businessObject: { id: 'Task_1' },
+        parent: { id: 'Process_1' },
+        width: 100,
+        height: 80
+      };
+
+      const elementReg = comp.viewer.get('elementRegistry');
+      elementReg.getAll = vi.fn().mockReturnValue([mockRootPlane, mockTask]);
+
+      comp.isSourceViewer = true;
+      comp.enableMappingButtons = true;
+      comp.mappedActivityIds = new Set();
+
+      const overlays = comp.viewer.get('overlays');
+      overlays.add.mockClear();
+
+      comp.updateMappingButtons();
+
+      expect(overlays.add).toHaveBeenCalledTimes(1);
+      expect(overlays.add).toHaveBeenCalledWith(
+        'Task_1',
+        expect.objectContaining({ html: expect.any(HTMLElement) })
+      );
+    });
+
+    it('creates mapping button for unmapped subprocess shape (not plane)', () => {
+      const mockSubProcessShape = {
+        id: 'SubProcess_1',
+        type: 'bpmn:SubProcess',
+        businessObject: { id: 'SubProcess_1' },
+        parent: { id: 'Process_1' },
+        width: 200,
+        height: 150
+      };
+
+      const elementReg = comp.viewer.get('elementRegistry');
+      elementReg.getAll = vi.fn().mockReturnValue([mockSubProcessShape]);
+
+      comp.isSourceViewer = true;
+      comp.enableMappingButtons = true;
+      comp.mappedActivityIds = new Set();
+
+      const overlays = comp.viewer.get('overlays');
+      overlays.add.mockClear();
+
+      comp.updateMappingButtons();
+
+      expect(overlays.add).toHaveBeenCalledTimes(1);
+      expect(overlays.add).toHaveBeenCalledWith(
+        'SubProcess_1',
+        expect.objectContaining({ html: expect.any(HTMLElement) })
+      );
+    });
+
+    it('creates mapping button for unmapped task', () => {
+      const mockTask = {
+        id: 'Task_1',
+        type: 'bpmn:Task',
+        businessObject: { id: 'Task_1' },
+        parent: { id: 'Process_1' },
+        width: 100,
+        height: 80
+      };
+
+      const elementReg = comp.viewer.get('elementRegistry');
+      elementReg.getAll = vi.fn().mockReturnValue([mockTask]);
+
+      comp.isSourceViewer = true;
+      comp.enableMappingButtons = true;
+      comp.mappedActivityIds = new Set();
+
+      const overlays = comp.viewer.get('overlays');
+      overlays.add.mockClear();
+
+      comp.updateMappingButtons();
+
+      expect(overlays.add).toHaveBeenCalledTimes(1);
+      expect(overlays.add).toHaveBeenCalledWith(
+        'Task_1',
+        expect.objectContaining({ html: expect.any(HTMLElement) })
+      );
+    });
+
+    it('does not create mapping button for mapped task', () => {
+      const mockTask = {
+        id: 'Task_1',
+        type: 'bpmn:Task',
+        businessObject: { id: 'Task_1' },
+        parent: { id: 'Process_1' },
+        width: 100,
+        height: 80
+      };
+
+      const elementReg = comp.viewer.get('elementRegistry');
+      elementReg.getAll = vi.fn().mockReturnValue([mockTask]);
+
+      comp.isSourceViewer = true;
+      comp.enableMappingButtons = true;
+      comp.mappedActivityIds = new Set(['Task_1']);
+
+      const overlays = comp.viewer.get('overlays');
+      overlays.add.mockClear();
+
+      comp.updateMappingButtons();
+
+      expect(overlays.add).not.toHaveBeenCalled();
     });
   });
 });
