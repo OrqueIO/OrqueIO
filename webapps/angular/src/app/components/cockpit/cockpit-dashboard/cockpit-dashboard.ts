@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, DestroyRef, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, DestroyRef, ElementRef, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -31,7 +31,8 @@ import * as DashboardActions from '../../../store/cockpit/dashboard/dashboard.ac
 import * as DashboardSelectors from '../../../store/cockpit/dashboard/dashboard.selectors';
 import * as ProcessesActions from '../../../store/cockpit/processes/processes.actions';
 import * as ProcessesSelectors from '../../../store/cockpit/processes/processes.selectors';
-import { LlmUsageService } from '../../../shared/llm-task/llm-usage.service';
+import { LLM_USAGE_LONGEST_PERIOD, LlmRecordSource, LlmUsageService } from '../../../shared/llm-task/llm-usage.service';
+import { LlmTaskRecord } from '../../../shared/llm-task/llm-task-records';
 import { LlmUsage, summarizeLlmUsage } from '../../../shared/llm-task/llm-usage';
 import { BUBBLE_PATH, SPARK_PATH } from '../../../shared/bpmn-viewer/llm-task-renderer';
 
@@ -94,6 +95,8 @@ export class CockpitDashboardComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private cockpitService = inject(CockpitService);
   private llmUsageService = inject(LlmUsageService);
+  private host = inject(ElementRef<HTMLElement>);
+  private scrollTimer: ReturnType<typeof setTimeout> | null = null;
 
   /** The days the LLM figures of the stats cover. */
   readonly llmStatsDays = 7;
@@ -149,13 +152,29 @@ export class CockpitDashboardComponent implements OnInit, OnDestroy {
     this.llmUsageService.state$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(state => {
-        // Kept while reloading, so the cards do not flash
+        // Kept while reloading, so the cards do not flash; dropped when the records could
+        // not be loaded, so no outdated figure stays on screen
         if (state.loadingState === 'success') {
-          this.llmStats = state.records.length > 0 ? summarizeLlmUsage(state.records, this.llmStatsDays) : null;
+          this.llmStats = this.llmStatsOf(state.records, state.source);
+          this.cdr.markForCheck();
+        } else if (state.loadingState === 'error') {
+          this.llmStats = null;
           this.cdr.markForCheck();
         }
       });
     this.llmUsageService.ensureLoaded();
+  }
+
+  /**
+   * The figures of the stats, or null when they would mislead: below history level full
+   * only the latest record of each task is left, which cannot be counted as calls; and
+   * the cards only show once an LLM task has run in the period the dashboard reads.
+   */
+  private llmStatsOf(records: LlmTaskRecord[], source: LlmRecordSource): LlmUsage | null {
+    if (source !== 'updates' || summarizeLlmUsage(records, LLM_USAGE_LONGEST_PERIOD).calls === 0) {
+      return null;
+    }
+    return summarizeLlmUsage(records, this.llmStatsDays);
   }
 
   /** Opens the charts section and shows the LLM tasks card, which details the figures. */
@@ -163,10 +182,20 @@ export class CockpitDashboardComponent implements OnInit, OnDestroy {
     this.secondaryChartsVisible = true;
     this.cdr.markForCheck();
     // After the section's opening animation (200 ms), when the card is at its place
-    setTimeout(() => document.querySelector('app-llm-usage-chart')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
+    if (this.scrollTimer) {
+      clearTimeout(this.scrollTimer);
+    }
+    this.scrollTimer = setTimeout(() => {
+      this.scrollTimer = null;
+      const card = this.host.nativeElement.querySelector('app-llm-usage-chart') as HTMLElement | null;
+      card?.scrollIntoView?.({ behavior: 'smooth', block: 'start' });
+    }, 250);
   }
 
   ngOnDestroy(): void {
+    if (this.scrollTimer) {
+      clearTimeout(this.scrollTimer);
+    }
     this.navMenuService.clearMenuItems();
   }
 

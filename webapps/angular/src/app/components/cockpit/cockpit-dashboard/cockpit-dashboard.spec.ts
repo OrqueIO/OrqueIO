@@ -26,7 +26,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { of, Subject } from 'rxjs';
+import { Observable, of, Subject, throwError } from 'rxjs';
+import { Action } from '@ngrx/store';
 
 import { CockpitDashboardComponent } from './cockpit-dashboard';
 import { LlmUsageChartComponent } from '../dashboard-charts';
@@ -34,6 +35,8 @@ import { CockpitService } from '../../../services/cockpit.service';
 import { NavMenuService } from '../../../services/nav-menu.service';
 import { ProcessInstanceService, Variable } from '../../../services/process-instance.service';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
+import { TranslateService } from '../../../i18n/translate.service';
+import * as DashboardActions from '../../../store/cockpit/dashboard/dashboard.actions';
 import * as DashboardSelectors from '../../../store/cockpit/dashboard/dashboard.selectors';
 import * as ProcessesSelectors from '../../../store/cockpit/processes/processes.selectors';
 import { initTestEnvironment } from '../../../testing/test-utils';
@@ -43,6 +46,8 @@ describe('CockpitDashboardComponent', () => {
 
   let fixture: ComponentFixture<CockpitDashboardComponent>;
   let records: ReturnType<typeof vi.fn>;
+  let latest: ReturnType<typeof vi.fn>;
+  let actions$: Subject<Action>;
 
   const record = (fields: Record<string, unknown>): Variable => ({
     name: 'orqueioLlm_Task_' + Math.random().toString(36).slice(2), type: 'String',
@@ -52,8 +57,10 @@ describe('CockpitDashboardComponent', () => {
     })
   } as Variable);
 
-  async function create(variables: Variable[]): Promise<HTMLElement> {
-    records = vi.fn().mockReturnValue(of(variables));
+  async function create(variables: Variable[] | Observable<Variable[]>, latestRecords: Variable[] = []): Promise<HTMLElement> {
+    records = vi.fn().mockReturnValue(Array.isArray(variables) ? of(variables) : variables);
+    latest = vi.fn().mockReturnValue(of(latestRecords));
+    actions$ = new Subject<Action>();
     await TestBed.configureTestingModule({
       imports: [CockpitDashboardComponent],
       providers: [
@@ -61,7 +68,9 @@ describe('CockpitDashboardComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideNoopAnimations(),
-        provideMockActions(() => new Subject()),
+        provideMockActions(() => actions$),
+        // The key and its parameters, so the labels' parameters are checked too
+        { provide: TranslateService, useValue: { currentLang$: of('en'), instant: (key: string, params?: object) => params ? `${ key } ${ JSON.stringify(params) }` : key } },
         provideMockStore({
           selectors: [
             { selector: DashboardSelectors.selectDashboardStats, value: null },
@@ -81,7 +90,7 @@ describe('CockpitDashboardComponent', () => {
         },
         {
           provide: ProcessInstanceService,
-          useValue: { getLlmTaskRecordUpdates: records, getLlmTaskRecordVariables: vi.fn().mockReturnValue(of([])) }
+          useValue: { getLlmTaskRecordUpdates: records, getLlmTaskRecordVariables: latest }
         }
       ]
     })
@@ -122,8 +131,8 @@ describe('CockpitDashboardComponent', () => {
 
     const calls = root.querySelector('.stat-card--llm-calls') as HTMLElement;
     expect(text(calls, '.stat-card__value')).toBe('2');
-    expect(text(calls, '.stat-card__label')).toBe('cockpit.dashboard.llmCalls');
-    expect(text(calls, '.stat-card__detail')).toBe('cockpit.dashboard.llmTokens');
+    expect(text(calls, '.stat-card__label')).toBe('cockpit.dashboard.llmCalls {"days":"7"}');
+    expect(text(calls, '.stat-card__detail')).toBe('cockpit.dashboard.llmTokens {"count":"560"}');
 
     const invalid = root.querySelector('.stat-card--llm-invalid') as HTMLElement;
     expect(text(invalid, '.stat-card__value')).toBe('1');
@@ -139,13 +148,62 @@ describe('CockpitDashboardComponent', () => {
     expect(invalid.classList.contains('stat-card--neutral')).toBe(true);
   });
 
-  it('should open the charts section on the LLM tasks card when an LLM stat is clicked', async () => {
+  it('should open the charts section and scroll to the LLM tasks card when an LLM stat is clicked', async () => {
     const root = await create([record({})]);
     expect(fixture.componentInstance.secondaryChartsVisible).toBe(false);
+    const scrolled: Element[] = [];
+    (HTMLElement.prototype as any).scrollIntoView = function () { scrolled.push(this); };
 
-    (root.querySelector('.stat-card--llm-calls') as HTMLElement).click();
+    try {
+      vi.useFakeTimers();
+      (root.querySelector('.stat-card--llm-invalid') as HTMLElement).click();
+      fixture.detectChanges();
+      expect(fixture.componentInstance.secondaryChartsVisible).toBe(true);
 
-    expect(fixture.componentInstance.secondaryChartsVisible).toBe(true);
+      // After the section's opening animation
+      vi.advanceTimersByTime(250);
+      expect(scrolled.map(element => element.tagName)).toEqual(['APP-LLM-USAGE-CHART']);
+    } finally {
+      vi.useRealTimers();
+      delete (HTMLElement.prototype as any).scrollIntoView;
+    }
+  });
+
+  it('should not show call counts below history level full, where only the latest record of each task is left', async () => {
+    const root = await create([], [record({})]);
+
+    expect(latest).toHaveBeenCalled();
+    expect(cards(root).length).toBe(4);
+  });
+
+  it('should not show the LLM stats when no LLM task has run in the period read', async () => {
+    const root = await create([record({ recordedAt: new Date(Date.now() - 40 * 24 * 3600 * 1000).toISOString() })]);
+
+    expect(cards(root).length).toBe(4);
+  });
+
+  it('should keep the figures while reloading, and drop them when the records cannot be loaded', async () => {
+    const root = await create([record({})]);
+    const reload = new Subject<Variable[]>();
+    records.mockReturnValue(reload);
+
+    actions$.next(DashboardActions.refreshAllCharts());
+    fixture.detectChanges();
+    expect(cards(root).length).toBe(6);
+
+    reload.error(new Error('403'));
+    fixture.detectChanges();
+    expect(cards(root).length).toBe(4);
+  });
+
+  it('should remove the LLM stats when a refresh finds no record any more', async () => {
+    const root = await create([record({})]);
+    records.mockReturnValue(of([]));
+
+    actions$.next(DashboardActions.refreshAllCharts());
+    fixture.detectChanges();
+
+    expect(cards(root).length).toBe(4);
   });
 
   it('should load the LLM records once for the stats and the LLM tasks card', async () => {
