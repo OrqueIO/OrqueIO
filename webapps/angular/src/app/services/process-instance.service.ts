@@ -338,8 +338,33 @@ export class ProcessInstanceService {
   }
 
   /**
-   * The LLM task records (orqueioLlm_* variables) of all process instances, from the history,
-   * at most maxResults of them. Errors are passed on, so a chart can show them.
+   * Every LLM task record written since a date, newest first, at most maxResults of them:
+   * one per execution, loops and multi-instance included. Read from the variable updates
+   * of the history, which exist at history level full only. Errors are passed on.
+   */
+  getLlmTaskRecordUpdates(since: Date, maxResults: number = 2000): Observable<Variable[]> {
+    return this.http.get<HistoricVariableUpdate[]>(`${this.historyUrl}/detail`, {
+      params: {
+        variableNameLike: 'orqueioLlm_%',
+        variableUpdates: 'true',
+        occurredAfter: toEngineDate(since),
+        sortBy: 'time',
+        sortOrder: 'desc',
+        maxResults: maxResults.toString()
+      }
+    }).pipe(map(updates => updates.map(update => ({
+      name: update.variableName,
+      type: update.variableType,
+      value: update.value,
+      processInstanceId: update.processInstanceId,
+      processDefinitionKey: update.processDefinitionKey,
+      tenantId: update.tenantId
+    }))));
+  }
+
+  /**
+   * The latest LLM task record of each task and instance, at most maxResults of them, in
+   * no particular order: what the history keeps below history level full.
    */
   getLlmTaskRecordVariables(maxResults: number = 2000): Observable<Variable[]> {
     return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, {
@@ -666,4 +691,23 @@ export class ProcessInstanceService {
       catchError(() => of(null))
     );
   }
+}
+
+/** A variable update, as GET /history/detail returns it. */
+interface HistoricVariableUpdate {
+  variableName: string;
+  variableType: string;
+  value: unknown;
+  processInstanceId: string;
+  processDefinitionKey?: string;
+  tenantId?: string;
+}
+
+/** A date in the engine's REST format, yyyy-MM-ddTHH:mm:ss.SSSZ with a numeric offset. */
+function toEngineDate(date: Date): string {
+  const pad = (n: number, width = 2) => String(Math.abs(n)).padStart(width, '0');
+  const offset = -date.getTimezoneOffset();
+  return `${ date.getFullYear() }-${ pad(date.getMonth() + 1) }-${ pad(date.getDate()) }`
+    + `T${ pad(date.getHours()) }:${ pad(date.getMinutes()) }:${ pad(date.getSeconds()) }.${ pad(date.getMilliseconds(), 3) }`
+    + `${ offset >= 0 ? '+' : '-' }${ pad(Math.trunc(offset / 60)) }${ pad(offset % 60) }`;
 }

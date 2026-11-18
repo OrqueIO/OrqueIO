@@ -29,6 +29,9 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { Actions, ofType } from '@ngrx/effects';
 import Chart from 'chart.js/auto';
 
 import { ChartCardComponent } from '../chart-card/chart-card.component';
@@ -38,9 +41,16 @@ import { CHART_COLORS, ChartLoadingState } from '../../../../models/cockpit/dash
 import { ProcessInstanceService } from '../../../../services/process-instance.service';
 import { LlmTaskRecord, llmTaskRecords } from '../../../../shared/llm-task/llm-task-records';
 import { LlmUsage, summarizeLlmUsage } from '../../../../shared/llm-task/llm-usage';
+import * as DashboardActions from '../../../../store/cockpit/dashboard/dashboard.actions';
 
-/** The most records read; the history query cannot filter variables by date. */
+/** The most records read, the newest first. */
 export const LLM_USAGE_MAX_RECORDS = 2000;
+
+/** The longest period offered, so the records of all periods are read at once. */
+const LONGEST_PERIOD = 30;
+
+/** Where the records come from, which says what they count. */
+type RecordSource = 'updates' | 'latest';
 
 /**
  * What the LLM tasks used over the last days, from the record each LLM task execution
@@ -129,8 +139,7 @@ export const LLM_USAGE_MAX_RECORDS = 2000;
           </button>
         </div>
         <span class="llm-note" [title]="'cockpit.charts.llmUsage.noteHint' | translate">
-          {{ (limited ? 'cockpit.charts.llmUsage.noteLimited' : 'cockpit.charts.llmUsage.note')
-            | translate:{ count: '' + maxRecords } }}
+          {{ noteKey | translate:{ count: '' + maxRecords } }}
         </span>
       </div>
     </app-chart-card>
@@ -289,9 +298,12 @@ export class LlmUsageChartComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private processInstanceService = inject(ProcessInstanceService);
   private translateService = inject(TranslateService);
+  private actions$ = inject(Actions);
 
   private chart: Chart<'bar'> | null = null;
   private records: LlmTaskRecord[] = [];
+  private drawTimer: ReturnType<typeof setTimeout> | null = null;
+  private destroyed = false;
 
   readonly periods = [7, 14, 30];
   readonly maxRecords = LLM_USAGE_MAX_RECORDS;
@@ -301,19 +313,39 @@ export class LlmUsageChartComponent implements OnInit, OnDestroy {
   error: string | null = null;
   /** Whether more records may exist than were read. */
   limited = false;
+  source: RecordSource = 'updates';
   usage: LlmUsage = summarizeLlmUsage([], 7);
 
-  /** Hidden while no LLM task has ever run, so processes without one see nothing new. */
+  /**
+   * Hidden while no LLM task has run in the longest period, loading included, so
+   * installations without LLM tasks see nothing new. Shown on errors.
+   */
   @HostBinding('hidden')
   get hidden(): boolean {
-    return this.loadingState === 'success' && this.records.length === 0;
+    return this.loadingState !== 'error' && this.records.length === 0;
+  }
+
+  get noteKey(): string {
+    if (this.source === 'latest') {
+      return 'cockpit.charts.llmUsage.noteLatestOnly';
+    }
+    return this.limited ? 'cockpit.charts.llmUsage.noteLimited' : 'cockpit.charts.llmUsage.note';
   }
 
   ngOnInit(): void {
     this.load();
+
+    // The dashboard's refresh reloads every chart, this one included
+    this.actions$
+      .pipe(ofType(DashboardActions.refreshAllCharts), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.load());
   }
 
   ngOnDestroy(): void {
+    this.destroyed = true;
+    if (this.drawTimer) {
+      clearTimeout(this.drawTimer);
+    }
     this.chart?.destroy();
     this.chart = null;
   }
@@ -323,11 +355,23 @@ export class LlmUsageChartComponent implements OnInit, OnDestroy {
     this.error = null;
     this.cdr.markForCheck();
 
-    this.processInstanceService.getLlmTaskRecordVariables(LLM_USAGE_MAX_RECORDS)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    const now = new Date();
+    const since = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (LONGEST_PERIOD - 1));
+
+    // One record per execution from the variable updates; below history level full there
+    // are none, so fall back to the latest record of each task and instance
+    this.processInstanceService.getLlmTaskRecordUpdates(since, LLM_USAGE_MAX_RECORDS)
+      .pipe(
+        switchMap(updates => updates.length > 0
+          ? of({ variables: updates, source: 'updates' as RecordSource })
+          : this.processInstanceService.getLlmTaskRecordVariables(LLM_USAGE_MAX_RECORDS)
+            .pipe(map(variables => ({ variables, source: 'latest' as RecordSource })))),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe({
-        next: variables => {
+        next: ({ variables, source }) => {
           this.records = llmTaskRecords(variables);
+          this.source = source;
           this.limited = variables.length >= LLM_USAGE_MAX_RECORDS;
           this.loadingState = 'success';
           this.summarize();
@@ -349,17 +393,26 @@ export class LlmUsageChartComponent implements OnInit, OnDestroy {
     this.usage = summarizeLlmUsage(this.records, this.days);
     this.cdr.markForCheck();
     // The canvas exists once the card shows its content
-    setTimeout(() => this.updateChart());
+    if (this.drawTimer) {
+      clearTimeout(this.drawTimer);
+    }
+    this.drawTimer = setTimeout(() => {
+      this.drawTimer = null;
+      this.updateChart();
+    });
   }
 
   private updateChart(): void {
+    if (this.destroyed) {
+      return;
+    }
     const ctx = this.chartCanvas?.nativeElement.getContext('2d');
     if (!ctx) {
       return;
     }
 
     const labels = this.usage.days.map(day =>
-      new Date(day.date + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }));
+      new Date(day.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
     const input = this.usage.days.map(day => day.inputTokens);
     const output = this.usage.days.map(day => day.outputTokens);
 

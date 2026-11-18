@@ -198,6 +198,53 @@ describe('ProcessInstanceService', () => {
   // Variables
   // =============================================
 
+  describe('LLM task records', () => {
+    it('should read the record updates since a date, newest first, as variables', () => {
+      const since = new Date(2026, 10, 12);
+      let result: Variable[] = [];
+      service.getLlmTaskRecordUpdates(since, 50).subscribe(variables => result = variables);
+
+      const req = httpMock.expectOne(r => r.url === `${historyUrl}/detail`);
+      expect(req.request.params.get('variableNameLike')).toBe('orqueioLlm_%');
+      expect(req.request.params.get('variableUpdates')).toBe('true');
+      expect(req.request.params.get('sortBy')).toBe('time');
+      expect(req.request.params.get('sortOrder')).toBe('desc');
+      expect(req.request.params.get('maxResults')).toBe('50');
+      // The engine's date format, with the browser's offset: the same instant as since
+      const occurredAfter = req.request.params.get('occurredAfter')!;
+      expect(occurredAfter).toMatch(/^2026-11-12T00:00:00\.000[+-]\d{4}$/);
+      expect(new Date(occurredAfter.replace(/([+-]\d{2})(\d{2})$/, '$1:$2')).getTime()).toBe(since.getTime());
+
+      req.flush([{
+        type: 'variableUpdate', variableName: 'orqueioLlm_Task_Extract', variableType: 'String',
+        value: '{"model":"qwen2.5:7b"}', processInstanceId: 'pi-1', processDefinitionKey: 'claimTriage',
+        tenantId: null, time: '2026-11-18T10:58:25.952+0100'
+      }]);
+
+      expect(result).toEqual([{
+        name: 'orqueioLlm_Task_Extract', type: 'String', value: '{"model":"qwen2.5:7b"}',
+        processInstanceId: 'pi-1', processDefinitionKey: 'claimTriage', tenantId: null
+      }]);
+    });
+
+    it('should read the latest record of each task and instance', () => {
+      service.getLlmTaskRecordVariables(2000).subscribe();
+
+      const req = httpMock.expectOne(r => r.url === `${historyUrl}/variable-instance`);
+      expect(req.request.params.get('variableNameLike')).toBe('orqueioLlm_%');
+      expect(req.request.params.get('maxResults')).toBe('2000');
+      req.flush([]);
+    });
+
+    it('should pass errors on, so the chart can show them', () => {
+      let failed = false;
+      service.getLlmTaskRecordUpdates(new Date()).subscribe({ error: () => failed = true });
+
+      httpMock.expectOne(r => r.url === `${historyUrl}/detail`).flush('Forbidden', { status: 403, statusText: 'Forbidden' });
+      expect(failed).toBe(true);
+    });
+  });
+
   describe('getProcessInstanceVariables', () => {
     it('should fetch variables from history API', () => {
       const vars: Variable[] = [

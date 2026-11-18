@@ -77,7 +77,8 @@ export function summarizeLlmUsage(records: LlmTaskRecord[], days: number, now: D
 
   for (const record of records) {
     const time = record.readable && record.recordedAt ? new Date(record.recordedAt) : null;
-    if (!time || isNaN(time.getTime()) || time < start || time > now) {
+    // No upper bound: the server clock may run ahead of the browser's
+    if (!time || isNaN(time.getTime()) || time < start) {
       continue;
     }
 

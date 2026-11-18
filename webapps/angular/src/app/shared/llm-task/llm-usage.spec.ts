@@ -68,13 +68,19 @@ describe('summarizeLlmUsage', () => {
     const usage = summarizeLlmUsage([
       record({ recordedAt: at(11, 23) }),
       record({ recordedAt: at(12, 0) }),
-      record({ recordedAt: new Date(2026, 10, 19).toISOString() }),
       record({ readable: false }),
       record({ recordedAt: undefined }),
       record({ recordedAt: 'not a date' })
     ], 7, NOW);
 
     expect(usage.calls).toBe(1);
+  });
+
+  it('should count a record dated a little after the browser clock, written by a server ahead of it', () => {
+    const usage = summarizeLlmUsage([record({ recordedAt: new Date(NOW.getTime() + 60000).toISOString() })], 7, NOW);
+
+    expect(usage.calls).toBe(1);
+    expect(usage.days[6].calls).toBe(1);
   });
 
   it('should count unknown token counts as 0, and give no average latency without one', () => {
