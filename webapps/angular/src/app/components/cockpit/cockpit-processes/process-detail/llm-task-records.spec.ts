@@ -110,4 +110,19 @@ describe('LLM task records', () => {
 
     expect(records.map(record => record.activityId)).toEqual(['Task_First', 'Task_Second', 'Task_Broken']);
   });
+
+  it('should order records by time, whatever the length of their fraction of a second', () => {
+    // Instant.toString() drops a zero fraction and prints 3, 6 or 9 digits otherwise
+    const at = (activityId: string, recordedAt: string) =>
+      variable('orqueioLlm_' + activityId, JSON.stringify({ ...RECORD, recordedAt }));
+
+    const records = llmTaskRecords([
+      at('Task_C', '2026-11-18T09:30:01Z'),
+      at('Task_B', '2026-11-18T09:30:00.123456Z'),
+      at('Task_A', '2026-11-18T09:30:00Z'),
+      at('Task_D', 'not a date')
+    ]);
+
+    expect(records.map(record => record.activityId)).toEqual(['Task_A', 'Task_B', 'Task_C', 'Task_D']);
+  });
 });

@@ -31,9 +31,36 @@ export const SPARK_PATH = 'M12 7.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z';
 
 const HIGH_PRIORITY = 1500;
 
-function attribute(businessObject: any, name: string): unknown {
-  // The viewer has no Camunda moddle extension, so Camunda attributes stay in $attrs
-  return businessObject?.$attrs?.[name] ?? businessObject?.get?.(name);
+const CAMUNDA_NAMESPACE = 'http://camunda.org/schema/1.0/bpmn';
+
+/** The prefixes the diagram binds to the Camunda namespace, usually just "camunda". */
+function camundaPrefixes(businessObject: any): string[] {
+  const prefixes = new Set<string>(['camunda']);
+
+  for (let parent = businessObject; parent; parent = parent.$parent) {
+    for (const [key, value] of Object.entries(parent.$attrs || {})) {
+      if (key.startsWith('xmlns:') && value === CAMUNDA_NAMESPACE) {
+        prefixes.add(key.substring('xmlns:'.length));
+      }
+    }
+  }
+  return [...prefixes];
+}
+
+function camundaAttribute(businessObject: any, name: string): unknown {
+  if (!businessObject) {
+    return undefined;
+  }
+
+  // The viewer has no Camunda moddle extension, so Camunda attributes stay in $attrs,
+  // under the prefix the diagram declares for the Camunda namespace
+  for (const prefix of camundaPrefixes(businessObject)) {
+    const value = businessObject.$attrs?.[`${ prefix }:${ name }`];
+    if (value !== undefined) {
+      return value;
+    }
+  }
+  return businessObject.get?.(`camunda:${ name }`);
 }
 
 /**
@@ -47,8 +74,8 @@ export function isLlmTask(element: any): boolean {
 
   const businessObject = element.businessObject;
 
-  return attribute(businessObject, 'camunda:delegateExpression') === LLM_TASK_DELEGATE_EXPRESSION
-    || attribute(businessObject, 'camunda:modelerTemplate') === LLM_TASK_TEMPLATE_ID;
+  return camundaAttribute(businessObject, 'delegateExpression') === LLM_TASK_DELEGATE_EXPRESSION
+    || camundaAttribute(businessObject, 'modelerTemplate') === LLM_TASK_TEMPLATE_ID;
 }
 
 /**

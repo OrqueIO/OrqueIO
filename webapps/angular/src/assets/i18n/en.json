@@ -392,6 +392,7 @@
   "cockpit.processDetail.llmCalls.prompt": "Prompt",
   "cockpit.processDetail.llmCalls.answer": "Answer",
   "cockpit.processDetail.llmCalls.truncated": "The prompt and the answer were shortened to fit in the record.",
+  "cockpit.processDetail.llmCalls.truncatedBadge": "shortened",
   "cockpit.processDetail.llmCalls.unreadable": "This record could not be read. Its stored value:",
   "cockpit.processDetail.llmCalls.none": "No LLM task has run in this process instance",
   "cockpit.processDetail.instanceInfo": "Instance Information",

@@ -474,8 +474,11 @@
                 <tbody>
                   <ng-container *ngFor="let record of llmRecords">
                     <tr class="llm-record"
+                        tabindex="0"
                         [class.selected]="selectedActivityIds.includes(record.activityId)"
-                        (click)="selectActivity(record.activityId)">
+                        [attr.aria-selected]="selectedActivityIds.includes(record.activityId)"
+                        (click)="selectActivity(record.activityId)"
+                        (keydown.enter)="selectActivity(record.activityId)">
                       <td class="llm-task">
                         {{ llmTaskName(record) }}
                         <span class="llm-reused" *ngIf="record.fromCache"
@@ -503,8 +506,14 @@
                         <td class="llm-mono" [title]="record.promptVersion || ''">{{ record.promptVersion ? record.promptVersion.substring(0, 12) : '-' }}</td>
                         <td>{{ formatDate(record.recordedAt) }}</td>
                         <td>
+                          <span class="llm-truncated-badge" *ngIf="record.truncated"
+                                [title]="'cockpit.processDetail.llmCalls.truncated' | translate">
+                            {{ 'cockpit.processDetail.llmCalls.truncatedBadge' | translate }}
+                          </span>
                           <button type="button" class="btn btn-link btn-sm" *ngIf="hasLlmContent(record)"
-                                  (click)="toggleLlmContent(record, $event)">
+                                  [attr.aria-expanded]="expandedLlmRecord === record.variableName"
+                                  (click)="toggleLlmContent(record, $event)"
+                                  (keydown.enter)="$event.stopPropagation()">
                             {{ (expandedLlmRecord === record.variableName
                               ? 'cockpit.processDetail.llmCalls.hideContent'
                               : 'cockpit.processDetail.llmCalls.showContent') | translate }}

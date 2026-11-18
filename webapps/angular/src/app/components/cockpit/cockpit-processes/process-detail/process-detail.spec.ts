@@ -481,6 +481,44 @@ describe('ProcessDetailComponent', () => {
       expect(rows[0].querySelector('.llm-unreadable code')!.textContent).toBe('not json');
     });
 
+    it('should leave the tab, and close the content, when the next instance has no LLM call', () => {
+      const root = render([triage, reused]);
+      open(root);
+      component.expandedLlmRecord = reused.name;
+
+      cockpitService.getProcessInstanceVariables.mockReturnValue(of(mockVariables));
+      routeParams$.next({ id: 'pi-2' });
+      refresh();
+      fixture.detectChanges();
+
+      expect(component.activeTab).toBe('variables');
+      expect(component.expandedLlmRecord).toBeNull();
+      expect(tabLabels(root)).not.toContain('cockpit.processDetail.tabs.llmCalls');
+    });
+
+    it('should mark a shortened record in the table, and say whether its content is shown', () => {
+      const root = render([triage, reused]);
+      const rows = open(root);
+
+      expect(rows[0].querySelector('.llm-truncated-badge')).toBeNull();
+      expect(rows[1].querySelector('.llm-truncated-badge')).not.toBeNull();
+      const button = rows[1].querySelector('button') as HTMLButtonElement;
+      expect(button.getAttribute('aria-expanded')).toBe('false');
+      button.click();
+      fixture.detectChanges();
+      expect(button.getAttribute('aria-expanded')).toBe('true');
+    });
+
+    it('should select a task from its row with the keyboard', () => {
+      const rows = open(render([triage, reused]));
+
+      expect(rows[0].getAttribute('tabindex')).toBe('0');
+      rows[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      fixture.detectChanges();
+
+      expect(component.selectedActivityId).toBe('Task_Triage');
+    });
+
     it('should select the task in the diagram from its row, and its row from the diagram', () => {
       const root = render([triage, reused]);
       let rows = open(root);

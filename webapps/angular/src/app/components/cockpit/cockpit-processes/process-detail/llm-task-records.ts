@@ -118,12 +118,20 @@ export function llmTaskRecords(variables: Variable[]): LlmTaskRecord[] {
     .filter(variable => variable.name.startsWith(LLM_RECORD_PREFIX) && variable.name.length > LLM_RECORD_PREFIX.length)
     .map(parseLlmTaskRecord)
     .sort((a, b) => {
-      if (a.recordedAt && b.recordedAt && a.recordedAt !== b.recordedAt) {
-        return a.recordedAt < b.recordedAt ? -1 : 1;
+      // Compared as times: Instant.toString() drops a zero fraction, so the texts do not sort in order
+      const aTime = time(a.recordedAt);
+      const bTime = time(b.recordedAt);
+      if (aTime !== undefined && bTime !== undefined && aTime !== bTime) {
+        return aTime - bTime;
       }
-      if (!a.recordedAt !== !b.recordedAt) {
-        return a.recordedAt ? -1 : 1;
+      if ((aTime === undefined) !== (bTime === undefined)) {
+        return aTime !== undefined ? -1 : 1;
       }
       return a.activityId.localeCompare(b.activityId);
     });
+}
+
+function time(recordedAt: string | undefined): number | undefined {
+  const parsed = recordedAt ? Date.parse(recordedAt) : NaN;
+  return isNaN(parsed) ? undefined : parsed;
 }

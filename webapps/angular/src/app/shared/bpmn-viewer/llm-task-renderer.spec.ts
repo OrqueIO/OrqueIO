@@ -16,7 +16,9 @@
 
 // @ts-ignore - bpmn-moddle doesn't have types
 import BpmnModdle from 'bpmn-moddle';
-import { isLlmTask, LlmTaskRenderer, BUBBLE_PATH, SPARK_PATH } from './llm-task-renderer';
+// @ts-ignore - bpmn-js doesn't have types
+import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
+import { isLlmTask, llmTaskRendererModule, LlmTaskRenderer, BUBBLE_PATH, SPARK_PATH } from './llm-task-renderer';
 
 const XML = `<?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
@@ -30,9 +32,9 @@ const XML = `<?xml version="1.0" encoding="UTF-8"?>
   </bpmn:process>
 </bpmn:definitions>`;
 
-async function elements(): Promise<Record<string, any>> {
+async function elements(xml = XML): Promise<Record<string, any>> {
   // As in the viewer: no Camunda moddle extension, so Camunda attributes stay in $attrs
-  const { rootElement } = await new BpmnModdle().fromXML(XML);
+  const { rootElement } = await new BpmnModdle().fromXML(xml);
   const byId: Record<string, any> = {};
   for (const flowElement of rootElement.rootElements[0].flowElements) {
     byId[flowElement.id] = { id: flowElement.id, type: flowElement.$type, businessObject: flowElement };
@@ -66,11 +68,54 @@ describe('LLM task renderer', () => {
       expect(isLlmTask(null)).toBe(false);
     });
 
+    it('should recognise an LLM task whatever prefix the diagram binds to the Camunda namespace', async () => {
+      const byId = await elements(XML.replace(/camunda:/g, 'cam:').replace('xmlns:camunda=', 'xmlns:cam='));
+
+      expect(isLlmTask(byId['Task_Llm'])).toBe(true);
+      expect(isLlmTask(byId['Task_Template'])).toBe(true);
+      expect(isLlmTask(byId['Task_Other'])).toBe(false);
+    });
+
     it('should read Camunda attributes when the Camunda moddle extension is loaded', () => {
       const businessObject = {
         get: (name: string) => name === 'camunda:delegateExpression' ? '${orqueioLlmTask}' : undefined
       };
       expect(isLlmTask({ type: 'bpmn:ServiceTask', businessObject })).toBe(true);
+    });
+  });
+
+  describe('in the viewer', () => {
+    // jsdom cannot import a whole diagram (no SVG layout), so draw single shapes with the
+    // viewer's own graphics factory, as it does on import
+    it('should draw the LLM icon on LLM tasks only, with the module the shared viewer registers', async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+      const viewer = new NavigatedViewer({ container, additionalModules: [llmTaskRendererModule] });
+
+      try {
+        const byId = await elements();
+        const draw = (id: string) => {
+          const element = { ...byId[id], width: 100, height: 80, di: { get: () => undefined } };
+          const visual = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          viewer.get('graphicsFactory').drawShape(visual, element);
+          return visual;
+        };
+
+        const llm = draw('Task_Llm');
+        const other = draw('Task_Other');
+
+        expect(llm.querySelector('[data-orqueio-llm-task]')).not.toBeNull();
+        expect(other.querySelector('[data-orqueio-llm-task]')).toBeNull();
+        // Drawn by bpmn-js as a plain task: the outline first, where markers apply, and no gears
+        expect(llm.firstElementChild!.tagName).toBe('rect');
+        const paths = (visual: SVGElement) => Array.from(visual.querySelectorAll('path')).map(path => path.getAttribute('d'));
+        expect(paths(llm)).toEqual([BUBBLE_PATH, SPARK_PATH]);
+        expect(paths(other).length).toBeGreaterThan(0);
+        expect(paths(other)).not.toContain(BUBBLE_PATH);
+      } finally {
+        viewer.destroy();
+        container.remove();
+      }
     });
   });
 

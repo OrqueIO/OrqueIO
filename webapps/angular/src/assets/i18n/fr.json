@@ -389,6 +389,7 @@
   "cockpit.processDetail.llmCalls.prompt": "Prompt",
   "cockpit.processDetail.llmCalls.answer": "Réponse",
   "cockpit.processDetail.llmCalls.truncated": "Le prompt et la réponse ont été raccourcis pour tenir dans l'enregistrement.",
+  "cockpit.processDetail.llmCalls.truncatedBadge": "raccourci",
   "cockpit.processDetail.llmCalls.unreadable": "Cet enregistrement n'a pas pu être lu. Sa valeur enregistrée :",
   "cockpit.processDetail.llmCalls.none": "Aucune tâche LLM n'a été exécutée dans cette instance",
   "cockpit.processDetail.instanceInfo": "Informations de l'instance",

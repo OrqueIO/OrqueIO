@@ -268,6 +268,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   loadProcessData(): void {
     this.loading = true;
     this.bpmnXml = null;
+    this.expandedLlmRecord = null;
     this.activityTree = null;
     this.activityStatistics = [];
     this.cdr.markForCheck();
@@ -316,6 +317,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (variables) => {
           this.variables = variables;
+          this.leaveHiddenTab();
           this.applyVariableFilter();
           this.cdr.markForCheck();
         }
@@ -762,6 +764,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(variables => {
               this.variables = variables;
+              this.leaveHiddenTab();
               this.applyVariableFilter();
               this.cdr.markForCheck();
             });
@@ -800,6 +803,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
             .pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe(variables => {
               this.variables = variables;
+              this.leaveHiddenTab();
               this.applyVariableFilter();
               this.cdr.markForCheck();
             });
@@ -815,6 +819,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.variables = this.variables.filter(v => v.name !== variableName);
+          this.leaveHiddenTab();
           this.applyVariableFilter();
           this.cdr.markForCheck();
         }
@@ -1136,6 +1141,14 @@ getTasklistUrl(task: UserTask): string {
 
   isTabVisible(tab: { visible?: () => boolean }): boolean {
     return !tab.visible || tab.visible();
+  }
+
+  // A tab that is no longer shown (another instance, a record deleted) cannot stay active
+  private leaveHiddenTab(): void {
+    const active = this.tabs.find(tab => tab.id === this.activeTab);
+    if (active && !this.isTabVisible(active)) {
+      this.activeTab = 'variables';
+    }
   }
 
   // LLM task records

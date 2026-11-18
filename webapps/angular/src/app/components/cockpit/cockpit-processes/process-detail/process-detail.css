@@ -1968,3 +1968,18 @@ a:focus-visible {
   color: var(--text-muted);
   font-size: 12px;
 }
+
+.llm-calls-tab .llm-truncated-badge {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm, 4px);
+  background: #fff4e5;
+  color: #92400e;
+  font-size: 11px;
+}
+
+.llm-calls-tab .llm-record:focus-visible td {
+  outline: none;
+  background: rgba(21, 92, 181, 0.12);
+}
