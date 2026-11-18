@@ -21,8 +21,6 @@ import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDeploymentIT.pro
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.orqueio.bpm.spring.boot.starter.ai.test.TestAiApplication;
-import org.springframework.boot.test.context.SpringBootTest;
 import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -38,12 +36,14 @@ import io.orqueio.bpm.engine.RepositoryService;
 import io.orqueio.bpm.engine.RuntimeService;
 import io.orqueio.bpm.engine.repository.Deployment;
 import io.orqueio.bpm.engine.runtime.ProcessInstance;
+import io.orqueio.bpm.spring.boot.starter.ai.test.TestAiApplication;
 import io.orqueio.bpm.spring.boot.starter.ai.testing.StubChatModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.retry.NonTransientAiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

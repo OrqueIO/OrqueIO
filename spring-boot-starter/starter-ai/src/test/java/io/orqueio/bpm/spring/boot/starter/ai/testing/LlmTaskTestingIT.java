@@ -139,16 +139,19 @@ class LlmTaskTestingIT {
     assertThat(report.passed()).isEqualTo(2);
     assertThat(report.results()).extracting(LlmEvaluationReport.CaseResult::passed).containsExactly(true, false, true);
     assertThat(report.results().get(1).differences()).containsExactly("incidentType: expected Fire, got Water");
-    assertThat(report.results().get(0).model()).isEqualTo(StubChatModel.DEFAULT_MODEL);
+    // The stub reports the model the task asks for, as a provider does
+    assertThat(report.results().get(0).model()).isEqualTo("gpt-4o-mini");
     assertThat(report.toString()).isEqualTo("""
-        LLM task evaluation of claimTriage / Task_Extract with stub-model: 2 of 3 cases passed
+        LLM task evaluation of claimTriage / Task_Extract with gpt-4o-mini: 2 of 3 cases passed
           [ok] stolen bike
           [KO] kitchen fire
                  incidentType: expected Fire, got Water
           [ok] prompt injection""");
     assertThatThrownBy(report::assertAllPassed).isInstanceOf(AssertionError.class).hasMessage(report.toString());
-    // Each case leaves no instance behind
+    // Each case leaves no instance behind, nor its history
     assertThat(runtimeService.createProcessInstanceQuery().processDefinitionKey("claimTriage").count()).isZero();
+    assertThat(processEngine.getHistoryService().createHistoricProcessInstanceQuery()
+        .processDefinitionKey("claimTriage").count()).isZero();
   }
 
   @Test
@@ -182,11 +185,38 @@ class LlmTaskTestingIT {
   }
 
   @Test
-  void shouldCompareNumbersByValue() {
+  void shouldCompareNumbersByValueAndOtherValuesWithTheirType() {
     assertThat(LlmTaskEvaluation.sameValue(2400, 2400.0)).isTrue();
     assertThat(LlmTaskEvaluation.sameValue(2400, 2400.5)).isFalse();
     assertThat(LlmTaskEvaluation.sameValue("Theft", "Theft")).isTrue();
     assertThat(LlmTaskEvaluation.sameValue("Theft", "theft")).isFalse();
+    // A number or a boolean written as text is a type regression
+    assertThat(LlmTaskEvaluation.sameValue(2400, "2400")).isFalse();
+    assertThat(LlmTaskEvaluation.sameValue(true, "true")).isFalse();
+  }
+
+  @Test
+  void shouldReportACaseThatCannotRunAndStillRunTheOthers() {
+    model.answer(THEFT);
+
+    LlmEvaluationReport report = LlmTaskEvaluation.of(processEngine, "claimTriage", "Task_Extract")
+        .cases(LlmEvaluationCase.expecting("unserializable", Map.of("claimText", new Object()), Map.of("incidentType", "Theft")),
+            LlmEvaluationCase.expecting("theft", Map.of("claimText", "stolen"), Map.of("incidentType", "Theft")))
+        .run();
+
+    assertThat(report.results().get(0).differences()).singleElement().asString().startsWith("the case could not run: ");
+    assertThat(report.results().get(1).passed()).isTrue();
+  }
+
+  @Test
+  void shouldShowTextInQuotesWhenTheTypesDiffer() {
+    model.answer("{\"claimAmount\": 2400, \"incidentType\": \"Theft\"}");
+
+    LlmEvaluationReport report = LlmTaskEvaluation.of(processEngine, "claimTriage", "Task_Extract")
+        .cases(LlmEvaluationCase.expecting("text", Map.of("claimText", "stolen"), Map.of("claimAmount", "2400")))
+        .run();
+
+    assertThat(report.results().get(0).differences()).containsExactly("claimAmount: expected \"2400\", got 2400.0");
   }
 
   @Test

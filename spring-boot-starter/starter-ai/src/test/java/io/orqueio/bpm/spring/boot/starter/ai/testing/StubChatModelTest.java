@@ -18,6 +18,7 @@ package io.orqueio.bpm.spring.boot.starter.ai.testing;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 
 class StubChatModelTest {
@@ -103,13 +105,33 @@ class StubChatModelTest {
   }
 
   @Test
-  void shouldSayWhenItHasNoAnswerForAPrompt() {
+  void shouldFailTheTaskAtOnceWhenItHasNoAnswerForAPrompt() {
     model.when("Classify").answer("x");
 
-    assertThatThrownBy(() -> model.call(prompt("Summarize the claim", "...")))
-        .isInstanceOf(IllegalStateException.class)
+    Throwable failure = catchThrowable(() -> model.call(prompt("Summarize the claim " + "x".repeat(500), "...")));
+
+    // Not a provider failure: the task does not retry, and keeps the message in its job
+    assertThat(failure).isInstanceOf(LlmTaskException.class).isNotInstanceOf(LlmTransientException.class)
         .hasMessageContaining("no answer for this prompt")
         .hasMessageContaining("Summarize the claim");
+    assertThat(new LlmFailureClassifier().classify(failure)).isSameAs(failure);
+    assertThat(failure.getMessage()).hasSizeLessThan(400).endsWith("...");
+  }
+
+  @Test
+  void shouldRejectAnAnswerListThatIsEmpty() {
+    assertThatThrownBy(() -> model.answer()).isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> model.when("x").answer()).isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> model.respond()).isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  void shouldReportTheModelTheTaskAsksForAsAProviderDoes() {
+    Prompt prompt = new Prompt(List.of(new SystemMessage("x"), new UserMessage("y")),
+        ChatOptions.builder().model("gpt-4o-mini").build());
+
+    assertThat(model.answer("x").call(prompt).getMetadata().getModel()).isEqualTo("gpt-4o-mini");
+    assertThat(model.reportModel("claude-sonnet-5-5").call(prompt).getMetadata().getModel()).isEqualTo("claude-sonnet-5-5");
   }
 
   @Test
@@ -184,7 +206,7 @@ class StubChatModelTest {
     model.reset();
 
     assertThat(model.calls()).isZero();
-    assertThatThrownBy(() -> model.call(prompt("Classify", "z"))).isInstanceOf(IllegalStateException.class);
+    assertThatThrownBy(() -> model.call(prompt("Classify", "z"))).isInstanceOf(LlmTaskException.class);
     ChatResponse response = model.answer("again").call(prompt("Classify", "z"));
     assertThat(response.getMetadata().getModel()).isEqualTo(StubChatModel.DEFAULT_MODEL);
     assertThat(response.getMetadata().getUsage().getTotalTokens()).isZero();

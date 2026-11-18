@@ -28,6 +28,7 @@ import java.util.function.Consumer;
 
 import io.orqueio.bpm.spring.boot.starter.ai.provider.LlmProvider;
 import io.orqueio.bpm.spring.boot.starter.ai.provider.LlmProviderStandIn;
+import io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskException;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.metadata.ChatResponseMetadata;
 import org.springframework.ai.chat.metadata.DefaultUsage;
@@ -42,8 +43,9 @@ import org.springframework.ai.retry.TransientAiException;
  * A model that answers LLM tasks with fixed answers, for process tests that run without
  * a network, an API key or cost, and always give the same result.
  *
- * <p>Register it as a bean in the test configuration, in place of the provider's Spring AI
- * starter. It stands in for every provider, so the BPMN does not change:
+ * <p>Register it as a bean in the test configuration. It stands in for every provider, so the
+ * BPMN does not change, and it is chosen over the provider models the application configures,
+ * so the provider's Spring AI starter can stay on the test classpath:
  * <pre>{@code
  * @Bean
  * StubChatModel stubChatModel() {
@@ -57,11 +59,12 @@ import org.springframework.ai.retry.TransientAiException;
  * calls it. A call that no rule matches gets the default answer, set with {@link #answer}.
  * Several answers are given in turn, the last one repeated; {@link #fail} gives a provider
  * error, such as {@link #providerError(int) HTTP 429}, to test the failure paths.
- * The prompts received are kept for assertions, see {@link #prompts()}.
+ * The prompts received are kept for assertions, see {@link #prompts()}. A call it has no
+ * answer for fails the task at once, with the beginning of the prompt in the job's message.
  */
 public class StubChatModel implements ChatModel, LlmProviderStandIn {
 
-  /** The model name the stub reports, unless {@link #reportModel} sets another. */
+  /** The model name the stub reports when the task names none, unless {@link #reportModel} sets one. */
   public static final String DEFAULT_MODEL = "stub-model";
 
   /** The provider id recorded for calls of tasks that name no provider. */
@@ -71,7 +74,7 @@ public class StubChatModel implements ChatModel, LlmProviderStandIn {
   private final Deque<Reply> defaultReplies = new ArrayDeque<>();
   private final List<Prompt> prompts = new ArrayList<>();
   private final Set<LlmProvider> providers = EnumSet.allOf(LlmProvider.class);
-  private String model = DEFAULT_MODEL;
+  private String model;
   private Integer inputTokens;
   private Integer outputTokens;
   private Consumer<Prompt> onCall = prompt -> { };
@@ -82,6 +85,7 @@ public class StubChatModel implements ChatModel, LlmProviderStandIn {
    * Answers every call no rule matches with these answers, in turn; the last one is repeated.
    */
   public synchronized StubChatModel answer(String... answers) {
+    requireSome(answers);
     defaultReplies.clear();
     Arrays.stream(answers).map(Reply::answer).forEach(defaultReplies::add);
     return this;
@@ -103,6 +107,7 @@ public class StubChatModel implements ChatModel, LlmProviderStandIn {
    * @param answersOrFailures answers ({@link String}) and failures ({@link RuntimeException})
    */
   public synchronized StubChatModel respond(Object... answersOrFailures) {
+    requireSome(answersOrFailures);
     defaultReplies.clear();
     defaultReplies.addAll(Reply.of(answersOrFailures));
     return this;
@@ -128,7 +133,8 @@ public class StubChatModel implements ChatModel, LlmProviderStandIn {
   }
 
   /**
-   * Reports this model name with each answer, and offers it as the default model.
+   * Reports this model name with each answer, and offers it as the default model. Without it,
+   * the stub reports the model the task asks for, as a provider does, else {@link #DEFAULT_MODEL}.
    */
   public synchronized StubChatModel reportModel(String model) {
     this.model = Objects.requireNonNull(model, "model");
@@ -162,7 +168,7 @@ public class StubChatModel implements ChatModel, LlmProviderStandIn {
     defaultReplies.clear();
     prompts.clear();
     providers.addAll(EnumSet.allOf(LlmProvider.class));
-    model = DEFAULT_MODEL;
+    model = null;
     inputTokens = null;
     outputTokens = null;
     onCall = prompt -> { };
@@ -216,7 +222,7 @@ public class StubChatModel implements ChatModel, LlmProviderStandIn {
       prompts.add(prompt);
       reply = replyFor(prompt.getContents());
       action = onCall;
-      ChatResponseMetadata.Builder builder = ChatResponseMetadata.builder().model(model);
+      ChatResponseMetadata.Builder builder = ChatResponseMetadata.builder().model(reportedModel(prompt));
       if (inputTokens != null) {
         builder.usage(new DefaultUsage(inputTokens, outputTokens));
       }
@@ -228,7 +234,7 @@ public class StubChatModel implements ChatModel, LlmProviderStandIn {
 
   @Override
   public synchronized ChatOptions getOptions() {
-    return ChatOptions.builder().model(model).build();
+    return ChatOptions.builder().model(model != null ? model : DEFAULT_MODEL).build();
   }
 
   // LlmProviderStandIn //////////
@@ -245,6 +251,20 @@ public class StubChatModel implements ChatModel, LlmProviderStandIn {
 
   // internals //////////
 
+  private String reportedModel(Prompt prompt) {
+    if (model != null) {
+      return model;
+    }
+    String requested = prompt.getOptions() != null ? prompt.getOptions().getModel() : null;
+    return requested != null ? requested : DEFAULT_MODEL;
+  }
+
+  private static void requireSome(Object[] responses) {
+    if (responses == null || responses.length == 0) {
+      throw new IllegalArgumentException("Give at least one answer");
+    }
+  }
+
   private Reply replyFor(String promptText) {
     for (Rule rule : rules) {
       if (promptText.contains(rule.promptContains) && !rule.replies.isEmpty()) {
@@ -252,8 +272,10 @@ public class StubChatModel implements ChatModel, LlmProviderStandIn {
       }
     }
     if (defaultReplies.isEmpty()) {
-      throw new IllegalStateException("The stub model has no answer for this prompt; give one with answer(...) "
-          + "or when(\"a phrase of the prompt\").answer(...):\n" + promptText);
+      // Not retried, and its message is kept in the job, unlike a provider failure
+      String start = promptText.length() > 200 ? promptText.substring(0, 200) + "..." : promptText;
+      throw new LlmTaskException("The stub model has no answer for this prompt; give one with answer(...) "
+          + "or when(\"a phrase of the prompt\").answer(...): " + start);
     }
     return next(defaultReplies);
   }
@@ -313,6 +335,7 @@ public class StubChatModel implements ChatModel, LlmProviderStandIn {
      * Answers these calls with these answers, in turn; the last one is repeated.
      */
     public StubChatModel answer(String... answers) {
+      requireSome(answers);
       synchronized (StubChatModel.this) {
         replies.clear();
         Arrays.stream(answers).map(Reply::answer).forEach(replies::add);
@@ -337,6 +360,7 @@ public class StubChatModel implements ChatModel, LlmProviderStandIn {
      * @param answersOrFailures answers ({@link String}) and failures ({@link RuntimeException})
      */
     public StubChatModel respond(Object... answersOrFailures) {
+      requireSome(answersOrFailures);
       List<Reply> responses = Reply.of(answersOrFailures);
       synchronized (StubChatModel.this) {
         replies.clear();

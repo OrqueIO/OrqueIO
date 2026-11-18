@@ -30,6 +30,9 @@ import io.orqueio.bpm.engine.ManagementService;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.RuntimeService;
 import io.orqueio.bpm.engine.history.HistoricVariableInstance;
+import io.orqueio.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import io.orqueio.bpm.engine.impl.history.HistoryLevel;
+import io.orqueio.bpm.engine.impl.jobexecutor.JobExecutor;
 import io.orqueio.bpm.engine.runtime.Job;
 import io.orqueio.bpm.engine.runtime.ProcessInstance;
 import io.orqueio.bpm.spring.boot.starter.ai.task.LlmInvalidAnswerException;
@@ -56,10 +59,14 @@ import tools.jackson.databind.json.JsonMapper;
  * }</pre>
  *
  * <p>It calls the real model, so it costs tokens and needs the provider's configuration: run it
- * on demand, for example in a test tagged and left out of the default build. The engine's
- * job executor must be off, so the evaluation runs the LLM task itself, and the history level
- * must keep variables ({@code audit} or {@code full}). The rest of the process runs too, up to
- * its next wait state; the instance is then deleted.
+ * on demand, for example in a test tagged and left out of the default build. It needs:
+ * <ul>
+ *   <li>the engine's job executor off, so the evaluation runs the LLM task itself;</li>
+ *   <li>a history level that keeps variables ({@code audit} or {@code full});</li>
+ *   <li>the LLM task's audit on (the default), whose record tells an accepted answer from a refused one.</li>
+ * </ul>
+ * The rest of the process runs too, up to its next wait state; the instance and its history
+ * are then deleted. A case that cannot run is reported as such, and the other cases still run.
  */
 public class LlmTaskEvaluation {
 
@@ -99,11 +106,11 @@ public class LlmTaskEvaluation {
    * Adds the cases of a JSON file on the classpath: a list of {@link LlmEvaluationCase}.
    */
   public LlmTaskEvaluation casesFrom(String classpathResource) {
-    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-    try (InputStream json = classLoader.getResourceAsStream(classpathResource)) {
-      if (json == null) {
-        throw new IllegalArgumentException("No evaluation cases at classpath resource " + classpathResource);
-      }
+    InputStream json = Thread.currentThread().getContextClassLoader().getResourceAsStream(classpathResource);
+    if (json == null) {
+      throw new IllegalArgumentException("No evaluation cases at classpath resource " + classpathResource);
+    }
+    try (json) {
       // A case may leave expectInvalidAnswer out; a misspelt field is reported rather than ignored
       JsonMapper mapper = JsonMapper.builder()
           .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
@@ -123,20 +130,21 @@ public class LlmTaskEvaluation {
       return cases(mapper.treeToValue(root, new TypeReference<List<LlmEvaluationCase>>() { }));
     }
     catch (IOException | RuntimeException e) {
-      if (e instanceof IllegalArgumentException missing && String.valueOf(e.getMessage()).startsWith("No evaluation cases at")) {
-        throw missing;
-      }
       throw new IllegalArgumentException("Cannot read the evaluation cases of " + classpathResource + ": " + e.getMessage(), e);
     }
   }
 
   /**
    * Runs every case, one after the other.
+   *
+   * @throws IllegalStateException when the engine cannot run an evaluation: job executor on,
+   *         or a history level that keeps no variables
    */
   public LlmEvaluationReport run() {
     if (cases.isEmpty()) {
       throw new IllegalStateException("No evaluation case: add some with cases(...) or casesFrom(...)");
     }
+    checkEngine();
     List<LlmEvaluationReport.CaseResult> results = new ArrayList<>();
     for (LlmEvaluationCase evaluationCase : cases) {
       results.add(evaluate(evaluationCase));
@@ -144,21 +152,54 @@ public class LlmTaskEvaluation {
     return new LlmEvaluationReport(processDefinitionKey, activityId, results);
   }
 
+  protected void checkEngine() {
+    if (!(processEngine.getProcessEngineConfiguration() instanceof ProcessEngineConfigurationImpl configuration)) {
+      return;
+    }
+    JobExecutor jobExecutor = configuration.getJobExecutor();
+    if (jobExecutor != null && jobExecutor.isActive()) {
+      throw new IllegalStateException("The engine's job executor is on: it would run the LLM task in place of the "
+          + "evaluation. Turn it off, for example with camunda.bpm.job-execution.enabled=false");
+    }
+    HistoryLevel historyLevel = configuration.getHistoryLevel();
+    if (historyLevel != null && historyLevel.getId() < HistoryLevel.HISTORY_LEVEL_AUDIT.getId()) {
+      throw new IllegalStateException("The history level '" + historyLevel.getName() + "' keeps no variables: the "
+          + "evaluation reads the written fields from the history. Use the history level audit or full");
+    }
+  }
+
   protected LlmEvaluationReport.CaseResult evaluate(LlmEvaluationCase evaluationCase) {
     RuntimeService runtimeService = processEngine.getRuntimeService();
-    ProcessInstance instance = runtimeService.startProcessInstanceByKey(processDefinitionKey, evaluationCase.variables());
+    String processInstanceId = null;
     try {
-      TaskRun run = runLlmTask(instance.getId());
-      Map<String, Object> written = writtenVariables(instance.getId());
+      ProcessInstance instance = runtimeService.startProcessInstanceByKey(processDefinitionKey, evaluationCase.variables());
+      processInstanceId = instance.getId();
+      TaskRun run = runLlmTask(processInstanceId);
+      Map<String, Object> written = writtenVariables(processInstanceId);
       LlmTaskRecord record = LlmTaskRecord.parse(written.get(LlmTaskAuditor.variableName(activityId)));
       return new LlmEvaluationReport.CaseResult(evaluationCase.name(), record.model(),
           differences(evaluationCase, run, written, record));
     }
-    finally {
-      if (runtimeService.createProcessInstanceQuery().processInstanceId(instance.getId()).count() > 0) {
-        runtimeService.deleteProcessInstance(instance.getId(), "LLM task evaluation", true, true);
-      }
+    catch (RuntimeException e) {
+      // One case that cannot run does not lose the results of the others
+      return new LlmEvaluationReport.CaseResult(evaluationCase.name(), null,
+          List.of("the case could not run: " + e.getMessage()));
     }
+    finally {
+      delete(processInstanceId);
+    }
+  }
+
+  protected void delete(String processInstanceId) {
+    if (processInstanceId == null) {
+      return;
+    }
+    RuntimeService runtimeService = processEngine.getRuntimeService();
+    if (runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).count() > 0) {
+      runtimeService.deleteProcessInstance(processInstanceId, "LLM task evaluation", true, true);
+    }
+    // Its history holds the case's data, and the prompt and answer when the audit includes them
+    processEngine.getHistoryService().deleteHistoricProcessInstanceIfExists(processInstanceId);
   }
 
   /**
@@ -185,14 +226,21 @@ public class LlmTaskEvaluation {
   protected TaskRun runLlmTask(String processInstanceId) {
     ManagementService managementService = processEngine.getManagementService();
     for (int i = 0; i < MAX_JOBS_BEFORE_THE_TASK; i++) {
-      Job taskJob = managementService.createJobQuery().processInstanceId(processInstanceId)
-          .activityId(activityId).singleResult();
+      List<Job> taskJobs = managementService.createJobQuery().processInstanceId(processInstanceId)
+          .activityId(activityId).list();
+      if (taskJobs.size() > 1) {
+        return new TaskRun("the LLM task waits in " + taskJobs.size() + " jobs, as a multi-instance task does: "
+            + "evaluate it in a process where it runs once", null);
+      }
+      Job taskJob = taskJobs.isEmpty() ? null : taskJobs.get(0);
       Job job = taskJob != null ? taskJob
           : managementService.createJobQuery().processInstanceId(processInstanceId).executable().listPage(0, 1)
               .stream().findFirst().orElse(null);
       if (job == null) {
-        return new TaskRun("the LLM task did not wait in a job: it must run asynchronously (asyncBefore), "
-            + "and the engine's job executor must be off", null);
+        boolean waiting = managementService.createJobQuery().processInstanceId(processInstanceId).count() > 0;
+        return new TaskRun(waiting
+            ? "the process waits in a job that is not due yet, such as a timer, before the LLM task"
+            : "the LLM task did not wait in a job: it must run asynchronously (asyncBefore)", null);
       }
       try {
         managementService.executeJob(job.getId());
@@ -224,23 +272,29 @@ public class LlmTaskEvaluation {
                                      LlmTaskRecord record) {
     List<String> differences = new ArrayList<>();
     // Without an error code, a refused answer fails the task instead of throwing a BPMN error
-    if (evaluationCase.expectInvalidAnswer() && run.refusedAnswer()) {
+    if (run.refusedAnswer()) {
+      if (!evaluationCase.expectInvalidAnswer()) {
+        differences.add("the answer was refused: " + run.failure().getMessage());
+      }
       return differences;
     }
     if (run.problem() != null) {
       differences.add(run.problem());
       return differences;
     }
-    boolean refused = record.refused()
-        || (record.missing() && evaluationCase.expected().keySet().stream().noneMatch(written::containsKey));
+    if (record.missing()) {
+      differences.add("the LLM task left no record, so the evaluation cannot tell an accepted answer from a "
+          + "refused one: keep its audit on (camunda.bpm.ai.audit.enabled)");
+      return differences;
+    }
     if (evaluationCase.expectInvalidAnswer()) {
-      if (!refused) {
+      if (!record.refused()) {
         differences.add("expected the answer to be refused, but it was accepted"
             + (record.answer() != null ? ": " + record.answer() : ""));
       }
       return differences;
     }
-    if (refused) {
+    if (record.refused()) {
       differences.add("the answer was refused (the task threw its BPMN error)"
           + (record.answer() != null ? ": " + record.answer() : ""));
       return differences;
@@ -250,17 +304,28 @@ public class LlmTaskEvaluation {
         differences.add(field + ": expected " + expectedValue + ", not written");
       }
       else if (!sameValue(expectedValue, written.get(field))) {
-        differences.add(field + ": expected " + expectedValue + ", got " + written.get(field));
+        Object actual = written.get(field);
+        boolean sameKind = expectedValue != null && actual != null && expectedValue.getClass() == actual.getClass();
+        differences.add(field + ": expected " + describe(expectedValue, sameKind) + ", got " + describe(actual, sameKind));
       }
     });
     return differences;
   }
 
+  /**
+   * Numbers are compared by value, whatever their type (2400 and 2400.0 are the same); other
+   * values must be equal and of the same kind, so a number written as text is a difference.
+   */
   protected static boolean sameValue(Object expected, Object actual) {
     if (expected instanceof Number && actual instanceof Number) {
       return new BigDecimal(expected.toString()).compareTo(new BigDecimal(actual.toString())) == 0;
     }
-    return Objects.equals(String.valueOf(expected), String.valueOf(actual));
+    return Objects.equals(expected, actual);
+  }
+
+  // When the types differ, text is shown in quotes, so "2400" and 2400 read differently
+  private static String describe(Object value, boolean sameKind) {
+    return !sameKind && value instanceof String text ? "\"" + text + "\"" : String.valueOf(value);
   }
 
   /**

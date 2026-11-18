@@ -20,7 +20,6 @@ import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDeploymentIT.pro
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskDeploymentIT.property;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 import io.orqueio.bpm.engine.ManagementService;
 import io.orqueio.bpm.engine.RepositoryService;
 import io.orqueio.bpm.engine.RuntimeService;

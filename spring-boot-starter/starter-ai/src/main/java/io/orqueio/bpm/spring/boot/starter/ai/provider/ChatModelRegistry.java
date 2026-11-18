@@ -70,6 +70,11 @@ public class ChatModelRegistry {
     List<ChatModel> matches = chatModels.get().stream()
         .filter(model -> isInstance(model, provider))
         .toList();
+    // A test stand-in is chosen over the provider's own model, whose starter may stay on the classpath
+    List<ChatModel> standIns = standIns(matches);
+    if (standIns.size() == 1) {
+      return standIns.get(0);
+    }
     if (matches.isEmpty()) {
       throw new LlmProviderException("LLM provider '" + provider.getId() + "' is not configured. Add the "
           + provider.getStarterArtifactId() + " dependency and its spring.ai configuration.");
@@ -92,6 +97,10 @@ public class ChatModelRegistry {
     List<ChatModel> models = chatModels.get();
     if (models.size() == 1) {
       return models.get(0);
+    }
+    List<ChatModel> standIns = standIns(models);
+    if (standIns.size() == 1) {
+      return standIns.get(0);
     }
     if (models.isEmpty()) {
       throw new LlmProviderException(
@@ -125,6 +134,10 @@ public class ChatModelRegistry {
         .map(LlmProvider::getId)
         .findFirst()
         .orElse(AopUtils.getTargetClass(model).getName());
+  }
+
+  protected static List<ChatModel> standIns(List<ChatModel> models) {
+    return models.stream().filter(model -> model instanceof LlmProviderStandIn).toList();
   }
 
   protected boolean isInstance(ChatModel model, LlmProvider provider) {

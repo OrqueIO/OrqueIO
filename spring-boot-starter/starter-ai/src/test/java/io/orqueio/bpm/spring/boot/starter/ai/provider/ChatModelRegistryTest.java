@@ -66,8 +66,18 @@ class ChatModelRegistryTest {
   }
 
   @Test
-  void shouldRejectAStandInModelNextToTheProviderItStandsFor() {
-    ChatModelRegistry registry = registry(null, new StubChatModel(), ollama);
+  void shouldChooseAStandInModelOverTheProviderItStandsFor() {
+    // The provider's starter stays on the test classpath and still creates its model
+    StubChatModel stub = new StubChatModel();
+    ChatModelRegistry registry = registry(null, stub, ollama);
+
+    assertThat(registry.getChatModel("ollama")).isSameAs(stub);
+    assertThat(registry.getChatModel(null)).isSameAs(stub);
+  }
+
+  @Test
+  void shouldRejectTwoStandInModelsForTheSameProvider() {
+    ChatModelRegistry registry = registry(null, new StubChatModel(), new StubChatModel());
 
     assertThatThrownBy(() -> registry.getChatModel("ollama"))
         .isInstanceOf(LlmProviderException.class)

@@ -16,6 +16,7 @@
  */
 package io.orqueio.bpm.spring.boot.starter.ai.testing;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -44,8 +45,8 @@ public record LlmEvaluationCase(String name, Map<String, Object> variables, Map<
 
   public LlmEvaluationCase {
     Objects.requireNonNull(name, "name");
-    variables = variables != null ? new LinkedHashMap<>(variables) : new LinkedHashMap<>();
-    expected = expected != null ? new LinkedHashMap<>(expected) : new LinkedHashMap<>();
+    variables = Collections.unmodifiableMap(variables != null ? new LinkedHashMap<>(variables) : new LinkedHashMap<>());
+    expected = Collections.unmodifiableMap(expected != null ? new LinkedHashMap<>(expected) : new LinkedHashMap<>());
     if (expectInvalidAnswer == !expected.isEmpty()) {
       throw new IllegalArgumentException("Evaluation case '" + name
           + "' must give either the expected output fields or expectInvalidAnswer, not both or neither");
