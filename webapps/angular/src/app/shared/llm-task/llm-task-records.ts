@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Variable } from '../../../../services/cockpit.service';
+import { Variable } from '../../services/cockpit.service';
 
 /**
  * The prefix of the process variables in which the AI starter records each LLM task
@@ -28,6 +28,8 @@ export interface LlmTaskRecord {
   variableName: string;
   /** The id of the LLM task that wrote the record. */
   activityId: string;
+  /** The key of the process the record belongs to, when the variable carries it. */
+  processDefinitionKey?: string;
   /** False when the record is not the expected JSON: only {@link raw} is then set. */
   readable: boolean;
   /** The variable's value as stored. */
@@ -74,6 +76,7 @@ export function parseLlmTaskRecord(variable: Variable): LlmTaskRecord {
   const record: LlmTaskRecord = {
     variableName: variable.name,
     activityId: variable.name.substring(LLM_RECORD_PREFIX.length),
+    processDefinitionKey: variable.processDefinitionKey,
     readable: false,
     raw
   };

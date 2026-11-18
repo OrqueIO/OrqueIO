@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Variable } from '../../../../services/cockpit.service';
+import { Variable } from '../../services/cockpit.service';
 import { llmTaskRecords, parseLlmTaskRecord } from './llm-task-records';
 
 const variable = (name: string, value: unknown, type = 'String'): Variable =>
@@ -41,6 +41,7 @@ describe('LLM task records', () => {
     expect(record).toEqual({
       variableName: 'orqueioLlm_Task_Triage',
       activityId: 'Task_Triage',
+      processDefinitionKey: undefined,
       readable: true,
       raw: JSON.stringify(RECORD),
       ...RECORD,

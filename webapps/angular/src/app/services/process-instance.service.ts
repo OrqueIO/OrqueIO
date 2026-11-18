@@ -338,6 +338,16 @@ export class ProcessInstanceService {
   }
 
   /**
+   * The LLM task records (orqueioLlm_* variables) of all process instances, from the history,
+   * at most maxResults of them. Errors are passed on, so a chart can show them.
+   */
+  getLlmTaskRecordVariables(maxResults: number = 2000): Observable<Variable[]> {
+    return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, {
+      params: { variableNameLike: 'orqueioLlm_%', maxResults: maxResults.toString() }
+    });
+  }
+
+  /**
    * Set a variable on a process instance
    */
   setProcessInstanceVariable(processInstanceId: string, variableName: string, value: any, type: string): Observable<void> {

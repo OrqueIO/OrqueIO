@@ -565,3 +565,13 @@
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+
+/* A chart that spans the whole grid row, such as the LLM tasks */
+.chart-card--wide {
+  display: block;
+  grid-column: 1 / -1;
+}
+
+.chart-card--wide[hidden] {
+  display: none;
+}

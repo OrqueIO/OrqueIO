@@ -56,7 +56,7 @@ import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockp
 import { SearchWidgetComponent, SearchType, SearchCriteria } from '../../../../shared/search-widget/search-widget';
 import { UserAutocompleteComponent } from '../../../../shared/user-autocomplete/user-autocomplete';
 import { User } from '../../../../models/admin/user.model';
-import { LlmTaskRecord, llmTaskRecords } from './llm-task-records';
+import { LlmTaskRecord, llmTaskRecords } from '../../../../shared/llm-task/llm-task-records';
 
 type TabType = 'variables' | 'llmCalls' | 'incidents' | 'calledInstances' | 'userTasks' | 'jobs' | 'externalTasks';
 type SidebarTab = 'info' | 'filter';

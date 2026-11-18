@@ -12,3 +12,4 @@ export * from './timeline-chart/timeline-chart.component';
 export * from './tasks-by-group-chart/tasks-by-group-chart.component';
 export * from './process-distribution-chart/process-distribution-chart.component';
 export * from './open-incidents-chart/open-incidents-chart.component';
+export * from './llm-usage-chart/llm-usage-chart.component';

@@ -38,7 +38,8 @@ import {
   TasksByGroupChartComponent,
   ProcessDistributionChartComponent,
   OpenIncidentsChartComponent,
-  TimelineChartComponent
+  TimelineChartComponent,
+  LlmUsageChartComponent
 } from '../dashboard-charts';
 
 interface DeployedStats {
@@ -63,7 +64,8 @@ interface DeployedStats {
     TasksByGroupChartComponent,
     ProcessDistributionChartComponent,
     OpenIncidentsChartComponent,
-    TimelineChartComponent
+    TimelineChartComponent,
+    LlmUsageChartComponent
   ],
   templateUrl: './cockpit-dashboard.html',
   styleUrls: ['./cockpit-dashboard.css'],
