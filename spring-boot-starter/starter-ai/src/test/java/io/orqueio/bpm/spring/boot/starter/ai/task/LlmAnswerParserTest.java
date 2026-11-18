@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.entry;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -149,6 +150,124 @@ class LlmAnswerParserTest {
     assertThat(parser.formatInstructions(OUTPUTS))
         .contains("single JSON object")
         .contains("\"category\" (string), \"urgency\" (integer), \"score\" (number), \"complete\" (boolean)");
+  }
+
+  // Claim triage: the type of incident and the amount claimed
+  private static final List<LlmOutputField> CLAIM = List.of(
+      new LlmOutputField("incidentType", STRING, List.of("Theft", "Fire", "Water", "Other"), null, null),
+      new LlmOutputField("claimAmount", NUMBER, List.of(), new BigDecimal("0"), new BigDecimal("50000")));
+
+  // Support ticket: a sentiment and a priority from 1 to 5
+  private static final List<LlmOutputField> TICKET = List.of(
+      new LlmOutputField("sentiment", STRING, List.of("positive", "neutral", "negative"), null, null),
+      new LlmOutputField("priority", INTEGER, List.of(), new BigDecimal("1"), new BigDecimal("5")));
+
+  @Test
+  void shouldAcceptValuesWithinConstraints() {
+    assertThat(parser.parse("{\"incidentType\":\"Theft\",\"claimAmount\":2400}", CLAIM))
+        .containsExactly(entry("incidentType", "Theft"), entry("claimAmount", 2400.0));
+    assertThat(parser.parse("{\"sentiment\":\"negative\",\"priority\":4}", TICKET))
+        .containsExactly(entry("sentiment", "negative"), entry("priority", 4L));
+  }
+
+  @Test
+  void shouldAcceptBoundsThemselves() {
+    assertThat(parser.parse("{\"incidentType\":\"Other\",\"claimAmount\":0}", CLAIM)).containsEntry("claimAmount", 0.0);
+    assertThat(parser.parse("{\"incidentType\":\"Other\",\"claimAmount\":50000.0}", CLAIM)).containsEntry("claimAmount", 50000.0);
+    assertThat(parser.parse("{\"sentiment\":\"neutral\",\"priority\":1}", TICKET)).containsEntry("priority", 1L);
+    assertThat(parser.parse("{\"sentiment\":\"neutral\",\"priority\":5}", TICKET)).containsEntry("priority", 5L);
+  }
+
+  @Test
+  void shouldRejectValueNotAllowedWithoutRepeatingIt() {
+    // The injection measured in #315: a stolen bike reported as a fire
+    assertThatThrownBy(() -> parser.parse("{\"incidentType\":\"Arson by the neighbour\",\"claimAmount\":2400}", CLAIM))
+        .isInstanceOf(LlmInvalidAnswerException.class)
+        .hasMessage("Field 'incidentType' of the model's answer is not one of the allowed values");
+  }
+
+  @Test
+  void shouldCompareAllowedValuesExactly() {
+    assertThatThrownBy(() -> parser.parse("{\"sentiment\":\"Negative\",\"priority\":3}", TICKET))
+        .hasMessage("Field 'sentiment' of the model's answer is not one of the allowed values");
+    assertThatThrownBy(() -> parser.parse("{\"sentiment\":\" negative\",\"priority\":3}", TICKET))
+        .hasMessage("Field 'sentiment' of the model's answer is not one of the allowed values");
+  }
+
+  @Test
+  void shouldRejectNumberOutsideBoundsWithoutRepeatingIt() {
+    assertThatThrownBy(() -> parser.parse("{\"incidentType\":\"Fire\",\"claimAmount\":99999}", CLAIM))
+        .isInstanceOf(LlmInvalidAnswerException.class)
+        .hasMessage("Field 'claimAmount' of the model's answer is outside the allowed range");
+    assertThatThrownBy(() -> parser.parse("{\"incidentType\":\"Fire\",\"claimAmount\":-0.01}", CLAIM))
+        .hasMessage("Field 'claimAmount' of the model's answer is outside the allowed range");
+    assertThatThrownBy(() -> parser.parse("{\"sentiment\":\"neutral\",\"priority\":6}", TICKET))
+        .hasMessage("Field 'priority' of the model's answer is outside the allowed range");
+    assertThatThrownBy(() -> parser.parse("{\"sentiment\":\"neutral\",\"priority\":0}", TICKET))
+        .hasMessage("Field 'priority' of the model's answer is outside the allowed range");
+  }
+
+  @Test
+  void shouldCheckEveryFieldBeforeReturningAny() {
+    // A valid first field does not get through when a later one is out of range
+    assertThatThrownBy(() -> parser.parse("{\"incidentType\":\"Theft\",\"claimAmount\":1e9}", CLAIM))
+        .hasMessage("Field 'claimAmount' of the model's answer is outside the allowed range");
+  }
+
+  @Test
+  void shouldApplyOneSidedBounds() {
+    // Invoice approval: an amount with a maximum only; a credit score with a minimum only
+    List<LlmOutputField> invoice = List.of(new LlmOutputField("amount", NUMBER, List.of(), null, new BigDecimal("10000")));
+    List<LlmOutputField> credit = List.of(new LlmOutputField("score", INTEGER, List.of(), new BigDecimal("-100"), null));
+
+    assertThat(parser.parse("{\"amount\":-5}", invoice)).containsEntry("amount", -5.0);
+    assertThatThrownBy(() -> parser.parse("{\"amount\":10000.5}", invoice))
+        .hasMessage("Field 'amount' of the model's answer is outside the allowed range");
+    assertThat(parser.parse("{\"score\":-100}", credit)).containsEntry("score", -100L);
+    assertThat(parser.parse("{\"score\":9223372036854775807}", credit)).containsEntry("score", Long.MAX_VALUE);
+    assertThatThrownBy(() -> parser.parse("{\"score\":-101}", credit))
+        .hasMessage("Field 'score' of the model's answer is outside the allowed range");
+  }
+
+  @Test
+  void shouldCompareDecimalBoundsWithoutRoundingErrors() {
+    // A probability: 0.3 must be accepted with a maximum of 0.3, although 0.1 + 0.2 is not 0.3 in binary
+    List<LlmOutputField> risk = List.of(new LlmOutputField("probability", NUMBER, List.of(), new BigDecimal("0.1"), new BigDecimal("0.3")));
+
+    assertThat(parser.parse("{\"probability\":0.3}", risk)).containsEntry("probability", 0.3);
+    assertThat(parser.parse("{\"probability\":0.1}", risk)).containsEntry("probability", 0.1);
+    assertThatThrownBy(() -> parser.parse("{\"probability\":0.30000000000000004}", risk))
+        .hasMessage("Field 'probability' of the model's answer is outside the allowed range");
+  }
+
+  @Test
+  void shouldCheckBoundsOfIntegerWrittenAsWholeDecimal() {
+    assertThat(parser.parse("{\"sentiment\":\"neutral\",\"priority\":5.0}", TICKET)).containsEntry("priority", 5L);
+    assertThatThrownBy(() -> parser.parse("{\"sentiment\":\"neutral\",\"priority\":6.0}", TICKET))
+        .hasMessage("Field 'priority' of the model's answer is outside the allowed range");
+  }
+
+  @Test
+  void shouldNotBuildFieldWithBothAllowedValuesAndBounds() {
+    assertThatThrownBy(() -> new LlmOutputField("code", STRING, List.of("A", "B"), BigDecimal.ONE, null))
+        .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new LlmOutputField("code", NUMBER, List.of("1", "2"), null, null))
+        .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new LlmOutputField("label", STRING, List.of(), BigDecimal.ONE, null))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  void shouldTellTheModelTheAllowedValuesAndBounds() {
+    assertThat(parser.formatInstructions(CLAIM)).contains(
+        "\"incidentType\" (string, exactly one of \"Theft\", \"Fire\", \"Water\", \"Other\"), "
+            + "\"claimAmount\" (number, from 0 to 50000)");
+    assertThat(parser.formatInstructions(List.of(
+        new LlmOutputField("amount", NUMBER, List.of(), null, new BigDecimal("10000")),
+        new LlmOutputField("score", INTEGER, List.of(), new BigDecimal("-100"), null),
+        new LlmOutputField("label", STRING, List.of("say \"yes\"", "no"), null, null))))
+        .contains("\"amount\" (number, at most 10000), \"score\" (integer, at least -100), "
+            + "\"label\" (string, exactly one of \"say \\\"yes\\\"\", \"no\")");
   }
 
 }

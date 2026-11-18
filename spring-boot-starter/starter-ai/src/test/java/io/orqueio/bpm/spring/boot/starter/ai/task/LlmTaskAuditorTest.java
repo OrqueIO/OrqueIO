@@ -16,6 +16,7 @@
  */
 package io.orqueio.bpm.spring.boot.starter.ai.task;
 
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmOutputField.Type.NUMBER;
 import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmOutputField.Type.STRING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -130,6 +132,30 @@ class LlmTaskAuditorTest {
     assertThat(auditor.promptVersion(new LlmTaskConfiguration(null, null, "Classify: {{text}}",
         List.of("text"), List.of(new LlmOutputField("label", STRING))))).isNotEqualTo(version);
     assertThat(version).hasSize(64);
+  }
+
+  @Test
+  void shouldChangePromptVersionWithAllowedValuesOrBounds() {
+    LlmTaskAuditor auditor = new LlmTaskAuditor(registry, false, CLOCK);
+    String free = auditor.promptVersion(withOutputs(new LlmOutputField("category", STRING)));
+    String listed = auditor.promptVersion(withOutputs(
+        new LlmOutputField("category", STRING, List.of("Theft", "Fire"), null, null)));
+    String bounded = auditor.promptVersion(withOutputs(
+        new LlmOutputField("category", NUMBER, List.of(), BigDecimal.ZERO, new BigDecimal("10"))));
+
+    assertThat(listed).isNotEqualTo(free);
+    assertThat(auditor.promptVersion(withOutputs(new LlmOutputField("category", STRING, List.of("Theft", "Water"), null, null))))
+        .isNotEqualTo(listed);
+    assertThat(auditor.promptVersion(withOutputs(new LlmOutputField("category", NUMBER, List.of(), BigDecimal.ZERO, null))))
+        .isNotEqualTo(bounded);
+    // Unconstrained outputs keep the version they had before constraints existed
+    assertThat(new LlmOutputField("category", STRING).declaration()).isEqualTo("category:string");
+    assertThat(new LlmOutputField("category", NUMBER, List.of(), null, new BigDecimal("10")).declaration())
+        .isEqualTo("category:number[..10]");
+  }
+
+  private LlmTaskConfiguration withOutputs(LlmOutputField output) {
+    return new LlmTaskConfiguration(null, null, "Classify: {{text}}", List.of("text"), List.of(output));
   }
 
   private JsonNode record(LlmTaskAuditor auditor, Prompt prompt, LlmModelAnswer answer) {

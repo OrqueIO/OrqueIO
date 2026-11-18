@@ -146,7 +146,8 @@ public class LlmTaskAuditor {
         .append('\n').append(LlmPromptResolver.DATA_REMINDER)
         .append('\n').append(LlmPrompt.DATA_LABEL);
     for (LlmOutputField output : configuration.getOutputs()) {
-      declared.append('\n').append(output.name()).append(':').append(output.type().getId());
+      // The allowed values and bounds are part of the instructions: changing them changes the version
+      declared.append('\n').append(output.declaration());
     }
     return sha256(declared.toString());
   }
