@@ -474,6 +474,35 @@ describe('ProcessDetailComponent', () => {
       expect(root.querySelector('.llm-calls-tab .llm-content')).toBeNull();
     });
 
+    it('should show the instructions from the deployed process above the data sent', () => {
+      cockpitService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="D">
+  <bpmn:process id="invoice">
+    <bpmn:serviceTask id="Task_Check">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="orqueio.llm.prompt">Check the claim.
+{{claimText}}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+  </bpmn:process>
+</bpmn:definitions>` }));
+      const root = render([reused]);
+      const rows = open(root);
+
+      (rows[0].querySelector('button') as HTMLButtonElement).click();
+      fixture.detectChanges();
+
+      const blocks = Array.from(root.querySelectorAll('.llm-calls-tab .llm-content .llm-content-block'))
+        .map(block => [block.querySelector('strong')!.textContent!.trim(), block.querySelector('pre')!.textContent]);
+      expect(blocks).toEqual([
+        ['cockpit.processDetail.llmCalls.instructions', 'Check the claim.\n{{claimText}}'],
+        ['cockpit.processDetail.llmCalls.sentData', 'Check <claimText>'],
+        ['cockpit.processDetail.llmCalls.answer', '{"valid":false}']
+      ]);
+    });
+
     it('should show the raw value of a record that cannot be read', () => {
       const rows = open(render([broken]));
 

@@ -57,6 +57,7 @@ import { SearchWidgetComponent, SearchType, SearchCriteria } from '../../../../s
 import { UserAutocompleteComponent } from '../../../../shared/user-autocomplete/user-autocomplete';
 import { User } from '../../../../models/admin/user.model';
 import { LlmTaskRecord, llmTaskRecords } from '../../../../shared/llm-task/llm-task-records';
+import { llmTaskInstructions } from '../../../../shared/llm-task/llm-task-instructions';
 
 type TabType = 'variables' | 'llmCalls' | 'incidents' | 'calledInstances' | 'userTasks' | 'jobs' | 'externalTasks';
 type SidebarTab = 'info' | 'filter';
@@ -217,6 +218,9 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   // LLM task records, read from the variables (cached per variables array)
   private llmRecordsSource: Variable[] | null = null;
   private llmRecordsCache: LlmTaskRecord[] = [];
+  // The instructions of the LLM tasks, read from the definition's XML (cached per XML)
+  private llmInstructionsSource: string | null = null;
+  private llmInstructionsCache = new Map<string, string>();
   expandedLlmRecord: string | null = null;
 
   // UI State - Activity selection (supports multi-select like AngularJS)
@@ -1169,6 +1173,18 @@ getTasklistUrl(task: UserTask): string {
 
   formatTokens(value: number | null | undefined): string {
     return value === null || value === undefined ? '-' : String(value);
+  }
+
+  /**
+   * The instructions the LLM task sent with the recorded data: its prompt in the deployed
+   * definition, the same for every call of that version.
+   */
+  llmInstructions(record: LlmTaskRecord): string | null {
+    if (this.llmInstructionsSource !== this.bpmnXml) {
+      this.llmInstructionsSource = this.bpmnXml;
+      this.llmInstructionsCache = llmTaskInstructions(this.bpmnXml);
+    }
+    return this.llmInstructionsCache.get(record.activityId) ?? null;
   }
 
   hasLlmContent(record: LlmTaskRecord): boolean {

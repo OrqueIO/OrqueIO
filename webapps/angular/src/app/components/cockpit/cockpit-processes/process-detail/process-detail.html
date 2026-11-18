@@ -529,8 +529,12 @@
                     </tr>
                     <tr class="llm-content" *ngIf="expandedLlmRecord === record.variableName">
                       <td colspan="9">
-                        <div class="llm-content-block">
-                          <strong>{{ 'cockpit.processDetail.llmCalls.prompt' | translate }}</strong>
+                        <div class="llm-content-block llm-instructions" *ngIf="llmInstructions(record) as instructions">
+                          <strong>{{ 'cockpit.processDetail.llmCalls.instructions' | translate }}</strong>
+                          <pre>{{ instructions }}</pre>
+                        </div>
+                        <div class="llm-content-block llm-sent-data">
+                          <strong>{{ 'cockpit.processDetail.llmCalls.sentData' | translate }}</strong>
                           <pre>{{ record.prompt }}</pre>
                         </div>
                         <div class="llm-content-block">
