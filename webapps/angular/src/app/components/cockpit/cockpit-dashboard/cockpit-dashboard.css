@@ -575,3 +575,49 @@
 .chart-card--wide[hidden] {
   display: none;
 }
+
+/* LLM task stats, shown once an LLM task has run: six cards, three per row */
+.stats-grid--llm {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 1200px) {
+  .stats-grid--llm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid--llm {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-card--indigo {
+  --stat-accent-color: #4f46e5;
+  --stat-bg-color: rgba(79, 70, 229, 0.08);
+}
+
+.stat-card--danger {
+  --stat-accent-color: var(--color-danger);
+  --stat-bg-color: var(--color-danger-bg);
+}
+
+.stat-card--danger .stat-card__value {
+  color: var(--color-danger);
+}
+
+.stat-card--neutral {
+  --stat-accent-color: var(--color-gray-400, #9ca3af);
+  --stat-bg-color: var(--color-gray-100, #f3f4f6);
+}
+
+.stat-card__icon--llm {
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.stat-card__detail {
+  font-size: 12px;
+  color: var(--text-secondary);
+}

@@ -29,28 +29,19 @@ import {
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
-import { Actions, ofType } from '@ngrx/effects';
 import Chart from 'chart.js/auto';
 
 import { ChartCardComponent } from '../chart-card/chart-card.component';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
 import { CHART_COLORS, ChartLoadingState } from '../../../../models/cockpit/dashboard-charts.model';
-import { ProcessInstanceService } from '../../../../services/process-instance.service';
-import { LlmTaskRecord, llmTaskRecords } from '../../../../shared/llm-task/llm-task-records';
+import { LlmTaskRecord } from '../../../../shared/llm-task/llm-task-records';
 import { LlmUsage, summarizeLlmUsage } from '../../../../shared/llm-task/llm-usage';
-import * as DashboardActions from '../../../../store/cockpit/dashboard/dashboard.actions';
-
-/** The most records read, the newest first. */
-export const LLM_USAGE_MAX_RECORDS = 2000;
-
-/** The longest period offered, so the records of all periods are read at once. */
-const LONGEST_PERIOD = 30;
-
-/** Where the records come from, which says what they count. */
-type RecordSource = 'updates' | 'latest';
+import {
+  LLM_USAGE_MAX_RECORDS,
+  LlmRecordSource,
+  LlmUsageService
+} from '../../../../shared/llm-task/llm-usage.service';
 
 /**
  * What the LLM tasks used over the last days, from the record each LLM task execution
@@ -296,9 +287,8 @@ export class LlmUsageChartComponent implements OnInit, OnDestroy {
 
   private destroyRef = inject(DestroyRef);
   private cdr = inject(ChangeDetectorRef);
-  private processInstanceService = inject(ProcessInstanceService);
+  private llmUsageService = inject(LlmUsageService);
   private translateService = inject(TranslateService);
-  private actions$ = inject(Actions);
 
   private chart: Chart<'bar'> | null = null;
   private records: LlmTaskRecord[] = [];
@@ -313,7 +303,7 @@ export class LlmUsageChartComponent implements OnInit, OnDestroy {
   error: string | null = null;
   /** Whether more records may exist than were read. */
   limited = false;
-  source: RecordSource = 'updates';
+  source: LlmRecordSource = 'updates';
   usage: LlmUsage = summarizeLlmUsage([], 7);
 
   /**
@@ -333,12 +323,22 @@ export class LlmUsageChartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.load();
-
-    // The dashboard's refresh reloads every chart, this one included
-    this.actions$
-      .pipe(ofType(DashboardActions.refreshAllCharts), takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.load());
+    // The records are shared with the dashboard's LLM figures, and reloaded with its refresh
+    this.llmUsageService.state$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(state => {
+        this.loadingState = state.loadingState;
+        this.error = state.failed ? this.translateService.instant('cockpit.charts.llmUsage.error') : null;
+        this.records = state.records;
+        this.source = state.source;
+        this.limited = state.limited;
+        if (state.loadingState === 'success') {
+          this.summarize();
+        } else {
+          this.cdr.markForCheck();
+        }
+      });
+    this.llmUsageService.ensureLoaded();
   }
 
   ngOnDestroy(): void {
@@ -351,37 +351,7 @@ export class LlmUsageChartComponent implements OnInit, OnDestroy {
   }
 
   load(): void {
-    this.loadingState = 'loading';
-    this.error = null;
-    this.cdr.markForCheck();
-
-    const now = new Date();
-    const since = new Date(now.getFullYear(), now.getMonth(), now.getDate() - (LONGEST_PERIOD - 1));
-
-    // One record per execution from the variable updates; below history level full there
-    // are none, so fall back to the latest record of each task and instance
-    this.processInstanceService.getLlmTaskRecordUpdates(since, LLM_USAGE_MAX_RECORDS)
-      .pipe(
-        switchMap(updates => updates.length > 0
-          ? of({ variables: updates, source: 'updates' as RecordSource })
-          : this.processInstanceService.getLlmTaskRecordVariables(LLM_USAGE_MAX_RECORDS)
-            .pipe(map(variables => ({ variables, source: 'latest' as RecordSource })))),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe({
-        next: ({ variables, source }) => {
-          this.records = llmTaskRecords(variables);
-          this.source = source;
-          this.limited = variables.length >= LLM_USAGE_MAX_RECORDS;
-          this.loadingState = 'success';
-          this.summarize();
-        },
-        error: () => {
-          this.loadingState = 'error';
-          this.error = this.translateService.instant('cockpit.charts.llmUsage.error');
-          this.cdr.markForCheck();
-        }
-      });
+    this.llmUsageService.load();
   }
 
   onPeriodChange(days: number): void {

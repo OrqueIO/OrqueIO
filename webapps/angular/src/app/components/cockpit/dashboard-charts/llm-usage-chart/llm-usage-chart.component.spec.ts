@@ -38,7 +38,8 @@ vi.mock('chart.js/auto', () => ({
   }
 }));
 
-import { LlmUsageChartComponent, LLM_USAGE_MAX_RECORDS } from './llm-usage-chart.component';
+import { LlmUsageChartComponent } from './llm-usage-chart.component';
+import { LLM_USAGE_MAX_RECORDS, LlmUsageService } from '../../../../shared/llm-task/llm-usage.service';
 import { ProcessInstanceService, Variable } from '../../../../services/process-instance.service';
 import * as DashboardActions from '../../../../store/cockpit/dashboard/dashboard.actions';
 import { initTestEnvironment } from '../../../../testing/test-utils';
@@ -78,6 +79,7 @@ describe('LlmUsageChartComponent', () => {
         provideHttpClientTesting(),
         provideRouter([]),
         provideMockActions(() => actions$),
+        LlmUsageService,
         { provide: ProcessInstanceService, useValue: service }
       ]
     }).compileComponents();

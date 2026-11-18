@@ -31,6 +31,9 @@ import * as DashboardActions from '../../../store/cockpit/dashboard/dashboard.ac
 import * as DashboardSelectors from '../../../store/cockpit/dashboard/dashboard.selectors';
 import * as ProcessesActions from '../../../store/cockpit/processes/processes.actions';
 import * as ProcessesSelectors from '../../../store/cockpit/processes/processes.selectors';
+import { LlmUsageService } from '../../../shared/llm-task/llm-usage.service';
+import { LlmUsage, summarizeLlmUsage } from '../../../shared/llm-task/llm-usage';
+import { BUBBLE_PATH, SPARK_PATH } from '../../../shared/bpmn-viewer/llm-task-renderer';
 
 // Chart components
 import {
@@ -70,6 +73,7 @@ interface DeployedStats {
   templateUrl: './cockpit-dashboard.html',
   styleUrls: ['./cockpit-dashboard.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [LlmUsageService],
   animations: [
     trigger('slideDown', [
       transition(':enter', [
@@ -89,6 +93,15 @@ export class CockpitDashboardComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private cdr = inject(ChangeDetectorRef);
   private cockpitService = inject(CockpitService);
+  private llmUsageService = inject(LlmUsageService);
+
+  /** The days the LLM figures of the stats cover. */
+  readonly llmStatsDays = 7;
+  readonly llmBubblePath = BUBBLE_PATH;
+  readonly llmSparkPath = SPARK_PATH;
+
+  /** What the LLM tasks used over the last days; null while no LLM task has run. */
+  llmStats: LlmUsage | null = null;
 
   // Icons
   faSpinner = faSpinner;
@@ -129,6 +142,28 @@ export class CockpitDashboardComponent implements OnInit, OnDestroy {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadDashboardData();
     this.loadDeployedStats();
+    this.loadLlmStats();
+  }
+
+  private loadLlmStats(): void {
+    this.llmUsageService.state$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(state => {
+        // Kept while reloading, so the cards do not flash
+        if (state.loadingState === 'success') {
+          this.llmStats = state.records.length > 0 ? summarizeLlmUsage(state.records, this.llmStatsDays) : null;
+          this.cdr.markForCheck();
+        }
+      });
+    this.llmUsageService.ensureLoaded();
+  }
+
+  /** Opens the charts section and shows the LLM tasks card, which details the figures. */
+  showLlmUsage(): void {
+    this.secondaryChartsVisible = true;
+    this.cdr.markForCheck();
+    // After the section's opening animation (200 ms), when the card is at its place
+    setTimeout(() => document.querySelector('app-llm-usage-chart')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
   }
 
   ngOnDestroy(): void {
