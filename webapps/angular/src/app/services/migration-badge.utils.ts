@@ -18,11 +18,6 @@ export interface MigrationBadgeResult {
 /**
  * Pure function to calculate migration badges for source and target diagrams.
  *
- * Rules:
- * - Green checkmark (valid): activity is part of a valid migration instruction
- * - Red X (invalid): activity is part of an invalid migration instruction
- * - Yellow ! (unmapped): source activity has active instances but no instruction
- *
  * @param plan The generated migration plan
  * @param report The validation report for the plan
  * @param sourceStats Activity statistics for the source process (for unmapped detection)
@@ -44,32 +39,72 @@ export function calculateMigrationBadges(
 
   const mappedSourceActivities = new Set<string>();
 
+  const sourceErrorMap = new Map<string, string[]>();
+  const targetErrorMap = new Map<string, string[]>();
+
   plan.instructions.forEach((instruction, index) => {
     const state = validationStates[index];
-    const hasFailures = !state.valid;
-    const badgeType: MigrationBadgeType = hasFailures ? 'invalid' : 'valid';
-
-    let tooltip: string | undefined;
-    if (hasFailures && state.failures.length > 0) {
-      const failureMessages = state.failures.join('; ');
-      tooltip = `Migration validation failed: ${failureMessages}`;
-    }
+    const failures = state.failures;
 
     instruction.sourceActivityIds.forEach(sourceId => {
-      mappedSourceActivities.add(sourceId);
-      sourceBadges.push({
-        activityId: sourceId,
-        type: badgeType,
-        tooltip
-      });
+      const innerActivityId = sourceId.replace(/#multiInstanceBody$/, '');
+      mappedSourceActivities.add(innerActivityId);
+
+      if (failures.length > 0) {
+        const existing = sourceErrorMap.get(innerActivityId) || [];
+        sourceErrorMap.set(innerActivityId, [...existing, ...failures]);
+      } else {
+        if (!sourceErrorMap.has(innerActivityId)) {
+          sourceErrorMap.set(innerActivityId, []);
+        }
+      }
     });
 
     instruction.targetActivityIds.forEach(targetId => {
-      targetBadges.push({
-        activityId: targetId,
-        type: badgeType,
-        tooltip
-      });
+      const innerActivityId = targetId.replace(/#multiInstanceBody$/, '');
+
+      if (failures.length > 0) {
+        const existing = targetErrorMap.get(innerActivityId) || [];
+        targetErrorMap.set(innerActivityId, [...existing, ...failures]);
+      } else {
+        if (!targetErrorMap.has(innerActivityId)) {
+          targetErrorMap.set(innerActivityId, []);
+        }
+      }
+    });
+  });
+
+  sourceErrorMap.forEach((failures, activityId) => {
+    const hasFailures = failures.length > 0;
+    const badgeType: MigrationBadgeType = hasFailures ? 'invalid' : 'valid';
+
+    let tooltip: string | undefined;
+    if (hasFailures) {
+      const failureMessages = failures.join('; ');
+      tooltip = `Migration validation failed: ${failureMessages}`;
+    }
+
+    sourceBadges.push({
+      activityId,
+      type: badgeType,
+      tooltip
+    });
+  });
+
+  targetErrorMap.forEach((failures, activityId) => {
+    const hasFailures = failures.length > 0;
+    const badgeType: MigrationBadgeType = hasFailures ? 'invalid' : 'valid';
+
+    let tooltip: string | undefined;
+    if (hasFailures) {
+      const failureMessages = failures.join('; ');
+      tooltip = `Migration validation failed: ${failureMessages}`;
+    }
+
+    targetBadges.push({
+      activityId,
+      type: badgeType,
+      tooltip
     });
   });
 

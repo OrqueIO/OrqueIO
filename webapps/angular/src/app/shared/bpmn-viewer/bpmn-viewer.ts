@@ -1182,9 +1182,20 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
       if (failures && failures.length > 0) {
         failures.forEach(failure => {
+          const formatted = this.formatValidationMessage(failure);
+
           const errorItem = document.createElement('div');
           errorItem.className = 'bpmn-mapping-popover__error-item';
-          errorItem.textContent = failure;
+          errorItem.textContent = formatted.primary;
+
+          if (formatted.primary !== formatted.raw) {
+            errorItem.title = formatted.raw;
+            const rawMessage = document.createElement('div');
+            rawMessage.className = 'bpmn-mapping-popover__error-raw';
+            rawMessage.textContent = formatted.raw;
+            errorItem.appendChild(rawMessage);
+          }
+
           errorList.appendChild(errorItem);
         });
       } else {
@@ -1376,32 +1387,76 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
 
+  private formatValidationMessage(rawMessage: string): { primary: string; raw: string } {
+    const incompatibleTypesPattern = /^Activities have incompatible types \((.+?) is not compatible with (.+?)\)$/;
+    const match = rawMessage.match(incompatibleTypesPattern);
+
+    if (match) {
+      const sourceBehavior = match[1];
+      const targetBehavior = match[2];
+
+      const isParallelToSequential =
+        sourceBehavior === 'ParallelMultiInstanceActivityBehavior' &&
+        targetBehavior === 'SequentialMultiInstanceActivityBehavior';
+      const isSequentialToParallel =
+        sourceBehavior === 'SequentialMultiInstanceActivityBehavior' &&
+        targetBehavior === 'ParallelMultiInstanceActivityBehavior';
+
+      if (isParallelToSequential) {
+        return {
+          primary: 'Incompatible activity types: parallel multi-instance cannot be mapped to sequential multi-instance',
+          raw: rawMessage
+        };
+      } else if (isSequentialToParallel) {
+        return {
+          primary: 'Incompatible activity types: sequential multi-instance cannot be mapped to parallel multi-instance',
+          raw: rawMessage
+        };
+      } else {
+        return {
+          primary: rawMessage,
+          raw: rawMessage
+        };
+      }
+    }
+
+    return {
+      primary: rawMessage,
+      raw: rawMessage
+    };
+  }
+
   private getFailuresForActivity(activityId: string): string[] {
     if (!this.migrationReport) return [];
 
     const instructions = this.editableInstructions || [];
     const validationStates = parseInstructionReports(this.migrationReport, instructions);
 
+    const accumulatedFailures: string[] = [];
+
+    const activityIdsToCheck = [activityId, `${activityId}#multiInstanceBody`];
+
     for (let i = 0; i < instructions.length; i++) {
       const instruction = instructions[i];
-      const isSource = instruction.sourceActivityIds.includes(activityId);
-      const isTarget = instruction.targetActivityIds.includes(activityId);
+      const sourceId = instruction.sourceActivityIds[0];
+      const targetId = instruction.targetActivityIds[0];
 
-      if (isSource || isTarget) {
-        const sourceId = instruction.sourceActivityIds[0];
-        const targetId = instruction.targetActivityIds[0];
+      const isRelevant = activityIdsToCheck.some(id =>
+        instruction.sourceActivityIds.includes(id) || instruction.targetActivityIds.includes(id)
+      );
 
+      if (isRelevant) {
         const state = validationStates.find(
           s => s.sourceActivityId === sourceId && s.targetActivityId === targetId
         );
 
         if (state && state.failures.length > 0) {
-          return state.failures;
+          accumulatedFailures.push(...state.failures);
         }
       }
     }
 
-    return [];
+    return accumulatedFailures;
   }
 
   private isEventType(type: string): boolean {

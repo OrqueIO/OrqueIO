@@ -559,6 +559,14 @@ button.breadcrumb-parent-name {
   margin-bottom: 0;
 }
 
+.bpmn-mapping-popover__error-raw {
+  font-size: 10px;
+  color: #991b1b;
+  margin-top: 4px;
+  opacity: 0.8;
+  font-style: italic;
+}
+
 .bpmn-mapping-popover__checkbox {
   display: flex;
   align-items: center;

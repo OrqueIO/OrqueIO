@@ -645,6 +645,34 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * @param xml
+   * @param activityId
+   * @returns
+   */
+  private getElementFromXml(xml: string | null, activityId: string): Element | null {
+    if (!xml) return null;
+
+    const elementMap = this.buildElementMap(xml);
+    return elementMap.get(activityId) || null;
+  }
+
+  /**
+   * @param xml
+   * @param activityId
+   * @returns
+   */
+  private getMultiInstanceType(xml: string | null, activityId: string): 'parallel' | 'sequential' | null {
+    const element = this.getElementFromXml(xml, activityId);
+    if (!element) return null;
+
+    const loopChar = element.querySelector('multiInstanceLoopCharacteristics');
+    if (!loopChar) return null;
+
+    const isSequential = loopChar.getAttribute('isSequential');
+    return isSequential === 'true' ? 'sequential' : 'parallel';
+  }
+
+  /**
    * @param snapshotId
    * @returns
    */
@@ -1041,7 +1069,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   mappedSourceActivityIds = computed(() => {
     const mapped = new Set<string>();
     this.editableInstructions().forEach(instr => {
-      instr.sourceActivityIds.forEach(id => mapped.add(id));
+      instr.sourceActivityIds.forEach(id => {
+        if (!id.endsWith('#multiInstanceBody')) {
+          mapped.add(id);
+        }
+      });
     });
     return mapped;
   });
@@ -1089,7 +1121,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   mappedTargetActivityIds = computed(() => {
     const mapped = new Set<string>();
     this.editableInstructions().forEach(instr => {
-      instr.targetActivityIds.forEach(id => mapped.add(id));
+      instr.targetActivityIds.forEach(id => {
+        if (!id.endsWith('#multiInstanceBody')) {
+          mapped.add(id);
+        }
+      });
     });
     return mapped;
   });
@@ -1150,8 +1186,34 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       updateEventTrigger
     };
 
+    const instructionsToAdd: MigrationInstructionDto[] = [newInstruction];
+
+    const sourceMiType = this.getMultiInstanceType(sourceXml, sourceId);
+    const targetXml = this.targetXml();
+    const targetMiType = this.getMultiInstanceType(targetXml, targetActivityId);
+
+    if (sourceMiType && targetMiType) {
+      const sourceBodyId = `${sourceId}#multiInstanceBody`;
+      const targetBodyId = `${targetActivityId}#multiInstanceBody`;
+
+      const current = this.editableInstructions();
+      const bodyInstructionExists = current.some(instr =>
+        instr.sourceActivityIds.includes(sourceBodyId) &&
+        instr.targetActivityIds.includes(targetBodyId)
+      );
+
+      if (!bodyInstructionExists) {
+        const bodyInstruction: MigrationInstructionDto = {
+          sourceActivityIds: [sourceBodyId],
+          targetActivityIds: [targetBodyId],
+          updateEventTrigger
+        };
+        instructionsToAdd.push(bodyInstruction);
+      }
+    }
+
     const current = this.editableInstructions();
-    this.editableInstructions.set([...current, newInstruction]);
+    this.editableInstructions.set([...current, ...instructionsToAdd]);
 
     const plan = this.migrationPlan();
     if (plan) {
@@ -1188,8 +1250,14 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Perform deletion
-    const filtered = current.filter(instr => !instr.sourceActivityIds.includes(sourceActivityId));
+    let filtered = current.filter(instr => !instr.sourceActivityIds.includes(sourceActivityId));
+
+    const sourceMiType = this.getMultiInstanceType(this.sourceXml(), sourceActivityId);
+    if (sourceMiType) {
+      const sourceBodyId = `${sourceActivityId}#multiInstanceBody`;
+      filtered = filtered.filter(instr => !instr.sourceActivityIds.includes(sourceBodyId));
+    }
+
     this.editableInstructions.set(filtered);
 
     const anchors = this.customAnchors();
