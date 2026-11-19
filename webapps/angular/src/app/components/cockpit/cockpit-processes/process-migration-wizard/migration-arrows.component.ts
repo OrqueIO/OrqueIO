@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MigrationInstructionDto, MigrationPlanReportDto } from '../../../../services/migration.model';
-import { parseInstructionReports, findInstructionState, type InstructionValidationState } from '../../../../services/migration-validation.utils';
+import { parseInstructionReports, findInstructionFailuresWithBody, type InstructionValidationState } from '../../../../services/migration-validation.utils';
 import { Anchor, anchorPoint, nearestAnchor, buildArrowPath, getAnchorKey, Point, Rect as AnchorRect } from './migration-arrow-anchors';
 import {
   buildOrthogonalRoute,
@@ -681,8 +681,8 @@ export class MigrationArrowsComponent implements AfterViewInit, OnChanges, OnDes
           const targetRect = this.getElementRect(targetId, this.targetContainerSelector, containerRect);
 
           if (sourceRect && targetRect) {
-            const validationState = findInstructionState(validationStates, sourceId, targetId);
-            const valid = validationState?.valid ?? true;
+            const failures = findInstructionFailuresWithBody(validationStates, sourceId, targetId);
+            const valid = failures.length === 0;
 
             const instructionKey = sourceId + '-' + targetId;
             const routeParams = this.customAnchors.get(instructionKey);

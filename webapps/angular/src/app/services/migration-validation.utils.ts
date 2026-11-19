@@ -74,3 +74,31 @@ export function findInstructionState(
     s => s.sourceActivityId === sourceId && s.targetActivityId === targetId
   ) || null;
 }
+
+/**
+ * @param states
+ * @param sourceId
+ * @param targetId
+ * @returns
+ */
+export function findInstructionFailuresWithBody(
+  states: InstructionValidationState[],
+  sourceId: string,
+  targetId: string
+): string[] {
+  const failures: string[] = [];
+
+  const innerState = findInstructionState(states, sourceId, targetId);
+  if (innerState && innerState.failures.length > 0) {
+    failures.push(...innerState.failures);
+  }
+
+  const bodySourceId = `${sourceId}#multiInstanceBody`;
+  const bodyTargetId = `${targetId}#multiInstanceBody`;
+  const bodyState = findInstructionState(states, bodySourceId, bodyTargetId);
+  if (bodyState && bodyState.failures.length > 0) {
+    failures.push(...bodyState.failures);
+  }
+
+  return failures;
+}
