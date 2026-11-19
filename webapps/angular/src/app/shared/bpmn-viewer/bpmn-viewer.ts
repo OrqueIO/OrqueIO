@@ -32,7 +32,6 @@ export interface ParentBreadcrumb {
   currentLabel: string;
 }
 
-// @ts-ignore - bpmn-js doesn't have types
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 
 export interface ActivityBadge {
@@ -89,7 +88,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() callActivityIdsWithInstances: Set<string> = new Set();
   @Input() parentBreadcrumb: ParentBreadcrumb | null = null;
 
-  // Migration mapping mode
   @Input() enableMappingButtons = false;
   @Input() mappedActivityIds: Set<string> = new Set();
   @Input() mappingMode = false;
@@ -108,7 +106,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() elementHover = new EventEmitter<BpmnElementHoverEvent | BpmnElement | null>();
   @Output() viewerReady = new EventEmitter<void>();
 
-  // Migration mapping events
   @Output() createMapping = new EventEmitter<string>();
   @Output() deleteMapping = new EventEmitter<string>();
   @Output() selectMappedActivity = new EventEmitter<string>();
@@ -134,22 +131,20 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private correlateOverlayData: Map<string, { btn: HTMLButtonElement; elementId: string; anchorId: string; hideTimer: ReturnType<typeof setTimeout> | null }> = new Map();
   private correlateHoverListeners: Array<() => void> = [];
 
-  // Migration mapping overlays
   private mappingOverlayIds: string[] = [];
   private targetHighlightOverlayIds: string[] = [];
 
-  // XML parsing cache
   private cachedXml: string | null = null;
   private cachedDocument: Document | null = null;
-  // PERMANENT OVERLAYS FIX: Maps as class properties to prevent race conditions
+
   private buttonContainers: Map<string, HTMLElement> = new Map();
   private hideTimeouts: Map<string, ReturnType<typeof setTimeout>> = new Map();
-  // Remove button overlays (for mapped activities)
+
   private removeButtonOverlayIds: string[] = [];
   private removeButtonContainers: Map<string, HTMLElement> = new Map();
   private removeButtonHideTimeouts: Map<string, ReturnType<typeof setTimeout>> = new Map();
   private removeButtonHovered: Map<string, boolean> = new Map();
-  // Migration badge popover
+
   private activePopover: HTMLElement | null = null;
   private popoverCleanup: (() => void) | null = null;
   private popoverViewboxListener: (() => void) | null = null;
@@ -314,19 +309,14 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
           name: element.businessObject?.name
         };
 
-        // Check if this viewer is used in migration wizard context (isSourceViewer explicitly set in template)
-        // Migration wizard sets [isSourceViewer]="true" for source, doesn't set it (default false) for target
-        // Process-detail doesn't set it at all, so we check if we're in a migration context
         const inMigrationContext = this.enableMappingButtons;
 
         if (inMigrationContext) {
-          // New format for migration wizard: {side, element}
           this.elementHover.emit({
             side: this.isSourceViewer ? 'source' : 'target',
             element: bpmnElement
           });
         } else {
-          // Old format for process-detail: BpmnElement directly
           this.elementHover.emit(bpmnElement);
         }
       }
@@ -336,13 +326,11 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       const inMigrationContext = this.enableMappingButtons;
 
       if (inMigrationContext) {
-        // New format: {side, element: null}
         this.elementHover.emit({
           side: this.isSourceViewer ? 'source' : 'target',
           element: null
         });
       } else {
-        // Old format: null directly
         this.elementHover.emit(null);
       }
     });
@@ -400,7 +388,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       return;
     }
 
-    // Skip if same XML already loaded
     if (this.xml === this.currentXml) {
       return;
     }
@@ -420,14 +407,12 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     try {
       const result = await this.viewer.importXML(this.xml);
 
-      // Store current XML to avoid re-import
       this.currentXml = this.xml;
 
       if (result.warnings && result.warnings.length > 0) {
         console.warn('BPMN import warnings:', result.warnings);
       }
 
-      // Fit diagram to viewport
       this.needsZoomFit = true;
       this.scheduleFitToViewport();
 
@@ -435,7 +420,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       this.cdr.detectChanges();
       this.viewerReady.emit();
 
-      // Visual updates are now triggered by import.done event
     } catch (err: any) {
       this.loading = false;
       this.currentXml = null;
@@ -515,7 +499,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         try {
           this.overlays?.remove(id);
         } catch (e) {
-          // Overlay might already be removed
         }
       });
     });
@@ -569,19 +552,16 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private updateBadges(): void {
     if (!this.viewer || !this.overlays) return;
 
-    // Clear existing badges only (not Call Activity overlays)
     this.clearBadgeOverlays();
 
     const elementRegistry = this.viewer.get('elementRegistry');
 
-    // Create badges for each activity
     this.activityBadges.forEach(badge => {
       const element = elementRegistry.get(badge.activityId);
       if (!element) return;
 
       const overlayIds: string[] = [];
 
-      // Instance count badge (blue)
       if (badge.instances && badge.instances > 0) {
         const instanceHtml = document.createElement('div');
         instanceHtml.className = 'bpmn-badge bpmn-badge-instances';
@@ -599,7 +579,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         }
       }
 
-      // Incident count badge (red)
       if (badge.incidents && badge.incidents > 0) {
         const incidentHtml = document.createElement('div');
         incidentHtml.className = 'bpmn-badge bpmn-badge-incidents';
@@ -617,7 +596,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         }
       }
 
-      // Migration status badge (top-right) - clickable for valid/invalid
       if (badge.migrationStatus) {
         const statusHtml = document.createElement('button');
         statusHtml.type = 'button';
@@ -702,11 +680,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       const hasInstances = this.callActivityIdsWithInstances.has(element.id);
       const calledElement: string | null = element.businessObject?.calledElement ?? null;
 
-      // Rule 1: no calledElement and no instances → no icon
       if (!calledElement && !hasInstances) return;
 
-      // Rule 2: EL expression with no instances → gray, non-clickable
-      // When instances exist, the icon is always clickable (navigation uses the instance ID, not calledElement)
       const isExpression = !hasInstances && calledElement !== null &&
         (calledElement.includes('${') || calledElement.includes('#{'));
 
@@ -719,7 +694,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         btn.title = 'Navigation unavailable: calledElement is a dynamic expression';
         btn.disabled = true;
       } else {
-        // Rule 3: static reference or has instances → blue, clickable
         btn.className = 'bjs-drilldown bpmn-call-activity-overlay';
         btn.title = hasInstances ? 'Show Called Process Instances' : 'Go to Called Process Definition';
         btn.addEventListener('click', (e: Event) => {
@@ -763,18 +737,15 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
   private updateMappingButtons(): void {
-    // Clear existing mapping overlays
     this.mappingOverlayIds.forEach(id => {
       try { this.overlays?.remove(id); } catch (_) {}
     });
     this.mappingOverlayIds = [];
 
-    // Clear existing class-level Maps and timeouts
     this.hideTimeouts.forEach(timeout => clearTimeout(timeout));
     this.hideTimeouts.clear();
     this.buttonContainers.clear();
 
-    // Remove old event bus listeners
     if (this.hoverListener) {
       const eventBus = this.viewer?.get('eventBus');
       eventBus?.off('element.hover', this.hoverListener);
@@ -785,21 +756,19 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     if (!this.viewer || !this.overlays || !this.enableMappingButtons) return;
 
-    // SOURCE ONLY rule: mapping creation button (→) appears ONLY on source viewer
     if (!this.isSourceViewer) return;
 
     const elementRegistry = this.viewer.get('elementRegistry');
     const eventBus = this.viewer.get('eventBus');
     const allElements = elementRegistry.getAll();
 
-    // Add mapping button overlays to mappable flow nodes (excluding Start/End Events)
     allElements.forEach((element: any) => {
       if (!element.businessObject || element.type === 'label') return;
 
       if (!element.parent) return;
 
-      // Exclude Start/End Events, SequenceFlow, Process, Participant/Pool, labels, and annotations
-      if (element.type === 'bpmn:StartEvent' ||
+      const isExcludedStartEvent = element.type === 'bpmn:StartEvent' && !this.isEventSubprocessStartEvent(element);
+      if (isExcludedStartEvent ||
           element.type === 'bpmn:EndEvent' ||
           element.type === 'bpmn:SequenceFlow' ||
           element.type === 'bpmn:Process' ||
@@ -819,22 +788,22 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         element.type.includes('CallActivity')
       );
 
-      if (!isFlowNode) return;
+      const isEventSubprocessStart = this.isEventSubprocessStartEvent(element);
+
+      if (!isFlowNode && !isEventSubprocessStart) return;
 
       const isMapped = this.mappedActivityIds.has(element.id);
 
-      // Create button (only for unmapped activities - mapped will use badge click)
-      if (isMapped) return; // Mapped activities use the green badge for control
+      if (isMapped) return;
 
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'bpmn-mapping-button bpmn-mapping-create';
 
-      // SVG arrow-right icon from FontAwesome
       const arrowIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 448 512"><path fill="currentColor" d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/></svg>';
       btn.innerHTML = arrowIcon;
       btn.setAttribute('aria-label', 'Map to target');
-      btn.title = ''; // Will be set via i18n
+      btn.title = '';
       btn.style.cssText = 'width: 24px; height: 24px; background: white; color: #3b82f6; border: 1.5px solid #3b82f6; border-radius: 50%; cursor: pointer; pointer-events: auto; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: all 0.12s ease; padding: 0;';
 
       btn.addEventListener('click', (e) => {
@@ -844,7 +813,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         });
       });
 
-      // Hover effect: blue background, white icon, slight scale
       btn.addEventListener('mouseenter', () => {
         btn.style.background = '#3b82f6';
         btn.style.color = 'white';
@@ -857,7 +825,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         btn.style.transform = 'scale(1)';
       });
 
-      // Prevent button from hiding when mouse enters it
       btn.addEventListener('mouseenter', () => {
         const timeout = this.hideTimeouts.get(element.id);
         if (timeout) {
@@ -866,7 +833,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         }
       });
 
-      // Hide with delay when mouse leaves button
       btn.addEventListener('mouseleave', () => {
         const timeout = setTimeout(() => {
           container.classList.remove('bpmn-mapping-visible');
@@ -875,7 +841,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         this.hideTimeouts.set(element.id, timeout);
       });
 
-      // Container with pointer-events none and hidden class
       const container = document.createElement('div');
       container.style.cssText = 'pointer-events: none;';
       container.className = 'bpmn-mapping-container';
@@ -931,13 +896,11 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private hoverListener: ((event: any) => void) | null = null;
   private outListener: ((event: any) => void) | null = null;
   private updateRemoveButtons(): void {
-    // Clear existing remove button overlays
     this.removeButtonOverlayIds.forEach(id => {
       try { this.overlays?.remove(id); } catch (_) {}
     });
     this.removeButtonOverlayIds = [];
 
-    // Clear existing class-level Maps and timeouts
     this.removeButtonHideTimeouts.forEach(timeout => clearTimeout(timeout));
     this.removeButtonHideTimeouts.clear();
     this.removeButtonContainers.clear();
@@ -948,8 +911,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     const eventBus = this.viewer.get('eventBus');
     const allElements = elementRegistry.getAll();
 
-    // Build mapping from activityId to sourceActivityId for quick lookup
-    // (to find which sourceActivityId to emit when clicking on a target button)
     const activityToSourceMap = new Map<string, string>();
     if (this.editableInstructions) {
       this.editableInstructions.forEach((instr: any) => {
@@ -962,14 +923,13 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       });
     }
 
-    // Add remove button overlays to mapped flow nodes (both source and target)
     allElements.forEach((element: any) => {
       if (!element.businessObject || element.type === 'label') return;
 
       if (!element.parent) return;
 
-      // Exclude Start/End Events, SequenceFlow, Process, Participant/Pool, labels, and annotations
-      if (element.type === 'bpmn:StartEvent' ||
+      const isExcludedStartEvent = element.type === 'bpmn:StartEvent' && !this.isEventSubprocessStartEvent(element);
+      if (isExcludedStartEvent ||
           element.type === 'bpmn:EndEvent' ||
           element.type === 'bpmn:SequenceFlow' ||
           element.type === 'bpmn:Process' ||
@@ -989,7 +949,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         element.type.includes('CallActivity')
       );
 
-      if (!isFlowNode) return;
+      const isEventSubprocessStart = this.isEventSubprocessStartEvent(element);
+
+      if (!isFlowNode && !isEventSubprocessStart) return;
 
       const isMapped = this.mappedActivityIds.has(element.id);
 
@@ -1138,7 +1100,8 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       // Exclude root elements (planes) - they have no parent and represent diagram roots
       if (!element.parent) return;
 
-      if (element.type === 'bpmn:StartEvent' ||
+      const isExcludedStartEvent = element.type === 'bpmn:StartEvent' && !this.isEventSubprocessStartEvent(element);
+      if (isExcludedStartEvent ||
           element.type === 'bpmn:EndEvent' ||
           element.type === 'bpmn:SequenceFlow' ||
           element.type === 'bpmn:Process' ||
@@ -1158,7 +1121,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         element.type.includes('CallActivity')
       );
 
-      if (!isFlowNode) return;
+      const isEventSubprocessStart = this.isEventSubprocessStartEvent(element);
+
+      if (!isFlowNode && !isEventSubprocessStart) return;
 
       try {
         canvas.addMarker(element.id, 'target-highlight');
@@ -1191,11 +1156,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
   }
 
-  /**
-   * Determines if a valid mapping popup should be displayed.
-   * Valid popups only show for events in the source viewer (they contain the "Update event trigger" checkbox).
-   * Invalid popups always show (they contain error messages and remove button).
-   */
+
   private shouldShowValidPopover(activityId: string): boolean {
     const element = this.getElement(activityId);
     return element !== null && this.isEventType(element.type) && this.isSourceViewer;
@@ -1203,7 +1164,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   private showMappingPopover(activityId: string, status: 'valid' | 'invalid' | 'unmapped', anchor: HTMLElement, badge: ActivityBadge): void {
     if (status === 'unmapped') return;
-    // Close any existing popover
     this.closeMappingPopover();
 
     const popover = document.createElement('div');
@@ -1285,8 +1245,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     }
 
-    // Only add "Remove mapping" button for invalid mappings
-    // Valid mappings can be removed via the hover cross button
     if (status !== 'valid') {
       const instructions = this.editableInstructions || [];
       let sourceActivityIdToDelete: string | null = null;
@@ -1321,45 +1279,37 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     arrow.className = 'bpmn-mapping-popover__arrow';
     popover.appendChild(arrow);
 
-    // Attach to document.body with position: fixed (independent of viewer zoom/transforms)
     popover.style.position = 'fixed';
     popover.style.zIndex = '10000';
     document.body.appendChild(popover);
     this.activePopover = popover;
 
-    // Position popover using viewport coordinates (getBoundingClientRect returns viewport coords)
     const anchorRect = anchor.getBoundingClientRect();
 
-    // Initial position below anchor
     let top = anchorRect.bottom + 8;
     let left = anchorRect.left;
     let arrowLeft = 12;
     let isFlippedVertically = false;
 
-    // Get popover dimensions after adding to DOM
     const popoverRect = popover.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
-    // Flip horizontally if overflows right edge
     if (left + popoverRect.width > viewportWidth - 10) {
       left = anchorRect.right - popoverRect.width;
       arrowLeft = popoverRect.width - anchorRect.width / 2 - 6;
     }
 
-    // Flip vertically if overflows bottom edge
     if (top + popoverRect.height > viewportHeight - 10) {
       top = anchorRect.top - popoverRect.height - 8;
       isFlippedVertically = true;
     }
 
-    // Ensure popover doesn't go off left edge
     if (left < 10) {
       left = 10;
       arrowLeft = anchorRect.left - 10 + anchorRect.width / 2 - 6;
     }
 
-    // Ensure popover doesn't go off top edge
     if (top < 10) {
       top = 10;
     }
@@ -1367,7 +1317,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     popover.style.top = `${top}px`;
     popover.style.left = `${left}px`;
 
-    // Position arrow
     arrow.style.left = `${Math.max(6, Math.min(arrowLeft, popoverRect.width - 18))}px`;
     if (isFlippedVertically) {
       arrow.style.top = 'auto';
@@ -1379,7 +1328,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       arrow.style.transform = 'rotate(45deg)';
     }
 
-    // Close on Escape
     const closeOnEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         this.ngZone.run(() => this.closeMappingPopover());
@@ -1558,6 +1506,28 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     return false;
   }
 
+  private isEventSubprocessStartEvent(element: any): boolean {
+    if (!element || element.type !== 'bpmn:StartEvent') {
+      return false;
+    }
+
+    const parent = element.parent;
+    if (!parent || parent.type !== 'bpmn:SubProcess' || !parent.businessObject?.triggeredByEvent) {
+      return false;
+    }
+
+    const eventDefinitions = element.businessObject?.eventDefinitions;
+    if (!eventDefinitions || eventDefinitions.length === 0) {
+      return false;
+    }
+
+    const supportedTypes = ['bpmn:MessageEventDefinition', 'bpmn:TimerEventDefinition',
+                           'bpmn:SignalEventDefinition', 'bpmn:ConditionalEventDefinition'];
+    return eventDefinitions.some((def: any) =>
+      supportedTypes.includes(def.$type)
+    );
+  }
+
   private checkMultiInstanceScope(element: any): boolean {
     let current = element.parent;
     while (current) {
@@ -1590,7 +1560,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       const canvas = this.viewer.get('canvas');
       canvas.setRootElement(item.element);
     } catch (e: any) {
-      // Breadcrumb navigation target may not exist in subprocess stack
     }
   }
 
@@ -1626,7 +1595,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       return true;
 
     } catch (e: any) {
-      // Subprocess navigation may fail if target definition structure differs
       return false;
     }
   }
@@ -1641,7 +1609,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       canvas.setRootElement(this.initialRootElement);
       return true;
     } catch (e: any) {
-      // Root navigation may fail if initial root element not set
       return false;
     }
   }
@@ -1704,7 +1671,6 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       return depth;
 
     } catch (e: any) {
-      // Path navigation may fail if subprocess structure differs between diagrams
       return this.getLinkedNavigationPath().length;
     }
   }
