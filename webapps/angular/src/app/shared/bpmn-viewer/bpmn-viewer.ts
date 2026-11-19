@@ -1389,11 +1389,11 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   private formatValidationMessage(rawMessage: string): { primary: string; raw: string } {
     const incompatibleTypesPattern = /^Activities have incompatible types \((.+?) is not compatible with (.+?)\)$/;
-    const match = rawMessage.match(incompatibleTypesPattern);
+    const incompatibleMatch = rawMessage.match(incompatibleTypesPattern);
 
-    if (match) {
-      const sourceBehavior = match[1];
-      const targetBehavior = match[2];
+    if (incompatibleMatch) {
+      const sourceBehavior = incompatibleMatch[1];
+      const targetBehavior = incompatibleMatch[2];
 
       const isParallelToSequential =
         sourceBehavior === 'ParallelMultiInstanceActivityBehavior' &&
@@ -1418,6 +1418,14 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
           raw: rawMessage
         };
       }
+    }
+
+    const descendantPattern = /^Target activity '.+?' is a descendant of multi-instance body '.+?' that is not mapped from the source process definition$/;
+    if (descendantPattern.test(rawMessage)) {
+      return {
+        primary: 'Cannot add multi-instance: the target multi-instance body is not mapped from any source activity',
+        raw: rawMessage
+      };
     }
 
     return {
