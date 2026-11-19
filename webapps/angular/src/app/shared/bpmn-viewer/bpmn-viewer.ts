@@ -95,6 +95,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() migrationReport: any = null;
   @Input() editableInstructions: any[] = [];
   @Input() isSourceViewer = false;
+  @Input() targetElementNames: Map<string, string> = new Map();
   @Input() hoveredMappingSourceId: string | null = null;
   @Input() hoveredRemoveButtonActivityIds: Set<string> = new Set();
 
@@ -1420,10 +1421,27 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     }
 
-    const descendantPattern = /^Target activity '.+?' is a descendant of multi-instance body '.+?' that is not mapped from the source process definition$/;
-    if (descendantPattern.test(rawMessage)) {
+    const descendantPattern = /^Target activity\s+['"](.+?)['"]\s+is a descendant of multi-instance body\s+['"](.+?)['"]\s+that is not mapped from the source process definition\.?$/;
+    const descendantMatch = rawMessage.match(descendantPattern);
+
+    if (descendantMatch) {
+      const targetActivityId = descendantMatch[1];
+      const bodyId = descendantMatch[2];
+
+      const parentId = bodyId.replace(/#multiInstanceBody$/, '');
+
+      const targetName = this.getActivityName(targetActivityId);
+      const parentName = this.getActivityName(parentId);
+
+      if (parentId === targetActivityId) {
+        return {
+          primary: `'${targetName}' is multi-instance in the target process, but no source activity is mapped to it. Map a multi-instance source activity to it, or remove this mapping.`,
+          raw: rawMessage
+        };
+      }
+
       return {
-        primary: 'Cannot add multi-instance: the target multi-instance body is not mapped from any source activity',
+        primary: `'${targetName}' is inside the multi-instance '${parentName}', which no source activity is mapped to. Map the parent first, or remove this mapping.`,
         raw: rawMessage
       };
     }
@@ -1432,6 +1450,33 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       primary: rawMessage,
       raw: rawMessage
     };
+  }
+
+
+  private getActivityName(activityId: string): string {
+    if (this.targetElementNames && this.targetElementNames.has(activityId)) {
+      const name = this.targetElementNames.get(activityId);
+      if (name && name.trim()) {
+        return name.trim();
+      }
+    }
+
+    if (this.viewer) {
+      try {
+        const elementRegistry = this.viewer.get('elementRegistry');
+        const element = elementRegistry.get(activityId);
+
+        if (element && element.businessObject) {
+          const name = element.businessObject.name;
+          if (name && name.trim()) {
+            return name.trim();
+          }
+        }
+      } catch (e) {
+      }
+    }
+
+    return activityId;
   }
 
   private getFailuresForActivity(activityId: string): string[] {

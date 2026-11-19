@@ -147,7 +147,9 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   sourceXmlLoading = signal(false);
   targetXmlLoading = signal(false);
 
-  // Activity statistics for badges (source only)
+  private cachedTargetXmlForNames: string | null = null;
+  private cachedTargetElementNames: Map<string, string> = new Map();
+
   sourceActivityStats = signal<ActivityStatistics[]>([]);
 
   sourceActivityBadges = computed<ActivityBadge[]>(() => {
@@ -343,9 +345,11 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   private sourceViewerReady = signal(false);
   private targetViewerReady = signal(false);
 
-  // XML parsing cache
+  // XML parsing cache (separate caches for source and target to avoid collision)
   private cachedSourceXml: string | null = null;
   private cachedSourceElementMap: Map<string, Element> | null = null;
+  private cachedTargetXmlForElements: string | null = null;
+  private cachedTargetElementMap: Map<string, Element> | null = null;
 
   // Computed for enabling mapping buttons
   enableMappingButtons = computed(() => !!(this.sourceDefinitionId() && this.targetDefinitionId()));
@@ -875,15 +879,21 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   /**
    * Parse BPMN XML and build a Map of element IDs to DOM elements.
-   * Uses cache to avoid re-parsing the same XML.
+   * Uses separate caches for source and target XML to avoid cache collision.
    * @param xml The BPMN XML string to parse
    * @returns Map of element id -> Element, or empty Map if parsing fails
    */
   private buildElementMap(xml: string): Map<string, Element> {
     if (!xml) return new Map<string, Element>();
 
+    // Check source cache first
     if (this.cachedSourceXml === xml && this.cachedSourceElementMap) {
       return this.cachedSourceElementMap;
+    }
+
+    // Check target cache
+    if (this.cachedTargetXmlForElements === xml && this.cachedTargetElementMap) {
+      return this.cachedTargetElementMap;
     }
 
     const elementMap = new Map<string, Element>();
@@ -900,14 +910,57 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.cachedSourceXml = xml;
-      this.cachedSourceElementMap = elementMap;
+      const currentSourceXml = this.sourceXml();
+      const currentTargetXml = this.targetXml();
+
+      if (xml === currentSourceXml) {
+        this.cachedSourceXml = xml;
+        this.cachedSourceElementMap = elementMap;
+      } else if (xml === currentTargetXml) {
+        this.cachedTargetXmlForElements = xml;
+        this.cachedTargetElementMap = elementMap;
+      } else {
+        this.cachedSourceXml = xml;
+        this.cachedSourceElementMap = elementMap;
+      }
     } catch (e) {
     }
 
     return elementMap;
   }
 
+  /**
+   * @param xml
+   * @returns
+   */
+  private buildElementNameMap(xml: string): Map<string, string> {
+    if (!xml) return new Map<string, string>();
+
+    const elementMap = this.buildElementMap(xml);
+    const nameMap = new Map<string, string>();
+
+    elementMap.forEach((element, id) => {
+      const name = element.getAttribute('name');
+      if (name && name.trim()) {
+        nameMap.set(id, name.trim());
+      }
+    });
+
+    return nameMap;
+  }
+
+  targetElementNames(): Map<string, string> {
+    const xml = this.targetXml();
+    if (!xml) return new Map<string, string>();
+
+    if (this.cachedTargetXmlForNames === xml && this.cachedTargetElementNames) {
+      return this.cachedTargetElementNames;
+    }
+
+    this.cachedTargetElementNames = this.buildElementNameMap(xml);
+    this.cachedTargetXmlForNames = xml;
+    return this.cachedTargetElementNames;
+  }
 
   private applyUpdateEventTriggerFlags(instructions: MigrationInstructionDto[]): MigrationInstructionDto[] {
     const sourceXml = this.sourceXml();
