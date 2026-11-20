@@ -1162,6 +1162,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   private shouldShowValidPopover(activityId: string): boolean {
     const element = this.getElement(activityId);
     if (element !== null && this.isEventType(element.type) && this.isSourceViewer) {
+      if (element.type === 'bpmn:EventBasedGateway') {
+        return false;
+      }
       return true;
     }
 
