@@ -537,6 +537,24 @@ button.breadcrumb-parent-name {
   margin-bottom: 8px;
   padding-bottom: 6px;
   border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bpmn-mapping-popover__title-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.bpmn-mapping-popover__title-badge--warning {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fbbf24;
 }
 
 .bpmn-mapping-popover__errors {
@@ -592,6 +610,18 @@ button.breadcrumb-parent-name {
   font-style: italic;
 }
 
+.bpmn-mapping-popover__linked-parent {
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  background: #fef9f0;
+  border: 1px solid #fbbf24;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #92400e;
+  line-height: 1.4;
+}
+
 .bpmn-mapping-popover__remove-btn {
   display: flex;
   align-items: center;
@@ -644,4 +674,42 @@ button.breadcrumb-parent-name {
 .bpmn-badge-migration--invalid:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 2px;
+}
+
+/* Variant C: compact popover for "Parent in error" note */
+.bpmn-mapping-popover--variant-c {
+  padding: 10px;
+}
+
+.bpmn-mapping-popover--variant-c .bpmn-mapping-popover__title {
+  font-size: 12px;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  gap: 6px;
+}
+
+.bpmn-mapping-popover--variant-c .bpmn-mapping-popover__title-badge--warning {
+  font-size: 10px;
+  padding: 2px 6px;
+}
+
+.bpmn-mapping-popover--variant-c .bpmn-mapping-popover__remove-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 0;
+  justify-content: flex-end;
+  font-size: 11px;
+  font-weight: 500;
+  gap: 4px;
+}
+
+.bpmn-mapping-popover--variant-c .bpmn-mapping-popover__remove-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+.bpmn-mapping-popover--variant-c .bpmn-mapping-popover__remove-btn:hover {
+  background: transparent;
+  color: #dc2626;
+  text-decoration: underline;
 }

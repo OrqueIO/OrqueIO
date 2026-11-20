@@ -212,6 +212,64 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     }));
   });
 
+  targetMultiInstanceDependencies = computed<Map<string, { parentActivityId: string; parentSourceActivityId: string; parentHasError: boolean; parentName: string }>>(() => {
+    const targetXml = this.targetXml();
+    const instructions = this.editableInstructions();
+    const report = this.migrationReport();
+
+    const result = new Map<string, { parentActivityId: string; parentSourceActivityId: string; parentHasError: boolean; parentName: string }>();
+
+    if (!targetXml || !instructions || !report) {
+      return result;
+    }
+
+    const elementMap = this.buildElementMap(targetXml);
+    const validationStates = parseInstructionReports(report, instructions);
+
+    const findMultiInstanceParent = (elementId: string): string | null => {
+      const element = elementMap.get(elementId);
+      if (!element) return null;
+
+      let current = element.parentElement;
+      while (current) {
+        const id = current.getAttribute('id');
+        if (id && current.querySelector(':scope > multiInstanceLoopCharacteristics')) {
+          return id;
+        }
+        current = current.parentElement;
+      }
+      return null;
+    };
+
+    elementMap.forEach((element, elementId) => {
+      const parentId = findMultiInstanceParent(elementId);
+      if (!parentId || parentId === elementId) return;
+
+      const parentInstruction = instructions.find(instr =>
+        !instr.sourceActivityIds[0].endsWith('#multiInstanceBody') &&
+        instr.targetActivityIds[0] === parentId
+      );
+
+      if (parentInstruction) {
+        const parentSourceId = parentInstruction.sourceActivityIds[0];
+        const failures = findInstructionFailuresWithBody(validationStates, parentSourceId, parentId);
+        const parentHasError = failures.length > 0;
+
+        const parentElement = elementMap.get(parentId);
+        const parentName = parentElement?.getAttribute('name')?.trim() || parentId;
+
+        result.set(elementId, {
+          parentActivityId: parentId,
+          parentSourceActivityId: parentSourceId,
+          parentHasError,
+          parentName
+        });
+      }
+    });
+
+    return result;
+  });
+
   // Migration plan
   migrationPlan = signal<MigrationPlanDto | null>(null);
   migrationReport = signal<MigrationPlanReportDto | null>(null);

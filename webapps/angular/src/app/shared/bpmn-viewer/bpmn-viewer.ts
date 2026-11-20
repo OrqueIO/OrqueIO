@@ -96,6 +96,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() editableInstructions: any[] = [];
   @Input() isSourceViewer = false;
   @Input() targetElementNames: Map<string, string> = new Map();
+  @Input() targetMultiInstanceDependencies: Map<string, { parentActivityId: string; parentSourceActivityId: string; parentHasError: boolean; parentName: string }> = new Map();
   @Input() hoveredMappingSourceId: string | null = null;
   @Input() hoveredRemoveButtonActivityIds: Set<string> = new Set();
 
@@ -1160,7 +1161,21 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   private shouldShowValidPopover(activityId: string): boolean {
     const element = this.getElement(activityId);
-    return element !== null && this.isEventType(element.type) && this.isSourceViewer;
+    if (element !== null && this.isEventType(element.type) && this.isSourceViewer) {
+      return true;
+    }
+
+    // Also show popover for variant C (parent error dependency)
+    let targetActivityId = activityId;
+    const instruction = this.editableInstructions?.find(instr =>
+      instr.sourceActivityIds[0] === activityId || instr.targetActivityIds[0] === activityId
+    );
+    if (instruction) {
+      targetActivityId = instruction.targetActivityIds[0];
+    }
+
+    const dependency = this.targetMultiInstanceDependencies.get(targetActivityId);
+    return !!(dependency && dependency.parentHasError);
   }
 
   private showMappingPopover(activityId: string, status: 'valid' | 'invalid' | 'unmapped', anchor: HTMLElement, badge: ActivityBadge): void {
@@ -1170,10 +1185,52 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     const popover = document.createElement('div');
     popover.className = 'bpmn-mapping-popover';
 
-    const title = document.createElement('div');
-    title.className = 'bpmn-mapping-popover__title';
-    title.textContent = status === 'valid' ? 'Mapping' : 'Mapping Error';
-    popover.appendChild(title);
+    let targetActivityId = activityId;
+    const instruction = this.editableInstructions?.find(instr =>
+      instr.sourceActivityIds[0] === activityId || instr.targetActivityIds[0] === activityId
+    );
+    if (instruction) {
+      targetActivityId = instruction.targetActivityIds[0];
+    }
+
+    const dependency = this.targetMultiInstanceDependencies.get(targetActivityId);
+    const isVariantC = status === 'valid' && dependency && dependency.parentHasError;
+
+    if (isVariantC) {
+      popover.className = 'bpmn-mapping-popover bpmn-mapping-popover--variant-c';
+    }
+
+    const titleContainer = document.createElement('div');
+    titleContainer.className = 'bpmn-mapping-popover__title';
+
+    const titleText = document.createElement('span');
+    titleText.textContent = status === 'valid' ? 'Mapping' : 'Mapping Error';
+    titleContainer.appendChild(titleText);
+
+    if (isVariantC) {
+      const badge = document.createElement('span');
+      badge.className = 'bpmn-mapping-popover__title-badge bpmn-mapping-popover__title-badge--warning';
+      badge.textContent = '⚠ Parent in error';
+      titleContainer.appendChild(badge);
+    }
+
+    popover.appendChild(titleContainer);
+
+    if (isVariantC && dependency) {
+      const linkedLine = document.createElement('div');
+      linkedLine.className = 'bpmn-mapping-popover__linked-parent';
+
+      const parentSourceName = this.getActivityName(dependency.parentSourceActivityId);
+      const parentTargetName = dependency.parentName;
+
+      linkedLine.textContent = `Linked to ${parentSourceName} → ${parentTargetName}`;
+
+      const detailText = `This mapping may depend on the mapping '${parentSourceName}' → '${parentTargetName}', which currently has an error. The plan stays invalid until that mapping is fixed.`;
+      linkedLine.title = detailText;
+      linkedLine.setAttribute('aria-label', detailText);
+
+      popover.appendChild(linkedLine);
+    }
 
     if (status === 'invalid') {
       const errorList = document.createElement('div');
@@ -1209,7 +1266,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       popover.appendChild(errorList);
     }
 
-    if (status === 'valid' && this.isSourceViewer) {
+    if (status === 'valid' && this.isSourceViewer && !isVariantC) {
       const bpmnDomElement = this.getBpmnDomElement(activityId);
 
       if (bpmnDomElement) {
@@ -1257,7 +1314,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       }
     }
 
-    if (status !== 'valid') {
+    if (status !== 'valid' || isVariantC) {
       const instructions = this.editableInstructions || [];
       let sourceActivityIdToDelete: string | null = null;
 
