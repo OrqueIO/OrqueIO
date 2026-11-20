@@ -281,11 +281,11 @@
                 [disabled]="!canGoToSetVariables()"
                 (click)="onGoToSetVariables()"
                 [attr.aria-describedby]="shouldShowUnmappedWarning() ? 'unmapped-activities-warning' : (setVariablesDisabledReason() ? 'set-variables-disabled-reason' : null)"
-                [title]="setVariablesDisabledReason() ? (setVariablesDisabledReason()! | translate) : ''">
+                [title]="detailedDisabledReason() || (setVariablesDisabledReason() ? (setVariablesDisabledReason()! | translate) : '')">
                 {{ 'migration.setVariables' | translate }} →
               </button>
               @if (setVariablesDisabledReason()) {
-                <span id="set-variables-disabled-reason" class="sr-only">{{ setVariablesDisabledReason()! | translate }}</span>
+                <span id="set-variables-disabled-reason" class="sr-only">{{ detailedDisabledReason() || (setVariablesDisabledReason()! | translate) }}</span>
               }
             </div>
           </div>

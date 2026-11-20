@@ -35,6 +35,7 @@ import { MigrationUndoToastService } from './migration-undo-toast.service';
 import { snapshotMapping, restoreMapping, MigrationState } from './migration-undo-utils';
 import { PlanVariable } from './migration-variables.utils';
 import { MigrationValidationService } from './migration-validation.service';
+import { parseInstructionReports, findInstructionFailuresWithBody } from '../../../../services/migration-validation.utils';
 
 type LoadingState = 'idle' | 'loading' | 'loaded' | 'error';
 
@@ -313,14 +314,67 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   canGoToSetVariables = computed(() => this.setVariablesDisabledReason() === null);
 
-  // V4: Can proceed from Variables step to Select Instances step
+  detailedDisabledReason = computed<string | null>(() => {
+    const reason = this.setVariablesDisabledReason();
+
+    if (reason !== 'migration.fixInvalidMappings' && reason !== 'migration.unmappedActivitiesWithInstances') {
+      return null;
+    }
+
+    let mappingsWithErrors = 0;
+    if (reason === 'migration.fixInvalidMappings' || reason === 'migration.unmappedActivitiesWithInstances') {
+      const report = this.migrationReport();
+      const instructions = this.editableInstructions();
+
+      if (report && instructions) {
+        const validationStates = parseInstructionReports(report, instructions);
+
+        for (const instruction of instructions) {
+          const sourceId = instruction.sourceActivityIds[0];
+          const targetId = instruction.targetActivityIds[0];
+
+          if (sourceId.endsWith('#multiInstanceBody')) {
+            continue;
+          }
+
+          const failures = findInstructionFailuresWithBody(validationStates, sourceId, targetId);
+          if (failures.length > 0) {
+            mappingsWithErrors++;
+          }
+        }
+      }
+    }
+
+    const unmappedCount = this.unmappedActivitiesWithInstances().length;
+    const parts: string[] = [];
+
+    if (mappingsWithErrors > 0) {
+      const mappingText = mappingsWithErrors === 1
+        ? '1 mapping has errors'
+        : `${mappingsWithErrors} mappings have errors`;
+      parts.push(mappingText);
+    }
+
+    if (unmappedCount > 0) {
+      const unmappedText = unmappedCount === 1
+        ? '1 activity with running instances is not mapped'
+        : `${unmappedCount} activities with running instances are not mapped`;
+      parts.push(unmappedText);
+    }
+
+    if (parts.length === 0) {
+      return null;
+    }
+
+    return `Cannot continue: ${parts.join('; ')}.`;
+  });
+
   canProceedFromVariables = computed(() => {
     return this.validationService.areAllVariablesValid() &&
            !this.validationService.isValidationPending() &&
            !this.validationService.hasValidationErrors();
   });
 
-  // V4: Reason why cannot proceed from Variables step
   variablesDisabledReason = computed<string | null>(() => {
     if (this.validationService.isValidationPending()) {
       return 'migration.variables.validating';
@@ -334,7 +388,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     return null;
   });
 
-  // UI controls
   showMigrationPlan = true;
   linkDiagramsNavigation = signal(false);
 
@@ -345,23 +398,18 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   private sourceViewerReady = signal(false);
   private targetViewerReady = signal(false);
 
-  // XML parsing cache (separate caches for source and target to avoid collision)
   private cachedSourceXml: string | null = null;
   private cachedSourceElementMap: Map<string, Element> | null = null;
   private cachedTargetXmlForElements: string | null = null;
   private cachedTargetElementMap: Map<string, Element> | null = null;
 
-  // Computed for enabling mapping buttons
   enableMappingButtons = computed(() => !!(this.sourceDefinitionId() && this.targetDefinitionId()));
 
-  // Effect to dismiss toast when context changes (source/target/step)
   private dismissToastOnContextChange = effect(() => {
-    // Track these signals to trigger effect on change
     this.sourceDefinitionId();
     this.targetDefinitionId();
     this.currentStep();
 
-    // Dismiss toast if visible (untracked to avoid circular dependency)
     untracked(() => {
       if (this.undoToastService.toastState().visible) {
         this.undoToastService.dismiss();
@@ -402,7 +450,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
     this.loadProcessDefinitions();
 
-    // Setup debounced validation
     this.validateSubject
       .pipe(
         debounceTime(250),
@@ -412,7 +459,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         this.validateMigrationPlan(plan);
       });
 
-    // Setup source diagram loading pipeline
     this.sourceDefinitionChangeSubject
       .pipe(
         tap(() => {
@@ -444,7 +490,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
       });
 
-    // Setup target diagram loading pipeline
     this.targetDefinitionChangeSubject
       .pipe(
         tap(() => {
@@ -470,7 +515,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         this.cdr.markForCheck();
       });
 
-    // Setup plan generation pipeline
     this.planGenerationSubject
       .pipe(
         tap(() => {
@@ -495,9 +539,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
               const currentSource = this.sourceDefinitionId();
               const currentTarget = this.targetDefinitionId();
               if (plan && currentSource === sourceId && currentTarget === targetId) {
-                // Valid response for current selection
               } else if (currentSource !== sourceId || currentTarget !== targetId) {
-                // Discard late response
                 return;
               }
             })
@@ -513,11 +555,9 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
       .subscribe(plan => {
         this.migrationPlan.set(plan);
         if (plan && plan.instructions) {
-          // Apply updateEventTrigger flags based on BPMN analysis
           const instructionsWithFlags = this.applyUpdateEventTriggerFlags(plan.instructions);
           this.editableInstructions.set(instructionsWithFlags);
 
-          // Update plan with flags for validation
           const planWithFlags = { ...plan, instructions: instructionsWithFlags };
           this.validateMigrationPlan(planWithFlags);
         } else {
@@ -1691,7 +1731,6 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
   onKeyDown(event: KeyboardEvent): void {
     if (event.key !== 'Delete' && event.key !== 'Suppr') return;
 
-    // Don't trigger if focus is in an input element
     const activeElement = document.activeElement;
     if (activeElement && (
       activeElement.tagName === 'INPUT' ||
