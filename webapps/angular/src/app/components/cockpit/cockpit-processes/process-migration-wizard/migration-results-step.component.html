@@ -133,10 +133,17 @@
                   <div class="instance-failed-section">
                     <div class="instance-failed-label">{{ 'migration.results.instanceFailed.causes' | translate }}</div>
                     @for (cause of getInstanceFailedCauses(); track $index) {
+                      @let formattedCause = formatError(cause);
                       <div class="cause-card">
                         <div class="cause-dot"></div>
                         <div class="cause-content">
-                          <div class="cause-message">{{ cause }}</div>
+                          <div class="cause-message" [attr.title]="formattedCause.wasFormatted ? formattedCause.raw : null">
+                            @if (formattedCause.wasFormatted) {
+                              {{ formattedCause.formatted | translate }}
+                            } @else {
+                              {{ cause }}
+                            }
+                          </div>
                         </div>
                       </div>
                     }
@@ -154,7 +161,14 @@
                             <div class="cause-activity-id">{{ report.activityId }}</div>
                           }
                           @for (error of report.errors; track $index) {
-                            <div class="cause-message">{{ error }}</div>
+                            @let formattedError = formatError(error);
+                            <div class="cause-message" [attr.title]="formattedError.wasFormatted ? formattedError.raw : null">
+                              @if (formattedError.wasFormatted) {
+                                {{ formattedError.formatted | translate }}
+                              } @else {
+                                {{ error }}
+                              }
+                            </div>
                           }
                         </div>
                       </div>

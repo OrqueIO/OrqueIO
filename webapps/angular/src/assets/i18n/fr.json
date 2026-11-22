@@ -2314,5 +2314,6 @@
   "migration.results.failed.exceptionType": "Type d'exception",
   "migration.results.failed.rawMessage": "Message brut",
   "migration.results.failed.backToConfirm": "← Retour à la confirmation",
-  "migration.results.failed.retry": "Réessayer"
+  "migration.results.failed.retry": "Réessayer",
+  "migration.results.errors.targetNotAsyncBefore": "Une activité cible n'est pas configurée en asyncBefore alors que des instances attendent sur un job asynchrone avant la tâche. Choisis une cible configurée en asyncBefore ou désélectionne les instances concernées."
 }

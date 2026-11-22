@@ -2332,5 +2332,6 @@
   "migration.results.failed.exceptionType": "Exception Type",
   "migration.results.failed.rawMessage": "Raw Message",
   "migration.results.failed.backToConfirm": "← Back to confirm",
-  "migration.results.failed.retry": "Retry"
+  "migration.results.failed.retry": "Retry",
+  "migration.results.errors.targetNotAsyncBefore": "A target activity is not configured as asyncBefore while instances are waiting on an asynchronous job before the task. Choose a target configured as asyncBefore or deselect the affected instances."
 }

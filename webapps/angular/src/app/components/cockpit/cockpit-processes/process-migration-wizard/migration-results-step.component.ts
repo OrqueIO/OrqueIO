@@ -6,6 +6,7 @@ import { faSpinner, faCheckCircle, faExclamationTriangle, faPencilAlt } from '@f
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { MigrationExecutionResult } from './migration-execution-result.model';
+import { formatErrorMessage, FormattedError } from './migration-error-formatter.utils';
 
 @Component({
   selector: 'app-migration-results-step',
@@ -105,6 +106,10 @@ export class MigrationResultsStepComponent {
   getInstanceFailedActivityReports(): Array<{ activityId: string | null; scopeId: string | null; errors: string[] }> {
     const r = this.result();
     return r.kind === 'instance-failed' ? r.activityReports : [];
+  }
+
+  formatError(rawMessage: string): FormattedError {
+    return formatErrorMessage(rawMessage);
   }
 
   getInstanceLink(): string | null {
