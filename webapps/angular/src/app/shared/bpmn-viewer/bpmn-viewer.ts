@@ -2020,7 +2020,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     return elementRegistry.getAll();
   }
 
-  addCorrelateOverlays(messageNodes: Map<string, string>, onClick: (messageName: string) => void): void {
+  addCorrelateOverlays(messageNodes: Map<string, string>, onClick: (messageName: string, activityId?: string) => void): void {
     if (!this.viewer || !this.overlays) return;
     this.clearCorrelateOverlays();
 
@@ -2052,7 +2052,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       btn.innerHTML = envelope;
       btn.addEventListener('click', (e: Event) => {
         e.stopPropagation();
-        this.ngZone.run(() => onClick(messageName));
+        this.ngZone.run(() => onClick(messageName, elementId));
       });
 
       try {

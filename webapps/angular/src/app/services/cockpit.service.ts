@@ -572,6 +572,17 @@ export interface DeploymentQueryParams {
   maxResults?: number;
 }
 
+export interface EventSubscription {
+  id: string;
+  eventType: string;
+  eventName: string;
+  executionId: string;
+  processInstanceId: string;
+  activityId: string;
+  createdDate: string;
+  tenantId?: string;
+}
+
 /**
  * @deprecated This service is being refactored. Use the specialized services directly:
  * - DashboardService for dashboard statistics and charts
@@ -2029,5 +2040,30 @@ export class CockpitService {
    */
   getResourceDownloadUrl(deploymentId: string, resourceId: string): string {
     return this.deploymentService.getResourceDownloadUrl(deploymentId, resourceId);
+  }
+
+  // ============================================
+  // Event Subscriptions
+  // ============================================
+
+  /**
+   * Get event subscriptions for a process instance and activity
+   */
+  getEventSubscriptions(params: {
+    processInstanceId: string;
+    activityId: string;
+    eventType: string;
+    firstResult: number;
+    maxResults: number;
+  }): Observable<EventSubscription[]> {
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set('processInstanceId', params.processInstanceId);
+    httpParams = httpParams.set('activityId', params.activityId);
+    httpParams = httpParams.set('eventType', params.eventType);
+    httpParams = httpParams.set('firstResult', params.firstResult.toString());
+    httpParams = httpParams.set('maxResults', params.maxResults.toString());
+
+    return this.http.get<EventSubscription[]>(`${this.baseUrl}/event-subscription`, { params: httpParams })
+      .pipe(catchError(() => of([])));
   }
 }

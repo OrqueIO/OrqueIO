@@ -31,7 +31,8 @@ import {
   faArrowUp,
   faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of, timeout, catchError } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
@@ -48,7 +49,8 @@ import {
   Job,
   UserTask,
   ExternalTask,
-  MultiValueFilter
+  MultiValueFilter,
+  EventSubscription
 } from '../../../../services/cockpit.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { CamDatePipe } from '../../../../pipes/cam-date.pipe';
@@ -652,10 +654,31 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       const nodeMap = buildMessageNodeMap(elements);
       this.messageSuggestions = extractMessageNames(elements);
       if (nodeMap.size > 0) {
-        this.bpmnViewer?.addCorrelateOverlays(nodeMap, (name) => {
-          this.correlateInitialMessageName = name;
-          this.showCorrelateModal = true;
-          this.cdr.markForCheck();
+        this.bpmnViewer?.addCorrelateOverlays(nodeMap, (name, activityId) => {
+          if (activityId && this.processInstance?.id) {
+            this.cockpitService.getEventSubscriptions({
+              processInstanceId: this.processInstance.id,
+              activityId: activityId,
+              eventType: 'message',
+              firstResult: 0,
+              maxResults: 50
+            })
+              .pipe(
+                timeout(3000),
+                map(subscriptions => subscriptions.length > 0 ? subscriptions[0].eventName : name),
+                catchError(() => of(name)),
+                takeUntilDestroyed(this.destroyRef)
+              )
+              .subscribe(messageName => {
+                this.correlateInitialMessageName = messageName;
+                this.showCorrelateModal = true;
+                this.cdr.markForCheck();
+              });
+          } else {
+            this.correlateInitialMessageName = name;
+            this.showCorrelateModal = true;
+            this.cdr.markForCheck();
+          }
         });
       }
       this.cdr.markForCheck();
