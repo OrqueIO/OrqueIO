@@ -3090,6 +3090,63 @@ public class TaskRestServiceInteractionTest extends
   }
 
   @Test
+  public void testDeleteSingleTaskAttachmentThrowsAuthorizationException() {
+    String message = "expected exception";
+    doThrow(new AuthorizationException(message)).when(taskServiceMock).deleteTaskAttachment(EXAMPLE_TASK_ID, EXAMPLE_TASK_ATTACHMENT_ID);
+
+    given()
+      .pathParam("id", EXAMPLE_TASK_ID)
+      .pathParam("attachmentId", EXAMPLE_TASK_ATTACHMENT_ID)
+      .header("accept", MediaType.APPLICATION_JSON)
+    .then().expect()
+      .statusCode(Status.FORBIDDEN.getStatusCode())
+      .body("type", equalTo(AuthorizationException.class.getSimpleName()))
+      .body("message", equalTo(message))
+    .when()
+      .delete(SINGLE_TASK_DELETE_SINGLE_ATTACHMENT_URL);
+  }
+
+  @Test
+  public void testGetSubResourcesOfRunningStandaloneTaskTheCallerMayNotSee() {
+    // The history query does not check permissions on a standalone task, the task query does
+    mockRunningStandaloneTask();
+    when(mockQuery.singleResult()).thenReturn(null);
+
+    given().pathParam("id", EXAMPLE_TASK_ID).pathParam("attachmentId", EXAMPLE_TASK_ATTACHMENT_ID)
+    .then().expect().statusCode(Status.NOT_FOUND.getStatusCode())
+      .body(containsString("No task found for task id " + EXAMPLE_TASK_ID))
+    .when().get(SINGLE_TASK_SINGLE_ATTACHMENT_DATA_URL);
+
+    given().pathParam("id", EXAMPLE_TASK_ID)
+    .then().expect().statusCode(Status.NOT_FOUND.getStatusCode())
+    .when().get(SINGLE_TASK_ATTACHMENTS_URL);
+
+    given().pathParam("id", EXAMPLE_TASK_ID).pathParam("commentId", EXAMPLE_TASK_COMMENT_ID)
+    .then().expect().statusCode(Status.NOT_FOUND.getStatusCode())
+    .when().get(SINGLE_TASK_SINGLE_COMMENT_URL);
+
+    verify(taskServiceMock, never()).getTaskAttachmentContent(anyString(), anyString());
+    verify(taskServiceMock, never()).getTaskAttachments(anyString());
+    verify(taskServiceMock, never()).getTaskComment(anyString(), anyString());
+  }
+
+  @Test
+  public void testGetSubResourcesOfRunningStandaloneTaskTheCallerMaySee() {
+    mockRunningStandaloneTask();
+
+    given().pathParam("id", EXAMPLE_TASK_ID).pathParam("commentId", EXAMPLE_TASK_COMMENT_ID)
+    .then().expect().statusCode(Status.OK.getStatusCode())
+    .when().get(SINGLE_TASK_SINGLE_COMMENT_URL);
+  }
+
+  protected void mockRunningStandaloneTask() {
+    HistoricTaskInstance standaloneTask = mock(HistoricTaskInstance.class);
+    when(standaloneTask.getExecutionId()).thenReturn(null);
+    when(standaloneTask.getEndTime()).thenReturn(null);
+    when(historicTaskInstanceQueryMock.singleResult()).thenReturn(standaloneTask);
+  }
+
+  @Test
   public void testDeleteSingleTaskAttachmentForNonExistingTaskWithHistoryDisabled() {
     mockHistoryDisabled();
 
