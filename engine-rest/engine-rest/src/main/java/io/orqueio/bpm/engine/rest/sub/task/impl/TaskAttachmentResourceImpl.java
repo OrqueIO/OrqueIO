@@ -74,6 +74,8 @@ public class TaskAttachmentResourceImpl implements TaskAttachmentResource {
   @Override
   public AttachmentDto getAttachment(String attachmentId) {
     ensureHistoryEnabled(Status.NOT_FOUND);
+    // Only a caller who may see the task may reach its sub-resources (CVE-2026-109431)
+    ensureTaskExists(Status.NOT_FOUND);
 
     Attachment attachment = engine.getTaskService().getTaskAttachment(taskId, attachmentId);
 
@@ -87,6 +89,8 @@ public class TaskAttachmentResourceImpl implements TaskAttachmentResource {
   @Override
   public InputStream getAttachmentData(String attachmentId) {
     ensureHistoryEnabled(Status.NOT_FOUND);
+    // Only a caller who may see the task may reach its sub-resources (CVE-2026-109431)
+    ensureTaskExists(Status.NOT_FOUND);
 
     InputStream attachmentData = engine.getTaskService().getTaskAttachmentContent(taskId, attachmentId);
 
@@ -101,6 +105,8 @@ public class TaskAttachmentResourceImpl implements TaskAttachmentResource {
   @Override
   public void deleteAttachment(String attachmentId) {
     ensureHistoryEnabled(Status.FORBIDDEN);
+    // Only a caller who may see the task may reach its sub-resources (CVE-2026-109431)
+    ensureTaskExists(Status.NOT_FOUND);
 
     try {
       engine.getTaskService().deleteTaskAttachment(taskId, attachmentId);
