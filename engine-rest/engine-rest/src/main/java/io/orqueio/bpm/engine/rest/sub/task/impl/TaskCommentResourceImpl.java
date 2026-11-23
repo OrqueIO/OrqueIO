@@ -169,9 +169,20 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
 
   private void ensureTaskExists(Status status) {
     HistoricTaskInstance historicTaskInstance = engine.getHistoryService().createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
-    if (historicTaskInstance == null) {
+    if (historicTaskInstance == null || !isRunningStandaloneTaskVisible(historicTaskInstance)) {
       throw new InvalidRequestException(status, "No task found for task id " + taskId);
     }
+  }
+
+  /**
+   * The history query does not check permissions on a task outside a process, unless historic
+   * instance permissions are enabled. While such a task runs, the task query does.
+   */
+  private boolean isRunningStandaloneTaskVisible(HistoricTaskInstance historicTaskInstance) {
+    if (historicTaskInstance.getExecutionId() != null || historicTaskInstance.getEndTime() != null) {
+      return true;
+    }
+    return engine.getTaskService().createTaskQuery().taskId(taskId).singleResult() != null;
   }
 
 }
