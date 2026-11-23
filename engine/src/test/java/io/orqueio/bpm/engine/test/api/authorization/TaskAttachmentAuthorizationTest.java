@@ -16,7 +16,9 @@
  */
 package io.orqueio.bpm.engine.test.api.authorization;
 
+import static io.orqueio.bpm.engine.authorization.Permissions.DELETE_HISTORY;
 import static io.orqueio.bpm.engine.authorization.Permissions.UPDATE;
+import static io.orqueio.bpm.engine.authorization.Resources.PROCESS_DEFINITION;
 import static io.orqueio.bpm.engine.authorization.Resources.TASK;
 import static io.orqueio.bpm.engine.authorization.TaskPermissions.TASK_WORK;
 import static org.junit.Assert.assertNotNull;
@@ -26,14 +28,18 @@ import static org.junit.Assert.fail;
 import io.orqueio.bpm.engine.AuthorizationException;
 import io.orqueio.bpm.engine.ProcessEngineConfiguration;
 import io.orqueio.bpm.engine.task.Attachment;
+import io.orqueio.bpm.engine.test.Deployment;
 import io.orqueio.bpm.engine.test.RequiredHistoryLevel;
 import org.junit.Test;
 
 /**
- * Deleting a task's attachment needs the same permission as deleting its comment (CVE-2026-109431).
+ * Deleting a task's attachment needs the same permission as deleting its comment, and once the
+ * task has ended, the permission to delete its history (CVE-2026-109431).
  */
 @RequiredHistoryLevel(ProcessEngineConfiguration.HISTORY_AUDIT)
 public class TaskAttachmentAuthorizationTest extends AuthorizationTest {
+
+  protected static final String PROCESS_KEY = "oneTaskProcess";
 
   protected static final String MISSING_PERMISSION = "The user with id 'test' does not have one of the following permissions: "
       + "'TASK_WORK' permission on resource 'myTask' of type 'Task' or 'UPDATE' permission on resource 'myTask' of type 'Task'";
@@ -106,6 +112,56 @@ public class TaskAttachmentAuthorizationTest extends AuthorizationTest {
     assertNull(findAttachment(attachment.getId()));
 
     deleteTask(TASK_ID, true);
+  }
+
+  @Test
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  public void shouldNotDeleteAttachmentOfCompletedTaskWithoutDeleteHistoryPermission() {
+    // given
+    String taskId = startAndCompleteTaskWithAttachment();
+    Attachment attachment = findTaskAttachments(taskId);
+    createGrantAuthorization(TASK, taskId, userId, UPDATE);
+
+    try {
+      // when
+      taskService.deleteTaskAttachment(taskId, attachment.getId());
+      fail("Exception expected: It should not be possible to delete the attachment.");
+    } catch (AuthorizationException e) {
+      // then
+      testRule.assertTextPresent("'DELETE_HISTORY' permission on resource '" + PROCESS_KEY + "' of type 'ProcessDefinition'",
+          e.getMessage());
+    }
+    assertNotNull(findAttachment(attachment.getId()));
+  }
+
+  @Test
+  @Deployment(resources = "io/orqueio/bpm/engine/test/api/oneTaskProcess.bpmn20.xml")
+  public void shouldDeleteAttachmentOfCompletedTaskWithDeleteHistoryPermission() {
+    // given
+    String taskId = startAndCompleteTaskWithAttachment();
+    Attachment attachment = findTaskAttachments(taskId);
+    createGrantAuthorization(PROCESS_DEFINITION, PROCESS_KEY, userId, DELETE_HISTORY);
+
+    // when
+    taskService.deleteTaskAttachment(taskId, attachment.getId());
+
+    // then
+    assertNull(findAttachment(attachment.getId()));
+  }
+
+  protected String startAndCompleteTaskWithAttachment() {
+    startProcessInstanceByKey(PROCESS_KEY);
+    String taskId = selectSingleTask().getId();
+    createAttachment(taskId);
+    runWithoutAuthorization(() -> {
+      taskService.complete(taskId);
+      return null;
+    });
+    return taskId;
+  }
+
+  protected Attachment findTaskAttachments(String taskId) {
+    return runWithoutAuthorization(() -> taskService.getTaskAttachments(taskId).get(0));
   }
 
   protected Attachment createAttachment(String taskId) {

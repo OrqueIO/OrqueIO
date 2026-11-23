@@ -26,6 +26,7 @@ import io.orqueio.bpm.engine.impl.cfg.CommandChecker;
 import io.orqueio.bpm.engine.impl.interceptor.Command;
 import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
 import io.orqueio.bpm.engine.impl.persistence.entity.AttachmentEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricTaskInstanceEntity;
 import io.orqueio.bpm.engine.impl.persistence.entity.PropertyChange;
 import io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity;
 
@@ -73,6 +74,12 @@ public class DeleteAttachmentCmd implements Command<Object>, Serializable {
     if (task != null) {
       // Deleting a task's attachment changes the task, as deleting its comment does
       checkTaskWork(task, commandContext);
+    } else if (attachment.getTaskId() != null && !attachment.getTaskId().isBlank()) {
+      // The task has ended: its attachment is part of its history
+      HistoricTaskInstanceEntity historicTask = commandContext
+          .getHistoricTaskInstanceManager()
+          .findHistoricTaskInstanceById(attachment.getTaskId());
+      checkDeleteHistoricTaskInstance(historicTask, commandContext);
     }
 
     commandContext
@@ -100,6 +107,12 @@ public class DeleteAttachmentCmd implements Command<Object>, Serializable {
   protected void checkTaskWork(TaskEntity task, CommandContext commandContext) {
     for (CommandChecker checker : commandContext.getProcessEngineConfiguration().getCommandCheckers()) {
       checker.checkTaskWork(task);
+    }
+  }
+
+  protected void checkDeleteHistoricTaskInstance(HistoricTaskInstanceEntity historicTask, CommandContext commandContext) {
+    for (CommandChecker checker : commandContext.getProcessEngineConfiguration().getCommandCheckers()) {
+      checker.checkDeleteHistoricTaskInstance(historicTask);
     }
   }
 
