@@ -1210,6 +1210,9 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
         { sourceActivityIds: ['BoundaryEvent_1'], targetActivityIds: ['Target_1'], updateEventTrigger: false }
       ];
 
+      const outputSpy = vi.fn();
+      comp.updateEventTriggerChange.subscribe(outputSpy);
+
       comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
       let popover = document.querySelector('.bpmn-mapping-popover');
       let checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
@@ -1219,7 +1222,9 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       checkbox.click();
       await fixture.whenStable();
 
-      expect(comp.editableInstructions[0].updateEventTrigger).toBe(true);
+      expect(outputSpy).toHaveBeenCalledWith({ sourceActivityId: 'BoundaryEvent_1', value: true });
+
+      comp.editableInstructions[0].updateEventTrigger = true;
 
       comp.closeMappingPopover();
 
@@ -1239,6 +1244,9 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
         { sourceActivityIds: ['BoundaryEvent_1'], targetActivityIds: ['Target_1'], updateEventTrigger: true }
       ];
 
+      const outputSpy = vi.fn();
+      comp.updateEventTriggerChange.subscribe(outputSpy);
+
       comp.showMappingPopover(mockMessageBoundaryEvent.id, 'valid', mockAnchor, mockBadge);
       let popover = document.querySelector('.bpmn-mapping-popover');
       let checkbox = popover?.querySelector('input[type="checkbox"]') as HTMLInputElement;
@@ -1248,7 +1256,9 @@ describe('BpmnViewerComponent — Update event trigger checkbox (isSourceViewer)
       checkbox.click();
       await fixture.whenStable();
 
-      expect(comp.editableInstructions[0].updateEventTrigger).toBe(false);
+      expect(outputSpy).toHaveBeenCalledWith({ sourceActivityId: 'BoundaryEvent_1', value: false });
+
+      comp.editableInstructions[0].updateEventTrigger = false;
 
       comp.closeMappingPopover();
 

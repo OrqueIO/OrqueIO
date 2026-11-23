@@ -149,7 +149,8 @@
                   (elementHover)="onElementHover($event)"
                   (backgroundClick)="onCancelMapping()"
                   (viewerReady)="onSourceViewerReady()"
-                  (navigationChange)="onSourceNavigationChange($event)">
+                  (navigationChange)="onSourceNavigationChange($event)"
+                  (updateEventTriggerChange)="onUpdateEventTriggerChange($event)">
                 </app-bpmn-viewer>
               } @else {
                 <div class="diagram-empty">{{ 'migration.selectSourceDiagram' | translate }}</div>

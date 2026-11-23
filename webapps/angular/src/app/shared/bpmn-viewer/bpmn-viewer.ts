@@ -118,6 +118,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() focusClick = new EventEmitter<void>();
   @Output() callActivityClick = new EventEmitter<CallActivityClickEvent>();
   @Output() navigationChange = new EventEmitter<{ path: string[]; depth: number; breadcrumb: string[] }>();
+  @Output() updateEventTriggerChange = new EventEmitter<{ sourceActivityId: string; value: boolean }>();
 
   private viewer: any = null;
   private overlays: any = null;
@@ -1610,11 +1611,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   private updateEventTrigger(activityId: string, value: boolean): void {
-    const instructions = this.editableInstructions || [];
-    const instruction = instructions.find(instr => instr.sourceActivityIds.includes(activityId));
-    if (instruction) {
-      instruction.updateEventTrigger = value;
-    }
+    this.updateEventTriggerChange.emit({ sourceActivityId: activityId, value });
   }
 
   private getElementDisplayName(element: any): string {

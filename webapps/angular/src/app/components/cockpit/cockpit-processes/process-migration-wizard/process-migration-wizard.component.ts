@@ -291,6 +291,7 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
 
   // Debounced validation subject
   private validateSubject = new Subject<MigrationPlanDto>();
+  private updateEventTriggerSubject = new Subject<{ sourceActivityId: string; value: boolean }>();
 
   // Reactive subjects for definition changes
   private sourceDefinitionChangeSubject = new Subject<string | null>();
@@ -517,6 +518,15 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         this.validateMigrationPlan(plan);
       });
 
+    this.updateEventTriggerSubject
+      .pipe(
+        debounceTime(250),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.applyUpdateEventTriggerValidation();
+      });
+
     this.sourceDefinitionChangeSubject
       .pipe(
         tap(() => {
@@ -611,14 +621,18 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(plan => {
-        this.migrationPlan.set(plan);
         if (plan && plan.instructions) {
           const instructionsWithFlags = this.applyUpdateEventTriggerFlags(plan.instructions);
           this.editableInstructions.set(instructionsWithFlags);
 
+          // Store plan with the SAME instructions array as editableInstructions
+          // so that viewer mutations propagate to execution payload
           const planWithFlags = { ...plan, instructions: instructionsWithFlags };
+          this.migrationPlan.set(planWithFlags);
+
           this.validateMigrationPlan(planWithFlags);
         } else {
+          this.migrationPlan.set(plan);
           this.editableInstructions.set([]);
           this.planLoading.set(false);
         }
@@ -1065,23 +1079,50 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     if (!sourceXml) return instructions;
 
     const elementMap = this.buildElementMap(sourceXml);
+    const existingChoices = this.editableInstructions();
+
+    const userChoicesMap = new Map<string, boolean>();
+    existingChoices.forEach(existing => {
+      const key = this.getInstructionKey(existing);
+      if (existing.updateEventTrigger !== undefined && existing.updateEventTrigger !== null) {
+        userChoicesMap.set(key, existing.updateEventTrigger);
+      }
+    });
 
     return instructions.map(instr => {
-      let finalFlag = instr.updateEventTrigger || false;
+      const instrKey = this.getInstructionKey(instr);
+      let finalFlag: boolean | undefined = undefined;
 
       for (const activityId of instr.sourceActivityIds) {
         const element = elementMap.get(activityId);
         if (element) {
           const state = getEventTriggerState(element);
-          if (state.available && state.checkedByDefault) {
-            finalFlag = true;
-            break;
-          }
           if (state.forced) {
             finalFlag = true;
             break;
           }
         }
+      }
+
+      if (finalFlag === undefined && userChoicesMap.has(instrKey)) {
+        finalFlag = userChoicesMap.get(instrKey)!;
+      }
+
+      if (finalFlag === undefined) {
+        for (const activityId of instr.sourceActivityIds) {
+          const element = elementMap.get(activityId);
+          if (element) {
+            const state = getEventTriggerState(element);
+            if (state.available && state.checkedByDefault) {
+              finalFlag = true;
+              break;
+            }
+          }
+        }
+      }
+
+      if (finalFlag === undefined) {
+        finalFlag = instr.updateEventTrigger || false;
       }
 
       return {
@@ -1465,6 +1506,39 @@ export class ProcessMigrationWizardComponent implements OnInit, OnDestroy {
     this.hoveredRemoveButtonSource.set(new Set());
 
     this.undoToastService.dismiss();
+  }
+
+  onUpdateEventTriggerChange(change: { sourceActivityId: string; value: boolean }): void {
+    const current = this.editableInstructions();
+    const instructionIndex = current.findIndex(instr => instr.sourceActivityIds.includes(change.sourceActivityId));
+
+    if (instructionIndex === -1) return;
+
+    const updatedInstructions = current.map((instr, idx) =>
+      idx === instructionIndex
+        ? { ...instr, updateEventTrigger: change.value }
+        : instr
+    );
+
+    this.editableInstructions.set(updatedInstructions);
+
+    const plan = this.migrationPlan();
+    if (plan) {
+      const updatedPlan = {
+        ...plan,
+        instructions: updatedInstructions
+      };
+      this.migrationPlan.set(updatedPlan);
+    }
+
+    this.updateEventTriggerSubject.next(change);
+  }
+
+  private applyUpdateEventTriggerValidation(): void {
+    const plan = this.migrationPlan();
+    if (plan) {
+      this.validateSubject.next(plan);
+    }
   }
 
   /**

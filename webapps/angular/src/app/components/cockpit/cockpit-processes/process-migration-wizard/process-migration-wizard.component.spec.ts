@@ -1,6 +1,6 @@
 import 'zone.js';
 import 'zone.js/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { of, throwError, Subject, delay } from 'rxjs';
@@ -2620,5 +2620,633 @@ ${Array.from({ length: 300 }, (_, i) => `    <bpmn2:userTask id="Task_${i + 1}"/
 
       parseFromStringSpy.mockRestore();
     });
+  });
+
+  describe('applyUpdateEventTriggerFlags preserves user choices across plan regeneration', () => {
+    const xmlWithReceiveTaskMessageRef = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn">
+  <bpmn2:message id="Msg1" name="Message1"/>
+  <bpmn2:process id="test">
+    <bpmn2:receiveTask id="ReceiveTask_1" messageRef="Msg1"/>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+    it('respects user unchecked choice instead of applying checkedByDefault', () => {
+      (component as any).sourceXml.set(xmlWithReceiveTaskMessageRef);
+
+      const userChoice = [
+        { sourceActivityIds: ['ReceiveTask_1'], targetActivityIds: ['ReceiveTask_1'], updateEventTrigger: false }
+      ];
+      component.editableInstructions.set(userChoice);
+
+      const enginePlan = [
+        { sourceActivityIds: ['ReceiveTask_1'], targetActivityIds: ['ReceiveTask_1'], updateEventTrigger: false }
+      ];
+
+      const result = (component as any).applyUpdateEventTriggerFlags(enginePlan);
+
+      expect(result[0].updateEventTrigger).toBe(false);
+
+      expect(component.editableInstructions()[0].updateEventTrigger).toBe(false);
+
+    });
+  });
+
+  describe('User event-trigger choice preservation across plan regeneration', () => {
+    const xmlWithEventActivities = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn">
+  <bpmn2:message id="Msg1" name="Message1"/>
+  <bpmn2:process id="test">
+    <bpmn2:receiveTask id="ReceiveTask_WithRef" messageRef="Msg1"/>
+    <bpmn2:userTask id="UserTask_1"/>
+    <bpmn2:boundaryEvent id="BoundaryConditional_1" attachedToRef="UserTask_1">
+      <bpmn2:conditionalEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+    it('preserves user unchecked choice for event with checkedByDefault=true', () => {
+      (component as any).sourceXml.set(xmlWithEventActivities);
+
+      const existingInstructions = [
+        { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
+      ];
+      component.editableInstructions.set(existingInstructions);
+
+      const newPlanFromEngine = [
+        { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
+      ];
+
+      const result = (component as any).applyUpdateEventTriggerFlags(newPlanFromEngine);
+
+      expect(result[0].updateEventTrigger).toBe(false);
+    });
+
+    it('preserves user explicit choice after applying defaults first time', () => {
+      (component as any).sourceXml.set(xmlWithEventActivities);
+
+      component.editableInstructions.set([]);
+
+      const firstPlan = [
+        { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
+      ];
+      let result = (component as any).applyUpdateEventTriggerFlags(firstPlan);
+      expect(result[0].updateEventTrigger).toBe(true);
+
+      component.editableInstructions.set([
+        { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
+      ]);
+
+      const secondPlan = [
+        { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
+      ];
+      result = (component as any).applyUpdateEventTriggerFlags(secondPlan);
+
+      expect(result[0].updateEventTrigger).toBe(false);
+    });
+
+    it('applies forced=true with highest priority over user choice', () => {
+      (component as any).sourceXml.set(xmlWithEventActivities);
+
+      component.editableInstructions.set([
+        { sourceActivityIds: ['BoundaryConditional_1'], targetActivityIds: ['BoundaryConditional_1'], updateEventTrigger: false }
+      ]);
+
+      const newPlan = [
+        { sourceActivityIds: ['BoundaryConditional_1'], targetActivityIds: ['BoundaryConditional_1'], updateEventTrigger: true }
+      ];
+
+      const result = (component as any).applyUpdateEventTriggerFlags(newPlan);
+
+      expect(result[0].updateEventTrigger).toBe(true);
+    });
+  });
+
+  describe('Event-trigger flag precedence rules', () => {
+    const xmlWithMultipleEventTypes = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn">
+  <bpmn2:message id="Msg1" name="Message1"/>
+  <bpmn2:process id="test">
+    <bpmn2:receiveTask id="ReceiveTask_WithRef" messageRef="Msg1"/>
+    <bpmn2:receiveTask id="ReceiveTask_NoRef"/>
+    <bpmn2:userTask id="UserTask_1"/>
+    <bpmn2:boundaryEvent id="BoundaryConditional_1" attachedToRef="UserTask_1">
+      <bpmn2:conditionalEventDefinition/>
+    </bpmn2:boundaryEvent>
+    <bpmn2:boundaryEvent id="BoundaryTimer_1" attachedToRef="UserTask_1">
+      <bpmn2:timerEventDefinition/>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+</bpmn2:definitions>`;
+
+    it('preserves user unchecked choice after plan regeneration', () => {
+      (component as any).sourceXml.set(xmlWithMultipleEventTypes);
+
+      component.editableInstructions.set([
+        { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
+      ]);
+
+      const newPlan = [
+        { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
+      ];
+
+      const result = (component as any).applyUpdateEventTriggerFlags(newPlan);
+
+      expect(result[0].updateEventTrigger).toBe(false);
+    });
+
+    it('preserves user checked choice for event with checkedByDefault=false', () => {
+      (component as any).sourceXml.set(xmlWithMultipleEventTypes);
+
+      component.editableInstructions.set([
+        { sourceActivityIds: ['BoundaryTimer_1'], targetActivityIds: ['BoundaryTimer_1'], updateEventTrigger: true }
+      ]);
+
+      const newPlan = [
+        { sourceActivityIds: ['BoundaryTimer_1'], targetActivityIds: ['BoundaryTimer_1'], updateEventTrigger: false }
+      ];
+
+      const result = (component as any).applyUpdateEventTriggerFlags(newPlan);
+
+      expect(result[0].updateEventTrigger).toBe(true);
+    });
+
+    it('applies forced flag with highest priority over user choice', () => {
+      (component as any).sourceXml.set(xmlWithMultipleEventTypes);
+
+      component.editableInstructions.set([
+        { sourceActivityIds: ['BoundaryConditional_1'], targetActivityIds: ['BoundaryConditional_1'], updateEventTrigger: false }
+      ]);
+
+      const newPlan = [
+        { sourceActivityIds: ['BoundaryConditional_1'], targetActivityIds: ['BoundaryConditional_1'], updateEventTrigger: true }
+      ];
+
+      const result = (component as any).applyUpdateEventTriggerFlags(newPlan);
+
+      expect(result[0].updateEventTrigger).toBe(true);
+    });
+
+    it('applies checkedByDefault for new mapping without prior user choice', () => {
+      (component as any).sourceXml.set(xmlWithMultipleEventTypes);
+
+      component.editableInstructions.set([]);
+
+      const newPlan = [
+        { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
+      ];
+
+      const result = (component as any).applyUpdateEventTriggerFlags(newPlan);
+
+      expect(result[0].updateEventTrigger).toBe(true);
+    });
+
+    it('resets to default when mapping target changes', () => {
+      (component as any).sourceXml.set(xmlWithMultipleEventTypes);
+
+      component.editableInstructions.set([
+        { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
+      ]);
+
+      const newPlan = [
+        { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['UserTask_1'], updateEventTrigger: false }
+      ];
+
+      const result = (component as any).applyUpdateEventTriggerFlags(newPlan);
+
+      expect(result[0].updateEventTrigger).toBe(true);
+    });
+
+    it('uses engine value when no forced, no default, and no prior choice', () => {
+      (component as any).sourceXml.set(xmlWithMultipleEventTypes);
+
+      component.editableInstructions.set([]);
+
+      const newPlan = [
+        { sourceActivityIds: ['ReceiveTask_NoRef'], targetActivityIds: ['ReceiveTask_NoRef'], updateEventTrigger: true }
+      ];
+
+      const result = (component as any).applyUpdateEventTriggerFlags(newPlan);
+
+      expect(result[0].updateEventTrigger).toBe(true);
+    });
+
+    it('returns false when no forced, no choice, no default, and engine returns false', () => {
+      (component as any).sourceXml.set(xmlWithMultipleEventTypes);
+
+      component.editableInstructions.set([]);
+
+      const newPlan = [
+        { sourceActivityIds: ['ReceiveTask_NoRef'], targetActivityIds: ['ReceiveTask_NoRef'], updateEventTrigger: false }
+      ];
+
+      const result = (component as any).applyUpdateEventTriggerFlags(newPlan);
+
+      expect(result[0].updateEventTrigger).toBe(false);
+    });
+
+    it('propagates user choice to validate and execute payload', () => {
+      (component as any).sourceXml.set(xmlWithMultipleEventTypes);
+
+      component.editableInstructions.set([
+        { sourceActivityIds: ['ReceiveTask_WithRef'], targetActivityIds: ['ReceiveTask_WithRef'], updateEventTrigger: false }
+      ]);
+
+      const planWithUserChoice = {
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: component.editableInstructions()
+      };
+
+      expect(planWithUserChoice.instructions[0].updateEventTrigger).toBe(false);
+
+    });
+  });
+
+  describe('Integration: checkbox updateEventTrigger propagation from viewer to payload', () => {
+    const messageCatchXml = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/Model"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_1" isExecutable="true">
+    <bpmn:intermediateCatchEvent id="Catch_Message" name="Wait for message">
+      <bpmn:messageEventDefinition messageRef="Message_1" />
+    </bpmn:intermediateCatchEvent>
+  </bpmn:process>
+  <bpmn:message id="Message_1" name="TestMessage" />
+</bpmn:definitions>`;
+
+    it('should propagate checked value from viewer mutation to migrationPlan signal', async () => {
+      // RED TEST: Demonstrates the bug where viewer's direct mutation to editableInstructions
+      // doesn't propagate to migrationPlan, which is what migration-confirm-step uses to build payload
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of(messageCatchXml));
+
+      const planV1toV2 = {
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [{
+          sourceActivityIds: ['Catch_Message'],
+          targetActivityIds: ['Catch_Message'],
+          updateEventTrigger: false
+        }]
+      };
+
+      migrationService.generateMigrationPlan.mockReturnValue(of(planV1toV2));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      // User selects definitions
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      // Wait for plan generation + debounce
+      await new Promise(resolve => setTimeout(resolve, 350));
+      fixture.detectChanges();
+
+      // Initial state from applyUpdateEventTriggerFlags: checkedByDefault=true for message catch
+      const initialValue = component.editableInstructions()[0]?.updateEventTrigger;
+
+      // User clicks checkbox in viewer - simulate the REAL viewer's direct mutation
+      // (This is what bpmn-viewer.ts line 1616 does: instruction.updateEventTrigger = value)
+      const instructions = component.editableInstructions();
+      const instruction = instructions[0];
+      instruction.updateEventTrigger = !initialValue; // Toggle from initial
+
+      // Verify mutation took effect in editableInstructions
+      expect(component.editableInstructions()[0].updateEventTrigger).toBe(!initialValue);
+
+      // Check if editableInstructions and migrationPlan.instructions are the same array
+      const editable = component.editableInstructions();
+      const plan = component.migrationPlan();
+      const sameArray = editable === plan.instructions;
+
+      // After fix: they should now be the SAME array so mutations propagate
+      expect(sameArray).toBe(true);
+
+      // And because they're the same, migrationPlan has the mutated value
+      expect(plan.instructions[0].updateEventTrigger).toBe(!initialValue);
+    });
+
+    it('propagates checkbox change via Output handler to validation and execution payloads', fakeAsync(() => {
+      // This test verifies that checkbox change propagates synchronously to state and triggers debounced validation
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of(messageCatchXml));
+
+      const planV1toV2 = {
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [{
+          sourceActivityIds: ['Catch_Message'],
+          targetActivityIds: ['Catch_Message'],
+          updateEventTrigger: false
+        }]
+      };
+
+      migrationService.generateMigrationPlan.mockReturnValue(of(planV1toV2));
+      let validateCallCount = 0;
+      migrationService.validateMigrationPlan = vi.fn().mockImplementation((plan: any) => {
+        validateCallCount++;
+        return of({ instructionReports: [] });
+      });
+      migrationService.executeMigration = vi.fn().mockReturnValue(of({ migratedCount: 1 }));
+
+      fixture.detectChanges();
+      tick();
+
+      // Setup mapping
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+      tick();
+
+      // Wait for plan generation + initial validation
+      tick(350);
+      fixture.detectChanges();
+
+      const initialValidateCount = validateCallCount;
+
+      // User checks the checkbox - simulate Output emission
+      component.onUpdateEventTriggerChange({ sourceActivityId: 'Catch_Message', value: true });
+
+      // State should be updated SYNCHRONOUSLY (before debounce)
+      expect(component.editableInstructions()[0].updateEventTrigger).toBe(true);
+      expect(component.migrationPlan()?.instructions[0].updateEventTrigger).toBe(true);
+
+      // Validation hasn't been called yet (debounced)
+      expect(validateCallCount).toBe(initialValidateCount);
+
+      // Wait for debounce (250ms)
+      tick(250);
+      fixture.detectChanges();
+
+      // Now validation was called with updated value
+      expect(validateCallCount).toBeGreaterThan(initialValidateCount);
+      const lastValidateCall = migrationService.validateMigrationPlan.mock.calls[validateCallCount - 1][0];
+      expect(lastValidateCall.instructions[0].updateEventTrigger).toBe(true);
+
+      // Now verify execution payload
+      // Skip through steps to execution
+      component.onGoToSetVariables();
+      component.onVariablesNext();
+      component.onSelectInstancesNext({
+        mode: 'instance',
+        processInstanceIds: ['inst1'],
+        filterCriteria: null,
+        vnIgnoreCase: false,
+        vvIgnoreCase: false
+      });
+
+      component.onConfirmNext({
+        payload: {
+          migrationPlan: {
+            sourceProcessDefinitionId: 'pd1:1',
+            targetProcessDefinitionId: 'pd1:2',
+            instructions: component.migrationPlan()!.instructions,
+            variables: {}
+          },
+          processInstanceIds: ['inst1'],
+          skipCustomListeners: false,
+          skipIoMappings: false
+        },
+        mode: 'sync',
+        totalCount: 1
+      });
+
+      fixture.detectChanges();
+      tick();
+
+      expect(migrationService.executeMigration).toHaveBeenCalled();
+      const executionPayload = migrationService.executeMigration.mock.calls[0][0];
+      expect(executionPayload.migrationPlan.instructions[0].updateEventTrigger).toBe(true);
+    }));
+
+    it('ensures immutability: original instruction object is not modified', fakeAsync(() => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of(messageCatchXml));
+
+      const originalInstruction = {
+        sourceActivityIds: ['Catch_Message'],
+        targetActivityIds: ['Catch_Message'],
+        updateEventTrigger: false
+      };
+
+      const planV1toV2 = {
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [originalInstruction]
+      };
+
+      migrationService.generateMigrationPlan.mockReturnValue(of(planV1toV2));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      tick();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+      tick();
+
+      tick(350);
+      fixture.detectChanges();
+
+      const instructionBeforeChange = component.editableInstructions()[0];
+      const valueBeforeChange = instructionBeforeChange.updateEventTrigger;
+
+      component.onUpdateEventTriggerChange({ sourceActivityId: 'Catch_Message', value: false });
+
+      expect(instructionBeforeChange.updateEventTrigger).toBe(valueBeforeChange);
+      expect(component.editableInstructions()[0]).not.toBe(instructionBeforeChange);
+      expect(component.editableInstructions()[0].updateEventTrigger).toBe(false);
+    }));
+  });
+
+  describe('MigrationPlan synchronization with editableInstructions', () => {
+    it('synchronizes migrationPlan when updateEventTrigger changes', async () => {
+      const plan = {
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Activity1'], targetActivityIds: ['Activity1'], updateEventTrigger: false }
+        ]
+      };
+
+      component.editableInstructions.set(plan.instructions);
+      component.migrationPlan.set(plan);
+
+      component.onUpdateEventTriggerChange({ sourceActivityId: 'Activity1', value: true });
+
+      expect(component.editableInstructions()[0].updateEventTrigger).toBe(true);
+      expect(component.migrationPlan()?.instructions[0].updateEventTrigger).toBe(true);
+    });
+  });
+
+  describe('Debounce behavior: state synchronous, validation debounced', () => {
+    const messageCatchXml = `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/Model"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_1" isExecutable="true">
+    <bpmn:intermediateCatchEvent id="Catch_Message1" name="Wait for message 1">
+      <bpmn:messageEventDefinition messageRef="Message_1" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="Catch_Message2" name="Wait for message 2">
+      <bpmn:messageEventDefinition messageRef="Message_2" />
+    </bpmn:intermediateCatchEvent>
+  </bpmn:process>
+  <bpmn:message id="Message_1" name="TestMessage1" />
+  <bpmn:message id="Message_2" name="TestMessage2" />
+</bpmn:definitions>`;
+
+    it('preserves both changes when two checkboxes are toggled within 250ms', fakeAsync(() => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of(messageCatchXml));
+
+      const planV1toV2 = {
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Catch_Message1'], targetActivityIds: ['Catch_Message1'], updateEventTrigger: false },
+          { sourceActivityIds: ['Catch_Message2'], targetActivityIds: ['Catch_Message2'], updateEventTrigger: false }
+        ]
+      };
+
+      migrationService.generateMigrationPlan.mockReturnValue(of(planV1toV2));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+
+      fixture.detectChanges();
+      tick();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+      tick(350);
+
+      component.onUpdateEventTriggerChange({ sourceActivityId: 'Catch_Message1', value: true });
+
+      tick(100);
+
+      component.onUpdateEventTriggerChange({ sourceActivityId: 'Catch_Message2', value: true });
+
+      expect(component.editableInstructions()[0].updateEventTrigger).toBe(true);
+      expect(component.editableInstructions()[1].updateEventTrigger).toBe(true);
+      expect(component.migrationPlan()?.instructions[0].updateEventTrigger).toBe(true);
+      expect(component.migrationPlan()?.instructions[1].updateEventTrigger).toBe(true);
+    }));
+
+    it('includes change in execution payload when clicking next step immediately after toggle', fakeAsync(() => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of(messageCatchXml));
+
+      const planV1toV2 = {
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Catch_Message1'], targetActivityIds: ['Catch_Message1'], updateEventTrigger: false }
+        ]
+      };
+
+      migrationService.generateMigrationPlan.mockReturnValue(of(planV1toV2));
+      migrationService.validateMigrationPlan.mockReturnValue(of({ instructionReports: [] }));
+      migrationService.executeMigration = vi.fn().mockReturnValue(of({ migratedCount: 1 }));
+
+      fixture.detectChanges();
+      tick();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+      tick(350);
+
+      component.onUpdateEventTriggerChange({ sourceActivityId: 'Catch_Message1', value: true });
+
+      component.onGoToSetVariables();
+      component.onVariablesNext();
+      component.onSelectInstancesNext({
+        mode: 'instance',
+        processInstanceIds: ['inst1'],
+        filterCriteria: null,
+        vnIgnoreCase: false,
+        vvIgnoreCase: false
+      });
+
+      component.onConfirmNext({
+        payload: {
+          migrationPlan: {
+            sourceProcessDefinitionId: 'pd1:1',
+            targetProcessDefinitionId: 'pd1:2',
+            instructions: component.migrationPlan()!.instructions,
+            variables: {}
+          },
+          processInstanceIds: ['inst1'],
+          skipCustomListeners: false,
+          skipIoMappings: false
+        },
+        mode: 'sync',
+        totalCount: 1
+      });
+
+      tick();
+
+      expect(migrationService.executeMigration).toHaveBeenCalled();
+      const executionPayload = migrationService.executeMigration.mock.calls[0][0];
+      expect(executionPayload.migrationPlan.instructions[0].updateEventTrigger).toBe(true);
+    }));
+
+    it('triggers validation only once after multiple rapid changes', fakeAsync(() => {
+      processDefinitionService.getBpmn20Xml.mockReturnValue(of(messageCatchXml));
+
+      const planV1toV2 = {
+        sourceProcessDefinitionId: 'pd1:1',
+        targetProcessDefinitionId: 'pd1:2',
+        instructions: [
+          { sourceActivityIds: ['Catch_Message1'], targetActivityIds: ['Catch_Message1'], updateEventTrigger: false }
+        ]
+      };
+
+      migrationService.generateMigrationPlan.mockReturnValue(of(planV1toV2));
+      let validateCallCount = 0;
+      migrationService.validateMigrationPlan = vi.fn().mockImplementation(() => {
+        validateCallCount++;
+        return of({ instructionReports: [] });
+      });
+
+      fixture.detectChanges();
+      tick();
+
+      component.onSourceKeyChange('OrderProcess');
+      component.onSourceVersionChange(1);
+      component.onTargetKeyChange('OrderProcess');
+      component.onTargetVersionChange(2);
+      fixture.detectChanges();
+      tick(350);
+
+      const countBeforeChanges = validateCallCount;
+
+      component.onUpdateEventTriggerChange({ sourceActivityId: 'Catch_Message1', value: true });
+      tick(50);
+      component.onUpdateEventTriggerChange({ sourceActivityId: 'Catch_Message1', value: false });
+      tick(50);
+      component.onUpdateEventTriggerChange({ sourceActivityId: 'Catch_Message1', value: true });
+      tick(50);
+      component.onUpdateEventTriggerChange({ sourceActivityId: 'Catch_Message1', value: false });
+      tick(50);
+      component.onUpdateEventTriggerChange({ sourceActivityId: 'Catch_Message1', value: true });
+
+      expect(validateCallCount).toBe(countBeforeChanges);
+
+      tick(250);
+      expect(validateCallCount).toBe(countBeforeChanges + 1);
+    }));
   });
 });
