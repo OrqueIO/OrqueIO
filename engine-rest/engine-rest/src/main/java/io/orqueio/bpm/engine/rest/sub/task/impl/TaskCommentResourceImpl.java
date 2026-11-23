@@ -69,6 +69,8 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
 
   public CommentDto getComment(String commentId) {
     ensureHistoryEnabled(Status.NOT_FOUND);
+    // Only a caller who may see the task may reach its sub-resources (CVE-2026-109431)
+    ensureTaskExists(Status.NOT_FOUND);
 
     Comment comment = engine.getTaskService().getTaskComment(taskId, commentId);
     if (comment == null) {

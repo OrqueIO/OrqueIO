@@ -2381,15 +2381,21 @@ public class TaskRestServiceInteractionTest extends
 
   @Test
   public void testGetSingleTaskCommentForNonExistingTask() {
+    // A task that does not exist, or that the caller may not see (CVE-2026-109431)
+    when(historicTaskInstanceQueryMock.taskId(NON_EXISTING_ID)).thenReturn(historicTaskInstanceQueryMock);
+    when(historicTaskInstanceQueryMock.singleResult()).thenReturn(null);
+
     given()
       .pathParam("id", NON_EXISTING_ID)
       .pathParam("commentId", EXAMPLE_TASK_COMMENT_ID)
       .header("accept", MediaType.APPLICATION_JSON)
     .then().expect()
       .statusCode(Status.NOT_FOUND.getStatusCode())
-      .body(containsString("Task comment with id " + EXAMPLE_TASK_COMMENT_ID + " does not exist for task id '" + NON_EXISTING_ID + "'"))
+      .body(containsString("No task found for task id " + NON_EXISTING_ID))
     .when()
       .get(SINGLE_TASK_SINGLE_COMMENT_URL);
+
+    verify(taskServiceMock, never()).getTaskComment(anyString(), anyString());
   }
 
   @Test
@@ -2694,15 +2700,21 @@ public class TaskRestServiceInteractionTest extends
 
   @Test
   public void testGetSingleTaskAttachmentForNonExistingTask() {
+    // A task that does not exist, or that the caller may not see (CVE-2026-109431)
+    when(historicTaskInstanceQueryMock.taskId(NON_EXISTING_ID)).thenReturn(historicTaskInstanceQueryMock);
+    when(historicTaskInstanceQueryMock.singleResult()).thenReturn(null);
+
     given()
       .pathParam("id", NON_EXISTING_ID)
       .pathParam("attachmentId", EXAMPLE_TASK_ATTACHMENT_ID)
       .header("accept", MediaType.APPLICATION_JSON)
     .then().expect()
       .statusCode(Status.NOT_FOUND.getStatusCode())
-      .body(containsString("Task attachment with id " + EXAMPLE_TASK_ATTACHMENT_ID + " does not exist for task id '" + NON_EXISTING_ID + "'"))
+      .body(containsString("No task found for task id " + NON_EXISTING_ID))
     .when()
       .get(SINGLE_TASK_SINGLE_ATTACHMENT_URL);
+
+    verify(taskServiceMock, never()).getTaskAttachment(anyString(), anyString());
   }
 
   @Test
@@ -2975,14 +2987,20 @@ public class TaskRestServiceInteractionTest extends
 
   @Test
   public void testGetSingleTaskAttachmentContentForNonExistingTask() {
+    // A task that does not exist, or that the caller may not see (CVE-2026-109431)
+    when(historicTaskInstanceQueryMock.taskId(NON_EXISTING_ID)).thenReturn(historicTaskInstanceQueryMock);
+    when(historicTaskInstanceQueryMock.singleResult()).thenReturn(null);
+
     given()
       .pathParam("id", NON_EXISTING_ID)
       .pathParam("attachmentId", EXAMPLE_TASK_ATTACHMENT_ID)
     .then().expect()
       .statusCode(Status.NOT_FOUND.getStatusCode())
-      .body(containsString("Attachment content for attachment with id '" + EXAMPLE_TASK_ATTACHMENT_ID + "' does not exist for task id '" + NON_EXISTING_ID + "'."))
+      .body(containsString("No task found for task id " + NON_EXISTING_ID))
     .when()
       .get(SINGLE_TASK_SINGLE_ATTACHMENT_DATA_URL);
+
+    verify(taskServiceMock, never()).getTaskAttachmentContent(anyString(), anyString());
   }
 
   @Test
@@ -3054,7 +3072,9 @@ public class TaskRestServiceInteractionTest extends
 
   @Test
   public void testDeleteSingleTaskAttachmentForNonExistingTask() {
-    doThrow(new ProcessEngineException()).when(taskServiceMock).deleteTaskAttachment(NON_EXISTING_ID, EXAMPLE_TASK_ATTACHMENT_ID);
+    // A task that does not exist, or that the caller may not see (CVE-2026-109431)
+    when(historicTaskInstanceQueryMock.taskId(NON_EXISTING_ID)).thenReturn(historicTaskInstanceQueryMock);
+    when(historicTaskInstanceQueryMock.singleResult()).thenReturn(null);
 
     given()
       .pathParam("id", NON_EXISTING_ID)
@@ -3062,9 +3082,11 @@ public class TaskRestServiceInteractionTest extends
       .header("accept", MediaType.APPLICATION_JSON)
     .then().expect()
       .statusCode(Status.NOT_FOUND.getStatusCode())
-      .body(containsString("Deletion is not possible. No attachment exists for task id '" + NON_EXISTING_ID + "' and attachment id '" + EXAMPLE_TASK_ATTACHMENT_ID + "'."))
+      .body(containsString("No task found for task id " + NON_EXISTING_ID))
     .when()
       .delete(SINGLE_TASK_DELETE_SINGLE_ATTACHMENT_URL);
+
+    verify(taskServiceMock, never()).deleteTaskAttachment(anyString(), anyString());
   }
 
   @Test
