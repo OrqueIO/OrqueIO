@@ -196,6 +196,20 @@
 
 
     <profile>
+      <id>distro-wildfly</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>javaee/ejb-client</module>
+        <module>javaee/ejb-client-jakarta</module>
+        <module>distro/license-book</module>
+        <module>distro/wildfly</module>
+        <module>distro/wildfly26</module>
+      </modules>
+    </profile>
+
+    <profile>
       <id>distro-webjar</id>
       <activation>
         <activeByDefault>true</activeByDefault>
