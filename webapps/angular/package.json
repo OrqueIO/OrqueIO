@@ -64,6 +64,6 @@
     "postcss": ">=8.5.10",
     "picomatch": ">=2.3.2",
     "piscina": ">=5.3.2",
-    "minimatch": ">=11.0.1"
+    "minimatch": "^11.0.1"
   }
 }
