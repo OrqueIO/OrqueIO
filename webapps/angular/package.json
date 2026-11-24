@@ -1,6 +1,6 @@
 {
   "name": "orque-io-angular",
-  "version": "2.0.7",
+  "version": "2.0.8-SNAPSHOT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
