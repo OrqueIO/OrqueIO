@@ -28,6 +28,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import io.orqueio.bpm.engine.IdentityService;
+import io.orqueio.bpm.engine.AuthorizationException;
 import io.orqueio.bpm.engine.ProcessEngine;
 import io.orqueio.bpm.engine.ProcessEngineException;
 import io.orqueio.bpm.engine.history.HistoricTaskInstance;
@@ -74,6 +75,8 @@ public class TaskAttachmentResourceImpl implements TaskAttachmentResource {
   @Override
   public AttachmentDto getAttachment(String attachmentId) {
     ensureHistoryEnabled(Status.NOT_FOUND);
+    // Only a caller who may see the task may reach its sub-resources (CVE-2026-109431)
+    ensureTaskExists(Status.NOT_FOUND);
 
     Attachment attachment = engine.getTaskService().getTaskAttachment(taskId, attachmentId);
 
@@ -87,6 +90,8 @@ public class TaskAttachmentResourceImpl implements TaskAttachmentResource {
   @Override
   public InputStream getAttachmentData(String attachmentId) {
     ensureHistoryEnabled(Status.NOT_FOUND);
+    // Only a caller who may see the task may reach its sub-resources (CVE-2026-109431)
+    ensureTaskExists(Status.NOT_FOUND);
 
     InputStream attachmentData = engine.getTaskService().getTaskAttachmentContent(taskId, attachmentId);
 
@@ -101,9 +106,13 @@ public class TaskAttachmentResourceImpl implements TaskAttachmentResource {
   @Override
   public void deleteAttachment(String attachmentId) {
     ensureHistoryEnabled(Status.FORBIDDEN);
+    // Only a caller who may see the task may reach its sub-resources (CVE-2026-109431)
+    ensureTaskExists(Status.NOT_FOUND);
 
     try {
       engine.getTaskService().deleteTaskAttachment(taskId, attachmentId);
+    } catch (AuthorizationException e) {
+      throw e;
     } catch (ProcessEngineException e) {
       throw new InvalidRequestException(Status.NOT_FOUND, "Deletion is not possible. No attachment exists for task id '" + taskId + "' and attachment id '" + attachmentId + "'.");
     }
@@ -183,9 +192,20 @@ public class TaskAttachmentResourceImpl implements TaskAttachmentResource {
 
   private void ensureTaskExists(Status status) {
     HistoricTaskInstance historicTaskInstance = engine.getHistoryService().createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
-    if (historicTaskInstance == null) {
+    if (historicTaskInstance == null || !isRunningStandaloneTaskVisible(historicTaskInstance)) {
       throw new InvalidRequestException(status, "No task found for task id " + taskId);
     }
+  }
+
+  /**
+   * The history query does not check permissions on a task outside a process, unless historic
+   * instance permissions are enabled. While such a task runs, the task query does.
+   */
+  private boolean isRunningStandaloneTaskVisible(HistoricTaskInstance historicTaskInstance) {
+    if (historicTaskInstance.getExecutionId() != null || historicTaskInstance.getEndTime() != null) {
+      return true;
+    }
+    return engine.getTaskService().createTaskQuery().taskId(taskId).singleResult() != null;
   }
 
 }

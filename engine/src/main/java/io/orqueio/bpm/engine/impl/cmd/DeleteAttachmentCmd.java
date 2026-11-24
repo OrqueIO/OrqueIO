@@ -22,9 +22,11 @@ import java.io.Serializable;
 
 import java.util.Objects;
 import io.orqueio.bpm.engine.history.UserOperationLogEntry;
+import io.orqueio.bpm.engine.impl.cfg.CommandChecker;
 import io.orqueio.bpm.engine.impl.interceptor.Command;
 import io.orqueio.bpm.engine.impl.interceptor.CommandContext;
 import io.orqueio.bpm.engine.impl.persistence.entity.AttachmentEntity;
+import io.orqueio.bpm.engine.impl.persistence.entity.HistoricTaskInstanceEntity;
 import io.orqueio.bpm.engine.impl.persistence.entity.PropertyChange;
 import io.orqueio.bpm.engine.impl.persistence.entity.TaskEntity;
 
@@ -62,6 +64,24 @@ public class DeleteAttachmentCmd implements Command<Object>, Serializable {
       ensureNotNull("No attachment exists with attachmentId '" + attachmentId + "'.", "attachment", attachment);
     }
 
+    TaskEntity task = null;
+    if (attachment.getTaskId() != null && !attachment.getTaskId().isBlank()) {
+      task = commandContext
+          .getTaskManager()
+          .findTaskById(attachment.getTaskId());
+    }
+
+    if (task != null) {
+      // Deleting a task's attachment changes the task, as deleting its comment does
+      checkTaskWork(task, commandContext);
+    } else if (attachment.getTaskId() != null && !attachment.getTaskId().isBlank()) {
+      // The task has ended: its attachment is part of its history
+      HistoricTaskInstanceEntity historicTask = commandContext
+          .getHistoricTaskInstanceManager()
+          .findHistoricTaskInstanceById(attachment.getTaskId());
+      checkDeleteHistoricTaskInstance(historicTask, commandContext);
+    }
+
     commandContext
         .getDbEntityManager()
         .delete(attachment);
@@ -72,22 +92,28 @@ public class DeleteAttachmentCmd implements Command<Object>, Serializable {
           .deleteByteArrayById(attachment.getContentId());
     }
 
-    if (attachment.getTaskId() != null && !attachment.getTaskId().isBlank()) {
-      TaskEntity task = commandContext
-          .getTaskManager()
-          .findTaskById(attachment.getTaskId());
+    if (task != null) {
+      PropertyChange propertyChange = new PropertyChange("name", null, attachment.getName());
 
-      if (task != null) {
-        PropertyChange propertyChange = new PropertyChange("name", null, attachment.getName());
+      commandContext.getOperationLogManager()
+          .logAttachmentOperation(UserOperationLogEntry.OPERATION_TYPE_DELETE_ATTACHMENT, task, propertyChange);
 
-        commandContext.getOperationLogManager()
-            .logAttachmentOperation(UserOperationLogEntry.OPERATION_TYPE_DELETE_ATTACHMENT, task, propertyChange);
-
-        task.triggerUpdateEvent();
-      }
+      task.triggerUpdateEvent();
     }
 
     return null;
+  }
+
+  protected void checkTaskWork(TaskEntity task, CommandContext commandContext) {
+    for (CommandChecker checker : commandContext.getProcessEngineConfiguration().getCommandCheckers()) {
+      checker.checkTaskWork(task);
+    }
+  }
+
+  protected void checkDeleteHistoricTaskInstance(HistoricTaskInstanceEntity historicTask, CommandContext commandContext) {
+    for (CommandChecker checker : commandContext.getProcessEngineConfiguration().getCommandCheckers()) {
+      checker.checkDeleteHistoricTaskInstance(historicTask);
+    }
   }
 
 }
