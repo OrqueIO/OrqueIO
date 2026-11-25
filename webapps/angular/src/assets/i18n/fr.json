@@ -839,6 +839,7 @@
   "admin.system.copyAll": "Copier toutes les données dans le presse-papiers",
   "admin.system.copy": "Copier",
   "admin.system.telemetryLoadError": "Échec de la récupération des données de télémétrie",
+  "admin.system.currentPeriod": "(en cours)",
   "admin.users.title": "Gestion des utilisateurs",
   "admin.users.createUser": "Créer un utilisateur",
   "admin.users.id": "ID Utilisateur",

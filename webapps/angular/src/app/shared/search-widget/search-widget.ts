@@ -267,12 +267,22 @@ export class SearchWidgetComponent implements OnInit, OnDestroy {
   loadCriteria(name: string): void {
     const criteria = this.storedCriteria[name];
     if (criteria) {
-      this.searches = criteria.map(c => ({ ...c }));
+      this.searches = criteria.map(c => this.withCurrentLabels(c));
       this.editingIndex = null;
       this.showStoredDropdown = false;
       this.emitChange();
       this.cdr.markForCheck();
     }
+  }
+
+  /**
+   * Saved criteria keep the labels of the day they were saved; take the type and operator
+   * from the current search types instead, matched by key, so they follow the current language.
+   */
+  private withCurrentLabels(criteria: SearchCriteria): SearchCriteria {
+    const type = this.searchTypes.find(t => t.key === criteria.type.key) ?? criteria.type;
+    const operator = type.operators.find(o => o.key === criteria.operator.key) ?? criteria.operator;
+    return { ...criteria, type, operator };
   }
 
   deleteCriteria(name: string, event: MouseEvent): void {

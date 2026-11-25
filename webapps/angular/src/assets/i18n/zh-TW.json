@@ -973,6 +973,7 @@
   "admin.system.copyAll": "將所有資料複製到剪貼簿",
   "admin.system.copy": "複製",
   "admin.system.telemetryLoadError": "取得遙測資料失敗",
+  "admin.system.currentPeriod": "（目前）",
 
   "admin.users.title": "使用者管理",
   "admin.users.createUser": "建立使用者",

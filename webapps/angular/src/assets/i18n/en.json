@@ -919,6 +919,7 @@
   "admin.system.copyAll": "Copy all data to clipboard",
   "admin.system.copy": "Copy",
   "admin.system.telemetryLoadError": "Failed to fetch telemetry data",
+  "admin.system.currentPeriod": "(current)",
   "admin.users.title": "User Management",
   "admin.users.createUser": "Create User",
   "admin.users.id": "User ID",

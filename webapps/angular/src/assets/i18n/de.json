@@ -920,6 +920,7 @@
   "admin.system.copyAll": "Alle Daten in die Zwischenablage kopieren",
   "admin.system.copy": "Kopieren",
   "admin.system.telemetryLoadError": "Telemetriedaten konnten nicht abgerufen werden",
+  "admin.system.currentPeriod": "(aktuell)",
   "admin.users.title": "Benutzerverwaltung",
   "admin.users.createUser": "Benutzer erstellen",
   "admin.users.id": "Benutzer-ID",

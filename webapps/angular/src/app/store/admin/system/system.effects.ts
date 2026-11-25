@@ -405,7 +405,7 @@ export class SystemEffects {
     const toStr = this.formatDate(yearEnd);
 
     return isCurrent
-      ? `${fromStr} - ${toStr} (current)`
+      ? `${fromStr} - ${toStr} ${this.translateService.instant('admin.system.currentPeriod')}`
       : `${fromStr} - ${toStr}`;
   }
 

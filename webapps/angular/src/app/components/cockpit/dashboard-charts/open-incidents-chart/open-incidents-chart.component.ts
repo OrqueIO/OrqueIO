@@ -25,6 +25,7 @@ import {
 import * as DashboardActions from '../../../../store/cockpit/dashboard/dashboard.actions';
 import * as DashboardSelectors from '../../../../store/cockpit/dashboard/dashboard.selectors';
 import { TranslateService } from '../../../../i18n/translate.service';
+import { skip } from 'rxjs';
 
 @Component({
   selector: 'app-open-incidents-chart',
@@ -148,6 +149,11 @@ export class OpenIncidentsChartComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToStore(): void {
+    // Labels are translated when the chart is drawn: redraw them when the language changes
+    this.translate.currentLang$
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.updateChart());
+
     // Calculate total from incidentsByProcess (root incidents only, like AngularJS)
     this.store.select(DashboardSelectors.selectIncidentsByProcess)
       .pipe(takeUntilDestroyed(this.destroyRef))
