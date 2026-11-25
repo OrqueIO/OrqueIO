@@ -216,13 +216,13 @@ export class TaskMetaComponent implements OnInit, OnChanges {
           this.assigneeChange.emit(newAssignee);
           this.editingAssignee = false;
         } else {
-          this.assigneeError = 'User not found';
+          this.assigneeError = this.translateService.instant('delegate.userNotFound');
         }
       },
       error: (err) => {
         this.validatingAssignee = false;
         this.assigneeValid = false;
-        this.assigneeError = err.message || 'Validation failed';
+        this.assigneeError = err.message || this.translateService.instant('tasklist.errors.validationFailed');
       }
     });
   }
@@ -293,11 +293,11 @@ export class TaskMetaComponent implements OnInit, OnChanges {
    */
   getInstanceTypeLabel(): string {
     if (this.task?.processInstanceId) {
-      return 'Process Instance';
+      return this.translateService.instant('tasklist.processInstance');
     } else if (this.task?.caseInstanceId) {
-      return 'Case Instance';
+      return this.translateService.instant('tasklist.caseInstance');
     }
-    return 'Standalone Task';
+    return this.translateService.instant('tasklist.standaloneTask');
   }
 
   /**

@@ -5,6 +5,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Actions, ofType } from '@ngrx/effects';
 import { Subject, takeUntil, filter } from 'rxjs';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
+import { TranslateService } from '../../../i18n/translate.service';
 import { Task, TaskForm } from '../../../models/tasklist';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
 import { CamFormService, CamFormInstance } from '../../../services/tasklist/cam-form.service';
@@ -51,6 +52,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly actions$ = inject(Actions);
+  private readonly translate = inject(TranslateService);
   private readonly destroy$ = new Subject<void>();
 
   @ViewChild('formContainer') formContainer!: ElementRef;
@@ -243,7 +245,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
 
     const formUrl = this.getEmbeddedFormUrl();
     if (!formUrl) {
-      this.camFormError = 'No form URL available';
+      this.camFormError = this.translate.instant('tasklist.errors.noFormUrl');
       return;
     }
 
@@ -278,7 +280,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
       },
       error: (err) => {
         this.camFormLoading = false;
-        this.camFormError = err.message || 'Failed to load embedded form';
+        this.camFormError = err.message || this.translate.instant('tasklist.errors.loadEmbeddedForm');
         this.cdr.detectChanges();
       }
     });
@@ -308,7 +310,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
       },
       error: (err) => {
         this.submitting = false;
-        this.completeError = err.message || 'Failed to submit form';
+        this.completeError = err.message || this.translate.instant('tasklist.errors.submitForm');
         this.cdr.detectChanges();
       }
     });
@@ -389,7 +391,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
         this.cdr.detectChanges();
       },
       error: (err) => {
-        this.loadingError = err.message || 'Failed to load form variables';
+        this.loadingError = err.message || this.translate.instant('tasklist.errors.loadFormVariables');
         this.loading = false;
         this.variablesLoaded = false; // Allow retry on error
         this.cdr.detectChanges();
@@ -449,7 +451,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
       this.submitSave(variables);
     } catch (error: any) {
       console.error('Failed to process files:', error);
-      this.completeError = error.message || 'Failed to process file upload';
+      this.completeError = error.message || this.translate.instant('tasklist.errors.processFileUpload');
       this.saving = false;
       this.cdr.detectChanges();
     }
@@ -517,7 +519,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
       this.complete.emit(variables);
     } catch (error: any) {
       console.error('Failed to process files:', error);
-      this.completeError = error.message || 'Failed to process file upload';
+      this.completeError = error.message || this.translate.instant('tasklist.errors.processFileUpload');
       this.submitting = false;
       this.cdr.detectChanges();
     }
@@ -642,7 +644,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
       // Check max file size (5MB default, like AngularJS)
       const maxSize = 5000000; // 5MB
       if (file.size > maxSize) {
-        reject(new Error(`File size exceeds maximum of ${this.bytesToSize(maxSize)}`));
+        reject(new Error(this.translate.instant('tasklist.errors.fileTooLarge', { size: this.bytesToSize(maxSize) })));
         return;
       }
 
@@ -656,7 +658,7 @@ export class TaskFormTabComponent implements OnInit, OnChanges, OnDestroy, After
         }
         resolve(btoa(binary));
       };
-      reader.onerror = () => reject(new Error('Failed to read file'));
+      reader.onerror = () => reject(new Error(this.translate.instant('tasklist.errors.readFile')));
       reader.readAsArrayBuffer(file);
     });
   }

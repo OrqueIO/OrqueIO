@@ -17,6 +17,7 @@ import Chart from 'chart.js/auto';
 
 import { ChartCardComponent } from '../chart-card/chart-card.component';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 import {
   TaskGroupData,
   CHART_COLORS,
@@ -125,6 +126,7 @@ export class TasksByGroupChartComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
+  private translate = inject(TranslateService);
 
   private chart: Chart<'bar'> | null = null;
 
@@ -250,8 +252,11 @@ export class TasksByGroupChartComponent implements OnInit, OnDestroy {
                 const value = context.raw as number;
                 const percentage = this.totalTasks > 0
                   ? ((value / this.totalTasks) * 100).toFixed(1)
-                  : 0;
-                return `${value} tasks (${percentage}%)`;
+                  : '0';
+                return this.translate.instant('cockpit.charts.tasksByGroup.tooltip', {
+                  count: String(value),
+                  percentage: String(percentage)
+                });
               }
             }
           }

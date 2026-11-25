@@ -199,7 +199,7 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
   }
 
   formatType(type: string | undefined): string {
-    if (!type) return 'Unknown';
+    if (!type) return this.translateService.instant('common.unknown');
     // Simplify Java types
     const parts = type.split('.');
     return parts[parts.length - 1];

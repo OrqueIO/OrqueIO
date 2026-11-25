@@ -313,18 +313,20 @@
         <!-- Tabs header -->
         <div class="tabs-header">
           <ul class="nav nav-tabs">
-            <li *ngFor="let tab of tabs"
-                [class.active]="activeTab === tab.id"
-                (click)="setActiveTab(tab.id)">
-              <a>
-                {{ tab.labelKey | translate }}
-                <span *ngIf="getTabBadgeCount(tab)"
-                      class="badge"
-                      [class.badge-warning]="tab.id === 'incidents'">
-                  {{ getTabBadgeCount(tab) }}
-                </span>
-              </a>
-            </li>
+            <ng-container *ngFor="let tab of tabs">
+              <li *ngIf="isTabVisible(tab)"
+                  [class.active]="activeTab === tab.id"
+                  (click)="setActiveTab(tab.id)">
+                <a>
+                  {{ tab.labelKey | translate }}
+                  <span *ngIf="getTabBadgeCount(tab)"
+                        class="badge"
+                        [class.badge-warning]="tab.id === 'incidents'">
+                    {{ getTabBadgeCount(tab) }}
+                  </span>
+                </a>
+              </li>
+            </ng-container>
           </ul>
           <button class="collapse-diagram-btn"
                   (click)="toggleDiagramCollapse()"
@@ -479,6 +481,109 @@
             </div>
           </div>
 
+          <!-- LLM Calls Tab: what each LLM task used and cost, from its record variable -->
+          <div class="tab-pane llm-calls-tab" *ngIf="activeTab === 'llmCalls'">
+            <div class="llm-beta-note"><app-beta-badge></app-beta-badge></div>
+            <div class="table-scroll-wrapper">
+              <table class="cam-table" *ngIf="llmRecords.length > 0">
+                <thead>
+                  <tr>
+                    <th>{{ 'cockpit.processDetail.llmCalls.task' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.llmCalls.outcome' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.llmCalls.model' | translate }}</th>
+                    <th class="llm-number">{{ 'cockpit.processDetail.llmCalls.inputTokens' | translate }}</th>
+                    <th class="llm-number">{{ 'cockpit.processDetail.llmCalls.outputTokens' | translate }}</th>
+                    <th class="llm-number">{{ 'cockpit.processDetail.llmCalls.latency' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.llmCalls.promptVersion' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.llmCalls.recordedAt' | translate }}</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let record of llmRecords">
+                    <tr class="llm-record"
+                        tabindex="0"
+                        [class.selected]="selectedActivityIds.includes(record.activityId)"
+                        [attr.aria-selected]="selectedActivityIds.includes(record.activityId)"
+                        (click)="selectActivity(record.activityId)"
+                        (keydown.enter)="selectActivity(record.activityId)">
+                      <td class="llm-task">
+                        {{ llmTaskName(record) }}
+                        <span class="llm-reused" *ngIf="record.fromCache"
+                              [title]="'cockpit.processDetail.llmCalls.reusedHint' | translate">
+                          {{ 'cockpit.processDetail.llmCalls.reused' | translate }}
+                        </span>
+                      </td>
+                      <ng-container *ngIf="record.readable; else unreadable">
+                        <td>
+                          <span class="llm-outcome"
+                                [class.llm-outcome-valid]="record.outcome === 'VALID'"
+                                [class.llm-outcome-error]="record.outcome === 'BPMN_ERROR'">
+                            {{ record.outcome === 'VALID' ? ('cockpit.processDetail.llmCalls.outcomeValid' | translate)
+                              : record.outcome === 'BPMN_ERROR' ? ('cockpit.processDetail.llmCalls.outcomeBpmnError' | translate)
+                              : (record.outcome || '-') }}
+                          </span>
+                        </td>
+                        <td>
+                          {{ record.model || '-' }}
+                          <span class="llm-provider" *ngIf="record.provider">{{ record.provider }}</span>
+                        </td>
+                        <td class="llm-number">{{ formatTokens(record.inputTokens) }}</td>
+                        <td class="llm-number">{{ formatTokens(record.outputTokens) }}</td>
+                        <td class="llm-number">{{ record.latencyMs !== undefined ? record.latencyMs + ' ms' : '-' }}</td>
+                        <td class="llm-mono" [title]="record.promptVersion || ''">{{ record.promptVersion ? record.promptVersion.substring(0, 12) : '-' }}</td>
+                        <td>{{ formatDate(record.recordedAt) }}</td>
+                        <td>
+                          <span class="llm-truncated-badge" *ngIf="record.truncated"
+                                [title]="'cockpit.processDetail.llmCalls.truncated' | translate">
+                            {{ 'cockpit.processDetail.llmCalls.truncatedBadge' | translate }}
+                          </span>
+                          <button type="button" class="btn btn-link btn-sm" *ngIf="hasLlmContent(record)"
+                                  [attr.aria-expanded]="expandedLlmRecord === record.variableName"
+                                  (click)="toggleLlmContent(record, $event)"
+                                  (keydown.enter)="$event.stopPropagation()">
+                            {{ (expandedLlmRecord === record.variableName
+                              ? 'cockpit.processDetail.llmCalls.hideContent'
+                              : 'cockpit.processDetail.llmCalls.showContent') | translate }}
+                          </button>
+                        </td>
+                      </ng-container>
+                      <ng-template #unreadable>
+                        <td colspan="8" class="llm-unreadable">
+                          {{ 'cockpit.processDetail.llmCalls.unreadable' | translate }}
+                          <code>{{ record.raw }}</code>
+                        </td>
+                      </ng-template>
+                    </tr>
+                    <tr class="llm-content" *ngIf="expandedLlmRecord === record.variableName">
+                      <td colspan="9">
+                        <div class="llm-content-block llm-instructions" *ngIf="llmInstructions(record) as instructions">
+                          <strong>{{ 'cockpit.processDetail.llmCalls.instructions' | translate }}</strong>
+                          <pre>{{ instructions }}</pre>
+                        </div>
+                        <div class="llm-content-block llm-sent-data">
+                          <strong>{{ 'cockpit.processDetail.llmCalls.sentData' | translate }}</strong>
+                          <pre>{{ record.prompt }}</pre>
+                        </div>
+                        <div class="llm-content-block">
+                          <strong>{{ 'cockpit.processDetail.llmCalls.answer' | translate }}</strong>
+                          <pre>{{ record.answer }}</pre>
+                        </div>
+                        <div class="llm-truncated" *ngIf="record.truncated">
+                          {{ 'cockpit.processDetail.llmCalls.truncated' | translate }}
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+
+              <div class="no-data" *ngIf="llmRecords.length === 0">
+                {{ 'cockpit.processDetail.llmCalls.none' | translate }}
+              </div>
+            </div>
+          </div>
+
           <!-- Incidents Tab -->
           <div class="tab-pane incidents-tab" *ngIf="activeTab === 'incidents'">
             <div class="table-scroll-wrapper">
@@ -489,13 +594,15 @@
                     <th>{{ 'cockpit.processDetail.incidents.message' | translate }}</th>
                     <th>{{ 'cockpit.processDetail.incidents.activity' | translate }}</th>
                     <th>{{ 'cockpit.processDetail.incidents.createTime' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.incidents.status' | translate }}</th>
+                    <th>{{ 'cockpit.processDetail.incidents.endTime' | translate }}</th>
                     <th class="actions" *ngIf="isProcessRunning()"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let incident of incidents">
+                  <tr *ngFor="let incident of incidents" [class.incident-closed]="!isIncidentOpen(incident)">
                     <td class="incident-type">
-                      <fa-icon [icon]="faExclamationTriangle" class="incident-icon"></fa-icon>
+                      <fa-icon [icon]="incidentIcon(incident)" class="incident-icon"></fa-icon>
                       {{ incident.incidentType }}
                     </td>
                     <td class="incident-message">
@@ -506,10 +613,12 @@
                         {{ incident.activityId }}
                       </a>
                     </td>
-                    <td class="incident-time">{{ formatDate(incident.createTime) }}</td>
+                    <td class="incident-time">{{ formatDate(incidentCreateTime(incident)) }}</td>
+                    <td class="incident-state">{{ 'cockpit.processDetail.incidents.state.' + incidentState(incident) | translate }}</td>
+                    <td class="incident-end-time">{{ incident.endTime ? formatDate(incident.endTime) : '-' }}</td>
                     <td class="actions" *ngIf="isProcessRunning()">
                       <button class="btn btn-xs btn-default"
-                              *ngIf="incident.incidentType === 'failedJob'"
+                              *ngIf="incident.incidentType === 'failedJob' && isIncidentOpen(incident)"
                               (click)="retryIncident(incident)"
                               [title]="'cockpit.processDetail.actions.retry' | translate">
                         <fa-icon [icon]="faRedo"></fa-icon>

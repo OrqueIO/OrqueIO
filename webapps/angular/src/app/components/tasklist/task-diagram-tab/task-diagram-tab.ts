@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, ViewChild, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
+import { TranslateService } from '../../../i18n/translate.service';
 import { Task } from '../../../models/tasklist';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
 import { BpmnViewerComponent } from '../../../shared/bpmn-viewer/bpmn-viewer';
@@ -18,6 +19,7 @@ const xmlCache = new Map<string, string>();
 export class TaskDiagramTabComponent implements OnInit, OnChanges {
   private readonly tasklistService = inject(TasklistService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly translate = inject(TranslateService);
 
   @Input() task!: Task;
   @Input() isActive = false;
@@ -94,7 +96,7 @@ export class TaskDiagramTabComponent implements OnInit, OnChanges {
     const definitionId = this.task.processDefinitionId || this.task.caseDefinitionId;
 
     if (!definitionId) {
-      this.error = 'No process or case definition available';
+      this.error = this.translate.instant('tasklist.errors.noDefinition');
       this.loading = false;
       return;
     }
@@ -123,12 +125,12 @@ export class TaskDiagramTabComponent implements OnInit, OnChanges {
             this.loading = false;
             this.cdr.detectChanges();
           } else {
-            this.error = 'Could not load process diagram';
+            this.error = this.translate.instant('tasklist.errors.loadProcessDiagram');
             this.loading = false;
           }
         },
         error: (err) => {
-          this.error = err.message || 'Failed to load diagram';
+          this.error = err.message || this.translate.instant('tasklist.errors.loadDiagram');
           this.loading = false;
         }
       });
@@ -141,12 +143,12 @@ export class TaskDiagramTabComponent implements OnInit, OnChanges {
             this.loading = false;
             this.cdr.detectChanges();
           } else {
-            this.error = 'Could not load case diagram';
+            this.error = this.translate.instant('tasklist.errors.loadCaseDiagram');
             this.loading = false;
           }
         },
         error: (err) => {
-          this.error = err.message || 'Failed to load diagram';
+          this.error = err.message || this.translate.instant('tasklist.errors.loadDiagram');
           this.loading = false;
         }
       });
@@ -168,7 +170,7 @@ export class TaskDiagramTabComponent implements OnInit, OnChanges {
 
   onViewerError(err: Error): void {
     console.error('Diagram viewer error:', err);
-    this.error = err.message || 'Failed to render diagram';
+    this.error = err.message || this.translate.instant('tasklist.errors.renderDiagram');
   }
 
   resetZoom(): void {

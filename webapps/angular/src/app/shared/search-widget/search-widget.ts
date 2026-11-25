@@ -9,7 +9,8 @@ import {
   OnDestroy,
   ElementRef,
   ViewChild,
-  HostListener
+  HostListener,
+  inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -23,12 +24,13 @@ import {
   faChevronDown
 } from '@fortawesome/free-solid-svg-icons';
 import { TranslatePipe } from '../../i18n/translate.pipe';
+import { TranslateService } from '../../i18n/translate.service';
 export interface SearchType {
   key: string;
-  label: string;
+  label: string; // Translation key or already translated text
   operators: SearchOperator[];
   allowName?: boolean; // For extended searches like variableValues
-  placeholder?: string;
+  placeholder?: string; // Translation key or already translated text
 }
 
 export interface SearchOperator {
@@ -57,7 +59,8 @@ export interface SearchQuery {
 })
 export class SearchWidgetComponent implements OnInit, OnDestroy {
   @Input() searchTypes: SearchType[] = [];
-  @Input() placeholder = 'Add criteria';
+  // Translation key or already translated text
+  @Input() placeholder = 'cockpit.processDetail.variables.addCriteria';
   @Input() storageKey = 'search-criteria';
 
   @Output() searchChange = new EventEmitter<SearchCriteria[]>();
@@ -83,6 +86,8 @@ export class SearchWidgetComponent implements OnInit, OnDestroy {
 
   // For editing
   editingIndex: number | null = null;
+
+  private translate = inject(TranslateService);
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -123,7 +128,7 @@ export class SearchWidgetComponent implements OnInit, OnDestroy {
       this.filteredTypes = [...this.searchTypes];
     } else {
       this.filteredTypes = this.searchTypes.filter(type =>
-        type.label.toLowerCase().includes(query) ||
+        this.translate.instant(type.label).toLowerCase().includes(query) ||
         type.key.toLowerCase().includes(query)
       );
     }
@@ -262,12 +267,22 @@ export class SearchWidgetComponent implements OnInit, OnDestroy {
   loadCriteria(name: string): void {
     const criteria = this.storedCriteria[name];
     if (criteria) {
-      this.searches = criteria.map(c => ({ ...c }));
+      this.searches = criteria.map(c => this.withCurrentLabels(c));
       this.editingIndex = null;
       this.showStoredDropdown = false;
       this.emitChange();
       this.cdr.markForCheck();
     }
+  }
+
+  /**
+   * Saved criteria keep the labels of the day they were saved; take the type and operator
+   * from the current search types instead, matched by key, so they follow the current language.
+   */
+  private withCurrentLabels(criteria: SearchCriteria): SearchCriteria {
+    const type = this.searchTypes.find(t => t.key === criteria.type.key) ?? criteria.type;
+    const operator = type.operators.find(o => o.key === criteria.operator.key) ?? criteria.operator;
+    return { ...criteria, type, operator };
   }
 
   deleteCriteria(name: string, event: MouseEvent): void {

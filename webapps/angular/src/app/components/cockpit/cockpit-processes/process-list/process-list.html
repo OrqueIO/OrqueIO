@@ -134,7 +134,7 @@
             <div class="filter-errors" *ngIf="filterErrors.length > 0">
               <div class="filter-error" *ngFor="let error of filterErrors">
                 <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-                {{ error }}
+                {{ error | translate }}
               </div>
             </div>
 
@@ -449,7 +449,8 @@
                           {{ incident.activityId }}
                         </a>
                       </td>
-                      <td>{{ formatDate(incident.createTime) || '-' }}</td>
+                      <!-- Runtime incidents carry their creation date as incidentTimestamp -->
+                      <td>{{ formatDate(incident.incidentTimestamp || incident.createTime) || '-' }}</td>
                       <td>
                         <a
                           [routerLink]="['/cockpit/processes/instance', incident.processInstanceId]"

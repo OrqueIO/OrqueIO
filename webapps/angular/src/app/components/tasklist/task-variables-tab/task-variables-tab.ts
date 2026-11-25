@@ -5,6 +5,7 @@ import { Task } from '../../../models/tasklist';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
 import { CamDatePipe } from '../../../pipes/cam-date.pipe';
 import { VariableDetailModalComponent, VariableDetail } from '../variable-detail-modal/variable-detail-modal';
+import { TranslateService } from '../../../i18n/translate.service';
 
 export interface ProcessVariable {
   name: string;
@@ -46,6 +47,7 @@ const CACHE_TTL = 30000; // 30 seconds cache TTL
 export class TaskVariablesTabComponent implements OnChanges {
   private readonly tasklistService = inject(TasklistService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly translate = inject(TranslateService);
 
   @Input() task!: Task;
 
@@ -119,7 +121,7 @@ export class TaskVariablesTabComponent implements OnChanges {
         this.cdr.markForCheck();
       },
       error: (err) => {
-        this.error = err?.message || 'Failed to load variables';
+        this.error = err?.message || this.translate.instant('tasklist.errors.loadVariables');
         this.loading = false;
         this.cdr.markForCheck();
       }

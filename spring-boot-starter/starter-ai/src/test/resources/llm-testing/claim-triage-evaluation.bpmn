@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  targetNamespace="http://orqueio.io/test">
+  <bpmn:error id="Error_Invalid" errorCode="LLM_INVALID_ANSWER" />
+  <!-- The claim triage of the demo, without a provider: the evaluation uses the model the run configures -->
+  <bpmn:process id="claimTriageEvaluation" isExecutable="true" camunda:historyTimeToLive="P1D">
+    <bpmn:startEvent id="Start" />
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start" targetRef="Task_Extract" />
+    <bpmn:serviceTask id="Task_Extract" name="Extraire les faits"
+                      camunda:delegateExpression="${orqueioLlmTask}" camunda:asyncBefore="true">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="orqueio.llm.inputs" value="claimText" />
+          <camunda:property name="orqueio.llm.outputs" value="claimAmount:number[0..50000], daysSincePolicyStart:integer, previousClaims:integer, incidentType:Theft|Fire|Water|Other" />
+          <camunda:property name="orqueio.llm.timeout" value="PT90S" />
+          <camunda:property name="orqueio.llm.errorCode" value="LLM_INVALID_ANSWER" />
+        </camunda:properties>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="orqueio.llm.prompt">Tu extrais des faits d'une déclaration de sinistre en assurance.
+Règles :
+- claimAmount : le montant réclamé en euros, en nombre.
+- daysSincePolicyStart : le nombre de jours entre la souscription et le sinistre. Si le texte donne une durée en mois ou en années, convertis-la en jours.
+- previousClaims : le nombre de sinistres antérieurs. Si le texte dit que c'est le premier sinistre, réponds 0.
+- incidentType : le type de sinistre.
+Si une information est absente du texte, utilise 0 pour les nombres et Other pour le type. N'invente jamais de valeur.
+
+Déclaration :
+{{claimText}}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="Catch_Invalid" attachedToRef="Task_Extract">
+      <bpmn:errorEventDefinition errorRef="Error_Invalid" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_Invalid" sourceRef="Catch_Invalid" targetRef="Task_Review" />
+    <bpmn:userTask id="Task_Review" name="Revoir le dossier" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Extract" targetRef="Task_Handle" />
+    <bpmn:userTask id="Task_Handle" name="Traiter le dossier" />
+  </bpmn:process>
+</bpmn:definitions>

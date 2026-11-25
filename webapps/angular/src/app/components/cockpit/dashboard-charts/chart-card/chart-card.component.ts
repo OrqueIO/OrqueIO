@@ -15,19 +15,20 @@ import {
   faCompress
 } from '@fortawesome/free-solid-svg-icons';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { BetaBadgeComponent } from '../../../../shared/beta-badge/beta-badge';
 import { ChartLoadingState } from '../../../../models/cockpit/dashboard-charts.model';
 
 @Component({
   selector: 'app-chart-card',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, TranslatePipe],
+  imports: [CommonModule, FontAwesomeModule, TranslatePipe, BetaBadgeComponent],
   template: `
     <div class="chart-card" [class.chart-card--loading]="loading === 'loading'" [class.chart-card--error]="loading === 'error'" [class.chart-card--no-header]="!showHeader">
       <!-- Header -->
       <div class="chart-card__header" *ngIf="showHeader">
         <div class="chart-card__title-wrapper">
           <h3 class="chart-card__title">
-            {{ titleKey ? (titleKey | translate) : title }}
+            {{ titleKey ? (titleKey | translate) : title }}<app-beta-badge *ngIf="beta"></app-beta-badge>
           </h3>
           <span class="chart-card__subtitle" *ngIf="subtitle">{{ subtitle }}</span>
         </div>
@@ -232,6 +233,7 @@ import { ChartLoadingState } from '../../../../models/cockpit/dashboard-charts.m
 export class ChartCardComponent {
   @Input() title = '';
   @Input() titleKey = '';
+  @Input() beta = false;
   @Input() subtitle = '';
   @Input() loading: ChartLoadingState = 'idle';
   @Input() error: string | null = null;
