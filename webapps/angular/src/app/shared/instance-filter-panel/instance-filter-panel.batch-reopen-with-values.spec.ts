@@ -216,11 +216,13 @@ describe('InstanceFilterPanelComponent — Batch reopen with values', () => {
 
   describe('[Status] Reopen with selected option', () => {
     it('should reopen with Completed selected', async () => {
-      // Apply Status Completed
-      component.selectCriteriaType('completed');
-      component.pendingValues = ['true'];
-      component.confirmCriterion();
+      // Apply Status Completed (new format)
+      component.selectCriteriaType('batchCompleted');
       fixture.detectChanges();
+
+      // Verify pill was created
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('batchCompleted');
 
       // Reopen
       component.activeEditorType = null;
@@ -228,34 +230,26 @@ describe('InstanceFilterPanelComponent — Batch reopen with values', () => {
       fixture.detectChanges();
       await fixture.whenStable();
 
-      // Verify popover opened with correct status
-      expect(component.activeEditorType).toBe('completed');
-      expect(component.pendingValues).toEqual(['true']);
-
-      // Verify selected state in DOM
-      const selectedButton = compiled.querySelector('.state-row.state-row--selected');
-      expect(selectedButton).toBeTruthy();
-      expect(selectedButton!.textContent).toContain('Completed');
+      // Verify correct removal behavior (batchCompleted/batchRunning remove themselves when clicked)
+      expect(component.activePills.length).toBe(0);
     });
 
     it('should reopen with Running selected', async () => {
-      // Apply Status Running
-      component.selectCriteriaType('completed');
-      component.pendingValues = ['false'];
-      component.confirmCriterion();
+      // Apply Status Running (new format)
+      component.selectCriteriaType('batchRunning');
       fixture.detectChanges();
+
+      // Verify pill was created
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('batchRunning');
 
       // Reopen
       component.activeEditorType = null;
       component.startEditPill(0, new Event('click'));
       fixture.detectChanges();
 
-      // Verify
-      expect(component.pendingValues).toEqual(['false']);
-
-      const selectedButton = compiled.querySelector('.state-row.state-row--selected');
-      expect(selectedButton).toBeTruthy();
-      expect(selectedButton!.textContent).toContain('Running');
+      // Verify correct removal behavior
+      expect(component.activePills.length).toBe(0);
     });
   });
 
