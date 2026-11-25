@@ -124,6 +124,18 @@ export class LlmTaskRenderer extends BaseRenderer {
     svgAttr(icon, { 'data-orqueio-llm-task': 'true' });
     svgAppend(parentGfx, icon);
 
+    // "Beta" pill in the top right corner: the LLM task is still being tested
+    const width = element.width || 100;
+    const beta = svgCreate('g', { class: 'orqueio-llm-task-beta', transform: `translate(${ width - 36 }, 5)` });
+    svgAppend(beta, svgCreate('rect', { width: 30, height: 14, rx: 7, fill: '#e6f4ea', stroke: '#1e7e34', 'stroke-width': 1 }));
+    const label = svgCreate('text', {
+      x: 15, y: 10.5, 'text-anchor': 'middle', 'font-size': 9, 'font-weight': 600,
+      'font-family': 'Arial, sans-serif', fill: '#1e7e34'
+    });
+    label.textContent = 'Beta';
+    svgAppend(beta, label);
+    svgAppend(parentGfx, beta);
+
     return task;
   }
 

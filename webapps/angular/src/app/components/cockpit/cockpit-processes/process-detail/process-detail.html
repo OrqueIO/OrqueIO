@@ -456,6 +456,7 @@
 
           <!-- LLM Calls Tab: what each LLM task used and cost, from its record variable -->
           <div class="tab-pane llm-calls-tab" *ngIf="activeTab === 'llmCalls'">
+            <div class="llm-beta-note"><app-beta-badge></app-beta-badge></div>
             <div class="table-scroll-wrapper">
               <table class="cam-table" *ngIf="llmRecords.length > 0">
                 <thead>

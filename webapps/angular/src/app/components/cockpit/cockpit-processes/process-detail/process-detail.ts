@@ -48,6 +48,7 @@ import {
   ExternalTask
 } from '../../../../services/cockpit.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { BetaBadgeComponent } from '../../../../shared/beta-badge/beta-badge';
 import { BpmnViewerComponent, ActivityBadge, BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
 import { ActivityInstanceTreeComponent } from '../../../../shared/activity-instance-tree/activity-instance-tree';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
@@ -78,6 +79,7 @@ interface VariableEdit {
     FormsModule,
     FontAwesomeModule,
     TranslatePipe,
+    BetaBadgeComponent,
     BpmnViewerComponent,
     ActivityInstanceTreeComponent,
     ConfirmDialogComponent,

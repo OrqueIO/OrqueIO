@@ -54,6 +54,7 @@ import {
   template: `
     <app-chart-card
       titleKey="cockpit.charts.llmUsage.title"
+      [beta]="true"
       [loading]="loadingState"
       [error]="error"
       [height]="200"

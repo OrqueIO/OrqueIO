@@ -152,6 +152,8 @@
   "cockpit.charts.tasks.humanTasks": "Open Human Tasks",
   "cockpit.charts.timeline.title": "Process Activity",
   "cockpit.charts.llmUsage.title": "LLM tasks",
+  "common.beta": "Beta",
+  "common.betaHint": "Being tested",
   "cockpit.charts.llmUsage.calls": "Calls",
   "cockpit.charts.llmUsage.inputTokens": "Input tokens",
   "cockpit.charts.llmUsage.outputTokens": "Output tokens",

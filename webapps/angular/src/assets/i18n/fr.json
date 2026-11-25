@@ -247,6 +247,8 @@
   "cockpit.charts.tasks.humanTasks": "Tâches humaines ouvertes",
   "cockpit.charts.timeline.title": "Activité des processus",
   "cockpit.charts.llmUsage.title": "Tâches LLM",
+  "common.beta": "Beta",
+  "common.betaHint": "En cours de test",
   "cockpit.charts.llmUsage.calls": "Appels",
   "cockpit.charts.llmUsage.inputTokens": "Tokens en entrée",
   "cockpit.charts.llmUsage.outputTokens": "Tokens en sortie",
