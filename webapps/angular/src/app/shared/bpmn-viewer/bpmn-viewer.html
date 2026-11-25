@@ -23,12 +23,12 @@
       <!-- Left ellipsis — shifts window left (reveals earlier levels) -->
       <button *ngIf="item.isEllipsis" type="button"
               class="breadcrumb-parent-name breadcrumb-ellipsis-btn"
-              title="Afficher les niveaux précédents"
+              [title]="'common.viewer.showPreviousLevels' | translate"
               (click)="shiftWindowLeft()">…</button>
       <!-- Right ellipsis — shifts window right (reveals later levels) -->
       <button *ngIf="item.isRightEllipsis" type="button"
               class="breadcrumb-parent-name breadcrumb-ellipsis-btn"
-              title="Afficher les niveaux suivants"
+              [title]="'common.viewer.showNextLevels' | translate"
               (click)="shiftWindowRight()">…</button>
       <!-- Current (non-navigable) level -->
       <span *ngIf="!item.isEllipsis && !item.isRightEllipsis && item.index === null"
@@ -50,20 +50,20 @@
           <polyline points="3 9 3 3 9 3"></polyline>
         </svg>
       </button>
-      <button type="button" class="zoom-btn" *ngIf="showFocusButton && focusElementId" (click)="focusClick.emit()" title="Focus">
+      <button type="button" class="zoom-btn" *ngIf="showFocusButton && focusElementId" (click)="focusClick.emit()" [title]="'common.viewer.focus' | translate">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="10" r="3"></circle>
           <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 10-16 0c0 3 2.7 7 8 11.7z"></path>
         </svg>
       </button>
-      <button type="button" class="zoom-btn" (click)="zoomIn()" title="Zoom in">+</button>
-      <button type="button" class="zoom-btn" (click)="zoomOut()" title="Zoom out">-</button>
+      <button type="button" class="zoom-btn" (click)="zoomIn()" [title]="'common.viewer.zoomIn' | translate">+</button>
+      <button type="button" class="zoom-btn" (click)="zoomOut()" [title]="'common.viewer.zoomOut' | translate">-</button>
     </div>
 
     <!-- Loading state -->
     <div class="loading-overlay" *ngIf="loading">
       <div class="spinner"></div>
-      <span>Loading diagram...</span>
+      <span>{{ 'common.loadingDiagram' | translate }}</span>
     </div>
 
     <!-- Error state -->

@@ -118,7 +118,7 @@
                     class="btn-icon-remove"
                     (click)="removeVariableFilter(i)"
                     type="button"
-                    title="Remove"
+                    [title]="'common.remove' | translate"
                   >
                     <fa-icon [icon]="faTimes"></fa-icon>
                   </button>
@@ -191,7 +191,7 @@
                 <button class="pl-toolbar-btn pl-toolbar-btn--info"
                         (click)="openCorrelateMessage()"
                         [title]="'cockpit.batchOps.correlate.label' | translate"
-                        aria-label="Correlate a message to process instances waiting on a message event">
+                        [attr.aria-label]="'cockpit.correlateMessage.ariaLabel' | translate">
                   <fa-icon [icon]="faEnvelope"></fa-icon>
                 </button>
               </div>

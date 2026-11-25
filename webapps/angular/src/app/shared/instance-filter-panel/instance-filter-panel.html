@@ -663,7 +663,7 @@
                       (click)="toggleProcessDefinitionVersion(group.key, ver.id)" type="button">
                 <fa-icon [icon]="faCodeBranch" class="processdef-version-icon"></fa-icon>
                 <span class="state-row-label">
-                  Version {{ ver.version }}<span *ngIf="ver.isLatest" class="processdef-version-latest"> (latest)</span>
+                  {{ 'common.versionNumber' | translate: { version: ver.version + '' } }}<span *ngIf="ver.isLatest" class="processdef-version-latest"> ({{ 'common.latest' | translate }})</span>
                 </span>
                 <fa-icon *ngIf="isVersionSelected(group.key, ver.id)" [icon]="faCheck" class="state-row-check"></fa-icon>
               </button>

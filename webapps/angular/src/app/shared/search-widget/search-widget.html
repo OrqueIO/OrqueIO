@@ -81,7 +81,7 @@
             *ngIf="searches.length > 0"
             (click)="clearAll()"
             type="button"
-            title="Clear all">
+            [title]="'search.clearAll' | translate">
       <fa-icon [icon]="faTimes"></fa-icon>
     </button>
 
@@ -90,7 +90,7 @@
       <button class="action-btn stored-btn"
               (click)="toggleStoredDropdown()"
               type="button"
-              title="Save/Load criteria">
+              [title]="'search.saveLoadCriteria' | translate">
         <fa-icon [icon]="faFolder"></fa-icon>
         <fa-icon [icon]="faChevronDown" class="chevron"></fa-icon>
       </button>
@@ -100,7 +100,7 @@
         <div class="stored-save" *ngIf="searches.length > 0">
           <input type="text"
                  class="stored-name-input"
-                 placeholder="Save as..."
+                 [placeholder]="'search.saveAsPlaceholder' | translate"
                  [(ngModel)]="newCriteriaName"
                  (keydown.enter)="saveCurrentCriteria()" />
           <button class="stored-save-btn"
@@ -130,7 +130,7 @@
 
         <!-- Empty state -->
         <div class="stored-empty" *ngIf="storedCriteriaNames.length === 0 && searches.length === 0">
-          No saved criteria
+          {{ 'search.noSavedCriteria' | translate }}
         </div>
       </div>
     </div>

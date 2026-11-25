@@ -3,7 +3,7 @@
 
   <div class="loading-overlay" *ngIf="loading">
     <div class="spinner"></div>
-    <span>Loading diagram...</span>
+    <span>{{ 'common.loadingDiagram' | translate }}</span>
   </div>
 
   <div class="error-overlay" *ngIf="errorMessage">

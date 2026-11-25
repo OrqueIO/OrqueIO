@@ -55,7 +55,7 @@
         <!-- Value display - using pre-computed flags -->
         <div class="variable-value">
           <!-- Empty value -->
-          <span class="empty-value" *ngIf="variable.isEmpty">&lt;Empty&gt;</span>
+          <span class="empty-value" *ngIf="variable.isEmpty">&lt;{{ 'common.emptyValue' | translate }}&gt;</span>
 
           <!-- File type - Download link -->
           <ng-container *ngIf="variable.isFile && !variable.isEmpty">

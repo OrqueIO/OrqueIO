@@ -22,6 +22,7 @@ import {
   faTrash,
   faChevronDown
 } from '@fortawesome/free-solid-svg-icons';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 export interface SearchType {
   key: string;
   label: string;
@@ -49,7 +50,7 @@ export interface SearchQuery {
 @Component({
   selector: 'app-search-widget',
   standalone: true,
-  imports: [CommonModule, FormsModule, FontAwesomeModule],
+  imports: [CommonModule, FormsModule, FontAwesomeModule, TranslatePipe],
   templateUrl: './search-widget.html',
   styleUrls: ['./search-widget.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
