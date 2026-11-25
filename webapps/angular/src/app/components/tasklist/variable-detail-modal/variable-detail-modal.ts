@@ -116,7 +116,7 @@ export class VariableDetailModalComponent implements OnChanges {
   }
 
   get objectTypeName(): string {
-    return this.variable?.valueInfo?.objectTypeName || this.variable?.type || 'Unknown';
+    return this.variable?.valueInfo?.objectTypeName || this.variable?.type || this.translate.instant('common.unknown');
   }
 
   get serializationFormat(): string {

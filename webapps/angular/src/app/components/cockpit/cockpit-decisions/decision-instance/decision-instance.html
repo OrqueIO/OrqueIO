@@ -256,7 +256,7 @@
                     </td>
                     <td>
                       <span class="variable-type-badge"
-                            [ngClass]="'type-' + formatType(input.type).toLowerCase()">
+                            [ngClass]="'type-' + (input.type ? formatType(input.type).toLowerCase() : 'unknown')">
                         {{ formatType(input.type) }}
                       </span>
                     </td>
@@ -305,7 +305,7 @@
                     <td>{{ output.ruleOrder }}</td>
                     <td>
                       <span class="variable-type-badge"
-                            [ngClass]="'type-' + formatType(output.type).toLowerCase()">
+                            [ngClass]="'type-' + (output.type ? formatType(output.type).toLowerCase() : 'unknown')">
                         {{ formatType(output.type) }}
                       </span>
                     </td>

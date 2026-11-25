@@ -293,11 +293,11 @@ export class TaskMetaComponent implements OnInit, OnChanges {
    */
   getInstanceTypeLabel(): string {
     if (this.task?.processInstanceId) {
-      return 'Process Instance';
+      return this.translateService.instant('tasklist.processInstance');
     } else if (this.task?.caseInstanceId) {
-      return 'Case Instance';
+      return this.translateService.instant('tasklist.caseInstance');
     }
-    return 'Standalone Task';
+    return this.translateService.instant('tasklist.standaloneTask');
   }
 
   /**

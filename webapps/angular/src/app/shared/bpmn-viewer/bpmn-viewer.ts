@@ -457,7 +457,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         const instanceHtml = document.createElement('div');
         instanceHtml.className = 'bpmn-badge bpmn-badge-instances';
         instanceHtml.innerHTML = `<span>${badge.instances}</span>`;
-        instanceHtml.title = `${badge.instances} instance(s)`;
+        instanceHtml.title = this.translate.instant('common.viewer.badge.instances', { count: String(badge.instances) });
 
         try {
           const overlayId = this.overlays.add(badge.activityId, {
@@ -475,7 +475,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         const incidentHtml = document.createElement('div');
         incidentHtml.className = 'bpmn-badge bpmn-badge-incidents';
         incidentHtml.innerHTML = `<span>${badge.incidents}</span>`;
-        incidentHtml.title = `${badge.incidents} incident(s)`;
+        incidentHtml.title = this.translate.instant('common.viewer.badge.incidents', { count: String(badge.incidents) });
 
         try {
           const overlayId = this.overlays.add(badge.activityId, {
@@ -794,8 +794,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
       const btn = document.createElement('button');
       btn.className = 'bpmn-correlate-overlay bpmn-correlate-overlay--hidden';
-      btn.title = `Correlate message: ${messageName}`;
-      btn.setAttribute('aria-label', `Correlate message: ${messageName}`);
+      const correlateLabel = this.translate.instant('common.viewer.correlateMessage', { name: messageName });
+      btn.title = correlateLabel;
+      btn.setAttribute('aria-label', correlateLabel);
       btn.innerHTML = envelope;
       btn.addEventListener('click', (e: Event) => {
         e.stopPropagation();
