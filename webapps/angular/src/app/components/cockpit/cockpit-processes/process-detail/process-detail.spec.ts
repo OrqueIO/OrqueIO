@@ -116,6 +116,7 @@ describe('ProcessDetailComponent', () => {
       getHistoryUserTasksByProcessInstance: vi.fn().mockReturnValue(of([])),
       getExternalTasksByProcessInstance: vi.fn().mockReturnValue(of([])),
       getCalledProcessInstances: vi.fn().mockReturnValue(of([])),
+      getCallActivityMapping: vi.fn().mockReturnValue(of(new Map<string, string[]>())),
       suspendProcessInstance: vi.fn().mockReturnValue(of(undefined)),
       resumeProcessInstance: vi.fn().mockReturnValue(of(undefined)),
       cancelProcessInstance: vi.fn().mockReturnValue(of(undefined)),
@@ -144,7 +145,7 @@ describe('ProcessDetailComponent', () => {
         { provide: NavMenuService, useValue: navMenuService },
         {
           provide: ActivatedRoute,
-          useValue: { params: routeParams$.asObservable() },
+          useValue: { params: routeParams$.asObservable(), snapshot: { queryParams: {} } },
         },
       ],
     }).compileComponents();
@@ -313,16 +314,16 @@ describe('ProcessDetailComponent', () => {
 
       expect(rows.length).toBe(3);
       // A runtime incident: open, created at incidentTimestamp, no end, Retry offered
-      expect(cell(rows[0], '.incident-time')).toBe(new Date(runtimeIncident.incidentTimestamp!).toLocaleString());
+      expect(cell(rows[0], '.incident-time')).toBe(new Date(runtimeIncident.incidentTimestamp!).toLocaleString(component['translateService'].locale));
       expect(cell(rows[0], '.incident-state')).toBe('cockpit.processDetail.incidents.state.open');
       expect(cell(rows[0], '.incident-end-time')).toBe('-');
       expect(rows[0].classList.contains('incident-closed')).toBe(false);
       expect(rows[0].querySelector('.actions button')).not.toBeNull();
       // Resolved and deleted: their end date, shown as history, no Retry
       expect(cell(rows[1], '.incident-state')).toBe('cockpit.processDetail.incidents.state.resolved');
-      expect(cell(rows[1], '.incident-end-time')).toBe(new Date(resolved.endTime!).toLocaleString());
+      expect(cell(rows[1], '.incident-end-time')).toBe(new Date(resolved.endTime!).toLocaleString(component['translateService'].locale));
       expect(cell(rows[2], '.incident-state')).toBe('cockpit.processDetail.incidents.state.deleted');
-      expect(cell(rows[2], '.incident-end-time')).toBe(new Date(deleted.endTime!).toLocaleString());
+      expect(cell(rows[2], '.incident-end-time')).toBe(new Date(deleted.endTime!).toLocaleString(component['translateService'].locale));
       for (const closed of [rows[1], rows[2]]) {
         expect(closed.classList.contains('incident-closed')).toBe(true);
         expect(closed.querySelector('.actions button')).toBeNull();
@@ -447,7 +448,7 @@ describe('ProcessDetailComponent', () => {
       // In the order they were written; the task name from the history, else the activity id
       expect(cells(rows[0])).toEqual([
         'Triage the claim', 'cockpit.processDetail.llmCalls.outcomeValid', 'gpt-4o-mini openai',
-        '412', '27', '930 ms', '3f2a9c1e0b7d', new Date('2026-11-18T09:30:00Z').toLocaleString(), ''
+        '412', '27', '930 ms', '3f2a9c1e0b7d', new Date('2026-11-18T09:30:00Z').toLocaleString(component['translateService'].locale), ''
       ]);
       expect(cells(rows[1])[0]).toBe('Task_Check cockpit.processDetail.llmCalls.reused');
       expect(cells(rows[1])[1]).toBe('cockpit.processDetail.llmCalls.outcomeBpmnError');
@@ -1033,6 +1034,64 @@ describe('ProcessDetailComponent', () => {
     it('should return tasklist URL', () => {
       const url = component.getTasklistUrl(mockUserTasks[0]);
       expect(url).toBe('/orqueio/app/tasklist?task=task-1');
+    });
+  });
+
+  describe('removal time field', () => {
+    it('should display removal time when present', async () => {
+      const instanceWithRemovalTime = {
+        ...mockInstance,
+        removalTime: '2027-01-01T00:00:00.000+0000',
+      };
+      cockpitService.getProcessInstance.mockReturnValue(of(instanceWithRemovalTime));
+
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const removalTimeDd = compiled.querySelector('.removal-time');
+      expect(removalTimeDd).toBeTruthy();
+      expect(removalTimeDd?.textContent?.trim()).not.toBe('null');
+      expect(removalTimeDd?.textContent?.trim()).not.toBe('-');
+    });
+
+    it('should display null when removal time is absent', async () => {
+      const instanceWithoutRemovalTime = {
+        ...mockInstance,
+        removalTime: undefined,
+      };
+      cockpitService.getProcessInstance.mockReturnValue(of(instanceWithoutRemovalTime));
+
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const removalTimeDd = compiled.querySelector('.removal-time');
+      expect(removalTimeDd).toBeTruthy();
+      const nullValue = removalTimeDd?.querySelector('.null-value');
+      expect(nullValue).toBeTruthy();
+      expect(nullValue?.textContent?.trim()).toBe('null');
+    });
+
+    it('should not affect other fields', async () => {
+      const instanceWithRemovalTime = {
+        ...mockInstance,
+        removalTime: '2027-01-01T00:00:00.000+0000',
+      };
+      cockpitService.getProcessInstance.mockReturnValue(of(instanceWithRemovalTime));
+
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      expect(compiled.querySelector('.instance-id')?.textContent?.trim()).toBe('pi-1');
+      expect(compiled.querySelector('.definition-key')?.textContent?.trim()).toBe('invoice');
     });
   });
 });

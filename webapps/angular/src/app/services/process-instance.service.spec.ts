@@ -437,6 +437,40 @@ describe('ProcessInstanceService', () => {
     });
   });
 
+  describe('setJobRetriesAsync', () => {
+    const historicUrl = `${baseUrl}/process-instance/job-retries-historic-query-based`;
+
+    it('uses the process-based endpoint for instances mode with processInstances in body', () => {
+      service.setJobRetriesAsync({ retries: 3, processInstances: ['pi-1', 'pi-2'] }).subscribe();
+
+      const req = httpMock.expectOne(historicUrl);
+      expect(req.request.method).toBe('POST');
+      expect(req.request.body['retries']).toBe(3);
+      expect(req.request.body['processInstances']).toEqual(['pi-1', 'pi-2']);
+      expect(req.request.body['jobQuery']).toBeUndefined();
+      req.flush({ id: 'batch-1' });
+    });
+
+    it('uses the process-based endpoint for query mode with historicProcessInstanceQuery in body', () => {
+      const query = { unfinished: true, processDefinitionKeyIn: ['myProcess'] };
+      service.setJobRetriesAsync({ retries: 2, historicProcessInstanceQuery: query }).subscribe();
+
+      const req = httpMock.expectOne(historicUrl);
+      expect(req.request.body['retries']).toBe(2);
+      expect(req.request.body['historicProcessInstanceQuery']).toEqual(query);
+      expect(req.request.body['processInstances']).toBeUndefined();
+      req.flush({ id: 'batch-2' });
+    });
+
+    it('includes dueDate in body when provided', () => {
+      service.setJobRetriesAsync({ retries: 1, processInstances: ['pi-1'], dueDate: '2026-01-01T00:00:00.000Z' }).subscribe();
+
+      const req = httpMock.expectOne(historicUrl);
+      expect(req.request.body['dueDate']).toBe('2026-01-01T00:00:00.000Z');
+      req.flush({ id: 'batch-3' });
+    });
+  });
+
   // =============================================
   // External Tasks
   // =============================================
@@ -542,9 +576,79 @@ describe('ProcessInstanceService', () => {
     });
   });
 
-  // =============================================
-  // Called/Super Process Instances
-  // =============================================
+
+  describe('deduplicateVariables', () => {
+    function v(name: string, type: string, value: any, processInstanceId: string, executionId?: string): Variable {
+      return { name, type, value, processInstanceId, executionId };
+    }
+    function dedup(vars: Variable[]) {
+      return (service as any).deduplicateVariables(vars) as { name: string; type: string; value: any; valuesConflict: boolean }[];
+    }
+
+    it('8 identical values (same type, same content) → no conflict', () => {
+      const vars = Array.from({ length: 8 }, (_, i) =>
+        v('amount', 'Integer', 100, `inst-${i}`, `inst-${i}`)
+      );
+      const result = dedup(vars);
+      expect(result.length).toBe(1);
+      expect(result[0].name).toBe('amount');
+      expect(result[0].valuesConflict).toBe(false);
+    });
+
+    it('one value differs among 8 → genuine conflict reported', () => {
+      const vars = [
+        ...Array.from({ length: 7 }, (_, i) => v('amount', 'Integer', 100, `inst-${i}`, `inst-${i}`)),
+        v('amount', 'Integer', 200, 'inst-7', 'inst-7'),
+      ];
+      const result = dedup(vars);
+      expect(result[0].valuesConflict).toBe(true);
+    });
+
+    it('multi-scope false positive: instance with sub-execution scope (value differs at scope level) → no false conflict when root scopes all agree', () => {
+      const vars = [
+        v('amount', 'Integer', 100, 'inst-0', 'inst-0'),
+        v('amount', 'Integer', null, 'inst-0', 'sub-exec-0'),
+        ...Array.from({ length: 7 }, (_, i) => v('amount', 'Integer', 100, `inst-${i + 1}`, `inst-${i + 1}`)),
+      ];
+      const result = dedup(vars);
+      expect(result[0].valuesConflict).toBe(false);
+    });
+
+    it('sub-scope without root scope (executionId unavailable): keeps first entry, no crash', () => {
+      const vars = Array.from({ length: 4 }, (_, i) => v('flag', 'Boolean', true, `inst-${i}`));
+      const result = dedup(vars);
+      expect(result[0].valuesConflict).toBe(false);
+    });
+
+    it('"5" (String) vs 5 (Integer) under the same name → genuine type conflict, not normalised', () => {
+      const vars = [
+        v('count', 'String', '5', 'inst-0', 'inst-0'),
+        v('count', 'Integer', 5, 'inst-1', 'inst-1'),
+      ];
+      const result = dedup(vars);
+      expect(result[0].valuesConflict).toBe(true);
+    });
+
+    it('all null values across instances → no conflict', () => {
+      const vars = Array.from({ length: 3 }, (_, i) => v('opt', 'String', null, `inst-${i}`, `inst-${i}`));
+      const result = dedup(vars);
+      expect(result[0].valuesConflict).toBe(false);
+    });
+
+    it('multiple variable names in a single batch → each resolved independently', () => {
+      const vars = [
+        v('amount', 'Integer', 100, 'inst-0', 'inst-0'),
+        v('amount', 'Integer', 100, 'inst-1', 'inst-1'),
+        v('label', 'String', 'foo', 'inst-0', 'inst-0'),
+        v('label', 'String', 'bar', 'inst-1', 'inst-1'),
+      ];
+      const result = dedup(vars);
+      const amount = result.find(r => r.name === 'amount')!;
+      const label = result.find(r => r.name === 'label')!;
+      expect(amount.valuesConflict).toBe(false);
+      expect(label.valuesConflict).toBe(true);
+    });
+  });
 
   describe('getCalledProcessInstances', () => {
     it('should fetch sub-process instances', () => {
@@ -566,6 +670,68 @@ describe('ProcessInstanceService', () => {
           r.params.get('superProcessInstanceId') === 'pi-1'
       );
       req.flush(subInstances);
+    });
+  });
+
+  describe('loadDistinctVariableSuggestions', () => {
+    const makeVar = (name: string, type: string, value: any, processInstanceId: string, executionId?: string): Variable => ({
+      name, type, value, processInstanceId, executionId: executionId ?? processInstanceId
+    });
+
+    it('calls the standard variable-instance endpoint with maxResults=500 and deduplicates', () => {
+      const rawVars: Variable[] = [
+        makeVar('amount', 'Integer', 100, 'pi-1'),
+        makeVar('amount', 'Integer', 200, 'pi-2'),
+        makeVar('status', 'String', 'active', 'pi-1'),
+      ];
+      let result: any[] = [];
+      service.loadDistinctVariableSuggestions([]).subscribe(r => { result = r; });
+
+      const req = httpMock.expectOne(
+        (r) => r.url === `${historyUrl}/variable-instance` && r.params.get('maxResults') === '500'
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(rawVars);
+
+      expect(result.length).toBe(2);
+      const amount = result.find((r: any) => r.name === 'amount');
+      const status = result.find((r: any) => r.name === 'status');
+      expect(amount?.valuesConflict).toBe(true);
+      expect(status?.valuesConflict).toBe(false);
+    });
+
+    it('passes processInstanceIdIn when instance IDs are provided', () => {
+      service.loadDistinctVariableSuggestions(['inst1', 'inst2']).subscribe();
+
+      const req = httpMock.expectOne(
+        (r) => r.url === `${historyUrl}/variable-instance`
+      );
+      expect(req.request.params.get('processInstanceIdIn')).toBe('inst1,inst2');
+      expect(req.request.params.get('maxResults')).toBe('500');
+      req.flush([]);
+    });
+
+    it('does not send processInstanceIdIn when IDs array is empty (global search)', () => {
+      service.loadDistinctVariableSuggestions([]).subscribe();
+
+      const req = httpMock.expectOne(
+        (r) => r.url === `${historyUrl}/variable-instance`
+      );
+      expect(req.request.params.has('processInstanceIdIn')).toBe(false);
+      expect(req.request.params.get('maxResults')).toBe('500');
+      req.flush([]);
+    });
+
+    it('returns empty array on error', () => {
+      let result: any[] = [{ sentinel: true }];
+      service.loadDistinctVariableSuggestions([]).subscribe(r => { result = r; });
+
+      const req = httpMock.expectOne(
+        (r) => r.url === `${historyUrl}/variable-instance`
+      );
+      req.error(new ProgressEvent('Network error'));
+
+      expect(result).toEqual([]);
     });
   });
 });

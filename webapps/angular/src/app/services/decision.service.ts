@@ -49,6 +49,7 @@ export interface DecisionInstance {
   decisionDefinitionKey: string;
   decisionDefinitionName?: string;
   evaluationTime: string;
+  removalTime?: string;
   processDefinitionId?: string;
   processDefinitionKey?: string;
   processInstanceId?: string;
@@ -102,6 +103,9 @@ export interface DecisionRequirementsDefinition {
 export interface DecisionInstanceQueryParams {
   decisionDefinitionId?: string;
   decisionDefinitionKey?: string;
+  decisionDefinitionKeyIn?: string[];
+  decisionInstanceId?: string;
+  decisionInstanceIdIn?: string[];
   processDefinitionId?: string;
   processDefinitionKey?: string;
   processInstanceId?: string;
@@ -325,6 +329,15 @@ export class DecisionService {
     if (params.decisionDefinitionKey) {
       httpParams = httpParams.set('decisionDefinitionKey', params.decisionDefinitionKey);
     }
+    if (params.decisionDefinitionKeyIn?.length) {
+      httpParams = httpParams.set('decisionDefinitionKeyIn', params.decisionDefinitionKeyIn.join(','));
+    }
+    if (params.decisionInstanceId) {
+      httpParams = httpParams.set('decisionInstanceId', params.decisionInstanceId);
+    }
+    if (params.decisionInstanceIdIn?.length) {
+      httpParams = httpParams.set('decisionInstanceIdIn', params.decisionInstanceIdIn.join(','));
+    }
     if (params.processDefinitionId) {
       httpParams = httpParams.set('processDefinitionId', params.processDefinitionId);
     }
@@ -409,6 +422,58 @@ export class DecisionService {
     }).pipe(
       map(results => results.length > 0 ? results[0] : null),
       catchError(() => of(null))
+    );
+  }
+
+  getDecisionInstancesCountFiltered(params: DecisionInstanceQueryParams): Observable<number> {
+    let httpParams = new HttpParams();
+    if (params.decisionDefinitionKey) {
+      httpParams = httpParams.set('decisionDefinitionKey', params.decisionDefinitionKey);
+    }
+    if (params.decisionDefinitionKeyIn?.length) {
+      httpParams = httpParams.set('decisionDefinitionKeyIn', params.decisionDefinitionKeyIn.join(','));
+    }
+    if (params.decisionInstanceId) {
+      httpParams = httpParams.set('decisionInstanceId', params.decisionInstanceId);
+    }
+    if (params.decisionInstanceIdIn?.length) {
+      httpParams = httpParams.set('decisionInstanceIdIn', params.decisionInstanceIdIn.join(','));
+    }
+    if (params.processInstanceId) {
+      httpParams = httpParams.set('processInstanceId', params.processInstanceId);
+    }
+    if (params.evaluatedBefore) {
+      httpParams = httpParams.set('evaluatedBefore', params.evaluatedBefore);
+    }
+    if (params.evaluatedAfter) {
+      httpParams = httpParams.set('evaluatedAfter', params.evaluatedAfter);
+    }
+    return this.http.get<{ count: number }>(`${this.historyUrl}/decision-instance/count`, { params: httpParams })
+      .pipe(map(res => res.count), catchError(() => of(0)));
+  }
+
+  deleteDecisionInstancesAsync(payload: {
+    deleteReason?: string;
+    historicDecisionInstanceIds?: string[];
+    historicDecisionInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.historyUrl}/decision-instance/delete`,
+      payload
+    );
+  }
+
+  setRemovalTimeAsync(payload: {
+    calculatedRemovalTime?: boolean;
+    absoluteRemovalTime?: string;
+    clearedRemovalTime?: boolean;
+    historicDecisionInstanceIds?: string[];
+    historicDecisionInstanceQuery?: Record<string, unknown>;
+    hierarchical?: boolean;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.historyUrl}/decision-instance/set-removal-time`,
+      payload
     );
   }
 }

@@ -3,13 +3,13 @@
     {{ 'SHOWING' | translate }} {{ startIndex }}-{{ endIndex }} {{ 'OF' | translate }} {{ total }}
   </span>
 
-  <nav class="pagination-nav" aria-label="Pagination">
+  <nav class="pagination-nav" [attr.aria-label]="'cockpit.pagination.label' | translate">
     <button
       type="button"
       class="btn-page btn-prev"
-      [disabled]="!hasPrevious"
+      [disabled]="keysetMode ? !keysetHasPrev : !hasPrevious"
       (click)="previousPage()"
-      aria-label="Previous page">
+      [attr.aria-label]="'cockpit.pagination.previous' | translate">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="15 18 9 12 15 6"></polyline>
       </svg>
@@ -20,12 +20,20 @@
     <button
       type="button"
       class="btn-page btn-next"
-      [disabled]="!hasNext"
+      [disabled]="keysetMode ? !keysetHasNext : !hasNext"
       (click)="nextPage()"
-      aria-label="Next page">
+      [attr.aria-label]="'cockpit.pagination.next' | translate">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="9 18 15 12 9 6"></polyline>
       </svg>
     </button>
   </nav>
+
+  <select
+    *ngIf="showSizeSelector"
+    class="page-size-select"
+    (change)="changePageSize($event)"
+    [attr.aria-label]="'cockpit.pagination.pageSize' | translate">
+    <option *ngFor="let s of availableSizes" [value]="s" [selected]="s === size">{{ s }}</option>
+  </select>
 </footer>

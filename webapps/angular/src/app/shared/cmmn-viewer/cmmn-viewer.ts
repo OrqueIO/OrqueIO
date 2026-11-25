@@ -15,16 +15,19 @@ import { CommonModule } from '@angular/common';
 
 // @ts-ignore - cmmn-js doesn't have types
 import CmmnViewer from 'cmmn-js/lib/NavigatedViewer';
+import { TranslatePipe } from '../../i18n/translate.pipe';
+import { TranslateService } from '../../i18n/translate.service';
 
 @Component({
   selector: 'app-cmmn-viewer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './cmmn-viewer.html',
   styleUrls: ['./cmmn-viewer.css']
 })
 export class CmmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
+  private translate = inject(TranslateService);
 
   @ViewChild('canvas', { static: true }) private canvasRef!: ElementRef<HTMLDivElement>;
 
@@ -135,7 +138,7 @@ export class CmmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       if (err) {
         this.loading = false;
         this.currentXml = null;
-        this.errorMessage = err.message || 'Failed to load CMMN diagram';
+        this.errorMessage = err.message || this.translate.instant('common.viewer.loadCmmnError');
         this.cdr.detectChanges();
         console.error('CMMN import error:', err);
         return;

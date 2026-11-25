@@ -22,12 +22,14 @@
         batch: batch$ | async,
         type: type$ | async,
         isSuspended: isSuspended$ | async,
-        hasFailedJobs: hasFailedJobs$ | async
+        hasFailedJobs: hasFailedJobs$ | async,
+        users: users$ | async
       } as data">
         <ng-container *ngIf="data.batch">
           <!-- Header -->
           <div class="detail-header">
             <h3 class="detail-title">
+              <fa-icon [icon]="faInfoCircle"></fa-icon>
               <span *ngIf="data.type === 'history'">{{ 'BATCHES_PROGRESS_COMPLETED' | translate }}</span>
               <span *ngIf="data.type === 'runtime'">{{ 'BATCHES_PROGRESS_IN_PROGRESS' | translate }}</span>
               {{ 'BATCHES_PROGRESS_BATCH_DETAILS' | translate }}
@@ -37,7 +39,8 @@
               <!-- Suspend/Resume -->
               <button class="btn btn-icon"
                       (click)="onToggleSuspension(data.batch)"
-                      [appTooltip]="data.isSuspended ? ('BATCHES_PROGRESS_TOOLTIP_ACTIVATE_BATCH' | translate) : ('BATCHES_PROGRESS_TOOLTIP_SUSPEND_BATCH' | translate)">
+                      [appTooltip]="data.isSuspended ? ('BATCHES_PROGRESS_TOOLTIP_ACTIVATE_BATCH' | translate) : ('BATCHES_PROGRESS_TOOLTIP_SUSPEND_BATCH' | translate)"
+                      tooltipVariant="primary">
                 <fa-icon [icon]="data.isSuspended ? faPlay : faPause"></fa-icon>
               </button>
 
@@ -45,14 +48,16 @@
               <button class="btn btn-icon"
                       *ngIf="data.hasFailedJobs"
                       (click)="onRetryAll(data.batch)"
-                      [appTooltip]="'BATCHES_PROGRESS_TOOLTIP_INCREMENT_NUMBER' | translate">
+                      [appTooltip]="'BATCHES_PROGRESS_TOOLTIP_INCREMENT_NUMBER' | translate"
+                      tooltipVariant="success">
                 <fa-icon [icon]="faRedo"></fa-icon>
               </button>
 
               <!-- Delete -->
               <button class="btn btn-icon btn-danger"
                       (click)="onDeleteClick()"
-                      [appTooltip]="'BATCHES_PROGRESS_TOOLTIP_DELETE_BATCH' | translate">
+                      [appTooltip]="'BATCHES_PROGRESS_TOOLTIP_DELETE_BATCH' | translate"
+                      tooltipVariant="danger">
                 <fa-icon [icon]="faTrash"></fa-icon>
               </button>
             </div>
@@ -61,13 +66,14 @@
             <div class="detail-actions" *ngIf="data.type === 'history'">
               <button class="btn btn-icon btn-danger"
                       (click)="onDeleteClick()"
-                      [appTooltip]="'BATCHES_PROGRESS_TOOLTIP_DELETE_BATCH' | translate">
+                      [appTooltip]="'BATCHES_PROGRESS_TOOLTIP_DELETE_BATCH' | translate"
+                      tooltipVariant="danger">
                 <fa-icon [icon]="faTrash"></fa-icon>
               </button>
             </div>
           </div>
 
-          <!-- Properties table -->
+          <!-- Batch properties — independent scrollable section -->
           <div class="properties-section">
             <table class="properties-table">
               <thead>
@@ -79,16 +85,19 @@
               <tbody>
                 <ng-container *ngFor="let key of detailKeys">
                   <tr *ngIf="shouldShowKey(data.batch, key)" [class]="key">
-                    <td class="prop-name">{{ key }}</td>
+                    <td class="prop-name">{{ detailLabels[key] ? (detailLabels[key] | translate) : key }}</td>
                     <td class="prop-value">
-                      <ng-container *ngIf="!isTimeKey(key)">
+                      <ng-container *ngIf="key === 'createUserId'">
+                        {{ getUserName(data.batch, data.users) }}
+                      </ng-container>
+                      <ng-container *ngIf="key !== 'createUserId' && !isTimeKey(key)">
                         {{ getBatchValue(data.batch, key) }}
                         <span *ngIf="key === 'remainingJobs' && isRuntimeBatch(data.batch) && data.batch.failedJobs > 0"
                               class="failed-note">
                           ({{ data.batch.failedJobs }} {{ 'BATCHES_PROGRESS_FAILED_LABEL' | translate }})
                         </span>
                       </ng-container>
-                      <ng-container *ngIf="isTimeKey(key)">
+                      <ng-container *ngIf="key !== 'createUserId' && isTimeKey(key)">
                         {{ getBatchValue(data.batch, key) | camDate }}
                       </ng-container>
                     </td>
@@ -98,16 +107,24 @@
             </table>
           </div>
 
-          <!-- Failed Jobs (runtime only) -->
-          <ng-container *ngIf="data.type === 'runtime'">
-            <app-batch-jobs-list></app-batch-jobs-list>
+          <ng-container *ngIf="annotation$ | async as annotation">
+            <div class="annotation-section">
+              <h4 class="annotation-title">
+                <fa-icon [icon]="faInfoCircle"></fa-icon>
+                {{ 'BATCHES_PROGRESS_ANNOTATION' | translate }}
+              </h4>
+              <p class="annotation-text">{{ annotation }}</p>
+            </div>
           </ng-container>
+
+          <!-- Failed Jobs — independent scrollable section -->
+          <app-batch-jobs-list></app-batch-jobs-list>
 
           <!-- Delete confirmation modal -->
           <app-confirm-dialog
             *ngIf="showDeleteModal"
             [title]="'BATCHES_DELETE_BATCH_TITLE' | translate"
-            [message]="'BATCHES_DELETE_BATCH_MESSAGE' | translate"
+            [message]="'BATCHES_CONFIRM_DELETE' | translate"
             [confirmLabel]="'DELETE' | translate"
             [cancelLabel]="'CANCEL' | translate"
             [isDanger]="true"

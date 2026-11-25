@@ -28,6 +28,8 @@ import { KeyboardShortcutsModalComponent } from '../keyboard-shortcuts-modal/key
 import { CreateTaskModalComponent } from '../create-task-modal/create-task-modal';
 import { TaskFilter } from '../../../models/tasklist/filter.model';
 import { NavActionsService } from '../../../services/nav-actions.service';
+import { CockpitHeaderComponent } from '../../../shared/cockpit-header/cockpit-header';
+import { TranslateService } from '../../../i18n/translate.service';
 
 // Auto-refresh interval in milliseconds (10 seconds like AngularJS)
 const AUTO_REFRESH_INTERVAL = 10000;
@@ -39,6 +41,7 @@ const AUTO_REFRESH_INTERVAL = 10000;
     CommonModule,
     RouterModule,
     TranslatePipe,
+    CockpitHeaderComponent,
     TaskFiltersComponent,
     TaskListComponent,
     TaskDetailComponent,
@@ -56,6 +59,7 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly ngZone = inject(NgZone);
   private readonly navActionsService = inject(NavActionsService);
+  private readonly translate = inject(TranslateService);
   private readonly destroy$ = new Subject<void>();
 
   vm$ = this.store.select(selectTasklistViewModel);
@@ -467,7 +471,7 @@ export class TasklistLayoutComponent implements OnInit, OnDestroy {
   }
 
   onFilterDelete(filterId: string): void {
-    if (confirm('Are you sure you want to delete this filter?')) {
+    if (confirm(this.translate.instant('tasklist.confirmDeleteFilter'))) {
       this.store.dispatch(FiltersActions.deleteFilter({ filterId }));
       this.closeFilterModal();
     }

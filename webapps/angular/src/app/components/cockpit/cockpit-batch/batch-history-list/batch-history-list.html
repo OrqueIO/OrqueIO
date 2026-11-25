@@ -1,5 +1,8 @@
 <div class="batch-history-list">
-  <h3 class="section-title">{{ 'BATCHES_PROGRESS_END' | translate }}</h3>
+  <h3 class="section-title">
+    <fa-icon [icon]="faHistory"></fa-icon>
+    {{ 'BATCHES_PROGRESS_END' | translate }}
+  </h3>
 
   <ng-container *ngIf="shouldLoad$ | async; else loadButton">
     <ng-container *ngIf="loading$ | async as loading">
@@ -46,9 +49,15 @@
                     [class.selected]="isSelected(batch, data.selectedBatch)"
                     (click)="onBatchClick(batch)">
                   <td class="batch-id">
-                    <a class="batch-link">{{ batch.id }}</a>
+                    <a class="batch-link"
+                       [appTooltip]="batch.id"
+                       tooltipPosition="top"
+                       [tooltipOnlyIfTruncated]="true">{{ batch.id }}</a>
                   </td>
-                  <td class="batch-type">{{ batch.type }}</td>
+                  <td class="batch-type"
+                      [appTooltip]="batch.type"
+                      tooltipPosition="top"
+                      [tooltipOnlyIfTruncated]="true">{{ batch.type }}</td>
                   <td class="batch-time">{{ batch.startTime | camDate }}</td>
                   <td class="batch-time">{{ batch.endTime | camDate }}</td>
                 </tr>

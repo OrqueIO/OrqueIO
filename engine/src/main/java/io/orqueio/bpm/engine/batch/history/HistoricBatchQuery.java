@@ -34,6 +34,11 @@ public interface HistoricBatchQuery extends Query<HistoricBatchQuery, HistoricBa
   HistoricBatchQuery type(String type);
 
   /**
+   * Only select historic batches whose type is one of the given types.
+   */
+  HistoricBatchQuery typeIn(String... types);
+
+  /**
    * Only select historic batches which are completed or not.
    */
   HistoricBatchQuery completed(boolean completed);

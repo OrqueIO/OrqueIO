@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, DestroyRef, inject, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -31,16 +31,24 @@ import {
   faCompress,
   faPlus,
   faMinus,
-  faSync
+  faSync,
+  faArrowUp,
+  faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
-import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics, Incident, JobDefinition, CalledProcessDefinition } from '../../../../services/cockpit.service';
+import { CockpitService, ProcessInstance, ProcessDefinition, ProcessQueryParams, ActivityStatistics, Incident, JobDefinition, CalledProcessDefinition, parseVariableValue } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
-import { BpmnViewerComponent, ActivityBadge } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { TranslateService } from '../../../../i18n/translate.service';
+import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { ModifyTabComponent, ModifyOverlay } from '../modify-tab/modify-tab';
+import { MOVE_INSTANCES_DIALOG_SESSION_KEY, BATCH_OPS_MODIFY_SIGNAL_KEY, SEARCH_PRESELECTION_SESSION_KEY } from '../modify-tab/select-instances-dialog';
+import { CorrelateMessageModalComponent } from '../correlate-message-modal/correlate-message-modal';
+import { buildMessageNodeMap, extractMessageNames } from '../../../../utils/message-names.utils';
+import { MultiValueFilter } from '../../../../services/cockpit.service';
 
 interface SortConfig {
   column: string;
@@ -76,7 +84,9 @@ interface FilterState {
     FontAwesomeModule,
     CockpitHeaderComponent,
     TranslatePipe,
-    BpmnViewerComponent
+    BpmnViewerComponent,
+    ModifyTabComponent,
+    CorrelateMessageModalComponent
   ],
   templateUrl: './process-list.html',
   styleUrls: ['./process-list.css'],
@@ -86,6 +96,8 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private navMenuService = inject(NavMenuService);
   private cockpitService = inject(CockpitService);
+  private translateService = inject(TranslateService);
+  private router = inject(Router);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
 
@@ -120,12 +132,23 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   faPlus = faPlus;
   faMinus = faMinus;
   faSync = faSync;
+  faArrowUp = faArrowUp;
+  faEnvelope = faEnvelope;
 
   @ViewChild('bpmnViewer') bpmnViewer!: BpmnViewerComponent;
+  @ViewChild('modifyTab') modifyTab?: ModifyTabComponent;
 
   breadcrumbs: BreadcrumbItem[] = [
     { translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' }
   ];
+
+  // Parent definition context for breadcrumb (set when navigating from a calling definition)
+  parentDefinitionKey: string | null = null;
+  parentDefinitionName: string | null = null;
+  // Full ancestor chain above the parent — used to restore back-navigation context at any depth
+  definitionAncestors: Array<{ key: string; name: string }> = [];
+  // Parent instance ID for navigation context (set when navigating from a calling instance)
+  parentInstanceId: string | null = null;
 
   // Process definition info
   processDefinitionKey = '';
@@ -170,7 +193,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   sortableColumns = ['startTime', 'endTime', 'businessKey'];
 
   // Tabs
-  activeTab: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' = 'instances';
+  activeTab: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' | 'modify' = 'instances';
 
   // Tab data - Incidents
   incidents: Incident[] = [];
@@ -188,20 +211,48 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   calledProcessDefinitions: CalledProcessDefinition[] = [];
   calledProcessDefinitionsLoading = false;
 
+  private modifyOverlayIds: string[] = [];
+
+  // Correlate Message
+  showCorrelateModal = false;
+  messageSuggestions: string[] = [];
+  correlateInitialMessageName: string | null = null;
+
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSavedPreferences();
 
-    // Get the process definition key from route params
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
-        this.processDefinitionKey = params['key'];
-        if (this.processDefinitionKey) {
+        this.diagramMaximized = (window.history.state as any)?.[EXPAND_DIAGRAM_STATE_KEY] === true;
+        const newKey = params['key'];
+        if (!newKey) return;
+
+        const fromKey: string | null = this.route.snapshot.queryParams['from'] || null;
+        const fromName: string | null = this.route.snapshot.queryParams['fromName'] || null;
+        const fromInstance: string | null = this.route.snapshot.queryParams['fromInstance'] || null;
+        const ancestorsParam: string | null = this.route.snapshot.queryParams['ancestors'] || null;
+
+        this.parentDefinitionKey = fromKey;
+        this.parentDefinitionName = fromName;
+        this.parentInstanceId = fromInstance;
+        try {
+          this.definitionAncestors = ancestorsParam ? JSON.parse(ancestorsParam) : [];
+        } catch {
+          this.definitionAncestors = [];
+        }
+
+        if (newKey !== this.processDefinitionKey) {
+          this.processDefinitionKey = newKey;
+          this.processDefinition = null;
+          this.lastLoadedDefinitionId = null;
           this.currentPage = 1;
           this.loadProcessDefinition();
           this.loadProcessDefinitionVersions();
           this.loadProcessInstances();
+        } else if (this.processDefinition) {
+          this.buildBreadcrumbs();
         }
       });
   }
@@ -217,7 +268,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       try {
         const prefs = JSON.parse(saved);
         if (prefs.pageSize) this.pageSize = prefs.pageSize;
-        // Validate sortConfig before applying - only accept valid Camunda sort columns
         if (prefs.sortConfig?.column && prefs.sortConfig?.direction) {
           const validColumns = ['startTime', 'endTime', 'businessKey'];
           if (validColumns.includes(prefs.sortConfig.column)) {
@@ -225,7 +275,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           }
         }
       } catch (e) {
-        // Ignore invalid saved preferences
       }
     }
   }
@@ -237,21 +286,41 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     }));
   }
 
+  private lastLoadedDefinitionId: string | null = null;
+
   loadProcessDefinition(): void {
-    this.cockpitService.getProcessDefinitionByKey(this.processDefinitionKey)
+    const requestedForKey = this.processDefinitionKey;
+    const requestedDefinitionId = this.route.snapshot.queryParams['definitionId'] as string | undefined;
+    const requestedTab = this.route.snapshot.queryParams['tab'] as string | undefined;
+
+    // Guard: avoid reloading the same definition
+    const targetDefinitionId = requestedDefinitionId && requestedDefinitionId.startsWith(this.processDefinitionKey + ':')
+      ? requestedDefinitionId
+      : this.processDefinitionKey;
+
+    if (this.lastLoadedDefinitionId === targetDefinitionId && this.processDefinition?.id === targetDefinitionId) {
+      // Already loaded, just handle post-load logic
+      this.handlePostLoadLogic(requestedTab);
+      return;
+    }
+
+    // If definitionId is provided in query params, load that specific version
+    const loadObservable = requestedDefinitionId && requestedDefinitionId.startsWith(this.processDefinitionKey + ':')
+      ? this.cockpitService.getProcessDefinitionById(requestedDefinitionId)
+      : this.cockpitService.getProcessDefinitionByKey(this.processDefinitionKey);
+
+    loadObservable
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (definition) => {
+          if (requestedForKey !== this.processDefinitionKey) return;
           this.processDefinition = definition;
-          // Initialize selectedVersion to the latest version (current definition ID)
           if (definition?.id) {
+            this.lastLoadedDefinitionId = definition.id;
             this.selectedVersion = definition.id;
+            this.handlePostLoadLogic(requestedTab);
           }
-          const name = definition?.name || this.processDefinitionKey;
-          this.breadcrumbs = [
-            { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' },
-            { label: name }
-          ];
+          this.buildBreadcrumbs();
           this.cdr.markForCheck();
 
           // Load BPMN diagram
@@ -261,6 +330,125 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           }
         }
       });
+  }
+
+  private handlePostLoadLogic(requestedTab?: string): void {
+    if (!this.processDefinition?.id) return;
+
+    let tabToSwitch: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' | 'modify' | null = null;
+    let shouldCleanQueryParams = false;
+
+    try {
+      // Check for batch operation signal
+      const batchSignal = sessionStorage.getItem(BATCH_OPS_MODIFY_SIGNAL_KEY);
+      const isForThisProcess = batchSignal && (
+        batchSignal === this.processDefinition.id ||
+        batchSignal.startsWith(this.processDefinitionKey + ':')
+      );
+      if (isForThisProcess) {
+        sessionStorage.removeItem(BATCH_OPS_MODIFY_SIGNAL_KEY);
+        if (batchSignal !== this.processDefinition.id) {
+          this.selectedVersion = batchSignal;
+          this.onVersionChange();
+        }
+        tabToSwitch = 'modify';
+        shouldCleanQueryParams = true;
+      }
+
+      // Check for search preselection (Move instances from Search)
+      if (!tabToSwitch) {
+        const preselectionRaw = sessionStorage.getItem(SEARCH_PRESELECTION_SESSION_KEY);
+        if (preselectionRaw) {
+          const preselection = JSON.parse(preselectionRaw);
+          if (preselection?.processDefinitionId === this.processDefinition.id) {
+            // FIX: Do NOT remove the key here. Let modify-tab consume it in ngOnChanges.
+            // This fixes the race condition where the key was cleared before modify-tab could read it.
+            tabToSwitch = 'modify';
+            shouldCleanQueryParams = true;
+          }
+        }
+      }
+
+      // Check for dialogue session (Adjust selection)
+      if (!tabToSwitch) {
+        const dialogRaw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+        if (dialogRaw) {
+          const state = JSON.parse(dialogRaw);
+          if (state?.processDefinitionId === this.processDefinition.id) {
+            tabToSwitch = 'modify';
+            shouldCleanQueryParams = true;
+          }
+        }
+      }
+
+      // If a specific tab was requested via queryParams, use it (unless overridden above)
+      if (!tabToSwitch && requestedTab && this.isValidTab(requestedTab)) {
+        tabToSwitch = requestedTab as 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' | 'modify';
+        shouldCleanQueryParams = true;
+      }
+
+      // Switch to the determined tab
+      if (tabToSwitch) {
+        this.switchTab(tabToSwitch);
+      }
+
+      // Clean queryParams after consumption to prevent re-triggering
+      if (shouldCleanQueryParams) {
+        const currentParams = this.route.snapshot.queryParams;
+        if (currentParams['definitionId'] || currentParams['tab']) {
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: {},
+            replaceUrl: true
+          });
+        }
+      }
+    } catch { }
+  }
+
+  private buildBreadcrumbs(): void {
+    const name = this.processDefinition?.name || this.processDefinitionKey;
+    this.breadcrumbs = [
+      { label: 'Processes', translateKey: 'cockpit.menu.processes', route: '/cockpit/processes' },
+      { label: name }
+    ];
+    this.cdr.markForCheck();
+  }
+
+  // Query params for instance links — carries definition navigation context into instance view
+  get instanceLinkQueryParams(): Record<string, string> | null {
+    const params: Record<string, string> = {};
+    if (this.parentInstanceId) params['from'] = this.parentInstanceId;
+    if (this.parentDefinitionKey) {
+      params['fromDef'] = this.parentDefinitionKey;
+      if (this.parentDefinitionName) params['fromDefName'] = this.parentDefinitionName;
+      if (this.definitionAncestors.length > 0) {
+        params['fromDefAncestors'] = JSON.stringify(this.definitionAncestors);
+      }
+    }
+    return Object.keys(params).length > 0 ? params : null;
+  }
+
+  // Query params to attach to the breadcrumb parent link so back-navigation restores full context
+  get parentBreadcrumbQueryParams(): Record<string, string> | null {
+    if (!this.definitionAncestors.length) return null;
+    const grandparent = this.definitionAncestors[this.definitionAncestors.length - 1];
+    const remainingAncestors = this.definitionAncestors.slice(0, -1);
+    const params: Record<string, string> = { from: grandparent.key, fromName: grandparent.name };
+    if (remainingAncestors.length > 0) {
+      params['ancestors'] = JSON.stringify(remainingAncestors);
+    }
+    return params;
+  }
+
+  get activeParentBreadcrumb(): ParentBreadcrumb | null {
+    if (!this.parentDefinitionKey || !this.processDefinition) return null;
+    return {
+      link: ['/cockpit/processes', this.parentDefinitionKey, 'definition'],
+      queryParams: this.parentBreadcrumbQueryParams ?? undefined,
+      label: this.parentDefinitionName || this.parentDefinitionKey,
+      currentLabel: this.processDefinition.name || this.processDefinition.key
+    };
   }
 
   loadBpmnDiagram(definitionId: string): void {
@@ -332,6 +520,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       ? this.cockpitService.getIncidentsByProcessDefinitionKey(this.processDefinitionKey)
       : this.cockpitService.getIncidentsByProcessDefinitionId(this.selectedVersion);
 
+    const requestedForKey = this.processDefinitionKey;
     forkJoin({
       count: this.cockpitService.queryProcessInstancesCount(queryBody),
       instances: this.cockpitService.queryProcessInstances(queryBody, firstResult, this.pageSize),
@@ -339,6 +528,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     }).pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: ({ count, instances, incidents }) => {
+          if (requestedForKey !== this.processDefinitionKey) return;
           this.totalCount = count;
           // Associate incidents with process instances
           this.processInstances = instances.map(instance => {
@@ -356,6 +546,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       });
   }
 
+  // Translation keys, displayed with the translate pipe
   filterErrors: string[] = [];
 
   buildQueryBody(): any {
@@ -395,30 +586,30 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     if (this.filters.startedAfter) {
       const formatted = this.formatDateForApi(this.filters.startedAfter);
       if (formatted) { body.startedAfter = formatted; }
-      else { this.filterErrors.push('Invalid "Started after" date'); }
+      else { this.filterErrors.push('cockpit.processes.dateValidation.invalidStartedAfter'); }
     }
     if (this.filters.startedBefore) {
       const formatted = this.formatDateForApi(this.filters.startedBefore);
       if (formatted) { body.startedBefore = formatted; }
-      else { this.filterErrors.push('Invalid "Started before" date'); }
+      else { this.filterErrors.push('cockpit.processes.dateValidation.invalidStartedBefore'); }
     }
     if (this.filters.finishedAfter) {
       const formatted = this.formatDateForApi(this.filters.finishedAfter);
       if (formatted) { body.finishedAfter = formatted; }
-      else { this.filterErrors.push('Invalid "Finished after" date'); }
+      else { this.filterErrors.push('cockpit.processes.dateValidation.invalidFinishedAfter'); }
     }
     if (this.filters.finishedBefore) {
       const formatted = this.formatDateForApi(this.filters.finishedBefore);
       if (formatted) { body.finishedBefore = formatted; }
-      else { this.filterErrors.push('Invalid "Finished before" date'); }
+      else { this.filterErrors.push('cockpit.processes.dateValidation.invalidFinishedBefore'); }
     }
 
     // Validate date range coherence
     if (body.startedAfter && body.startedBefore && body.startedAfter >= body.startedBefore) {
-      this.filterErrors.push('"Started after" must be before "Started before"');
+      this.filterErrors.push('cockpit.processes.dateValidation.startedRange');
     }
     if (body.finishedAfter && body.finishedBefore && body.finishedAfter >= body.finishedBefore) {
-      this.filterErrors.push('"Finished after" must be before "Finished before"');
+      this.filterErrors.push('cockpit.processes.dateValidation.finishedRange');
     }
 
     // State filter
@@ -450,7 +641,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     const variables: any[] = [];
     for (const v of this.filters.variables) {
       if (!v.name.trim() || !v.value.trim()) continue;
-      const value = this.parseVariableValue(v.value, v.operator);
+      const value = parseVariableValue(v.value, v.operator);
       variables.push({ name: v.name, value, operator: v.operator });
     }
     if (variables.length > 0) {
@@ -481,39 +672,6 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     const sec = String(d.getSeconds()).padStart(2, '0');
     const ms = String(d.getMilliseconds()).padStart(3, '0');
     return `${year}-${mon}-${day}T${hrs}:${min}:${sec}.${ms}${sign}${hh}${mm}`;
-  }
-
-  /**
-   * Parse a variable value string into the appropriate type.
-   * Matches Legacy behavior: auto-detects numbers, booleans, null.
-   * For 'like' operator, wraps value with % if no wildcards are present.
-   */
-  private parseVariableValue(raw: string, operator: string): any {
-    let value: string = raw;
-
-    // Like operator: auto-wrap with % if no wildcards present
-    if (operator === 'like') {
-      if (!value.includes('%')) {
-        value = `%${value}%`;
-      }
-      return value;
-    }
-
-    // Boolean detection
-    if (value.toLowerCase() === 'true') return true;
-    if (value.toLowerCase() === 'false') return false;
-
-    // Null detection
-    if (value === 'NULL') return null;
-
-    // Number detection
-    const trimmed = value.trim();
-    if (trimmed !== '') {
-      const parsed = Number(trimmed);
-      if (!isNaN(parsed)) return parsed;
-    }
-
-    return value;
   }
 
   addVariableFilter(): void {
@@ -720,11 +878,11 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   getStateLabel(instance: ProcessInstance): string {
     const computedState = this.getComputedState(instance);
     switch (computedState) {
-      case 'running': return 'Running';
-      case 'suspended': return 'Suspended';
-      case 'completed': return 'Completed';
-      case 'incidents': return 'Incidents';
-      case 'terminated': return 'Terminated';
+      case 'running': return this.translateService.instant('cockpit.processes.globalSearch.instanceStateRunning');
+      case 'suspended': return this.translateService.instant('cockpit.processes.filters.stateSuspended');
+      case 'completed': return this.translateService.instant('cockpit.processes.filters.stateCompleted');
+      case 'incidents': return this.translateService.instant('cockpit.processes.columns.incidents');
+      case 'terminated': return this.translateService.instant('cockpit.processes.filters.stateTerminated');
       default: return '';
     }
   }
@@ -732,7 +890,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   formatDate(dateStr: string): string {
     if (!dateStr) return '-';
     const date = new Date(dateStr);
-    return date.toLocaleString();
+    return date.toLocaleString(this.translateService.locale);
   }
 
   getVersionLabel(def: ProcessDefinition): string {
@@ -766,7 +924,11 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     }
   }
 
-  switchTab(tab: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions'): void {
+  private isValidTab(tab: string): boolean {
+    return ['instances', 'incidents', 'called-definitions', 'job-definitions', 'modify'].includes(tab);
+  }
+
+  switchTab(tab: 'instances' | 'incidents' | 'called-definitions' | 'job-definitions' | 'modify'): void {
     this.activeTab = tab;
 
     // Load data for the tab if not already loaded
@@ -786,6 +948,10 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           this.loadCalledProcessDefinitions();
         }
         break;
+    }
+
+    if (tab !== 'modify') {
+      this.clearModifyOverlays();
     }
 
     this.cdr.markForCheck();
@@ -874,9 +1040,9 @@ export class ProcessListComponent implements OnInit, OnDestroy {
 
   getCalledDefStateLabel(state?: string): string {
     switch (state) {
-      case 'running': return 'Running';
-      case 'referenced': return 'Referenced';
-      case 'running-and-referenced': return 'Running and Referenced';
+      case 'running': return this.translateService.instant('cockpit.calledDefinitions.state.running');
+      case 'referenced': return this.translateService.instant('cockpit.calledDefinitions.state.referenced');
+      case 'running-and-referenced': return this.translateService.instant('cockpit.calledDefinitions.state.runningAndReferenced');
       default: return '-';
     }
   }
@@ -914,5 +1080,224 @@ export class ProcessListComponent implements OnInit, OnDestroy {
           this.cdr.markForCheck();
         }
       });
+  }
+
+  // Query params for "Called Process Definitions" tab links — same ancestor chain logic as BPMN diagram navigation
+  getCalledDefNavParams(): Record<string, string> {
+    const fromKey = this.processDefinitionKey;
+    const fromName = this.processDefinition?.name || this.processDefinitionKey;
+    const newAncestors = this.parentDefinitionKey
+      ? [...this.definitionAncestors, { key: this.parentDefinitionKey, name: this.parentDefinitionName || this.parentDefinitionKey }]
+      : [...this.definitionAncestors];
+    const params: Record<string, string> = { from: fromKey, fromName };
+    if (newAncestors.length > 0) {
+      params['ancestors'] = JSON.stringify(newAncestors);
+    }
+    return params;
+  }
+
+  get modifyTabEnabled(): boolean {
+    return this.selectedVersion !== 'all' && !!this.processDefinition;
+  }
+
+  onModifyRefreshRequested(): void {
+    const definitionId = this.selectedVersion === 'all'
+      ? this.processDefinition?.id
+      : this.selectedVersion;
+    if (definitionId) {
+      this.cockpitService.getActivityStatistics(definitionId, true)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(stats => {
+          this.activityStatistics = stats;
+          this.cdr.detectChanges();
+        });
+    }
+    this.loadProcessInstances();
+  }
+
+  onBpmnElementClick(element: BpmnElement): void {
+    if (this.activeTab === 'modify' && this.modifyTab) {
+      this.modifyTab.onElementClick(element);
+    }
+  }
+
+  onModifyOverlaysChanged(overlays: ModifyOverlay[]): void {
+    this.clearModifyOverlays();
+
+    if (!this.bpmnViewer) return;
+
+    const viewer = (this.bpmnViewer as any).viewer;
+    if (!viewer) return;
+
+    const overlayService = viewer.get('overlays');
+    const canvas = viewer.get('canvas');
+    const elementRegistry = viewer.get('elementRegistry');
+
+    for (const overlay of overlays) {
+      const isSource = overlay.role === 'source';
+      const markerCss = isSource ? 'modify-source' : 'modify-target';
+
+      if (canvas) {
+        try {
+          canvas.addMarker(overlay.activityId, markerCss);
+        } catch (_) {}
+      }
+
+      this.addModifyOverlayLabel(overlayService, overlay.activityId, isSource);
+
+      if (elementRegistry) {
+        const element = elementRegistry.get(overlay.activityId);
+        if (element) {
+          const collapsed = this.findCollapsedSubprocessAncestor(element);
+          if (collapsed) {
+            if (canvas) {
+              try { canvas.addMarker(collapsed.id, markerCss); } catch (_) {}
+            }
+            this.addModifyOverlayLabel(overlayService, collapsed.id, isSource);
+          }
+        }
+      }
+    }
+  }
+
+  private addModifyOverlayLabel(overlayService: any, elementId: string, isSource: boolean): void {
+    if (!overlayService) return;
+    const marker = document.createElement('div');
+    marker.className = isSource
+      ? 'bpmn-modify-marker bpmn-modify-marker--source'
+      : 'bpmn-modify-marker bpmn-modify-marker--target';
+    marker.textContent = isSource
+      ? this.translateService.instant('cockpit.modify.overlaySource')
+      : this.translateService.instant('cockpit.modify.overlayTarget');
+
+    try {
+      const id = overlayService.add(elementId, {
+        position: { bottom: 2, left: -4 },
+        html: marker
+      });
+      this.modifyOverlayIds.push(id);
+    } catch (_) {}
+  }
+
+  private findCollapsedSubprocessAncestor(element: any): any {
+    let current = element.parent;
+    let result: any = null;
+    while (current) {
+      if (current.type === 'bpmn:SubProcess' && current.collapsed) {
+        result = current;
+      }
+      current = current.parent;
+    }
+    return result;
+  }
+
+  private clearModifyOverlays(): void {
+    if (!this.bpmnViewer) return;
+
+    const viewer = (this.bpmnViewer as any).viewer;
+    if (!viewer) return;
+
+    const overlayService = viewer.get('overlays');
+    const canvas = viewer.get('canvas');
+
+    if (overlayService) {
+      for (const id of this.modifyOverlayIds) {
+        try { overlayService.remove(id); } catch (_) {}
+      }
+    }
+    this.modifyOverlayIds = [];
+
+    if (canvas) {
+      const elementRegistry = viewer.get('elementRegistry');
+      if (elementRegistry) {
+        elementRegistry.forEach((element: any) => {
+          try {
+            canvas.removeMarker(element.id, 'modify-source');
+            canvas.removeMarker(element.id, 'modify-target');
+          } catch (_) {}
+        });
+      }
+    }
+  }
+
+  navigateToCalledDefinition(event: CallActivityClickEvent): void {
+    const { callActivityId, calledElement } = event;
+    if (!calledElement) return;
+
+    // Capture synchronously at click time — processDefinitionKey must not be read
+    // inside the async subscribe callback or it may reflect a later navigation.
+    const fromKey = this.processDefinitionKey;
+    const fromName = this.processDefinition?.name || this.processDefinitionKey;
+
+    // Build new ancestor chain: all current ancestors + current parent (if any)
+    const newAncestors = this.parentDefinitionKey
+      ? [...this.definitionAncestors, { key: this.parentDefinitionKey, name: this.parentDefinitionName || this.parentDefinitionKey }]
+      : [...this.definitionAncestors];
+
+    this.cockpitService.getProcessDefinitionByKey(calledElement)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(definition => {
+        if (definition) {
+          const queryParams: Record<string, string> = { from: fromKey, fromName };
+          if (newAncestors.length > 0) {
+            queryParams['ancestors'] = JSON.stringify(newAncestors);
+          }
+          this.router.navigate(['/cockpit/processes', calledElement, 'definition'], {
+            queryParams,
+            state: { [EXPAND_DIAGRAM_STATE_KEY]: this.diagramMaximized }
+          });
+        } else {
+          this.bpmnViewer?.showCallActivityError(
+            callActivityId,
+            `Process definition '${calledElement}' not found`
+          );
+        }
+      });
+  }
+
+  onBpmnViewerReady(): void {
+    const elements = this.bpmnViewer?.getAllElements() ?? [];
+    const nodeMap = buildMessageNodeMap(elements);
+    this.messageSuggestions = extractMessageNames(elements);
+    if (nodeMap.size > 0) {
+      this.bpmnViewer?.addCorrelateOverlays(nodeMap, (name) => {
+        this.correlateInitialMessageName = name;
+        this.showCorrelateModal = true;
+        this.cdr.markForCheck();
+      });
+    }
+    this.cdr.markForCheck();
+  }
+
+  openCorrelateMessage(): void {
+    this.correlateInitialMessageName = null;
+    this.showCorrelateModal = true;
+    this.cdr.markForCheck();
+  }
+
+  onCorrelateOpenBatchOp(messageName: string | null): void {
+    this.showCorrelateModal = false;
+    if (!this.processDefinition) return;
+
+    const criterion: MultiValueFilter = {
+      field: 'processDefinition',
+      values: [this.processDefinitionKey],
+      processDefinitionIds: [this.processDefinition.id]
+    };
+
+    const state = {
+      operationId: 'correlate',
+      mode: 'query',
+      step: 1,
+      filterCriteria: [criterion],
+      messageName: messageName ?? undefined,
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedIds: [],
+      correlateVariableDefs: []
+    };
+
+    sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+    this.router.navigate(['/cockpit/batch/operations']);
   }
 }

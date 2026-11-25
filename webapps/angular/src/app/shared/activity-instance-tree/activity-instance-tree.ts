@@ -20,6 +20,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Activity, ActivityInstanceTree } from '../../services/cockpit.service';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 export interface ActivityNode {
   id: string;
@@ -35,7 +36,7 @@ export interface ActivityNode {
 @Component({
   selector: 'app-activity-instance-tree',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, FontAwesomeModule, TranslatePipe],
   templateUrl: './activity-instance-tree.html',
   styleUrls: ['./activity-instance-tree.css']
 })

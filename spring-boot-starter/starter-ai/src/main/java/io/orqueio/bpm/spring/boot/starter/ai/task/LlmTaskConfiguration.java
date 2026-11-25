@@ -39,6 +39,19 @@ public final class LlmTaskConfiguration {
   public static final String MODEL_PROPERTY = PROPERTY_PREFIX + "model";
   public static final String PROMPT_PROPERTY = PROPERTY_PREFIX + "prompt";
   public static final String INPUTS_PROPERTY = PROPERTY_PREFIX + "inputs";
+
+  /**
+   * The fields the model returns, each written to the process variable of the same name:
+   * comma-separated entries, each of them one of
+   * <ul>
+   *   <li>{@code name:type}, the type being {@code string}, {@code integer}, {@code number} or {@code boolean};</li>
+   *   <li>{@code name:A|B|C}, a string that must be exactly one of the listed values, which cannot
+   *       contain {@code ,} {@code :} or {@code |};</li>
+   *   <li>{@code name:number[min..max]} or {@code name:integer[min..max]}, inclusive bounds, either of which
+   *       may be left out ({@code [0..]}, {@code [..100]}), with at most 18 digits before and after the decimal point.</li>
+   * </ul>
+   * For example {@code incidentType:Theft|Fire|Water|Other, claimAmount:number[0..50000], summary:string}.
+   */
   public static final String OUTPUTS_PROPERTY = PROPERTY_PREFIX + "outputs";
   public static final String TIMEOUT_PROPERTY = PROPERTY_PREFIX + "timeout";
   public static final String ERROR_CODE_PROPERTY = PROPERTY_PREFIX + "errorCode";

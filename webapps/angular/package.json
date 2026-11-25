@@ -1,6 +1,6 @@
 {
   "name": "orque-io-angular",
-  "version": "2.1.2-SNAPSHOT",
+  "version": "2.2.0-SNAPSHOT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -23,13 +23,13 @@
   "private": true,
   "packageManager": "npm@11.6.2",
   "dependencies": {
-    "@angular/animations": "^21.2.4",
-    "@angular/common": "^21.2.4",
-    "@angular/compiler": "^21.2.4",
-    "@angular/core": "^21.2.4",
-    "@angular/forms": "^21.2.4",
-    "@angular/platform-browser": "^21.2.4",
-    "@angular/router": "^21.2.4",
+    "@angular/animations": "^21.2.25",
+    "@angular/common": "^21.2.25",
+    "@angular/compiler": "^21.2.25",
+    "@angular/core": "^21.2.25",
+    "@angular/forms": "^21.2.25",
+    "@angular/platform-browser": "^21.2.25",
+    "@angular/router": "^21.2.25",
     "@bpmn-io/dmn-migrate": "^0.6.0",
     "@fortawesome/angular-fontawesome": "^4.0.0",
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
@@ -51,10 +51,10 @@
   },
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "^2.3.1",
-    "@angular/build": "^21.2.14",
-    "@angular/cli": "^21.2.5",
-    "@angular/compiler-cli": "^21.2.4",
-    "@angular/platform-browser-dynamic": "^21.2.4",
+    "@angular/build": "^21.2.31",
+    "@angular/cli": "^21.2.31",
+    "@angular/compiler-cli": "^21.2.25",
+    "@angular/platform-browser-dynamic": "^21.2.25",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",
     "vitest": "^4.1.0",
@@ -63,6 +63,8 @@
   "overrides": {
     "postcss": ">=8.5.10",
     "picomatch": ">=2.3.2",
-    "piscina": ">=5.3.2"
+    "piscina": ">=5.3.2",
+    "minimatch": "^11.0.1",
+    "glob": "^14.0.2"
   }
 }

@@ -219,6 +219,13 @@
       <if test="type != null">
         and RES.TYPE_ = #{type}
       </if>
+      <if test="types != null &amp;&amp; types.length > 0">
+        and RES.TYPE_ IN
+        <foreach item="item" index="index" collection="types"
+                 open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
       <if test="completed != null &amp;&amp; completed">
         and RES.END_TIME_ is not null
       </if>

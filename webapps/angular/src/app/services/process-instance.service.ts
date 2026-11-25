@@ -16,9 +16,10 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, forkJoin } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { ModificationDto } from '../models/cockpit/modification.model';
 
 // ============================================
 // Process Instance Interfaces
@@ -296,6 +297,95 @@ export class ProcessInstanceService {
       .pipe(catchError(() => of(null)));
   }
 
+  getRuntimeInstanceIdsByActivity(params: {
+    activityIdIn: string[];
+    processDefinitionId?: string;
+  }): Observable<string[]> {
+    if (!params.activityIdIn.length) return of([]);
+    let httpParams = new HttpParams()
+      .set('activityIdIn', params.activityIdIn.join(','))
+      .set('maxResults', '2000');
+    if (params.processDefinitionId) {
+      httpParams = httpParams.set('processDefinitionId', params.processDefinitionId);
+    }
+    return this.http.get<{ id: string }[]>(`${this.baseUrl}/process-instance`, { params: httpParams }).pipe(
+      map(instances => instances.map(i => i.id))
+    );
+  }
+
+  /**
+   * Max batch size for POST /process-instance queries.
+   * Must be well below queryMaxResultsLimit (configured at 2000) to avoid 400 errors.
+   */
+  private static readonly PROCESS_INSTANCE_QUERY_BATCH_SIZE = 500;
+
+  /**
+   * Query runtime process instances with POST (for eligibility checks with large processInstanceIds arrays).
+   * Unlike GET, POST allows sending large lists in the body without URL length limits.
+   * Automatically batches requests if processInstanceIds exceeds PROCESS_INSTANCE_QUERY_BATCH_SIZE.
+   */
+  queryRuntimeInstancesAtActivity(body: {
+    processInstanceIds: string[];
+    activityIdIn: string[];
+    processDefinitionId?: string;
+  }): Observable<string[]> {
+    if (!body.processInstanceIds.length || !body.activityIdIn.length) {
+      return of([]);
+    }
+
+    const batchSize = ProcessInstanceService.PROCESS_INSTANCE_QUERY_BATCH_SIZE;
+    const instanceIds = body.processInstanceIds;
+
+    // Split into batches
+    const batches: string[][] = [];
+    for (let i = 0; i < instanceIds.length; i += batchSize) {
+      batches.push(instanceIds.slice(i, i + batchSize));
+    }
+
+    // Query each batch with pagination params
+    const batchObservables = batches.map(batchIds => {
+      const params = new HttpParams()
+        .set('firstResult', '0')
+        .set('maxResults', batchSize.toString());
+
+      return this.http.post<{ id: string }[]>(
+        `${this.baseUrl}/process-instance`,
+        {
+          processInstanceIds: batchIds,
+          activityIdIn: body.activityIdIn,
+          processDefinitionId: body.processDefinitionId
+        },
+        { params }
+      );
+    });
+
+    // Execute all batches in parallel and concat results
+    if (batchObservables.length === 1) {
+      return batchObservables[0].pipe(
+        map(instances => instances.map(i => i.id))
+      );
+    }
+
+    return forkJoin(batchObservables).pipe(
+      map(batchResults => {
+        const allIds: string[] = [];
+        for (const batch of batchResults) {
+          allIds.push(...batch.map(i => i.id));
+        }
+        return allIds;
+      })
+    );
+  }
+
+  getProcessInstanceIdByIncident(incidentId: string): Observable<string | null> {
+    return this.http.get<{ id: string; processInstanceId: string }[]>(
+      `${this.historyUrl}/incident`,
+      { params: { incidentId, maxResults: '1' } }
+    ).pipe(
+      map(incidents => incidents[0]?.processInstanceId ?? null)
+    );
+  }
+
   /**
    * Query process instances with POST (supports complex filters)
    */
@@ -307,7 +397,7 @@ export class ProcessInstanceService {
       `${this.historyUrl}/process-instance`,
       body,
       { params: { firstResult: firstResult.toString(), maxResults: cappedMax.toString() } }
-    ).pipe(catchError(() => of([])));
+    ).pipe(catchError(err => { console.error('[ProcessInstance] query error:', err); return of([]); }));
   }
 
   /**
@@ -335,6 +425,71 @@ export class ProcessInstanceService {
     return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, {
       params: { processInstanceId: id, maxResults: maxResults.toString() }
     }).pipe(catchError(() => of([])));
+  }
+
+  getVariableSuggestions(instanceIds: string[]): Observable<{ name: string; type: string; value: any; valuesConflict: boolean }[]> {
+    if (!instanceIds.length) return of([]);
+    return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, {
+      params: { processInstanceIdIn: instanceIds.join(','), maxResults: '1000' }
+    }).pipe(
+      map(vars => this.deduplicateVariables(vars)),
+      catchError(() => of([]))
+    );
+  }
+
+  searchVariableSuggestions(query: string, instanceIds: string[]): Observable<{ name: string; type: string; value: any; valuesConflict: boolean }[]> {
+    const params: Record<string, string> = {
+      variableNameLike: `%${query}%`,
+      maxResults: '2000'
+    };
+    if (instanceIds.length) {
+      params['processInstanceIdIn'] = instanceIds.join(',');
+    }
+    return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, { params }).pipe(
+      map(vars => this.deduplicateVariables(vars)),
+      catchError(() => of([]))
+    );
+  }
+
+  loadDistinctVariableSuggestions(instanceIds: string[]): Observable<{ name: string; type: string; value: any; valuesConflict: boolean }[]> {
+    const params: Record<string, string> = { maxResults: '500' };
+    if (instanceIds.length) {
+      params['processInstanceIdIn'] = instanceIds.join(',');
+    }
+    return this.http.get<Variable[]>(`${this.historyUrl}/variable-instance`, { params }).pipe(
+      map(vars => this.deduplicateVariables(vars)),
+      catchError(() => of([]))
+    );
+  }
+
+  private deduplicateVariables(vars: Variable[]): { name: string; type: string; value: any; valuesConflict: boolean }[] {
+    const perInstance = new Map<string, Variable>();
+    for (const v of vars) {
+      const key = `${v.processInstanceId}::${v.name}`;
+      const cur = perInstance.get(key);
+      const vIsRoot = v.executionId != null && v.executionId === v.processInstanceId;
+      const curIsRoot = cur != null && cur.executionId != null && cur.executionId === cur.processInstanceId;
+      if (!cur || (vIsRoot && !curIsRoot)) {
+        perInstance.set(key, v);
+      }
+    }
+
+    const nameMap = new Map<string, { type: string; value: any; conflict: boolean }>();
+    for (const v of perInstance.values()) {
+      const existing = nameMap.get(v.name);
+      if (!existing) {
+        nameMap.set(v.name, { type: v.type, value: v.value, conflict: false });
+      } else if (!existing.conflict && existing.value !== v.value) {
+        nameMap.set(v.name, { ...existing, conflict: true });
+      }
+    }
+
+    return Array.from(nameMap.entries()).map(([name, { type, value, conflict }]) => ({
+      name,
+      type,
+      value,
+      valuesConflict: conflict
+    }));
   }
 
   /**
@@ -481,6 +636,120 @@ export class ProcessInstanceService {
     ).pipe(catchError(() => of(void 0)));
   }
 
+  suspendInstancesAsync(payload: {
+    suspended: boolean;
+    processInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.baseUrl}/process-instance/suspended-async`,
+      payload
+    );
+  }
+
+  deleteInstancesAsync(payload: {
+    deleteReason?: string;
+    skipCustomListeners: boolean;
+    skipIoMappings: boolean;
+    processInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.baseUrl}/process-instance/delete`,
+      payload
+    );
+  }
+
+  deleteFinishedInstancesAsync(payload: {
+    deleteReason?: string;
+    historicProcessInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.historyUrl}/process-instance/delete`,
+      payload
+    );
+  }
+
+  setJobRetriesAsync(payload: {
+    retries: number;
+    dueDate?: string;
+    processInstances?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    const body: Record<string, unknown> = { retries: payload.retries };
+    if (payload.dueDate) body['dueDate'] = payload.dueDate;
+    if (payload.processInstances?.length) {
+      body['processInstances'] = payload.processInstances;
+    }
+    if (payload.historicProcessInstanceQuery) {
+      body['historicProcessInstanceQuery'] = payload.historicProcessInstanceQuery;
+    }
+    return this.http.post<{ id: string }>(`${this.baseUrl}/process-instance/job-retries-historic-query-based`, body);
+  }
+
+  setExternalTaskRetriesAsync(payload: {
+    retries: number;
+    processInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    const body: Record<string, unknown> = { retries: payload.retries };
+    if (payload.processInstanceIds?.length) {
+      body['processInstanceIds'] = payload.processInstanceIds;
+    }
+    if (payload.historicProcessInstanceQuery) {
+      body['historicProcessInstanceQuery'] = payload.historicProcessInstanceQuery;
+    }
+    return this.http.post<{ id: string }>(`${this.baseUrl}/external-task/retries-async`, body);
+  }
+
+  setVariablesAsync(payload: {
+    variables: Record<string, { value: unknown; type: string }>;
+    processInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.baseUrl}/process-instance/variables-async`,
+      payload
+    );
+  }
+
+  correlateMessageAsync(payload: {
+    messageName?: string;
+    variables?: Record<string, { value: unknown; type: string }>;
+    processInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    const body: Record<string, unknown> = {};
+    if (payload.messageName?.trim()) body['messageName'] = payload.messageName.trim();
+    if (payload.variables && Object.keys(payload.variables).length) body['variables'] = payload.variables;
+    if (payload.processInstanceIds?.length) body['processInstanceIds'] = payload.processInstanceIds;
+    if (payload.historicProcessInstanceQuery) body['historicProcessInstanceQuery'] = payload.historicProcessInstanceQuery;
+    return this.http.post<{ id: string }>(`${this.baseUrl}/process-instance/message-async`, body);
+  }
+
+  setRemovalTimeAsync(payload: {
+    calculatedRemovalTime?: boolean;
+    absoluteRemovalTime?: string;
+    clearedRemovalTime?: boolean;
+    historicProcessInstanceIds?: string[];
+    historicProcessInstanceQuery?: Record<string, unknown>;
+    hierarchical?: boolean;
+    updateInChunks?: boolean;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.historyUrl}/process-instance/set-removal-time`,
+      payload
+    );
+  }
+
+  executeModificationAsync(dto: ModificationDto): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.baseUrl}/modification/executeAsync`,
+      dto
+    );
+  }
+
   /**
    * Resume (activate) a process instance
    */
@@ -500,7 +769,7 @@ export class ProcessInstanceService {
    */
   getJobsByProcessInstance(processInstanceId: string, maxResults = 100): Observable<Job[]> {
     return this.http.get<Job[]>(`${this.baseUrl}/job`, {
-      params: { processInstanceId, maxResults: maxResults.toString() }
+      params: { processInstanceId, firstResult: '0', maxResults: maxResults.toString() }
     }).pipe(catchError(() => of([])));
   }
 
@@ -678,6 +947,74 @@ export class ProcessInstanceService {
   }
 
   /**
+   * Get called process instances filtered by call activity ID
+   *
+   * This method queries the historic activity instances to find Call Activities
+   * that match the given activityId, then returns the process instances they created
+   */
+  getCalledProcessInstancesByActivity(
+    superProcessInstanceId: string,
+    activityId: string,
+    maxResults = 10
+  ): Observable<ProcessInstance[]> {
+    // Query historic activity instances to find the Call Activity execution
+    // that matches this activityId and get its calledProcessInstanceId
+    return this.http.get<Activity[]>(`${this.historyUrl}/activity-instance`, {
+      params: {
+        processInstanceId: superProcessInstanceId,
+        activityId,
+        activityType: 'callActivity',
+        maxResults: maxResults.toString()
+      }
+    }).pipe(
+      map((activityInstances: Activity[]) => {
+        // Extract the calledProcessInstanceId from each Call Activity execution
+        const calledInstanceIds = activityInstances
+          .filter(ai => ai.calledProcessInstanceId)
+          .map(ai => ai.calledProcessInstanceId);
+
+        if (calledInstanceIds.length === 0) {
+          return [];
+        }
+
+        // Return process instances matching these IDs
+        // Note: We'll need to query them, but for simplicity, let's just return
+        // minimal ProcessInstance objects with the IDs we found
+        return calledInstanceIds.map(id => ({ id } as ProcessInstance));
+      }),
+      catchError(() => of([]))
+    );
+  }
+
+  /**
+   * Get Call Activity to called process instance IDs mapping for a process instance
+   * Returns a map of activityId -> calledProcessInstanceIds[]
+   * Supports Call Activities that call multiple instances (e.g., in loops, parallel flows)
+   */
+  getCallActivityMapping(processInstanceId: string): Observable<Map<string, string[]>> {
+    return this.http.get<Activity[]>(`${this.historyUrl}/activity-instance`, {
+      params: {
+        processInstanceId,
+        maxResults: '1000' // Limit to prevent unbound queries
+      }
+    }).pipe(
+      map((activities: Activity[]) => {
+        const mapping = new Map<string, string[]>();
+        activities.forEach(activity => {
+          // Only include activities that have called a process instance
+          if (activity.activityId && activity.calledProcessInstanceId) {
+            const existing = mapping.get(activity.activityId) || [];
+            existing.push(activity.calledProcessInstanceId);
+            mapping.set(activity.activityId, existing);
+          }
+        });
+        return mapping;
+      }),
+      catchError(() => of(new Map()))
+    );
+  }
+
+  /**
    * Get the super process instance (parent)
    */
   getSuperProcessInstance(processInstanceId: string): Observable<ProcessInstance | null> {
@@ -691,6 +1028,7 @@ export class ProcessInstanceService {
       catchError(() => of(null))
     );
   }
+
 }
 
 /** A variable update, as GET /history/detail returns it. */

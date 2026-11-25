@@ -1,0 +1,17 @@
+<div class="wizard-stepper">
+  <ng-container *ngFor="let step of steps; let last = last">
+    <div class="step"
+         [class.step--active]="step.number === currentStep"
+         [class.step--done]="step.number < currentStep">
+      <div class="step__circle">
+        <fa-icon *ngIf="step.number < currentStep" [icon]="faCheck"></fa-icon>
+        <span *ngIf="step.number >= currentStep">{{ step.number }}</span>
+      </div>
+      <span class="step__label">{{ step.labelKey | translate }}</span>
+    </div>
+    <div *ngIf="!last"
+         class="step-connector"
+         [class.step-connector--done]="step.number < currentStep">
+    </div>
+  </ng-container>
+</div>

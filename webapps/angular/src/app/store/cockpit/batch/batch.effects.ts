@@ -9,7 +9,8 @@ import {
   withLatestFrom,
   filter,
   takeUntil,
-  exhaustMap
+  exhaustMap,
+  pairwise
 } from 'rxjs/operators';
 
 import { BatchService } from '../../../services/batch.service';
@@ -17,6 +18,7 @@ import { NotificationsService } from '../../../services/notifications.service';
 import * as BatchActions from './batch.actions';
 import * as BatchSelectors from './batch.selectors';
 import { BatchStatistics } from '../../../models/cockpit/batch.model';
+import { TranslateService } from '../../../i18n/translate.service';
 
 @Injectable()
 export class BatchEffects {
@@ -24,6 +26,7 @@ export class BatchEffects {
   private store = inject(Store);
   private batchService = inject(BatchService);
   private notifications = inject(NotificationsService);
+  private translate = inject(TranslateService);
 
   
   // RUNTIME BATCHES
@@ -107,7 +110,7 @@ export class BatchEffects {
               if (batchType === 'runtime') {
                 return of(BatchActions.switchToHistory({ id }));
               }
-              return of(BatchActions.loadBatchDetailsFailure({ error: 'Batch not found' }));
+              return of(BatchActions.loadBatchDetailsFailure({ error: this.translate.instant('BATCHES_NOT_FOUND') }));
             }
             return of(BatchActions.loadBatchDetailsSuccess({ batch, batchType }));
           }),
@@ -130,14 +133,22 @@ export class BatchEffects {
     )
   );
 
-  // Load failed jobs after batch details loaded (runtime only)
+  detectBatchCompletion$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(BatchActions.loadRuntimeBatchesSuccess),
+      map(({ count }) => count),
+      pairwise(),
+      filter(([prevCount, currCount]) => currCount < prevCount),
+      map(() => BatchActions.loadHistoryBatches())
+    )
+  );
+
   loadJobsAfterDetails$ = createEffect(() =>
     this.actions$.pipe(
       ofType(BatchActions.loadBatchDetailsSuccess),
-      filter(({ batchType }) => batchType === 'runtime'),
       map(({ batch }) => {
-        const runtimeBatch = batch as BatchStatistics;
-        return BatchActions.loadFailedJobs({ jobDefinitionId: runtimeBatch.batchJobDefinitionId });
+        const b = batch as BatchStatistics;
+        return BatchActions.loadFailedJobs({ jobDefinitionId: b.batchJobDefinitionId });
       })
     )
   );
@@ -335,7 +346,6 @@ export class BatchEffects {
       exhaustMap(([_, batch, selectionType, jobsCount]) => {
         const actions: any[] = [BatchActions.loadRuntimeBatches()];
 
-        // Also refresh selection if it's a runtime batch with no failed jobs
         if (batch && selectionType === 'runtime' && jobsCount === 0) {
           actions.push(BatchActions.loadBatchDetails({ id: batch.id, batchType: 'runtime' }));
         }

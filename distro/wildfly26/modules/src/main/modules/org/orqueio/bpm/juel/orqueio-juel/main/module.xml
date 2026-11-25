@@ -1,0 +1,10 @@
+<module xmlns="urn:jboss:module:1.0" name="io.orqueio.bpm.juel.orqueio-juel">
+  <resources>
+    <resource-root path="orqueio-juel-@project.version@.jar" />
+  </resources>
+
+  <dependencies>
+    <module name="java.base" />
+    <module name="javax.el.api" />
+  </dependencies>
+</module>

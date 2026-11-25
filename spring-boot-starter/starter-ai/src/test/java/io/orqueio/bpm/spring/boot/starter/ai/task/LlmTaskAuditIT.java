@@ -108,7 +108,10 @@ class LlmTaskAuditIT {
     JsonNode audit = auditOf(instance);
     assertThat(audit.get("provider").asString()).isEqualTo(ReportingChatModel.class.getName());
     assertThat(audit.get("model").asString()).isEqualTo("qwen2.5:7b-reported");
-    assertThat(audit.get("promptVersion").asString()).isEqualTo(LlmTaskAuditor.sha256(PROMPT + "\ncategory:string"));
+    // The author's prompt, the library's wording around the data, and the declared outputs
+    assertThat(audit.get("promptVersion").asString()).isEqualTo(LlmTaskAuditor.sha256(PROMPT
+        + "\n" + LlmPromptResolver.DATA_RULE + "\n" + LlmPromptResolver.DATA_REMINDER + "\n" + LlmPrompt.DATA_LABEL
+        + "\ncategory:string"));
     assertThat(audit.get("inputTokens").asInt()).isEqualTo(312);
     assertThat(audit.get("outputTokens").asInt()).isEqualTo(100);
     assertThat(audit.get("latencyMs").asLong()).isGreaterThanOrEqualTo(0);

@@ -16,7 +16,8 @@ import { User } from '../../models/admin/user.model';
   styleUrls: ['./user-autocomplete.css']
 })
 export class UserAutocompleteComponent implements OnInit, OnDestroy {
-  @Input() placeholder = 'Search user...';
+  // Translation key or already translated text
+  @Input() placeholder = 'cockpit.processDetail.userTasks.searchUser';
   @Input() initialValue = '';
   @Input() allowClear = true;
   @Input() debounceMs = 300;

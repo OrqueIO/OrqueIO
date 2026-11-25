@@ -3,6 +3,7 @@ import { provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { CockpitDashboardComponent } from './cockpit-dashboard/cockpit-dashboard';
 import { ProcessDefinitionsComponent } from './cockpit-processes/process-definitions/process-definitions';
+import { ProcessInstanceSearchComponent } from './cockpit-processes/process-instance-search/process-instance-search';
 import { ProcessListComponent } from './cockpit-processes/process-list/process-list';
 import { ProcessDetailComponent } from './cockpit-processes/process-detail/process-detail';
 import { DecisionListComponent } from './cockpit-decisions/decision-list/decision-list';
@@ -11,6 +12,7 @@ import { DecisionInstanceComponent } from './cockpit-decisions/decision-instance
 import { DrdDetailComponent } from './cockpit-decisions/drd-detail/drd-detail';
 import { TaskDashboardComponent } from './cockpit-tasks/task-dashboard/task-dashboard';
 import { BatchPageComponent } from './cockpit-batch/batch-page/batch-page';
+import { BatchOperationsWizardComponent } from './cockpit-batch/batch-operations-wizard/batch-operations-wizard';
 import { DeploymentListComponent } from './cockpit-deployments/deployment-list/deployment-list';
 
 // Cockpit NgRx State - lazy loaded with this module
@@ -45,15 +47,19 @@ export const COCKPIT_ROUTES: Routes = [
     ],
     children: [
       { path: '', component: CockpitDashboardComponent, pathMatch: 'full', title: 'PAGE_TITLE_COCKPIT' },
-      { path: 'processes', component: ProcessDefinitionsComponent, title: 'PAGE_TITLE_COCKPIT_PROCESSES' },
+      { path: 'processes', redirectTo: 'processes/definitions', pathMatch: 'full' },
+      { path: 'processes/definitions', component: ProcessDefinitionsComponent, title: 'PAGE_TITLE_COCKPIT_PROCESSES' },
+      { path: 'processes/search', component: ProcessInstanceSearchComponent, title: 'PAGE_TITLE_COCKPIT_PROCESSES' },
       { path: 'processes/:key/instances', component: ProcessListComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_INSTANCES' },
+      { path: 'processes/:key/definition', component: ProcessListComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_DEFINITION' },
       { path: 'processes/instance/:id', component: ProcessDetailComponent, title: 'PAGE_TITLE_COCKPIT_PROCESS_DETAIL' },
       { path: 'decisions', component: DecisionListComponent, title: 'PAGE_TITLE_COCKPIT_DECISIONS' },
       { path: 'decisions/:id', component: DecisionDetailComponent, title: 'PAGE_TITLE_COCKPIT_DECISION_DETAIL' },
       { path: 'decision-instance/:id', component: DecisionInstanceComponent, title: 'PAGE_TITLE_COCKPIT_DECISION_INSTANCE' },
       { path: 'drd/:id', component: DrdDetailComponent, title: 'PAGE_TITLE_COCKPIT_DRD_DETAIL' },
       { path: 'tasks', component: TaskDashboardComponent, title: 'PAGE_TITLE_COCKPIT_TASKS' },
-      { path: 'batch', component: BatchPageComponent, title: 'PAGE_TITLE_COCKPIT_BATCH' },
+      { path: 'batch/operations', component: BatchOperationsWizardComponent, title: 'PAGE_TITLE_COCKPIT_BATCH_OPS' },
+      { path: 'batch', component: BatchPageComponent, title: 'PAGE_TITLE_COCKPIT_BATCH', pathMatch: 'full' },
       { path: 'deployments', component: DeploymentListComponent, title: 'PAGE_TITLE_COCKPIT_DEPLOYMENTS' }
     ]
   }

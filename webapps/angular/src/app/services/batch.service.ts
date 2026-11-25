@@ -26,6 +26,7 @@ interface UserProfile {
 })
 export class BatchService {
   private readonly baseUrl = environment.engineUrl + '/default';
+  private readonly historyUrl = `${this.baseUrl}/history`;
 
   constructor(private http: HttpClient) {}
 
@@ -112,8 +113,6 @@ export class BatchService {
     return this.http.get<HistoryBatch[]>(
       `${this.baseUrl}/history/batch`,
       { params: httpParams }
-    ).pipe(
-      catchError(() => of([]))
     );
   }
 
@@ -160,17 +159,16 @@ export class BatchService {
    * Get failed jobs for a batch
    */
   getFailedJobs(jobDefinitionId: string, params: JobQueryParams = {}): Observable<BatchJob[]> {
-    const body = {
-      jobDefinitionId,
-      withException: true,
-      noRetriesLeft: true,
-      sorting: params.sorting || [{ sortBy: 'jobId', sortOrder: 'asc' }],
-      ...params
-    };
+    const { firstResult = 0, maxResults = 10 } = params;
+    const httpParams = new HttpParams()
+      .set('jobDefinitionId', jobDefinitionId)
+      .set('noRetriesLeft', 'true')
+      .set('firstResult', String(firstResult))
+      .set('maxResults', String(maxResults));
 
-    return this.http.post<BatchJob[]>(
+    return this.http.get<BatchJob[]>(
       `${this.baseUrl}/job`,
-      body
+      { params: httpParams }
     ).pipe(
       catchError(() => of([]))
     );
@@ -182,7 +180,6 @@ export class BatchService {
   getFailedJobsCount(jobDefinitionId: string): Observable<number> {
     const body = {
       jobDefinitionId,
-      withException: true,
       noRetriesLeft: true
     };
 
@@ -224,9 +221,6 @@ export class BatchService {
     );
   }
 
-  /**
-   * Get job stacktrace URL
-   */
   getJobStacktraceUrl(jobId: string): string {
     return `${this.baseUrl}/job/${jobId}/stacktrace`;
   }
@@ -361,6 +355,41 @@ export class BatchService {
         })
       );
     }
+  }
+
+  getOperationAnnotation(batchId: string): Observable<string | null> {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/history/user-operation`,
+      { params: new HttpParams().set('batchId', batchId).set('maxResults', '1') }
+    ).pipe(
+      map(entries => {
+        if (entries.length > 0 && entries[0].annotation) {
+          return entries[0].annotation;
+        }
+        return null;
+      }),
+      catchError(() => of(null))
+    );
+  }
+
+  // ============================================
+  // BATCH OPERATIONS
+  // ============================================
+
+  /**
+   * Set removal time for batch instances (async batch operation)
+   */
+  setRemovalTimeAsync(payload: {
+    calculatedRemovalTime?: boolean;
+    absoluteRemovalTime?: string;
+    clearedRemovalTime?: boolean;
+    historicBatchIds?: string[];
+    historicBatchQuery?: Record<string, unknown>;
+  }): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(
+      `${this.historyUrl}/batch/set-removal-time`,
+      payload
+    );
   }
 
   // ============================================

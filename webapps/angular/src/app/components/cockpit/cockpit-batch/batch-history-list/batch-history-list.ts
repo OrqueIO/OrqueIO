@@ -2,11 +2,12 @@ import { Component, Output, EventEmitter, inject, ChangeDetectionStrategy } from
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faSpinner, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faSort, faSortUp, faSortDown, faHistory } from '@fortawesome/free-solid-svg-icons';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { CamDatePipe } from '../../../../pipes';
 import { PaginationComponent, PageChangeEvent } from '../../../../shared/pagination/pagination';
+import { TooltipDirective } from '../../../../shared/tooltip/tooltip.directive';
 import { HistoryBatch, BatchSorting } from '../../../../models/cockpit/batch.model';
 
 import * as BatchActions from '../../../../store/cockpit/batch/batch.actions';
@@ -15,7 +16,7 @@ import * as BatchSelectors from '../../../../store/cockpit/batch/batch.selectors
 @Component({
   selector: 'app-batch-history-list',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, TranslatePipe, CamDatePipe, PaginationComponent],
+  imports: [CommonModule, FontAwesomeModule, TranslatePipe, CamDatePipe, PaginationComponent, TooltipDirective],
   templateUrl: './batch-history-list.html',
   styleUrl: './batch-history-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,6 +28,7 @@ export class BatchHistoryListComponent {
 
   // Icons
   faSpinner = faSpinner;
+  faHistory = faHistory;
   faSort = faSort;
   faSortUp = faSortUp;
   faSortDown = faSortDown;
@@ -43,10 +45,10 @@ export class BatchHistoryListComponent {
 
   // Table columns
   columns = [
-    { key: 'batchId', label: 'BATCHES_PROGRESS_ID', sortable: true },
-    { key: 'type', label: 'BATCHES_PROGRESS_TYPE', sortable: false },
-    { key: 'startTime', label: 'BATCHES_PROGRESS_START_TIME', sortable: true },
-    { key: 'endTime', label: 'BATCHES_PROGRESS_END_TIME', sortable: true }
+    { key: 'batchId', label: 'BATCHES_BATCH_ID', sortable: true },
+    { key: 'type', label: 'BATCHES_TYPE', sortable: false },
+    { key: 'startTime', label: 'BATCHES_START_TIME', sortable: true },
+    { key: 'endTime', label: 'BATCHES_END_TIME', sortable: true }
   ];
 
   onLoadHistory(): void {

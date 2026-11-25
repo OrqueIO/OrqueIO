@@ -1,0 +1,72 @@
+<div class="op-selector">
+
+  <!-- ── Trigger (always visible, shows selected or placeholder) ─────── -->
+  <button type="button"
+          class="op-trigger"
+          [class.op-trigger--open]="isOpen"
+          (click)="toggleOpen($event)">
+
+    <!-- Selected operation -->
+    <ng-container *ngIf="selectedOperation; else placeholderTpl">
+      <div class="op-badge" [class]="selectedOperation.badgeClass">
+        <fa-icon [icon]="selectedOperation.icon"></fa-icon>
+      </div>
+      <div class="op-info">
+        <span class="op-label">{{ selectedOperation.labelKey | translate }}</span>
+        <span class="op-desc">{{ selectedOperation.descKey | translate }}</span>
+      </div>
+    </ng-container>
+
+    <!-- No selection yet -->
+    <ng-template #placeholderTpl>
+      <span class="op-placeholder">
+        {{ 'cockpit.batchOps.step1.selectPlaceholder' | translate }}
+      </span>
+    </ng-template>
+
+    <fa-icon [icon]="isOpen ? faChevronUp : faChevronDown" class="trigger-chevron"></fa-icon>
+  </button>
+
+  <!-- ── Dropdown overlay ───────────────────────────────────────────── -->
+  <div *ngIf="isOpen"
+       class="op-dropdown"
+       role="listbox"
+       (click)="$event.stopPropagation()">
+
+    <!-- Reset row: visible only when an operation is already selected -->
+    <div *ngIf="selectedId"
+         class="op-item op-item--reset"
+         (click)="clearAndClose()">
+      <span class="op-placeholder">{{ 'cockpit.batchOps.step1.selectPlaceholder' | translate }}</span>
+    </div>
+
+    <div *ngFor="let op of operations"
+         class="op-item"
+         [class.op-item--selected]="op.id === selectedId"
+         [class.op-item--disabled]="!op.available"
+         role="option"
+         [attr.aria-selected]="op.id === selectedId"
+         (click)="select(op)">
+
+      <div class="op-badge" [class]="op.badgeClass">
+        <fa-icon [icon]="op.icon"></fa-icon>
+      </div>
+
+      <div class="op-info">
+        <span class="op-label">{{ op.labelKey | translate }}</span>
+        <span class="op-desc">{{ op.descKey | translate }}</span>
+      </div>
+
+      <div class="op-end">
+        <span *ngIf="!op.available" class="coming-soon-badge">
+          {{ 'cockpit.batchOps.operationList.comingSoon' | translate }}
+        </span>
+        <fa-icon *ngIf="op.available && op.id === selectedId"
+                 [icon]="faCheck"
+                 class="check-icon">
+        </fa-icon>
+      </div>
+    </div>
+
+  </div>
+</div>

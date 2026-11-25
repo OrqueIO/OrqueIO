@@ -1,4 +1,7 @@
-import { Component, OnInit, OnDestroy, DestroyRef, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, DestroyRef, inject,
+  ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -6,16 +9,8 @@ import { forkJoin } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
-  faSpinner,
-  faSearch,
-  faCogs,
-  faExclamationTriangle,
-  faCheckCircle,
-  faPlayCircle,
-  faEye,
-  faSort,
-  faSortUp,
-  faSortDown
+  faSpinner, faSearch, faCogs, faExclamationTriangle, faCheckCircle,
+  faPlayCircle, faEye, faSort, faSortUp, faSortDown
 } from '@fortawesome/free-solid-svg-icons';
 
 interface SortConfig {
@@ -25,7 +20,10 @@ interface SortConfig {
 
 import { CockpitHeaderComponent, BreadcrumbItem } from '../../../../shared/cockpit-header/cockpit-header';
 import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/cockpit-menu';
-import { CockpitService, ProcessDefinitionStatistics } from '../../../../services/cockpit.service';
+import {
+  CockpitService,
+  ProcessDefinitionStatistics
+} from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
@@ -68,26 +66,22 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
     { label: 'Processes', translateKey: 'cockpit.menu.processes' }
   ];
 
-  // Data
   processDefinitions: ProcessDefinitionStatistics[] = [];
   filteredDefinitions: ProcessDefinitionStatistics[] = [];
   totalCount = 0;
   loading = true;
-
-  // Filters
   searchQuery = '';
-
-  // Sorting
-  sortConfig: SortConfig = {
-    sortBy: 'name',
-    sortOrder: 'asc'
-  };
+  sortConfig: SortConfig = { sortBy: 'name', sortOrder: 'asc' };
   private readonly SORT_CONFIG_KEY = 'cockpit.processes.sortConfig';
 
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
     this.loadSortConfig();
     this.loadProcessDefinitions();
+  }
+
+  ngOnDestroy(): void {
+    this.navMenuService.clearMenuItems();
   }
 
   private loadSortConfig(): void {
@@ -98,9 +92,7 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
         if (config.sortBy && config.sortOrder) {
           this.sortConfig = config;
         }
-      } catch {
-        // Use default
-      }
+      } catch { /* use default */ }
     }
   }
 
@@ -120,14 +112,8 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
   }
 
   getSortIcon(columnId: string): any {
-    if (this.sortConfig.sortBy !== columnId) {
-      return this.faSort;
-    }
+    if (this.sortConfig.sortBy !== columnId) return this.faSort;
     return this.sortConfig.sortOrder === 'asc' ? this.faSortUp : this.faSortDown;
-  }
-
-  ngOnDestroy(): void {
-    this.navMenuService.clearMenuItems();
   }
 
   loadProcessDefinitions(): void {
@@ -166,11 +152,9 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
       });
     }
 
-    // Apply sorting
     this.filteredDefinitions.sort((a, b) => {
       let valueA: any;
       let valueB: any;
-
       switch (this.sortConfig.sortBy) {
         case 'name':
           valueA = this.getDefinitionName(a).toLowerCase();
@@ -196,7 +180,6 @@ export class ProcessDefinitionsComponent implements OnInit, OnDestroy {
           valueA = this.getDefinitionName(a).toLowerCase();
           valueB = this.getDefinitionName(b).toLowerCase();
       }
-
       if (valueA < valueB) return this.sortConfig.sortOrder === 'asc' ? -1 : 1;
       if (valueA > valueB) return this.sortConfig.sortOrder === 'asc' ? 1 : -1;
       return 0;

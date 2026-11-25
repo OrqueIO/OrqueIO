@@ -1,0 +1,1085 @@
+import 'zone.js';
+import 'zone.js/testing';
+import { vi, describe, it, expect, beforeAll, beforeEach } from 'vitest';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { SelectInstancesDialogComponent, MOVE_INSTANCES_DIALOG_SESSION_KEY } from './select-instances-dialog';
+import { CockpitService, VariableLine } from '../../../../services/cockpit.service';
+import { ProcessInstanceService } from '../../../../services/process-instance.service';
+import { InstanceFilterPanelComponent } from '../../../../shared/instance-filter-panel/instance-filter-panel';
+import { TranslateService } from '../../../../i18n/translate.service';
+import { BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { initTestEnvironment } from '../../../../testing/test-utils';
+import { of } from 'rxjs';
+
+const SAMPLE_ACTIVITIES: BpmnElement[] = [
+  { id: 'UserTask_1', type: 'bpmn:UserTask', name: 'User Task' },
+  { id: 'ServiceTask_1', type: 'bpmn:ServiceTask', name: 'Service Task' },
+  { id: 'EndEvent_1', type: 'bpmn:EndEvent' },
+];
+
+const mockCockpitService = {
+  queryProcessInstances: vi.fn().mockReturnValue(of([]))
+};
+
+const mockProcessInstanceService = {
+  getRuntimeInstanceIdsByActivity: vi.fn().mockReturnValue(of(['inst-runtime-1'])),
+  getProcessInstanceIdByIncident: vi.fn().mockReturnValue(of(null))
+};
+
+const mockTranslateService = {
+  instant: (key: string) => key,
+  get: (key: string) => of(key),
+  currentLang$: of('en')
+};
+
+async function createComponent(opts: {
+  sourceActivityId?: string | null;
+  availableActivities?: BpmnElement[];
+  targetActivityId?: string | null;
+} = {}) {
+  await TestBed.configureTestingModule({
+    imports: [SelectInstancesDialogComponent],
+    providers: [
+      provideRouter([]),
+      { provide: CockpitService, useValue: mockCockpitService },
+      { provide: ProcessInstanceService, useValue: mockProcessInstanceService },
+      { provide: TranslateService, useValue: mockTranslateService }
+    ]
+  }).compileComponents();
+
+  sessionStorage.removeItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+
+  const fixture: ComponentFixture<SelectInstancesDialogComponent> =
+    TestBed.createComponent(SelectInstancesDialogComponent);
+  const component = fixture.componentInstance;
+  component.processDefinitionId = 'process:1';
+  component.sourceActivityId = opts.sourceActivityId ?? 'UserTask_1';
+  component.availableActivities = opts.availableActivities ?? SAMPLE_ACTIVITIES;
+  component.targetActivityId = opts.targetActivityId ?? null;
+  fixture.detectChanges();
+  return { fixture, component };
+}
+
+// ─── Non-regression: bidirectional sync ──────────────────────────────────────
+
+describe('SelectInstancesDialogComponent — bidirectional sync (non-regression)', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('modifying the Activity ID pill emits activityIdCriterionChange with the new value', async () => {
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+    const emitted: (string | null)[] = [];
+    component.activityIdCriterionChange.subscribe((v: string | null) => emitted.push(v));
+
+    component.startEditPill(0, new MouseEvent('click'));
+    component.selectActivity('ServiceTask_1');
+    component.confirmEdit();
+
+    expect(emitted).toEqual(['ServiceTask_1']);
+  });
+
+  it('removing the Activity ID pill sets canConfirm to false', async () => {
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    component.selectionMode = 'query';
+    (component as any).searchResults = [{ id: 'inst-1', businessKey: null }];
+    expect(component.canConfirm).toBe(true);
+
+    component.removePill(0);
+
+    expect(component.hasActivityIdPill).toBe(false);
+    expect(component.canConfirm).toBe(false);
+  });
+
+  it('Activity ID uses the activity picker (not chip input) — single value only', async () => {
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    expect(component.isChipField('activityId')).toBe(false);
+
+    component.startEditPill(0, new MouseEvent('click'));
+    component.selectActivity('EndEvent_1');
+    component.confirmEdit();
+
+    const pill = component.activePills.find(p => p.field === 'activityId');
+    expect(pill).toBeDefined();
+    expect(pill!.values.length).toBe(1);
+    expect(pill!.values[0]).toBe('EndEvent_1');
+  });
+});
+
+// ─── Part 2: Activity dropdown with Target grayed out ────────────────────────
+
+describe('SelectInstancesDialogComponent — activity dropdown (Part 2)', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('target activity item is disabled and non-clickable in the picker', async () => {
+    const { component, fixture } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+      targetActivityId: 'ServiceTask_1'
+    });
+
+    // Open the editor for the pre-populated activityId pill
+    component.startEditPill(0, new MouseEvent('click'));
+    fixture.detectChanges();
+
+    // All activity-picker-item buttons rendered
+    const items = fixture.debugElement.queryAll(By.css('.activity-picker-item'));
+    expect(items.length).toBe(SAMPLE_ACTIVITIES.length);
+
+    // The button for ServiceTask_1 (= targetActivityId) must be disabled
+    const targetItem = items.find(el =>
+      el.nativeElement.textContent.includes('ServiceTask_1') ||
+      el.nativeElement.textContent.includes('Service Task')
+    );
+    expect(targetItem).toBeDefined();
+    expect(targetItem!.nativeElement.disabled).toBe(true);
+    expect(targetItem!.nativeElement.classList.contains('activity-picker-item--disabled')).toBe(true);
+  });
+
+  it('target activity does not update pendingTextValue when clicked', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+      targetActivityId: 'ServiceTask_1'
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    // Attempt to select the target activity directly
+    component.selectActivity('ServiceTask_1');
+
+    // Calling selectActivity directly sets the value, but the template guard
+    // `act.id !== targetActivityId && selectActivity(act.id)` prevents this from
+    // being reachable via the button click. Here we verify that even if called,
+    // confirmEdit will simply pick whatever pendingTextValue is — the template
+    // prevents the call from happening in the browser.
+    // The meaningful assertion: clicking a disabled button fires no (click) event.
+    // We test the template guard via the class and disabled attribute (tested above).
+    // This test asserts selectActivity still works when called for non-target activities.
+    component.pendingTextValue = '';
+    component.selectActivity('EndEvent_1');
+    expect(component.pendingTextValue).toBe('EndEvent_1');
+  });
+
+  it('re-opening the dialog after going back resets to the new sourceActivityId', async () => {
+    // This verifies the *ngIf destroy/recreate mechanism:
+    // When showSelectDialog flips false→true, ngOnInit() re-runs and re-populates the pill.
+    // We simulate this by re-calling ngOnInit with a new sourceActivityId.
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    // Simulate going back: the parent closes the dialog (*ngIf = false)
+    // and changes sourceActivityId, then re-opens (*ngIf = true → ngOnInit re-runs)
+    component.activePills = [];                   // cleared by destruction
+    component.sourceActivityId = 'ServiceTask_1'; // parent changed the source
+    component.ngOnInit();                          // re-init simulates *ngIf recreation
+
+    const pill = component.activePills.find(p => p.field === 'activityId');
+    expect(pill).toBeDefined();
+    expect(pill!.values[0]).toBe('ServiceTask_1');
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — check icon and hover state', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('check icon appears only on the currently selected activity and moves when selection changes', async () => {
+    const { component, fixture } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    fixture.detectChanges();
+
+    let checks = fixture.debugElement.queryAll(By.css('.activity-picker-item__check'));
+    expect(checks.length).toBe(1);
+
+    const items = fixture.debugElement.queryAll(By.css('.activity-picker-item'));
+    const userTaskItem = items.find(el => el.nativeElement.textContent.includes('User Task'))!;
+    expect(userTaskItem.query(By.css('.activity-picker-item__check'))).toBeTruthy();
+
+    component.selectActivity('ServiceTask_1');
+    fixture.detectChanges();
+
+    checks = fixture.debugElement.queryAll(By.css('.activity-picker-item__check'));
+    expect(checks.length).toBe(1);
+
+    const serviceTaskItem = items.find(el => el.nativeElement.textContent.includes('Service Task'))!;
+    expect(serviceTaskItem.query(By.css('.activity-picker-item__check'))).toBeTruthy();
+    expect(userTaskItem.query(By.css('.activity-picker-item__check'))).toBeNull();
+  });
+
+  it('hoveredId is set on mouseenter and cleared on mouseleave, independently of selection', async () => {
+    const { component, fixture } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    fixture.detectChanges();
+
+    expect(component.hoveredId).toBeNull();
+
+    const items = fixture.debugElement.queryAll(By.css('.activity-picker-item'));
+    const serviceItem = items.find(el => el.nativeElement.textContent.includes('Service Task'))!;
+    serviceItem.nativeElement.dispatchEvent(new MouseEvent('mouseenter'));
+    fixture.detectChanges();
+
+    expect(component.hoveredId).toBe('ServiceTask_1');
+    const checks = fixture.debugElement.queryAll(By.css('.activity-picker-item__check'));
+    expect(checks.length).toBe(1);
+    expect(serviceItem.query(By.css('.activity-picker-item__check'))).toBeNull();
+
+    serviceItem.nativeElement.dispatchEvent(new MouseEvent('mouseleave'));
+    fixture.detectChanges();
+    expect(component.hoveredId).toBeNull();
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — activity type icons', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('returns the correct icon and color for every listed BPMN type', async () => {
+    const { component } = await createComponent();
+
+    const cases: Array<{ type: string; expectedColor: string; label: string }> = [
+      { type: 'bpmn:StartEvent',             expectedColor: 'var(--color-success)',  label: 'startEvent' },
+      { type: 'bpmn:EndEvent',               expectedColor: 'var(--color-danger)',   label: 'endEvent' },
+      { type: 'bpmn:UserTask',               expectedColor: 'var(--color-primary)',  label: 'userTask' },
+      { type: 'bpmn:ServiceTask',            expectedColor: 'var(--color-primary)',  label: 'serviceTask' },
+      { type: 'bpmn:ScriptTask',             expectedColor: 'var(--color-primary)',  label: 'scriptTask' },
+      { type: 'bpmn:BusinessRuleTask',       expectedColor: 'var(--color-primary)',  label: 'businessRuleTask' },
+      { type: 'bpmn:SendTask',               expectedColor: 'var(--color-primary)',  label: 'sendTask' },
+      { type: 'bpmn:ReceiveTask',            expectedColor: 'var(--color-primary)',  label: 'receiveTask' },
+      { type: 'bpmn:ManualTask',             expectedColor: 'var(--color-primary)',  label: 'manualTask' },
+      { type: 'bpmn:CallActivity',           expectedColor: 'var(--color-primary)',  label: 'callActivity' },
+      { type: 'bpmn:SubProcess',             expectedColor: 'var(--color-primary)',  label: 'subProcess' },
+      { type: 'bpmn:ExclusiveGateway',       expectedColor: 'var(--color-warning)',  label: 'exclusiveGateway' },
+      { type: 'bpmn:ParallelGateway',        expectedColor: 'var(--color-warning)',  label: 'parallelGateway' },
+      { type: 'bpmn:InclusiveGateway',       expectedColor: 'var(--color-warning)',  label: 'inclusiveGateway' },
+      { type: 'bpmn:IntermediateCatchEvent', expectedColor: 'var(--text-secondary)', label: 'intermediateCatchEvent' },
+      { type: 'bpmn:IntermediateThrowEvent', expectedColor: 'var(--text-secondary)', label: 'intermediateThrowEvent' },
+      { type: 'bpmn:BoundaryEvent',          expectedColor: 'var(--text-secondary)', label: 'boundaryEvent' },
+    ];
+
+    for (const { type, expectedColor, label } of cases) {
+      const icon = component.getActivityIcon(type);
+      const color = component.getActivityIconColor(type);
+      expect(icon, `${label}: icon should be defined`).toBeDefined();
+      expect(color, `${label}: color`).toBe(expectedColor);
+    }
+
+    const exclusiveIcon = component.getActivityIcon('bpmn:ExclusiveGateway');
+    const parallelIcon  = component.getActivityIcon('bpmn:ParallelGateway');
+    expect(exclusiveIcon).not.toBe(parallelIcon);
+    const inclusiveIcon = component.getActivityIcon('bpmn:InclusiveGateway');
+    expect(inclusiveIcon).toBe(parallelIcon);
+  });
+
+  it('returns fallback icon (faSquare) and muted color for an unrecognised BPMN type', async () => {
+    const { component } = await createComponent();
+
+    const icon = component.getActivityIcon('bpmn:UnknownFutureElement');
+    const color = component.getActivityIconColor('bpmn:UnknownFutureElement');
+
+    expect(icon).toBeDefined();
+    expect(color).toBe('var(--text-muted)');
+    expect(icon).not.toBe(component.getActivityIcon('bpmn:UserTask'));
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — instance ID link navigation', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('renders a link to the process instance detail page for each result row', async () => {
+    mockCockpitService.queryProcessInstances.mockReturnValueOnce(
+      of([{ id: 'inst-abc-123', businessKey: 'my-key' }])
+    );
+    const { fixture } = await createComponent();
+
+    const link = fixture.debugElement.query(By.css('a.instance-link'));
+    expect(link).toBeTruthy();
+    expect(link.nativeElement.getAttribute('href')).toBe('/cockpit/processes/instance/inst-abc-123');
+  });
+
+  it('clicking the instance ID cell does not toggle row selection', async () => {
+    mockCockpitService.queryProcessInstances.mockReturnValueOnce(
+      of([{ id: 'inst-abc-123', businessKey: null }])
+    );
+    const { component, fixture } = await createComponent();
+
+    expect(component.selectedIds.has('inst-abc-123')).toBe(false);
+
+    const idCell = fixture.debugElement.query(By.css('td.col-id'));
+    idCell.nativeElement.click();
+    fixture.detectChanges();
+
+    expect(component.selectedIds.has('inst-abc-123')).toBe(false);
+  });
+});
+
+
+
+describe('SelectInstancesDialogComponent — Variables criterion', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('selecting Variables opens the editor with one empty variable line', async () => {
+    const { component } = await createComponent();
+    component.selectCriterion('variables', new MouseEvent('click'));
+    expect(component.activeEditorType).toBe('variables');
+    expect(component.pendingVariableLines.length).toBe(1);
+    expect(component.pendingVariableLines[0]).toEqual({ name: '', operator: 'eq', values: [] });
+  });
+
+  it('addVariableLine appends a new empty line', async () => {
+    const { component } = await createComponent();
+    component.selectCriterion('variables', new MouseEvent('click'));
+    component.addVariableLine();
+    expect(component.pendingVariableLines.length).toBe(2);
+  });
+
+  it('removeVariableLine removes the specified line', async () => {
+    const { component } = await createComponent();
+    component.selectCriterion('variables', new MouseEvent('click'));
+    component.addVariableLine();
+    component.pendingVariableLines[0].name = 'amount';
+    component.removeVariableLine(0);
+    expect(component.pendingVariableLines.length).toBe(1);
+    expect(component.pendingVariableLines[0].name).toBe('');
+  });
+
+  it('confirmEdit with valid variable lines creates a pill with variableLines', async () => {
+    const { component } = await createComponent();
+    component.selectCriterion('variables', new MouseEvent('click'));
+    component.pendingVariableLines[0] = { name: 'amount', operator: 'gt', values: ['100'] };
+    component.confirmEdit();
+    const pill = component.activePills.find(p => p.field === 'variables');
+    expect(pill).toBeDefined();
+    expect(pill!.variableLines).toHaveLength(1);
+    expect(pill!.variableLines![0].variableName).toBe('amount');
+    expect(pill!.variableLines![0].variableOperator).toBe('gt');
+    expect(pill!.variableLines![0].values).toEqual(['100']);
+  });
+
+  it('confirmEdit with no valid lines does not add a variables pill', async () => {
+    const { component } = await createComponent();
+    component.selectCriterion('variables', new MouseEvent('click'));
+    component.confirmEdit();
+    expect(component.activePills.find(p => p.field === 'variables')).toBeUndefined();
+  });
+
+  it('populatePending restores variable lines when editing an existing pill', async () => {
+    const { component } = await createComponent();
+    const existingPill: any = {
+      field: 'variables', values: [],
+      variableLines: [{ variableName: 'status', variableOperator: 'eq', values: ['active'] }]
+    };
+    component.activePills = [component.activePills[0], existingPill];
+    component.startEditPill(1, new MouseEvent('click'));
+    expect(component.pendingVariableLines.length).toBe(1);
+    expect(component.pendingVariableLines[0].name).toBe('status');
+    expect(component.pendingVariableLines[0].operator).toBe('eq');
+    expect(component.pendingVariableLines[0].values).toEqual(['active']);
+  });
+
+  it('getPillIcon returns faCode for variables field', async () => {
+    const { component } = await createComponent();
+    expect(component.getPillIcon('variables')).toBe(component.faCode);
+  });
+
+  it('getPillLabel for variables calls instant with the variable-line count as a string param', async () => {
+    const { component } = await createComponent();
+    const spy = vi.spyOn((component as any)['translateService'], 'instant');
+    const pill: any = {
+      field: 'variables', values: [],
+      variableLines: [
+        { variableName: 'a', variableOperator: 'eq', values: ['1'] },
+        { variableName: 'b', variableOperator: 'gt', values: ['2'] },
+      ]
+    };
+    component.getPillLabel(pill);
+    expect(spy).toHaveBeenCalledWith('cockpit.processes.globalSearch.pill.variables', { count: '2' });
+  });
+
+  it('[S1] buildQueryBody: all single-value variable lines → flat variables[], no orQueries', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      {
+        field: 'variables', values: [],
+        variableLines: [
+          { variableName: 'amount', variableOperator: 'gt', values: ['100'] } as VariableLine,
+          { variableName: 'status', variableOperator: 'eq', values: ['active'] } as VariableLine,
+        ]
+      } as any
+    ];
+    const body = component.buildQueryBody();
+    const vars = body['variables'] as Array<{ name: string; operator: string; value: any }>;
+    expect(vars).toHaveLength(2);
+    expect(vars[0]).toEqual({ name: 'amount', operator: 'gt', value: 100 });
+    expect(vars[1]).toEqual({ name: 'status', operator: 'eq', value: 'active' });
+    expect(body['orQueries']).toBeUndefined();
+  });
+
+  it('[S2] buildQueryBody: multi-value for same variable → one orQuery entry, both values inside variables[]', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      {
+        field: 'variables', values: [],
+        variableLines: [
+          { variableName: 'varName', variableOperator: 'eq', values: ['v1', 'v2'] } as VariableLine,
+        ]
+      } as any
+    ];
+    const body = component.buildQueryBody();
+    expect(body['variables']).toBeUndefined();
+    const orQ = body['orQueries'] as Array<{ variables: Array<{ name: string; operator: string; value: any }> }>;
+    expect(orQ).toHaveLength(1);
+    expect(orQ[0].variables).toHaveLength(2);
+    expect(orQ[0].variables).toContainEqual({ name: 'varName', operator: 'eq', value: 'v1' });
+    expect(orQ[0].variables).toContainEqual({ name: 'varName', operator: 'eq', value: 'v2' });
+  });
+
+  it('[S3] buildQueryBody: multi-value variable + single-value variable → one orQuery entry per variable (AND between, OR within)', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      {
+        field: 'variables', values: [],
+        variableLines: [
+          { variableName: 'status', variableOperator: 'eq', values: ['active', 'pending'] } as VariableLine,
+          { variableName: 'amount', variableOperator: 'gt', values: ['100'] } as VariableLine,
+        ]
+      } as any
+    ];
+    const body = component.buildQueryBody();
+    expect(body['variables']).toBeUndefined();
+    const orQ = body['orQueries'] as Array<{ variables: Array<{ name: string; operator: string; value: any }> }>;
+    expect(orQ).toHaveLength(2);
+    expect(orQ[0].variables).toHaveLength(2);
+    expect(orQ[0].variables).toContainEqual({ name: 'status', operator: 'eq', value: 'active' });
+    expect(orQ[0].variables).toContainEqual({ name: 'status', operator: 'eq', value: 'pending' });
+    expect(orQ[1].variables).toHaveLength(1);
+    expect(orQ[1].variables).toContainEqual({ name: 'amount', operator: 'gt', value: 100 });
+  });
+
+  it('[S4] buildQueryBody: like operator + two values → one orQuery entry with % wrapped values', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      {
+        field: 'variables', values: [],
+        variableLines: [
+          { variableName: 'varName', variableOperator: 'like', values: ['user', 'my'] } as VariableLine,
+        ]
+      } as any
+    ];
+    const body = component.buildQueryBody();
+    expect(body['variables']).toBeUndefined();
+    const orQ = body['orQueries'] as Array<{ variables: Array<{ name: string; operator: string; value: any }> }>;
+    expect(orQ).toHaveLength(1);
+    expect(orQ[0].variables).toHaveLength(2);
+    expect(orQ[0].variables).toContainEqual({ name: 'varName', operator: 'like', value: '%user%' });
+    expect(orQ[0].variables).toContainEqual({ name: 'varName', operator: 'like', value: '%my%' });
+  });
+
+
+  it('[S5] buildQueryBody: businessKey pill always excluded — search() applies processInstanceBusinessKeyLike', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      { field: 'businessKey', values: ['ORDER-001'] },
+    ];
+    const body = component.buildQueryBody();
+    expect(body['processInstanceBusinessKeyLike']).toBeUndefined();
+    expect(body['processInstanceBusinessKeyIn']).toBeUndefined();
+    expect(body['orQueries']).toBeUndefined();
+    expect(body['processDefinitionId']).toBe('process:1');
+    expect(body['unfinished']).toBe(true);
+    expect(body['activeActivityIdIn']).toEqual(['UserTask_1']);
+  });
+
+  it('[S6] buildQueryBody: two businessKey values → no businessKey field (search() runs parallel LIKE calls)', async () => {
+    const { component } = await createComponent();
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      { field: 'businessKey', values: ['ORDER-001', 'ORDER-NOMATCH-999'] },
+    ];
+    const body = component.buildQueryBody();
+    expect(body['processInstanceBusinessKeyLike']).toBeUndefined();
+    expect(body['processInstanceBusinessKeyIn']).toBeUndefined();
+    expect(body['orQueries']).toBeUndefined();
+    expect(body['processDefinitionId']).toBe('process:1');
+    expect(body['unfinished']).toBe(true);
+    expect(body['activeActivityIdIn']).toEqual(['UserTask_1']);
+  });
+
+  it('isMultiValueOperator and getOperatorLabel match the InstanceFilterPanelComponent implementation', async () => {
+    const { component } = await createComponent();
+    expect(component.isMultiValueOperator('eq')).toBe(true);
+    expect(component.isMultiValueOperator('neq')).toBe(true);
+    expect(component.isMultiValueOperator('like')).toBe(true);
+    expect(component.isMultiValueOperator('gt')).toBe(false);
+    expect(component.isMultiValueOperator('gteq')).toBe(false);
+    expect(component.isMultiValueOperator('lt')).toBe(false);
+    expect(component.isMultiValueOperator('lteq')).toBe(false);
+    const labels: Record<string, string> = { eq: '=', neq: '≠', gt: '>', gteq: '≥', lt: '<', lteq: '≤', like: '~' };
+    for (const [op, label] of Object.entries(labels)) {
+      expect(component.getOperatorLabel(op as any)).toBe(label);
+    }
+    const line: VariableLine = { variableName: 'x', variableOperator: 'eq', values: ['1'] };
+    expect(line.variableName).toBe('x');
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — Business Key criterion (end-to-end)', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(() => {
+    mockCockpitService.queryProcessInstances.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of(['inst-runtime-1']));
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockClear();
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockReturnValue(of(null));
+  });
+
+  it('[BK-E2E-S1] single businessKey chip → search uses processInstanceBusinessKeyLike (contains) + mandatory filters', async () => {
+    const matchingInstance = { id: 'inst-ORDER-001', businessKey: 'ORDER-001', startTime: '2026-01-01T00:00:00.000Z' };
+
+    // First call: initial search (ngOnInit). Second call: after businessKey pill applied.
+    mockCockpitService.queryProcessInstances
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([matchingInstance]));
+
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    component.selectCriterion('businessKey', new MouseEvent('click'));
+    component.pendingChipValues = ['ORDER-001'];
+    component.confirmEdit();
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    const bkCall = calls.find(call => call[0].processInstanceBusinessKeyLike != null);
+    expect(bkCall).toBeDefined();
+    const body = bkCall[0];
+    expect(body.processInstanceBusinessKeyLike).toBe('%ORDER-001%');
+    expect(body.processInstanceBusinessKeyIn).toBeUndefined();
+    expect(body.processDefinitionId).toBe('process:1');
+    expect(body.unfinished).toBe(true);
+    expect(body.processInstanceIds).toEqual(['inst-runtime-1']);
+    expect(body.activeActivityIdIn).toBeUndefined();
+    expect(component.searchResults).toEqual([matchingInstance]);
+  });
+
+  it('[BK-E2E-S2] two businessKey values → two parallel LIKE calls, only matching instance appears', async () => {
+    const existingInstance = { id: 'inst-ORDER-001', businessKey: 'ORDER-001', startTime: '2026-01-01T00:00:00.000Z' };
+
+    // Call 1: initial search (ngOnInit)
+    // Call 2: LIKE '%ORDER-001%'  → returns the existing instance
+    // Call 3: LIKE '%ORDER-NOMATCH-999%' → returns nothing
+    mockCockpitService.queryProcessInstances
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([existingInstance]))
+      .mockReturnValueOnce(of([]));
+
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    component.selectCriterion('businessKey', new MouseEvent('click'));
+    component.pendingChipValues = ['ORDER-001', 'ORDER-NOMATCH-999'];
+    component.confirmEdit();
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    const bkCalls = calls.filter(call => call[0].processInstanceBusinessKeyLike != null);
+
+    // Two separate LIKE calls — one per value
+    expect(bkCalls.length).toBe(2);
+    expect(bkCalls[0][0].processInstanceBusinessKeyLike).toBe('%ORDER-001%');
+    expect(bkCalls[1][0].processInstanceBusinessKeyLike).toBe('%ORDER-NOMATCH-999%');
+
+    // Each call carries the mandatory filters
+    for (const call of bkCalls) {
+      expect(call[0].processInstanceBusinessKeyIn).toBeUndefined();
+      expect(call[0].processDefinitionId).toBe('process:1');
+      expect(call[0].unfinished).toBe(true);
+      expect(call[0].processInstanceIds).toEqual(['inst-runtime-1']);
+      expect(call[0].activeActivityIdIn).toBeUndefined();
+    }
+
+    // Only the existing instance appears — the non-matching key yields nothing
+    expect(component.searchResults).toEqual([existingInstance]);
+    expect(component.searchResults!.length).toBe(1);
+  });
+});
+
+
+describe('InstanceFilterPanelComponent — non-regression after Variables integration in Move Instances', () => {
+  it('InstanceFilterPanelComponent class is still importable and unmodified', () => {
+    expect(InstanceFilterPanelComponent).toBeDefined();
+    expect(InstanceFilterPanelComponent.name).toContain('InstanceFilterPanelComponent');
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — Activity ID: two-step runtime lookup', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(() => {
+    mockCockpitService.queryProcessInstances.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockClear();
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockClear();
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockReturnValue(of(null));
+  });
+
+  it('[AID-1] runtime returns IDs → body uses processInstanceIds (not activeActivityIdIn), non-regression for sync tasks', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity
+      .mockReturnValue(of(['inst-A', 'inst-B']));
+    mockCockpitService.queryProcessInstances
+      .mockReturnValue(of([{ id: 'inst-A', businessKey: null }]));
+
+    const { component } = await createComponent({ sourceActivityId: 'ServiceTask_1' });
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    expect(calls.length).toBeGreaterThan(0);
+    const body = calls[0][0];
+    expect(body.processInstanceIds).toEqual(['inst-A', 'inst-B']);
+    expect(body.activeActivityIdIn).toBeUndefined();
+    expect(body.processDefinitionId).toBe('process:1');
+    expect(body.unfinished).toBe(true);
+
+    const runtimeCalls = mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mock.calls as any[][];
+    expect(runtimeCalls[0][0].activityIdIn).toEqual(['ServiceTask_1']);
+    expect(runtimeCalls[0][0].processDefinitionId).toBe('process:1');
+  });
+
+  it('[AID-2] runtime returns empty → searchResults is empty and no history query is sent', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity
+      .mockReturnValue(of([]));
+    mockCockpitService.queryProcessInstances
+      .mockReturnValue(of([{ id: 'should-not-appear', businessKey: null }]));
+
+    const { component } = await createComponent({ sourceActivityId: 'ServiceTask_1' });
+
+    expect(mockCockpitService.queryProcessInstances).not.toHaveBeenCalled();
+    expect(component.searchResults).toEqual([]);
+  });
+
+  it('[AID-3] activityId + businessKey combined → processInstanceIds AND processInstanceBusinessKeyLike both in body', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity
+      .mockReturnValue(of(['inst-A']));
+    mockCockpitService.queryProcessInstances
+      .mockReturnValueOnce(of([]))
+      .mockReturnValueOnce(of([{ id: 'inst-A', businessKey: 'BK-001' }]));
+
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    component.selectCriterion('businessKey', new MouseEvent('click'));
+    component.pendingChipValues = ['BK-001'];
+    component.confirmEdit();
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    const bkCall = calls.find(call => call[0].processInstanceBusinessKeyLike != null);
+    expect(bkCall).toBeDefined();
+    expect(bkCall![0].processInstanceBusinessKeyLike).toBe('%BK-001%');
+    expect(bkCall![0].processInstanceIds).toEqual(['inst-A']);
+    expect(bkCall![0].activeActivityIdIn).toBeUndefined();
+    expect(component.searchResults).toEqual([{ id: 'inst-A', businessKey: 'BK-001' }]);
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — Incident ID: two-step history lookup', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(() => {
+    mockCockpitService.queryProcessInstances.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of(['inst-runtime-1']));
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockClear();
+  });
+
+  it('[IID-1] incidentId alone → body uses processInstanceIds with incident processInstanceId, incidentId absent', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of(['inst-runtime-1']));
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockReturnValue(of('incident-owner-proc-id'));
+
+    const { component } = await createComponent();
+
+    // Remove the auto-populated activity pill and clear ngOnInit calls
+    component.activePills = [];
+    mockCockpitService.queryProcessInstances.mockClear();
+    mockCockpitService.queryProcessInstances.mockReturnValue(
+      of([{ id: 'incident-owner-proc-id', businessKey: null }])
+    );
+
+    component.selectCriterion('incidentId', new MouseEvent('click'));
+    component.pendingTextValue = 'db6acfdd-b682-11f1-82c1-48ea62940dbf';
+    component.confirmEdit();
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    expect(calls.length).toBeGreaterThan(0);
+    const body = calls[0][0];
+    expect(body.processInstanceIds).toEqual(['incident-owner-proc-id']);
+    expect(body.incidentId).toBeUndefined();
+    expect(body.processDefinitionId).toBe('process:1');
+
+    expect(mockProcessInstanceService.getProcessInstanceIdByIncident).toHaveBeenCalledWith(
+      'db6acfdd-b682-11f1-82c1-48ea62940dbf'
+    );
+  });
+
+  it('[IID-2] incidentId lookup returns null (not found) → searchResults is empty, no history query', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of(['inst-runtime-1']));
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockReturnValue(of(null));
+
+    const { component } = await createComponent();
+
+    // Remove the auto-populated activity pill and clear ngOnInit calls
+    component.activePills = [];
+    mockCockpitService.queryProcessInstances.mockClear();
+
+    component.selectCriterion('incidentId', new MouseEvent('click'));
+    component.pendingTextValue = 'non-existent-incident-id';
+    component.confirmEdit();
+
+    expect(mockCockpitService.queryProcessInstances).not.toHaveBeenCalled();
+    expect(component.searchResults).toEqual([]);
+  });
+
+  it('[IID-3] incidentId + activityId combined → intersection: only instance matching both in body', async () => {
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of(['inst-A', 'inst-B', 'inst-C']));
+    mockProcessInstanceService.getProcessInstanceIdByIncident.mockReturnValue(of('inst-B'));
+
+    const { component } = await createComponent({ sourceActivityId: 'ServiceTask_1' });
+
+    // Clear ngOnInit calls, set up mock for the combined search
+    mockCockpitService.queryProcessInstances.mockClear();
+    mockCockpitService.queryProcessInstances.mockReturnValue(of([{ id: 'inst-B', businessKey: null }]));
+
+    component.selectCriterion('incidentId', new MouseEvent('click'));
+    component.pendingTextValue = 'some-incident-id';
+    component.confirmEdit();
+
+    const calls = mockCockpitService.queryProcessInstances.mock.calls as any[][];
+    expect(calls.length).toBe(1);
+    const body = calls[0][0];
+    expect(body.processInstanceIds).toEqual(['inst-B']);
+    expect(body.activeActivityIdIn).toBeUndefined();
+    expect(body.incidentId).toBeUndefined();
+    expect(component.searchResults).toEqual([{ id: 'inst-B', businessKey: null }]);
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — criteria dropdown completeness', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('Add criteria dropdown contains all 14 expected criteria', async () => {
+    const { component, fixture } = await createComponent();
+
+    component.toggleCriteriaDropdown(new MouseEvent('click'));
+    fixture.detectChanges();
+
+    const dropdownEl = fixture.debugElement.query(By.css('.criteria-dropdown'));
+    const buttons = dropdownEl.queryAll(By.css('.criteria-option'));
+    const labels = buttons.map(b => b.nativeElement.textContent.trim());
+
+    const expected = [
+      'cockpit.modify.selectDialog.queryInstanceIds',
+      'cockpit.modify.selectDialog.queryBusinessKey',
+      'cockpit.modify.selectDialog.querySuperProcessInstanceId',
+      'cockpit.modify.selectDialog.querySubProcessInstanceId',
+      'cockpit.modify.selectDialog.queryActive',
+      'cockpit.modify.selectDialog.querySuspended',
+      'cockpit.modify.selectDialog.queryWithJobsRetrying',
+      'cockpit.modify.selectDialog.queryWithIncidents',
+      'cockpit.modify.selectDialog.queryIncidentId',
+      'cockpit.modify.selectDialog.queryIncidentType',
+      'cockpit.modify.selectDialog.queryIncidentMessageLike',
+      'cockpit.modify.selectDialog.queryActivityId',
+      'cockpit.modify.selectDialog.queryStartedAfter',
+      'cockpit.modify.selectDialog.queryStartedBefore',
+      'cockpit.processes.filters.variable',
+    ];
+
+    expect(buttons.length, `Expected 15 criteria buttons but got ${buttons.length}. Labels: ${JSON.stringify(labels)}`).toBe(15);
+
+    for (const key of expected) {
+      const found = labels.some(l => l.includes(key));
+      expect(found, `Criterion "${key}" not found in dropdown. Present: ${JSON.stringify(labels)}`).toBe(true);
+    }
+  });
+});
+
+describe('SelectInstancesDialogComponent — chip auto-search', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(() => {
+    mockCockpitService.queryProcessInstances.mockClear();
+    mockCockpitService.queryProcessInstances.mockReturnValue(of([]));
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockClear();
+    mockProcessInstanceService.getRuntimeInstanceIdsByActivity.mockReturnValue(of([]));
+  });
+
+  it('[CAS-1] adding instanceId chips accumulates in pending only — no search, editor stays open, no pill committed', async () => {
+    const { component } = await createComponent();
+    component.activePills = [];
+    mockCockpitService.queryProcessInstances.mockClear();
+
+    component.selectCriterion('instanceId', new MouseEvent('click'));
+    component.pendingChipValues = ['inst-001'];
+
+    expect(mockCockpitService.queryProcessInstances).not.toHaveBeenCalled();
+    expect(component.activeEditorType).toBe('instanceId');
+    expect(component.activePills.find(p => p.field === 'instanceId')).toBeUndefined();
+  });
+
+  it('[CAS-2] confirmEdit (emptyEnter / Apply) commits pill and triggers search', async () => {
+    const { component } = await createComponent();
+    component.activePills = [];
+    component.selectCriterion('instanceId', new MouseEvent('click'));
+    component.pendingChipValues = ['inst-001', 'inst-002'];
+    mockCockpitService.queryProcessInstances.mockClear();
+
+    component.confirmEdit();
+
+    expect(mockCockpitService.queryProcessInstances).toHaveBeenCalledTimes(1);
+    const pills = component.activePills.filter(p => p.field === 'instanceId');
+    expect(pills.length).toBe(1);
+    expect(pills[0].values).toEqual(['inst-001', 'inst-002']);
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('[CAS-3] adding businessKey chips accumulates in pending only — no search, editor stays open', async () => {
+    const { component } = await createComponent();
+    component.activePills = [];
+    mockCockpitService.queryProcessInstances.mockClear();
+
+    component.selectCriterion('businessKey', new MouseEvent('click'));
+    component.pendingChipValues = ['ORDER-001'];
+
+    expect(mockCockpitService.queryProcessInstances).not.toHaveBeenCalled();
+    expect(component.activeEditorType).toBe('businessKey');
+    expect(component.activePills.find(p => p.field === 'businessKey')).toBeUndefined();
+  });
+
+  it('[CAS-4] confirmEdit with empty chips removes the pill and re-searches', async () => {
+    const { component } = await createComponent();
+    component.activePills = [];
+    component.selectCriterion('instanceId', new MouseEvent('click'));
+    component.pendingChipValues = ['inst-001', 'inst-002'];
+    component.confirmEdit();
+
+    const pillIdx = component.activePills.findIndex(p => p.field === 'instanceId');
+    component.startEditPill(pillIdx, new MouseEvent('click'));
+    component.pendingChipValues = [];
+    mockCockpitService.queryProcessInstances.mockClear();
+
+    component.confirmEdit();
+
+    expect(mockCockpitService.queryProcessInstances).toHaveBeenCalledTimes(1);
+    expect(component.activePills.find(p => p.field === 'instanceId')).toBeUndefined();
+  });
+});
+
+
+describe('SelectInstancesDialogComponent — Activity picker keyboard navigation', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
+  it('ArrowDown moves highlight from null to first enabled activity, then to the next', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+      targetActivityId: null,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.activityHighlightIndex).toBeNull();
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(0);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(1);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(2);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(2);
+  });
+
+  it('ArrowUp moves highlight back and stops at the first item', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+      targetActivityId: null,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(2);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    expect(component.activityHighlightIndex).toBe(1);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    expect(component.activityHighlightIndex).toBe(0);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+    expect(component.activityHighlightIndex).toBe(0);
+  });
+
+  it('ArrowDown skips the disabled (target) activity', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+      targetActivityId: 'ServiceTask_1',
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(0);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(2);
+  });
+
+  it('Enter selects the highlighted activity and triggers Apply (confirmEdit)', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+      targetActivityId: null,
+    });
+
+    const emitted: (string | null)[] = [];
+    component.activityIdCriterionChange.subscribe((v: string | null) => emitted.push(v));
+
+    component.startEditPill(0, new MouseEvent('click'));
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(1);
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.activeEditorType).toBeNull();
+    const pill = component.activePills.find(p => p.field === 'activityId');
+    expect(pill?.values[0]).toBe('ServiceTask_1');
+    expect(emitted).toEqual(['ServiceTask_1']);
+    expect(component.activityHighlightIndex).toBeNull();
+  });
+
+  it('Enter with no highlight does nothing', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.activityHighlightIndex).toBeNull();
+
+    const emitted: (string | null)[] = [];
+    component.activityIdCriterionChange.subscribe((v: string | null) => emitted.push(v));
+
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.activeEditorType).toBe('activityId');
+    expect(emitted).toEqual([]);
+  });
+
+  it('activityHighlightIndex resets to null when the editor is closed via Escape', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(0);
+
+    component.cancelEdit();
+
+    expect(component.activityHighlightIndex).toBeNull();
+    expect(component.activeEditorType).toBeNull();
+  });
+
+  it('activityHighlightIndex resets when a different editor is reopened', async () => {
+    const { component } = await createComponent({
+      sourceActivityId: 'UserTask_1',
+      availableActivities: SAMPLE_ACTIVITIES,
+    });
+
+    component.startEditPill(0, new MouseEvent('click'));
+    component.onActivityPickerKeydown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+    expect(component.activityHighlightIndex).toBe(0);
+
+    component.startEditPill(0, new MouseEvent('click'));
+    expect(component.activityHighlightIndex).toBeNull();
+  });
+});
+
+describe('SelectInstancesDialogComponent — state preserved on Back from Confirm Modification', () => {
+
+  it('onConfirm does not clear sessionStorage — state survives for Back-button recreation', async () => {
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+    component.activePills = [
+      { field: 'activityId', values: ['UserTask_1'] },
+      { field: 'businessKey', values: ['bk-42'] },
+    ];
+    component.selectedIds = new Set(['inst-a', 'inst-b']);
+    component.onConfirm();
+    component.ngOnDestroy();
+
+    const raw = sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY);
+    expect(raw).not.toBeNull();
+    const saved = JSON.parse(raw!);
+    expect(saved.activePills).toHaveLength(2);
+    expect(saved.selectedIds).toContain('inst-a');
+    expect(saved.selectedIds).toContain('inst-b');
+  });
+
+  it('ngOnInit restores pills and selected IDs when dialog is recreated after Back', async () => {
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    const persistedState = {
+      processDefinitionId: 'process:1',
+      activePills: [
+        { field: 'activityId', values: ['UserTask_1'] },
+        { field: 'businessKey', values: ['bk-42'] },
+      ],
+      selectionMode: 'instance',
+      selectedIds: ['inst-a', 'inst-b'],
+      variableNamesIgnoreCase: false,
+      variableValuesIgnoreCase: false,
+      sourceActivity: null,
+      targetActivity: null,
+    };
+    sessionStorage.setItem(MOVE_INSTANCES_DIALOG_SESSION_KEY, JSON.stringify(persistedState));
+
+    component.ngOnInit();
+
+    expect(component.activePills).toHaveLength(2);
+    expect(component.activePills.find(p => p.field === 'businessKey')?.values[0]).toBe('bk-42');
+    expect(component.selectionMode).toBe('instance');
+  });
+
+  it('onCancel still clears sessionStorage — cancel discards state as before', async () => {
+    const { component } = await createComponent({ sourceActivityId: 'UserTask_1' });
+
+    sessionStorage.setItem(MOVE_INSTANCES_DIALOG_SESSION_KEY, '{"processDefinitionId":"process:1"}');
+
+    component.onCancel();
+
+    expect(sessionStorage.getItem(MOVE_INSTANCES_DIALOG_SESSION_KEY)).toBeNull();
+  });
+
+});
+

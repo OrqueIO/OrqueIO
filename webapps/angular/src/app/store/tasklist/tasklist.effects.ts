@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { of, forkJoin } from 'rxjs';
 import { map, catchError, switchMap, withLatestFrom, tap, concatMap } from 'rxjs/operators';
 import { TasklistService } from '../../services/tasklist/tasklist.service';
+import { TranslateService } from '../../i18n/translate.service';
 import { TasksActions, FiltersActions, TaskDetailActions, TasklistUIActions } from './tasklist.actions';
 import {
   selectTasksQueryParams,
@@ -28,6 +29,7 @@ export class TasklistEffects {
   private readonly store = inject(Store);
   private readonly router = inject(Router);
   private readonly tasklistService = inject(TasklistService);
+  private readonly translate = inject(TranslateService);
 
   //  SEARCH QUERY BUILDER 
 
@@ -274,7 +276,7 @@ export class TasklistEffects {
         this.tasklistService.completeTask(taskId, variables).pipe(
           map(() => TasksActions.completeTaskSuccess({ taskId })),
           catchError(error => {
-            const errorMessage = error.error?.message || error.error?.errorMessage || error.message || 'Failed to complete task';
+            const errorMessage = error.error?.message || error.error?.errorMessage || error.message || this.translate.instant('tasklist.errors.completeTask');
             return of(TasksActions.completeTaskFailure({ taskId, error: errorMessage }));
           })
         )

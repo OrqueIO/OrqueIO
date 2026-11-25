@@ -7,7 +7,7 @@
 
   <ng-template #emptyState>
     <div class="empty-state">
-      <span>No activities</span>
+      <span>{{ 'cockpit.processDetail.noActivities' | translate }}</span>
     </div>
   </ng-template>
 </div>
@@ -49,7 +49,7 @@
     </span>
 
     <!-- Incident indicator -->
-    <span *ngIf="node.hasIncidents" class="incident-indicator" title="Has incidents">
+    <span *ngIf="node.hasIncidents" class="incident-indicator" [title]="'cockpit.processDetail.hasIncidents' | translate">
       <fa-icon [icon]="faExclamationTriangle"></fa-icon>
     </span>
   </div>

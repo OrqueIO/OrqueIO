@@ -356,8 +356,11 @@ public class DevProcessApplication extends ServletProcessApplication {
     user.setProfile(profile);
     user.setCredentials(credentials);
 
-    // manually perform setup
-    new SetupResource().createInitialUser(engine.getName(), user);
+    try {
+      new SetupResource().createInitialUser(engine.getName(), user);
+    } catch (io.orqueio.bpm.engine.rest.exception.InvalidRequestException e) {
+      LOGGER.info("Initial admin user already exists, skipping setup: " + e.getMessage());
+    }
   }
 
   private void createTasklistDemoData(ProcessEngine engine) {

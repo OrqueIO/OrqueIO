@@ -118,7 +118,7 @@
                     class="btn-icon-remove"
                     (click)="removeVariableFilter(i)"
                     type="button"
-                    title="Remove"
+                    [title]="'common.remove' | translate"
                   >
                     <fa-icon [icon]="faTimes"></fa-icon>
                   </button>
@@ -134,7 +134,7 @@
             <div class="filter-errors" *ngIf="filterErrors.length > 0">
               <div class="filter-error" *ngFor="let error of filterErrors">
                 <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-                {{ error }}
+                {{ error | translate }}
               </div>
             </div>
 
@@ -154,33 +154,46 @@
 
         <!-- Right content area -->
         <div class="content-area" [class.fullscreen]="diagramMaximized" [class.table-expanded]="tableMaximized">
+
           <!-- BPMN Diagram section -->
           <section class="diagram-section" [class.maximized]="diagramMaximized" [class.collapsed]="tableMaximized">
+
             <div class="section-header" *ngIf="!diagramMaximized">
-              <div class="section-title">
-                <fa-icon [icon]="faProjectDiagram"></fa-icon>
-                <span>{{ 'cockpit.processDetail.diagram' | translate }}</span>
-              </div>
-              <div class="definition-info" *ngIf="processDefinition">
-                <span class="definition-name">{{ processDefinition.name || processDefinition.key }}</span>
-                <span class="definition-key">{{ processDefinition.key }}</span>
-                <span class="definition-version" *ngIf="selectedVersion === 'all'">
-                  {{ 'cockpit.processes.allVersions' | translate }}
-                </span>
-                <span class="tenant-id" *ngIf="processDefinition.tenantId">
-                  <fa-icon [icon]="faCog"></fa-icon>
-                  {{ processDefinition.tenantId }}
-                </span>
-                <!-- Version selector -->
-                <div class="version-selector" *ngIf="processDefinitionVersions.length > 1">
-                  <label>{{ 'cockpit.processes.version' | translate }}:</label>
-                  <select [(ngModel)]="selectedVersion" (change)="onVersionChange()">
-                    <option value="all">{{ 'cockpit.processes.allVersions' | translate }}</option>
-                    <option *ngFor="let v of processDefinitionVersions" [value]="v.id">
-                      {{ getVersionLabel(v) }}
-                    </option>
-                  </select>
+              <div class="section-header-identity">
+                <div class="section-title">
+                  <fa-icon [icon]="faProjectDiagram"></fa-icon>
+                  <span>{{ 'cockpit.processDetail.diagram' | translate }}</span>
                 </div>
+                <div class="definition-info" *ngIf="processDefinition">
+                  <span class="definition-name">{{ processDefinition.name || processDefinition.key }}</span>
+                  <span class="definition-key">{{ processDefinition.key }}</span>
+                  <span class="definition-version" *ngIf="selectedVersion === 'all'">
+                    {{ 'cockpit.processes.allVersions' | translate }}
+                  </span>
+                  <span class="tenant-id" *ngIf="processDefinition.tenantId">
+                    <fa-icon [icon]="faCog"></fa-icon>
+                    {{ processDefinition.tenantId }}
+                  </span>
+                  <!-- Version selector -->
+                  <div class="version-selector" *ngIf="processDefinitionVersions.length > 1">
+                    <label>{{ 'cockpit.processes.version' | translate }}:</label>
+                    <select [(ngModel)]="selectedVersion" (change)="onVersionChange()">
+                      <option value="all">{{ 'cockpit.processes.allVersions' | translate }}</option>
+                      <option *ngFor="let v of processDefinitionVersions" [value]="v.id">
+                        {{ getVersionLabel(v) }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- Actions group (same visual as Instance view toolbar) -->
+              <div class="section-actions" *ngIf="processDefinition">
+                <button class="pl-toolbar-btn pl-toolbar-btn--info"
+                        (click)="openCorrelateMessage()"
+                        [title]="'cockpit.batchOps.correlate.label' | translate"
+                        [attr.aria-label]="'cockpit.correlateMessage.ariaLabel' | translate">
+                  <fa-icon [icon]="faEnvelope"></fa-icon>
+                </button>
               </div>
             </div>
 
@@ -197,7 +210,12 @@
                 [activityBadges]="activityBadges"
                 [showExpandButton]="true"
                 [isExpanded]="diagramMaximized"
+                [enableCallActivityNavigation]="true"
+                [parentBreadcrumb]="activeParentBreadcrumb"
                 (expandToggle)="toggleDiagramMaximize()"
+                (callActivityClick)="navigateToCalledDefinition($event)"
+                (elementClick)="onBpmnElementClick($event)"
+                (viewerReady)="onBpmnViewerReady()"
               ></app-bpmn-viewer>
 
               <div class="empty-state" *ngIf="!loadingDiagram && !bpmnXml">
@@ -239,6 +257,15 @@
                   (click)="switchTab('job-definitions')"
                 >
                   {{ 'cockpit.processes.tabs.jobDefinitions' | translate }}
+                </a>
+                <a
+                  class="process-tab"
+                  [class.active]="activeTab === 'modify'"
+                  [class.disabled]="!modifyTabEnabled"
+                  (click)="modifyTabEnabled && switchTab('modify')"
+                  [title]="!modifyTabEnabled ? ('cockpit.modify.selectVersion' | translate) : ''"
+                >
+                  {{ 'cockpit.processes.tabs.modify' | translate }}
                 </a>
               </nav>
               <button class="tabs-expand-btn"
@@ -339,7 +366,9 @@
                       </span>
                     </td>
                     <td class="id-cell">
-                      <a [routerLink]="['/cockpit/processes/instance', instance.id]" class="instance-link">
+                      <a [routerLink]="['/cockpit/processes/instance', instance.id]"
+                         [queryParams]="instanceLinkQueryParams"
+                         class="instance-link">
                         {{ instance.id }}
                       </a>
                       <span class="super-process-link" *ngIf="instance.superProcessInstanceId">
@@ -353,6 +382,7 @@
                     <td>
                       <a
                         [routerLink]="['/cockpit/processes/instance', instance.id]"
+                        [queryParams]="instanceLinkQueryParams"
                         class="action-link"
                         [title]="'cockpit.processes.viewDetails' | translate"
                       >
@@ -425,7 +455,7 @@
                         <a
                           [routerLink]="['/cockpit/processes/instance', incident.processInstanceId]"
                           class="action-link"
-                          [title]="'cockpit.incidents.retry' | translate"
+                          [title]="'common.retry' | translate"
                         >
                           <fa-icon [icon]="faSync"></fa-icon>
                         </a>
@@ -472,7 +502,9 @@
                   <tbody>
                     <tr *ngFor="let calledDef of calledProcessDefinitions">
                       <td>
-                        <a [routerLink]="['/cockpit/processes', calledDef.key, 'instances']" class="definition-link">
+                        <a [routerLink]="['/cockpit/processes', calledDef.key, 'definition']"
+                           [queryParams]="getCalledDefNavParams()"
+                           class="definition-link">
                           {{ calledDef.name || calledDef.key }}
                         </a>
                         <span class="definition-key mono" *ngIf="calledDef.name">{{ calledDef.key }}</span>
@@ -489,7 +521,8 @@
                       </td>
                       <td>
                         <a
-                          [routerLink]="['/cockpit/processes', calledDef.key, 'instances']"
+                          [routerLink]="['/cockpit/processes', calledDef.key, 'definition']"
+                          [queryParams]="getCalledDefNavParams()"
                           class="action-link"
                           [title]="'cockpit.processes.viewInstances' | translate"
                         >
@@ -535,7 +568,7 @@
                       <td>
                         <span class="state-badge" [ngClass]="jobDef.suspended ? 'state-suspended' : 'state-active'">
                           <fa-icon [icon]="jobDef.suspended ? faPauseCircle : faPlayCircle"></fa-icon>
-                          {{ jobDef.suspended ? 'Suspended' : 'Active' }}
+                          {{ (jobDef.suspended ? 'cockpit.processes.filters.stateSuspended' : 'cockpit.processes.filters.stateActive') | translate }}
                         </span>
                       </td>
                       <td>{{ jobDef.activityId }}</td>
@@ -597,9 +630,28 @@
                 <p>{{ 'cockpit.jobDefinitions.noJobDefinitions' | translate }}</p>
               </div>
             </div>
+
+            <div class="tab-content modify-tab-content" *ngIf="activeTab === 'modify'">
+              <app-modify-tab
+                #modifyTab
+                [processDefinitionId]="selectedVersion !== 'all' ? selectedVersion : null"
+                [bpmnXml]="bpmnXml"
+                (overlaysChanged)="onModifyOverlaysChanged($event)"
+                (refreshRequested)="onModifyRefreshRequested()"
+              ></app-modify-tab>
+            </div>
           </section>
         </div>
       </div>
     </div>
   </main>
 </div>
+
+<app-correlate-message-modal
+  *ngIf="showCorrelateModal"
+  [messageName]="correlateInitialMessageName"
+  [suggestions]="messageSuggestions"
+  [suggestionsEnabled]="correlateInitialMessageName === null"
+  (confirm)="onCorrelateOpenBatchOp($event)"
+  (cancel)="showCorrelateModal = false"
+></app-correlate-message-modal>

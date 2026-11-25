@@ -1,4 +1,15 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 3;
+  min-height: 0;
+  padding-top: var(--space-4);
+  background: var(--bg-page);
+}
+
 .batch-jobs-list {
+  flex: 1;
+  min-height: 0;
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color-light);
@@ -11,14 +22,12 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--border-color-light);
-  background: var(--color-gray-50);
+  padding: var(--space-5) var(--space-5) var(--space-4);
 }
 
 .list-title {
   margin: 0;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
   display: flex;
@@ -52,6 +61,7 @@
 
 .table-container {
   flex: 1;
+  overflow-x: auto;
   overflow-y: auto;
   min-height: 0;
 }
@@ -59,11 +69,16 @@
 .jobs-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
+
+.jobs-table th:nth-child(1) { width: 260px; }
+.jobs-table th:nth-child(3) { width: 90px; min-width: 80px; }
 
 .jobs-table th {
   position: sticky;
   top: 0;
+  z-index: 2;
   background: var(--color-gray-50);
   padding: var(--space-2) var(--space-3);
   text-align: left;
@@ -105,6 +120,10 @@
   background: var(--color-gray-50);
 }
 
+.job-id {
+  overflow: hidden;
+}
+
 .job-id code {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
@@ -112,21 +131,34 @@
   background: var(--color-primary-bg);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+  vertical-align: middle;
 }
 
 .job-exception {
-  max-width: 400px;
+  overflow: hidden;
+}
+
+.exception-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
 }
 
 .exception-preview {
   color: var(--color-danger);
   font-size: var(--font-size-xs);
-  display: inline-block;
-  max-width: 350px;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  vertical-align: middle;
 }
 
 .stacktrace-link {
@@ -154,7 +186,7 @@
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--color-gray-500);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
@@ -172,6 +204,40 @@
 .btn-delete:hover {
   background: var(--color-danger-bg);
   color: var(--color-danger);
+}
+
+.btn-stacktrace:hover,
+.btn-stacktrace.active {
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+}
+
+
+.stacktrace-row td {
+  padding: 0;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.stacktrace-loading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.stacktrace-content {
+  margin: 0;
+  padding: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-100, #f3f4f6);
+  background: var(--color-gray-900, #111827);
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 260px;
+  overflow-y: auto;
 }
 
 /* Pagination spacing */

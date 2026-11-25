@@ -1,0 +1,401 @@
+import 'zone.js';
+import 'zone.js/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { MultiValueChipInputComponent } from './multi-value-chip-input';
+import { initTestEnvironment } from '../../testing/test-utils';
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Read CSS file for direct assertion (jsdom doesn't compute styles)
+// Global variable shared across all describe blocks
+const cssPath = path.join(__dirname, 'multi-value-chip-input.css');
+const cssContent = fs.readFileSync(cssPath, 'utf-8');
+
+describe('MultiValueChipInputComponent', () => {
+  let component: MultiValueChipInputComponent;
+  let fixture: ComponentFixture<MultiValueChipInputComponent>;
+
+  beforeAll(() => {
+    initTestEnvironment();
+  });
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MultiValueChipInputComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(MultiValueChipInputComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  // ── 1. Enter key adds chip and clears input ──────────────────────────────
+
+  it('should add a chip on Enter and clear the input', () => {
+    component.currentInput = 'abc';
+    const event = new KeyboardEvent('keydown', { key: 'Enter' });
+    const spy = vi.spyOn(event, 'preventDefault');
+    component.onKeydown(event);
+    expect(spy).toHaveBeenCalled();
+    expect(component.values).toEqual(['abc']);
+    expect(component.currentInput).toBe('');
+  });
+
+  it('should not add an empty value on Enter — emits emptyEnter instead', () => {
+    let count = 0;
+    component.emptyEnter.subscribe(() => count++);
+    component.currentInput = '   ';
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(component.values).toEqual([]);
+    expect(count).toBe(1);
+  });
+
+  // ── emptyEnter output ─────────────────────────────────────────────────────
+
+  it('should emit emptyEnter when Enter is pressed on empty input', () => {
+    let count = 0;
+    component.emptyEnter.subscribe(() => count++);
+    component.currentInput = '';
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(count).toBe(1);
+    expect(component.values).toEqual([]);
+  });
+
+  it('should NOT emit emptyEnter when Enter is pressed with text — chip created, popover stays open', () => {
+    let count = 0;
+    component.emptyEnter.subscribe(() => count++);
+    component.currentInput = 'abc';
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(component.values).toEqual(['abc']);
+    expect(count).toBe(0);
+  });
+
+  // ── 2. Comma key adds chip, comma does not appear in chip or input ───────
+
+  it('should add a chip on comma and clear the input without a trailing comma', () => {
+    component.currentInput = 'val1';
+    const event = new KeyboardEvent('keydown', { key: ',' });
+    const spy = vi.spyOn(event, 'preventDefault');
+    component.onKeydown(event);
+    expect(spy).toHaveBeenCalled();
+    expect(component.values).toEqual(['val1']);
+    expect(component.currentInput).toBe('');
+  });
+
+  // ── 3. Blur adds pending input without requiring Enter ───────────────────
+
+  it('should add a chip on blur even without pressing Enter', () => {
+    component.currentInput = 'blur-val';
+    component.onBlur();
+    expect(component.values).toEqual(['blur-val']);
+    expect(component.currentInput).toBe('');
+  });
+
+  it('should do nothing on blur when input is empty', () => {
+    component.currentInput = '';
+    component.onBlur();
+    expect(component.values).toEqual([]);
+  });
+
+  // ── 4. Paste splits on comma and newline ─────────────────────────────────
+
+  it('should split pasted comma-separated text into distinct chips', () => {
+    const pasteEvent = {
+      preventDefault: vi.fn(),
+      clipboardData: { getData: vi.fn().mockReturnValue('a, b, c') }
+    } as any as ClipboardEvent;
+    component.onPaste(pasteEvent);
+    expect(component.values).toEqual(['a', 'b', 'c']);
+    expect(component.currentInput).toBe('');
+  });
+
+  it('should split pasted newline-separated text into distinct chips', () => {
+    const pasteEvent = {
+      preventDefault: vi.fn(),
+      clipboardData: { getData: vi.fn().mockReturnValue('x\ny\nz') }
+    } as any as ClipboardEvent;
+    component.onPaste(pasteEvent);
+    expect(component.values).toEqual(['x', 'y', 'z']);
+  });
+
+  it('should filter out blank parts from pasted text', () => {
+    const pasteEvent = {
+      preventDefault: vi.fn(),
+      clipboardData: { getData: vi.fn().mockReturnValue('v1,,v2,  ') }
+    } as any as ClipboardEvent;
+    component.onPaste(pasteEvent);
+    expect(component.values).toEqual(['v1', 'v2']);
+  });
+
+  // ── 5. Deduplication on paste ─────────────────────────────────────────────
+
+  it('should not add a duplicate when pasting a value already in values', () => {
+    component.values = ['existing'];
+    const pasteEvent = {
+      preventDefault: vi.fn(),
+      clipboardData: { getData: vi.fn().mockReturnValue('existing, new') }
+    } as any as ClipboardEvent;
+    component.onPaste(pasteEvent);
+    expect(component.values).toEqual(['existing', 'new']);
+    expect(component.values.filter(v => v === 'existing').length).toBe(1);
+  });
+
+  // ── 6. Remove chip ────────────────────────────────────────────────────────
+
+  it('should remove only the targeted chip and keep the others', () => {
+    component.values = ['a', 'b', 'c'];
+    component.removeValue(1);
+    expect(component.values).toEqual(['a', 'c']);
+  });
+
+  it('should remove the first chip correctly', () => {
+    component.values = ['first', 'second'];
+    component.removeValue(0);
+    expect(component.values).toEqual(['second']);
+  });
+
+  // ── Deduplication on Enter ─────────────────────────────────────────────
+
+  it('should not add a duplicate value via Enter', () => {
+    component.values = ['dup'];
+    component.currentInput = 'dup';
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(component.values).toEqual(['dup']);
+  });
+
+  it('should not add a duplicate value via blur', () => {
+    component.values = ['dup'];
+    component.currentInput = 'dup';
+    component.onBlur();
+    expect(component.values).toEqual(['dup']);
+  });
+
+  // ── valuesChange emission ──────────────────────────────────────────────
+
+  it('should emit valuesChange after adding a value via Enter', () => {
+    const emitted: string[][] = [];
+    component.valuesChange.subscribe(v => emitted.push(v));
+    component.currentInput = 'x';
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(emitted.length).toBe(1);
+    expect(emitted[0]).toEqual(['x']);
+  });
+
+  it('should emit valuesChange after adding a value via blur', () => {
+    const emitted: string[][] = [];
+    component.valuesChange.subscribe(v => emitted.push(v));
+    component.currentInput = 'y';
+    component.onBlur();
+    expect(emitted.length).toBe(1);
+    expect(emitted[0]).toEqual(['y']);
+  });
+
+  it('should emit valuesChange after removing a chip', () => {
+    component.values = ['a', 'b'];
+    const emitted: string[][] = [];
+    component.valuesChange.subscribe(v => emitted.push(v));
+    component.removeValue(0);
+    expect(emitted.length).toBe(1);
+    expect(emitted[0]).toEqual(['b']);
+  });
+
+  it('should NOT emit valuesChange when blur fires on an empty input', () => {
+    const emitted: string[][] = [];
+    component.valuesChange.subscribe(v => emitted.push(v));
+    component.currentInput = '';
+    component.onBlur();
+    expect(emitted.length).toBe(0);
+  });
+
+  // ── Multiple values accumulation ─────────────────────────────────────────
+
+  it('should accumulate 3 values via onKeydown Enter and clear input after each', () => {
+    component.currentInput = '100';
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(component.values).toEqual(['100']);
+    expect(component.currentInput).toBe('');
+
+    component.currentInput = '200';
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(component.values).toEqual(['100', '200']);
+
+    component.currentInput = '300';
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(component.values).toEqual(['100', '200', '300']);
+    expect(component.currentInput).toBe('');
+  });
+});
+
+
+describe('MultiValueChipInputComponent — chip inline-edit', () => {
+  let component: MultiValueChipInputComponent;
+  let fixture: ComponentFixture<MultiValueChipInputComponent>;
+
+  beforeAll(() => { initTestEnvironment(); });
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MultiValueChipInputComponent],
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(MultiValueChipInputComponent);
+    component = fixture.componentInstance;
+    component.values = ['alpha', 'beta', 'gamma'];
+    fixture.detectChanges();
+  });
+
+  it('should update the chip value and close edit mode on Enter with a valid new value', () => {
+    const emitted: string[][] = [];
+    component.valuesChange.subscribe(v => emitted.push(v));
+
+    component.startEdit(1);
+    expect(component.editingIndex).toBe(1);
+    expect(component.editingValue).toBe('beta');
+
+    component.editingValue = 'delta';
+    component.onEditKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.values).toEqual(['alpha', 'delta', 'gamma']);
+    expect(component.editingIndex).toBeNull();
+    expect(component.editingError).toBeNull();
+    expect(emitted.length).toBe(1);
+    expect(emitted[0]).toEqual(['alpha', 'delta', 'gamma']);
+    // no duplicate chip: list length unchanged
+    expect(component.values.length).toBe(3);
+  });
+
+  it('should restore the original chip value on Escape and leave values unchanged', () => {
+    const emitted: string[][] = [];
+    component.valuesChange.subscribe(v => emitted.push(v));
+
+    component.startEdit(0);
+    component.editingValue = 'changed';
+    component.onEditKeydown(new KeyboardEvent('keydown', { key: 'Escape' }));
+
+    expect(component.values).toEqual(['alpha', 'beta', 'gamma']);
+    expect(component.editingIndex).toBeNull();
+    expect(component.editingError).toBeNull();
+    expect(emitted.length).toBe(0);
+  });
+
+  it('should block confirmation and set an error when the new value is empty', () => {
+    component.startEdit(0);
+    component.editingValue = '   ';
+    component.onEditKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.editingIndex).toBe(0);
+    expect(component.editingError).toBe('cockpit.processes.globalSearch.chipEditErrorEmpty');
+    expect(component.values).toEqual(['alpha', 'beta', 'gamma']);
+  });
+
+  it('should block confirmation and set a duplicate error when the new value matches another chip', () => {
+    component.startEdit(0);
+    component.editingValue = 'gamma';
+    component.onEditKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+    expect(component.editingIndex).toBe(0);
+    expect(component.editingError).toBe('cockpit.processes.globalSearch.chipEditErrorDuplicate');
+    expect(component.values).toEqual(['alpha', 'beta', 'gamma']);
+  });
+
+  it('should remove the chip being edited and clear edit state when its remove button is clicked', () => {
+    component.startEdit(1);
+    expect(component.editingIndex).toBe(1);
+
+    component.removeValue(1);
+
+    expect(component.values).toEqual(['alpha', 'gamma']);
+    expect(component.editingIndex).toBeNull();
+    expect(component.editingError).toBeNull();
+  });
+
+  it('should adjust editingIndex when a chip before the edited one is removed', () => {
+    component.startEdit(2);
+    expect(component.editingIndex).toBe(2);
+
+    component.removeValue(0);
+
+    expect(component.values).toEqual(['beta', 'gamma']);
+    expect(component.editingIndex).toBe(1);
+  });
+
+
+  it('[T1] should apply max-height and overflow-y auto to container with 3 values (no overflow)', async () => {
+    component.values = ['value1', 'value2', 'value3'];
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const container = fixture.nativeElement.querySelector('.chip-input-container') as HTMLElement;
+    expect(container).toBeTruthy();
+
+    // Verify CSS file contains max-height and overflow-y (jsdom limitation workaround)
+    // Direct assertion on CSS source since jsdom doesn't compute styles
+    // Must NOT be commented out
+    expect(cssContent).toMatch(/^\s*max-height:\s*220px;/m);
+    expect(cssContent).toMatch(/^\s*overflow-y:\s*auto;/m);
+
+    expect(container.scrollHeight).toBeLessThanOrEqual(container.clientHeight + 1);
+  });
+
+  it('[T2] should apply max-height and overflow with 100 values (hint/buttons outside scrollable area)', async () => {
+    const manyValues = Array.from({ length: 100 }, (_, i) => `id-${i}`);
+    component.values = manyValues;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const container = fixture.nativeElement.querySelector('.chip-input-container') as HTMLElement;
+    const hint = fixture.nativeElement.querySelector('.chip-input-hint') as HTMLElement;
+
+    expect(container).toBeTruthy();
+    expect(hint).toBeTruthy();
+
+    // Verify CSS file contains max-height and overflow-y (not commented)
+    expect(cssContent).toMatch(/^\s*max-height:\s*220px;/m);
+    expect(cssContent).toMatch(/^\s*overflow-y:\s*auto;/m);
+
+    // Verify hint is OUTSIDE container (not a child)
+    const hintParent = hint.parentElement;
+    expect(hintParent).not.toBe(container);
+    expect(hint.closest('.chip-input-container')).toBeNull();
+  });
+
+  it('[T3] should scroll to bottom after adding a value', async () => {
+    const manyValues = Array.from({ length: 50 }, (_, i) => `id-${i}`);
+    component.values = manyValues;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const container = component.containerEl?.nativeElement;
+
+    Object.defineProperty(container, 'scrollHeight', { value: 500, configurable: true });
+    Object.defineProperty(container, 'clientHeight', { value: 220, configurable: true });
+
+    const initialScrollTop = container!.scrollTop;
+
+    component.currentInput = 'new-value';
+    component.addCurrentInput();
+    fixture.detectChanges();
+
+    await new Promise(resolve => setTimeout(resolve, 10));
+
+    expect(container!.scrollTop).toBe(500);
+  });
+
+  it('[T4] should remove chip when × button is clicked', () => {
+    component.values = ['value1', 'value2', 'value3'];
+    fixture.detectChanges();
+
+    const removeButtons = fixture.nativeElement.querySelectorAll('.chip-remove');
+    expect(removeButtons.length).toBe(3);
+
+
+    (removeButtons[1] as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    expect(component.values).toEqual(['value1', 'value3']);
+  });
+});

@@ -17,6 +17,7 @@ import Chart from 'chart.js/auto';
 import { ChartCardComponent } from '../chart-card/chart-card.component';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
+import { skip } from 'rxjs';
 import {
   TimelineDataPoint,
   TimelinePeriod,
@@ -57,7 +58,7 @@ import * as DashboardSelectors from '../../../../store/cockpit/dashboard/dashboa
             [class.period-btn--active]="p.value === selectedPeriod"
             (click)="onPeriodChange(p.value)"
           >
-            {{ p.label }}
+            {{ p.label | translate }}
           </button>
         </div>
         <div class="chart-totals" *ngIf="timeline.length > 0">
@@ -174,9 +175,9 @@ export class TimelineChartComponent implements OnInit, OnDestroy {
   error: string | null = null;
 
   readonly periods = [
-    { value: '7d' as TimelinePeriod, label: '7 days' },
-    { value: '14d' as TimelinePeriod, label: '14 days' },
-    { value: '30d' as TimelinePeriod, label: '30 days' }
+    { value: '7d' as TimelinePeriod, label: 'cockpit.charts.timeline.period.7d' },
+    { value: '14d' as TimelinePeriod, label: 'cockpit.charts.timeline.period.14d' },
+    { value: '30d' as TimelinePeriod, label: 'cockpit.charts.timeline.period.30d' }
   ];
 
   readonly colors = {
@@ -195,6 +196,11 @@ export class TimelineChartComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToStore(): void {
+    // Dataset and date labels are translated when the chart is drawn: redraw them when the language changes
+    this.translateService.currentLang$
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.updateChart());
+
     // Subscribe to timeline data
     this.store.select(DashboardSelectors.selectTimeline)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -255,7 +261,9 @@ export class TimelineChartComponent implements OnInit, OnDestroy {
       this.createChart(labels, startedData, completedData);
     } else {
       this.chart.data.labels = labels;
+      this.chart.data.datasets[0].label = this.translateService.instant('CHART_STARTED');
       this.chart.data.datasets[0].data = startedData;
+      this.chart.data.datasets[1].label = this.translateService.instant('CHART_COMPLETED');
       this.chart.data.datasets[1].data = completedData;
       this.chart.update('none');
     }
@@ -359,7 +367,7 @@ export class TimelineChartComponent implements OnInit, OnDestroy {
   private formatDate(dateStr: string): string {
     const date = new Date(dateStr);
     const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString(this.translateService.currentLang, options);
   }
 
   private destroyChart(): void {

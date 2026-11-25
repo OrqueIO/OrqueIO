@@ -6,6 +6,7 @@ import { TimeAgoPipe } from '../../../pipes';
 import { TooltipDirective } from '../../../shared/tooltip/tooltip.directive';
 import { Task, GroupRef, IdentityLink } from '../../../models/tasklist';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
+import { TranslateService } from '../../../i18n/translate.service';
 
 @Component({
   selector: 'app-task-meta',
@@ -15,6 +16,8 @@ import { TasklistService } from '../../../services/tasklist/tasklist.service';
   styleUrl: './task-meta.css'
 })
 export class TaskMetaComponent implements OnInit, OnChanges {
+  private translateService = inject(TranslateService);
+
   private readonly tasklistService = inject(TasklistService);
 
   @Input() task!: Task;
@@ -213,13 +216,13 @@ export class TaskMetaComponent implements OnInit, OnChanges {
           this.assigneeChange.emit(newAssignee);
           this.editingAssignee = false;
         } else {
-          this.assigneeError = 'User not found';
+          this.assigneeError = this.translateService.instant('delegate.userNotFound');
         }
       },
       error: (err) => {
         this.validatingAssignee = false;
         this.assigneeValid = false;
-        this.assigneeError = err.message || 'Validation failed';
+        this.assigneeError = err.message || this.translateService.instant('tasklist.errors.validationFailed');
       }
     });
   }
@@ -290,11 +293,11 @@ export class TaskMetaComponent implements OnInit, OnChanges {
    */
   getInstanceTypeLabel(): string {
     if (this.task?.processInstanceId) {
-      return 'Process Instance';
+      return this.translateService.instant('tasklist.processInstance');
     } else if (this.task?.caseInstanceId) {
-      return 'Case Instance';
+      return this.translateService.instant('tasklist.caseInstance');
     }
-    return 'Standalone Task';
+    return this.translateService.instant('tasklist.standaloneTask');
   }
 
   /**
@@ -313,12 +316,12 @@ export class TaskMetaComponent implements OnInit, OnChanges {
 
   formatDate(date: string | null): string {
     if (!date) return '';
-    return new Date(date).toLocaleDateString();
+    return new Date(date).toLocaleDateString(this.translateService.locale);
   }
 
   getFullDateTooltip(date: string | undefined): string {
     if (!date) return '';
-    return new Date(date).toLocaleString(undefined, {
+    return new Date(date).toLocaleString(this.translateService.locale, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',

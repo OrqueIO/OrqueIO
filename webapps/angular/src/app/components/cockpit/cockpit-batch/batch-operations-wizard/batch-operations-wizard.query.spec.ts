@@ -1,0 +1,3219 @@
+import { describe, it, expect } from 'vitest';
+import { SimpleChange } from '@angular/core';
+import { of } from 'rxjs';
+import { BatchOperationsWizardComponent } from './batch-operations-wizard';
+import { MultiValueFilter } from '../../../../services/cockpit.service';
+import { InstanceFilterPanelComponent } from '../../../../shared/instance-filter-panel/instance-filter-panel';
+import { VariableDef } from './variable-definitions-modal/variable-definitions-modal';
+
+function getLockedFilterState(selectedOperationId: string): string | null {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'lockedFilterState');
+  return desc?.get?.call({ selectedOperationId }) as string | null;
+}
+
+/**
+ * Tests for buildHistoricQueryForBatch() — verifies that the processDefinition
+ * criterion combines correctly with the locked state for each operation.
+ *
+ * Uses prototype.call() so we can test the pure logic without Angular TestBed.
+ */
+
+function buildQuery(
+  selectedOperationId: string,
+  filterCriteria: MultiValueFilter[],
+  vnIgnoreCase = false,
+  vvIgnoreCase = false
+): Record<string, unknown> {
+  const stub = { selectedOperationId, filterCriteria, vnIgnoreCase, vvIgnoreCase, lockedFilterState: getLockedFilterState(selectedOperationId) };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch processDefinition', () => {
+
+  it('suspend: includes active+unfinished AND processDefinitionKeyIn', () => {
+    const result = buildQuery('suspend', [
+      { field: 'processDefinition', values: ['order-proc', 'invoice-val'] }
+    ]);
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc', 'invoice-val']);
+  });
+
+  it('activate: includes suspended+unfinished AND processDefinitionKeyIn', () => {
+    const result = buildQuery('activate', [
+      { field: 'processDefinition', values: ['order-proc'] }
+    ]);
+    expect(result['suspended']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+  });
+
+  it('delete-running: includes unfinished AND processDefinitionKeyIn', () => {
+    const result = buildQuery('delete-running', [
+      { field: 'processDefinition', values: ['order-proc', 'invoice-val'] }
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['finished']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc', 'invoice-val']);
+  });
+
+  it('delete-finished: includes finished AND processDefinitionKeyIn', () => {
+    const result = buildQuery('delete-finished', [
+      { field: 'processDefinition', values: ['report-gen'] }
+    ]);
+    expect(result['finished']).toBe(true);
+    expect(result['unfinished']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['report-gen']);
+  });
+
+  it('non-regression: businessKey still works alongside locked state', () => {
+    const result = buildQuery('suspend', [
+      { field: 'businessKey', values: ['ORDER-123'] }
+    ]);
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+    expect(result['processInstanceBusinessKeyLike']).toBe('%ORDER-123%');
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch processDefinitionIdIn (version-specific filter)', () => {
+
+  it('suspend: specific version IDs produce processDefinitionIdIn (not KeyIn)', () => {
+    const result = buildQuery('suspend', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-a-v2', 'pd-b-v1'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-a-v2', 'pd-b-v1']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activate: specific version IDs produce processDefinitionIdIn', () => {
+    const result = buildQuery('activate', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-a-v1'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-a-v1']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['suspended']).toBe(true);
+  });
+
+  it('delete-running: specific version IDs produce processDefinitionIdIn', () => {
+    const result = buildQuery('delete-running', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-a-v2'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-a-v2']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('delete-finished: specific version IDs produce processDefinitionIdIn', () => {
+    const result = buildQuery('delete-finished', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-a-v1', 'pd-a-v2'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-a-v1', 'pd-a-v2']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['finished']).toBe(true);
+  });
+
+  it('set-retries-jobs: specific version IDs produce processDefinitionIdIn', () => {
+    const result = buildQuery('set-retries-jobs', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-b-v3'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-b-v3']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('set-variables: specific version IDs produce processDefinitionIdIn + unfinished base', () => {
+    const result = buildQuery('set-variables', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-a-v2'] }
+    ]);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-a-v2']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+});
+
+function buildDecisionQuery(criteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = { decisionFilterCriteria: criteria };
+  return BatchOperationsWizardComponent.prototype.buildHistoricDecisionQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — buildHistoricDecisionQueryForBatch', () => {
+
+  it('returns empty object when no criteria are set', () => {
+    const result = buildDecisionQuery([]);
+    expect(Object.keys(result)).toHaveLength(0);
+  });
+
+  it('single decision definition key → decisionDefinitionKey (not In)', () => {
+    const result = buildDecisionQuery([{ field: 'decisionDefinition', values: ['invoice-check'] }]);
+    expect(result['decisionDefinitionKey']).toBe('invoice-check');
+    expect(result['decisionDefinitionKeyIn']).toBeUndefined();
+  });
+
+  it('multiple decision definition keys → decisionDefinitionKeyIn array', () => {
+    const result = buildDecisionQuery([{ field: 'decisionDefinition', values: ['invoice-check', 'credit-score'] }]);
+    expect(result['decisionDefinitionKeyIn']).toEqual(['invoice-check', 'credit-score']);
+    expect(result['decisionDefinitionKey']).toBeUndefined();
+  });
+
+  it('evaluatedAfter → passed through as-is (filter panel formats dates before emitting)', () => {
+    const isoDate = '2025-03-01T00:00:00.000+0100';
+    const result = buildDecisionQuery([{ field: 'evaluatedAfter', values: [isoDate] }]);
+    expect(result['evaluatedAfter']).toBe(isoDate);
+    expect(result['evaluatedBefore']).toBeUndefined();
+  });
+
+  it('evaluatedBefore → passed through as-is (filter panel formats end-of-day before emitting)', () => {
+    const isoDate = '2025-03-31T23:59:59.000+0100';
+    const result = buildDecisionQuery([{ field: 'evaluatedBefore', values: [isoDate] }]);
+    expect(result['evaluatedBefore']).toBe(isoDate);
+    expect(result['evaluatedAfter']).toBeUndefined();
+  });
+
+  it('combined: definition key + both dates', () => {
+    const afterDate  = '2025-01-01T00:00:00.000+0100';
+    const beforeDate = '2025-12-31T23:59:59.000+0100';
+    const result = buildDecisionQuery([
+      { field: 'decisionDefinition', values: ['invoice-check'] },
+      { field: 'evaluatedAfter',  values: [afterDate] },
+      { field: 'evaluatedBefore', values: [beforeDate] }
+    ]);
+    expect(result['decisionDefinitionKey']).toBe('invoice-check');
+    expect(result['evaluatedAfter']).toBe(afterDate);
+    expect(result['evaluatedBefore']).toBe(beforeDate);
+  });
+
+  it('no state field in decision query — decision instances have no state', () => {
+    const result = buildDecisionQuery([{ field: 'decisionDefinition', values: ['invoice-check'] }]);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+    expect(result['finished']).toBeUndefined();
+    expect(result['unfinished']).toBeUndefined();
+  });
+
+  it('processDefinitionIdIn never set — Process Definition not a criterion in decision panel', () => {
+    // The decision panel (criteriaSet='decision') does not expose Process Definition.
+    // buildHistoricDecisionQueryForBatch never produces processDefinitionIdIn or processDefinitionKeyIn.
+    const result = buildDecisionQuery([{ field: 'decisionDefinition', values: ['invoice-check'] }]);
+    expect(result['processDefinitionIdIn']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+  });
+
+  it('single decisionInstanceId → decisionInstanceId scalar (not In)', () => {
+    const result = buildDecisionQuery([{ field: 'decisionInstanceId', values: ['abc-123'] }]);
+    expect(result['decisionInstanceId']).toBe('abc-123');
+    expect(result['decisionInstanceIdIn']).toBeUndefined();
+  });
+
+  it('multiple decisionInstanceIds → decisionInstanceIdIn array (OR semantics)', () => {
+    const result = buildDecisionQuery([{ field: 'decisionInstanceId', values: ['abc-1', 'abc-2', 'abc-3'] }]);
+    expect(result['decisionInstanceIdIn']).toEqual(['abc-1', 'abc-2', 'abc-3']);
+    expect(result['decisionInstanceId']).toBeUndefined();
+  });
+
+  it('processInstanceId → mapped to scalar (Camunda API only supports single value)', () => {
+    const result = buildDecisionQuery([{ field: 'processInstanceId', values: ['proc-99'] }]);
+    expect(result['processInstanceId']).toBe('proc-99');
+  });
+
+  it('combined all 4 criteria — definition + dates + decisionInstanceId + processInstanceId', () => {
+    const afterDate  = '2025-01-01T00:00:00.000+0100';
+    const beforeDate = '2025-12-31T23:59:59.000+0100';
+    const result = buildDecisionQuery([
+      { field: 'decisionDefinition',  values: ['invoice-check', 'credit-score'] },
+      { field: 'evaluatedAfter',      values: [afterDate] },
+      { field: 'evaluatedBefore',     values: [beforeDate] },
+      { field: 'decisionInstanceId',  values: ['di-1', 'di-2'] },
+      { field: 'processInstanceId',   values: ['pi-42'] },
+    ]);
+    expect(result['decisionDefinitionKeyIn']).toEqual(['invoice-check', 'credit-score']);
+    expect(result['evaluatedAfter']).toBe(afterDate);
+    expect(result['evaluatedBefore']).toBe(beforeDate);
+    expect(result['decisionInstanceIdIn']).toEqual(['di-1', 'di-2']);
+    expect(result['processInstanceId']).toBe('pi-42');
+    // No state fields
+    expect(result['active']).toBeUndefined();
+    expect(result['finished']).toBeUndefined();
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — lockedFilterState: State always absent from Add criteria (all 6 batch operations)', () => {
+
+  // For the 5 process operations: State is hidden via [lockedState]="lockedFilterState" which is
+  // non-null → InstanceFilterPanelComponent suppresses the State option via *ngIf="!lockedState".
+  // For delete-decision: the wizard uses a separate decision panel ([criteriaSet]="'decision'")
+  // which never exposes State as a criterion — State is structurally absent, not suppressed via lockedState.
+
+  it('suspend: lockedFilterState is "active" (non-null) → State hidden from process panel', () => {
+    expect(getLockedFilterState('suspend')).toBe('active');
+    expect(getLockedFilterState('suspend')).not.toBeNull();
+  });
+
+  it('activate: lockedFilterState is "suspended" → State hidden from process panel', () => {
+    expect(getLockedFilterState('activate')).toBe('suspended');
+    expect(getLockedFilterState('activate')).not.toBeNull();
+  });
+
+  it('delete-running: lockedFilterState is "unfinished" → State hidden from process panel', () => {
+    expect(getLockedFilterState('delete-running')).toBe('unfinished');
+    expect(getLockedFilterState('delete-running')).not.toBeNull();
+  });
+
+  it('delete-finished: lockedFilterState is "finished" → State hidden from process panel', () => {
+    expect(getLockedFilterState('delete-finished')).toBe('finished');
+    expect(getLockedFilterState('delete-finished')).not.toBeNull();
+  });
+
+  it('set-retries-jobs: lockedFilterState is "unfinished" → State hidden from process panel', () => {
+    expect(getLockedFilterState('set-retries-jobs')).toBe('unfinished');
+    expect(getLockedFilterState('set-retries-jobs')).not.toBeNull();
+  });
+
+  it('delete-decision: uses decision panel ([criteriaSet]="decision") — State structurally absent, not via lockedState', () => {
+    // The wizard renders the decision panel for delete-decision, which does not pass [lockedState].
+    // State is absent because the decision criteria set simply has no State criterion.
+    // lockedFilterState() falls to default 'active', but this value is never bound to the decision panel.
+    expect(getLockedFilterState('delete-decision')).toBe('active');
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch withJobsRetrying', () => {
+
+  it('suspend: withJobsRetrying criterion sets withJobsRetrying=true, preserves locked state', () => {
+    const result = buildQuery('suspend', [{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activate: withJobsRetrying criterion sets withJobsRetrying=true', () => {
+    const result = buildQuery('activate', [{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('delete-running: withJobsRetrying criterion sets withJobsRetrying=true', () => {
+    const result = buildQuery('delete-running', [{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('combined: withJobsRetrying + processDefinition', () => {
+    const result = buildQuery('suspend', [
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'processDefinition', values: ['order-proc'] },
+    ]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['active']).toBe(true);
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — correlate buildHistoricQueryForBatch', () => {
+
+  it('correlate: base query is unfinished only — no active/suspended/finished lock', () => {
+    const result = buildQuery('correlate', []);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+    expect(result['finished']).toBeUndefined();
+  });
+
+  it('correlate: user can narrow to active via stateActive criterion', () => {
+    const result = buildQuery('correlate', [{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('correlate: user can narrow to suspended via stateSuspended criterion', () => {
+    const result = buildQuery('correlate', [{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('correlate: no process definition locked by default', () => {
+    const result = buildQuery('correlate', []);
+    expect(result['processDefinitionIdIn']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+  });
+
+  it('correlate: user-provided processDefinition criterion is accepted (cross-process by design)', () => {
+    const result = buildQuery('correlate', [
+      { field: 'processDefinition', values: ['order-proc', 'invoice-val'] }
+    ]);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc', 'invoice-val']);
+    expect(result['unfinished']).toBe(true);
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — correlate buildVariablesPayload (via parameterised overload)', () => {
+
+  function buildCorrelateVarsPayload(defs: VariableDef[]): Record<string, { value: unknown; type: string }> {
+    const stub = { variableDefinitions: [] as VariableDef[] };
+    return BatchOperationsWizardComponent.prototype.buildVariablesPayload.call(stub, defs);
+  }
+
+  it('instances mode with messageName and one variable: payload contains the variable', () => {
+    const vars = buildCorrelateVarsPayload([{ name: 'orderId', type: 'String', value: 'ORD-001' }]);
+    expect(vars['orderId']).toEqual({ value: 'ORD-001', type: 'String' });
+    expect(Object.keys(vars)).toHaveLength(1);
+  });
+
+  it('empty correlateVariableDefs: payload is empty object (variables field omitted from request)', () => {
+    const vars = buildCorrelateVarsPayload([]);
+    expect(Object.keys(vars)).toHaveLength(0);
+  });
+
+  it('set-variables behavior unchanged: buildVariablesPayload() without args still uses variableDefinitions', () => {
+    const stub = { variableDefinitions: [{ name: 'x', type: 'String', value: 'hello' }] as VariableDef[] };
+    const vars = BatchOperationsWizardComponent.prototype.buildVariablesPayload.call(stub);
+    expect(vars['x']).toEqual({ value: 'hello', type: 'String' });
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — correlate lockedFilterState', () => {
+
+  it('correlate: lockedFilterState is "unfinished" (not "active" like suspend)', () => {
+    expect(getLockedFilterState('correlate')).toBe('unfinished');
+  });
+
+  it('correlate vs suspend: different locked states — correlate allows suspended instances too', () => {
+    expect(getLockedFilterState('suspend')).toBe('active');
+    expect(getLockedFilterState('correlate')).toBe('unfinished');
+    expect(getLockedFilterState('correlate')).not.toBe(getLockedFilterState('suspend'));
+  });
+
+  it('correlate vs set-variables: same locked state (both target unfinished instances)', () => {
+    expect(getLockedFilterState('correlate')).toBe('unfinished');
+    expect(getLockedFilterState('set-variables')).toBe('unfinished');
+  });
+
+});
+
+// ─── correlate: confirmPayloadJson ─────────────────────────────────────────
+
+function getCorrelatePayload(
+  mode: 'instances' | 'query',
+  overrides: Partial<{
+    correlateMessageName: string;
+    correlateVariableDefs: VariableDef[];
+    selectedIds: Set<string>;
+    filterCriteria: MultiValueFilter[];
+    resolvedBatchQuery: Record<string, unknown> | null;
+  }> = {}
+): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'correlate',
+    mode,
+    correlateMessageName: 'payment-received',
+    correlateVariableDefs: [] as VariableDef[],
+    selectedIds: new Set(['inst-1', 'inst-2']),
+    filterCriteria: [],
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+    resolvedBatchQuery: null as Record<string, unknown> | null,
+    buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload,
+    ...overrides
+  };
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmPayloadJson');
+  return JSON.parse(desc?.get?.call(stub) as string);
+}
+
+describe('BatchOperationsWizardComponent — correlate: confirmPayloadJson', () => {
+
+  it('instances mode with messageName — payload contains messageName and processInstanceIds', () => {
+    const payload = getCorrelatePayload('instances', { correlateMessageName: 'payment-received' });
+    expect(payload['messageName']).toBe('payment-received');
+    expect(payload['processInstanceIds']).toEqual(expect.arrayContaining(['inst-1', 'inst-2']));
+    expect(payload['historicProcessInstanceQuery']).toBeUndefined();
+    expect(payload['variables']).toBeUndefined();
+  });
+
+  it('instances mode without messageName — messageName omitted from payload (never "")', () => {
+    const payload = getCorrelatePayload('instances', { correlateMessageName: '' });
+    expect(payload['messageName']).toBeUndefined();
+    expect(payload['messageName']).not.toBe('');
+    expect(payload['processInstanceIds']).toBeDefined();
+  });
+
+  it('instances mode with whitespace-only messageName — treated as empty, messageName omitted', () => {
+    const payload = getCorrelatePayload('instances', { correlateMessageName: '   ' });
+    expect(payload['messageName']).toBeUndefined();
+    expect(payload['messageName']).not.toBe('');
+    expect(payload['messageName']).not.toBe('   ');
+  });
+
+  it('query mode with messageName — payload contains messageName and historicProcessInstanceQuery', () => {
+    const payload = getCorrelatePayload('query', {
+      correlateMessageName: 'order-created',
+      selectedIds: new Set()
+    });
+    expect(payload['messageName']).toBe('order-created');
+    expect(payload['historicProcessInstanceQuery']).toBeDefined();
+    expect(payload['processInstanceIds']).toBeUndefined();
+    expect((payload['historicProcessInstanceQuery'] as Record<string, unknown>)['unfinished']).toBe(true);
+  });
+
+  it('query mode without messageName — messageName omitted, historicProcessInstanceQuery present', () => {
+    const payload = getCorrelatePayload('query', { correlateMessageName: '', selectedIds: new Set() });
+    expect(payload['messageName']).toBeUndefined();
+    expect(payload['messageName']).not.toBe('');
+    expect(payload['historicProcessInstanceQuery']).toBeDefined();
+  });
+
+  it('instances mode with variables — variables map included in payload', () => {
+    const payload = getCorrelatePayload('instances', {
+      correlateMessageName: 'msg',
+      correlateVariableDefs: [{ name: 'amount', type: 'Integer', value: '42' }]
+    });
+    expect(payload['variables']).toBeDefined();
+    expect((payload['variables'] as Record<string, unknown>)['amount']).toEqual({ value: 42, type: 'Integer' });
+  });
+
+  it('instances mode without variables — variables key absent from payload', () => {
+    const payload = getCorrelatePayload('instances', { correlateVariableDefs: [] });
+    expect(payload['variables']).toBeUndefined();
+  });
+
+  it('query mode with variables — variables map included alongside historicProcessInstanceQuery', () => {
+    const payload = getCorrelatePayload('query', {
+      correlateMessageName: 'msg',
+      correlateVariableDefs: [{ name: 'status', type: 'String', value: 'active' }],
+      selectedIds: new Set()
+    });
+    expect(payload['variables']).toBeDefined();
+    expect((payload['variables'] as Record<string, unknown>)['status']).toEqual({ value: 'active', type: 'String' });
+    expect(payload['historicProcessInstanceQuery']).toBeDefined();
+  });
+
+  it('query mode with resolvedBatchQuery — uses resolvedBatchQuery instead of buildHistoricQueryForBatch', () => {
+    const resolved = { unfinished: true, processInstanceIdIn: ['p-1', 'p-2'] };
+    const payload = getCorrelatePayload('query', {
+      correlateMessageName: 'done',
+      resolvedBatchQuery: resolved,
+      selectedIds: new Set()
+    });
+    const hq = payload['historicProcessInstanceQuery'] as Record<string, unknown>;
+    expect(hq['processInstanceIdIn']).toEqual(['p-1', 'p-2']);
+  });
+
+  it('messageName is trimmed before inclusion — leading/trailing whitespace stripped', () => {
+    const payload = getCorrelatePayload('instances', { correlateMessageName: '  msg-name  ' });
+    expect(payload['messageName']).toBe('msg-name');
+  });
+
+  it('historicProcessInstanceQuery base includes unfinished:true for correlate', () => {
+    const payload = getCorrelatePayload('query', { correlateMessageName: '', selectedIds: new Set() });
+    const hq = payload['historicProcessInstanceQuery'] as Record<string, unknown>;
+    expect(hq['unfinished']).toBe(true);
+    expect(hq['finished']).toBeUndefined();
+  });
+
+  it('no processDefinitionKeyIn in historicProcessInstanceQuery by default (multi-process by design)', () => {
+    const payload = getCorrelatePayload('query', { correlateMessageName: '', selectedIds: new Set() });
+    const hq = payload['historicProcessInstanceQuery'] as Record<string, unknown>;
+    expect(hq['processDefinitionKeyIn']).toBeUndefined();
+    expect(hq['processDefinitionIdIn']).toBeUndefined();
+  });
+
+  it('set-variables non-regression — buildVariablesPayload without args still uses variableDefinitions', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances' as const,
+      variableDefinitions: [{ name: 'x', type: 'String', value: 'hello' }] as VariableDef[],
+      selectedIds: new Set(['inst-a']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload,
+    };
+    const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmPayloadJson');
+    const payload = JSON.parse(desc?.get?.call(stub) as string);
+    expect(payload['variables']['x']).toEqual({ value: 'hello', type: 'String' });
+    expect(payload['processInstanceIds']).toContain('inst-a');
+  });
+
+});
+
+// ─── correlate: confirmEndpoint ────────────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — correlate: confirmEndpoint', () => {
+
+  it('instances mode → /process-instance/message-async', () => {
+    const stub = { selectedOperationId: 'correlate', mode: 'instances' };
+    expect(getConfirmEndpoint(stub)).toContain('/process-instance/message-async');
+  });
+
+  it('query mode → /process-instance/message-async (same endpoint, body differs)', () => {
+    const stub = { selectedOperationId: 'correlate', mode: 'query' };
+    expect(getConfirmEndpoint(stub)).toContain('/process-instance/message-async');
+  });
+
+});
+
+// ─── correlate: canContinue ────────────────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — correlate: canContinue', () => {
+
+  it('instances mode with no instances selected → false', () => {
+    const stub = {
+      selectedOperationId: 'correlate',
+      mode: 'instances',
+      selectedIds: new Set<string>()
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('instances mode with instances selected → true (messageName not required)', () => {
+    const stub = {
+      selectedOperationId: 'correlate',
+      mode: 'instances',
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+  it('query mode with no instances → true (query mode never requires explicit selection)', () => {
+    const stub = {
+      selectedOperationId: 'correlate',
+      mode: 'query',
+      selectedIds: new Set<string>()
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+});
+
+// ─── correlate: showCorrelateEmptyMessageWarning ───────────────────────────
+
+function getShowCorrelateEmptyMessageWarning(stub: Record<string, unknown>): boolean {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'showCorrelateEmptyMessageWarning');
+  return desc?.get?.call(stub) as boolean;
+}
+
+describe('BatchOperationsWizardComponent — correlate: showCorrelateEmptyMessageWarning', () => {
+
+  it('returns true when messageName is empty and no criteria active', () => {
+    const stub = { selectedOperationId: 'correlate', correlateMessageName: '', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(true);
+  });
+
+  it('returns true when messageName is whitespace-only and no criteria active', () => {
+    const stub = { selectedOperationId: 'correlate', correlateMessageName: '   ', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(true);
+  });
+
+  it('returns false when messageName is set (even without criteria)', () => {
+    const stub = { selectedOperationId: 'correlate', correlateMessageName: 'payment-received', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(false);
+  });
+
+  it('returns false when criteria are active (even with empty messageName)', () => {
+    const stub = { selectedOperationId: 'correlate', correlateMessageName: '', hasActiveCriteria: true };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(false);
+  });
+
+  it('returns false when both messageName is set and criteria are active', () => {
+    const stub = { selectedOperationId: 'correlate', correlateMessageName: 'msg', hasActiveCriteria: true };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(false);
+  });
+
+  it('returns false for other operations even with no messageName and no criteria', () => {
+    const stub = { selectedOperationId: 'set-variables', correlateMessageName: '', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(false);
+  });
+
+  it('returns false when selectedOperationId is null', () => {
+    const stub = { selectedOperationId: null, correlateMessageName: '', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(stub)).toBe(false);
+  });
+
+  it('warning disappears when user types a messageName (reactive)', () => {
+    const withName = { selectedOperationId: 'correlate', correlateMessageName: 'msg', hasActiveCriteria: false };
+    const withoutName = { selectedOperationId: 'correlate', correlateMessageName: '', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(withName)).toBe(false);
+    expect(getShowCorrelateEmptyMessageWarning(withoutName)).toBe(true);
+  });
+
+  it('warning disappears when user adds a search criterion (reactive)', () => {
+    const withCriteria = { selectedOperationId: 'correlate', correlateMessageName: '', hasActiveCriteria: true };
+    const withoutCriteria = { selectedOperationId: 'correlate', correlateMessageName: '', hasActiveCriteria: false };
+    expect(getShowCorrelateEmptyMessageWarning(withCriteria)).toBe(false);
+    expect(getShowCorrelateEmptyMessageWarning(withoutCriteria)).toBe(true);
+  });
+
+});
+
+describe('InstanceFilterPanelComponent — ngOnChanges resets pills on operation switch', () => {
+
+  function applyPillsChange(
+    prevPills: MultiValueFilter[],
+    nextPills: MultiValueFilter[],
+    isFirstChange = false
+  ): { activePills: MultiValueFilter[]; activeEditorType: string | null; editingPillIndex: number | null } {
+    const stub: any = {
+      activePills: [...prevPills],
+      activeEditorType: null,
+      editingPillIndex: null,
+      cancelCriterion() {
+        this.activeEditorType = null;
+        this.editingPillIndex = null;
+      },
+      cdr: { markForCheck() {} },
+    };
+    InstanceFilterPanelComponent.prototype.ngOnChanges.call(stub, {
+      initialPills: new SimpleChange(prevPills, nextPills, isFirstChange),
+    });
+    return stub;
+  }
+
+  it('clears activePills when initialPills becomes empty (operation switch)', () => {
+    const prevPills: MultiValueFilter[] = [{ field: 'withJobsRetrying', values: [] }];
+    const stub = applyPillsChange(prevPills, []);
+    expect(stub.activePills).toHaveLength(0);
+  });
+
+  it('also clears the active editor when pills are reset', () => {
+    const prevPills: MultiValueFilter[] = [{ field: 'businessKey', values: ['ACME'] }];
+    const stub: any = {
+      activePills: [...prevPills],
+      activeEditorType: 'businessKey',
+      editingPillIndex: 0,
+      cancelCriterion() { this.activeEditorType = null; this.editingPillIndex = null; },
+      cdr: { markForCheck() {} },
+    };
+    InstanceFilterPanelComponent.prototype.ngOnChanges.call(stub, {
+      initialPills: new SimpleChange(prevPills, [], false),
+    });
+    expect(stub.activePills).toHaveLength(0);
+    expect(stub.activeEditorType).toBeNull();
+    expect(stub.editingPillIndex).toBeNull();
+  });
+
+  it('does NOT clear pills on firstChange — ngOnInit handles initial population', () => {
+    const stub = applyPillsChange([], [], true);
+    expect(stub.activePills).toHaveLength(0); // unchanged, not reset by ngOnChanges
+  });
+
+  it('does NOT clear pills when initialPills becomes non-empty (parent restoring saved criteria)', () => {
+    const prev: MultiValueFilter[] = [{ field: 'withIncidents', values: [] }];
+    const next: MultiValueFilter[] = [{ field: 'withIncidents', values: [] }, { field: 'withJobsRetrying', values: [] }];
+    const stub = applyPillsChange(prev, next);
+    expect(stub.activePills).toEqual(prev); // unchanged — ngOnChanges only resets on empty
+  });
+
+});
+
+// ─── Helpers for canContinue and confirmPayloadJson ────────────────────────
+
+function getCanContinue(stub: Record<string, unknown>): boolean {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'canContinue');
+  return desc?.get?.call(stub) as boolean;
+}
+
+function getConfirmPayloadJson(stub: Record<string, unknown>): string {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmPayloadJson');
+  return desc?.get?.call(stub) as string;
+}
+
+function getConfirmEndpoint(stub: Record<string, unknown>): string {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmEndpoint');
+  return desc?.get?.call(stub) as string;
+}
+
+// ─── set-retries-jobs: buildHistoricQueryForBatch ──────────────────────────
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: buildHistoricQueryForBatch', () => {
+
+  it('uses unfinished base — includes active AND suspended, not limited to active only', () => {
+    const result = buildQuery('set-retries-jobs', []);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+    expect(result['finished']).toBeUndefined();
+  });
+
+  it('combines unfinished with processDefinitionKeyIn filter — active not set', () => {
+    const result = buildQuery('set-retries-jobs', [
+      { field: 'processDefinition', values: ['order-proc', 'invoice'] }
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc', 'invoice']);
+  });
+
+  it('combines active+unfinished with businessKey filter', () => {
+    const result = buildQuery('set-retries-jobs', [
+      { field: 'businessKey', values: ['ORD-99'] }
+    ]);
+    expect(result['processInstanceBusinessKeyLike']).toBe('%ORD-99%');
+  });
+
+});
+
+// ─── set-retries-jobs: canContinue ─────────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: canContinue validation', () => {
+
+  it('returns false when no instances are selected (instances mode)', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 3,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set<string>()
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('returns true when instances selected and retries is 0', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 0,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+  it('returns true when instances selected and retries > 0', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 3,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set(['inst-1', 'inst-2'])
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+  it('returns false when retries is negative', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: -1,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('returns false when setDueDate is true but retriesDueDate is empty', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 3,
+      setDueDate: true,
+      retriesDueDate: '',
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('returns true when setDueDate is true and retriesDueDate is filled', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 3,
+      setDueDate: true,
+      retriesDueDate: '2025-12-31',
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+  it('returns true in query mode regardless of selectedIds', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'query',
+      retries: 1,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set<string>()
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+});
+
+// ─── set-retries-jobs: confirmPayloadJson ──────────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: confirmPayloadJson', () => {
+
+  it('instances mode — body contains retries and processInstances array (job-retries-historic-query-based endpoint resolves incidents)', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 5,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set(['inst-a', 'inst-b']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['retries']).toBe(5);
+    expect(payload['processInstances']).toEqual(expect.arrayContaining(['inst-a', 'inst-b']));
+    expect(payload['jobQuery']).toBeUndefined();
+    expect(payload['dueDate']).toBeUndefined();
+    expect(payload['historicProcessInstanceQuery']).toBeUndefined();
+  });
+
+  it('instances mode — dueDate included when setDueDate is true', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'instances',
+      retries: 3,
+      setDueDate: true,
+      retriesDueDate: '2025-06-15',
+      selectedIds: new Set(['inst-x']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['retries']).toBe(3);
+    expect(payload['dueDate']).toMatch(/^2025-06-15T00:00:00\.000[+-]\d{4}$/);
+  });
+
+  it('query mode — body contains retries and historicProcessInstanceQuery', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'query',
+      retries: 2,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set<string>(),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['retries']).toBe(2);
+    expect(payload['historicProcessInstanceQuery']).toBeDefined();
+    expect(payload['jobQuery']).toBeUndefined();
+  });
+
+  it('query mode — dueDate absent when setDueDate is false', () => {
+    const stub = {
+      selectedOperationId: 'set-retries-jobs',
+      mode: 'query',
+      retries: 1,
+      setDueDate: false,
+      retriesDueDate: '',
+      selectedIds: new Set<string>(),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['dueDate']).toBeUndefined();
+  });
+
+});
+
+// ─── set-retries-jobs: confirmEndpoint ─────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: confirmEndpoint', () => {
+
+  it('instances mode → /process-instance/job-retries-historic-query-based (same endpoint as query mode — resolves incidents)', () => {
+    const stub = { selectedOperationId: 'set-retries-jobs', mode: 'instances' };
+    expect(getConfirmEndpoint(stub)).toContain('/process-instance/job-retries-historic-query-based');
+  });
+
+  it('query mode → /process-instance/job-retries-historic-query-based', () => {
+    const stub = { selectedOperationId: 'set-retries-jobs', mode: 'query' };
+    expect(getConfirmEndpoint(stub)).toContain('/process-instance/job-retries-historic-query-based');
+  });
+
+});
+
+// ─── set-retries-jobs: error classification ──────────────────────────────────────────
+
+/**
+ * Mirrors the error handler in execute() for set-retries-jobs.
+ * Isolated here so we can assert flag values without Angular TestBed.
+ */
+function classifyJobsError(err: unknown): { batchError: boolean; batchErrorNoJobs: boolean } {
+  const msg: string = (err as { error?: { message?: string } } | null)?.error?.message ?? '';
+  return {
+    batchError: true,
+    batchErrorNoJobs: msg.includes('jobIds is empty'),
+  };
+}
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: error classification', () => {
+
+  it('engine message "jobIds is empty" → batchErrorNoJobs=true, batchError=true', () => {
+    const result = classifyJobsError({ error: { message: 'ENGINE-13011 Batch set retries: jobIds is empty.' } });
+    expect(result.batchError).toBe(true);
+    expect(result.batchErrorNoJobs).toBe(true);
+  });
+
+  it('other 400 error message → batchErrorNoJobs=false, batchError=true (generic path)', () => {
+    const result = classifyJobsError({ error: { message: 'ENGINE-00001 Some unrelated engine error.' } });
+    expect(result.batchError).toBe(true);
+    expect(result.batchErrorNoJobs).toBe(false);
+  });
+
+  it('null error object → batchErrorNoJobs=false, batchError=true (graceful fallback)', () => {
+    const result = classifyJobsError(null);
+    expect(result.batchError).toBe(true);
+    expect(result.batchErrorNoJobs).toBe(false);
+  });
+
+  it('error without message field → batchErrorNoJobs=false, batchError=true', () => {
+    const result = classifyJobsError({ error: {} });
+    expect(result.batchError).toBe(true);
+    expect(result.batchErrorNoJobs).toBe(false);
+  });
+
+});
+
+
+// ─── set-variables: buildHistoricQueryForBatch ─────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-variables: buildHistoricQueryForBatch', () => {
+
+  it('includes unfinished:true — engine only sets variables on running instances', () => {
+    const result = buildQuery('set-variables', []);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+    expect(result['finished']).toBeUndefined();
+  });
+
+  it('combines unfinished base with processDefinitionKeyIn filter', () => {
+    const result = buildQuery('set-variables', [
+      { field: 'processDefinition', values: ['order-proc', 'invoice'] }
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc', 'invoice']);
+  });
+
+  it('businessKey filter works with empty base', () => {
+    const result = buildQuery('set-variables', [
+      { field: 'businessKey', values: ['ORD-99'] }
+    ]);
+    expect(result['processInstanceBusinessKeyLike']).toBe('%ORD-99%');
+    expect(result['active']).toBeUndefined();
+  });
+
+});
+
+// ─── set-variables: lockedFilterState ──────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-variables: lockedFilterState', () => {
+
+  it('returns "unfinished" — only running instances can have variables set', () => {
+    expect(getLockedFilterState('set-variables')).toBe('unfinished');
+  });
+
+});
+
+// ─── set-variables: canContinue ────────────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-variables: canContinue', () => {
+
+  it('returns false when no instances selected (instances mode)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      variableDefinitions: [{ name: 'myVar', type: 'String', value: 'hello' }],
+      selectedIds: new Set<string>()
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('returns false when variable name is empty', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      variableDefinitions: [{ name: '', type: 'String', value: 'hello' }],
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('returns false when variable list is empty', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      variableDefinitions: [],
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('returns true when instance selected and variable has name', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      variableDefinitions: [{ name: 'myVar', type: 'String', value: 'hello' }],
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+  it('returns true in query mode even without selectedIds', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      variableDefinitions: [{ name: 'myVar', type: 'String', value: 'hello' }],
+      selectedIds: new Set<string>()
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+  it('returns false in query mode when variable name is empty', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      variableDefinitions: [{ name: '', type: 'String', value: 'hello' }],
+      selectedIds: new Set<string>()
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+  it('returns true with multiple variables all having names', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      variableDefinitions: [
+        { name: 'var1', type: 'String', value: 'a' },
+        { name: 'var2', type: 'Integer', value: '42' }
+      ],
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(true);
+  });
+
+  it('returns false if any variable in a multi-var list has an empty name', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      variableDefinitions: [
+        { name: 'var1', type: 'String', value: 'a' },
+        { name: '', type: 'Integer', value: '42' }
+      ],
+      selectedIds: new Set(['inst-1'])
+    };
+    expect(getCanContinue(stub)).toBe(false);
+  });
+
+});
+
+// ─── set-variables: buildVariablesPayload ──────────────────────────────────
+
+function buildVariablesPayload(
+  variableDefinitions: { name: string; type: string; value: string }[]
+): Record<string, { value: unknown; type: string }> {
+  return BatchOperationsWizardComponent.prototype.buildVariablesPayload.call({ variableDefinitions });
+}
+
+describe('BatchOperationsWizardComponent — set-variables: buildVariablesPayload', () => {
+
+  it('String type — value stays as string', () => {
+    const result = buildVariablesPayload([{ name: 'myStr', type: 'String', value: 'hello' }]);
+    expect(result['myStr']).toEqual({ value: 'hello', type: 'String' });
+  });
+
+  it('Integer type — value parsed to number', () => {
+    const result = buildVariablesPayload([{ name: 'myInt', type: 'Integer', value: '42' }]);
+    expect(result['myInt']).toEqual({ value: 42, type: 'Integer' });
+  });
+
+  it('Long type — value parsed to number', () => {
+    const result = buildVariablesPayload([{ name: 'myLong', type: 'Long', value: '1000000' }]);
+    expect(result['myLong']).toEqual({ value: 1000000, type: 'Long' });
+  });
+
+  it('Double type — value parsed to float', () => {
+    const result = buildVariablesPayload([{ name: 'myDouble', type: 'Double', value: '3.14' }]);
+    expect(result['myDouble']).toEqual({ value: 3.14, type: 'Double' });
+  });
+
+  it('Boolean type — "true" string → boolean true', () => {
+    const result = buildVariablesPayload([{ name: 'myBool', type: 'Boolean', value: 'true' }]);
+    expect(result['myBool']).toEqual({ value: true, type: 'Boolean' });
+  });
+
+  it('Boolean type — "false" string → boolean false', () => {
+    const result = buildVariablesPayload([{ name: 'myBool', type: 'Boolean', value: 'false' }]);
+    expect(result['myBool']).toEqual({ value: false, type: 'Boolean' });
+  });
+
+  it('Date type — date-only value (yyyy-MM-dd) converts to midnight local time', () => {
+    const result = buildVariablesPayload([{ name: 'myDate', type: 'Date', value: '2025-01-15' }]);
+    const dateValue = result['myDate'].value as string;
+    expect(dateValue).toMatch(/^2025-01-15T00:00:00\.000[+-]\d{4}$/);
+    expect(result['myDate'].type).toBe('Date');
+  });
+
+  it('Date type — datetime-local value (yyyy-MM-ddTHH:mm) preserves the specified time', () => {
+    const result = buildVariablesPayload([{ name: 'myDate', type: 'Date', value: '2025-01-15T14:30' }]);
+    const dateValue = result['myDate'].value as string;
+    expect(dateValue).toMatch(/^2025-01-15T14:30:00\.000[+-]\d{4}$/);
+    expect(result['myDate'].type).toBe('Date');
+  });
+
+  it('Date type — datetime-local at midnight (yyyy-MM-ddT00:00) produces midnight output', () => {
+    const result = buildVariablesPayload([{ name: 'myDate', type: 'Date', value: '2025-01-15T00:00' }]);
+    const dateValue = result['myDate'].value as string;
+    expect(dateValue).toMatch(/^2025-01-15T00:00:00\.000[+-]\d{4}$/);
+    expect(result['myDate'].type).toBe('Date');
+  });
+
+  it('Date type — empty value (no date picked yet) is passed as-is without conversion', () => {
+    const result = buildVariablesPayload([{ name: 'myDate', type: 'Date', value: '' }]);
+    expect(result['myDate']).toEqual({ value: '', type: 'Date' });
+  });
+
+  it('skips entries with empty name', () => {
+    const result = buildVariablesPayload([
+      { name: 'valid', type: 'String', value: 'ok' },
+      { name: '', type: 'String', value: 'skip-me' }
+    ]);
+    expect(Object.keys(result)).toHaveLength(1);
+    expect(result['valid']).toBeDefined();
+  });
+
+  it('trims whitespace from variable name', () => {
+    const result = buildVariablesPayload([{ name: '  myVar  ', type: 'String', value: 'v' }]);
+    expect(result['myVar']).toBeDefined();
+    expect(result['  myVar  ']).toBeUndefined();
+  });
+
+  it('multiple variables — all included', () => {
+    const result = buildVariablesPayload([
+      { name: 'a', type: 'String', value: 'alpha' },
+      { name: 'b', type: 'Integer', value: '99' }
+    ]);
+    expect(Object.keys(result)).toHaveLength(2);
+    expect(result['a'].value).toBe('alpha');
+    expect(result['b'].value).toBe(99);
+  });
+
+});
+
+// ─── set-variables: confirmPayloadJson ─────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-variables: confirmPayloadJson', () => {
+
+  it('instances mode — payload has processInstanceIds and variables map', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      variableDefinitions: [{ name: 'status', type: 'String', value: 'approved' }],
+      selectedIds: new Set(['id-1', 'id-2']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['processInstanceIds']).toEqual(expect.arrayContaining(['id-1', 'id-2']));
+    expect(payload['variables']['status']).toEqual({ value: 'approved', type: 'String' });
+    expect(payload['historicProcessInstanceQuery']).toBeUndefined();
+  });
+
+  it('query mode — payload has historicProcessInstanceQuery and variables map', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      variableDefinitions: [{ name: 'count', type: 'Integer', value: '5' }],
+      selectedIds: new Set<string>(),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['historicProcessInstanceQuery']).toBeDefined();
+    expect(payload['variables']['count']).toEqual({ value: 5, type: 'Integer' });
+    expect(payload['processInstanceIds']).toBeUndefined();
+  });
+
+  it('multiple variables — all included in variables map', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      variableDefinitions: [
+        { name: 'strVar', type: 'String', value: 'hello' },
+        { name: 'intVar', type: 'Integer', value: '42' },
+        { name: 'boolVar', type: 'Boolean', value: 'true' }
+      ],
+      selectedIds: new Set(['inst-a']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['variables']['strVar']).toEqual({ value: 'hello', type: 'String' });
+    expect(payload['variables']['intVar']).toEqual({ value: 42, type: 'Integer' });
+    expect(payload['variables']['boolVar']).toEqual({ value: true, type: 'Boolean' });
+  });
+
+  it('query mode — historicProcessInstanceQuery includes unfinished:true', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      variableDefinitions: [{ name: 'x', type: 'String', value: 'y' }],
+      selectedIds: new Set<string>(),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    const hq = payload['historicProcessInstanceQuery'];
+    // Engine forces unfinished — variables can only be set on running instances
+    expect(hq['unfinished']).toBe(true);
+    expect(hq['active']).toBeUndefined();
+    expect(hq['finished']).toBeUndefined();
+  });
+
+});
+
+// ─── set-variables: confirmEndpoint ────────────────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-variables: confirmEndpoint', () => {
+
+  it('instances mode → /process-instance/variables-async', () => {
+    const stub = { selectedOperationId: 'set-variables', mode: 'instances' };
+    expect(getConfirmEndpoint(stub)).toContain('/process-instance/variables-async');
+  });
+
+  it('query mode → /process-instance/variables-async', () => {
+    const stub = { selectedOperationId: 'set-variables', mode: 'query' };
+    expect(getConfirmEndpoint(stub)).toContain('/process-instance/variables-async');
+  });
+
+});
+
+// ─── set-variables: execute payload structure ───────────────────────────────
+
+describe('BatchOperationsWizardComponent — set-variables: execute payload', () => {
+
+  it('instances mode — payload structure has processInstanceIds array and variables map', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      variableDefinitions: [{ name: 'orderStatus', type: 'String', value: 'shipped' }],
+      selectedIds: new Set(['proc-id-1', 'proc-id-2']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    // Must have processInstanceIds with the selected IDs
+    expect(Array.isArray(payload['processInstanceIds'])).toBe(true);
+    expect(payload['processInstanceIds']).toContain('proc-id-1');
+    expect(payload['processInstanceIds']).toContain('proc-id-2');
+    // Must have variables as a map of { value, type } — not an array
+    expect(typeof payload['variables']).toBe('object');
+    expect(Array.isArray(payload['variables'])).toBe(false);
+    expect(payload['variables']['orderStatus']).toEqual({ value: 'shipped', type: 'String' });
+    // Must NOT include historicProcessInstanceQuery in instances mode
+    expect(payload['historicProcessInstanceQuery']).toBeUndefined();
+  });
+
+  it('Integer variable — value is serialized as a number (not a string) in the payload', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      variableDefinitions: [{ name: 'retryCount', type: 'Integer', value: '7' }],
+      selectedIds: new Set(['proc-id-1']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    const variable = payload['variables']['retryCount'];
+    expect(variable.type).toBe('Integer');
+    // Camunda engine requires a JSON number for Integer, not the string "7"
+    expect(typeof variable.value).toBe('number');
+    expect(variable.value).toBe(7);
+  });
+
+});
+
+// ─── set-variables: onVariablesApplied deduplication ──────────────────────
+
+function applyVars(
+  existing: VariableDef[],
+  incoming: VariableDef[]
+): VariableDef[] {
+  const stub = {
+    variableDefinitions: [...existing],
+    showVariablesModal: true,
+    saveToSessionStorage: () => {},
+    cdr: { markForCheck: () => {} },
+  };
+  BatchOperationsWizardComponent.prototype.onVariablesApplied.call(stub, incoming);
+  return stub.variableDefinitions;
+}
+
+describe('BatchOperationsWizardComponent — set-variables: onVariablesApplied deduplication', () => {
+
+  it('same name appears twice in apply list → single chip with the new value (last wins)', () => {
+    // Scenario: existing [amount=100], user opens modal and adds a second row [amount=200].
+    // Apply emits both rows; only one chip should remain, with value 200.
+    const result = applyVars(
+      [{ name: 'amount', type: 'Integer', value: '100' }],
+      [{ name: 'amount', type: 'Integer', value: '100' }, { name: 'amount', type: 'Integer', value: '200' }]
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe('amount');
+    expect(result[0].value).toBe('200');
+  });
+
+  it('two different names → both chips coexist — no false positive deduplication', () => {
+    const result = applyVars(
+      [],
+      [{ name: 'amount', type: 'Integer', value: '100' }, { name: 'label', type: 'String', value: 'hello' }]
+    );
+    expect(result).toHaveLength(2);
+    expect(result.map(v => v.name)).toEqual(['amount', 'label']);
+  });
+
+  it('deduplication is case-sensitive — "amount" and "Amount" are distinct Camunda variables', () => {
+    const result = applyVars(
+      [],
+      [{ name: 'amount', type: 'Integer', value: '100' }, { name: 'Amount', type: 'Integer', value: '200' }]
+    );
+    expect(result).toHaveLength(2);
+  });
+
+  it('chip click — modal opens with all 3 existing variables, not just the clicked one', () => {
+    const existing = [
+      { name: 'montant', type: 'Integer', value: '100' },
+      { name: 'label', type: 'String', value: 'ok' },
+      { name: 'active', type: 'Boolean', value: false },
+    ];
+    const stub = { variableDefinitions: [...existing] };
+    const get = Object.getOwnPropertyDescriptor(
+      BatchOperationsWizardComponent.prototype, 'modalInitialVariables'
+    )!.get!;
+    const result: VariableDef[] = get.call(stub);
+    expect(result).toHaveLength(3);
+    expect(result.map((v: VariableDef) => v.name)).toEqual(['montant', 'label', 'active']);
+  });
+
+  it('rename a variable in the modal — total count unchanged, old name gone, new name present', () => {
+    // Modal receives all vars. User renames "montant" → "montantTotal", keeps label unchanged.
+    // Expect 2 vars total — no duplication, no ghost of the old name.
+    const result = applyVars(
+      [{ name: 'montant', type: 'Integer', value: '100' }, { name: 'label', type: 'String', value: 'ok' }],
+      [{ name: 'montantTotal', type: 'Integer', value: '100' }, { name: 'label', type: 'String', value: 'ok' }]
+    );
+    expect(result).toHaveLength(2);
+    expect(result.find(v => v.name === 'montantTotal')?.value).toBe('100');
+    expect(result.find(v => v.name === 'montant')).toBeUndefined();
+  });
+
+  it('modify type or value without renaming — non-regression', () => {
+    const result = applyVars(
+      [{ name: 'amount', type: 'Integer', value: '100' }, { name: 'label', type: 'String', value: 'hello' }],
+      [{ name: 'amount', type: 'Integer', value: '999' }, { name: 'label', type: 'String', value: 'hello' }]
+    );
+    expect(result).toHaveLength(2);
+    expect(result.find(v => v.name === 'amount')?.value).toBe('999');
+    expect(result.find(v => v.name === 'label')?.value).toBe('hello');
+  });
+
+  it('three rows with two duplicate names → deduplicated to two unique chips', () => {
+    const result = applyVars(
+      [],
+      [
+        { name: 'x', type: 'String', value: 'first' },
+        { name: 'y', type: 'String', value: 'keep' },
+        { name: 'x', type: 'String', value: 'second' },
+      ]
+    );
+    expect(result).toHaveLength(2);
+    expect(result.find(v => v.name === 'x')?.value).toBe('second');
+    expect(result.find(v => v.name === 'y')?.value).toBe('keep');
+  });
+
+});
+
+// ─── set-variables: engine constraint (unfinished only) ────────────────────
+// SetVariablesToProcessInstancesBatchCmd (engine source, collectProcessInstanceIds):
+//   processInstanceIds  → new ProcessInstanceQueryImpl() — RUNTIME table only
+//   historicProcessInstanceQuery → forced .unfinished() before listDeploymentIdMappings()
+// Variables CANNOT be set on completed/terminated instances. This is an engine-level
+// constraint, not a client-side workaround. Compare: DeleteHistoricProcessInstancesBatchCmd
+// does NOT force .unfinished(), which is why that operation supports completed instances.
+
+describe('BatchOperationsWizardComponent — set-variables: engine constraint (unfinished only)', () => {
+
+  it('lockedFilterState is "unfinished" — completed instances are excluded from selection', () => {
+    // The filter must restrict to running instances to match the engine constraint.
+    // Passing a completed-instance ID would produce an empty batch element list → 400.
+    expect(getLockedFilterState('set-variables')).toBe('unfinished');
+  });
+
+  it('buildHistoricQueryForBatch includes unfinished:true — mirrors engine .unfinished() enforcement', () => {
+    // Engine calls historicProcessInstanceQuery.unfinished() regardless of what we pass.
+    // Setting it here explicitly documents the constraint and prevents accidental omission.
+    const result = buildQuery('set-variables', []);
+    expect(result['unfinished']).toBe(true);
+    expect(result['finished']).toBeUndefined();
+  });
+
+  it('non-regression — active instances are targetable: processInstanceIds payload is correct', () => {
+    // Active (unfinished) instances exist in the runtime table and are found by the engine.
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      variableDefinitions: [{ name: 'status', type: 'String', value: 'active-ok' }],
+      selectedIds: new Set(['running-id-1', 'running-id-2']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['processInstanceIds']).toContain('running-id-1');
+    expect(payload['processInstanceIds']).toContain('running-id-2');
+    expect(payload['variables']['status']).toEqual({ value: 'active-ok', type: 'String' });
+    // historicProcessInstanceQuery must not be present in instances mode
+    expect(payload['historicProcessInstanceQuery']).toBeUndefined();
+  });
+
+  it('non-regression — suspended instances targetable via query mode: unfinished:true included', () => {
+    // Suspended instances are "unfinished" — the engine finds them.
+    // Query mode sends historicProcessInstanceQuery, engine adds .unfinished() on its side too.
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      variableDefinitions: [{ name: 'reason', type: 'String', value: 'maintenance' }],
+      selectedIds: new Set<string>(),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      buildVariablesPayload: BatchOperationsWizardComponent.prototype.buildVariablesPayload
+    };
+    const payload = JSON.parse(getConfirmPayloadJson(stub));
+    expect(payload['historicProcessInstanceQuery']['unfinished']).toBe(true);
+    expect(payload['variables']['reason']).toEqual({ value: 'maintenance', type: 'String' });
+    expect(payload['processInstanceIds']).toBeUndefined();
+  });
+
+});
+
+// ── set-retries-external ──────────────────────────────────────────────────────
+// External tasks only exist on unfinished instances → locked state is 'unfinished'.
+// Endpoint: POST /external-task/retries-async
+// Body — instances mode: { retries, processInstanceIds: [...] }
+//       — query mode:    { retries, historicProcessInstanceQuery: { unfinished:true, ... } }
+// No due-date field (confirmed absent on the Camunda 7 EE reference instance).
+
+describe('BatchOperationsWizardComponent — set-retries-external: buildHistoricQueryForBatch', () => {
+
+  it('includes unfinished:true — external tasks only exist on running instances', () => {
+    const result = buildQuery('set-retries-external', []);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['finished']).toBeUndefined();
+  });
+
+  it('combines unfinished base with processDefinitionKeyIn filter', () => {
+    const result = buildQuery('set-retries-external', [
+      { field: 'processDefinition', values: ['invoice-proc'] }
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['invoice-proc']);
+  });
+
+  it('combines unfinished base with processDefinitionIdIn (version-specific filter)', () => {
+    const result = buildQuery('set-retries-external', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['invoice-proc:2:abc'] }
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['processDefinitionIdIn']).toEqual(['invoice-proc:2:abc']);
+    expect(result['processDefinitionKeyIn']).toBeUndefined();
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — set-retries-external: lockedFilterState', () => {
+
+  it('returns "unfinished" — external tasks are only present on active or suspended instances', () => {
+    expect(getLockedFilterState('set-retries-external')).toBe('unfinished');
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — set-retries-external: canContinue', () => {
+
+  function canContinue(overrides: object): boolean {
+    const stub = {
+      selectedOperationId: 'set-retries-external',
+      mode: 'instances',
+      retries: 1,
+      selectedIds: new Set<string>(),
+      variableDefinitions: [],
+      setDueDate: false,
+      retriesDueDate: '',
+      ...overrides
+    };
+    const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'canContinue');
+    return desc?.get?.call(stub) as boolean;
+  }
+
+  it('returns false when no instances are selected (instances mode)', () => {
+    expect(canContinue({ retries: 3, selectedIds: new Set() })).toBe(false);
+  });
+
+  it('returns true when instances selected and retries is 0', () => {
+    expect(canContinue({ retries: 0, selectedIds: new Set(['inst-1']) })).toBe(true);
+  });
+
+  it('returns true when instances selected and retries > 0', () => {
+    expect(canContinue({ retries: 5, selectedIds: new Set(['inst-1']) })).toBe(true);
+  });
+
+  it('returns false when retries is negative', () => {
+    expect(canContinue({ retries: -1, selectedIds: new Set(['inst-1']) })).toBe(false);
+  });
+
+  it('returns true in query mode regardless of selectedIds', () => {
+    expect(canContinue({ mode: 'query', retries: 3, selectedIds: new Set() })).toBe(true);
+  });
+
+  it('no due-date field — retries alone is sufficient (unlike set-retries-jobs)', () => {
+    // set-retries-external has no dueDate validation — canContinue only checks retries + selectedIds
+    expect(canContinue({ retries: 1, selectedIds: new Set(['inst-1']), setDueDate: true, retriesDueDate: '' })).toBe(true);
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — set-retries-external: confirmPayloadJson', () => {
+
+  function getPayload(mode: 'instances' | 'query', overrides: object = {}): Record<string, unknown> {
+    const stub = {
+      selectedOperationId: 'set-retries-external',
+      mode,
+      retries: 3,
+      selectedIds: new Set(['pi-1', 'pi-2']),
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+      ...overrides
+    };
+    const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmPayloadJson');
+    return JSON.parse(desc?.get?.call(stub) as string);
+  }
+
+  it('instances mode — body contains retries and processInstanceIds array', () => {
+    const payload = getPayload('instances');
+    expect(payload['retries']).toBe(3);
+    expect(payload['processInstanceIds']).toEqual(expect.arrayContaining(['pi-1', 'pi-2']));
+    expect(payload['historicProcessInstanceQuery']).toBeUndefined();
+  });
+
+  it('instances mode — no dueDate field (absent for external tasks)', () => {
+    const payload = getPayload('instances');
+    expect(payload).not.toHaveProperty('dueDate');
+  });
+
+  it('query mode — body contains retries and historicProcessInstanceQuery with unfinished:true', () => {
+    const payload = getPayload('query');
+    expect(payload['retries']).toBe(3);
+    expect(payload['historicProcessInstanceQuery']).toBeDefined();
+    expect((payload['historicProcessInstanceQuery'] as Record<string, unknown>)['unfinished']).toBe(true);
+    expect(payload['processInstanceIds']).toBeUndefined();
+  });
+
+  it('query mode — no dueDate field', () => {
+    const payload = getPayload('query');
+    expect(payload).not.toHaveProperty('dueDate');
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — set-retries-external: confirmEndpoint', () => {
+
+  function getEndpoint(mode: 'instances' | 'query'): string {
+    const stub = { selectedOperationId: 'set-retries-external', mode };
+    const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'confirmEndpoint');
+    return desc?.get?.call(stub) as string;
+  }
+
+  it('instances mode → /external-task/retries-async', () => {
+    expect(getEndpoint('instances')).toContain('/external-task/retries-async');
+  });
+
+  it('query mode → /external-task/retries-async (same endpoint, body differs)', () => {
+    expect(getEndpoint('query')).toContain('/external-task/retries-async');
+  });
+
+});
+
+describe('BatchOperationsWizardComponent — batch instances load: no multi-state fusion', () => {
+
+  // In the batch wizard, instanceLoad$ always injects { field: 'state', values: [lockedFilterState] }.
+  // CockpitService.searchProcessInstancesGlobal only enters the searchPerState branch when
+  // statePill.values.length > 1.  Since lockedFilterState is always a single non-null string,
+  // multi-state fusion is structurally unreachable regardless of what user filters are added.
+
+  it('all 7 process operations have a non-null single-string lockedFilterState → injected pill length is always 1', () => {
+    const ALL_PROCESS_OPS = ['suspend', 'activate', 'delete-running', 'delete-finished', 'set-retries-jobs', 'set-variables', 'set-retries-external'];
+    for (const op of ALL_PROCESS_OPS) {
+      const locked = getLockedFilterState(op);
+      // Non-null + single string → { field: 'state', values: [locked] } → length 1
+      // → statePill.values.length > 1 is always false → searchPerState never called in batch
+      expect(locked, `operation "${op}" must have a non-null lockedFilterState`).not.toBeNull();
+      expect(typeof locked, `operation "${op}" lockedFilterState must be a string`).toBe('string');
+      // Simulating the injected pill that instanceLoad$ creates
+      const injectedPill = { field: 'state', values: [locked as string] };
+      expect(injectedPill.values, `operation "${op}" injected pill must have exactly 1 value`).toHaveLength(1);
+    }
+  });
+
+  it('version filter + locked state: buildHistoricQueryForBatch returns one flat query object per operation — no per-state fan-out', () => {
+    // The batch query builder produces a single flat query object.
+    // This object is passed directly to the cockpit service as one body.
+    // There is no fan-out into multiple per-state sub-queries at any stage of the batch flow.
+    const versionFilter: MultiValueFilter[] = [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['proc-a:3:xyz789', 'proc-b:2:uvw456'] }
+    ];
+
+    const CASES: { op: string; flags: Record<string, unknown> }[] = [
+      { op: 'suspend',               flags: { active: true, unfinished: true } },
+      { op: 'activate',              flags: { suspended: true, unfinished: true } },
+      { op: 'delete-running',        flags: { unfinished: true } },
+      { op: 'delete-finished',       flags: { finished: true } },
+      { op: 'set-retries-jobs',      flags: { unfinished: true } },
+      { op: 'set-variables',         flags: { unfinished: true } },
+      { op: 'set-retries-external',  flags: { unfinished: true } },
+    ];
+
+    for (const { op, flags } of CASES) {
+      const result = buildQuery(op, versionFilter);
+
+      // One plain object — not an array of sub-queries
+      expect(Array.isArray(result), `operation "${op}" result must be a flat object`).toBe(false);
+
+      // Version filter present in the single body
+      expect(result['processDefinitionIdIn'], `operation "${op}" must have processDefinitionIdIn`).toEqual(['proc-a:3:xyz789', 'proc-b:2:uvw456']);
+      expect(result, `operation "${op}" must not have processDefinitionKeyIn`).not.toHaveProperty('processDefinitionKeyIn');
+
+      // Correct locked state flags
+      for (const [flag, val] of Object.entries(flags)) {
+        expect(result[flag], `operation "${op}" must have ${flag}: ${String(val)}`).toBe(val);
+      }
+    }
+  });
+
+});
+
+
+function getModalQueryFilter(stub: Record<string, unknown>): Record<string, unknown> | null {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'modalQueryFilter');
+  return desc?.get?.call(stub) as Record<string, unknown> | null;
+}
+
+describe('BatchOperationsWizardComponent — modalQueryFilter', () => {
+
+  it('mode=query + hasActiveCriteria=true → returns non-null query object (unfinished:true for set-variables)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: true,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).not.toBeNull();
+    expect(typeof result).toBe('object');
+    expect(result!['unfinished']).toBe(true);
+  });
+
+  it('mode=query + hasActiveCriteria=false (no criteria) → returns null (no restriction; global search)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: false,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).toBeNull();
+  });
+
+  it('mode=instances → returns null regardless of hasActiveCriteria (targetInstanceIds takes over)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'instances',
+      hasActiveCriteria: true,
+      filterCriteria: [{ field: 'processDefinition', values: ['order-proc'] }],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).toBeNull();
+  });
+
+});
+
+
+function getModalTargetInstanceIds(stub: Record<string, unknown>): string[] | null {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'modalTargetInstanceIds');
+  return desc?.get?.call(stub) as string[] | null;
+}
+
+describe('BatchOperationsWizardComponent — modalTargetInstanceIds', () => {
+
+  it('mode=instances + IDs selected → returns array of selected IDs (not null, not [])', () => {
+    const stub = { mode: 'instances', selectedIds: new Set(['inst-1', 'inst-2', 'inst-3']) };
+    const result = getModalTargetInstanceIds(stub);
+    expect(result).not.toBeNull();
+    expect(result).toEqual(['inst-1', 'inst-2', 'inst-3']);
+  });
+
+  it('mode=instances + empty selection → returns [] (not null) — searchNow blocks search for []', () => {
+    const stub = { mode: 'instances', selectedIds: new Set<string>() };
+    const result = getModalTargetInstanceIds(stub);
+    expect(result).not.toBeNull();
+    expect(result).toEqual([]);
+  });
+
+  it('mode=query → returns null (global search or queryFilter takes over — never uses IDs directly)', () => {
+    const stub = { mode: 'query', selectedIds: new Set(['inst-1', 'inst-2']) };
+    const result = getModalTargetInstanceIds(stub);
+    expect(result).toBeNull();
+  });
+
+  it('cross-check: both getters are mutually exclusive — exactly one is non-null per mode', () => {
+    const instancesStub = {
+      mode: 'instances',
+      selectedIds: new Set(['inst-1']),
+      hasActiveCriteria: true,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedOperationId: 'set-variables',
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    expect(getModalTargetInstanceIds(instancesStub)).not.toBeNull();
+    expect(getModalQueryFilter(instancesStub)).toBeNull();
+
+    const queryStub = {
+      mode: 'query',
+      selectedIds: new Set(['inst-1']),
+      hasActiveCriteria: true,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedOperationId: 'set-variables',
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    expect(getModalTargetInstanceIds(queryStub)).toBeNull();
+    expect(getModalQueryFilter(queryStub)).not.toBeNull();
+
+    const queryNoCriteriaStub = {
+      mode: 'query',
+      selectedIds: new Set<string>(),
+      hasActiveCriteria: false,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedOperationId: 'set-variables',
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    expect(getModalTargetInstanceIds(queryNoCriteriaStub)).toBeNull();
+    expect(getModalQueryFilter(queryNoCriteriaStub)).toBeNull();
+  });
+
+});
+
+
+
+function getFilteredProcesses(stub: Record<string, unknown>): unknown[] {
+  const desc = Object.getOwnPropertyDescriptor(BatchOperationsWizardComponent.prototype, 'filteredMoveInstancesProcesses');
+  return (desc?.get?.call(stub) ?? []) as unknown[];
+}
+
+describe('BatchOperationsWizardComponent — move-instances: filteredMoveInstancesProcesses', () => {
+
+  const procs = [
+    { id: 'p1', key: 'invoice-process', name: 'Invoice Process', version: 1, deploymentId: '', suspended: false },
+    { id: 'p2', key: 'order-process', name: 'Order Process', version: 1, deploymentId: '', suspended: false },
+    { id: 'p3', key: 'payment-svc', name: '', version: 1, deploymentId: '', suspended: false }
+  ];
+
+  it('returns all processes when search text is empty', () => {
+    const stub = { moveInstancesUniqueProcesses: procs, moveInstancesSearchText: '' };
+    expect(getFilteredProcesses(stub)).toHaveLength(3);
+  });
+
+  it('filters by name (case-insensitive)', () => {
+    const stub = { moveInstancesUniqueProcesses: procs, moveInstancesSearchText: 'invoice' };
+    const result = getFilteredProcesses(stub) as any[];
+    expect(result).toHaveLength(1);
+    expect(result[0].key).toBe('invoice-process');
+  });
+
+  it('filters by key when name is empty', () => {
+    const stub = { moveInstancesUniqueProcesses: procs, moveInstancesSearchText: 'payment' };
+    const result = getFilteredProcesses(stub) as any[];
+    expect(result).toHaveLength(1);
+    expect(result[0].key).toBe('payment-svc');
+  });
+
+  it('returns empty array when no process matches', () => {
+    const stub = { moveInstancesUniqueProcesses: procs, moveInstancesSearchText: 'zzz-no-match' };
+    expect(getFilteredProcesses(stub)).toHaveLength(0);
+  });
+
+  it('search is case-insensitive for both name and key', () => {
+    const stub = { moveInstancesUniqueProcesses: procs, moveInstancesSearchText: 'ORDER' };
+    const result = getFilteredProcesses(stub) as any[];
+    expect(result).toHaveLength(1);
+    expect(result[0].key).toBe('order-process');
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch: extended criteria (suspend)', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'superProcessInstanceId', values: ['parent-id-123'] }
+    ]);
+    expect(result['superProcessInstanceId']).toBe('parent-id-123');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'subProcessInstanceId', values: ['sub-id-456'] }
+    ]);
+    expect(result['subProcessInstanceId']).toBe('sub-id-456');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType → mapped to incidentType in query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'incidentType', values: ['failedJob'] }
+    ]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildQuery('suspend', [
+      { field: 'incidentMessage', values: ['Connection refused'] }
+    ]);
+    expect(result['incidentMessageLike']).toBe('%Connection refused%');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildQuery('suspend', [
+      { field: 'activityId', values: ['task-1'] }
+    ]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['activeActivityIdIn']).toBeUndefined();
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildQuery('suspend', [
+      { field: 'incidentId', values: ['inc-789'] }
+    ]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('non-regression: locked state (active + unfinished) preserved alongside activityId', () => {
+    const result = buildQuery('suspend', [
+      { field: 'activityId', values: ['task-claim'] },
+      { field: 'processDefinition', values: ['order-proc'] }
+    ]);
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['activityId']).toBeUndefined();
+  });
+
+  it('activate: superProcessInstanceId + locked suspended state', () => {
+    const result = buildQuery('activate', [
+      { field: 'superProcessInstanceId', values: ['root-proc-id'] }
+    ]);
+    expect(result['superProcessInstanceId']).toBe('root-proc-id');
+    expect(result['suspended']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('all 4 direct criteria combined in one query', () => {
+    const result = buildQuery('suspend', [
+      { field: 'superProcessInstanceId', values: ['p-id'] },
+      { field: 'subProcessInstanceId',   values: ['s-id'] },
+      { field: 'incidentType',           values: ['failedExternalTask'] },
+      { field: 'incidentMessage',        values: ['Timeout'] },
+    ]);
+    expect(result['superProcessInstanceId']).toBe('p-id');
+    expect(result['subProcessInstanceId']).toBe('s-id');
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['incidentMessageLike']).toBe('%Timeout%');
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — move-instances: onMoveInstancesRowClick', () => {
+
+  const v1 = { id: 'orderProcess:1:aaa', key: 'orderProcess', name: 'Order', version: 1, deploymentId: '', suspended: false };
+  const v2 = { id: 'orderProcess:2:bbb', key: 'orderProcess', name: 'Order', version: 2, deploymentId: '', suspended: false };
+
+  function makeStub() {
+    const navigateCalls: Array<unknown[]> = [];
+    const stub: Record<string, unknown> = {
+      doNavigateToModifyTab: (...args: unknown[]) => { navigateCalls.push(args); }
+    };
+    return { stub, navigateCalls };
+  }
+
+  it('navigates directly using proc.key and proc.id (single version)', () => {
+    const { stub, navigateCalls } = makeStub();
+    BatchOperationsWizardComponent.prototype.onMoveInstancesRowClick.call(stub, v1);
+    expect(navigateCalls).toHaveLength(1);
+    expect(navigateCalls[0]).toEqual(['orderProcess', 'orderProcess:1:aaa']);
+  });
+
+  it('navigates directly using proc.key and proc.id (latest of multiple versions)', () => {
+    const { stub, navigateCalls } = makeStub();
+    // proc is the latest version representative (arr[0] after desc sort)
+    BatchOperationsWizardComponent.prototype.onMoveInstancesRowClick.call(stub, v2);
+    expect(navigateCalls).toHaveLength(1);
+    expect(navigateCalls[0]).toEqual(['orderProcess', 'orderProcess:2:bbb']);
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — loadActivitiesFromFilter: Activity ID dropdown vs free-text', () => {
+
+  function callLoadActivities(filterCriteria: MultiValueFilter[], getProcessDefinitionByKey?: (key: string) => any) {
+    const emitted: any[] = [];
+    const stub: any = {
+      filterCriteria,
+      activityLoad$: { next: (obs$: any) => emitted.push(obs$) },
+      processDefinitionService: {
+        getProcessDefinitionByKey: getProcessDefinitionByKey ?? (() => of(null))
+      }
+    };
+    (BatchOperationsWizardComponent.prototype as any)['loadActivitiesFromFilter'].call(stub);
+    return emitted;
+  }
+
+  it('single specific version selected → emits that version ID (dropdown activated)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-order-v2'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBe('pd-order-v2');
+  });
+
+  it('single key (no version pin) → resolves latest version via service (dropdown activated)', () => {
+    const [obs$] = callLoadActivities(
+      [{ field: 'processDefinition', values: ['order-proc'], processDefinitionIds: [] }],
+      (key: string) => of({ id: `latest-for-${key}`, key })
+    );
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBe('latest-for-order-proc');
+  });
+
+  it('no processDefinition criterion → emits null (free-text mode)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'businessKey', values: ['ACME'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+  it('multiple process keys selected → emits null (free-text mode)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'processDefinition', values: ['proc-a', 'proc-b'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+  it('multiple specific versions selected → emits null (free-text mode)', () => {
+    const [obs$] = callLoadActivities([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v1', 'pd-v2'] }
+    ]);
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+  it('single key, service returns null → emits null gracefully', () => {
+    const [obs$] = callLoadActivities(
+      [{ field: 'processDefinition', values: ['unknown-proc'] }],
+      () => of(null)
+    );
+    let result: string | null = undefined as any;
+    obs$.subscribe((v: string | null) => result = v);
+    expect(result).toBeNull();
+  });
+
+});
+
+
+describe('InstanceFilterPanelComponent — processDefinition change clears stale activityId', () => {
+
+  it('removing processDefinition pill also removes activityId pill', () => {
+    const stub: any = {
+      activePills: [
+        { field: 'processDefinition', values: ['proc-a'], processDefinitionIds: [] },
+        { field: 'activityId', values: ['task-1'] },
+      ],
+      cdr: { markForCheck() {} },
+      emit() {},
+    };
+    InstanceFilterPanelComponent.prototype.removePill.call(stub, 0);
+    expect(stub.activePills.find((p: any) => p.field === 'activityId')).toBeUndefined();
+    expect(stub.activePills.find((p: any) => p.field === 'processDefinition')).toBeUndefined();
+  });
+
+  it('removing a non-processDefinition pill does NOT clear activityId', () => {
+    const stub: any = {
+      activePills: [
+        { field: 'processDefinition', values: ['proc-a'] },
+        { field: 'businessKey', values: ['ACME'] },
+        { field: 'activityId', values: ['task-1'] },
+      ],
+      cdr: { markForCheck() {} },
+      emit() {},
+    };
+    InstanceFilterPanelComponent.prototype.removePill.call(stub, 1); // remove businessKey
+    expect(stub.activePills.find((p: any) => p.field === 'activityId')).toBeDefined();
+    expect(stub.activePills.find((p: any) => p.field === 'processDefinition')).toBeDefined();
+  });
+
+  it('processDefinition pill without a prior activityId pill: removePill is a no-op for activityId', () => {
+    const stub: any = {
+      activePills: [
+        { field: 'processDefinition', values: ['proc-a'] },
+        { field: 'businessKey', values: ['ACME'] },
+      ],
+      cdr: { markForCheck() {} },
+      emit() {},
+    };
+    InstanceFilterPanelComponent.prototype.removePill.call(stub, 0);
+    expect(stub.activePills).toHaveLength(1);
+    expect(stub.activePills[0].field).toBe('businessKey');
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — loadFromSessionStorage triggers BPMN loading on restore', () => {
+
+  const SESSION_KEY = 'batch-wizard-test-key';
+
+  function makeRestoreStub(operationId: string, filterCriteria: MultiValueFilter[], step = 1) {
+    let activitiesLoaded = false;
+    const stub: any = {
+      SESSION_KEY,
+      selectedOperationId: null,
+      mode: 'instances',
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      hasActiveCriteria: false,
+      selectedIds: new Set(),
+      deleteReason: '',
+      skipCustomListeners: false,
+      skipIoMappings: false,
+      retries: 1,
+      setDueDate: false,
+      retriesDueDate: '',
+      variableDefinitions: [],
+      selectedDecisionIds: new Set(),
+      decisionFilterCriteria: [],
+      decisionHasActiveCriteria: false,
+      currentStep: 1,
+      moveInstancesSearchText: '',
+      loadInstances() {},
+      loadDecisionInstances() {},
+      loadMoveInstancesProcesses() {},
+      loadActivitiesFromFilter() { activitiesLoaded = true; },
+      cdr: { markForCheck() {} },
+    };
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ operationId, filterCriteria, step }));
+    (BatchOperationsWizardComponent.prototype as any)['loadFromSessionStorage'].call(stub);
+    sessionStorage.removeItem(SESSION_KEY);
+    return { stub, activitiesLoaded: () => activitiesLoaded };
+  }
+
+  it('suspend with single processDefinition restored → loadActivitiesFromFilter called', () => {
+    const { activitiesLoaded } = makeRestoreStub('suspend', [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v1'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('activate with single processDefinition restored → loadActivitiesFromFilter called', () => {
+    const { activitiesLoaded } = makeRestoreStub('activate', [
+      { field: 'processDefinition', values: ['order-proc'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('delete-running with processDefinition restored → loadActivitiesFromFilter called', () => {
+    const { activitiesLoaded } = makeRestoreStub('delete-running', [
+      { field: 'processDefinition', values: ['order-proc'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('restore with no processDefinition → loadActivitiesFromFilter still called (emits null internally)', () => {
+    const { activitiesLoaded } = makeRestoreStub('suspend', [
+      { field: 'businessKey', values: ['ACME'] }
+    ]);
+    expect(activitiesLoaded()).toBe(true);
+  });
+
+  it('filterCriteria is correctly restored alongside the call', () => {
+    const criteria: MultiValueFilter[] = [
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v2'] },
+      { field: 'activityId', values: ['task-check'] },
+    ];
+    const { stub } = makeRestoreStub('suspend', criteria);
+    expect(stub.filterCriteria).toEqual(criteria);
+    expect(stub.selectedOperationId).toBe('suspend');
+  });
+
+});
+
+
+function buildDeleteRunningQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'delete-running',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — delete-running: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only (no active/suspended flags)', () => {
+    const result = buildDeleteRunningQuery([]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended pills → { unfinished: true } (both = default scope, no narrowing)', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill combined with processDefinitionKeyIn', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+  });
+
+  it('stateSuspended pill combined with processDefinitionIdIn', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v2'] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-v2']);
+  });
+
+});
+
+
+
+describe('BatchOperationsWizardComponent — delete-running: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying → mapped to withJobsRetrying:true in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType → mapped to incidentType in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildDeleteRunningQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildDeleteRunningQuery([{ field: 'activityId', values: ['task-review'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildDeleteRunningQuery([{ field: 'incidentId', values: ['inc-id-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateActive pill', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'incidentType', values: ['failedExternalTask'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['incidentType']).toBe('failedExternalTask');
+  });
+
+});
+
+
+
+describe('BatchOperationsWizardComponent — delete-running: state narrowing via filterCriteria pills', () => {
+
+  it('no state pill → active/suspended flags absent from query', () => {
+    const result = buildDeleteRunningQuery([]);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill alone → active: true in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill alone → suspended: true in query', () => {
+    const result = buildDeleteRunningQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both state pills → neither active nor suspended flag (default scope)', () => {
+    const result = buildDeleteRunningQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+});
+
+
+function buildDeleteFinishedQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'delete-finished',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — delete-finished: base query and Completed/Terminated narrowing', () => {
+
+  it('non-regression: no narrowing → { finished: true } only', () => {
+    const result = buildDeleteFinishedQuery([]);
+    expect(result['finished']).toBe(true);
+    expect(result['completed']).toBeUndefined();
+    expect(result['externallyTerminated']).toBeUndefined();
+  });
+
+  it('stateCompleted pill only → { completed: true }', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'stateCompleted', values: [] }]);
+    expect(result['completed']).toBe(true);
+    expect(result['finished']).toBeUndefined();
+    expect(result['externallyTerminated']).toBeUndefined();
+  });
+
+  it('stateTerminated pill only → { finished: true, internallyTerminated: true }', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'stateTerminated', values: [] }]);
+    expect(result['finished']).toBe(true);
+    expect(result['internallyTerminated']).toBe(true);
+    expect(result['externallyTerminated']).toBeUndefined();
+    expect(result['orQueries']).toBeUndefined();
+    expect(result['completed']).toBeUndefined();
+  });
+
+  it('both stateCompleted + stateTerminated pills → { finished: true } (same as default)', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'stateCompleted', values: [] },
+      { field: 'stateTerminated', values: [] },
+    ]);
+    expect(result['finished']).toBe(true);
+    expect(result['completed']).toBeUndefined();
+    expect(result['externallyTerminated']).toBeUndefined();
+  });
+
+  it('stateCompleted combined with processDefinitionKeyIn', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'stateCompleted', values: [] },
+    ]);
+    expect(result['completed']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+  });
+
+  it('stateTerminated combined with superProcessInstanceId', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'superProcessInstanceId', values: ['parent-abc'] },
+      { field: 'stateTerminated', values: [] },
+    ]);
+    expect(result['finished']).toBe(true);
+    expect(result['internallyTerminated']).toBe(true);
+    expect(result['externallyTerminated']).toBeUndefined();
+    expect(result['orQueries']).toBeUndefined();
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — delete-finished: extended criteria', () => {
+
+  it('superProcessInstanceId → mapped correctly', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'superProcessInstanceId', values: ['parent-1'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped correctly', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'subProcessInstanceId', values: ['child-2'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('incidentType → mapped correctly', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['finished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['finished']).toBe(true);
+  });
+
+  it('withJobsRetrying is excluded for delete-finished — no effect on finished query', () => {
+    const result = buildDeleteFinishedQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBeUndefined();
+    expect(result['finished']).toBe(true);
+  });
+
+  it('all direct extended criteria combined with stateCompleted narrowing', () => {
+    const result = buildDeleteFinishedQuery([
+      { field: 'processDefinition', values: ['invoice'] },
+      { field: 'superProcessInstanceId', values: ['parent-x'] },
+      { field: 'subProcessInstanceId', values: ['child-y'] },
+      { field: 'incidentType', values: ['failedExternalTask'] },
+      { field: 'incidentMessage', values: ['Connection refused'] },
+      { field: 'stateCompleted', values: [] },
+    ]);
+    expect(result['completed']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['invoice']);
+    expect(result['superProcessInstanceId']).toBe('parent-x');
+    expect(result['subProcessInstanceId']).toBe('child-y');
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['incidentMessageLike']).toBe('%Connection refused%');
+  });
+
+});
+
+
+
+
+function buildRetriesJobsQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'set-retries-jobs',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only', () => {
+    const result = buildRetriesJobsQuery([]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildRetriesJobsQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildRetriesJobsQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended → { unfinished: true } (both = default, no narrowing)', () => {
+    const result = buildRetriesJobsQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-retries-jobs: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying → mapped to withJobsRetrying:true in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedJob → mapped to incidentType in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedExternalTask → mapped to incidentType in query', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentType', values: ['failedExternalTask'] }]);
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesJobsQuery([{ field: 'activityId', values: ['task-review'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesJobsQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateActive narrowing', () => {
+    const result = buildRetriesJobsQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'subProcessInstanceId', values: ['child-2'] },
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'incidentType', values: ['failedJob'] },
+      { field: 'incidentMessage', values: ['connection'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['incidentMessageLike']).toBe('%connection%');
+  });
+
+});
+
+
+
+function buildRetriesExternalQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'set-retries-external',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — set-retries-external: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only', () => {
+    const result = buildRetriesExternalQuery([]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildRetriesExternalQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildRetriesExternalQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended → { unfinished: true } (both = default, no narrowing)', () => {
+    const result = buildRetriesExternalQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-retries-external: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildRetriesExternalQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildRetriesExternalQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedExternalTask → mapped to incidentType in query', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentType', values: ['failedExternalTask'] }]);
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedJob → also mapped (instance-level filter, both types valid)', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentMessage', values: ['worker timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%worker timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesExternalQuery([{ field: 'activityId', values: ['ext-task-1'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildRetriesExternalQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying pill is excluded from query for set-retries-external (defense-in-depth)', () => {
+    const result = buildRetriesExternalQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateSuspended narrowing', () => {
+    const result = buildRetriesExternalQuery([
+      { field: 'processDefinition', values: ['payment-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'subProcessInstanceId', values: ['child-2'] },
+      { field: 'incidentType', values: ['failedExternalTask'] },
+      { field: 'incidentMessage', values: ['connection'] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['payment-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['incidentMessageLike']).toBe('%connection%');
+    expect(result['withJobsRetrying']).toBeUndefined();
+  });
+
+  it('set-retries-jobs non-regression: withJobsRetrying still included for jobs', () => {
+    const result = buildRetriesJobsQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+  });
+
+});
+
+
+
+function buildSetVariablesQuery(filterCriteria: MultiValueFilter[]): Record<string, unknown> {
+  const stub = {
+    selectedOperationId: 'set-variables',
+    filterCriteria,
+    vnIgnoreCase: false,
+    vvIgnoreCase: false,
+  };
+  return BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch.call(stub);
+}
+
+describe('BatchOperationsWizardComponent — set-variables: Active/Suspended narrowing', () => {
+
+  it('non-regression: no narrowing → { unfinished: true } only (no active/suspended flags)', () => {
+    const result = buildSetVariablesQuery([]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill → { unfinished: true, active: true }', () => {
+    const result = buildSetVariablesQuery([{ field: 'stateActive', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateSuspended pill → { unfinished: true, suspended: true }', () => {
+    const result = buildSetVariablesQuery([{ field: 'stateSuspended', values: [] }]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['active']).toBeUndefined();
+  });
+
+  it('both stateActive + stateSuspended → { unfinished: true } (both = default, no narrowing)', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'stateActive', values: [] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBeUndefined();
+    expect(result['suspended']).toBeUndefined();
+  });
+
+  it('stateActive pill combined with processDefinitionKeyIn', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+  });
+
+  it('stateSuspended pill combined with processDefinitionIdIn', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'processDefinition', values: [], processDefinitionIds: ['pd-v2'] },
+      { field: 'stateSuspended', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['suspended']).toBe(true);
+    expect(result['processDefinitionIdIn']).toEqual(['pd-v2']);
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-variables: extended criteria in buildHistoricQueryForBatch', () => {
+
+  it('superProcessInstanceId → mapped to superProcessInstanceId in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'superProcessInstanceId', values: ['parent-abc'] }]);
+    expect(result['superProcessInstanceId']).toBe('parent-abc');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('subProcessInstanceId → mapped to subProcessInstanceId in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'subProcessInstanceId', values: ['child-xyz'] }]);
+    expect(result['subProcessInstanceId']).toBe('child-xyz');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('withJobsRetrying → mapped to withJobsRetrying:true in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedJob → mapped to incidentType in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentType', values: ['failedJob'] }]);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentType failedExternalTask → mapped to incidentType in query', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentType', values: ['failedExternalTask'] }]);
+    expect(result['incidentType']).toBe('failedExternalTask');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentMessage → mapped to incidentMessageLike with % wildcards', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentMessage', values: ['timeout'] }]);
+    expect(result['incidentMessageLike']).toBe('%timeout%');
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activityId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildSetVariablesQuery([{ field: 'activityId', values: ['task-review'] }]);
+    expect(result['activityId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('incidentId criterion is NOT included in sync buildHistoricQueryForBatch — resolved asynchronously', () => {
+    const result = buildSetVariablesQuery([{ field: 'incidentId', values: ['inc-999'] }]);
+    expect(result['incidentId']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('all direct criteria combined with stateActive narrowing', () => {
+    const result = buildSetVariablesQuery([
+      { field: 'processDefinition', values: ['order-proc'] },
+      { field: 'superProcessInstanceId', values: ['parent-1'] },
+      { field: 'subProcessInstanceId', values: ['child-2'] },
+      { field: 'withJobsRetrying', values: [] },
+      { field: 'incidentType', values: ['failedJob'] },
+      { field: 'incidentMessage', values: ['connection'] },
+      { field: 'stateActive', values: [] },
+    ]);
+    expect(result['unfinished']).toBe(true);
+    expect(result['active']).toBe(true);
+    expect(result['suspended']).toBeUndefined();
+    expect(result['processDefinitionKeyIn']).toEqual(['order-proc']);
+    expect(result['superProcessInstanceId']).toBe('parent-1');
+    expect(result['subProcessInstanceId']).toBe('child-2');
+    expect(result['withJobsRetrying']).toBe(true);
+    expect(result['incidentType']).toBe('failedJob');
+    expect(result['incidentMessageLike']).toBe('%connection%');
+  });
+
+  it('set-retries-external non-regression: withJobsRetrying still excluded for external-tasks', () => {
+    const result = buildRetriesExternalQuery([{ field: 'withJobsRetrying', values: [] }]);
+    expect(result['withJobsRetrying']).toBeUndefined();
+  });
+
+});
+
+
+describe('BatchOperationsWizardComponent — set-variables: modalQueryFilter uses resolvedBatchQuery', () => {
+
+  it('resolvedBatchQuery present → returned directly (async criteria like activityId included)', () => {
+    const resolved = { unfinished: true, processInstanceIds: ['inst-a', 'inst-b'] };
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: true,
+      resolvedBatchQuery: resolved,
+      filterCriteria: [{ field: 'activityId', values: ['task-review'] }],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).toBe(resolved);
+    expect((result as any)['processInstanceIds']).toEqual(['inst-a', 'inst-b']);
+  });
+
+  it('resolvedBatchQuery null → falls back to buildHistoricQueryForBatch (sync)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: true,
+      resolvedBatchQuery: null,
+      filterCriteria: [{ field: 'stateActive', values: [] }],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).not.toBeNull();
+    expect(result!['unfinished']).toBe(true);
+    expect(result!['active']).toBe(true);
+  });
+
+  it('resolvedBatchQuery undefined → falls back to buildHistoricQueryForBatch (sync)', () => {
+    const stub = {
+      selectedOperationId: 'set-variables',
+      mode: 'query',
+      hasActiveCriteria: true,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      buildHistoricQueryForBatch: BatchOperationsWizardComponent.prototype.buildHistoricQueryForBatch,
+    };
+    const result = getModalQueryFilter(stub);
+    expect(result).not.toBeNull();
+    expect(result!['unfinished']).toBe(true);
+  });
+
+});
+
+// ─── Finished-date criteria: excluded from query for in-progress operations ─
+
+describe('BatchOperationsWizardComponent — buildHistoricQueryForBatch: finishedAfter/finishedBefore excluded for in-progress operations', () => {
+  const finishedAfterDate  = '2024-01-01T00:00:00.000+0100';
+  const finishedBeforeDate = '2024-12-31T23:59:59.000+0100';
+
+  const finishedCriteria: MultiValueFilter[] = [
+    { field: 'finishedAfter',  values: [finishedAfterDate] },
+    { field: 'finishedBefore', values: [finishedBeforeDate] },
+  ];
+
+  it('suspend: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('suspend', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['active']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('activate: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('activate', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['suspended']).toBe(true);
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('delete-running: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('delete-running', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('set-retries-jobs: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('set-retries-jobs', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('set-retries-external: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('set-retries-external', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('set-variables: finishedAfter/Before residual pills are silently dropped from the query', () => {
+    const result = buildQuery('set-variables', finishedCriteria);
+    expect(result['finishedAfter']).toBeUndefined();
+    expect(result['finishedBefore']).toBeUndefined();
+    expect(result['unfinished']).toBe(true);
+  });
+
+  it('delete-finished: finishedAfter and finishedBefore ARE included in the query', () => {
+    const result = buildQuery('delete-finished', finishedCriteria);
+    expect(result['finishedAfter']).toBe(finishedAfterDate);
+    expect(result['finishedBefore']).toBe(finishedBeforeDate);
+    expect(result['finished']).toBe(true);
+  });
+});
+
+// ─── loadFromSessionStorage: finished-date pills stripped at the source ──────
+
+describe('BatchOperationsWizardComponent — loadFromSessionStorage strips finished-date criteria for in-progress operations', () => {
+  const SESSION_KEY = 'batchOpsWizardState';
+
+  function makeStub(operationId: string): any {
+    const stub: any = {
+      SESSION_KEY,
+      selectedOperationId: operationId,
+      filterCriteria: [],
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      hasActiveCriteria: false,
+      mode: 'query',
+      selectedIds: new Set(),
+      deleteReason: '',
+      skipCustomListeners: false,
+      skipIoMappings: false,
+      retries: 1,
+      setDueDate: false,
+      retriesDueDate: '',
+      variableDefinitions: [],
+      selectedDecisionIds: new Set(),
+      decisionFilterCriteria: [],
+      decisionHasActiveCriteria: false,
+      currentStep: 1,
+    };
+    Object.defineProperty(stub, 'lockedFilterState', {
+      get: () => getLockedFilterState(stub.selectedOperationId),
+    });
+    return stub;
+  }
+
+  function loadSession(operationId: string, storedCriteria: MultiValueFilter[]): any {
+    const stub = makeStub(operationId);
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ operationId, filterCriteria: storedCriteria, step: 1 }));
+    try {
+      (BatchOperationsWizardComponent.prototype as any).loadFromSessionStorage.call(stub);
+    } finally {
+      sessionStorage.removeItem(SESSION_KEY);
+    }
+    return stub;
+  }
+
+  const finishedPills: MultiValueFilter[] = [
+    { field: 'finishedAfter',  values: ['2024-01-01T00:00:00.000+0100'] },
+    { field: 'finishedBefore', values: ['2024-12-31T23:59:59.000+0100'] },
+    { field: 'businessKey',    values: ['ORDER-1'] },
+  ];
+
+  it('suspend: strips finishedAfter and finishedBefore, keeps other criteria', () => {
+    const stub = loadSession('suspend', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('activate: strips finished-date pills', () => {
+    const stub = loadSession('activate', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('delete-running: strips finished-date pills', () => {
+    const stub = loadSession('delete-running', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('set-retries-jobs: strips finished-date pills', () => {
+    const stub = loadSession('set-retries-jobs', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('set-retries-external: strips finished-date pills', () => {
+    const stub = loadSession('set-retries-external', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('set-variables: strips finished-date pills', () => {
+    const stub = loadSession('set-variables', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+
+  it('delete-finished: keeps finished-date pills', () => {
+    const stub = loadSession('delete-finished', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['finishedAfter', 'finishedBefore', 'businessKey']);
+  });
+
+  it('hasActiveCriteria is false after all criteria are stripped', () => {
+    const stub = loadSession('suspend', [{ field: 'finishedAfter', values: ['2024-01-01T00:00:00.000+0100'] }]);
+    expect(stub.filterCriteria).toHaveLength(0);
+    expect(stub.hasActiveCriteria).toBe(false);
+  });
+
+  it('correlate: strips finished-date pills', () => {
+    const stub = loadSession('correlate', finishedPills);
+    expect(stub.filterCriteria.map((f: MultiValueFilter) => f.field)).toEqual(['businessKey']);
+  });
+});
+
+// ─── correlate: buildDisplayStatePill (regression guard for display query) ───────────
+// Bug: correlate was absent from the instanceLoad$ if/else chain and fell to the else
+// branch which hardcodes ['active']. Fix: correlate now returns ['unfinished'] by default,
+// matching buildHistoricQueryForBatch (the execute payload) and lockedFilterState.
+
+function buildDisplayStatePill(
+  operationId: string,
+  filterCriteria: MultiValueFilter[]
+): { field: string; values: string[] } | null {
+  return BatchOperationsWizardComponent.prototype.buildDisplayStatePill.call({}, operationId, filterCriteria);
+}
+
+describe('BatchOperationsWizardComponent — correlate: buildDisplayStatePill (display query)', () => {
+
+  it('default (no criteria): returns unfinished — suspended instances visible in table', () => {
+    const pill = buildDisplayStatePill('correlate', []);
+    expect(pill?.values).toEqual(['unfinished']);
+  });
+
+  it('regression guard: no longer returns active by default (was the bug)', () => {
+    const pill = buildDisplayStatePill('correlate', []);
+    expect(pill?.values).not.toEqual(['active']);
+  });
+
+  it('stateActive criterion: narrows display to active only', () => {
+    const pill = buildDisplayStatePill('correlate', [{ field: 'stateActive', values: [] }]);
+    expect(pill?.values).toEqual(['active']);
+  });
+
+  it('stateSuspended criterion: narrows display to suspended only', () => {
+    const pill = buildDisplayStatePill('correlate', [{ field: 'stateSuspended', values: [] }]);
+    expect(pill?.values).toEqual(['suspended']);
+  });
+
+  it('both toggles absent: returns unfinished (active + suspended)', () => {
+    const pill = buildDisplayStatePill('correlate', [{ field: 'businessKey', values: ['ORD-1'] }]);
+    expect(pill?.values).toEqual(['unfinished']);
+  });
+
+  it('set-variables non-regression: still unfinished by default', () => {
+    expect(buildDisplayStatePill('set-variables', [])?.values).toEqual(['unfinished']);
+  });
+
+  it('set-retries-jobs non-regression: still unfinished by default', () => {
+    expect(buildDisplayStatePill('set-retries-jobs', [])?.values).toEqual(['unfinished']);
+  });
+
+  it('set-retries-external non-regression: still unfinished by default', () => {
+    expect(buildDisplayStatePill('set-retries-external', [])?.values).toEqual(['unfinished']);
+  });
+
+  it('delete-running non-regression: still unfinished by default', () => {
+    expect(buildDisplayStatePill('delete-running', [])?.values).toEqual(['unfinished']);
+  });
+
+  it('activate non-regression: still suspended', () => {
+    expect(buildDisplayStatePill('activate', [])?.values).toEqual(['suspended']);
+  });
+
+  it('delete-finished non-regression: still finished by default', () => {
+    expect(buildDisplayStatePill('delete-finished', [])?.values).toEqual(['finished']);
+  });
+
+  it('suspend (else branch): still active — suspend targets active instances', () => {
+    expect(buildDisplayStatePill('suspend', [])?.values).toEqual(['active']);
+  });
+
+});

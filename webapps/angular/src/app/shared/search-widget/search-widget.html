@@ -9,7 +9,7 @@
 
       <!-- Display mode -->
       <ng-container *ngIf="editingIndex !== i">
-        <span class="pill-type">{{ search.type.label }}</span>
+        <span class="pill-type">{{ search.type.label | translate }}</span>
         <span class="pill-name" *ngIf="search.name">{{ search.name }}</span>
         <span class="pill-operator">{{ search.operator.label }}</span>
         <span class="pill-value" (click)="editSearch(i)">{{ search.value }}</span>
@@ -20,13 +20,13 @@
 
       <!-- Edit mode -->
       <ng-container *ngIf="editingIndex === i">
-        <span class="pill-type">{{ search.type.label }}</span>
+        <span class="pill-type">{{ search.type.label | translate }}</span>
 
         <!-- Name input for extended searches -->
         <input *ngIf="search.type.allowName"
                type="text"
                class="pill-name-input"
-               [placeholder]="'Name'"
+               [placeholder]="'cockpit.processDetail.variables.name' | translate"
                [(ngModel)]="search.name"
                (keydown)="onKeydown($event, i)" />
 
@@ -42,7 +42,7 @@
         <!-- Value input -->
         <input type="text"
                class="pill-value-input"
-               [placeholder]="search.type.placeholder || 'Value'"
+               [placeholder]="(search.type.placeholder || 'cockpit.processDetail.variables.value') | translate"
                [(ngModel)]="search.value"
                (keydown)="onKeydown($event, i)"
                (blur)="confirmSearch(i)" />
@@ -58,7 +58,7 @@
       <input type="text"
              #searchInput
              class="search-input"
-             [placeholder]="placeholder"
+             [placeholder]="placeholder | translate"
              [(ngModel)]="inputQuery"
              (focus)="onInputFocus()"
              (input)="onInputChange()" />
@@ -68,7 +68,7 @@
         <div class="dropdown-item"
              *ngFor="let type of filteredTypes"
              (click)="selectType(type)">
-          <span class="dropdown-label">{{ type.label }}</span>
+          <span class="dropdown-label">{{ type.label | translate }}</span>
         </div>
       </div>
     </div>
@@ -81,7 +81,7 @@
             *ngIf="searches.length > 0"
             (click)="clearAll()"
             type="button"
-            title="Clear all">
+            [title]="'search.clearAll' | translate">
       <fa-icon [icon]="faTimes"></fa-icon>
     </button>
 
@@ -90,7 +90,7 @@
       <button class="action-btn stored-btn"
               (click)="toggleStoredDropdown()"
               type="button"
-              title="Save/Load criteria">
+              [title]="'search.saveLoadCriteria' | translate">
         <fa-icon [icon]="faFolder"></fa-icon>
         <fa-icon [icon]="faChevronDown" class="chevron"></fa-icon>
       </button>
@@ -100,7 +100,7 @@
         <div class="stored-save" *ngIf="searches.length > 0">
           <input type="text"
                  class="stored-name-input"
-                 placeholder="Save as..."
+                 [placeholder]="'search.saveAsPlaceholder' | translate"
                  [(ngModel)]="newCriteriaName"
                  (keydown.enter)="saveCurrentCriteria()" />
           <button class="stored-save-btn"
@@ -130,7 +130,7 @@
 
         <!-- Empty state -->
         <div class="stored-empty" *ngIf="storedCriteriaNames.length === 0 && searches.length === 0">
-          No saved criteria
+          {{ 'search.noSavedCriteria' | translate }}
         </div>
       </div>
     </div>

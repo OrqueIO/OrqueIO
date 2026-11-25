@@ -19,7 +19,9 @@ package io.orqueio.bpm.spring.boot.starter.ai.task;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.math.BigDecimal;
 import java.time.Duration;
+import java.util.List;
 
 import io.orqueio.bpm.engine.ProcessEngineException;
 import io.orqueio.bpm.engine.RepositoryService;
@@ -461,6 +463,132 @@ class LlmTaskDeploymentIT {
   }
 
   @Test
+  void shouldReadAllowedValuesAndBoundsOfSeveralProcesses() {
+    // Claim triage
+    assertThat(outputsOf("incidentType: Theft | Fire|Water |Other , claimAmount:number[0..50000]")).containsExactly(
+        new LlmOutputField("incidentType", LlmOutputField.Type.STRING, List.of("Theft", "Fire", "Water", "Other"), null, null),
+        new LlmOutputField("claimAmount", LlmOutputField.Type.NUMBER, List.of(), new BigDecimal("0"), new BigDecimal("50000")));
+    // Support ticket, with one-sided bounds and an output left free
+    assertThat(outputsOf("priority:integer [1..5], waitDays:integer[0..], refund:number[..-0.5], summary:string, urgent:boolean"))
+        .containsExactly(
+            new LlmOutputField("priority", LlmOutputField.Type.INTEGER, List.of(), new BigDecimal("1"), new BigDecimal("5")),
+            new LlmOutputField("waitDays", LlmOutputField.Type.INTEGER, List.of(), new BigDecimal("0"), null),
+            new LlmOutputField("refund", LlmOutputField.Type.NUMBER, List.of(), null, new BigDecimal("-0.5")),
+            new LlmOutputField("summary", LlmOutputField.Type.STRING),
+            new LlmOutputField("urgent", LlmOutputField.Type.BOOLEAN));
+    // Loan request: a decision between two values, and a probability with decimal bounds
+    assertThat(outputsOf("decision:approve|reject, risk:number[0.05..0.95], level:integer[-10..1e3]")).containsExactly(
+        new LlmOutputField("decision", LlmOutputField.Type.STRING, List.of("approve", "reject"), null, null),
+        new LlmOutputField("risk", LlmOutputField.Type.NUMBER, List.of(), new BigDecimal("0.05"), new BigDecimal("0.95")),
+        new LlmOutputField("level", LlmOutputField.Type.INTEGER, List.of(), new BigDecimal("-10"), new BigDecimal("1000")));
+  }
+
+  @Test
+  void shouldWriteBoundsTheSameWayHoweverTheAuthorWroteThem() {
+    List<LlmOutputField> plain = outputsOf("risk:number[0..1], level:integer[2..2], amount:number[..50000]");
+    List<LlmOutputField> written = outputsOf("risk:number[0.0..1.00], level:integer[2.0..2e0], amount:number[..5E4]");
+
+    assertThat(written).isEqualTo(plain);
+    assertThat(written).extracting(LlmOutputField::describe).containsExactly(
+        "\"risk\" (number, from 0 to 1)", "\"level\" (integer, from 2 to 2)", "\"amount\" (number, at most 50000)");
+  }
+
+  @Test
+  void shouldRejectBoundTooLargeOrTooPrecise() {
+    // Bounds are written in every prompt: an exponent must not make them millions of digits long
+    assertOutputsRejected("amount:number[..1e99999999]",
+        "LLM task 'Task_Llm' has a bound '1e99999999' that is too large or too precise for 'amount'");
+    assertOutputsRejected("amount:number[..1e2147483647]",
+        "LLM task 'Task_Llm' has a bound '1e2147483647' that is too large or too precise for 'amount'");
+    assertOutputsRejected("count:integer[0..1e19]",
+        "LLM task 'Task_Llm' has a bound '1e19' that is too large or too precise for 'count'");
+    assertOutputsRejected("rate:number[0..0.0000000000000000001]",
+        "LLM task 'Task_Llm' has a bound '0.0000000000000000001' that is too large or too precise for 'rate'");
+    // The largest accepted: 18 digits each side
+    assertThat(outputsOf("count:integer[-999999999999999999..999999999999999999], rate:number[0.000000000000000001..1]"))
+        .hasSize(2);
+  }
+
+  @Test
+  void shouldRejectThreeDotsBetweenBounds() {
+    assertOutputsRejected("priority:integer[1...5]", "LLM task 'Task_Llm' has invalid bounds '[1...5]' for 'priority'");
+  }
+
+  @Test
+  void shouldExplainThatAllowedValuesCannotContainColon() {
+    assertOutputsRejected("slot:10:00|11:00",
+        "LLM task 'Task_Llm' has an allowed value containing ':' for 'slot' in orqueio.llm.outputs; "
+            + "allowed values cannot contain ',' or ':'");
+  }
+
+  @Test
+  void shouldRejectBoundsMixedWithAllowedValues() {
+    assertOutputsRejected("amount:number[0..1]|2",
+        "LLM task 'Task_Llm' mixes bounds and allowed values for 'amount'");
+    // A value that only looks like brackets is still allowed
+    assertThat(outputsOf("code:A[1]|B[2]")).extracting(LlmOutputField::allowedValues).containsExactly(List.of("A[1]", "B[2]"));
+  }
+
+  @Test
+  void shouldRejectAllowedValueTooLongToBeMatched() {
+    assertOutputsRejected("label:" + "x".repeat(LlmOutputField.MAX_STRING_LENGTH + 1) + "|short",
+        "LLM task 'Task_Llm' has an allowed value longer than 4000 characters for 'label'");
+  }
+
+  @Test
+  void shouldRejectEmptyAllowedValue() {
+    assertOutputsRejected("incidentType:Theft||Fire", "LLM task 'Task_Llm' has an empty allowed value for 'incidentType'");
+    assertOutputsRejected("incidentType:Theft|Fire|", "LLM task 'Task_Llm' has an empty allowed value for 'incidentType'");
+    assertOutputsRejected("incidentType:|", "LLM task 'Task_Llm' has an empty allowed value for 'incidentType'");
+  }
+
+  @Test
+  void shouldRejectDuplicateAllowedValue() {
+    assertOutputsRejected("sentiment:positive|negative| positive",
+        "LLM task 'Task_Llm' lists the allowed value 'positive' twice for 'sentiment'");
+  }
+
+  @Test
+  void shouldRejectMinimumGreaterThanMaximum() {
+    assertOutputsRejected("priority:integer[5..1]", "LLM task 'Task_Llm' has a minimum greater than its maximum for 'priority'");
+    assertOutputsRejected("risk:number[0.6..0.5]", "LLM task 'Task_Llm' has a minimum greater than its maximum for 'risk'");
+  }
+
+  @Test
+  void shouldRejectBoundsOnStringOrBoolean() {
+    assertOutputsRejected("summary:string[1..10]",
+        "LLM task 'Task_Llm' declares bounds for 'summary', which is a string; only number and integer outputs can have bounds");
+    assertOutputsRejected("urgent:boolean[0..1]",
+        "LLM task 'Task_Llm' declares bounds for 'urgent', which is a boolean; only number and integer outputs can have bounds");
+  }
+
+  @Test
+  void shouldRejectEmptyBounds() {
+    assertOutputsRejected("amount:number[..]", "LLM task 'Task_Llm' has empty bounds for 'amount'");
+    assertOutputsRejected("amount:number[ .. ]", "LLM task 'Task_Llm' has empty bounds for 'amount'");
+  }
+
+  @Test
+  void shouldRejectMalformedBounds() {
+    assertOutputsRejected("amount:number[0-100]", "LLM task 'Task_Llm' has invalid bounds '[0-100]' for 'amount'");
+    assertOutputsRejected("amount:number[]", "LLM task 'Task_Llm' has invalid bounds '[]' for 'amount'");
+    assertOutputsRejected("amount:number[0..10..20]", "LLM task 'Task_Llm' has invalid bounds '[0..10..20]' for 'amount'");
+    assertOutputsRejected("amount:number[zero..100]", "LLM task 'Task_Llm' has an invalid bound 'zero' for 'amount'");
+    assertOutputsRejected("amount:number[0..1e]", "LLM task 'Task_Llm' has an invalid bound '1e' for 'amount'");
+  }
+
+  @Test
+  void shouldRejectFractionalBoundOnInteger() {
+    assertOutputsRejected("priority:integer[0.5..5]",
+        "LLM task 'Task_Llm' has a bound '0.5' that is not a whole number for integer output 'priority'");
+  }
+
+  @Test
+  void shouldRejectBoundsOnUnknownType() {
+    assertOutputsRejected("tags:array[0..5]", "LLM task 'Task_Llm' has an unsupported output type 'array' for 'tags'");
+  }
+
+  @Test
   void shouldRejectMissingPrompt() {
     assertDeploymentFails(serviceTask(LLM_DELEGATE, true, property("orqueio.llm.provider", "ollama")),
         "LLM task 'Task_Llm' requires a orqueio.llm.prompt property");
@@ -562,6 +690,19 @@ class LlmTaskDeploymentIT {
         .getDeployedProcessDefinition(definition.getId())
         .findActivity("Task_Llm");
     return LlmTaskConfiguration.of(activity);
+  }
+
+  private List<LlmOutputField> outputsOf(String outputs) {
+    List<LlmOutputField> fields = deployAndGetConfiguration(serviceTask(LLM_DELEGATE, true,
+        property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", outputs))).getOutputs();
+    repositoryService.deleteDeployment(deployment.getId(), true);
+    deployment = null;
+    return fields;
+  }
+
+  private void assertOutputsRejected(String outputs, String expectedMessage) {
+    assertDeploymentFails(serviceTask(LLM_DELEGATE, true,
+        property("orqueio.llm.prompt", "Classify") + property("orqueio.llm.outputs", outputs)), expectedMessage);
   }
 
   private void assertDeploymentFails(String bpmn, String expectedMessage) {

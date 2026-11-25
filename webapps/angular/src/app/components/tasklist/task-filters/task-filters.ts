@@ -3,14 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { TooltipDirective } from '../../../shared/tooltip/tooltip.directive';
-import { PaginationComponent, PageChangeEvent } from '../../../shared/pagination/pagination';
 import { TaskFilter } from '../../../models/tasklist';
 import { FiltersActions, selectCanCreateFilter } from '../../../store/tasklist';
 
 @Component({
   selector: 'app-task-filters',
   standalone: true,
-  imports: [CommonModule, TranslatePipe, TooltipDirective, PaginationComponent],
+  imports: [CommonModule, TranslatePipe, TooltipDirective],
   templateUrl: './task-filters.html',
   styleUrl: './task-filters.css'
 })
@@ -31,18 +30,16 @@ export class TaskFiltersComponent implements OnChanges {
 
   private hasAutoSelected = false;
 
-  // Pagination
-  pageSize = 10;
-  currentPage = 1;
+  searchQuery = '';
 
-  get totalFilters(): number {
-    return this.filters.length;
+  get filteredFilters(): TaskFilter[] {
+    if (!this.searchQuery.trim()) return this.filters;
+    const q = this.searchQuery.toLowerCase();
+    return this.filters.filter(f => f.name.toLowerCase().includes(q));
   }
 
-  get displayedFilters(): TaskFilter[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    return this.filters.slice(start, end);
+  onSearchInput(event: Event): void {
+    this.searchQuery = (event.target as HTMLInputElement).value;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -98,10 +95,6 @@ export class TaskFiltersComponent implements OnChanges {
 
   hasRefreshEnabled(filter: TaskFilter): boolean {
     return filter.properties?.refresh === true;
-  }
-
-  onPageChange(event: PageChangeEvent): void {
-    this.currentPage = event.current;
   }
 
   trackByFilterId(index: number, filter: TaskFilter): string {

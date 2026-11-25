@@ -12,7 +12,17 @@
 
 <!-- Filters List -->
 <div class="filters-list" *ngIf="!loading && !error">
-  <!-- Empty State -->
+
+  <!-- Search -->
+  <div class="filter-search" *ngIf="filters.length > 0">
+    <input type="text"
+           class="filter-search-input"
+           [value]="searchQuery"
+           (input)="onSearchInput($event)"
+           [placeholder]="'tasklist.searchFilters' | translate">
+  </div>
+
+  <!-- Empty State (no filters loaded) -->
   <div class="empty-state" *ngIf="filters.length === 0">
     <span class="info-icon">i</span>
     <p>{{ 'tasklist.noFiltersAvailable' | translate }}</p>
@@ -25,9 +35,14 @@
     </button>
   </div>
 
+  <!-- Search Empty State -->
+  <div class="search-empty-state" *ngIf="filters.length > 0 && searchQuery && filteredFilters.length === 0">
+    <p>{{ 'tasklist.noFiltersMatchSearch' | translate }}</p>
+  </div>
+
   <!-- Filter Items -->
-  <ul class="filter-items" *ngIf="filters.length > 0">
-    <li *ngFor="let filter of displayedFilters; trackBy: trackByFilterId"
+  <ul class="filter-items" *ngIf="filteredFilters.length > 0">
+    <li *ngFor="let filter of filteredFilters; trackBy: trackByFilterId"
         class="filter-item"
         [class.active]="isSelected(filter)"
         [class.has-refresh]="hasRefreshEnabled(filter)"
@@ -89,13 +104,3 @@
     </button>
   </div>
 </div>
-
-<!-- Filter Pagination -->
-<app-pagination
-  *ngIf="totalFilters > pageSize"
-  [current]="currentPage"
-  [size]="pageSize"
-  [total]="totalFilters"
-  (pageChange)="onPageChange($event)"
-  class="filters-pagination">
-</app-pagination>

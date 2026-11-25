@@ -13,9 +13,12 @@ import {
   MetricType,
   METRIC_KEYS
 } from '../../../models/admin/system.model';
+import { TranslateService } from '../../../i18n/translate.service';
 
 @Injectable()
 export class SystemEffects {
+  private translateService = inject(TranslateService);
+
   private actions$ = inject(Actions);
   private systemService = inject(SystemService);
   private notifications = inject(NotificationsService);
@@ -221,7 +224,7 @@ export class SystemEffects {
         this.systemService.getTelemetryData(engineName).pipe(
           map(data => SystemActions.loadTelemetryDataSuccess({ data })),
           catchError(error => {
-            const errorMsg = error?.message || 'Failed to fetch telemetry data';
+            const errorMsg = error?.message || this.translateService.instant('admin.system.telemetryLoadError');
             return of(SystemActions.loadTelemetryDataFailure({ error: errorMsg }));
           })
         )
@@ -317,7 +320,7 @@ export class SystemEffects {
         const metricKey = metric.metric as MetricType;
         metricsMap[label][metricKey] = {
           sum: metric.sum,
-          sumFmt: metric.sum.toLocaleString()
+          sumFmt: metric.sum.toLocaleString(this.translateService.locale)
         };
       }
     }
@@ -333,7 +336,7 @@ export class SystemEffects {
           const sum = metric['task-users'].sum + nextMetric['task-users'].sum;
           nextMetric['task-users'] = {
             sum,
-            sumFmt: sum.toLocaleString()
+            sumFmt: sum.toLocaleString(this.translateService.locale)
           };
         }
       }
@@ -365,7 +368,7 @@ export class SystemEffects {
       const metricKey = metric.metric as MetricType;
       metricsMap[label][metricKey] = {
         sum: metric.sum,
-        sumFmt: metric.sum.toLocaleString()
+        sumFmt: metric.sum.toLocaleString(this.translateService.locale)
       };
     }
 
@@ -402,7 +405,7 @@ export class SystemEffects {
     const toStr = this.formatDate(yearEnd);
 
     return isCurrent
-      ? `${fromStr} - ${toStr} (current)`
+      ? `${fromStr} - ${toStr} ${this.translateService.instant('admin.system.currentPeriod')}`
       : `${fromStr} - ${toStr}`;
   }
 
@@ -414,6 +417,6 @@ export class SystemEffects {
       }
       return msg;
     }
-    return error?.statusText || error?.message || 'Unknown error';
+    return error?.statusText || error?.message || this.translateService.instant('common.unknownError');
   }
 }

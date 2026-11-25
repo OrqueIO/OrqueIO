@@ -137,15 +137,15 @@ export class ProcessDefinitionService {
   /**
    * Get all process definitions (latest versions only)
    */
-  getProcessDefinitions(maxResults: number = 1000): Observable<ProcessDefinition[]> {
-    return this.http.get<ProcessDefinition[]>(`${this.baseUrl}/process-definition`, {
-      params: {
-        latestVersion: 'true',
-        sortBy: 'name',
-        sortOrder: 'asc',
-        maxResults: maxResults.toString()
-      }
-    }).pipe(catchError(() => of([])));
+  getProcessDefinitions(maxResults: number = 1000, latestVersionOnly = true): Observable<ProcessDefinition[]> {
+    const params: Record<string, string> = {
+      sortBy: 'name',
+      sortOrder: 'asc',
+      maxResults: maxResults.toString()
+    };
+    if (latestVersionOnly) params['latestVersion'] = 'true';
+    return this.http.get<ProcessDefinition[]>(`${this.baseUrl}/process-definition`, { params })
+      .pipe(catchError(() => of([])));
   }
 
   /**
@@ -161,6 +161,14 @@ export class ProcessDefinitionService {
    */
   getProcessDefinitionByKey(key: string): Observable<ProcessDefinition | null> {
     return this.http.get<ProcessDefinition>(`${this.baseUrl}/process-definition/key/${key}`)
+      .pipe(catchError(() => of(null)));
+  }
+
+  /**
+   * Get a process definition by ID (specific version)
+   */
+  getProcessDefinitionById(id: string): Observable<ProcessDefinition | null> {
+    return this.http.get<ProcessDefinition>(`${this.baseUrl}/process-definition/${id}`)
       .pipe(catchError(() => of(null)));
   }
 

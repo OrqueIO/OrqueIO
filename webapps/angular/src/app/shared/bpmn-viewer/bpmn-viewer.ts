@@ -11,12 +11,28 @@ import {
   AfterViewInit,
   HostListener,
   ChangeDetectorRef,
-  inject
+  ViewEncapsulation,
+  inject,
+  NgZone
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+
+export const EXPAND_DIAGRAM_STATE_KEY = 'expandDiagram' as const;
+
+export interface ParentBreadcrumb {
+  link: any[];
+  queryParams?: Record<string, string> | null;
+  label: string;
+  currentLabel: string;
+}
 
 // @ts-ignore - bpmn-js doesn't have types
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
+import { TranslatePipe } from '../../i18n/translate.pipe';
+import { TranslateService } from '../../i18n/translate.service';
 
 import { llmTaskRendererModule } from './llm-task-renderer';
 
@@ -30,17 +46,27 @@ export interface BpmnElement {
   id: string;
   type: string;
   name?: string;
+  isInEventSubprocessScope?: boolean;
+  isInMultiInstanceScope?: boolean;
+}
+
+export interface CallActivityClickEvent {
+  callActivityId: string;
+  calledElement: string | null;
 }
 
 @Component({
   selector: 'app-bpmn-viewer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, FontAwesomeModule, TranslatePipe],
   templateUrl: './bpmn-viewer.html',
-  styleUrls: ['./bpmn-viewer.css']
+  styleUrls: ['./bpmn-viewer.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
+  private ngZone = inject(NgZone);
+  private translate = inject(TranslateService);
 
   @ViewChild('canvas', { static: true }) private canvasRef!: ElementRef<HTMLDivElement>;
 
@@ -53,6 +79,13 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Input() isExpanded = false;
   @Input() showFocusButton = false;
   @Input() focusElementId: string | null | undefined = null;
+  @Input() enableCallActivityNavigation = false;
+  @Input() callActivityIdsWithInstances: Set<string> = new Set();
+  @Input() parentBreadcrumb: ParentBreadcrumb | null = null;
+
+  get expandState(): Record<string, boolean> {
+    return { [EXPAND_DIAGRAM_STATE_KEY]: this.isExpanded };
+  }
 
   @Output() elementClick = new EventEmitter<BpmnElement>();
   @Output() elementHover = new EventEmitter<BpmnElement | null>();
@@ -60,17 +93,54 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   @Output() error = new EventEmitter<Error>();
   @Output() expandToggle = new EventEmitter<void>();
   @Output() focusClick = new EventEmitter<void>();
+  @Output() callActivityClick = new EventEmitter<CallActivityClickEvent>();
 
   private viewer: any = null;
   private overlays: any = null;
   private isViewerReady = false;
   private badgeOverlayIds: Map<string, string[]> = new Map();
-  private currentXml: string | null = null; 
-  private needsZoomFit = false; 
+  private callActivityOverlayIds: string[] = [];
+  private callActivityErrorOverlayIds: string[] = [];
+  private correlateOverlayIds: string[] = [];
+  private correlateOverlayData: Map<string, { btn: HTMLButtonElement; elementId: string; anchorId: string; hideTimer: ReturnType<typeof setTimeout> | null }> = new Map();
+  private correlateHoverListeners: Array<() => void> = [];
+  private currentXml: string | null = null;
+  private needsZoomFit = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+  private activeRunningMarkers = new Set<string>();
+  private activeHighlightMarkers = new Set<string>();
+  private activeSelectionMarker: string | null = null;
+  private subprocessStack: { id: string; name: string; element: any }[] = [];
+  private currentRootElement: any = null;
 
+  faArrowUp = faArrowUp;
   loading = true;
+  subprocessBreadcrumb: string[] = [];
+  private windowStart = 0;
   errorMessage: string | null = null;
+
+  get visibleBreadcrumbItems(): Array<{ name: string; index: number | null; isEllipsis: boolean; isRightEllipsis?: boolean }> {
+    const items = this.subprocessBreadcrumb;
+    const n = items.length;
+    if (n <= 5) {
+      return items.map((name, i) => ({ name, index: i < n - 1 ? i : null, isEllipsis: false }));
+    }
+    const winEnd = Math.min(this.windowStart + 2, n - 2);
+    const result: Array<{ name: string; index: number | null; isEllipsis: boolean; isRightEllipsis?: boolean }> = [
+      { name: items[0], index: 0, isEllipsis: false },
+    ];
+    if (this.windowStart > 1) {
+      result.push({ name: '…', index: null, isEllipsis: true });
+    }
+    for (let i = this.windowStart; i <= winEnd; i++) {
+      result.push({ name: items[i], index: i, isEllipsis: false });
+    }
+    if (winEnd < n - 2) {
+      result.push({ name: '…', index: null, isEllipsis: false, isRightEllipsis: true });
+    }
+    result.push({ name: items[n - 1], index: null, isEllipsis: false });
+    return result;
+  }
 
   @HostListener('window:resize')
   onWindowResize(): void {
@@ -104,6 +174,16 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     if (changes['selectedActivity'] && this.isViewerReady && this.currentXml) {
       this.updateSelection();
     }
+    if (changes['enableCallActivityNavigation'] && this.isViewerReady && this.currentXml) {
+      if (this.enableCallActivityNavigation) {
+        this.addCallActivityOverlays();
+      } else {
+        this.clearCallActivityOverlays();
+      }
+    }
+    if (changes['callActivityIdsWithInstances'] && this.isViewerReady && this.currentXml && this.enableCallActivityNavigation) {
+      this.addCallActivityOverlays();
+    }
   }
 
   ngOnDestroy(): void {
@@ -129,13 +209,27 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     // Register event handlers
     const eventBus = this.viewer.get('eventBus');
 
+    // Wire import.done to apply all visual updates AFTER diagram is loaded
+    eventBus.on('import.done', () => {
+      this.updateHighlights();
+      this.updateRunningMarkers();
+      this.updateBadges();
+      this.updateSelection();
+      if (this.enableCallActivityNavigation) {
+        this.addCallActivityOverlays();
+      }
+      this.styleCollapsedSubprocessOverlays();
+    });
+
     eventBus.on('element.click', (event: any) => {
       const element = event.element;
       if (element && element.id && element.type !== 'bpmn:Process') {
         this.elementClick.emit({
           id: element.id,
           type: element.type,
-          name: element.businessObject?.name
+          name: element.businessObject?.name,
+          isInEventSubprocessScope: this.checkEventSubprocessScope(element),
+          isInMultiInstanceScope: this.checkMultiInstanceScope(element)
         });
       }
     });
@@ -153,6 +247,15 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     eventBus.on('element.out', () => {
       this.elementHover.emit(null);
+    });
+
+    // Re-center diagram on collapsed subprocess drilldown navigation.
+    // bpmn-js fires root.set when the canvas root changes (drill-in or drill-out)
+    // without re-importing XML, so importXML / ngOnChanges never trigger the fit.
+    eventBus.on('root.set', (event: any) => {
+      this.updateSubprocessStack(event.element);
+      this.needsZoomFit = true;
+      this.scheduleFitToViewport();
     });
 
     this.isViewerReady = true;
@@ -179,6 +282,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       if (this.isContainerVisible()) {
         try {
           const canvas = this.viewer.get('canvas');
+          canvas.resized();
           this.safeZoomFit(canvas);
           this.needsZoomFit = false;
         } catch (e) {
@@ -208,7 +312,14 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     this.loading = true;
     this.errorMessage = null;
-    this.clearAllOverlays();
+    this.subprocessStack = [];
+    this.currentRootElement = null;
+    this.subprocessBreadcrumb = [];
+    this.windowStart = 0;
+    this.activeRunningMarkers.clear();
+    this.activeHighlightMarkers.clear();
+    this.activeSelectionMarker = null;
+    this.cdr.detectChanges();
 
     try {
       const result = await this.viewer.importXML(this.xml);
@@ -220,23 +331,19 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         console.warn('BPMN import warnings:', result.warnings);
       }
 
-      // Fit diagram to viewport - use requestAnimationFrame to ensure DOM is fully rendered
+      // Fit diagram to viewport
       this.needsZoomFit = true;
       this.scheduleFitToViewport();
-
-      // Apply all visual states
-      this.updateHighlights();
-      this.updateRunningMarkers();
-      this.updateBadges();
-      this.updateSelection();
 
       this.loading = false;
       this.cdr.detectChanges();
       this.viewerReady.emit();
+
+      // Visual updates are now triggered by import.done event
     } catch (err: any) {
       this.loading = false;
-      this.currentXml = null; // Reset on error
-      this.errorMessage = err.message || 'Failed to load BPMN diagram';
+      this.currentXml = null;
+      this.errorMessage = err.message || this.translate.instant('common.viewer.loadBpmnError');
       this.cdr.detectChanges();
       this.error.emit(err);
       console.error('BPMN import error:', err);
@@ -245,71 +352,68 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
   private updateHighlights(): void {
     if (!this.viewer) return;
+    if (this.activeHighlightMarkers.size === 0 && this.highlightedActivities.length === 0) return;
 
     const canvas = this.viewer.get('canvas');
     const elementRegistry = this.viewer.get('elementRegistry');
 
-    // Remove existing highlights
-    elementRegistry.forEach((element: any) => {
-      if (element.businessObject) {
-        canvas.removeMarker(element.id, 'highlight');
-      }
+    this.activeHighlightMarkers.forEach(id => {
+      try { canvas.removeMarker(id, 'highlight'); } catch (_) {}
     });
+    this.activeHighlightMarkers.clear();
 
-    // Add highlights
     this.highlightedActivities.forEach(activityId => {
       const element = elementRegistry.get(activityId);
       if (element) {
         canvas.addMarker(activityId, 'highlight');
+        this.activeHighlightMarkers.add(activityId);
       }
     });
   }
 
   private updateRunningMarkers(): void {
     if (!this.viewer) return;
+    if (this.activeRunningMarkers.size === 0 && this.runningActivities.length === 0) return;
 
     const canvas = this.viewer.get('canvas');
     const elementRegistry = this.viewer.get('elementRegistry');
 
-    // Remove existing running markers
-    elementRegistry.forEach((element: any) => {
-      if (element.businessObject) {
-        canvas.removeMarker(element.id, 'running');
-      }
+    this.activeRunningMarkers.forEach(id => {
+      try { canvas.removeMarker(id, 'running'); } catch (_) {}
     });
+    this.activeRunningMarkers.clear();
 
-    // Add running markers
     this.runningActivities.forEach(activityId => {
       const element = elementRegistry.get(activityId);
       if (element) {
         canvas.addMarker(activityId, 'running');
+        this.activeRunningMarkers.add(activityId);
       }
     });
   }
 
   private updateSelection(): void {
     if (!this.viewer) return;
+    if (this.activeSelectionMarker === null && !this.selectedActivity) return;
 
     const canvas = this.viewer.get('canvas');
     const elementRegistry = this.viewer.get('elementRegistry');
 
-    // Remove existing selection
-    elementRegistry.forEach((element: any) => {
-      if (element.businessObject) {
-        canvas.removeMarker(element.id, 'selected');
-      }
-    });
+    if (this.activeSelectionMarker !== null) {
+      try { canvas.removeMarker(this.activeSelectionMarker, 'selected'); } catch (_) {}
+      this.activeSelectionMarker = null;
+    }
 
-    // Add selection marker
     if (this.selectedActivity) {
       const element = elementRegistry.get(this.selectedActivity);
       if (element) {
         canvas.addMarker(this.selectedActivity, 'selected');
+        this.activeSelectionMarker = this.selectedActivity;
       }
     }
   }
 
-  private clearAllOverlays(): void {
+  private clearBadgeOverlays(): void {
     this.badgeOverlayIds.forEach((ids) => {
       ids.forEach(id => {
         try {
@@ -322,11 +426,25 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     this.badgeOverlayIds.clear();
   }
 
+  private clearCallActivityOverlays(): void {
+    [...this.callActivityOverlayIds, ...this.callActivityErrorOverlayIds].forEach(id => {
+      try { this.overlays?.remove(id); } catch (_) {}
+    });
+    this.callActivityOverlayIds = [];
+    this.callActivityErrorOverlayIds = [];
+  }
+
+  private clearAllOverlays(): void {
+    this.clearBadgeOverlays();
+    this.clearCallActivityOverlays();
+    this.clearCorrelateOverlays();
+  }
+
   private updateBadges(): void {
     if (!this.viewer || !this.overlays) return;
 
-    // Clear existing badges
-    this.clearAllOverlays();
+    // Clear existing badges only (not Call Activity overlays)
+    this.clearBadgeOverlays();
 
     const elementRegistry = this.viewer.get('elementRegistry');
 
@@ -342,7 +460,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         const instanceHtml = document.createElement('div');
         instanceHtml.className = 'bpmn-badge bpmn-badge-instances';
         instanceHtml.innerHTML = `<span>${badge.instances}</span>`;
-        instanceHtml.title = `${badge.instances} instance(s)`;
+        instanceHtml.title = this.translate.instant('common.viewer.badge.instances', { count: String(badge.instances) });
 
         try {
           const overlayId = this.overlays.add(badge.activityId, {
@@ -360,7 +478,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         const incidentHtml = document.createElement('div');
         incidentHtml.className = 'bpmn-badge bpmn-badge-incidents';
         incidentHtml.innerHTML = `<span>${badge.incidents}</span>`;
-        incidentHtml.title = `${badge.incidents} incident(s)`;
+        incidentHtml.title = this.translate.instant('common.viewer.badge.incidents', { count: String(badge.incidents) });
 
         try {
           const overlayId = this.overlays.add(badge.activityId, {
@@ -379,6 +497,151 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     });
   }
 
+  private styleCollapsedSubprocessOverlays(): void {
+    const container = this.canvasRef.nativeElement;
+    const arrowSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="white" fill-rule="evenodd" d="M4.81801948,3.50735931 L10.4996894,9.1896894 L10.5,4 L12,4 L12,12 L4,12 L4,10.5 L9.6896894,10.4996894 L3.75735931,4.56801948 C3.46446609,4.27512627 3.46446609,3.80025253 3.75735931,3.50735931 C4.05025253,3.21446609 4.52512627,3.21446609 4.81801948,3.50735931 Z"/></svg>';
+    container.querySelectorAll<HTMLButtonElement>('.bjs-drilldown:not(.bpmn-call-activity-overlay)').forEach(btn => {
+      btn.classList.add('bpmn-subprocess-drilldown');
+      btn.innerHTML = arrowSvg;
+    });
+  }
+
+  private addCallActivityOverlays(): void {
+    if (!this.viewer || !this.overlays || !this.enableCallActivityNavigation) return;
+
+    this.clearCallActivityOverlays();
+
+    const elementRegistry = this.viewer.get('elementRegistry');
+
+    elementRegistry.forEach((element: any) => {
+      if (element.type !== 'bpmn:CallActivity') return;
+
+      const hasInstances = this.callActivityIdsWithInstances.has(element.id);
+      const calledElement: string | null = element.businessObject?.calledElement ?? null;
+
+      // Rule 1: no calledElement and no instances → no icon
+      if (!calledElement && !hasInstances) return;
+
+      // Rule 2: EL expression with no instances → gray, non-clickable
+      // When instances exist, the icon is always clickable (navigation uses the instance ID, not calledElement)
+      const isExpression = !hasInstances && calledElement !== null &&
+        (calledElement.includes('${') || calledElement.includes('#{'));
+
+      const btn = document.createElement('button');
+      const svgIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16"><path fill="white" fill-rule="evenodd" d="M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z"/></svg>';
+      btn.innerHTML = svgIcon;
+
+      if (isExpression) {
+        btn.className = 'bjs-drilldown bpmn-call-activity-overlay bpmn-call-activity-overlay--expression';
+        btn.title = this.translate.instant('common.viewer.callActivity.dynamicExpression');
+        btn.disabled = true;
+      } else {
+        // Rule 3: static reference or has instances → blue, clickable
+        btn.className = 'bjs-drilldown bpmn-call-activity-overlay';
+        btn.title = this.translate.instant(hasInstances
+          ? 'common.viewer.callActivity.showCalledInstances'
+          : 'common.viewer.callActivity.goToCalledDefinition');
+        btn.addEventListener('click', (e: Event) => {
+          e.stopPropagation();
+          this.callActivityClick.emit({ callActivityId: element.id, calledElement });
+        });
+      }
+
+      try {
+        const id = this.overlays.add(element.id, {
+          position: { bottom: -7, right: -8 },
+          html: btn
+        });
+        this.callActivityOverlayIds.push(id);
+      } catch (e) {
+        console.warn('Could not add Call Activity overlay to', element.id, e);
+      }
+    });
+  }
+
+  showCallActivityError(activityId: string, message: string): void {
+    if (!this.overlays) return;
+
+    const container = document.createElement('div');
+    container.className = 'bpmn-call-activity-error';
+    container.textContent = message;
+
+    try {
+      const overlayId = this.overlays.add(activityId, {
+        position: { bottom: -38, left: 0 },
+        html: container
+      });
+      this.callActivityErrorOverlayIds.push(overlayId);
+
+      setTimeout(() => {
+        try { this.overlays?.remove(overlayId); } catch (_) {}
+        this.callActivityErrorOverlayIds = this.callActivityErrorOverlayIds.filter(id => id !== overlayId);
+      }, 3000);
+    } catch (e) {
+      console.warn('Could not add error overlay to', activityId, e);
+    }
+  }
+  private getElementDisplayName(element: any): string {
+    if (element.businessObject?.name) return element.businessObject.name;
+    const id = element.id || '';
+    return id.endsWith('_plane') ? id.slice(0, -6) : id;
+  }
+
+  private updateSubprocessStack(element: any): void {
+    if (!element) return;
+
+    if (element.type === 'bpmn:Process' || element.type === 'bpmn:Collaboration') {
+      this.subprocessStack = [];
+    } else {
+      const existingIndex = this.subprocessStack.findIndex(item => item.id === element.id);
+      if (existingIndex >= 0) {
+        this.subprocessStack = this.subprocessStack.slice(0, existingIndex);
+      } else if (this.currentRootElement) {
+        const name = this.getElementDisplayName(this.currentRootElement);
+        this.subprocessStack.push({ id: this.currentRootElement.id, name, element: this.currentRootElement });
+      }
+    }
+
+    this.currentRootElement = element;
+
+    if (this.subprocessStack.length === 0) {
+      this.subprocessBreadcrumb = [];
+      this.windowStart = 0;
+    } else {
+      const currentName = this.getElementDisplayName(element);
+      this.subprocessBreadcrumb = [...this.subprocessStack.map(item => item.name), currentName];
+      const n = this.subprocessBreadcrumb.length;
+      this.windowStart = n > 5 ? Math.max(1, n - 3) : 0;
+    }
+
+    // bpmn-js fires root.set via its own EventBus (not a zone.js-patched DOM event),
+    // so Angular's OnPush parent is never marked dirty automatically.
+    // detectChanges() bypasses the parent check and re-renders this component immediately.
+    this.cdr.detectChanges();
+  }
+
+  private checkEventSubprocessScope(element: any): boolean {
+    let current = element.parent;
+    while (current) {
+      if (current.type === 'bpmn:SubProcess' && current.businessObject?.triggeredByEvent) {
+        return true;
+      }
+      current = current.parent;
+    }
+    return false;
+  }
+
+  private checkMultiInstanceScope(element: any): boolean {
+    let current = element.parent;
+    while (current) {
+      if (current.type === 'bpmn:SubProcess' && current.businessObject?.loopCharacteristics) {
+        return true;
+      }
+      current = current.parent;
+    }
+    return false;
+  }
+
   private destroyViewer(): void {
     if (this.viewer) {
       this.clearAllOverlays();
@@ -391,6 +654,22 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
   }
 
   // Public methods for external control
+  navigateToSubprocessLevel(index: number): void {
+    const item = this.subprocessStack[index];
+    if (!item || !this.viewer) return;
+    const canvas = this.viewer.get('canvas');
+    canvas.setRootElement(item.element);
+  }
+
+  shiftWindowLeft(): void {
+    this.windowStart = Math.max(1, this.windowStart - 3);
+  }
+
+  shiftWindowRight(): void {
+    const n = this.subprocessBreadcrumb.length;
+    this.windowStart = Math.min(n - 4, this.windowStart + 3);
+  }
+
   zoomIn(): void {
     if (this.viewer) {
       const canvas = this.viewer.get('canvas');
@@ -481,5 +760,182 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
       };
     }
     return null;
+  }
+
+  getAllElements(): any[] {
+    if (!this.viewer) return [];
+    const elementRegistry = this.viewer.get('elementRegistry');
+    return elementRegistry.getAll();
+  }
+
+  addCorrelateOverlays(messageNodes: Map<string, string>, onClick: (messageName: string) => void): void {
+    if (!this.viewer || !this.overlays) return;
+    this.clearCorrelateOverlays();
+
+    const elementRegistry = this.viewer.get('elementRegistry');
+    const eventBus = this.viewer.get('eventBus');
+
+    // Tracks how many eligible BoundaryEvents have been placed per host task (for stacking)
+    const hostBoundaryCount = new Map<string, number>();
+    const envelope = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 16 16"><path fill="currentColor" d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/></svg>';
+
+    messageNodes.forEach((messageName, elementId) => {
+      const element = elementRegistry.get(elementId);
+      let anchorId = elementId;
+      let position: { top: number; right: number };
+
+      if (element?.type === 'bpmn:BoundaryEvent' && element.host) {
+        // Anchor to host task so the button sits at the task's top-right, not on the small circle
+        const hostId: string = element.host.id;
+        const idx = hostBoundaryCount.get(hostId) ?? 0;
+        hostBoundaryCount.set(hostId, idx + 1);
+        anchorId = hostId;
+        position = this.correlateOverlayPosition('bpmn:BoundaryEvent', idx);
+      } else {
+        position = this.correlateOverlayPosition(element?.type ?? '', 0);
+      }
+
+      const btn = document.createElement('button');
+      btn.className = 'bpmn-correlate-overlay bpmn-correlate-overlay--hidden';
+      const correlateLabel = this.translate.instant('common.viewer.correlateMessage', { name: messageName });
+      btn.title = correlateLabel;
+      btn.setAttribute('aria-label', correlateLabel);
+      btn.innerHTML = envelope;
+      btn.addEventListener('click', (e: Event) => {
+        e.stopPropagation();
+        this.ngZone.run(() => onClick(messageName));
+      });
+
+      try {
+        const id = this.overlays.add(anchorId, { position, html: btn });
+        this.correlateOverlayIds.push(id);
+
+        // Store overlay data for hover management
+        this.correlateOverlayData.set(id, { btn, elementId, anchorId, hideTimer: null });
+
+        // Setup hover listeners outside Angular zone for performance
+        this.ngZone.runOutsideAngular(() => {
+          this.setupCorrelateOverlayHover(id, elementId, anchorId, btn, eventBus, elementRegistry);
+        });
+      } catch (_) {}
+    });
+  }
+
+  private setupCorrelateOverlayHover(
+    overlayId: string,
+    elementId: string,
+    anchorId: string,
+    btn: HTMLButtonElement,
+    eventBus: any,
+    elementRegistry: any
+  ): void {
+    const HIDE_DELAY = 150;
+
+    const showOverlay = () => {
+      const data = this.correlateOverlayData.get(overlayId);
+      if (!data) return;
+      if (data.hideTimer) {
+        clearTimeout(data.hideTimer);
+        data.hideTimer = null;
+      }
+      btn.classList.remove('bpmn-correlate-overlay--hidden');
+    };
+
+    const hideOverlay = () => {
+      const data = this.correlateOverlayData.get(overlayId);
+      if (!data) return;
+      if (data.hideTimer) clearTimeout(data.hideTimer);
+      data.hideTimer = setTimeout(() => {
+        btn.classList.add('bpmn-correlate-overlay--hidden');
+        data.hideTimer = null;
+      }, HIDE_DELAY);
+    };
+
+    // Show on element hover (elementId or anchorId if different, e.g., BoundaryEvent on host task)
+    const onElementHover = (event: any) => {
+      const hoveredId = event.element?.id;
+      if (hoveredId === elementId || hoveredId === anchorId) {
+        showOverlay();
+      }
+    };
+
+    // Hide on element out
+    const onElementOut = (event: any) => {
+      const leftId = event.element?.id;
+      if (leftId === elementId || leftId === anchorId) {
+        hideOverlay();
+      }
+    };
+
+    // Keep visible when hovering the button itself
+    const onButtonEnter = () => showOverlay();
+    const onButtonLeave = () => hideOverlay();
+
+    // Show on focus (keyboard navigation)
+    const onButtonFocus = () => showOverlay();
+    const onButtonBlur = () => hideOverlay();
+
+    eventBus.on('element.hover', onElementHover);
+    eventBus.on('element.out', onElementOut);
+    btn.addEventListener('mouseenter', onButtonEnter);
+    btn.addEventListener('mouseleave', onButtonLeave);
+    btn.addEventListener('focus', onButtonFocus);
+    btn.addEventListener('blur', onButtonBlur);
+
+    // Store cleanup functions
+    this.correlateHoverListeners.push(() => {
+      eventBus.off('element.hover', onElementHover);
+      eventBus.off('element.out', onElementOut);
+      btn.removeEventListener('mouseenter', onButtonEnter);
+      btn.removeEventListener('mouseleave', onButtonLeave);
+      btn.removeEventListener('focus', onButtonFocus);
+      btn.removeEventListener('blur', onButtonBlur);
+      const data = this.correlateOverlayData.get(overlayId);
+      if (data?.hideTimer) {
+        clearTimeout(data.hideTimer);
+        data.hideTimer = null;
+      }
+    });
+  }
+
+  private correlateOverlayPosition(
+    elementType: string,
+    boundaryIndex: number
+  ): { top: number; right: number } {
+    const BTN = 24;  // reduced from 28px to 24px
+    const GAP = 4;   // spacing between stacked buttons on the same host task
+
+    // BoundaryEvent: anchor on host task top-right; additional BEs on same task stack leftward
+    // Formula: right = i*(BTN+GAP) → button[i].left = host.width − i*(BTN+GAP), gap = GAP px
+    if (elementType === 'bpmn:BoundaryEvent') {
+      return { top: -BTN, right: boundaryIndex * (BTN + GAP) };
+    }
+    // ICE, ReceiveTask, StartEvent (event subprocess): button BL exactly at element TR corner
+    // right:0 → CSS left = element.width → button.left = element.right (0-px gap)
+    return { top: -BTN, right: 0 };
+  }
+
+  clearCorrelateOverlays(): void {
+    // Clean up all timers
+    for (const data of this.correlateOverlayData.values()) {
+      if (data.hideTimer) {
+        clearTimeout(data.hideTimer);
+        data.hideTimer = null;
+      }
+    }
+
+    // Clean up all event listeners
+    for (const cleanup of this.correlateHoverListeners) {
+      cleanup();
+    }
+    this.correlateHoverListeners = [];
+
+    // Remove overlays from DOM
+    for (const id of this.correlateOverlayIds) {
+      try { this.overlays?.remove(id); } catch (_) {}
+    }
+
+    this.correlateOverlayIds = [];
+    this.correlateOverlayData.clear();
   }
 }

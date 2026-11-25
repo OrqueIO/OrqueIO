@@ -131,26 +131,31 @@ public class LlmTaskDelegate implements JavaDelegate {
   public void execute(DelegateExecution execution) {
     LlmTaskConfiguration configuration = configurationOf(execution);
 
-    String userPrompt = promptResolver.resolve(configuration, execution);
+    LlmPrompt llmPrompt = promptResolver.build(configuration, execution);
+    String data = llmPrompt.data();
     ChatModel chatModel = chatModelOf(configuration);
 
-    // The answer format goes in the system message, the resolved prompt in the user message
-    List<Message> messages = List.of(
-        new SystemMessage(answerParser.formatInstructions(configuration.getOutputs())),
-        new UserMessage(userPrompt));
+    // One system message, first, then a user message: every provider accepts this order
+    String format = answerParser.formatInstructions(configuration.getOutputs());
+    List<Message> messages = llmPrompt.hasData()
+        // Instructions apart from the process data, which comes alone in the user message
+        ? List.of(new SystemMessage(llmPrompt.instructions() + "\n\n" + format + "\n\n" + LlmPromptResolver.DATA_REMINDER),
+            new UserMessage(llmPrompt.dataMessage()))
+        // No process data: the author's prompt is the request
+        : List.of(new SystemMessage(format), new UserMessage(llmPrompt.instructions()));
     ChatOptions options = optionsOf(chatModel, configuration);
     Prompt prompt = options == null ? new Prompt(messages) : new Prompt(messages, options);
 
     Duration timeout = configuration.getTimeout() != null ? configuration.getTimeout() : defaultTimeout;
     LlmTaskMetrics.Execution measured = startMeasuring(execution, configuration, chatModel, prompt);
     if (measured == null) {
-      answer(execution, configuration, chatModel, prompt, userPrompt, timeout, null);
+      answer(execution, configuration, chatModel, prompt, data, timeout, null);
       return;
     }
     LlmTaskMetrics.Outcome outcome = LlmTaskMetrics.Outcome.ERROR;
     Throwable error = null;
     try (Observation.Scope scope = measured.openScope()) {
-      answer(execution, configuration, chatModel, prompt, userPrompt, timeout, measured);
+      answer(execution, configuration, chatModel, prompt, data, timeout, measured);
       outcome = LlmTaskMetrics.Outcome.VALID;
     }
     catch (BpmnError | LlmInvalidAnswerException e) {
@@ -193,10 +198,11 @@ public class LlmTaskDelegate implements JavaDelegate {
   /**
    * Gets the model's answer, validates it and writes its values.
    *
+   * @param data the process data sent with the prompt, recorded by the audit when it includes content
    * @param measured the execution's metrics, or {@code null}
    */
   protected void answer(DelegateExecution execution, LlmTaskConfiguration configuration, ChatModel chatModel,
-                        Prompt prompt, String userPrompt, Duration timeout, LlmTaskMetrics.Execution measured) {
+                        Prompt prompt, String data, Duration timeout, LlmTaskMetrics.Execution measured) {
     long start = System.nanoTime();
     LlmModelAnswer answer = answerStore != null
         ? reusableAnswer(execution, configuration, chatModel, prompt, timeout, measured)
@@ -219,11 +225,11 @@ public class LlmTaskDelegate implements JavaDelegate {
       if (configuration.getErrorCode() == null || !hasErrorHandler(execution, configuration.getErrorCode())) {
         throw e;
       }
-      audit(execution, configuration, chatModel, prompt, userPrompt, answer, latency, LlmTaskAuditor.Outcome.BPMN_ERROR);
+      audit(execution, configuration, chatModel, prompt, data, answer, latency, LlmTaskAuditor.Outcome.BPMN_ERROR);
       throw new BpmnError(configuration.getErrorCode(), e.getMessage());
     }
     values.forEach(execution::setVariable);
-    audit(execution, configuration, chatModel, prompt, userPrompt, answer, latency, LlmTaskAuditor.Outcome.VALID);
+    audit(execution, configuration, chatModel, prompt, data, answer, latency, LlmTaskAuditor.Outcome.VALID);
   }
 
   /**

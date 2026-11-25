@@ -1,13 +1,15 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
+import { switchMap, of, distinctUntilChanged } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faSpinner,
   faPause,
   faPlay,
   faRedo,
-  faTrash
+  faTrash,
+  faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
@@ -17,6 +19,7 @@ import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confir
 import { BatchJobsListComponent } from '../batch-jobs-list/batch-jobs-list';
 
 import { BatchStatistics, HistoryBatch, BATCH_DETAIL_KEYS } from '../../../../models/cockpit/batch.model';
+import { BatchService } from '../../../../services/batch.service';
 import * as BatchActions from '../../../../store/cockpit/batch/batch.actions';
 import * as BatchSelectors from '../../../../store/cockpit/batch/batch.selectors';
 
@@ -38,9 +41,12 @@ import * as BatchSelectors from '../../../../store/cockpit/batch/batch.selectors
 })
 export class BatchDetailComponent {
   private store = inject(Store);
+  private batchService = inject(BatchService);
+  private cdr = inject(ChangeDetectorRef);
 
   // Icons
   faSpinner = faSpinner;
+  faInfoCircle = faInfoCircle;
   faPause = faPause;
   faPlay = faPlay;
   faRedo = faRedo;
@@ -54,12 +60,42 @@ export class BatchDetailComponent {
   isSuspended$ = this.store.select(BatchSelectors.selectIsSuspended);
   hasFailedJobs$ = this.store.select(BatchSelectors.selectHasFailedJobs);
   batchJobDefinitionId$ = this.store.select(BatchSelectors.selectBatchJobDefinitionId);
+  users$ = this.store.select(BatchSelectors.selectRuntimeUsers);
+
+  annotation$ = this.batch$.pipe(
+    distinctUntilChanged((a, b) => a?.id === b?.id),
+    switchMap(batch => {
+      if (!batch?.id || batch.type !== 'instance-modification') return of(null);
+      return this.batchService.getOperationAnnotation(batch.id);
+    })
+  );
 
   // Delete modal state
   showDeleteModal = false;
 
   // Detail keys to display
   detailKeys = BATCH_DETAIL_KEYS;
+
+  // Translation key of the label shown for each detail key
+  readonly detailLabels: Record<string, string> = {
+    id: 'BATCHES_BATCH_ID',
+    type: 'BATCHES_TYPE',
+    createUserId: 'BATCHES_PROGRESS_USER',
+    startTime: 'BATCHES_START_TIME',
+    executionStartTime: 'BATCHES_EXECUTION_START_TIME',
+    endTime: 'BATCHES_END_TIME',
+    removalTime: 'BATCHES_PROGRESS_REMOVAL_TIME',
+    totalJobs: 'BATCHES_TOTAL_JOBS',
+    completedJobs: 'BATCHES_COMPLETED_JOBS',
+    remainingJobs: 'BATCHES_REMAINING_JOBS',
+    failedJobs: 'BATCHES_FAILED_JOBS_COUNT',
+    batchJobsPerSeed: 'BATCHES_JOBS_PER_SEED',
+    invocationsPerBatchJob: 'BATCHES_INVOCATIONS_PER_JOB',
+    tenantId: 'BATCHES_TENANT',
+    batchJobDefinitionId: 'BATCHES_BATCH_JOB_DEFINITION',
+    monitorJobDefinitionId: 'BATCHES_MONITOR_JOB_DEFINITION',
+    seedJobDefinitionId: 'BATCHES_SEED_JOB_DEFINITION'
+  };
 
   onToggleSuspension(batch: BatchStatistics | HistoryBatch): void {
     const runtimeBatch = batch as BatchStatistics;
@@ -118,5 +154,14 @@ export class BatchDetailComponent {
 
   isRuntimeBatch(batch: any): batch is BatchStatistics {
     return 'suspended' in batch;
+  }
+
+  getUserName(batch: any, users: Record<string, any> | null): string {
+    if (!batch?.createUserId) return '-';
+    if (!users) return batch.createUserId;
+    const user = users[batch.createUserId];
+    if (!user) return batch.createUserId;
+    const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ');
+    return fullName || user.id;
   }
 }

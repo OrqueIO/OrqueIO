@@ -11,12 +11,15 @@ import {
   ViewChild,
   AfterViewInit,
   ChangeDetectorRef,
-  HostListener
+  HostListener,
+  inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import DmnViewer from 'dmn-js/lib/NavigatedViewer';
 import { migrateDiagram } from '@bpmn-io/dmn-migrate';
+import { TranslatePipe } from '../../i18n/translate.pipe';
+import { TranslateService } from '../../i18n/translate.service';
 
 // Interface for decision input/output values
 export interface DecisionVariable {
@@ -32,7 +35,7 @@ export interface DecisionVariable {
 @Component({
   selector: 'app-dmn-viewer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   template: `
     <div class="dmn-viewer-wrapper">
       <div class="dmn-viewer-container" [class.loading]="loading">
@@ -47,7 +50,7 @@ export interface DecisionVariable {
         </button>
         <div class="dmn-canvas" #dmnCanvas></div>
         <div class="loading-overlay" *ngIf="loading">
-          <span class="loading-text">Loading DMN...</span>
+          <span class="loading-text">{{ 'common.loadingDmn' | translate }}</span>
         </div>
         <div class="error-overlay" *ngIf="error">
           <span class="error-text">{{ error }}</span>
@@ -453,6 +456,7 @@ export class DmnViewerComponent implements OnInit, OnDestroy, OnChanges, AfterVi
 
   private dmnViewer: any = null;
   private initialized = false;
+  private translate = inject(TranslateService);
 
   constructor(private cdr: ChangeDetectorRef) {}
 
@@ -497,7 +501,7 @@ export class DmnViewerComponent implements OnInit, OnDestroy, OnChanges, AfterVi
       }
     } catch (err) {
       console.error('Failed to initialize DMN viewer:', err);
-      this.error = 'Failed to initialize DMN viewer';
+      this.error = this.translate.instant('common.viewer.initDmnError');
       this.loading = false;
       this.cdr.detectChanges();
     }
@@ -558,7 +562,7 @@ export class DmnViewerComponent implements OnInit, OnDestroy, OnChanges, AfterVi
 
     } catch (err: any) {
       console.error('Failed to render DMN:', err);
-      this.error = err.message || 'Failed to render DMN diagram';
+      this.error = err.message || this.translate.instant('common.viewer.renderDmnError');
       this.loading = false;
       this.loadError.emit(this.error);
       this.cdr.detectChanges();

@@ -1,9 +1,12 @@
 <div class="ctn-fixed-view">
-  <!-- Loading state -->
+  <!-- Initial loading state (no data yet) -->
   <div class="loading-overlay" *ngIf="loading">
     <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
     <span>{{ 'common.loading' | translate }}</span>
   </div>
+
+  <!-- Transition progress bar (navigating between instances — keeps current view visible) -->
+  <div class="transition-progress-bar" *ngIf="transitioning"></div>
 
   <!-- Not found state -->
   <div class="not-found" *ngIf="!loading && !processInstance">
@@ -47,6 +50,14 @@
     <!-- Right: Actions -->
     <div class="toolbar-section toolbar-actions-section">
       <div class="toolbar-actions" *ngIf="isProcessRunning()">
+        <!-- Correlate Message -->
+        <button class="toolbar-btn toolbar-btn--info"
+                (click)="openCorrelateMessage()"
+                [title]="'cockpit.batchOps.correlate.label' | translate"
+                [attr.aria-label]="'cockpit.correlateMessage.ariaLabel' | translate">
+          <fa-icon [icon]="faEnvelope"></fa-icon>
+        </button>
+
         <!-- Cancel Instance -->
         <button class="toolbar-btn danger"
                 (click)="showCancelDialog = true"
@@ -178,14 +189,26 @@
             {{ processDefinition?.deploymentId || '-' }}
           </dd>
 
+          <dt>{{ 'cockpit.processDetail.removalTime' | translate }}</dt>
+          <dd class="removal-time">
+            @if (processInstance.removalTime) {
+              {{ processInstance.removalTime | camDate }}
+            } @else {
+              <span class="null-value">null</span>
+            }
+          </dd>
+
           <!-- Super Process Instance ID -->
           <dt *ngIf="superProcessInstance"
               appClipboard [appClipboard]="superProcessInstance.id">
             {{ 'cockpit.processDetail.superProcess' | translate }}
           </dt>
           <dd *ngIf="superProcessInstance" class="super-process-instance-id">
-            <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]">
-              {{ superProcessInstance.id }}
+            <a [routerLink]="['/cockpit/processes/instance', superProcessInstance.id]"
+               class="parent-process-link"
+               [title]="'cockpit.processDetail.calledBy' | translate">
+              <fa-icon [icon]="faArrowUp" class="parent-icon"></fa-icon>
+              {{ 'cockpit.processDetail.calledBy' | translate }}: {{ superProcessInstance.id }}
             </a>
           </dd>
           <dt *ngIf="!superProcessInstance">
@@ -250,7 +273,6 @@
       <div class="ctn-row ctn-content-top"
            [class.collapsed]="diagramCollapsed"
            [class.maximized]="diagramMaximized">
-
         <div class="diagram-container">
           <div class="diagram-loading" *ngIf="loadingDiagram">
             <fa-icon [icon]="faSpinner" animation="spin"></fa-icon>
@@ -266,9 +288,14 @@
             [highlightedActivities]="selectedActivityIds"
             [showExpandButton]="true"
             [isExpanded]="diagramMaximized"
+            [parentBreadcrumb]="activeParentBreadcrumb"
+            [enableCallActivityNavigation]="true"
+            [callActivityIdsWithInstances]="callActivityIdsWithInstances"
             (elementClick)="handleBpmnElementSelection($event)"
             (elementHover)="onDiagramElementHover($event)"
             (expandToggle)="toggleDiagramMaximize()"
+            (callActivityClick)="navigateToCalledInstance($event)"
+            (viewerReady)="onBpmnViewerReady()"
           ></app-bpmn-viewer>
 
           <div class="empty-diagram" *ngIf="!loadingDiagram && !bpmnXml">
@@ -330,7 +357,7 @@
                   <input type="text"
                          class="form-control"
                          [(ngModel)]="newVariable.name"
-                         placeholder="Name" />
+                         [placeholder]="'cockpit.processDetail.variables.name' | translate" />
                 </div>
                 <div class="form-group">
                   <label>{{ 'cockpit.processDetail.variables.type' | translate }}</label>
@@ -343,7 +370,7 @@
                   <textarea class="form-control"
                             [(ngModel)]="newVariable.value"
                             [rows]="newVariable.type === 'Json' || newVariable.type === 'Object' ? 3 : 1"
-                            placeholder="Value"></textarea>
+                            [placeholder]="'cockpit.processDetail.variables.value' | translate"></textarea>
                 </div>
               </div>
               <div class="form-actions">
@@ -610,8 +637,8 @@
 
           <!-- Called Process Instances Tab -->
           <div class="tab-pane" *ngIf="activeTab === 'calledInstances'">
-            <div class="table-scroll-wrapper">
-              <table class="cam-table" *ngIf="calledInstances.length > 0">
+              <div class="table-scroll-wrapper">
+              <table class="cam-table" *ngIf="displayedCalledInstances.length > 0">
                 <thead>
                   <tr>
                     <th>{{ 'cockpit.processDetail.calledInstances.state' | translate }}</th>
@@ -622,14 +649,15 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let instance of calledInstances">
+                  <tr *ngFor="let instance of displayedCalledInstances">
                     <td class="instance-state">
                       <span class="state-indicator" [ngClass]="getStateClass(instance.state)">
                         <fa-icon [icon]="getStateIcon(instance.state)"></fa-icon>
                       </span>
                     </td>
                     <td class="instance-id">
-                      <a [routerLink]="['/cockpit/processes/instance', instance.id]">
+                      <a [routerLink]="['/cockpit/processes/instance', instance.id]"
+                         [queryParams]="{ from: processId }">
                         {{ instance.id }}
                       </a>
                     </td>
@@ -646,8 +674,8 @@
                 </tbody>
               </table>
 
-              <div class="no-data" *ngIf="calledInstances.length === 0">
-                {{ 'cockpit.processDetail.noCalledInstances' | translate }}
+              <div class="no-data" *ngIf="displayedCalledInstances.length === 0">
+                 {{ 'cockpit.processDetail.noCalledInstances' | translate }}
               </div>
             </div>
           </div>
@@ -869,4 +897,13 @@
     (confirm)="suspendInstance()"
     (cancel)="showSuspendDialog = false"
   ></app-confirm-dialog>
+
+  <app-correlate-message-modal
+    *ngIf="showCorrelateModal"
+    [messageName]="correlateInitialMessageName"
+    [suggestions]="messageSuggestions"
+    [suggestionsEnabled]="correlateInitialMessageName === null"
+    (confirm)="onCorrelateOpenBatchOp($event)"
+    (cancel)="showCorrelateModal = false"
+  ></app-correlate-message-modal>
 </div>

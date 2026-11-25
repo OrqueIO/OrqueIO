@@ -27,7 +27,9 @@ import {
   faChevronDown,
   faExpand,
   faCompress,
-  faSitemap
+  faSitemap,
+  faArrowUp,
+  faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 import { forkJoin } from 'rxjs';
 
@@ -45,11 +47,15 @@ import {
   ActivityStatistics,
   Job,
   UserTask,
-  ExternalTask
+  ExternalTask,
+  MultiValueFilter
 } from '../../../../services/cockpit.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { BetaBadgeComponent } from '../../../../shared/beta-badge/beta-badge';
-import { BpmnViewerComponent, ActivityBadge, BpmnElement } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { CamDatePipe } from '../../../../pipes/cam-date.pipe';
+import { BpmnViewerComponent, ActivityBadge, BpmnElement, CallActivityClickEvent, ParentBreadcrumb, EXPAND_DIAGRAM_STATE_KEY } from '../../../../shared/bpmn-viewer/bpmn-viewer';
+import { CorrelateMessageModalComponent } from '../correlate-message-modal/correlate-message-modal';
+import { buildMessageNodeMap, extractMessageNames } from '../../../../utils/message-names.utils';
 import { ActivityInstanceTreeComponent } from '../../../../shared/activity-instance-tree/activity-instance-tree';
 import { ConfirmDialogComponent } from '../../../../shared/confirm-dialog/confirm-dialog';
 import { ClipboardDirective } from '../../../../shared/clipboard-directive/clipboard.directive';
@@ -59,6 +65,7 @@ import { UserAutocompleteComponent } from '../../../../shared/user-autocomplete/
 import { User } from '../../../../models/admin/user.model';
 import { LlmTaskRecord, llmTaskRecords } from '../../../../shared/llm-task/llm-task-records';
 import { llmTaskInstructions } from '../../../../shared/llm-task/llm-task-instructions';
+import { TranslateService } from '../../../../i18n/translate.service';
 
 type TabType = 'variables' | 'llmCalls' | 'incidents' | 'calledInstances' | 'userTasks' | 'jobs' | 'externalTasks';
 type SidebarTab = 'info' | 'filter';
@@ -80,19 +87,23 @@ interface VariableEdit {
     FontAwesomeModule,
     TranslatePipe,
     BetaBadgeComponent,
+    CamDatePipe,
     BpmnViewerComponent,
     ActivityInstanceTreeComponent,
     ConfirmDialogComponent,
     ClipboardDirective,
     CockpitHeaderComponent,
     SearchWidgetComponent,
-    UserAutocompleteComponent
+    UserAutocompleteComponent,
+    CorrelateMessageModalComponent
   ],
   templateUrl: './process-detail.html',
   styleUrls: ['./process-detail.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProcessDetailComponent implements OnInit, OnDestroy {
+  private translateService = inject(TranslateService);
+
   @ViewChild(BpmnViewerComponent) bpmnViewer?: BpmnViewerComponent;
 
   private destroyRef = inject(DestroyRef);
@@ -124,9 +135,12 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   faExpand = faExpand;
   faCompress = faCompress;
   faSitemap = faSitemap;
+  faArrowUp = faArrowUp;
+  faEnvelope = faEnvelope;
 
   processId = '';
   loading = true;
+  transitioning = false;
   loadingDiagram = false;
   actionInProgress = false;
 
@@ -137,6 +151,37 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   processInstance: ProcessInstanceDetail | null = null;
   processDefinition: ProcessDefinition | null = null;
   superProcessInstance: ProcessInstance | null = null;
+  fromProcess: ProcessInstance | null = null;
+
+  /** Navigation context takes priority; API parent is the fallback for direct URL access. */
+  get parentInstance(): ProcessInstance | null {
+    return this.fromProcess ?? this.superProcessInstance;
+  }
+
+  get activeParentBreadcrumb(): ParentBreadcrumb | null {
+    if (this.parentInstance && (!this.fromDefKey || this.fromProcessId) && this.processDefinition) {
+      return {
+        link: ['/cockpit/processes/instance', this.parentInstance.id],
+        label: this.parentInstance.processDefinitionName || this.parentInstance.processDefinitionKey || this.parentInstance.id,
+        currentLabel: this.processDefinition.name || this.processDefinition.key
+      };
+    }
+    if (this.fromDefKey && this.processDefinition && !this.fromProcessId) {
+      return {
+        link: ['/cockpit/processes', this.fromDefKey, 'definition'],
+        queryParams: this.parentDefinitionBreadcrumbQueryParams ?? undefined,
+        label: this.fromDefName || this.fromDefKey,
+        currentLabel: this.processDefinition.name || this.processDefinition.key
+      };
+    }
+    return null;
+  }
+
+  fromProcessId: string | null = null;
+  // Definition navigation context — set when arriving from a definition view via call activity navigation
+  fromDefKey: string | null = null;
+  fromDefName: string | null = null;
+  fromDefAncestors: Array<{ key: string; name: string }> = [];
   variables: Variable[] = [];
   activities: Activity[] = [];
   incidents: Incident[] = [];
@@ -144,7 +189,28 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   userTasks: UserTask[] = [];
   externalTasks: ExternalTask[] = [];
   calledInstances: ProcessInstance[] = [];
+  callActivityMapping: Map<string, string[]> = new Map(); // activityId -> calledProcessInstanceIds[]
+  filteredCallActivityId: string | null = null;
   bpmnXml: string | null = null;
+
+  // Correlate Message
+  showCorrelateModal = false;
+  messageSuggestions: string[] = [];
+  correlateInitialMessageName: string | null = null;
+
+  // Computed property for Call Activities with instances
+  get callActivityIdsWithInstances(): Set<string> {
+    return new Set(this.callActivityMapping.keys());
+  }
+
+  // Filtered called instances for display
+  get displayedCalledInstances(): ProcessInstance[] {
+    if (!this.filteredCallActivityId) {
+      return this.calledInstances;
+    }
+    const filteredIds = new Set(this.callActivityMapping.get(this.filteredCallActivityId) ?? []);
+    return this.calledInstances.filter(instance => filteredIds.has(instance.id));
+  }
   activityTree: ActivityInstanceTree | null = null;
   activityStatistics: ActivityStatistics[] = [];
 
@@ -165,16 +231,16 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   variableSearchTypes: SearchType[] = [
     {
       key: 'variableName',
-      label: 'Name',
+      label: 'cockpit.processDetail.variables.name',
       operators: [
         { key: 'eq', label: '=' },
         { key: 'like', label: 'like' }
       ],
-      placeholder: 'Variable name'
+      placeholder: 'cockpit.processes.filters.variableName'
     },
     {
       key: 'variableValue',
-      label: 'Value',
+      label: 'cockpit.processDetail.variables.value',
       operators: [
         { key: 'eq', label: '=' },
         { key: 'neq', label: '!=' },
@@ -185,15 +251,15 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         { key: 'like', label: 'like' }
       ],
       allowName: true,
-      placeholder: 'Value'
+      placeholder: 'cockpit.processDetail.variables.value'
     },
     {
       key: 'activityInstanceIdIn',
-      label: 'Activity Instance ID',
+      label: 'cockpit.processDetail.variables.activityInstanceId',
       operators: [
         { key: 'eq', label: '=' }
       ],
-      placeholder: 'Activity instance ID'
+      placeholder: 'cockpit.processDetail.variables.activityInstanceIdPlaceholder'
     }
   ];
 
@@ -249,7 +315,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         visible: () => this.llmRecords.length > 0
       },
       { id: 'incidents', labelKey: 'cockpit.processDetail.tabs.incidents', badgeCount: () => this.openIncidentCount },
-      { id: 'calledInstances', labelKey: 'cockpit.processDetail.tabs.calledInstances', badgeCount: () => this.calledInstances.length },
+      { id: 'calledInstances', labelKey: 'cockpit.processDetail.tabs.calledInstances', badgeCount: () => this.displayedCalledInstances.length },
       { id: 'userTasks', labelKey: 'cockpit.processDetail.tabs.userTasks', badgeCount: () => this.userTasks.length },
       { id: 'jobs', labelKey: 'cockpit.processDetail.tabs.jobs', badgeCount: () => this.jobs.length },
       { id: 'externalTasks', labelKey: 'cockpit.processDetail.tabs.externalTasks', badgeCount: () => this.externalTasks.length }
@@ -259,10 +325,31 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navMenuService.setMenuItems(COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS);
 
+    // route.params emits only when THIS component's route params change.
+    // snapshot.queryParams is atomically updated before params fires, so reading
+    // it here always gives the current ?from= value without a separate subscription
+    // that would race against loadProcessData().
     this.route.params
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
+        // Restore expand state on every navigation — must be here, not ngOnInit,
+        // because Angular reuses the same component instance for the same route
+        // and ngOnInit only runs once.
+        this.diagramMaximized = (window.history.state as any)?.[EXPAND_DIAGRAM_STATE_KEY] === true;
+        const fromId: string | null = this.route.snapshot.queryParams['from'] || null;
         this.processId = params['id'];
+        this.fromProcessId = fromId;
+        this.fromProcess = null;
+        this.fromDefKey = this.route.snapshot.queryParams['fromDef'] || null;
+        this.fromDefName = this.route.snapshot.queryParams['fromDefName'] || null;
+        try {
+          this.fromDefAncestors = JSON.parse(this.route.snapshot.queryParams['fromDefAncestors'] || '[]');
+        } catch {
+          this.fromDefAncestors = [];
+        }
+        if (fromId) {
+          this.loadFromProcess(fromId);
+        }
         this.loadProcessData();
       });
   }
@@ -271,12 +358,33 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     this.navMenuService.clearMenuItems();
   }
 
+  // Query params for the parent definition breadcrumb link — restores full ancestor context
+  get parentDefinitionBreadcrumbQueryParams(): Record<string, string> | null {
+    if (!this.fromDefAncestors.length) return null;
+    const grandparent = this.fromDefAncestors[this.fromDefAncestors.length - 1];
+    const remaining = this.fromDefAncestors.slice(0, -1);
+    const params: Record<string, string> = { from: grandparent.key, fromName: grandparent.name };
+    if (remaining.length > 0) params['ancestors'] = JSON.stringify(remaining);
+    return params;
+  }
+
   loadProcessData(): void {
-    this.loading = true;
-    this.bpmnXml = null;
+    const isInitialLoad = this.processInstance === null;
+    this.loading = isInitialLoad;
+    this.transitioning = !isInitialLoad;
     this.expandedLlmRecord = null;
-    this.activityTree = null;
-    this.activityStatistics = [];
+    // Reset navigation-specific state on every load
+    this.superProcessInstance = null;
+    this.calledInstances = [];
+    this.callActivityMapping = new Map();
+    this.filteredCallActivityId = null;
+    // Keep bpmnXml, activityTree, activityStatistics in place during transition
+    // so the existing diagram remains visible while new data loads
+    if (isInitialLoad) {
+      this.bpmnXml = null;
+      this.activityTree = null;
+      this.activityStatistics = [];
+    }
     this.cdr.markForCheck();
 
     // Load process instance
@@ -286,6 +394,7 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         next: (instance) => {
           this.processInstance = instance;
           this.loading = false;
+          this.transitioning = false;
           this.updateBreadcrumbs();
           this.cdr.markForCheck();
 
@@ -305,17 +414,24 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
           // Load super process instance if this is a sub-process
           if (instance?.superProcessInstanceId) {
-            this.loadSuperProcessInstance(instance.superProcessInstanceId);
+            this.loadSuperProcessInstance(instance.superProcessInstanceId, this.processId);
+          } else if (this.fromProcessId) {
+            // Fallback: API didn't return superProcessInstanceId but user navigated
+            // from a parent via ?from=parentId — use that ID to load the parent instance
+            this.loadSuperProcessInstance(this.fromProcessId, this.processId);
           }
 
-          // Load called instances
-          this.loadCalledInstances();
         },
         error: () => {
           this.loading = false;
+          this.transitioning = false;
           this.cdr.markForCheck();
         }
       });
+
+    // Load called instances and call activity mapping in parallel with other data
+    this.loadCalledInstances();
+    this.loadCallActivityMapping();
 
     // Load variables
     this.cockpitService.getProcessInstanceVariables(this.processId)
@@ -492,13 +608,42 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
       });
   }
 
-  private loadSuperProcessInstance(superProcessInstanceId: string): void {
+
+  private loadCallActivityMapping(): void {
+    this.cockpitService.getCallActivityMapping(this.processId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (mapping) => {
+          this.callActivityMapping = mapping;
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+  private loadFromProcess(fromProcessId: string): void {
+    this.cockpitService.getProcessInstance(fromProcessId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (instance) => {
+          if (this.fromProcessId === fromProcessId) {
+            this.fromProcess = instance;
+            this.cdr.markForCheck();
+          }
+        }
+      });
+  }
+
+  private loadSuperProcessInstance(superProcessInstanceId: string, forProcessId: string): void {
     this.cockpitService.getProcessInstance(superProcessInstanceId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (instance) => {
-          this.superProcessInstance = instance;
-          this.cdr.markForCheck();
+          // Guard: processId is updated synchronously on route change, so this
+          // correctly rejects stale responses from a previous child page navigation
+          if (this.processId === forProcessId) {
+            this.superProcessInstance = instance;
+            this.cdr.markForCheck();
+          }
         }
       });
   }
@@ -521,6 +666,53 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
     // Resize diagram after transition completes
     this.resizeDiagramAfterTransition();
+  }
+
+  onBpmnViewerReady(): void {
+    setTimeout(() => {
+      this.bpmnViewer?.resize();
+      const elements = this.bpmnViewer?.getAllElements() ?? [];
+      const nodeMap = buildMessageNodeMap(elements);
+      this.messageSuggestions = extractMessageNames(elements);
+      if (nodeMap.size > 0) {
+        this.bpmnViewer?.addCorrelateOverlays(nodeMap, (name) => {
+          this.correlateInitialMessageName = name;
+          this.showCorrelateModal = true;
+          this.cdr.markForCheck();
+        });
+      }
+      this.cdr.markForCheck();
+    });
+  }
+
+  openCorrelateMessage(): void {
+    this.correlateInitialMessageName = null;
+    this.showCorrelateModal = true;
+    this.cdr.markForCheck();
+  }
+
+  onCorrelateOpenBatchOp(messageName: string | null): void {
+    this.showCorrelateModal = false;
+
+    const criterion: MultiValueFilter = {
+      field: 'instanceId',
+      values: [this.processId]
+    };
+
+    const state = {
+      operationId: 'correlate',
+      mode: 'query',
+      step: 1,
+      filterCriteria: [criterion],
+      messageName: messageName ?? undefined,
+      vnIgnoreCase: false,
+      vvIgnoreCase: false,
+      selectedIds: [],
+      correlateVariableDefs: []
+    };
+
+    sessionStorage.setItem('batchOpsWizardState', JSON.stringify(state));
+    this.router.navigate(['/cockpit/batch/operations']);
   }
 
   private resizeDiagramAfterTransition(): void {
@@ -589,6 +781,54 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
 
   onDiagramElementHover(_element: BpmnElement | null): void {
     // Could add hover feedback here
+  }
+
+  // Call Activity Navigation
+  navigateToCalledInstance(event: CallActivityClickEvent): void {
+    const { callActivityId, calledElement } = event;
+    const calledInstanceIds = this.callActivityMapping.get(callActivityId);
+
+    if (calledInstanceIds && calledInstanceIds.length > 0) {
+      if (calledInstanceIds.length === 1) {
+        this.router.navigate(['/cockpit/processes/instance', calledInstanceIds[0]], {
+          queryParams: { from: this.processId },
+          state: { [EXPAND_DIAGRAM_STATE_KEY]: this.diagramMaximized }
+        });
+      } else {
+        // Multiple instances: show filtered called instances tab
+        this.filteredCallActivityId = callActivityId;
+        this.activeTab = 'calledInstances';
+        this.cdr.markForCheck();
+        setTimeout(() => {
+          const tabsElement = document.querySelector('.ctn-content-bottom');
+          tabsElement?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+    } else if (calledElement) {
+      // No instances yet: navigate to the called process definition.
+      // Capture synchronously so the async HTTP response gets the correct parent context.
+      const fromKey = this.processDefinition?.key || this.processInstance?.processDefinitionKey || '';
+      const fromName = this.processDefinition?.name || fromKey;
+      // Pass fromInstance so the definition page can propagate the navigation
+      // context to its instance links — users clicking an instance from there
+      // will land with ?from=<this instance id> and see the correct breadcrumb.
+      const fromInstance = this.processId;
+      this.cockpitService.getProcessDefinitionByKey(calledElement)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(definition => {
+          if (definition) {
+            this.router.navigate(['/cockpit/processes', calledElement, 'definition'], {
+              queryParams: { from: fromKey, fromName, fromInstance },
+              state: { [EXPAND_DIAGRAM_STATE_KEY]: this.diagramMaximized }
+            });
+          } else {
+            this.bpmnViewer?.showCallActivityError(
+              callActivityId,
+              `Process definition '${calledElement}' not found`
+            );
+          }
+        });
+    }
   }
 
   // Actions
@@ -1124,7 +1364,7 @@ getTasklistUrl(task: UserTask): string {
   formatDate(dateStr: string | undefined): string {
     if (!dateStr) return '-';
     const date = new Date(dateStr);
-    return date.toLocaleString();
+    return date.toLocaleString(this.translateService.locale);
   }
 
   formatValue(value: any): string {

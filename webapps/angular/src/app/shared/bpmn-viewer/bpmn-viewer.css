@@ -1,11 +1,14 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   min-height: 200px;
 }
 
 .bpmn-viewer-container {
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 100%;
   height: 100%;
@@ -14,10 +17,86 @@
   overflow: hidden;
 }
 
+.canvas-area {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
 .bpmn-canvas {
   width: 100%;
   height: 100%;
-  min-height: 200px;
+}
+
+/* Subprocess drilldown breadcrumb — same visual design as the call activity breadcrumb */
+.process-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  padding: 8px 16px;
+  background: #f4f7fb;
+  border-bottom: 1px solid #e1e5e9;
+  box-shadow: 0 1px 0 0 rgba(0, 102, 204, 0.06);
+  font-size: 0.8375rem;
+  font-weight: 500;
+  position: relative;
+}
+
+.breadcrumb-up-icon {
+  font-size: 0.68rem;
+  color: #b5152b;
+  margin-right: 2px;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.breadcrumb-parent-name {
+  color: #b5152b;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+  transition: color 0.13s ease;
+}
+
+.breadcrumb-parent-name:hover {
+  color: #8f1022;
+  text-decoration: underline;
+}
+
+button.breadcrumb-parent-name {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+}
+
+.breadcrumb-separator {
+  color: #95a5a6;
+  font-size: 0.95rem;
+  line-height: 1;
+  flex-shrink: 0;
+  padding: 0 4px;
+  user-select: none;
+}
+
+.breadcrumb-current {
+  color: #6c757d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+  font-weight: 600;
+}
+
+.breadcrumb-ellipsis-btn {
+  letter-spacing: 0.15em;
 }
 
 /* Zoom controls */
@@ -137,12 +216,12 @@
 /* BPMN Element Markers & Highlights */
 
 /* Running activity marker (green animated border) */
-:host ::ng-deep .running .djs-visual > :nth-child(1) {
+.running .djs-visual > :nth-child(1) {
   stroke: #22c55e !important;
   stroke-width: 3px !important;
 }
 
-:host ::ng-deep .running .djs-outline {
+.running .djs-outline {
   stroke: #22c55e !important;
   stroke-width: 2px !important;
   stroke-dasharray: 4 2;
@@ -156,18 +235,18 @@
 }
 
 /* Highlighted activity (blue border) */
-:host ::ng-deep .highlight .djs-visual > :nth-child(1) {
+.highlight .djs-visual > :nth-child(1) {
   stroke: #3b82f6 !important;
   stroke-width: 2px !important;
 }
 
 /* Selected activity */
-:host ::ng-deep .selected .djs-visual > :nth-child(1) {
+.selected .djs-visual > :nth-child(1) {
   stroke: #1e40af !important;
   stroke-width: 2px !important;
 }
 
-:host ::ng-deep .selected .djs-outline {
+.selected .djs-outline {
   visibility: visible !important;
   stroke: #3b82f6 !important;
   stroke-width: 1.5px !important;
@@ -178,7 +257,7 @@
 
 /* Activity Badges (Overlays) */
 
-:host ::ng-deep .bpmn-badge {
+.bpmn-badge {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -194,35 +273,178 @@
   cursor: default;
 }
 
-:host ::ng-deep .bpmn-badge span {
+.bpmn-badge span {
   line-height: 1;
 }
 
 /* Instance count badge (blue) */
-:host ::ng-deep .bpmn-badge-instances {
+.bpmn-badge-instances {
   background: #3b82f6;
 }
 
 /* Incident count badge (red) */
-:host ::ng-deep .bpmn-badge-incidents {
+.bpmn-badge-incidents {
   background: #ef4444;
 }
 
+/* Collapsed Subprocess Drilldown Overlay */
+.bpmn-subprocess-drilldown {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  background-color: #0095ff;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bpmn-subprocess-drilldown:hover {
+  background-color: hsl(205, 100%, 45%);
+}
+
+/* Call Activity Navigation Overlay */
+.bpmn-call-activity-overlay {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin-left: -20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  background-color: hsl(205, 100%, 50%);
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bpmn-call-activity-overlay:hover {
+  background-color: hsl(205, 100%, 45%);
+}
+
+.bpmn-call-activity-overlay--expression {
+  background-color: #999999;
+  cursor: not-allowed;
+  pointer-events: auto;
+}
+
+.bpmn-call-activity-overlay--expression:hover {
+  background-color: #999999;
+}
+
+/* Correlate Message Overlay */
+.bpmn-correlate-overlay {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  cursor: pointer;
+  border: 1.5px solid var(--color-info, #3b82f6);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(59, 130, 246, 0.12);
+  color: var(--color-info, #3b82f6);
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  opacity: 1;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, opacity 0.12s ease;
+}
+
+.bpmn-correlate-overlay--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bpmn-correlate-overlay svg {
+  width: 14px;
+  height: 14px;
+}
+
+.bpmn-correlate-overlay:hover {
+  background: var(--color-info, #3b82f6);
+  color: #fff;
+  border-color: var(--color-info-dark, #2563eb);
+  box-shadow: 0 3px 8px rgba(59, 130, 246, 0.35);
+}
+
+.bpmn-correlate-overlay:focus-visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  outline: 2px solid var(--color-info, #3b82f6);
+  outline-offset: 2px;
+}
+
+.bpmn-call-activity-error {
+  background-color: #fee2e2;
+  border: 1px solid #ef4444;
+  border-radius: 4px;
+  color: #b91c1c;
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 3px 8px;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+
 /* Hide BPMN.js default elements */
 
-:host ::ng-deep .djs-palette {
+.djs-palette {
   display: none;
 }
 
-:host ::ng-deep .bjs-powered-by {
+.bjs-powered-by {
   display: none;
 }
 
 /* Hover state for clickable elements */
 
-:host ::ng-deep .djs-element:not(.djs-connection):hover .djs-outline {
+.djs-element:not(.djs-connection):hover .djs-outline {
   visibility: visible !important;
   stroke: #667eea !important;
   stroke-width: 1px !important;
   opacity: 0.5;
+}
+
+.modify-source .djs-visual > :nth-child(1) {
+  stroke: #dc2626 !important;
+  stroke-width: 2.5px !important;
+  stroke-dasharray: 6 3 !important;
+}
+
+.modify-target .djs-visual > :nth-child(1) {
+  stroke: #10b981 !important;
+  stroke-width: 2.5px !important;
+}
+
+.bpmn-modify-marker {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  cursor: default;
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.bpmn-modify-marker--source {
+  background: #dc2626;
+}
+
+.bpmn-modify-marker--target {
+  background: #10b981;
 }

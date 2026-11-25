@@ -34,6 +34,7 @@ public class HistoricBatchQueryImpl extends AbstractQuery<HistoricBatchQuery, Hi
 
   protected String batchId;
   protected String type;
+  protected String[] types;
   protected Boolean completed;
   protected boolean isTenantIdSet = false;
   protected String[] tenantIds;
@@ -55,6 +56,12 @@ public class HistoricBatchQueryImpl extends AbstractQuery<HistoricBatchQuery, Hi
   public HistoricBatchQuery type(String type) {
     ensureNotNull("Type", type);
     this.type = type;
+    return this;
+  }
+
+  public HistoricBatchQuery typeIn(String... types) {
+    ensureNotNull("types", (Object[]) types);
+    this.types = types;
     return this;
   }
 
@@ -86,6 +93,10 @@ public class HistoricBatchQueryImpl extends AbstractQuery<HistoricBatchQuery, Hi
 
   public String getType() {
     return type;
+  }
+
+  public String[] getTypes() {
+    return types;
   }
 
   public HistoricBatchQuery orderById() {

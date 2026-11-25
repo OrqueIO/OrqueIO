@@ -69,6 +69,8 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
 
   public CommentDto getComment(String commentId) {
     ensureHistoryEnabled(Status.NOT_FOUND);
+    // Only a caller who may see the task may reach its sub-resources (CVE-2026-109431)
+    ensureTaskExists(Status.NOT_FOUND);
 
     Comment comment = engine.getTaskService().getTaskComment(taskId, commentId);
     if (comment == null) {
@@ -167,9 +169,20 @@ public class TaskCommentResourceImpl implements TaskCommentResource {
 
   private void ensureTaskExists(Status status) {
     HistoricTaskInstance historicTaskInstance = engine.getHistoryService().createHistoricTaskInstanceQuery().taskId(taskId).singleResult();
-    if (historicTaskInstance == null) {
+    if (historicTaskInstance == null || !isRunningStandaloneTaskVisible(historicTaskInstance)) {
       throw new InvalidRequestException(status, "No task found for task id " + taskId);
     }
+  }
+
+  /**
+   * The history query does not check permissions on a task outside a process, unless historic
+   * instance permissions are enabled. While such a task runs, the task query does.
+   */
+  private boolean isRunningStandaloneTaskVisible(HistoricTaskInstance historicTaskInstance) {
+    if (historicTaskInstance.getExecutionId() != null || historicTaskInstance.getEndTime() != null) {
+      return true;
+    }
+    return engine.getTaskService().createTaskQuery().taskId(taskId).singleResult() != null;
   }
 
 }

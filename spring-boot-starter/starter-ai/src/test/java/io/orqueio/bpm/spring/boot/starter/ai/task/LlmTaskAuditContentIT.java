@@ -85,7 +85,8 @@ class LlmTaskAuditContentIT {
     String record = (String) runtimeService.getVariable(instance.getId(), "orqueioLlm_Task_Llm");
     assertThat(record).hasSizeLessThanOrEqualTo(LlmTaskAuditor.MAX_RECORD_LENGTH);
     JsonNode audit = JsonMapper.builder().build().readTree(record);
-    assertThat(audit.get("prompt").asString()).startsWith("Classify: My bike was stolen.");
+    // The data sent; the instructions are identified by the prompt version
+    assertThat(audit.get("prompt").asString()).startsWith("{\"text\":\"My bike was stolen.");
     assertThat(audit.get("truncated").asBoolean()).isTrue();
   }
 

@@ -1,6 +1,7 @@
 import {
   Directive,
   Input,
+  HostBinding,
   ElementRef,
   OnDestroy,
   inject,
@@ -24,6 +25,13 @@ export class TooltipDirective implements OnDestroy, OnChanges {
   @Input('appTooltip') tooltipText: string = '';
   @Input() tooltipPlacement: 'top' | 'bottom' | 'left' | 'right' = 'top';
   @Input() tooltipDelay: number = 200;
+  @Input() tooltipVariant: 'default' | 'danger' | 'success' | 'warning' | 'primary' = 'default';
+  @Input() tooltipOnlyIfTruncated: boolean = false;
+
+  @HostBinding('attr.aria-label')
+  get ariaLabelAttr(): string | null {
+    return this.tooltipText || null;
+  }
 
   private tooltipElement: HTMLElement | null = null;
   private showTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -92,10 +100,16 @@ export class TooltipDirective implements OnDestroy, OnChanges {
     }
 
     if (!this.tooltipText) return;
+    if (this.tooltipOnlyIfTruncated && !this.isContentTruncated()) return;
 
     this.showTimeout = setTimeout(() => {
       this.showTooltip();
     }, this.tooltipDelay);
+  }
+
+  private isContentTruncated(): boolean {
+    const el = this.el.nativeElement as HTMLElement;
+    return el.scrollWidth > el.clientWidth;
   }
 
   private scheduleHide(): void {
@@ -116,6 +130,7 @@ export class TooltipDirective implements OnDestroy, OnChanges {
     this.tooltipElement = this.renderer.createElement('div');
     this.renderer.addClass(this.tooltipElement, 'app-tooltip');
     this.renderer.addClass(this.tooltipElement, `tooltip-${this.tooltipPlacement}`);
+    this.renderer.addClass(this.tooltipElement, `tooltip-${this.tooltipVariant}`);
 
     // Create arrow
     const arrow = this.renderer.createElement('div');
@@ -132,14 +147,11 @@ export class TooltipDirective implements OnDestroy, OnChanges {
     // Add to body
     this.renderer.appendChild(document.body, this.tooltipElement);
 
-    // Position tooltip
-    this.positionTooltip();
-
-    // Add visible class after a frame for animation
+    // Position and reveal in the same rAF: dimensions are now known, no position flash
     requestAnimationFrame(() => {
-      if (this.tooltipElement) {
-        this.renderer.addClass(this.tooltipElement, 'visible');
-      }
+      if (!this.tooltipElement) return;
+      this.positionTooltip();
+      this.renderer.addClass(this.tooltipElement, 'visible');
     });
   }
 
@@ -160,47 +172,78 @@ export class TooltipDirective implements OnDestroy, OnChanges {
   private positionTooltip(): void {
     if (!this.tooltipElement) return;
 
-    const hostRect = this.el.nativeElement.getBoundingClientRect();
+    // position: fixed → coordinates are viewport-relative; no scroll offset needed
+    const hostRect    = this.el.nativeElement.getBoundingClientRect();
     const tooltipRect = this.tooltipElement.getBoundingClientRect();
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 
     let top: number;
     let left: number;
 
     switch (this.tooltipPlacement) {
-      case 'top':
-        top = hostRect.top + scrollTop - tooltipRect.height - 8;
-        left = hostRect.left + scrollLeft + (hostRect.width - tooltipRect.width) / 2;
+      case 'top': {
+        const rawTop = hostRect.top - tooltipRect.height - 8;
+        const { containerTop, floor } = this.getStickyHeaderInfo();
+        if (rawTop < floor || rawTop < 5) {
+          // Not enough room above button: anchor just above the scroll container
+          // (i.e. above the sticky column header row)
+          top = Math.max(5, containerTop - tooltipRect.height - 8);
+        } else {
+          top = rawTop;
+        }
+        left = hostRect.left + (hostRect.width - tooltipRect.width) / 2;
         break;
+      }
       case 'bottom':
-        top = hostRect.bottom + scrollTop + 8;
-        left = hostRect.left + scrollLeft + (hostRect.width - tooltipRect.width) / 2;
+        top  = hostRect.bottom + 8;
+        left = hostRect.left + (hostRect.width - tooltipRect.width) / 2;
         break;
       case 'left':
-        top = hostRect.top + scrollTop + (hostRect.height - tooltipRect.height) / 2;
-        left = hostRect.left + scrollLeft - tooltipRect.width - 8;
+        top  = hostRect.top + (hostRect.height - tooltipRect.height) / 2;
+        left = hostRect.left - tooltipRect.width - 8;
         break;
       case 'right':
-        top = hostRect.top + scrollTop + (hostRect.height - tooltipRect.height) / 2;
-        left = hostRect.right + scrollLeft + 8;
+        top  = hostRect.top + (hostRect.height - tooltipRect.height) / 2;
+        left = hostRect.right + 8;
         break;
     }
 
-    // Keep tooltip within viewport
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
+    // Clamp within viewport (all coords already viewport-relative for position: fixed)
     if (left < 5) left = 5;
-    if (left + tooltipRect.width > viewportWidth - 5) {
-      left = viewportWidth - tooltipRect.width - 5;
+    if (left + tooltipRect.width > window.innerWidth - 5) {
+      left = window.innerWidth - tooltipRect.width - 5;
     }
-    if (top < scrollTop + 5) top = scrollTop + 5;
-    if (top + tooltipRect.height > scrollTop + viewportHeight - 5) {
-      top = scrollTop + viewportHeight - tooltipRect.height - 5;
+    if (top < 5) top = 5;
+    if (top + tooltipRect.height > window.innerHeight - 5) {
+      top = window.innerHeight - tooltipRect.height - 5;
     }
 
-    this.renderer.setStyle(this.tooltipElement, 'top', `${top}px`);
+    this.renderer.setStyle(this.tooltipElement, 'top',  `${top}px`);
     this.renderer.setStyle(this.tooltipElement, 'left', `${left}px`);
+  }
+
+  /**
+   * Walks up to the nearest overflow-scrolling ancestor and returns:
+   * - containerTop: viewport Y of its top edge
+   * - floor: viewport Y of the bottom edge of any sticky <th>/<thead> inside it
+   *   (falls back to containerTop when no sticky header is found)
+   */
+  private getStickyHeaderInfo(): { containerTop: number; floor: number } {
+    let el: HTMLElement | null = this.el.nativeElement.parentElement;
+    while (el && el !== document.body) {
+      const style = window.getComputedStyle(el);
+      if (style.overflowY === 'auto'   || style.overflowY === 'scroll' ||
+          style.overflow  === 'auto'   || style.overflow  === 'scroll') {
+        const containerTop = el.getBoundingClientRect().top;
+        let floor = containerTop;
+        el.querySelectorAll<HTMLElement>('th, thead').forEach(child => {
+          if (window.getComputedStyle(child).position === 'sticky') {
+            floor = Math.max(floor, child.getBoundingClientRect().bottom);
+          }
+        });
+        return { containerTop, floor };
+      }
+      el = el.parentElement;
+    }
+    return { containerTop: 0, floor: 0 };
   }
 }

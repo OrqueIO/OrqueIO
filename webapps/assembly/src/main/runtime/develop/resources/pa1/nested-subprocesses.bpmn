@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+  xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+  id="nested-subprocesses-definitions"
+  targetNamespace="http://orqueio.io/bpmn">
+
+  <!--
+    Client Onboarding Process — 7 nested subprocess levels.
+    Each level: Start → UserTask (waits here) → next SubProcess → End
+    Level L7 (deepest): Start → UserTask → End
+
+    Progression:
+      Instance started → L1: pauses at "Review Identity Documents"
+      Complete L1      → L2: pauses at "Complete Risk Profile"
+      Complete L2      → L3: pauses at "Validate Regulatory Requirements"
+      Complete L3      → L4: pauses at "Set Up Account Parameters"
+      Complete L4      → L5: pauses at "Activate Product Portfolio"
+      Complete L5      → L6: pauses at "Configure Digital Access"
+      Complete L6      → L7: pauses at "Conduct Welcome Meeting"
+      Complete L7      → Process complete
+  -->
+  <bpmn2:process id="ClientOnboardingProcess" name="Client Onboarding Process"
+                 isExecutable="true" camunda:historyTimeToLive="P180D">
+
+    <!-- ── Root level ─────────────────────────────────────────────── -->
+    <bpmn2:startEvent id="Start_0" name="Onboarding Requested">
+      <bpmn2:outgoing>Flow_00</bpmn2:outgoing>
+    </bpmn2:startEvent>
+
+    <bpmn2:subProcess id="SubProcess_L1" name="Identity Verification">
+      <bpmn2:incoming>Flow_00</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_01</bpmn2:outgoing>
+
+      <!-- ── Level 1 : UserTask then drill into L2 ────────────────── -->
+      <bpmn2:startEvent id="Start_L1" name="Start">
+        <bpmn2:outgoing>Flow_L1a</bpmn2:outgoing>
+      </bpmn2:startEvent>
+      <bpmn2:userTask id="UserTask_L1" name="Review Identity Documents">
+        <bpmn2:incoming>Flow_L1a</bpmn2:incoming>
+        <bpmn2:outgoing>Flow_L1b</bpmn2:outgoing>
+      </bpmn2:userTask>
+      <bpmn2:subProcess id="SubProcess_L2" name="Risk Assessment">
+        <bpmn2:incoming>Flow_L1b</bpmn2:incoming>
+        <bpmn2:outgoing>Flow_L1c</bpmn2:outgoing>
+
+        <!-- ── Level 2 : UserTask then drill into L3 ──────────────── -->
+        <bpmn2:startEvent id="Start_L2" name="Start">
+          <bpmn2:outgoing>Flow_L2a</bpmn2:outgoing>
+        </bpmn2:startEvent>
+        <bpmn2:userTask id="UserTask_L2" name="Complete Risk Profile">
+          <bpmn2:incoming>Flow_L2a</bpmn2:incoming>
+          <bpmn2:outgoing>Flow_L2b</bpmn2:outgoing>
+        </bpmn2:userTask>
+        <bpmn2:subProcess id="SubProcess_L3" name="Compliance Screening">
+          <bpmn2:incoming>Flow_L2b</bpmn2:incoming>
+          <bpmn2:outgoing>Flow_L2c</bpmn2:outgoing>
+
+          <!-- ── Level 3 : UserTask then drill into L4 ────────────── -->
+          <bpmn2:startEvent id="Start_L3" name="Start">
+            <bpmn2:outgoing>Flow_L3a</bpmn2:outgoing>
+          </bpmn2:startEvent>
+          <bpmn2:userTask id="UserTask_L3" name="Validate Regulatory Requirements">
+            <bpmn2:incoming>Flow_L3a</bpmn2:incoming>
+            <bpmn2:outgoing>Flow_L3b</bpmn2:outgoing>
+          </bpmn2:userTask>
+          <bpmn2:subProcess id="SubProcess_L4" name="Account Configuration">
+            <bpmn2:incoming>Flow_L3b</bpmn2:incoming>
+            <bpmn2:outgoing>Flow_L3c</bpmn2:outgoing>
+
+            <!-- ── Level 4 : UserTask then drill into L5 ──────────── -->
+            <bpmn2:startEvent id="Start_L4" name="Start">
+              <bpmn2:outgoing>Flow_L4a</bpmn2:outgoing>
+            </bpmn2:startEvent>
+            <bpmn2:userTask id="UserTask_L4" name="Set Up Account Parameters">
+              <bpmn2:incoming>Flow_L4a</bpmn2:incoming>
+              <bpmn2:outgoing>Flow_L4b</bpmn2:outgoing>
+            </bpmn2:userTask>
+            <bpmn2:subProcess id="SubProcess_L5" name="Product Subscription">
+              <bpmn2:incoming>Flow_L4b</bpmn2:incoming>
+              <bpmn2:outgoing>Flow_L4c</bpmn2:outgoing>
+
+              <!-- ── Level 5 : UserTask then drill into L6 ────────── -->
+              <bpmn2:startEvent id="Start_L5" name="Start">
+                <bpmn2:outgoing>Flow_L5a</bpmn2:outgoing>
+              </bpmn2:startEvent>
+              <bpmn2:userTask id="UserTask_L5" name="Activate Product Portfolio">
+                <bpmn2:incoming>Flow_L5a</bpmn2:incoming>
+                <bpmn2:outgoing>Flow_L5b</bpmn2:outgoing>
+              </bpmn2:userTask>
+              <bpmn2:subProcess id="SubProcess_L6" name="Digital Access Setup">
+                <bpmn2:incoming>Flow_L5b</bpmn2:incoming>
+                <bpmn2:outgoing>Flow_L5c</bpmn2:outgoing>
+
+                <!-- ── Level 6 : UserTask then drill into L7 ────────── -->
+                <bpmn2:startEvent id="Start_L6" name="Start">
+                  <bpmn2:outgoing>Flow_L6a</bpmn2:outgoing>
+                </bpmn2:startEvent>
+                <bpmn2:userTask id="UserTask_L6" name="Configure Digital Access">
+                  <bpmn2:incoming>Flow_L6a</bpmn2:incoming>
+                  <bpmn2:outgoing>Flow_L6b</bpmn2:outgoing>
+                </bpmn2:userTask>
+                <bpmn2:subProcess id="SubProcess_L7" name="Welcome &amp; Handover">
+                  <bpmn2:incoming>Flow_L6b</bpmn2:incoming>
+                  <bpmn2:outgoing>Flow_L6c</bpmn2:outgoing>
+
+                  <!-- ── Level 7 (deepest) : UserTask only ─────────── -->
+                  <bpmn2:startEvent id="Start_L7" name="Start">
+                    <bpmn2:outgoing>Flow_L7a</bpmn2:outgoing>
+                  </bpmn2:startEvent>
+                  <bpmn2:userTask id="UserTask_L7" name="Conduct Welcome Meeting">
+                    <bpmn2:incoming>Flow_L7a</bpmn2:incoming>
+                    <bpmn2:outgoing>Flow_L7b</bpmn2:outgoing>
+                  </bpmn2:userTask>
+                  <bpmn2:sequenceFlow id="Flow_L7a" sourceRef="Start_L7"    targetRef="UserTask_L7"/>
+                  <bpmn2:sequenceFlow id="Flow_L7b" sourceRef="UserTask_L7" targetRef="End_L7"/>
+                  <bpmn2:endEvent id="End_L7" name="End">
+                    <bpmn2:incoming>Flow_L7b</bpmn2:incoming>
+                  </bpmn2:endEvent>
+
+                </bpmn2:subProcess>
+
+                <bpmn2:sequenceFlow id="Flow_L6a" sourceRef="Start_L6"      targetRef="UserTask_L6"/>
+                <bpmn2:sequenceFlow id="Flow_L6b" sourceRef="UserTask_L6"   targetRef="SubProcess_L7"/>
+                <bpmn2:sequenceFlow id="Flow_L6c" sourceRef="SubProcess_L7" targetRef="End_L6"/>
+                <bpmn2:endEvent id="End_L6" name="End">
+                  <bpmn2:incoming>Flow_L6c</bpmn2:incoming>
+                </bpmn2:endEvent>
+
+              </bpmn2:subProcess>
+
+              <bpmn2:sequenceFlow id="Flow_L5a" sourceRef="Start_L5"      targetRef="UserTask_L5"/>
+              <bpmn2:sequenceFlow id="Flow_L5b" sourceRef="UserTask_L5"   targetRef="SubProcess_L6"/>
+              <bpmn2:sequenceFlow id="Flow_L5c" sourceRef="SubProcess_L6" targetRef="End_L5"/>
+              <bpmn2:endEvent id="End_L5" name="End">
+                <bpmn2:incoming>Flow_L5c</bpmn2:incoming>
+              </bpmn2:endEvent>
+
+            </bpmn2:subProcess>
+
+            <bpmn2:sequenceFlow id="Flow_L4a" sourceRef="Start_L4"      targetRef="UserTask_L4"/>
+            <bpmn2:sequenceFlow id="Flow_L4b" sourceRef="UserTask_L4"   targetRef="SubProcess_L5"/>
+            <bpmn2:sequenceFlow id="Flow_L4c" sourceRef="SubProcess_L5" targetRef="End_L4"/>
+            <bpmn2:endEvent id="End_L4" name="End">
+              <bpmn2:incoming>Flow_L4c</bpmn2:incoming>
+            </bpmn2:endEvent>
+
+          </bpmn2:subProcess>
+
+          <bpmn2:sequenceFlow id="Flow_L3a" sourceRef="Start_L3"      targetRef="UserTask_L3"/>
+          <bpmn2:sequenceFlow id="Flow_L3b" sourceRef="UserTask_L3"   targetRef="SubProcess_L4"/>
+          <bpmn2:sequenceFlow id="Flow_L3c" sourceRef="SubProcess_L4" targetRef="End_L3"/>
+          <bpmn2:endEvent id="End_L3" name="End">
+            <bpmn2:incoming>Flow_L3c</bpmn2:incoming>
+          </bpmn2:endEvent>
+
+        </bpmn2:subProcess>
+
+        <bpmn2:sequenceFlow id="Flow_L2a" sourceRef="Start_L2"      targetRef="UserTask_L2"/>
+        <bpmn2:sequenceFlow id="Flow_L2b" sourceRef="UserTask_L2"   targetRef="SubProcess_L3"/>
+        <bpmn2:sequenceFlow id="Flow_L2c" sourceRef="SubProcess_L3" targetRef="End_L2"/>
+        <bpmn2:endEvent id="End_L2" name="End">
+          <bpmn2:incoming>Flow_L2c</bpmn2:incoming>
+        </bpmn2:endEvent>
+
+      </bpmn2:subProcess>
+
+      <bpmn2:sequenceFlow id="Flow_L1a" sourceRef="Start_L1"      targetRef="UserTask_L1"/>
+      <bpmn2:sequenceFlow id="Flow_L1b" sourceRef="UserTask_L1"   targetRef="SubProcess_L2"/>
+      <bpmn2:sequenceFlow id="Flow_L1c" sourceRef="SubProcess_L2" targetRef="End_L1"/>
+      <bpmn2:endEvent id="End_L1" name="End">
+        <bpmn2:incoming>Flow_L1c</bpmn2:incoming>
+      </bpmn2:endEvent>
+
+    </bpmn2:subProcess>
+
+    <bpmn2:sequenceFlow id="Flow_00" sourceRef="Start_0"        targetRef="SubProcess_L1"/>
+    <bpmn2:sequenceFlow id="Flow_01" sourceRef="SubProcess_L1"  targetRef="End_0"/>
+    <bpmn2:endEvent id="End_0" name="Client Onboarded">
+      <bpmn2:incoming>Flow_01</bpmn2:incoming>
+    </bpmn2:endEvent>
+
+  </bpmn2:process>
+
+  <!--
+    BPMNDiagram — single plane.
+
+    Layout par niveau (un UserTask + un subprocess/endEvent par niveau) :
+      x=100  Start      (36×36)
+      x=200  UserTask   (100×80)   ← process pause ici
+      x=380  SubProcess (100×80)   ← collapsed, sauf L7 qui n'en a pas
+      x=550  End        (36×36)
+
+    y-bands (centre y) :
+      Root  y=300   L1 y=600   L2 y=900   L3 y=1200
+      L4 y=1500     L5 y=1800  L6 y=2100  L7 y=2400
+  -->
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ClientOnboardingProcess">
+
+      <!-- ═══ Root view (y=300) ════════════════════════════════════ -->
+      <bpmndi:BPMNShape id="Start_0_di" bpmnElement="Start_0">
+        <dc:Bounds x="100" y="282" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="107" y="325" width="22" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="SubProcess_L1_di" bpmnElement="SubProcess_L1" isExpanded="false">
+        <dc:Bounds x="200" y="260" width="100" height="80"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="205" y="296" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_0_di" bpmnElement="End_0">
+        <dc:Bounds x="362" y="282" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="370" y="325" width="20" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_00_di" bpmnElement="Flow_00">
+        <di:waypoint x="136" y="300"/><di:waypoint x="200" y="300"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01_di" bpmnElement="Flow_01">
+        <di:waypoint x="300" y="300"/><di:waypoint x="362" y="300"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- ═══ L1 view — inside SubProcess_L1 (y=600) ══════════════ -->
+      <bpmndi:BPMNShape id="Start_L1_di" bpmnElement="Start_L1">
+        <dc:Bounds x="100" y="582" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="107" y="625" width="22" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="UserTask_L1_di" bpmnElement="UserTask_L1">
+        <dc:Bounds x="200" y="560" width="100" height="80"/>
+        <bpmndi:BPMNLabel/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="SubProcess_L2_di" bpmnElement="SubProcess_L2" isExpanded="false">
+        <dc:Bounds x="380" y="560" width="100" height="80"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="385" y="596" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_L1_di" bpmnElement="End_L1">
+        <dc:Bounds x="550" y="582" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="558" y="625" width="20" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_L1a_di" bpmnElement="Flow_L1a">
+        <di:waypoint x="136" y="600"/><di:waypoint x="200" y="600"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L1b_di" bpmnElement="Flow_L1b">
+        <di:waypoint x="300" y="600"/><di:waypoint x="380" y="600"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L1c_di" bpmnElement="Flow_L1c">
+        <di:waypoint x="480" y="600"/><di:waypoint x="550" y="600"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- ═══ L2 view — inside SubProcess_L2 (y=900) ══════════════ -->
+      <bpmndi:BPMNShape id="Start_L2_di" bpmnElement="Start_L2">
+        <dc:Bounds x="100" y="882" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="107" y="925" width="22" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="UserTask_L2_di" bpmnElement="UserTask_L2">
+        <dc:Bounds x="200" y="860" width="100" height="80"/>
+        <bpmndi:BPMNLabel/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="SubProcess_L3_di" bpmnElement="SubProcess_L3" isExpanded="false">
+        <dc:Bounds x="380" y="860" width="100" height="80"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="385" y="896" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_L2_di" bpmnElement="End_L2">
+        <dc:Bounds x="550" y="882" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="558" y="925" width="20" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_L2a_di" bpmnElement="Flow_L2a">
+        <di:waypoint x="136" y="900"/><di:waypoint x="200" y="900"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L2b_di" bpmnElement="Flow_L2b">
+        <di:waypoint x="300" y="900"/><di:waypoint x="380" y="900"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L2c_di" bpmnElement="Flow_L2c">
+        <di:waypoint x="480" y="900"/><di:waypoint x="550" y="900"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- ═══ L3 view — inside SubProcess_L3 (y=1200) ═════════════ -->
+      <bpmndi:BPMNShape id="Start_L3_di" bpmnElement="Start_L3">
+        <dc:Bounds x="100" y="1182" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="107" y="1225" width="22" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="UserTask_L3_di" bpmnElement="UserTask_L3">
+        <dc:Bounds x="200" y="1160" width="100" height="80"/>
+        <bpmndi:BPMNLabel/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="SubProcess_L4_di" bpmnElement="SubProcess_L4" isExpanded="false">
+        <dc:Bounds x="380" y="1160" width="100" height="80"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="385" y="1196" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_L3_di" bpmnElement="End_L3">
+        <dc:Bounds x="550" y="1182" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="558" y="1225" width="20" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_L3a_di" bpmnElement="Flow_L3a">
+        <di:waypoint x="136" y="1200"/><di:waypoint x="200" y="1200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L3b_di" bpmnElement="Flow_L3b">
+        <di:waypoint x="300" y="1200"/><di:waypoint x="380" y="1200"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L3c_di" bpmnElement="Flow_L3c">
+        <di:waypoint x="480" y="1200"/><di:waypoint x="550" y="1200"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- ═══ L4 view — inside SubProcess_L4 (y=1500) ═════════════ -->
+      <bpmndi:BPMNShape id="Start_L4_di" bpmnElement="Start_L4">
+        <dc:Bounds x="100" y="1482" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="107" y="1525" width="22" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="UserTask_L4_di" bpmnElement="UserTask_L4">
+        <dc:Bounds x="200" y="1460" width="100" height="80"/>
+        <bpmndi:BPMNLabel/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="SubProcess_L5_di" bpmnElement="SubProcess_L5" isExpanded="false">
+        <dc:Bounds x="380" y="1460" width="100" height="80"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="385" y="1496" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_L4_di" bpmnElement="End_L4">
+        <dc:Bounds x="550" y="1482" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="558" y="1525" width="20" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_L4a_di" bpmnElement="Flow_L4a">
+        <di:waypoint x="136" y="1500"/><di:waypoint x="200" y="1500"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L4b_di" bpmnElement="Flow_L4b">
+        <di:waypoint x="300" y="1500"/><di:waypoint x="380" y="1500"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L4c_di" bpmnElement="Flow_L4c">
+        <di:waypoint x="480" y="1500"/><di:waypoint x="550" y="1500"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- ═══ L5 view — inside SubProcess_L5 (y=1800) ═════════════ -->
+      <bpmndi:BPMNShape id="Start_L5_di" bpmnElement="Start_L5">
+        <dc:Bounds x="100" y="1782" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="107" y="1825" width="22" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="UserTask_L5_di" bpmnElement="UserTask_L5">
+        <dc:Bounds x="200" y="1760" width="100" height="80"/>
+        <bpmndi:BPMNLabel/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="SubProcess_L6_di" bpmnElement="SubProcess_L6" isExpanded="false">
+        <dc:Bounds x="380" y="1760" width="100" height="80"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="385" y="1796" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_L5_di" bpmnElement="End_L5">
+        <dc:Bounds x="550" y="1782" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="558" y="1825" width="20" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_L5a_di" bpmnElement="Flow_L5a">
+        <di:waypoint x="136" y="1800"/><di:waypoint x="200" y="1800"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L5b_di" bpmnElement="Flow_L5b">
+        <di:waypoint x="300" y="1800"/><di:waypoint x="380" y="1800"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L5c_di" bpmnElement="Flow_L5c">
+        <di:waypoint x="480" y="1800"/><di:waypoint x="550" y="1800"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- ═══ L6 view — inside SubProcess_L6 (y=2100) ═════════════ -->
+      <bpmndi:BPMNShape id="Start_L6_di" bpmnElement="Start_L6">
+        <dc:Bounds x="100" y="2082" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="107" y="2125" width="22" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="UserTask_L6_di" bpmnElement="UserTask_L6">
+        <dc:Bounds x="200" y="2060" width="100" height="80"/>
+        <bpmndi:BPMNLabel/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="SubProcess_L7_di" bpmnElement="SubProcess_L7" isExpanded="false">
+        <dc:Bounds x="380" y="2060" width="100" height="80"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="385" y="2096" width="90" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_L6_di" bpmnElement="End_L6">
+        <dc:Bounds x="550" y="2082" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="558" y="2125" width="20" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_L6a_di" bpmnElement="Flow_L6a">
+        <di:waypoint x="136" y="2100"/><di:waypoint x="200" y="2100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L6b_di" bpmnElement="Flow_L6b">
+        <di:waypoint x="300" y="2100"/><di:waypoint x="380" y="2100"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L6c_di" bpmnElement="Flow_L6c">
+        <di:waypoint x="480" y="2100"/><di:waypoint x="550" y="2100"/>
+      </bpmndi:BPMNEdge>
+
+      <!-- ═══ L7 view — inside SubProcess_L7 (y=2400) — deepest ═══ -->
+      <bpmndi:BPMNShape id="Start_L7_di" bpmnElement="Start_L7">
+        <dc:Bounds x="152" y="2382" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="159" y="2425" width="22" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="UserTask_L7_di" bpmnElement="UserTask_L7">
+        <dc:Bounds x="250" y="2360" width="100" height="80"/>
+        <bpmndi:BPMNLabel/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_L7_di" bpmnElement="End_L7">
+        <dc:Bounds x="412" y="2382" width="36" height="36"/>
+        <bpmndi:BPMNLabel><dc:Bounds x="420" y="2425" width="20" height="14"/></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_L7a_di" bpmnElement="Flow_L7a">
+        <di:waypoint x="188" y="2400"/><di:waypoint x="250" y="2400"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_L7b_di" bpmnElement="Flow_L7b">
+        <di:waypoint x="350" y="2400"/><di:waypoint x="412" y="2400"/>
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</bpmn2:definitions>

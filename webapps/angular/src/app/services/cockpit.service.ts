@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, forkJoin } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -64,7 +64,7 @@ export type {
   TasksByGroup
 } from './dashboard.service';
 
-// Interfaces pour les types de données
+// Interfaces pour les types de donnÃ©es
 
 export interface ProcessDefinition {
   id: string;
@@ -435,6 +435,61 @@ export interface VariableQueryParam {
   value: any;
 }
 
+export interface VariableLine {
+  variableName: string;
+  variableOperator: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
+  values: string[];
+}
+
+export type GlobalSearchField =
+  | 'businessKey' | 'instanceId' | 'state' | 'withIncidents' | 'withJobsRetrying' | 'processDefinition'
+  | 'startedAfter' | 'startedBefore' | 'finishedAfter' | 'finishedBefore'
+  | 'variable' | 'variables'
+  | 'decisionDefinition' | 'evaluatedAfter' | 'evaluatedBefore'
+  | 'decisionInstanceId' | 'processInstanceId'
+  | 'superProcessInstanceId' | 'subProcessInstanceId'
+  | 'incidentId' | 'incidentType' | 'incidentMessage' | 'activityId'
+  | 'stateActive' | 'stateSuspended'
+  | 'stateCompleted' | 'stateTerminated'
+  | 'batchId' | 'type' | 'completed'
+  | 'batchCompleted' | 'batchRunning'
+  | 'tenantIdIn' | 'withoutTenantId';
+
+export interface MultiValueFilter {
+  field: GlobalSearchField;
+  values: string[];
+  processDefinitionIds?: string[];
+  variableName?: string;
+  variableOperator?: 'eq' | 'neq' | 'gt' | 'gteq' | 'lt' | 'lteq' | 'like';
+  variableLines?: VariableLine[];
+}
+
+export interface MultiStateCursor {
+  offsets: Record<string, number>;
+}
+
+export interface KeysetPage {
+  items: ProcessInstance[];
+  nextCursor: MultiStateCursor;
+  hasMore: boolean;
+}
+
+
+export function parseVariableValue(raw: string, operator: string): any {
+  if (operator === 'like') {
+    return raw.includes('%') ? raw : `%${raw}%`;
+  }
+  if (raw.toLowerCase() === 'true')  return true;
+  if (raw.toLowerCase() === 'false') return false;
+  if (raw === 'NULL') return null;
+  const trimmed = raw.trim();
+  if (trimmed !== '') {
+    const n = Number(trimmed);
+    if (!isNaN(n)) return n;
+  }
+  return raw;
+}
+
 export interface TaskQueryParams {
   assignee?: string;
   assigneeLike?: string;
@@ -533,6 +588,7 @@ export interface DeploymentQueryParams {
 export class CockpitService {
   private readonly baseUrl = environment.engineUrl + '/default';
   private readonly historyUrl = `${this.baseUrl}/history`;
+  private readonly CAMUNDA_QUERY_MAX = 2000;
 
   constructor(
     private http: HttpClient,
@@ -542,10 +598,6 @@ export class CockpitService {
     private decisionService: DecisionService,
     private deploymentService: DeploymentService
   ) {}
-
-  // ============================================
-  // Dashboard Statistics (delegated to DashboardService)
-  // ============================================
 
   /**
    * Get main dashboard statistics
@@ -611,15 +663,12 @@ export class CockpitService {
     return this.dashboardService.getDeploymentsCount();
   }
 
-  // ============================================
-  // Process Definitions (delegated to ProcessDefinitionService)
-  // ============================================
 
   /**
    * @deprecated Use ProcessDefinitionService.getProcessDefinitions() directly
    */
-  getProcessDefinitions(maxResults: number = 1000): Observable<ProcessDefinition[]> {
-    return this.processDefinitionService.getProcessDefinitions(maxResults);
+  getProcessDefinitions(maxResults: number = 1000, latestVersionOnly = true): Observable<ProcessDefinition[]> {
+    return this.processDefinitionService.getProcessDefinitions(maxResults, latestVersionOnly);
   }
 
   /**
@@ -634,6 +683,13 @@ export class CockpitService {
    */
   getProcessDefinitionByKey(key: string): Observable<ProcessDefinition | null> {
     return this.processDefinitionService.getProcessDefinitionByKey(key);
+  }
+
+  /**
+   * @deprecated Use ProcessDefinitionService.getProcessDefinitionById() directly
+   */
+  getProcessDefinitionById(id: string): Observable<ProcessDefinition | null> {
+    return this.processDefinitionService.getProcessDefinitionById(id);
   }
 
   /**
@@ -1084,6 +1140,28 @@ export class CockpitService {
     return this.processInstanceService.getSuperProcessInstance(processInstanceId);
   }
 
+  /**
+   * Get called process instances filtered by call activity ID
+   */
+  getCalledProcessInstancesByActivity(
+    superProcessInstanceId: string,
+    activityId: string,
+    maxResults = 10
+  ): Observable<ProcessInstance[]> {
+    return this.processInstanceService.getCalledProcessInstancesByActivity(
+      superProcessInstanceId,
+      activityId,
+      maxResults
+    );
+  }
+
+  /**
+   * Get Call Activity to called process instance IDs mapping
+   */
+  getCallActivityMapping(processInstanceId: string): Observable<Map<string, string[]>> {
+    return this.processInstanceService.getCallActivityMapping(processInstanceId);
+  }
+
   // ============================================
   // External Tasks (delegated to ProcessInstanceService)
   // ============================================
@@ -1189,6 +1267,415 @@ export class CockpitService {
    */
   queryProcessInstancesCount(body: any): Observable<number> {
     return this.processInstanceService.queryProcessInstancesCount(body);
+  }
+
+  buildPayloadVariants(
+    filters: MultiValueFilter[],
+    variableNamesIgnoreCase = false,
+    variableValuesIgnoreCase = false
+  ): any[] {
+    const base: any = {};
+    const bkValues: string[] = [];
+    interface VarPill { name: string; op: string; values: string[]; vvIgnoreCase: boolean; }
+    const varPills: VarPill[] = [];
+
+    for (const filter of filters) {
+      switch (filter.field) {
+        case 'businessKey':
+          filter.values.forEach(v => bkValues.push(v));
+          break;
+        case 'instanceId':
+          if (filter.values.length > 0) base.processInstanceIds = filter.values;
+          break;
+        case 'state':
+          if (filter.values.length === 1) {
+            switch (filter.values[0]) {
+              case 'active':     base.active = true; base.unfinished = true; break;
+              case 'suspended':  base.suspended = true; base.unfinished = true; break;
+              case 'completed':  base.completed = true; base.finished = true; break;
+              case 'terminated': base.finished = true; break;
+              case 'unfinished': base.unfinished = true; break;
+              case 'finished':   base.finished = true; break;
+            }
+          }
+          break;
+        case 'withIncidents':
+          base.withIncidents = true;
+          break;
+        case 'withJobsRetrying':
+          base.withJobsRetrying = true;
+          break;
+        case 'processDefinition':
+          if (filter.values.length > 0) base.processDefinitionKeyIn = filter.values;
+          if (filter.processDefinitionIds?.length) base.processDefinitionIdIn = filter.processDefinitionIds;
+          break;
+        case 'startedAfter':
+          if (filter.values[0]) base.startedAfter = filter.values[0];
+          break;
+        case 'startedBefore':
+          if (filter.values[0]) base.startedBefore = filter.values[0];
+          break;
+        case 'finishedAfter':
+          if (filter.values[0]) base.finishedAfter = filter.values[0];
+          break;
+        case 'finishedBefore':
+          if (filter.values[0]) base.finishedBefore = filter.values[0];
+          break;
+        case 'superProcessInstanceId':
+          if (filter.values[0]) base.superProcessInstanceId = filter.values[0];
+          break;
+        case 'subProcessInstanceId':
+          if (filter.values[0]) base.subProcessInstanceId = filter.values[0];
+          break;
+        case 'incidentType':
+          if (filter.values[0]) base.incidentType = filter.values[0];
+          break;
+        case 'incidentMessage':
+          if (filter.values[0]) base.incidentMessageLike = `%${filter.values[0]}%`;
+          break;
+        case 'variable':
+          if (filter.variableName && filter.values.length > 0) {
+            const op = filter.variableOperator || 'eq';
+            varPills.push({
+              name: filter.variableName,
+              op,
+              values: filter.values,
+              vvIgnoreCase: op === 'like' || variableValuesIgnoreCase
+            });
+          }
+          break;
+        case 'variables':
+          if (filter.variableLines) {
+            const grouped = new Map<string, { name: string; op: string; values: string[]; vvIgnoreCase: boolean }>();
+            for (const line of filter.variableLines) {
+              if (!line.variableName || line.values.length === 0) continue;
+              const op = line.variableOperator || 'eq';
+              const key = `${line.variableName}::${op}`;
+              if (grouped.has(key)) {
+                const g = grouped.get(key)!;
+                for (const v of line.values) {
+                  if (!g.values.includes(v)) g.values.push(v);
+                }
+              } else {
+                grouped.set(key, {
+                  name: line.variableName,
+                  op,
+                  values: [...line.values],
+                  vvIgnoreCase: op === 'like' || variableValuesIgnoreCase
+                });
+              }
+            }
+            for (const g of grouped.values()) {
+              varPills.push(g);
+            }
+          }
+          break;
+      }
+    }
+
+    if (variableNamesIgnoreCase) base.variableNamesIgnoreCase = true;
+    if (variableValuesIgnoreCase) base.variableValuesIgnoreCase = true;
+
+    // Dimensions: bk values (or [null]) Ã— each variable pill's values
+    const bkDim: Array<string | null> = bkValues.length > 0 ? bkValues : [null];
+    const varDims = varPills.map(p =>
+      p.values.map(v => ({ name: p.name, op: p.op, rawValue: v, vvIgnoreCase: p.vvIgnoreCase }))
+    );
+
+    const allDims: any[][] = [bkDim, ...varDims];
+    const combos = allDims.reduce<any[][]>(
+      (acc, dim) => acc.flatMap(combo => dim.map((item: any) => [...combo, item])),
+      [[]]
+    );
+
+    return combos.map(combo => {
+      const body = { ...base };
+      const bk = combo[0] as string | null;
+      const varItems = combo.slice(1) as Array<{ name: string; op: string; rawValue: string; vvIgnoreCase: boolean }>;
+
+      if (bk !== null) {
+        body.processInstanceBusinessKeyLike = `%${bk.replace(/[%_]/g, '\\$&')}%`;
+      }
+
+      if (varItems.length > 0) {
+        body.variables = varItems.map(item => ({
+          name: item.name,
+          operator: item.op,
+          value: parseVariableValue(item.rawValue, item.op)
+        }));
+        if (varItems.some(item => item.vvIgnoreCase)) {
+          body.variableValuesIgnoreCase = true;
+        }
+      }
+
+      // Explicit sort so offset pagination is stable at any scale. Without ORDER BY, the DB
+      // optimizer switches from sequential to index scan above ~10k rows, causing offset 15000+
+      // to land on different rows than expected. queryProcessInstancesCount strips this field.
+      body.sorting = [{ sortBy: 'startTime', sortOrder: 'desc' }];
+
+      return body;
+    });
+  }
+
+  searchProcessInstancesGlobal(
+    filters: MultiValueFilter[],
+    variableNamesIgnoreCase = false,
+    variableValuesIgnoreCase = false,
+    firstResult = 0,
+    maxResults = 20,
+    cache?: Map<string, ProcessInstance[]>
+  ): Observable<ProcessInstance[]> {
+    const statePill = filters.find(f => f.field === 'state');
+    // When all possible states are selected, any instance qualifies â€” drop the state filter
+    if (statePill && this.isExhaustiveStateSelection(statePill.values)) {
+      filters = filters.filter(f => f.field !== 'state');
+    } else if (statePill && (statePill.values.length > 1 || statePill.values[0] === 'terminated')) {
+      const nativeFlag = this.resolveNativeStateFlag(statePill.values);
+      if (nativeFlag) {
+        const resolved: MultiValueFilter[] = [{ field: 'state', values: [nativeFlag] }, ...filters.filter(f => f.field !== 'state')];
+        const nativeVariants = this.buildPayloadVariants(resolved, variableNamesIgnoreCase, variableValuesIgnoreCase);
+        if (nativeVariants.length === 1) {
+          return this.processInstanceService.queryProcessInstances(nativeVariants[0], firstResult, maxResults);
+        }
+        const nativeNeeded = Math.min(firstResult + maxResults, this.CAMUNDA_QUERY_MAX);
+        return forkJoin(
+          nativeVariants.map(body => this.processInstanceService.queryProcessInstances(body, 0, nativeNeeded))
+        ).pipe(map(resultArrays => this.mergeSortSlice(resultArrays, firstResult, maxResults)));
+      }
+      return this.searchPerState(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase, firstResult, maxResults, cache);
+    }
+    const variants = this.buildPayloadVariants(filters, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    if (variants.length === 1) {
+      return this.processInstanceService.queryProcessInstances(variants[0], firstResult, maxResults);
+    }
+
+    const needed = Math.min(firstResult + maxResults, this.CAMUNDA_QUERY_MAX);
+    return forkJoin(
+      variants.map(body => this.processInstanceService.queryProcessInstances(body, 0, needed))
+    ).pipe(map(resultArrays => this.mergeSortSlice(resultArrays, firstResult, maxResults)));
+  }
+
+  searchProcessInstancesGlobalCount(
+    filters: MultiValueFilter[],
+    variableNamesIgnoreCase = false,
+    variableValuesIgnoreCase = false
+  ): Observable<number> {
+    const statePill = filters.find(f => f.field === 'state');
+    if (statePill && this.isExhaustiveStateSelection(statePill.values)) {
+      filters = filters.filter(f => f.field !== 'state');
+    } else if (statePill && (statePill.values.length > 1 || statePill.values[0] === 'terminated')) {
+      const nativeFlag = this.resolveNativeStateFlag(statePill.values);
+      if (nativeFlag) {
+        const resolved: MultiValueFilter[] = [{ field: 'state', values: [nativeFlag] }, ...filters.filter(f => f.field !== 'state')];
+        const nativeVariants = this.buildPayloadVariants(resolved, variableNamesIgnoreCase, variableValuesIgnoreCase);
+        if (nativeVariants.length === 1) {
+          return this.processInstanceService.queryProcessInstancesCount(nativeVariants[0]);
+        }
+        return forkJoin(
+          nativeVariants.map(body => this.processInstanceService.queryProcessInstancesCount(body))
+        ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
+      }
+      return this.countPerState(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    }
+    const variants = this.buildPayloadVariants(filters, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    if (variants.length === 1) {
+      return this.processInstanceService.queryProcessInstancesCount(variants[0]);
+    }
+    if (filters.some(f => f.field === 'state')) {
+      return forkJoin(
+        variants.map(body => this.processInstanceService.queryProcessInstancesCount(body))
+      ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
+    }
+    return forkJoin(
+      variants.map(body => this.processInstanceService.queryProcessInstances(body, 0, this.CAMUNDA_QUERY_MAX))
+    ).pipe(map(resultArrays => {
+      const seen = new Set<string>();
+      for (const items of resultArrays) for (const item of items) if (item.id) seen.add(item.id);
+      return seen.size;
+    }));
+  }
+
+  private static readonly ALL_STATE_VALUES = new Set<string>(['active', 'suspended', 'completed', 'terminated']);
+
+  private isExhaustiveStateSelection(stateValues: string[]): boolean {
+    return stateValues.length === CockpitService.ALL_STATE_VALUES.size &&
+      stateValues.every(v => CockpitService.ALL_STATE_VALUES.has(v));
+  }
+
+  private resolveNativeStateFlag(stateValues: string[]): string | null {
+    const sorted = [...stateValues].sort().join(',');
+    if (sorted === 'active,suspended') return 'unfinished';
+    if (sorted === 'completed,terminated') return 'finished';
+    return null;
+  }
+
+  // Returns the state-specific body fragments (flags only, no other criteria)
+  private stateBodyFragment(stateVal: string): Record<string, unknown>[] {
+    switch (stateVal) {
+      case 'active':    return [{ active: true, unfinished: true }];
+      case 'suspended': return [{ suspended: true, unfinished: true }];
+      case 'completed': return [{ completed: true, finished: true }];
+      case 'terminated': return [
+        { finished: true, externallyTerminated: true },
+        { finished: true, internallyTerminated: true }
+      ];
+      default: return [];
+    }
+  }
+
+  private buildPerStateBodies(
+    filters: MultiValueFilter[],
+    statePill: MultiValueFilter,
+    variableNamesIgnoreCase: boolean,
+    variableValuesIgnoreCase: boolean
+  ): any[] {
+    const otherFilters = filters.filter(f => f.field !== 'state');
+    const baseVariants = this.buildPayloadVariants(otherFilters, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    return statePill.values.flatMap(
+      stateVal => this.stateBodyFragment(stateVal).flatMap(
+        flags => baseVariants.map(variant => ({ ...variant, ...flags }))
+      )
+    );
+  }
+
+  private searchPerState(
+    filters: MultiValueFilter[],
+    statePill: MultiValueFilter,
+    variableNamesIgnoreCase: boolean,
+    variableValuesIgnoreCase: boolean,
+    firstResult: number,
+    maxResults: number,
+    cache?: Map<string, ProcessInstance[]>
+  ): Observable<ProcessInstance[]> {
+    const needed = Math.min(firstResult + maxResults, this.CAMUNDA_QUERY_MAX);
+    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+
+    const fetches: Observable<ProcessInstance[]>[] = bodies.map(body => {
+      const key = JSON.stringify(body);
+      const cached = cache?.get(key) ?? [];
+
+      if (cached.length >= needed) {
+        return of(cached.slice(0, needed));
+      }
+
+      return this.processInstanceService.queryProcessInstances(body, cached.length, needed - cached.length).pipe(
+        map(delta => {
+          const full = [...cached, ...delta];
+          cache?.set(key, full);
+          return full.slice(0, needed);
+        })
+      );
+    });
+
+    return forkJoin(fetches).pipe(
+      map(resultArrays => this.mergeSortSlice(resultArrays, firstResult, maxResults))
+    );
+  }
+
+  searchPerStatePaged(
+    filters: MultiValueFilter[],
+    statePill: MultiValueFilter,
+    variableNamesIgnoreCase: boolean,
+    variableValuesIgnoreCase: boolean,
+    pageSize: number,
+    cursor: MultiStateCursor | null
+  ): Observable<KeysetPage> {
+    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    const ps = +pageSize;
+    const bkFilter = filters.find(f => f.field === 'businessKey');
+    const fetchSize = (bkFilter && bkFilter.values.length > 1) ? this.CAMUNDA_QUERY_MAX : ps + 1;
+    const currentOffsets = cursor?.offsets ?? {};
+
+    const fetches = bodies.map((body, idx) => {
+      const offset = currentOffsets[String(idx)] ?? 0;
+      return this.processInstanceService
+        .queryProcessInstances(body, offset, fetchSize)
+        .pipe(map(items => ({ items, idx })));
+    });
+
+    return forkJoin(fetches).pipe(
+      map(results => {
+        const itemBodies = new Map<string, Set<number>>();
+        for (const { items, idx } of results) {
+          for (const item of items) {
+            if (!itemBodies.has(item.id)) itemBodies.set(item.id, new Set());
+            itemBodies.get(item.id)!.add(idx);
+          }
+        }
+
+        const seen = new Set<string>();
+        const allUnique: ProcessInstance[] = [];
+        for (const { items } of results) {
+          for (const item of items) {
+            if (item.id && !seen.has(item.id)) {
+              seen.add(item.id);
+              allUnique.push(item);
+            }
+          }
+        }
+
+        allUnique.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+
+        const hasMore = allUnique.length > ps;
+        const pageItems = allUnique.slice(0, ps);
+
+        const consumed = new Map<number, number>();
+        for (const item of pageItems) {
+          for (const bodyIdx of (itemBodies.get(item.id) ?? new Set())) {
+            consumed.set(bodyIdx, (consumed.get(bodyIdx) ?? 0) + 1);
+          }
+        }
+
+        const nextOffsets: Record<string, number> = {};
+        for (let i = 0; i < bodies.length; i++) {
+          const key = String(i);
+          nextOffsets[key] = (currentOffsets[key] ?? 0) + (consumed.get(i) ?? 0);
+        }
+
+        return { items: pageItems, nextCursor: { offsets: nextOffsets }, hasMore };
+      })
+    );
+  }
+
+  private mergeSortSlice(resultArrays: ProcessInstance[][], firstResult: number, maxResults: number): ProcessInstance[] {
+    const seen = new Set<string>();
+    const merged: ProcessInstance[] = [];
+    for (const arr of resultArrays) {
+      for (const inst of arr) {
+        if (inst.id && !seen.has(inst.id)) { seen.add(inst.id); merged.push(inst); }
+      }
+    }
+    merged.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+    return merged.slice(firstResult, firstResult + maxResults);
+  }
+
+
+  private countPerState(
+    filters: MultiValueFilter[],
+    statePill: MultiValueFilter,
+    variableNamesIgnoreCase: boolean,
+    variableValuesIgnoreCase: boolean
+  ): Observable<number> {
+    const bodies = this.buildPerStateBodies(filters, statePill, variableNamesIgnoreCase, variableValuesIgnoreCase);
+    const bkFilter = filters.find(f => f.field === 'businessKey');
+    if (!bkFilter || bkFilter.values.length <= 1) {
+      return forkJoin(
+        bodies.map(body => this.processInstanceService.queryProcessInstancesCount(body))
+      ).pipe(map(counts => counts.reduce((sum, c) => sum + c, 0)));
+    }
+    return forkJoin(
+      bodies.map(body => this.processInstanceService.queryProcessInstances(body, 0, this.CAMUNDA_QUERY_MAX))
+    ).pipe(
+      map(resultArrays => {
+        const seen = new Set<string>();
+        for (const items of resultArrays) {
+          for (const item of items) {
+            if (item.id) seen.add(item.id);
+          }
+        }
+        return seen.size;
+      })
+    );
   }
 
   // ============================================

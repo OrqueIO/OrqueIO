@@ -12,6 +12,7 @@ import {
 } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { initTestEnvironment } from '../../../../testing/test-utils';
+import { TranslateService } from '../../../../i18n/translate.service';
 
 describe('DecisionInstanceComponent', () => {
   beforeAll(() => { initTestEnvironment(); });
@@ -419,7 +420,9 @@ describe('DecisionInstanceComponent', () => {
   describe('formatType', () => {
     beforeEach(() => { createComponent(); });
 
-    it('should return "Unknown" for undefined', () => {
+    it('should return the translated "Unknown" for undefined', () => {
+      const translate = TestBed.inject(TranslateService);
+      vi.spyOn(translate, 'instant').mockImplementation(key => key === 'common.unknown' ? 'Unknown' : key);
       expect(component.formatType(undefined)).toBe('Unknown');
     });
 
@@ -433,26 +436,6 @@ describe('DecisionInstanceComponent', () => {
 
     it('should extract class name from deeply nested type', () => {
       expect(component.formatType('com.example.domain.MyClass')).toBe('MyClass');
-    });
-  });
-
-  describe('truncateId', () => {
-    beforeEach(() => { createComponent(); });
-
-    it('should truncate id longer than default 8 chars', () => {
-      expect(component.truncateId('abcdefghijk')).toBe('abcdefgh...');
-    });
-
-    it('should not truncate id equal to limit', () => {
-      expect(component.truncateId('abcdefgh')).toBe('abcdefgh');
-    });
-
-    it('should handle custom length', () => {
-      expect(component.truncateId('hello world', 5)).toBe('hello...');
-    });
-
-    it('should handle empty string', () => {
-      expect(component.truncateId('')).toBe('');
     });
   });
 

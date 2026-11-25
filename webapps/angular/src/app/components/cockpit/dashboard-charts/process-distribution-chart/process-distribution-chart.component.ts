@@ -24,6 +24,8 @@ import {
 } from '../../../../models/cockpit/dashboard-charts.model';
 import * as DashboardActions from '../../../../store/cockpit/dashboard/dashboard.actions';
 import * as DashboardSelectors from '../../../../store/cockpit/dashboard/dashboard.selectors';
+import { TranslateService } from '../../../../i18n/translate.service';
+import { skip } from 'rxjs';
 
 @Component({
   selector: 'app-process-distribution-chart',
@@ -118,6 +120,7 @@ export class ProcessDistributionChartComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
+  private translate = inject(TranslateService);
 
   private chart: Chart<'doughnut'> | null = null;
   private isChartEmpty = false; // Track if chart was created in empty state
@@ -147,6 +150,11 @@ export class ProcessDistributionChartComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToStore(): void {
+    // Labels are translated when the chart is drawn: redraw them when the language changes
+    this.translate.currentLang$
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.updateChart());
+
     // Get actual running instances count from dashboard stats
     this.store.select(DashboardSelectors.selectDashboardStats)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -200,7 +208,7 @@ export class ProcessDistributionChartComponent implements OnInit, OnDestroy {
     // If no process distribution data, show empty gray doughnut with totalInstances in center
     if (!hasData) {
       const emptyData = [1];
-      const emptyLabels = ['No data'];
+      const emptyLabels = [this.translate.instant('cockpit.charts.empty.noData')];
       const emptyColors = ['#e0e0e0'];
 
       if (!this.chart) {
