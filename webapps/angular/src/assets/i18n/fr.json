@@ -127,6 +127,7 @@
   "common.breadcrumb": "Fil d'Ariane",
   "common.latest": "dernière",
   "common.versionNumber": "Version {{version}}",
+  "common.versionCount": "{{count}} versions",
   "common.emptyValue": "Vide",
   "common.loadingDiagram": "Chargement du diagramme...",
   "common.loadingDmn": "Chargement du DMN...",

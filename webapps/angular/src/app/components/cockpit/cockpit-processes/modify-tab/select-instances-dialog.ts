@@ -2315,7 +2315,7 @@ export class SelectInstancesDialogComponent implements OnInit, OnDestroy {
 
   private formatDisplayDate(iso: string): string {
     if (!iso) return '';
-    try { return new Date(iso).toLocaleDateString(); }
+    try { return new Date(iso).toLocaleDateString(this.translateService.locale); }
     catch { return iso; }
   }
 }

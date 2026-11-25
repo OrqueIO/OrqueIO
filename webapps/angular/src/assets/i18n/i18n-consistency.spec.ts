@@ -17,6 +17,21 @@ function tokens(text: string): string[] {
   return (text.match(/\{\{\s*[\w.]+\s*\}\}|<\/?\w+/g) ?? []).map(t => t.replace(/\s/g, '')).sort();
 }
 
+// JSON.parse silently keeps the last of two identical keys, so duplicates are found in the raw text
+function duplicateKeys(lang: string): string[] {
+  const raw = readFileSync(join(I18N_DIR, `${lang}.json`), 'utf-8');
+  const keys = [...raw.matchAll(/^\s*"((?:[^"\\]|\\.)*)"\s*:/gm)].map(m => m[1]);
+  return keys.filter((key, i) => keys.indexOf(key) !== i);
+}
+
+describe('i18n files have no duplicate key', () => {
+  for (const lang of [REFERENCE, ...LANGUAGES]) {
+    it(`${lang}.json`, () => {
+      expect(duplicateKeys(lang)).toEqual([]);
+    });
+  }
+});
+
 describe('i18n consistency with en.json', () => {
   const reference = load(REFERENCE);
   const referenceKeys = Object.keys(reference);

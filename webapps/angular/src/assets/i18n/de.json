@@ -126,6 +126,7 @@
   "common.breadcrumb": "Brotkrümelnavigation",
   "common.latest": "neueste",
   "common.versionNumber": "Version {{version}}",
+  "common.versionCount": "{{count}} Versionen",
   "common.emptyValue": "Leer",
   "common.loadingDiagram": "Diagramm wird geladen...",
   "common.loadingDmn": "DMN wird geladen...",

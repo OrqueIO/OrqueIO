@@ -567,7 +567,7 @@
                       <td>
                         <span class="state-badge" [ngClass]="jobDef.suspended ? 'state-suspended' : 'state-active'">
                           <fa-icon [icon]="jobDef.suspended ? faPauseCircle : faPlayCircle"></fa-icon>
-                          {{ jobDef.suspended ? 'Suspended' : 'Active' }}
+                          {{ (jobDef.suspended ? 'cockpit.processes.filters.stateSuspended' : 'cockpit.processes.filters.stateActive') | translate }}
                         </span>
                       </td>
                       <td>{{ jobDef.activityId }}</td>

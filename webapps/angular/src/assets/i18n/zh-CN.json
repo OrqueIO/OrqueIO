@@ -141,6 +141,7 @@
   "common.breadcrumb": "面包屑导航",
   "common.latest": "最新",
   "common.versionNumber": "版本 {{version}}",
+  "common.versionCount": "{{count}} 个版本",
   "common.emptyValue": "空",
   "common.loadingDiagram": "正在加载图表...",
   "common.loadingDmn": "正在加载 DMN...",
@@ -746,7 +747,6 @@
   "cockpit.tasks.title": "人工任务",
   "cockpit.tasks.assignee": "办理人",
   "cockpit.tasks.filterByAssignee": "按办理人筛选...",
-  "cockpit.tasks.pageSize": "每页大小",
   "cockpit.tasks.filter": "筛选",
   "cockpit.tasks.showing": "显示",
   "cockpit.tasks.of": "共",
@@ -1178,8 +1178,6 @@
   "AUTHORIZATION_ALLOW": "允许",
   "AUTHORIZATION_DENY": "拒绝",
 
-  "AUTHORIZATION_USER": "用户",
-  "AUTHORIZATION_GROUP": "组",
   "AUTHORIZATION_ALL_USERS": "所有用户",
   "AUTHORIZATION_USER_ID_PLACEHOLDER": "输入用户 ID",
   "AUTHORIZATION_GROUP_ID_PLACEHOLDER": "输入组 ID",
@@ -1258,7 +1256,6 @@
   "tasklist.setAssignee": "设置办理人",
   "tasklist.delegate": "委派",
   "tasklist.addComment": "添加评论",
-  "tasklist.setDueDate": "设置到期日期",
   "tasklist.setFollowUp": "设置跟进日期",
   "tasklist.moreActions": "更多操作",
 

@@ -27,6 +27,8 @@ export class TranslateService {
     const savedLang = this.getSavedLanguage();
     this.currentLangSubject = new BehaviorSubject<Language>(savedLang);
     this.currentLang$ = this.currentLangSubject.asObservable();
+    // Screen readers and font selection (Simplified vs Traditional glyphs) follow <html lang>
+    this.document.documentElement.lang = savedLang;
     // Initial load is handled exclusively by APP_INITIALIZER (app.config.ts).
     // Do NOT call loadLanguage() here: if en.json is in the browser HTTP cache,
     // this fire-and-forget call could resolve before APP_INITIALIZER runs,
@@ -134,6 +136,7 @@ export class TranslateService {
   async setLanguage(lang: Language): Promise<void> {
     await this.loadLanguage(lang);
     localStorage.setItem(this.STORAGE_KEY, lang);
+    this.document.documentElement.lang = lang;
     this.currentLangSubject.next(lang);
   }
 

@@ -127,6 +127,7 @@
   "common.breadcrumb": "Breadcrumb",
   "common.latest": "latest",
   "common.versionNumber": "Version {{version}}",
+  "common.versionCount": "{{count}} versions",
   "common.emptyValue": "Empty",
   "common.loadingDiagram": "Loading diagram...",
   "common.loadingDmn": "Loading DMN...",

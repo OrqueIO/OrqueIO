@@ -1353,7 +1353,7 @@ export class InstanceFilterPanelComponent implements OnInit, OnChanges {
 
   private formatDisplayDate(isoStr: string): string {
     if (!isoStr) return '';
-    try { return new Date(isoStr).toLocaleDateString(); }
+    try { return new Date(isoStr).toLocaleDateString(this.translateService.locale); }
     catch { return isoStr; }
   }
 }

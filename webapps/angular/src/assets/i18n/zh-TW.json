@@ -141,6 +141,7 @@
   "common.breadcrumb": "麵包屑導覽",
   "common.latest": "最新",
   "common.versionNumber": "版本 {{version}}",
+  "common.versionCount": "{{count}} 個版本",
   "common.emptyValue": "空",
   "common.loadingDiagram": "正在載入圖表...",
   "common.loadingDmn": "正在載入 DMN...",
@@ -746,7 +747,6 @@
   "cockpit.tasks.title": "人工任務",
   "cockpit.tasks.assignee": "受派人",
   "cockpit.tasks.filterByAssignee": "依受派人篩選...",
-  "cockpit.tasks.pageSize": "每頁大小",
   "cockpit.tasks.filter": "篩選",
   "cockpit.tasks.showing": "顯示",
   "cockpit.tasks.of": "共",
@@ -1178,8 +1178,6 @@
   "AUTHORIZATION_ALLOW": "允許",
   "AUTHORIZATION_DENY": "拒絕",
 
-  "AUTHORIZATION_USER": "使用者",
-  "AUTHORIZATION_GROUP": "群組",
   "AUTHORIZATION_ALL_USERS": "所有使用者",
   "AUTHORIZATION_USER_ID_PLACEHOLDER": "輸入使用者 ID",
   "AUTHORIZATION_GROUP_ID_PLACEHOLDER": "輸入群組 ID",
@@ -1258,7 +1256,6 @@
   "tasklist.setAssignee": "設定受派人",
   "tasklist.delegate": "委派",
   "tasklist.addComment": "新增評論",
-  "tasklist.setDueDate": "設定到期日",
   "tasklist.setFollowUp": "設定跟進日期",
   "tasklist.moreActions": "更多操作",
 

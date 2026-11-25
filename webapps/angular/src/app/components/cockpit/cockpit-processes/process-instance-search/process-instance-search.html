@@ -376,7 +376,7 @@
                       (click)="toggleProcessDefinitionKey(group.key)" type="button">
                 <fa-icon [icon]="faSitemap" class="processdef-row-icon"></fa-icon>
                 <span class="state-row-label">{{ group.name }}</span>
-                <span *ngIf="group.versions.length > 1" class="processdef-version-count">{{ group.versions.length }} versions</span>
+                <span *ngIf="group.versions.length > 1" class="processdef-version-count">{{ 'common.versionCount' | translate: { count: group.versions.length + '' } }}</span>
                 <fa-icon *ngIf="isProcessGroupSelected(group)" [icon]="faCheck" class="state-row-check"></fa-icon>
               </button>
             </div>
