@@ -123,58 +123,36 @@ describe('InstanceFilterPanelComponent — Batch Apply button BUG', () => {
 
   describe('[BUG] Status (completed) criterion Apply button', () => {
     it('should create pill and emit event when Status → Completed → Apply clicked', async () => {
-      component.selectCriteriaType('completed');
+      // New behavior: batchCompleted is a direct criterion with no popover/Apply button
+      component.selectCriteriaType('batchCompleted');
       fixture.detectChanges();
       await fixture.whenStable();
 
-      const statusButtons = compiled.querySelectorAll('.editor-popover-body--state .state-row');
-      expect(statusButtons.length).toBe(2);
-
-      const completedButton = Array.from(statusButtons).find(b =>
-        b.querySelector('.state-row-label')?.textContent?.trim() === 'Completed'
-      ) as HTMLButtonElement;
-      expect(completedButton).toBeTruthy();
-      completedButton.click();
-      fixture.detectChanges();
-      await fixture.whenStable();
-
-      expect(component.pendingValues).toEqual(['true']);
-
-      const applyButton = compiled.querySelector('.btn-editor-confirm-icon') as HTMLButtonElement;
-      expect(applyButton).toBeTruthy();
-      applyButton.click();
-      fixture.detectChanges();
-      await fixture.whenStable();
-
+      // Pill is created immediately (no Apply button needed)
       expect(component.activePills.length).toBe(1);
-      expect(component.activePills[0].field).toBe('completed');
-      expect(component.activePills[0].values).toEqual(['true']);
+      expect(component.activePills[0].field).toBe('batchCompleted');
+      expect(component.activePills[0].values).toEqual([]);
 
+      // Event is emitted immediately
       expect(emittedEvents.length).toBe(1);
-      expect(emittedEvents[0].criteria[0].field).toBe('completed');
-      expect(emittedEvents[0].criteria[0].values).toEqual(['true']);
+      expect(emittedEvents[0].criteria[0].field).toBe('batchCompleted');
+      expect(emittedEvents[0].criteria[0].values).toEqual([]);
     });
 
     it('should create pill when Status → Running → Apply clicked', async () => {
-      component.selectCriteriaType('completed');
+      // New behavior: batchRunning is a direct criterion with no popover/Apply button
+      component.selectCriteriaType('batchRunning');
       fixture.detectChanges();
 
-      const statusButtons = compiled.querySelectorAll('.editor-popover-body--state .state-row');
-      const runningButton = Array.from(statusButtons).find(b =>
-        b.querySelector('.state-row-label')?.textContent?.trim() === 'Running'
-      ) as HTMLButtonElement;
-      runningButton.click();
-      fixture.detectChanges();
-
-      expect(component.pendingValues).toEqual(['false']);
-
-      const applyButton = compiled.querySelector('.btn-editor-confirm-icon') as HTMLButtonElement;
-      applyButton.click();
-      fixture.detectChanges();
-
+      // Pill is created immediately (no Apply button needed)
       expect(component.activePills.length).toBe(1);
-      expect(component.activePills[0].field).toBe('completed');
-      expect(component.activePills[0].values).toEqual(['false']);
+      expect(component.activePills[0].field).toBe('batchRunning');
+      expect(component.activePills[0].values).toEqual([]);
+
+      // Event is emitted immediately
+      expect(emittedEvents.length).toBe(1);
+      expect(emittedEvents[0].criteria[0].field).toBe('batchRunning');
+      expect(emittedEvents[0].criteria[0].values).toEqual([]);
     });
   });
 

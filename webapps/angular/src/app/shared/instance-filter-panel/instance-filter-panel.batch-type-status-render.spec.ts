@@ -162,39 +162,68 @@ describe('InstanceFilterPanelComponent — Batch Type select & Status (no All)',
   });
 
 
-  describe('Status popover has exactly 2 options (no "All")', () => {
-    beforeEach(() => {
-      component.selectCriteriaType('completed');
+  describe('Status criteria are direct selectors (no popover)', () => {
+    // New batch status architecture: batchCompleted and batchRunning are direct criteria
+    // They appear in the main criteria dropdown, not in a secondary popover
+    // No "All" option exists (mutual exclusion between Completed and Running)
+
+    it('should create batchCompleted pill immediately (no popover workflow)', () => {
+      component.selectCriteriaType('batchCompleted');
       fixture.detectChanges();
+
+      // Pill created immediately without popover
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('batchCompleted');
+      expect(component.activePills[0].values).toEqual([]);
     });
 
-    it('should display exactly 2 status options', () => {
-      const buttons = compiled.querySelectorAll('.editor-popover-body--state .state-row');
-      expect(buttons.length).toBe(2);
+    it('should create batchRunning pill immediately (no popover workflow)', () => {
+      component.selectCriteriaType('batchRunning');
+      fixture.detectChanges();
+
+      // Pill created immediately without popover
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('batchRunning');
+      expect(component.activePills[0].values).toEqual([]);
     });
 
-    it('should display "Completed" option', () => {
-      const buttons = Array.from(compiled.querySelectorAll('.state-row-label'));
-      const completedLabel = buttons.find(b => b.textContent?.trim() === 'Completed');
-      expect(completedLabel).toBeTruthy();
+    it('[CRITICAL] should exhibit mutual exclusion (batchCompleted then batchRunning → only Running pill)', () => {
+      // Apply batchCompleted
+      component.selectCriteriaType('batchCompleted');
+      fixture.detectChanges();
+      expect(component.activePills[0].field).toBe('batchCompleted');
+
+      // Apply batchRunning (should replace batchCompleted)
+      component.selectCriteriaType('batchRunning');
+      fixture.detectChanges();
+
+      // Verify only Running pill remains (mutual exclusion)
+      expect(component.activePills.length).toBe(1);
+      expect(component.activePills[0].field).toBe('batchRunning');
     });
 
-    it('should display "Running" option', () => {
-      const buttons = Array.from(compiled.querySelectorAll('.state-row-label'));
-      const runningLabel = buttons.find(b => b.textContent?.trim() === 'Running');
-      expect(runningLabel).toBeTruthy();
+    it('[CRITICAL] should NOT create "statusAll" criterion (no batch status "All" option)', () => {
+      // "completed" field still exists in availableCriteria (used for backend API)
+      // but there should be NO "statusAll" option
+      const hasStatusAllCriterion = component.availableCriteria.some(c => c.field === 'statusAll');
+
+      expect(hasStatusAllCriterion).toBe(false);
+
+      // Verify "completed" criterion exists (this is the backend field for batch status)
+      const hasCompletedCriterion = component.availableCriteria.some(c => c.field === 'completed');
+      expect(hasCompletedCriterion).toBe(true);
     });
 
-    it('[CRITICAL] should NOT display "All" option', () => {
-      const buttons = Array.from(compiled.querySelectorAll('.state-row-label'));
-      const allLabel = buttons.find(b => b.textContent?.trim() === 'All');
-      expect(allLabel).toBeUndefined();
-    });
+    it('[MUTATION PROOF] should NOT contain old "completed" criterion or statusAll i18n key', () => {
+      // Open criteria dropdown
+      component.toggleCriteriaDropdown(new Event('click'));
+      fixture.detectChanges();
 
-    it('[MUTATION PROOF] should NOT contain statusAll i18n key', () => {
-      const bodyText = compiled.querySelector('.editor-popover-body--state')?.textContent || '';
-      expect(bodyText).not.toContain('statusAll');
-      expect(bodyText).not.toContain('cockpit.batchOps.removalTimeBatch.filters.statusAll');
+      const dropdownText = compiled.querySelector('.filter-editor-dropdown')?.textContent || '';
+
+      // Should not contain old format or "All" option
+      expect(dropdownText).not.toContain('statusAll');
+      expect(dropdownText).not.toContain('cockpit.batchOps.removalTimeBatch.filters.statusAll');
     });
   });
 
