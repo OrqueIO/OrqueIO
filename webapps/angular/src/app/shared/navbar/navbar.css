@@ -370,20 +370,8 @@
   border-color: #d1d5db;
 }
 
-.lang-toggle .lang-flag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 14px;
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.lang-toggle .lang-flag svg {
-  display: block;
-  border-radius: 2px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+.lang-toggle .lang-globe {
+  font-size: 0.875rem;
 }
 
 .lang-toggle .lang-label {
@@ -450,23 +438,6 @@
   background: #eff6ff;
   color: #3b82f6;
   font-weight: 600;
-}
-
-.language-menu-item .lang-flag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 14px;
-  border-radius: 2px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.language-menu-item .lang-flag svg {
-  display: block;
-  border-radius: 2px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
 }
 
 .language-menu-item .lang-name {
@@ -665,7 +636,7 @@
     gap: 0.5rem;
   }
 
-  /* On small screens, the language trigger only shows the flag and the caret */
+  /* On small screens, the language trigger only shows the globe and the caret */
   .lang-toggle .lang-label {
     display: none;
   }

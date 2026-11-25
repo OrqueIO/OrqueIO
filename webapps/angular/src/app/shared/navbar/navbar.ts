@@ -4,7 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faUser, faSignOutAlt, faEllipsisH, faChevronDown, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSignOutAlt, faEllipsisH, faChevronDown, faCheck, faGlobe } from '@fortawesome/free-solid-svg-icons';
 import { TranslatePipe } from '../../i18n/translate.pipe';
 import { TranslateService, Language } from '../../i18n/translate.service';
 import { AuthService } from '../../services/auth';
@@ -23,7 +23,6 @@ export interface LanguageOption {
   value: Language;
   label: string;
   shortLabel: string;
-  flag: string;
 }
 
 @Component({
@@ -53,68 +52,32 @@ export class NavbarComponent implements OnInit {
    * - value: Language code passed to TranslateService
    * - label: Name displayed in the dropdown menu
    * - shortLabel: Short label displayed on the trigger button
-   * - flag: Inline SVG flag
    */
   readonly languageOptions: LanguageOption[] = [
     {
       value: 'fr',
       label: 'Français',
-      shortLabel: 'FR',
-      flag: `<svg viewBox="0 0 3 2" width="22" height="14">
-        <rect width="1" height="2" fill="#002395"/>
-        <rect width="1" height="2" x="1" fill="#fff"/>
-        <rect width="1" height="2" x="2" fill="#ED2939"/>
-      </svg>`
+      shortLabel: 'FR'
     },
     {
       value: 'en',
       label: 'English',
-      shortLabel: 'EN',
-      flag: `<svg viewBox="0 0 50 30" width="22" height="14">
-        <rect width="50" height="30" fill="#012169"/>
-        <path d="M0,0 L50,30 M50,0 L0,30" stroke="#fff" stroke-width="6"/>
-        <path d="M0,0 L50,30" stroke="#C8102E" stroke-width="2"/>
-        <path d="M50,0 L0,30" stroke="#C8102E" stroke-width="2"/>
-        <path d="M25,0 V30 M0,15 H50" stroke="#fff" stroke-width="10"/>
-        <path d="M25,0 V30 M0,15 H50" stroke="#C8102E" stroke-width="6"/>
-      </svg>`
+      shortLabel: 'EN'
     },
     {
       value: 'de',
       label: 'Deutsch',
-      shortLabel: 'DE',
-      flag: `<svg viewBox="0 0 5 3" width="22" height="14">
-        <rect width="5" height="1" fill="#000"/>
-        <rect width="5" height="1" y="1" fill="#DD0000"/>
-        <rect width="5" height="1" y="2" fill="#FFCE00"/>
-      </svg>`
+      shortLabel: 'DE'
     },
     {
       value: 'zh-CN',
       label: '简体中文',
-      shortLabel: '简',
-      flag: `<svg viewBox="0 0 30 20" width="22" height="14">
-        <rect width="30" height="20" fill="#DE2910"/>
-        <g fill="#FFDE00">
-          <path d="M5,3 l0.9,2.8 h2.9 l-2.4,1.7 l0.9,2.8 l-2.3,-1.8 l-2.3,1.8 l0.9,-2.8 l-2.4,-1.7 h2.9 z"/>
-          <circle cx="10" cy="3.2" r="0.9"/>
-          <circle cx="12" cy="5" r="0.9"/>
-          <circle cx="12" cy="7.5" r="0.9"/>
-          <circle cx="10" cy="9.3" r="0.9"/>
-        </g>
-      </svg>`
+      shortLabel: '简'
     },
     {
       value: 'zh-TW',
       label: '繁體中文',
-      shortLabel: '繁',
-      flag: `<svg viewBox="0 0 30 20" width="22" height="14">
-        <rect width="30" height="20" fill="#FE0000"/>
-        <rect width="15" height="10" fill="#000095"/>
-        <polygon fill="#fff" points="7.50,1.40 8.04,2.97 9.30,1.88 8.98,3.52 10.62,3.20 9.53,4.46 11.10,5.00 9.53,5.54 10.62,6.80 8.98,6.48 9.30,8.12 8.04,7.03 7.50,8.60 6.96,7.03 5.70,8.12 6.02,6.48 4.38,6.80 5.47,5.54 3.90,5.00 5.47,4.46 4.38,3.20 6.02,3.52 5.70,1.88 6.96,2.97"/>
-        <circle cx="7.5" cy="5" r="2.1" fill="#000095"/>
-        <circle cx="7.5" cy="5" r="1.8" fill="#fff"/>
-      </svg>`
+      shortLabel: '繁'
     }
   ];
 
@@ -123,6 +86,7 @@ export class NavbarComponent implements OnInit {
   faSignOut = faSignOutAlt;
   faEllipsisH = faEllipsisH;
   faChevronDown = faChevronDown;
+  faGlobe = faGlobe;
   faCheck = faCheck;
 
   @ViewChild('langToggle') private langToggle?: ElementRef<HTMLButtonElement>;
@@ -131,7 +95,6 @@ export class NavbarComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   // Sanitized once so the template does not re-render the SVG on every change detection
-  readonly languageFlags: Record<Language, SafeHtml>;
   currentLanguageOption: LanguageOption;
 
   constructor(
@@ -141,9 +104,6 @@ export class NavbarComponent implements OnInit {
     private navActionsService: NavActionsService,
     private sanitizer: DomSanitizer
   ) {
-    this.languageFlags = Object.fromEntries(
-      this.languageOptions.map(opt => [opt.value, this.sanitizeSvg(opt.flag)])
-    ) as Record<Language, SafeHtml>;
     this.currentLanguageOption = this.getLanguageOption(this.currentLang);
   }
 

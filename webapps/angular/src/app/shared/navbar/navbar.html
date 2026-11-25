@@ -116,7 +116,7 @@
           [attr.aria-label]="currentLanguageOption.label"
           [title]="currentLanguageOption.label"
         >
-          <span class="lang-flag" aria-hidden="true" [innerHTML]="languageFlags[currentLanguageOption.value]"></span>
+          <fa-icon [icon]="faGlobe" class="lang-globe" aria-hidden="true"></fa-icon>
           <span class="lang-label" aria-hidden="true">{{ currentLanguageOption.shortLabel }}</span>
           <fa-icon [icon]="faChevronDown" class="lang-caret" [class.rotated]="languageMenuOpen" aria-hidden="true"></fa-icon>
         </button>
@@ -141,7 +141,6 @@
               [tabindex]="lang.value === currentLang ? 0 : -1"
               (click)="selectLanguage(lang.value, $event)"
             >
-              <span class="lang-flag" aria-hidden="true" [innerHTML]="languageFlags[lang.value]"></span>
               <span class="lang-name">{{ lang.label }}</span>
               <fa-icon
                 *ngIf="lang.value === currentLang"
