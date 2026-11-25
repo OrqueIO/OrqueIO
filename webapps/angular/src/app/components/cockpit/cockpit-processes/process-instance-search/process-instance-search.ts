@@ -1678,4 +1678,8 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
     }
     this.router.navigate(['/cockpit/batch/operations']);
   }
+
+  trackByInstanceId(_index: number, instance: ProcessInstance): string {
+    return instance.id;
+  }
 }

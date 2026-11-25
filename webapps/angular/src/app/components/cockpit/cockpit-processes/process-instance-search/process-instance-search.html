@@ -728,7 +728,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let instance of searchResults"
+                    <tr *ngFor="let instance of searchResults; trackBy: trackByInstanceId"
                         class="result-row"
                         [class.row--selected]="isInstanceSelected(instance.id)">
                       <td class="col-check">

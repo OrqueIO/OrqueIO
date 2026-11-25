@@ -1544,7 +1544,10 @@ describe('CockpitService — large-scale offset pagination stability (>10k rows)
       );
 
       const [body] = queryInstances.mock.calls[0];
-      expect(body.sorting, `firstResult=${firstResult}`).toEqual([{ sortBy: 'startTime', sortOrder: 'desc' }]);
+      expect(body.sorting, `firstResult=${firstResult}`).toEqual([
+        { sortBy: 'startTime', sortOrder: 'desc' },
+        { sortBy: 'instanceId', sortOrder: 'asc' }
+      ]);
     }
   });
 
@@ -1563,7 +1566,10 @@ describe('CockpitService — large-scale offset pagination stability (>10k rows)
       await lastValueFrom(svc.searchProcessInstancesGlobal(filters, false, false, FIRST_RESULT, PAGE_SIZE));
 
       for (const call of queryInstances.mock.calls) {
-        expect(call[0].sorting).toEqual([{ sortBy: 'startTime', sortOrder: 'desc' }]);
+        expect(call[0].sorting).toEqual([
+          { sortBy: 'startTime', sortOrder: 'desc' },
+          { sortBy: 'instanceId', sortOrder: 'asc' }
+        ]);
       }
     }
   });

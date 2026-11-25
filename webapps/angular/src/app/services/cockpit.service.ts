@@ -1408,10 +1408,10 @@ export class CockpitService {
         }
       }
 
-      // Explicit sort so offset pagination is stable at any scale. Without ORDER BY, the DB
-      // optimizer switches from sequential to index scan above ~10k rows, causing offset 15000+
-      // to land on different rows than expected. queryProcessInstancesCount strips this field.
-      body.sorting = [{ sortBy: 'startTime', sortOrder: 'desc' }];
+      body.sorting = [
+        { sortBy: 'startTime', sortOrder: 'desc' },
+        { sortBy: 'instanceId', sortOrder: 'asc' }
+      ];
 
       return body;
     });

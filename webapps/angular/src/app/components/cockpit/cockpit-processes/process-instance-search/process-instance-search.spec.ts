@@ -1582,8 +1582,8 @@ describe('ProcessInstanceSearchComponent — pill editing', () => {
     const statePill = component.activePills[0];
     const bodies = (realSvc as any).buildPerStateBodies([statePill], statePill, false, false);
     expect(bodies.length).toBe(2);
-    expect(bodies[0]).toEqual({ active: true, unfinished: true, sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }] });
-    expect(bodies[1]).toEqual({ suspended: true, unfinished: true, sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }] });
+    expect(bodies[0]).toEqual({ active: true, unfinished: true, sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }, { sortBy: 'instanceId', sortOrder: 'asc' }] });
+    expect(bodies[1]).toEqual({ suspended: true, unfinished: true, sorting: [{ sortBy: 'startTime', sortOrder: 'desc' }, { sortBy: 'instanceId', sortOrder: 'asc' }] });
   });
 });
 
