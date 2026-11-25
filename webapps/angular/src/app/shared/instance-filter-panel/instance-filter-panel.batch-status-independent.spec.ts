@@ -1,47 +1,64 @@
+import 'zone.js';
+import 'zone.js/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InstanceFilterPanelComponent } from './instance-filter-panel';
 import { TranslateService } from '../../i18n/translate.service';
+import { CockpitService } from '../../services/cockpit.service';
+import { DecisionService } from '../../services/decision.service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { ChangeDetectorRef, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import * as fs from 'fs';
 import * as path from 'path';
+import { vi, describe, it, expect, beforeAll, beforeEach } from 'vitest';
+import { initTestEnvironment } from '../../testing/test-utils';
 
 describe('InstanceFilterPanel — Batch Status Independent Entries', () => {
+  beforeAll(() => { initTestEnvironment(); });
   let component: InstanceFilterPanelComponent;
   let fixture: ComponentFixture<InstanceFilterPanelComponent>;
-  let translateService: jasmine.SpyObj<TranslateService>;
+  let translateService: TranslateService;
 
   const enTranslations = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../assets/i18n/en.json'), 'utf-8'));
   const frTranslations = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../assets/i18n/fr.json'), 'utf-8'));
 
   beforeEach(async () => {
-    const translateSpy = jasmine.createSpyObj('TranslateService', ['instant', 'get', 'use', 'currentLang$']);
-    translateSpy.instant.and.callFake((key: string) => enTranslations[key] || key);
-    translateSpy.get.and.returnValue(of(''));
-    translateSpy.currentLang$ = of('en');
+    const mockCockpitService = {
+      getProcessDefinitions: vi.fn().mockReturnValue(of([]))
+    } as any;
+
+    const mockDecisionService = {
+      getDecisionDefinitions: vi.fn().mockReturnValue(of([]))
+    } as any;
 
     await TestBed.configureTestingModule({
       imports: [InstanceFilterPanelComponent],
       providers: [
-        { provide: TranslateService, useValue: translateSpy }
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: CockpitService, useValue: mockCockpitService },
+        { provide: DecisionService, useValue: mockDecisionService }
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(InstanceFilterPanelComponent);
     component = fixture.componentInstance;
-    translateService = TestBed.inject(TranslateService) as jasmine.SpyObj<TranslateService>;
+    translateService = TestBed.inject(TranslateService);
+
+    // Mock translate service with real translations
+    (translateService as any).translations = { en: enTranslations, fr: frTranslations };
   });
 
   describe('Menu rendering (criteriaSet=batch)', () => {
     beforeEach(() => {
       component.criteriaSet = 'batch';
-      component.ngOnInit();
       fixture.detectChanges();
     });
 
     it('should render STATE section header with "State" label', () => {
-      component.showCriteriaDropdown = true;
+      component.toggleCriteriaDropdown(new Event('click'));
       fixture.detectChanges();
       const labels = fixture.debugElement.queryAll(By.css('.criteria-group-label'));
       const stateLabel = labels.find(l => l.nativeElement.textContent.trim() === 'State');
@@ -49,7 +66,7 @@ describe('InstanceFilterPanel — Batch Status Independent Entries', () => {
     });
 
     it('should render "Completed" menu entry with blue icon and correct labels', () => {
-      component.showCriteriaDropdown = true;
+      component.toggleCriteriaDropdown(new Event('click'));
       fixture.detectChanges();
       const buttons = fixture.debugElement.queryAll(By.css('.criteria-option'));
       const completedBtn = buttons.find(b => {
@@ -66,7 +83,7 @@ describe('InstanceFilterPanel — Batch Status Independent Entries', () => {
     });
 
     it('should render "Running" menu entry with amber icon and correct labels', () => {
-      component.showCriteriaDropdown = true;
+      component.toggleCriteriaDropdown(new Event('click'));
       fixture.detectChanges();
       const buttons = fixture.debugElement.queryAll(By.css('.criteria-option'));
       const runningBtn = buttons.find(b => {
@@ -97,7 +114,6 @@ describe('InstanceFilterPanel — Batch Status Independent Entries', () => {
   describe('Pill addition and exclusion logic', () => {
     beforeEach(() => {
       component.criteriaSet = 'batch';
-      component.ngOnInit();
       component.activePills = [];
       fixture.detectChanges();
     });
@@ -200,7 +216,6 @@ describe('InstanceFilterPanel — Batch Status Independent Entries', () => {
   describe('Pill click behavior (removal without edit)', () => {
     beforeEach(() => {
       component.criteriaSet = 'batch';
-      component.ngOnInit();
       component.activePills = [];
       fixture.detectChanges();
     });

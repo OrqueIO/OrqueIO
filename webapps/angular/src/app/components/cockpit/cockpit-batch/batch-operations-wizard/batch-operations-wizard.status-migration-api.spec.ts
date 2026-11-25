@@ -1,3 +1,5 @@
+import 'zone.js';
+import 'zone.js/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BatchOperationsWizardComponent } from './batch-operations-wizard';
 import { CockpitService } from '../../../../services/cockpit.service';
@@ -6,20 +8,28 @@ import { HttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { of } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
+import { vi, describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
+import { initTestEnvironment } from '../../../../testing/test-utils';
 
 describe('BatchOperationsWizard — Status Migration and API Params', () => {
+  beforeAll(() => { initTestEnvironment(); });
+
   let component: BatchOperationsWizardComponent;
   let fixture: ComponentFixture<BatchOperationsWizardComponent>;
   let httpMock: HttpTestingController;
 
   beforeEach(async () => {
-    const translateSpy = jasmine.createSpyObj('TranslateService', ['instant', 'get', 'use', 'currentLang$']);
-    translateSpy.instant.and.callFake((key: string) => key);
-    translateSpy.get.and.returnValue(of(''));
-    translateSpy.currentLang$ = of('en');
+    const translateSpy = {
+      instant: vi.fn((key: string) => key),
+      get: vi.fn(() => of('')),
+      use: vi.fn(),
+      currentLang$: of('en')
+    };
 
-    const cockpitSpy = jasmine.createSpyObj('CockpitService', ['getBatches', 'getProcessInstances']);
-    cockpitSpy.getBatches.and.returnValue(of({ items: [], total: 0 }));
+    const cockpitSpy = {
+      getBatches: vi.fn(() => of({ items: [], total: 0 })),
+      getProcessInstances: vi.fn()
+    };
 
     await TestBed.configureTestingModule({
       imports: [BatchOperationsWizardComponent],
@@ -44,13 +54,13 @@ describe('BatchOperationsWizard — Status Migration and API Params', () => {
   describe('SessionStorage migration (old "completed" → new format)', () => {
     it('should migrate { field: "completed", values: ["true"] } to { field: "batchCompleted", values: [] }', () => {
       const oldState = {
-        selectedOperationId: 'removal-time-batch',
-        step: 1,
+        operationId: 'removal-time-batch',
+        step: 2,
         batchFilterCriteria: [
           { field: 'completed', values: ['true'] }
         ]
       };
-      sessionStorage.setItem('batchOperationsWizardState', JSON.stringify(oldState));
+      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(oldState));
 
       component.ngOnInit();
       fixture.detectChanges();
@@ -62,13 +72,13 @@ describe('BatchOperationsWizard — Status Migration and API Params', () => {
 
     it('should migrate { field: "completed", values: ["false"] } to { field: "batchRunning", values: [] }', () => {
       const oldState = {
-        selectedOperationId: 'removal-time-batch',
-        step: 1,
+        operationId: 'removal-time-batch',
+        step: 2,
         batchFilterCriteria: [
           { field: 'completed', values: ['false'] }
         ]
       };
-      sessionStorage.setItem('batchOperationsWizardState', JSON.stringify(oldState));
+      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(oldState));
 
       component.ngOnInit();
       fixture.detectChanges();
@@ -80,13 +90,13 @@ describe('BatchOperationsWizard — Status Migration and API Params', () => {
 
     it('should preserve new format batchCompleted pill', () => {
       const newState = {
-        selectedOperationId: 'removal-time-batch',
-        step: 1,
+        operationId: 'removal-time-batch',
+        step: 2,
         batchFilterCriteria: [
           { field: 'batchCompleted', values: [] }
         ]
       };
-      sessionStorage.setItem('batchOperationsWizardState', JSON.stringify(newState));
+      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(newState));
 
       component.ngOnInit();
       fixture.detectChanges();
@@ -98,13 +108,13 @@ describe('BatchOperationsWizard — Status Migration and API Params', () => {
 
     it('should preserve new format batchRunning pill', () => {
       const newState = {
-        selectedOperationId: 'removal-time-batch',
-        step: 1,
+        operationId: 'removal-time-batch',
+        step: 2,
         batchFilterCriteria: [
           { field: 'batchRunning', values: [] }
         ]
       };
-      sessionStorage.setItem('batchOperationsWizardState', JSON.stringify(newState));
+      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(newState));
 
       component.ngOnInit();
       fixture.detectChanges();
@@ -116,14 +126,14 @@ describe('BatchOperationsWizard — Status Migration and API Params', () => {
 
     it('should migrate completed pill while preserving Type pill in same state', () => {
       const oldState = {
-        selectedOperationId: 'removal-time-batch',
-        step: 1,
+        operationId: 'removal-time-batch',
+        step: 2,
         batchFilterCriteria: [
           { field: 'type', values: ['instance-deletion', 'process-set-removal-time'] },
           { field: 'completed', values: ['true'] }
         ]
       };
-      sessionStorage.setItem('batchOperationsWizardState', JSON.stringify(oldState));
+      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(oldState));
 
       component.ngOnInit();
       fixture.detectChanges();
@@ -140,13 +150,13 @@ describe('BatchOperationsWizard — Status Migration and API Params', () => {
     it('should NOT migrate process "completed" criterion (state:completed)', () => {
       // This test proves that the migration ONLY affects batch criteria, not process state
       const processState = {
-        selectedOperationId: 'delete-finished',
-        step: 1,
+        operationId: 'delete-finished',
+        step: 2,
         filterCriteria: [
           { field: 'state', values: ['completed'] } // Process uses 'completed' as a VALUE in 'state' field
         ]
       };
-      sessionStorage.setItem('batchOperationsWizardState', JSON.stringify(processState));
+      sessionStorage.setItem('batchOpsWizardState', JSON.stringify(processState));
 
       component.ngOnInit();
       fixture.detectChanges();
@@ -167,26 +177,50 @@ describe('BatchOperationsWizard — Status Migration and API Params', () => {
 
     it('should map batchCompleted to completed=true in getListQueryParams', () => {
       component.batchFilterCriteria = [{ field: 'batchCompleted', values: [] }];
-      const params = component.getListQueryParams();
-      expect(params['completed']).toBe(true);
+      component.loadBatchInstances();
+
+      const listReq = httpMock.expectOne(req => req.url.includes('/history/batch') && !req.url.includes('/count'));
+      expect(listReq.request.params.get('completed')).toBe('true');
+      listReq.flush({ items: [], total: 0 });
+
+      const countReq = httpMock.expectOne(req => req.url.includes('/history/batch/count'));
+      countReq.flush(0);
     });
 
     it('should map batchRunning to completed=false in getListQueryParams', () => {
       component.batchFilterCriteria = [{ field: 'batchRunning', values: [] }];
-      const params = component.getListQueryParams();
-      expect(params['completed']).toBe(false);
+      component.loadBatchInstances();
+
+      const listReq = httpMock.expectOne(req => req.url.includes('/history/batch') && !req.url.includes('/count'));
+      expect(listReq.request.params.get('completed')).toBe('false');
+      listReq.flush({ items: [], total: 0 });
+
+      const countReq = httpMock.expectOne(req => req.url.includes('/history/batch/count'));
+      countReq.flush(0);
     });
 
     it('should map batchCompleted to completed=true in getCountQueryParams', () => {
       component.batchFilterCriteria = [{ field: 'batchCompleted', values: [] }];
-      const params = component.getCountQueryParams();
-      expect(params['completed']).toBe(true);
+      component.loadBatchInstances();
+
+      const listReq = httpMock.expectOne(req => req.url.includes('/history/batch') && !req.url.includes('/count'));
+      listReq.flush({ items: [], total: 0 });
+
+      const countReq = httpMock.expectOne(req => req.url.includes('/history/batch/count'));
+      expect(countReq.request.params.get('completed')).toBe('true');
+      countReq.flush(10);
     });
 
     it('should map batchRunning to completed=false in getCountQueryParams', () => {
       component.batchFilterCriteria = [{ field: 'batchRunning', values: [] }];
-      const params = component.getCountQueryParams();
-      expect(params['completed']).toBe(false);
+      component.loadBatchInstances();
+
+      const listReq = httpMock.expectOne(req => req.url.includes('/history/batch') && !req.url.includes('/count'));
+      listReq.flush({ items: [], total: 0 });
+
+      const countReq = httpMock.expectOne(req => req.url.includes('/history/batch/count'));
+      expect(countReq.request.params.get('completed')).toBe('false');
+      countReq.flush(5);
     });
 
     it('should include completed=true with other filters in list query', () => {
@@ -194,9 +228,15 @@ describe('BatchOperationsWizard — Status Migration and API Params', () => {
         { field: 'type', values: ['instance-deletion'] },
         { field: 'batchCompleted', values: [] }
       ];
-      const params = component.getListQueryParams();
-      expect(params['typeIn']).toEqual(['instance-deletion']);
-      expect(params['completed']).toBe(true);
+      component.loadBatchInstances();
+
+      const listReq = httpMock.expectOne(req => req.url.includes('/history/batch') && !req.url.includes('/count'));
+      expect(listReq.request.params.get('typeIn')).toBe('instance-deletion');
+      expect(listReq.request.params.get('completed')).toBe('true');
+      listReq.flush({ items: [], total: 0 });
+
+      const countReq = httpMock.expectOne(req => req.url.includes('/history/batch/count'));
+      countReq.flush(0);
     });
 
     it('should include completed=false with other filters in count query', () => {
@@ -204,31 +244,41 @@ describe('BatchOperationsWizard — Status Migration and API Params', () => {
         { field: 'batchId', values: ['ABC123'] },
         { field: 'batchRunning', values: [] }
       ];
-      const params = component.getCountQueryParams();
-      expect(params['batchId']).toBe('ABC123');
-      expect(params['completed']).toBe(false);
+      component.loadBatchInstances();
+
+      const listReq = httpMock.expectOne(req => req.url.includes('/history/batch') && !req.url.includes('/count'));
+      listReq.flush({ items: [], total: 0 });
+
+      const countReq = httpMock.expectOne(req => req.url.includes('/history/batch/count'));
+      expect(countReq.request.params.get('batchId')).toBe('ABC123');
+      expect(countReq.request.params.get('completed')).toBe('false');
+      countReq.flush(3);
     });
 
-    it('should send correct HTTP request with completed=true when batchCompleted is active', (done) => {
+    it('should send correct HTTP request with completed=true when batchCompleted is active', () => {
       component.batchFilterCriteria = [{ field: 'batchCompleted', values: [] }];
       component.loadBatchInstances();
 
-      const req = httpMock.expectOne(req => req.url.includes('/history/batch') && req.params.get('completed') === 'true');
-      expect(req.request.method).toBe('GET');
-      expect(req.request.params.get('completed')).toBe('true');
-      req.flush({ items: [], total: 0 });
-      done();
+      const listReq = httpMock.expectOne(req => req.url.includes('/history/batch') && !req.url.includes('/count'));
+      expect(listReq.request.method).toBe('GET');
+      expect(listReq.request.params.get('completed')).toBe('true');
+      listReq.flush({ items: [], total: 0 });
+
+      const countReq = httpMock.expectOne(req => req.url.includes('/history/batch/count'));
+      countReq.flush(0);
     });
 
-    it('should send correct HTTP request with completed=false when batchRunning is active', (done) => {
+    it('should send correct HTTP request with completed=false when batchRunning is active', () => {
       component.batchFilterCriteria = [{ field: 'batchRunning', values: [] }];
       component.loadBatchInstances();
 
-      const req = httpMock.expectOne(req => req.url.includes('/history/batch') && req.params.get('completed') === 'false');
-      expect(req.request.method).toBe('GET');
-      expect(req.request.params.get('completed')).toBe('false');
-      req.flush({ items: [], total: 0 });
-      done();
+      const listReq = httpMock.expectOne(req => req.url.includes('/history/batch') && !req.url.includes('/count'));
+      expect(listReq.request.method).toBe('GET');
+      expect(listReq.request.params.get('completed')).toBe('false');
+      listReq.flush({ items: [], total: 0 });
+
+      const countReq = httpMock.expectOne(req => req.url.includes('/history/batch/count'));
+      countReq.flush(0);
     });
   });
 });

@@ -143,38 +143,27 @@ describe('Batch Type Multi-Select and Status Single Choice', () => {
     expect(component.pendingValues).toEqual([valueB]);
   });
 
-  it('[Status] Real DOM click: Completed then Running → only Running selected (single choice)', async () => {
-    component.selectCriteriaType('completed');
+  it('[Status] Direct selection: batchCompleted then batchRunning → only Running pill remains (mutual exclusion)', async () => {
+    // New batch status architecture: no popover, direct criteria with mutual exclusion at pill level
+
+    // Select batchCompleted (creates pill immediately)
+    component.selectCriteriaType('batchCompleted');
     fixture.detectChanges();
     await fixture.whenStable();
 
-    // Find Status option buttons in DOM (NOT batch-type-row, this is Status criteria)
-    const buttons = compiled.querySelectorAll('.state-row:not(.processdef-select-all-row)');
-    expect(buttons.length).toBe(2);
-
-    // Click Completed (button at index 0)
-    const buttonCompleted = buttons[0] as HTMLButtonElement;
-    buttonCompleted.click();
-    fixture.detectChanges();
-
-    // Verify Completed selected
-    expect(component.pendingValues).toEqual(['true']);
-
-    // Click Running (button at index 1)
-    const buttonRunning = buttons[1] as HTMLButtonElement;
-    buttonRunning.click();
-    fixture.detectChanges();
-
-    // Verify ONLY Running selected (Completed replaced - single choice behavior)
-    expect(component.pendingValues).toEqual(['false']);
-    expect(component.pendingValues.length).toBe(1);
-
-    // Apply and verify pill
-    component.confirmCriterion();
-    fixture.detectChanges();
-
+    // Verify batchCompleted pill created
     expect(component.activePills.length).toBe(1);
-    expect(component.activePills[0].field).toBe('completed');
-    expect(component.activePills[0].values).toEqual(['false']);
+    expect(component.activePills[0].field).toBe('batchCompleted');
+    expect(component.activePills[0].values).toEqual([]);
+
+    // Select batchRunning (should replace batchCompleted pill - mutual exclusion)
+    component.selectCriteriaType('batchRunning');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    // Verify ONLY batchRunning pill remains (mutual exclusion behavior)
+    expect(component.activePills.length).toBe(1);
+    expect(component.activePills[0].field).toBe('batchRunning');
+    expect(component.activePills[0].values).toEqual([]);
   });
 });
