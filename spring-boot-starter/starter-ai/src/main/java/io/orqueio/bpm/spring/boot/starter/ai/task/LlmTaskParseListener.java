@@ -1,0 +1,456 @@
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.orqueio.bpm.spring.boot.starter.ai.task;
+
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.DELEGATE_EXPRESSION;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.ERROR_CODE_PROPERTY;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.INPUTS_PROPERTY;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.KNOWN_PROPERTIES;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.MODEL_PROPERTY;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.OUTPUTS_PROPERTY;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROMPT_PROPERTY;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROPERTY_PREFIX;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.PROVIDER_PROPERTY;
+import static io.orqueio.bpm.spring.boot.starter.ai.task.LlmTaskConfiguration.TIMEOUT_PROPERTY;
+
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import io.orqueio.bpm.engine.BpmnParseException;
+import io.orqueio.bpm.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
+import io.orqueio.bpm.engine.impl.bpmn.parser.AbstractBpmnParseListener;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParse;
+import io.orqueio.bpm.engine.impl.bpmn.parser.BpmnParseUtil;
+import io.orqueio.bpm.engine.impl.core.variable.mapping.IoMapping;
+import io.orqueio.bpm.engine.impl.pvm.process.ActivityImpl;
+import io.orqueio.bpm.engine.impl.pvm.process.ScopeImpl;
+import io.orqueio.bpm.engine.impl.util.xml.Element;
+
+/**
+ * Reads and validates the configuration of LLM tasks when a process is parsed, so a
+ * misconfigured task fails the deployment rather than a process instance.
+ * <p>
+ * Only checks that depend on the BPMN XML alone run here: the engine parses a
+ * definition again when it reloads it from its cache. Providers depend on the
+ * application's configuration and are checked by {@link LlmTaskDeploymentValidator}.
+ */
+public class LlmTaskParseListener extends AbstractBpmnParseListener {
+
+  @Override
+  public void parseServiceTask(Element serviceTaskElement, ScopeImpl scope, ActivityImpl activity) {
+    Map<String, String> properties = BpmnParseUtil.parseOrqueioExtensionProperties(serviceTaskElement);
+
+    if (!isLlmDelegate(serviceTaskElement)) {
+      if (hasLlmProperties(properties)) {
+        throw error(activity, "has " + PROPERTY_PREFIX + "* properties but is not an LLM task; set "
+            + "camunda:delegateExpression to " + DELEGATE_EXPRESSION, serviceTaskElement);
+      }
+      return;
+    }
+
+    validateNoOtherImplementation(activity, serviceTaskElement);
+    Map<String, String> llmProperties = properties != null ? properties : Map.of();
+    validateKnownProperties(llmProperties, activity, serviceTaskElement);
+
+    String prompt = promptOf(llmProperties.get(PROMPT_PROPERTY), activity, serviceTaskElement);
+    if (prompt == null || prompt.isBlank()) {
+      throw error(activity, "requires a " + PROMPT_PROPERTY + " property or input parameter", serviceTaskElement);
+    }
+    if (isMultiInstance(activity)) {
+      throw error(activity, "is multi-instance, which LLM tasks do not support yet", serviceTaskElement);
+    }
+    if (!activity.isAsyncBefore()) {
+      throw error(activity, "requires camunda:asyncBefore=\"true\": the model call must not run inside "
+          + "the transaction that reaches the task", serviceTaskElement);
+    }
+
+    // A blank list counts as not declared. Inside a list, every entry must be filled: split(",", -1)
+    // keeps trailing empty entries, so "a," is rejected like "a,,b"
+    List<String> inputs = parseInputs(trimToNull(llmProperties.get(INPUTS_PROPERTY)), activity, serviceTaskElement);
+    validatePlaceholders(prompt, inputs, activity, serviceTaskElement);
+    List<LlmOutputField> outputs = parseOutputs(trimToNull(llmProperties.get(OUTPUTS_PROPERTY)), activity, serviceTaskElement);
+    validateOutputNames(outputs, inputs, activity, serviceTaskElement);
+
+    Duration timeout = parseTimeout(trimToNull(llmProperties.get(TIMEOUT_PROPERTY)), activity, serviceTaskElement);
+
+    activity.getProperties().set(LlmTaskConfiguration.KEY, new LlmTaskConfiguration(
+        trimToNull(llmProperties.get(PROVIDER_PROPERTY)), trimToNull(llmProperties.get(MODEL_PROPERTY)), prompt,
+        inputs, outputs, timeout, trimToNull(llmProperties.get(ERROR_CODE_PROPERTY))));
+  }
+
+  /** Multi-instance bookkeeping variables, which an output would overwrite. */
+  protected static final Set<String> RESERVED_OUTPUT_NAMES =
+      Set.of("loopCounter", "nrOfInstances", "nrOfActiveInstances", "nrOfCompletedInstances");
+
+  protected void validateOutputNames(List<LlmOutputField> outputs, List<String> inputs, ActivityImpl activity, Element element) {
+    for (LlmOutputField output : outputs) {
+      if (inputs.contains(output.name())) {
+        throw error(activity, "declares '" + output.name() + "' both as input and output; the answer would "
+            + "overwrite the data sent to the model", element);
+      }
+      if (output.name().startsWith(LlmTaskAuditor.VARIABLE_PREFIX)) {
+        throw error(activity, "cannot write output '" + output.name() + "': names starting with "
+            + LlmTaskAuditor.VARIABLE_PREFIX + " are kept for the LLM task's audit", element);
+      }
+      if (RESERVED_OUTPUT_NAMES.contains(output.name())) {
+        throw error(activity, "cannot write output '" + output.name() + "': the engine uses this variable", element);
+      }
+    }
+  }
+
+  protected List<LlmOutputField> parseOutputs(String value, ActivityImpl activity, Element element) {
+    List<LlmOutputField> outputs = new ArrayList<>();
+    Set<String> names = new LinkedHashSet<>();
+    if (value != null) {
+      for (String declaration : value.split(",", -1)) {
+        if (declaration.isBlank()) {
+          throw error(activity, "has an empty entry in " + OUTPUTS_PROPERTY, element);
+        }
+        String[] parts = declaration.split(":", -1);
+        String name = parts[0].trim();
+        // Outputs are separated by commas and names by colons: an allowed value cannot contain either
+        if (parts.length > 2 && declaration.contains("|")) {
+          throw error(activity, "has an allowed value containing ':' for '" + name + "' in " + OUTPUTS_PROPERTY
+              + "; allowed values cannot contain ',' or ':'", element);
+        }
+        if (parts.length != 2 || !PromptTemplate.isVariableName(name)) {
+          throw error(activity, "has an invalid output '" + declaration.trim() + "' in " + OUTPUTS_PROPERTY
+              + "; expected name:type", element);
+        }
+        if (!names.add(name)) {
+          throw error(activity, "declares output '" + name + "' twice in " + OUTPUTS_PROPERTY, element);
+        }
+        outputs.add(parseOutput(name, parts[1].trim(), activity, element));
+      }
+    }
+    if (outputs.isEmpty()) {
+      throw error(activity, "requires a " + OUTPUTS_PROPERTY + " property declaring the fields the model returns", element);
+    }
+    return outputs;
+  }
+
+  /** The type and its bounds, for example {@code number[0..50000]} or {@code integer[1..]}. */
+  protected static final Pattern BOUNDED_TYPE = Pattern.compile("(\\w+)\\s*\\[(.*)]");
+
+  /** Digits a bound may have before, and after, the decimal point; integer bounds then fit a long. */
+  protected static final int MAX_BOUND_DIGITS = 18;
+
+  /**
+   * Reads what follows the colon of an output: a type ({@code string}), allowed values
+   * ({@code Theft|Fire|Water|Other}, a string field) or a type with bounds ({@code number[0..50000]}).
+   */
+  protected LlmOutputField parseOutput(String name, String spec, ActivityImpl activity, Element element) {
+    if (spec.contains("|")) {
+      return new LlmOutputField(name, LlmOutputField.Type.STRING, parseAllowedValues(name, spec, activity, element), null, null);
+    }
+    Matcher bounded = BOUNDED_TYPE.matcher(spec);
+    String typeId = bounded.matches() ? bounded.group(1) : spec;
+    LlmOutputField.Type type = LlmOutputField.Type.fromId(typeId).orElseThrow(() -> error(activity,
+        "has an unsupported output type '" + typeId + "' for '" + name + "' in " + OUTPUTS_PROPERTY
+            + "; supported: string, integer, number, boolean, or allowed values such as A|B|C", element));
+    if (!bounded.matches()) {
+      return new LlmOutputField(name, type);
+    }
+    if (type != LlmOutputField.Type.NUMBER && type != LlmOutputField.Type.INTEGER) {
+      throw error(activity, "declares bounds for '" + name + "', which is a " + type.getId()
+          + "; only number and integer outputs can have bounds", element);
+    }
+    String[] bounds = bounded.group(2).split("\\.\\.", -1);
+    // "1...5" would otherwise read as 1 and .5
+    if (bounds.length != 2 || bounded.group(2).contains("...")) {
+      throw error(activity, "has invalid bounds '[" + bounded.group(2) + "]' for '" + name + "' in " + OUTPUTS_PROPERTY
+          + "; expected [min..max], for example [0..50000], [1..] or [..100]", element);
+    }
+    BigDecimal min = parseBound(bounds[0], type, name, activity, element);
+    BigDecimal max = parseBound(bounds[1], type, name, activity, element);
+    if (min == null && max == null) {
+      throw error(activity, "has empty bounds for '" + name + "' in " + OUTPUTS_PROPERTY
+          + "; give a minimum, a maximum or both", element);
+    }
+    if (min != null && max != null && min.compareTo(max) > 0) {
+      throw error(activity, "has a minimum greater than its maximum for '" + name + "' in " + OUTPUTS_PROPERTY, element);
+    }
+    return new LlmOutputField(name, type, List.of(), min, max);
+  }
+
+  protected List<String> parseAllowedValues(String name, String spec, ActivityImpl activity, Element element) {
+    Set<String> values = new LinkedHashSet<>();
+    for (String value : spec.split("\\|", -1)) {
+      String allowed = value.trim();
+      if (allowed.isEmpty()) {
+        throw error(activity, "has an empty allowed value for '" + name + "' in " + OUTPUTS_PROPERTY, element);
+      }
+      if (!values.add(allowed)) {
+        throw error(activity, "lists the allowed value '" + allowed + "' twice for '" + name + "' in "
+            + OUTPUTS_PROPERTY, element);
+      }
+      // number[0..1]|2 is a mistake, not a string field whose values are "number[0..1]" and "2"
+      Matcher bounded = BOUNDED_TYPE.matcher(allowed);
+      if (bounded.matches() && LlmOutputField.Type.fromId(bounded.group(1)).isPresent()) {
+        throw error(activity, "mixes bounds and allowed values for '" + name + "' in " + OUTPUTS_PROPERTY
+            + "; give either allowed values (A|B|C) or bounds (number[min..max])", element);
+      }
+      // A longer answer is rejected before it is compared, so such a value could never be matched
+      if (allowed.length() > LlmOutputField.MAX_STRING_LENGTH) {
+        throw error(activity, "has an allowed value longer than " + LlmOutputField.MAX_STRING_LENGTH
+            + " characters for '" + name + "' in " + OUTPUTS_PROPERTY, element);
+      }
+    }
+    return List.copyOf(values);
+  }
+
+  /**
+   * @return the bound, or {@code null} when it is left empty (no minimum or no maximum)
+   */
+  protected BigDecimal parseBound(String value, LlmOutputField.Type type, String name, ActivityImpl activity, Element element) {
+    String bound = value.trim();
+    if (bound.isEmpty()) {
+      return null;
+    }
+    BigDecimal number;
+    try {
+      number = new BigDecimal(bound);
+    }
+    catch (NumberFormatException e) {
+      throw error(activity, "has an invalid bound '" + bound + "' for '" + name + "' in " + OUTPUTS_PROPERTY, element);
+    }
+    number = number.stripTrailingZeros();
+    // The bound is written in every prompt: an exponent such as 1e99999999 would make it millions of digits long.
+    // Checked on precision and scale, before anything expands the number
+    long integerDigits = (long) number.precision() - number.scale();
+    if (integerDigits > MAX_BOUND_DIGITS || number.scale() > MAX_BOUND_DIGITS) {
+      throw error(activity, "has a bound '" + bound + "' that is too large or too precise for '" + name + "' in "
+          + OUTPUTS_PROPERTY + "; use at most " + MAX_BOUND_DIGITS + " digits before and after the decimal point", element);
+    }
+    if (type == LlmOutputField.Type.INTEGER && number.scale() > 0) {
+      throw error(activity, "has a bound '" + bound + "' that is not a whole number for integer output '" + name
+          + "' in " + OUTPUTS_PROPERTY, element);
+    }
+    // Written the same way however the author wrote it (2.0, 2, 2e0), so the prompt and its version do not depend on it
+    return number.scale() < 0 ? number.setScale(0) : number;
+  }
+
+  protected static final Duration MIN_TIMEOUT = Duration.ofMillis(1);
+  protected static final Duration MAX_TIMEOUT = Duration.ofHours(24);
+
+  /**
+   * The prompt is a {@code camunda:property}, or a {@code camunda:inputParameter} of the
+   * same name: element templates can only offer a multi-line field for the latter, and
+   * its text keeps its line breaks. The parameter only carries the prompt: it is removed
+   * from the task's input mapping in {@link #parseIoMapping}, so the engine neither
+   * evaluates it nor turns it into a variable.
+   */
+  protected String promptOf(String propertyPrompt, ActivityImpl activity, Element element) {
+    Element parameter = promptParameter(activity, element);
+    if (parameter == null) {
+      // Stripped like the parameter, so both forms give the same prompt, reuse key and audit version
+      return propertyPrompt != null ? propertyPrompt.strip() : null;
+    }
+    if (propertyPrompt != null) {
+      throw error(activity, "declares " + PROMPT_PROPERTY + " both as a property and as an input parameter", element);
+    }
+    if (!parameter.elements().isEmpty()) {
+      throw error(activity, "has a " + PROMPT_PROPERTY + " input parameter that is not plain text; "
+          + "a script, list or map cannot be a prompt", element);
+    }
+    String prompt = parameter.getText().strip();
+    // The engine would evaluate an expression in an input parameter; a prompt is sent as written
+    if (prompt.contains("${") || prompt.contains("#{")) {
+      throw error(activity, "has ${ or #{ in its " + PROMPT_PROPERTY + " input parameter, which the engine "
+          + "would evaluate as an expression, even before a {{name}} placeholder; write the prompt without "
+          + "them, or as a " + PROMPT_PROPERTY + " property", element);
+    }
+    return prompt;
+  }
+
+  protected Element promptParameter(ActivityImpl activity, Element element) {
+    Element inputOutput = BpmnParseUtil.findOrqueioExtensionElement(element, "inputOutput");
+    if (inputOutput == null) {
+      return null;
+    }
+    List<Element> parameters = inputOutput.elementsNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, "inputParameter").stream()
+        .filter(parameter -> PROMPT_PROPERTY.equals(parameter.attribute("name")))
+        .toList();
+    if (parameters.size() > 1) {
+      throw error(activity, "declares the " + PROMPT_PROPERTY + " input parameter twice", element);
+    }
+    return parameters.isEmpty() ? null : parameters.get(0);
+  }
+
+  /**
+   * The engine parses the input mapping after the service task, then calls this. A
+   * mapping that only carried the prompt is dropped, and so is the scope the engine
+   * made of the task for it: the task then runs as with the property form. Boundary
+   * events and compensation, parsed later, still make it a scope when needed.
+   */
+  @Override
+  public void parseIoMapping(Element extensionElements, ActivityImpl activity, IoMapping inputOutput) {
+    if (LlmTaskConfiguration.of(activity) == null || activity.getIoMapping() != inputOutput) {
+      return;
+    }
+    boolean hadPrompt = inputOutput.getInputParameters().removeIf(parameter -> PROMPT_PROPERTY.equals(parameter.getName()));
+    if (hadPrompt && inputOutput.getInputParameters().isEmpty() && inputOutput.getOutputParameters().isEmpty()) {
+      activity.setIoMapping(null);
+      activity.setScope(false);
+    }
+  }
+
+  /**
+   * The engine runs camunda:type and camunda:class before camunda:delegateExpression, and
+   * a connector replaces the behavior: left on the task, for example by applying the
+   * modeler's template to an external task, they would run instead of the LLM task.
+   */
+  protected void validateNoOtherImplementation(ActivityImpl activity, Element element) {
+    for (String attribute : List.of("type", "class", "expression")) {
+      String value = element.attributeNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS, attribute);
+      if (value != null && !value.isBlank()) {
+        throw error(activity, "also sets camunda:" + attribute + ", which the engine would run instead of the "
+            + "LLM task; remove it", element);
+      }
+    }
+    if (BpmnParseUtil.findOrqueioExtensionElement(element, "connector") != null) {
+      throw error(activity, "also declares a camunda:connector, which would run instead of the LLM task; remove it", element);
+    }
+  }
+
+  protected Duration parseTimeout(String value, ActivityImpl activity, Element element) {
+    if (value == null) {
+      return null;
+    }
+    Duration timeout;
+    try {
+      timeout = Duration.parse(value);
+    }
+    catch (DateTimeParseException e) {
+      timeout = null;
+    }
+    if (timeout == null || timeout.compareTo(MIN_TIMEOUT) < 0 || timeout.compareTo(MAX_TIMEOUT) > 0) {
+      throw error(activity, "has an invalid " + TIMEOUT_PROPERTY + " '" + value + "'; expected an ISO-8601 "
+          + "duration between 1 millisecond and 24 hours, such as PT30S", element);
+    }
+    return timeout;
+  }
+
+  protected List<String> parseInputs(String value, ActivityImpl activity, Element element) {
+    Set<String> inputs = new LinkedHashSet<>();
+    if (value != null) {
+      for (String name : value.split(",", -1)) {
+        if (name.isBlank()) {
+          throw error(activity, "has an empty entry in " + INPUTS_PROPERTY, element);
+        }
+        String input = name.trim();
+        if (!PromptTemplate.isVariableName(input)) {
+          throw error(activity, "has an invalid variable name '" + input + "' in " + INPUTS_PROPERTY, element);
+        }
+        if (!inputs.add(input)) {
+          throw error(activity, "declares input '" + input + "' twice in " + INPUTS_PROPERTY, element);
+        }
+      }
+    }
+    return new ArrayList<>(inputs);
+  }
+
+  protected void validatePlaceholders(String prompt, List<String> inputs, ActivityImpl activity, Element element) {
+    Set<String> placeholders;
+    try {
+      placeholders = PromptTemplate.placeholders(prompt);
+    }
+    catch (IllegalArgumentException e) {
+      throw error(activity, "has a " + e.getMessage() + " in " + PROMPT_PROPERTY, element);
+    }
+    TreeSet<String> undeclared = new TreeSet<>(placeholders);
+    undeclared.removeAll(inputs);
+    if (!undeclared.isEmpty()) {
+      throw error(activity, "uses variables " + undeclared + " in its prompt that are not declared in "
+          + INPUTS_PROPERTY + "; only declared variables are sent to the model", element);
+    }
+  }
+
+  // Other elements also accept camunda:delegateExpression; only service tasks can be LLM tasks
+
+  @Override
+  public void parseSendTask(Element sendTaskElement, ScopeImpl scope, ActivityImpl activity) {
+    rejectLlmConfiguration(sendTaskElement, activity);
+  }
+
+  @Override
+  public void parseBusinessRuleTask(Element businessRuleTaskElement, ScopeImpl scope, ActivityImpl activity) {
+    rejectLlmConfiguration(businessRuleTaskElement, activity);
+  }
+
+  @Override
+  public void parseIntermediateThrowEvent(Element intermediateEventElement, ScopeImpl scope, ActivityImpl activity) {
+    rejectLlmConfiguration(intermediateEventElement.element(BpmnParse.MESSAGE_EVENT_DEFINITION), activity);
+  }
+
+  @Override
+  public void parseEndEvent(Element endEventElement, ScopeImpl scope, ActivityImpl activity) {
+    rejectLlmConfiguration(endEventElement.element(BpmnParse.MESSAGE_EVENT_DEFINITION), activity);
+  }
+
+  protected void rejectLlmConfiguration(Element element, ActivityImpl activity) {
+    if (element != null && (isLlmDelegate(element) || hasLlmProperties(BpmnParseUtil.parseOrqueioExtensionProperties(element)))) {
+      throw error(activity, "is not a service task; only service tasks can be LLM tasks", element);
+    }
+  }
+
+  protected void validateKnownProperties(Map<String, String> properties, ActivityImpl activity, Element element) {
+    TreeSet<String> unknown = new TreeSet<>();
+    for (String name : properties.keySet()) {
+      if (name != null && name.startsWith(PROPERTY_PREFIX) && !KNOWN_PROPERTIES.contains(name)) {
+        unknown.add(name);
+      }
+    }
+    if (!unknown.isEmpty()) {
+      throw error(activity, "has unknown properties " + unknown + "; supported: " + new TreeSet<>(KNOWN_PROPERTIES), element);
+    }
+  }
+
+  protected boolean isLlmDelegate(Element element) {
+    String delegateExpression = element.attributeNS(BpmnParse.ORQUEIO_BPMN_EXTENSIONS_NS,
+        BpmnParse.PROPERTYNAME_DELEGATE_EXPRESSION);
+    return delegateExpression != null && DELEGATE_EXPRESSION.equals(delegateExpression.trim());
+  }
+
+  protected boolean hasLlmProperties(Map<String, String> properties) {
+    return properties != null
+        && properties.keySet().stream().anyMatch(name -> name != null && name.startsWith(PROPERTY_PREFIX));
+  }
+
+  protected boolean isMultiInstance(ActivityImpl activity) {
+    ActivityImpl flowScope = activity.getParentFlowScopeActivity();
+    return flowScope != null && flowScope.getActivityBehavior() instanceof MultiInstanceActivityBehavior;
+  }
+
+  protected BpmnParseException error(ActivityImpl activity, String problem, Element element) {
+    return new BpmnParseException("LLM task '" + activity.getId() + "' " + problem, element);
+  }
+
+  protected static String trimToNull(String value) {
+    return value == null || value.isBlank() ? null : value.trim();
+  }
+
+}
