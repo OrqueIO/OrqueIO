@@ -14,6 +14,7 @@ import { forkJoin } from 'rxjs';
 
 import { CockpitService, Deployment } from '../../../../services/cockpit.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 
 interface DeleteOptions {
   cascade: boolean;
@@ -38,6 +39,7 @@ export class DeleteDeploymentModalComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private cockpitService = inject(CockpitService);
   private cdr = inject(ChangeDetectorRef);
+  private translate = inject(TranslateService);
 
   @Input() deployment!: Deployment;
   @Output() close = new EventEmitter<void>();
@@ -141,7 +143,7 @@ export class DeleteDeploymentModalComponent implements OnInit {
         },
         error: (err) => {
           this.deleting = false;
-          this.error = err?.error?.message || err?.message || 'An error occurred while deleting the deployment';
+          this.error = err?.error?.message || err?.message || this.translate.instant('cockpit.deployments.deleteModal.error');
           this.cdr.markForCheck();
         }
       });

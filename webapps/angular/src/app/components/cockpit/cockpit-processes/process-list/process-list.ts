@@ -546,6 +546,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
       });
   }
 
+  // Translation keys, displayed with the translate pipe
   filterErrors: string[] = [];
 
   buildQueryBody(): any {
@@ -585,30 +586,30 @@ export class ProcessListComponent implements OnInit, OnDestroy {
     if (this.filters.startedAfter) {
       const formatted = this.formatDateForApi(this.filters.startedAfter);
       if (formatted) { body.startedAfter = formatted; }
-      else { this.filterErrors.push('Invalid "Started after" date'); }
+      else { this.filterErrors.push('cockpit.processes.dateValidation.invalidStartedAfter'); }
     }
     if (this.filters.startedBefore) {
       const formatted = this.formatDateForApi(this.filters.startedBefore);
       if (formatted) { body.startedBefore = formatted; }
-      else { this.filterErrors.push('Invalid "Started before" date'); }
+      else { this.filterErrors.push('cockpit.processes.dateValidation.invalidStartedBefore'); }
     }
     if (this.filters.finishedAfter) {
       const formatted = this.formatDateForApi(this.filters.finishedAfter);
       if (formatted) { body.finishedAfter = formatted; }
-      else { this.filterErrors.push('Invalid "Finished after" date'); }
+      else { this.filterErrors.push('cockpit.processes.dateValidation.invalidFinishedAfter'); }
     }
     if (this.filters.finishedBefore) {
       const formatted = this.formatDateForApi(this.filters.finishedBefore);
       if (formatted) { body.finishedBefore = formatted; }
-      else { this.filterErrors.push('Invalid "Finished before" date'); }
+      else { this.filterErrors.push('cockpit.processes.dateValidation.invalidFinishedBefore'); }
     }
 
     // Validate date range coherence
     if (body.startedAfter && body.startedBefore && body.startedAfter >= body.startedBefore) {
-      this.filterErrors.push('"Started after" must be before "Started before"');
+      this.filterErrors.push('cockpit.processes.dateValidation.startedRange');
     }
     if (body.finishedAfter && body.finishedBefore && body.finishedAfter >= body.finishedBefore) {
-      this.filterErrors.push('"Finished after" must be before "Finished before"');
+      this.filterErrors.push('cockpit.processes.dateValidation.finishedRange');
     }
 
     // State filter
@@ -877,11 +878,11 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   getStateLabel(instance: ProcessInstance): string {
     const computedState = this.getComputedState(instance);
     switch (computedState) {
-      case 'running': return 'Running';
-      case 'suspended': return 'Suspended';
-      case 'completed': return 'Completed';
-      case 'incidents': return 'Incidents';
-      case 'terminated': return 'Terminated';
+      case 'running': return this.translateService.instant('cockpit.processes.globalSearch.instanceStateRunning');
+      case 'suspended': return this.translateService.instant('cockpit.processes.filters.stateSuspended');
+      case 'completed': return this.translateService.instant('cockpit.processes.filters.stateCompleted');
+      case 'incidents': return this.translateService.instant('cockpit.processes.columns.incidents');
+      case 'terminated': return this.translateService.instant('cockpit.processes.filters.stateTerminated');
       default: return '';
     }
   }
@@ -1039,9 +1040,9 @@ export class ProcessListComponent implements OnInit, OnDestroy {
 
   getCalledDefStateLabel(state?: string): string {
     switch (state) {
-      case 'running': return 'Running';
-      case 'referenced': return 'Referenced';
-      case 'running-and-referenced': return 'Running and Referenced';
+      case 'running': return this.translateService.instant('cockpit.calledDefinitions.state.running');
+      case 'referenced': return this.translateService.instant('cockpit.calledDefinitions.state.referenced');
+      case 'running-and-referenced': return this.translateService.instant('cockpit.calledDefinitions.state.runningAndReferenced');
       default: return '-';
     }
   }

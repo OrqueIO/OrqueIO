@@ -1,4 +1,5 @@
-import { Directive, ElementRef, HostListener, Input, OnDestroy, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, OnDestroy, Renderer2, inject } from '@angular/core';
+import { TranslateService } from '../../i18n/translate.service';
 
 @Directive({
   selector: '[appClipboard]',
@@ -9,6 +10,7 @@ export class ClipboardDirective implements OnDestroy {
 
   private tooltip: HTMLElement | null = null;
   private timeoutId: any;
+  private translate = inject(TranslateService);
 
   constructor(
     private el: ElementRef,
@@ -28,7 +30,7 @@ export class ClipboardDirective implements OnDestroy {
 
     try {
       await navigator.clipboard.writeText(text);
-      this.showTooltip('Copied!');
+      this.showTooltip(this.translate.instant('common.copied'));
     } catch (err) {
       // Fallback for older browsers
       this.fallbackCopy(text);
@@ -45,9 +47,9 @@ export class ClipboardDirective implements OnDestroy {
 
     try {
       document.execCommand('copy');
-      this.showTooltip('Copied!');
+      this.showTooltip(this.translate.instant('common.copied'));
     } catch (err) {
-      this.showTooltip('Failed to copy');
+      this.showTooltip(this.translate.instant('common.copyFailed'));
     }
 
     document.body.removeChild(textArea);

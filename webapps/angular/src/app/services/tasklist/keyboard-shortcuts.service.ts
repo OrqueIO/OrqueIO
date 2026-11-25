@@ -8,6 +8,7 @@ export interface KeyboardShortcut {
   ctrlKey?: boolean;
   shiftKey?: boolean;
   altKey?: boolean;
+  /** Translation key; display it with the translate pipe or TranslateService.instant() */
   description: string;
   action: () => void;
 }
@@ -42,48 +43,48 @@ export class KeyboardShortcutsService implements OnDestroy {
     this.shortcuts = [
       {
         key: 'ArrowUp',
-        description: 'Navigate to previous task',
+        description: 'tasklist.shortcuts.navigateUp',
         action: () => this.handlers.onNavigateUp?.()
       },
       {
         key: 'ArrowDown',
-        description: 'Navigate to next task',
+        description: 'tasklist.shortcuts.navigateDown',
         action: () => this.handlers.onNavigateDown?.()
       },
       {
         key: 'Enter',
-        description: 'Select current task',
+        description: 'tasklist.shortcuts.selectTask',
         action: () => this.handlers.onSelectTask?.()
       },
       {
         key: 'Escape',
-        description: 'Close task detail',
+        description: 'tasklist.shortcuts.closeDetail',
         action: () => this.handlers.onCloseDetail?.()
       },
       {
         key: 'c',
-        description: 'Claim current task',
+        description: 'tasklist.shortcuts.claim',
         action: () => this.handlers.onClaim?.()
       },
       {
         key: 'u',
-        description: 'Unclaim current task',
+        description: 'tasklist.shortcuts.unclaim',
         action: () => this.handlers.onUnclaim?.()
       },
       {
         key: 'd',
-        description: 'Complete current task',
+        description: 'tasklist.shortcuts.complete',
         action: () => this.handlers.onComplete?.()
       },
       {
         key: '/',
-        description: 'Focus search',
+        description: 'tasklist.shortcuts.focusSearch',
         action: () => this.handlers.onSearch?.()
       },
       {
         key: 'r',
         ctrlKey: true,
-        description: 'Refresh task list',
+        description: 'tasklist.shortcuts.refresh',
         action: () => this.handlers.onRefresh?.()
       }
     ];

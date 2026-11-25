@@ -7,12 +7,14 @@ import { DashboardService } from '../../../services/dashboard.service';
 import { TimelinePeriod } from '../../../models/cockpit/dashboard-charts.model';
 import * as DashboardActions from './dashboard.actions';
 import * as DashboardSelectors from './dashboard.selectors';
+import { TranslateService } from '../../../i18n/translate.service';
 
 @Injectable()
 export class DashboardEffects {
   private actions$ = inject(Actions);
   private store = inject(Store);
   private dashboardService = inject(DashboardService);
+  private translate = inject(TranslateService);
 
   
   // Basic Dashboard Stats Effects 
@@ -60,7 +62,7 @@ export class DashboardEffects {
         this.dashboardService.getTaskStatsForChart().pipe(
           map(taskStats => DashboardActions.loadTaskStatsSuccess({ taskStats })),
           catchError(error => of(DashboardActions.loadTaskStatsFailure({
-            error: error?.message || 'Failed to load task stats'
+            error: error?.message || this.translate.instant('cockpit.dashboard.errors.loadTaskStats')
           })))
         )
       )
@@ -78,7 +80,7 @@ export class DashboardEffects {
         this.dashboardService.getIncidentsByProcess().pipe(
           map(incidentsByProcess => DashboardActions.loadIncidentsByProcessSuccess({ incidentsByProcess })),
           catchError(error => of(DashboardActions.loadIncidentsByProcessFailure({
-            error: error?.message || 'Failed to load incidents by process'
+            error: error?.message || this.translate.instant('cockpit.dashboard.errors.loadIncidentsByProcess')
           })))
         )
       )
@@ -97,7 +99,7 @@ export class DashboardEffects {
         return this.dashboardService.getProcessInstancesTimeline(days).pipe(
           map(timeline => DashboardActions.loadTimelineSuccess({ timeline, period })),
           catchError(error => of(DashboardActions.loadTimelineFailure({
-            error: error?.message || 'Failed to load timeline data'
+            error: error?.message || this.translate.instant('cockpit.dashboard.errors.loadTimeline')
           })))
         );
       })
@@ -123,7 +125,7 @@ export class DashboardEffects {
         this.dashboardService.getProcessDistribution().pipe(
           map(processDistribution => DashboardActions.loadProcessDistributionSuccess({ processDistribution })),
           catchError(error => of(DashboardActions.loadProcessDistributionFailure({
-            error: error?.message || 'Failed to load process distribution'
+            error: error?.message || this.translate.instant('cockpit.dashboard.errors.loadProcessDistribution')
           })))
         )
       )
@@ -141,7 +143,7 @@ export class DashboardEffects {
         this.dashboardService.getTasksByGroupWithNames().pipe(
           map(tasksByGroup => DashboardActions.loadTasksByGroupSuccess({ tasksByGroup })),
           catchError(error => of(DashboardActions.loadTasksByGroupFailure({
-            error: error?.message || 'Failed to load tasks by group'
+            error: error?.message || this.translate.instant('cockpit.dashboard.errors.loadTasksByGroup')
           })))
         )
       )

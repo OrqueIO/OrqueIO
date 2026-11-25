@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, from, of } from 'rxjs';
 import { map, switchMap, catchError, tap } from 'rxjs/operators';
 import { TasklistService } from './tasklist.service';
+import { TranslateService } from '../../i18n/translate.service';
 
 /**
  * Interface for form variable
@@ -77,6 +78,7 @@ export interface CamFormInstance {
 export class CamFormService {
   private readonly http = inject(HttpClient);
   private readonly tasklistService = inject(TasklistService);
+  private readonly translate = inject(TranslateService);
 
   // Attribute constants matching AngularJS SDK
   private readonly DIRECTIVE_CAM_VARIABLE_NAME = 'cam-variable-name';
@@ -149,7 +151,7 @@ export class CamFormService {
       }),
       map(() => instance),
       catchError(error => {
-        instance.error = error.message || 'Failed to load form';
+        instance.error = error.message || this.translate.instant('tasklist.formFailure');
         instance.isLoaded = true;
         return of(instance);
       })

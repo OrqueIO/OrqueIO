@@ -24,6 +24,7 @@ import {
 } from '../../../../models/cockpit/dashboard-charts.model';
 import * as DashboardActions from '../../../../store/cockpit/dashboard/dashboard.actions';
 import * as DashboardSelectors from '../../../../store/cockpit/dashboard/dashboard.selectors';
+import { TranslateService } from '../../../../i18n/translate.service';
 
 @Component({
   selector: 'app-tasks-chart',
@@ -117,6 +118,7 @@ export class TasksChartComponent implements OnInit, OnDestroy {
   private store = inject(Store);
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
+  private translate = inject(TranslateService);
 
   private chart: Chart<'doughnut'> | null = null;
   private isChartEmpty = false; // Track if chart was created in empty state
@@ -193,6 +195,14 @@ export class TasksChartComponent implements OnInit, OnDestroy {
       });
   }
 
+  private getSegmentLabels(): string[] {
+    return [
+      this.translate.instant('cockpit.charts.tasks.assignedToUser'),
+      this.translate.instant('cockpit.charts.tasks.assignedToGroup'),
+      this.translate.instant('cockpit.charts.tasks.unassigned')
+    ];
+  }
+
   private updateChart(): void {
     if (!this.chartCanvas?.nativeElement) {
       setTimeout(() => this.updateChart(), 50);
@@ -209,7 +219,7 @@ export class TasksChartComponent implements OnInit, OnDestroy {
     // If no stats, show empty gray doughnut
     if (!hasData) {
       const emptyData = [1];
-      const emptyLabels = ['No data'];
+      const emptyLabels = [this.translate.instant('cockpit.charts.empty.noData')];
       const emptyColors = ['#e0e0e0'];
 
       if (!this.chart) {
@@ -229,7 +239,7 @@ export class TasksChartComponent implements OnInit, OnDestroy {
     // 2. Assigned to group (unassigned but has candidate groups)
     // 3. Completely unassigned (unassigned and no candidate groups)
     const data = [this.stats!.assigned, this.stats!.unassigned, this.stats!.withoutCandidateGroups];
-    const labels = ['Assigned to User', 'Assigned to Group', 'Unassigned'];
+    const labels = this.getSegmentLabels();
     const colors = [this.colors.assigned, this.colors.withGroups, this.colors.unassigned];
 
     // Store colors for hover handler
@@ -275,7 +285,7 @@ export class TasksChartComponent implements OnInit, OnDestroy {
         onHover: isEmpty ? undefined : (_event, elements) => {
           if (elements.length > 0) {
             const index = elements[0].index;
-            const chartLabels = ['Assigned to User', 'Assigned to Group', 'Unassigned'];
+            const chartLabels = this.getSegmentLabels();
             const chartData = this.stats
               ? [this.stats.assigned, this.stats.unassigned, this.stats.withoutCandidateGroups]
               : [0, 0, 0];

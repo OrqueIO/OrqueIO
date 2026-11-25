@@ -224,7 +224,7 @@ export class SystemEffects {
         this.systemService.getTelemetryData(engineName).pipe(
           map(data => SystemActions.loadTelemetryDataSuccess({ data })),
           catchError(error => {
-            const errorMsg = error?.message || 'Failed to fetch telemetry data';
+            const errorMsg = error?.message || this.translateService.instant('admin.system.telemetryLoadError');
             return of(SystemActions.loadTelemetryDataFailure({ error: errorMsg }));
           })
         )
@@ -417,6 +417,6 @@ export class SystemEffects {
       }
       return msg;
     }
-    return error?.statusText || error?.message || 'Unknown error';
+    return error?.statusText || error?.message || this.translateService.instant('common.unknownError');
   }
 }

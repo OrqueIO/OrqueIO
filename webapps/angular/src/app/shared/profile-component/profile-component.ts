@@ -59,7 +59,7 @@ export class ProfileComponent implements OnInit {
   }
 
   get userEmail(): string {
-    return this.authentication?.email || 'Non renseigné';
+    return this.authentication?.email || this.translateService.instant('PROFILE_EMAIL_NOT_SET');
   }
 
   get isLoggedIn(): boolean {

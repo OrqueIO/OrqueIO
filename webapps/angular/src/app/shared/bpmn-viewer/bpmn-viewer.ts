@@ -32,6 +32,7 @@ export interface ParentBreadcrumb {
 // @ts-ignore - bpmn-js doesn't have types
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 import { TranslatePipe } from '../../i18n/translate.pipe';
+import { TranslateService } from '../../i18n/translate.service';
 
 export interface ActivityBadge {
   activityId: string;
@@ -63,6 +64,7 @@ export interface CallActivityClickEvent {
 export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private ngZone = inject(NgZone);
+  private translate = inject(TranslateService);
 
   @ViewChild('canvas', { static: true }) private canvasRef!: ElementRef<HTMLDivElement>;
 
@@ -338,7 +340,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     } catch (err: any) {
       this.loading = false;
       this.currentXml = null;
-      this.errorMessage = err.message || 'Failed to load BPMN diagram';
+      this.errorMessage = err.message || this.translate.instant('common.viewer.loadBpmnError');
       this.cdr.detectChanges();
       this.error.emit(err);
       console.error('BPMN import error:', err);
@@ -528,12 +530,14 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
       if (isExpression) {
         btn.className = 'bjs-drilldown bpmn-call-activity-overlay bpmn-call-activity-overlay--expression';
-        btn.title = 'Navigation unavailable: calledElement is a dynamic expression';
+        btn.title = this.translate.instant('common.viewer.callActivity.dynamicExpression');
         btn.disabled = true;
       } else {
         // Rule 3: static reference or has instances → blue, clickable
         btn.className = 'bjs-drilldown bpmn-call-activity-overlay';
-        btn.title = hasInstances ? 'Show Called Process Instances' : 'Go to Called Process Definition';
+        btn.title = this.translate.instant(hasInstances
+          ? 'common.viewer.callActivity.showCalledInstances'
+          : 'common.viewer.callActivity.goToCalledDefinition');
         btn.addEventListener('click', (e: Event) => {
           e.stopPropagation();
           this.callActivityClick.emit({ callActivityId: element.id, calledElement });

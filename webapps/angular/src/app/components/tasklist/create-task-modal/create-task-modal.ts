@@ -8,6 +8,7 @@ import { TenantService } from '../../../services/admin/tenant.service';
 import { User } from '../../../models/admin/user.model';
 import { Tenant } from '../../../models/admin/tenant.model';
 import { Subscription } from 'rxjs';
+import { TranslateService } from '../../../i18n/translate.service';
 
 export interface CreateTaskData {
   name: string;
@@ -28,6 +29,7 @@ export class CreateTaskModalComponent implements OnChanges, OnDestroy {
   private readonly tasklistService = inject(TasklistService);
   private readonly userService = inject(UserService);
   private readonly tenantService = inject(TenantService);
+  private readonly translate = inject(TranslateService);
 
   @Input() isOpen = false;
   @Output() close = new EventEmitter<void>();
@@ -289,7 +291,7 @@ export class CreateTaskModalComponent implements OnChanges, OnDestroy {
       this.taskCreated.emit(result?.id ?? '');
       this.close.emit();
     } catch (err: any) {
-      this.error = err.message || 'Failed to create task';
+      this.error = err.message || this.translate.instant('tasklist.errors.createTask');
     } finally {
       this.submitting = false;
     }

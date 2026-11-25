@@ -227,16 +227,16 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
   variableSearchTypes: SearchType[] = [
     {
       key: 'variableName',
-      label: 'Name',
+      label: 'cockpit.processDetail.variables.name',
       operators: [
         { key: 'eq', label: '=' },
         { key: 'like', label: 'like' }
       ],
-      placeholder: 'Variable name'
+      placeholder: 'cockpit.processes.filters.variableName'
     },
     {
       key: 'variableValue',
-      label: 'Value',
+      label: 'cockpit.processDetail.variables.value',
       operators: [
         { key: 'eq', label: '=' },
         { key: 'neq', label: '!=' },
@@ -247,15 +247,15 @@ export class ProcessDetailComponent implements OnInit, OnDestroy {
         { key: 'like', label: 'like' }
       ],
       allowName: true,
-      placeholder: 'Value'
+      placeholder: 'cockpit.processDetail.variables.value'
     },
     {
       key: 'activityInstanceIdIn',
-      label: 'Activity Instance ID',
+      label: 'cockpit.processDetail.variables.activityInstanceId',
       operators: [
         { key: 'eq', label: '=' }
       ],
-      placeholder: 'Activity instance ID'
+      placeholder: 'cockpit.processDetail.variables.activityInstanceIdPlaceholder'
     }
   ];
 

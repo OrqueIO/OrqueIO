@@ -216,13 +216,13 @@ export class TaskMetaComponent implements OnInit, OnChanges {
           this.assigneeChange.emit(newAssignee);
           this.editingAssignee = false;
         } else {
-          this.assigneeError = 'User not found';
+          this.assigneeError = this.translateService.instant('delegate.userNotFound');
         }
       },
       error: (err) => {
         this.validatingAssignee = false;
         this.assigneeValid = false;
-        this.assigneeError = err.message || 'Validation failed';
+        this.assigneeError = err.message || this.translateService.instant('tasklist.errors.validationFailed');
       }
     });
   }
