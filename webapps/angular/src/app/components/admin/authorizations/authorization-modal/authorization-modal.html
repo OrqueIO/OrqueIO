@@ -4,7 +4,7 @@
       <h3 class="modal-title">
         {{ (isEditMode ? 'AUTHORIZATION_EDIT' : 'AUTHORIZATION_CREATE_NEW_AUTHORIZATION') | translate }}
       </h3>
-      <button type="button" class="close-btn" (click)="onCancel()" aria-label="Close">
+      <button type="button" class="close-btn" (click)="onCancel()" [attr.aria-label]="'common.close' | translate">
         <fa-icon [icon]="faTimes"></fa-icon>
       </button>
     </div>

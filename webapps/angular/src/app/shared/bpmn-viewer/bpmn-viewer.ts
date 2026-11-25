@@ -31,6 +31,7 @@ export interface ParentBreadcrumb {
 
 // @ts-ignore - bpmn-js doesn't have types
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 export interface ActivityBadge {
   activityId: string;
@@ -54,7 +55,7 @@ export interface CallActivityClickEvent {
 @Component({
   selector: 'app-bpmn-viewer',
   standalone: true,
-  imports: [CommonModule, RouterModule, FontAwesomeModule],
+  imports: [CommonModule, RouterModule, FontAwesomeModule, TranslatePipe],
   templateUrl: './bpmn-viewer.html',
   styleUrls: ['./bpmn-viewer.css'],
   encapsulation: ViewEncapsulation.None

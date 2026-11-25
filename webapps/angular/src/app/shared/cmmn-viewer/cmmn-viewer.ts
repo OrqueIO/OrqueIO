@@ -15,11 +15,12 @@ import { CommonModule } from '@angular/common';
 
 // @ts-ignore - cmmn-js doesn't have types
 import CmmnViewer from 'cmmn-js/lib/NavigatedViewer';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 @Component({
   selector: 'app-cmmn-viewer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './cmmn-viewer.html',
   styleUrls: ['./cmmn-viewer.css']
 })

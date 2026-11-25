@@ -31,6 +31,7 @@ import {
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { DmnViewerComponent } from '../../../../shared/dmn-viewer/dmn-viewer';
+import { TranslateService } from '../../../../i18n/translate.service';
 
 type TabType = 'inputs' | 'outputs';
 
@@ -49,6 +50,8 @@ type TabType = 'inputs' | 'outputs';
   styleUrls: ['./decision-instance.css']
 })
 export class DecisionInstanceComponent implements OnInit, OnDestroy {
+  private translateService = inject(TranslateService);
+
   private destroyRef = inject(DestroyRef);
   private navMenuService = inject(NavMenuService);
   private cdr = inject(ChangeDetectorRef);
@@ -186,7 +189,7 @@ export class DecisionInstanceComponent implements OnInit, OnDestroy {
   formatDate(dateStr: string | undefined): string {
     if (!dateStr) return '-';
     const date = new Date(dateStr);
-    return date.toLocaleString();
+    return date.toLocaleString(this.translateService.locale);
   }
 
   formatValue(value: any): string {

@@ -20,7 +20,7 @@
       (keydown)="onEditKeydown($event)"
       (blur)="onEditBlur()"
     />
-    <button class="chip-remove" (click)="removeValue(i)" type="button" aria-label="Remove">×</button>
+    <button class="chip-remove" (click)="removeValue(i)" type="button" [attr.aria-label]="'common.remove' | translate">×</button>
   </span>
   <input
     #inputEl

@@ -194,7 +194,7 @@
                 <span class="var-chip__value">{{ v.value }}</span>
                 <span class="var-chip__type">{{ v.type }}</span>
               </button>
-              <button type="button" class="var-chip__remove" (click)="removeVariableDefinition(i)" title="Remove">&#x2715;</button>
+              <button type="button" class="var-chip__remove" (click)="removeVariableDefinition(i)" [title]="'common.remove' | translate">&#x2715;</button>
             </div>
           </div>
 
@@ -231,7 +231,7 @@
                   <span class="var-chip__value">{{ v.value }}</span>
                   <span class="var-chip__type">{{ v.type }}</span>
                 </button>
-                <button type="button" class="var-chip__remove" (click)="removeCorrelateVarDef(i)" title="Remove">&#x2715;</button>
+                <button type="button" class="var-chip__remove" (click)="removeCorrelateVarDef(i)" [title]="'common.remove' | translate">&#x2715;</button>
               </div>
             </div>
           </div>

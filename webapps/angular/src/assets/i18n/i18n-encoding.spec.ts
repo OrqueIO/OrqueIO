@@ -3,7 +3,7 @@ import { join } from 'path';
 import { describe, it, expect } from 'vitest';
 
 const I18N_DIR = join(__dirname);
-const FILES = ['en.json', 'fr.json'];
+const FILES = ['en.json', 'fr.json', 'de.json', 'zh-CN.json', 'zh-TW.json'];
 
 // UTF-8 double-encoding signature: © (U+00A9, UTF-8: 0xC2 0xA9) read as Latin-1
 // produces "Â©". Any occurrence in an i18n file means the file was written with

@@ -8,6 +8,7 @@ import { TooltipDirective } from '../../../shared/tooltip/tooltip.directive';
 import { PaginationComponent, PageChangeEvent } from '../../../shared/pagination/pagination';
 import { Task, TaskComment, UserOperationLogEntry } from '../../../models/tasklist';
 import { TaskDetailActions } from '../../../store/tasklist';
+import { TranslateService } from '../../../i18n/translate.service';
 
 interface HistoryDay {
   date: string;
@@ -43,6 +44,8 @@ interface HistoryEvent {
   styleUrl: './task-history-tab.css'
 })
 export class TaskHistoryTabComponent implements OnInit, OnChanges {
+  private translateService = inject(TranslateService);
+
   private readonly store = inject(Store);
 
   @Input() task!: Task;
@@ -135,7 +138,7 @@ export class TaskHistoryTabComponent implements OnInit, OnChanges {
         return {
           date,
           dayNumber: dateObj.getDate().toString().padStart(2, '0'),
-          monthName: dateObj.toLocaleDateString(undefined, { month: 'short' }),
+          monthName: dateObj.toLocaleDateString(this.translateService.locale, { month: 'short' }),
           year: dateObj.getFullYear().toString(),
           events: events.sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
         };
@@ -152,7 +155,7 @@ export class TaskHistoryTabComponent implements OnInit, OnChanges {
   }
 
   formatDate(date: string): string {
-    return new Date(date).toLocaleDateString(undefined, {
+    return new Date(date).toLocaleDateString(this.translateService.locale, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -161,14 +164,14 @@ export class TaskHistoryTabComponent implements OnInit, OnChanges {
   }
 
   formatTime(time: string): string {
-    return new Date(time).toLocaleTimeString(undefined, {
+    return new Date(time).toLocaleTimeString(this.translateService.locale, {
       hour: '2-digit',
       minute: '2-digit'
     });
   }
 
   formatFullDateTime(time: string): string {
-    return new Date(time).toLocaleString(undefined, {
+    return new Date(time).toLocaleString(this.translateService.locale, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
@@ -260,12 +263,12 @@ export class TaskHistoryTabComponent implements OnInit, OnChanges {
     if (this.isDateProperty(property)) {
       const timestamp = parseInt(value, 10);
       if (!isNaN(timestamp)) {
-        return new Date(timestamp).toLocaleDateString();
+        return new Date(timestamp).toLocaleDateString(this.translateService.locale);
       }
       // Try to parse as ISO date
       const dateVal = new Date(value);
       if (!isNaN(dateVal.getTime())) {
-        return dateVal.toLocaleDateString();
+        return dateVal.toLocaleDateString(this.translateService.locale);
       }
     }
 

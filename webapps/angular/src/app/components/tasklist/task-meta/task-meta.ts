@@ -6,6 +6,7 @@ import { TimeAgoPipe } from '../../../pipes';
 import { TooltipDirective } from '../../../shared/tooltip/tooltip.directive';
 import { Task, GroupRef, IdentityLink } from '../../../models/tasklist';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
+import { TranslateService } from '../../../i18n/translate.service';
 
 @Component({
   selector: 'app-task-meta',
@@ -15,6 +16,8 @@ import { TasklistService } from '../../../services/tasklist/tasklist.service';
   styleUrl: './task-meta.css'
 })
 export class TaskMetaComponent implements OnInit, OnChanges {
+  private translateService = inject(TranslateService);
+
   private readonly tasklistService = inject(TasklistService);
 
   @Input() task!: Task;
@@ -313,12 +316,12 @@ export class TaskMetaComponent implements OnInit, OnChanges {
 
   formatDate(date: string | null): string {
     if (!date) return '';
-    return new Date(date).toLocaleDateString();
+    return new Date(date).toLocaleDateString(this.translateService.locale);
   }
 
   getFullDateTooltip(date: string | undefined): string {
     if (!date) return '';
-    return new Date(date).toLocaleString(undefined, {
+    return new Date(date).toLocaleString(this.translateService.locale, {
       weekday: 'long',
       year: 'numeric',
       month: 'long',

@@ -1349,7 +1349,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
 
   formatDate(dateStr: string): string {
     if (!dateStr) return '-';
-    return new Date(dateStr).toLocaleString();
+    return new Date(dateStr).toLocaleString(this.translateService.locale);
   }
 
   extractVersionNumber(processDefinitionId: string): number | null {
@@ -1407,7 +1407,7 @@ export class ProcessInstanceSearchComponent implements OnInit, OnDestroy {
 
   private formatDisplayDate(isoStr: string): string {
     if (!isoStr) return '';
-    try { return new Date(isoStr).toLocaleDateString(); }
+    try { return new Date(isoStr).toLocaleDateString(this.translateService.locale); }
     catch { return isoStr; }
   }
 

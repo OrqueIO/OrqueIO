@@ -3,15 +3,19 @@ import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, firstValueFrom } from 'rxjs';
 
-export type Language = 'fr' | 'en';
+export type Language = 'fr' | 'en' | 'de' | 'zh-CN' | 'zh-TW';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TranslateService {
   private readonly STORAGE_KEY = 'orqueio_language';
+  private readonly SUPPORTED_LANGUAGES: Language[] = ['fr', 'en', 'de', 'zh-CN', 'zh-TW'];
+  // Used when a key is missing in the current language
+  private readonly FALLBACK_LANGUAGE: Language = 'en';
   private translations: { [lang: string]: { [key: string]: string } } = {};
   private loadedLanguages: Set<Language> = new Set();
+  private pendingLoads: Map<Language, Promise<void>> = new Map();
 
   private currentLangSubject: BehaviorSubject<Language>;
   public currentLang$: Observable<Language>;
@@ -23,6 +27,8 @@ export class TranslateService {
     const savedLang = this.getSavedLanguage();
     this.currentLangSubject = new BehaviorSubject<Language>(savedLang);
     this.currentLang$ = this.currentLangSubject.asObservable();
+    // Screen readers and font selection (Simplified vs Traditional glyphs) follow <html lang>
+    this.document.documentElement.lang = savedLang;
     // Initial load is handled exclusively by APP_INITIALIZER (app.config.ts).
     // Do NOT call loadLanguage() here: if en.json is in the browser HTTP cache,
     // this fire-and-forget call could resolve before APP_INITIALIZER runs,
@@ -31,13 +37,44 @@ export class TranslateService {
   }
 
   private getSavedLanguage(): Language {
-    const saved = localStorage.getItem(this.STORAGE_KEY);
-    if (saved === 'fr' || saved === 'en') {
+    const saved = localStorage.getItem(this.STORAGE_KEY) as Language | null;
+    if (saved && this.SUPPORTED_LANGUAGES.includes(saved)) {
       return saved;
     }
-    // Detect browser language
-    const browserLang = navigator.language.split('-')[0];
-    return browserLang === 'fr' ? 'fr' : 'en';
+    return this.detectBrowserLanguage();
+  }
+
+  private detectBrowserLanguage(): Language {
+    const browserLang = (navigator.language || '').toLowerCase();
+
+    // Simplified Chinese: zh-CN, zh-SG, zh-Hans, zh-Hans-CN ...
+    if (/^zh-(cn|sg|hans)/.test(browserLang)) {
+      return 'zh-CN';
+    }
+
+    // Traditional Chinese: zh-TW, zh-HK, zh-MO, zh-Hant, zh-Hant-TW ...
+    if (/^zh-(tw|hk|mo|hant)/.test(browserLang)) {
+      return 'zh-TW';
+    }
+
+    // When the general Chinese language cannot distinguish between simplified and traditional characters,
+    // simplified Chinese is used by default
+    if (browserLang === 'zh' || browserLang.startsWith('zh-')) {
+      return 'zh-CN';
+    }
+
+    // Français
+    if (browserLang.startsWith('fr')) {
+      return 'fr';
+    }
+
+    // Deutsch: de, de-DE, de-AT, de-CH ...
+    if (browserLang.startsWith('de')) {
+      return 'de';
+    }
+
+    // English
+    return 'en';
   }
 
   get currentLang(): Language {
@@ -45,38 +82,72 @@ export class TranslateService {
   }
 
   /**
-   * Load translations from JSON file
+   * Full locale of the current language, to format dates and numbers
+   * (e.g. toLocaleString(translateService.locale))
+   */
+  get locale(): string {
+    const locales: Record<Language, string> = {
+      'fr': 'fr-FR',
+      'en': 'en-US',
+      'de': 'de-DE',
+      'zh-CN': 'zh-CN',
+      'zh-TW': 'zh-TW'
+    };
+    return locales[this.currentLang];
+  }
+
+  /**
+   * Load translations for a language, together with the fallback language
    */
   async loadLanguage(lang: Language): Promise<void> {
+    const languages = lang === this.FALLBACK_LANGUAGE ? [lang] : [lang, this.FALLBACK_LANGUAGE];
+    await Promise.all(languages.map(l => this.loadTranslationFile(l)));
+  }
+
+  /**
+   * Load translations from JSON file (each file is fetched only once)
+   */
+  private loadTranslationFile(lang: Language): Promise<void> {
     if (this.loadedLanguages.has(lang)) {
-      return;
+      return Promise.resolve();
     }
 
-    try {
+    let pending = this.pendingLoads.get(lang);
+    if (!pending) {
+      // Resolved against the base URI, so it also works when the webapps are not at the server root
       const url = new URL(`assets/i18n/${lang}.json`, this.document.baseURI).href;
-      const translations = await firstValueFrom(
+      pending = firstValueFrom(
         this.http.get<{ [key: string]: string }>(url)
-      );
-      this.translations[lang] = translations;
-      this.loadedLanguages.add(lang);
-    } catch (error) {
-      console.error(`Failed to load translations for language: ${lang}`, error);
-      this.translations[lang] = {};
+      )
+        .then(translations => {
+          this.translations[lang] = translations;
+          this.loadedLanguages.add(lang);
+        })
+        .catch(error => {
+          console.error(`Failed to load translations for language: ${lang}`, error);
+          this.translations[lang] = {};
+        })
+        .finally(() => this.pendingLoads.delete(lang));
+      this.pendingLoads.set(lang, pending);
     }
+    return pending;
   }
 
   async setLanguage(lang: Language): Promise<void> {
     await this.loadLanguage(lang);
     localStorage.setItem(this.STORAGE_KEY, lang);
+    this.document.documentElement.lang = lang;
     this.currentLangSubject.next(lang);
   }
 
   /**
-   * Get translation for a key
+   * Get translation for a key.
+   * Falls back to the fallback language (English), then to the key itself.
    */
   instant(key: string, params?: { [key: string]: string }): string {
     const langTranslations = this.translations[this.currentLang];
-    let translation = langTranslations?.[key] || key;
+    const fallbackTranslations = this.translations[this.FALLBACK_LANGUAGE];
+    let translation = langTranslations?.[key] || fallbackTranslations?.[key] || key;
 
     // Replace parameters like {{param}}
     if (params) {
@@ -92,7 +163,7 @@ export class TranslateService {
    * Get all available languages
    */
   getAvailableLanguages(): Language[] {
-    return ['fr', 'en'];
+    return this.SUPPORTED_LANGUAGES;
   }
 
   /**

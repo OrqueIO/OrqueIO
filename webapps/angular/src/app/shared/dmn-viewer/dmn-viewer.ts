@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 
 import DmnViewer from 'dmn-js/lib/NavigatedViewer';
 import { migrateDiagram } from '@bpmn-io/dmn-migrate';
+import { TranslatePipe } from '../../i18n/translate.pipe';
 
 // Interface for decision input/output values
 export interface DecisionVariable {
@@ -32,7 +33,7 @@ export interface DecisionVariable {
 @Component({
   selector: 'app-dmn-viewer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   template: `
     <div class="dmn-viewer-wrapper">
       <div class="dmn-viewer-container" [class.loading]="loading">
@@ -47,7 +48,7 @@ export interface DecisionVariable {
         </button>
         <div class="dmn-canvas" #dmnCanvas></div>
         <div class="loading-overlay" *ngIf="loading">
-          <span class="loading-text">Loading DMN...</span>
+          <span class="loading-text">{{ 'common.loadingDmn' | translate }}</span>
         </div>
         <div class="error-overlay" *ngIf="error">
           <span class="error-text">{{ error }}</span>
