@@ -8,6 +8,7 @@ import { getVariableInputType } from '../../../utils/variable-type.util';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
 import { AuthService } from '../../../services/auth';
 import { ProcessDefinition, TaskForm, Task } from '../../../models/tasklist/task.model';
+import { TranslateService } from '../../../i18n/translate.service';
 
 interface FormVariable {
   name: string;
@@ -27,6 +28,7 @@ export class StartProcessModalComponent implements OnInit, OnChanges, OnDestroy 
   private readonly tasklistService = inject(TasklistService);
   private readonly authService = inject(AuthService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly translate = inject(TranslateService);
 
   @Input() isOpen = false;
   @Output() close = new EventEmitter<void>();
@@ -107,7 +109,7 @@ export class StartProcessModalComponent implements OnInit, OnChanges, OnDestroy 
         this.focusFirstProcessItem();
       },
       error: () => {
-        this.error = 'Failed to load process definitions';
+        this.error = this.translate.instant('tasklist.errors.loadProcessDefinitions');
         this.loadingDefinitions = false;
         this.cdr.detectChanges();
       }
@@ -274,7 +276,7 @@ export class StartProcessModalComponent implements OnInit, OnChanges, OnDestroy 
         this.closeModal();
       },
       error: (err) => {
-        this.error = err.error?.message || 'Failed to start process';
+        this.error = err.error?.message || this.translate.instant('tasklist.errors.startProcess');
         this.submitting = false;
         this.cdr.detectChanges();
       }

@@ -10,6 +10,14 @@ import { ProcessListComponent } from './process-list';
 import { CockpitService, ProcessInstance, ProcessDefinition } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { initTestEnvironment } from '../../../../testing/test-utils';
+import { TranslateService } from '../../../../i18n/translate.service';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+// English translations, so that the labels built in TypeScript can be asserted by their displayed text
+const en: { [key: string]: string } = JSON.parse(
+  readFileSync(join(__dirname, '../../../../../assets/i18n/en.json'), 'utf-8')
+);
 
 describe('ProcessListComponent', () => {
   beforeAll(() => { initTestEnvironment(); });
@@ -397,6 +405,9 @@ describe('ProcessListComponent', () => {
       component.filters.startedAfter = 'not-a-date';
       component.buildQueryBody();
       expect(component.filterErrors.length).toBeGreaterThan(0);
+      // Errors are translation keys, displayed with the translate pipe
+      expect(component.filterErrors).toContain('cockpit.processes.dateValidation.invalidStartedAfter');
+      expect(en['cockpit.processes.dateValidation.invalidStartedAfter']).toBe('Invalid "Started after" date');
     });
   });
 
@@ -499,6 +510,10 @@ describe('ProcessListComponent', () => {
   });
 
   describe('getStateLabel', () => {
+    beforeEach(() => {
+      vi.spyOn(TestBed.inject(TranslateService), 'instant').mockImplementation((key: string) => en[key] ?? key);
+    });
+
     it('should return correct label for each state', () => {
       expect(component.getStateLabel(mockInstances[0])).toBe('Running');
       expect(component.getStateLabel(mockInstances[1])).toBe('Completed');
@@ -622,6 +637,7 @@ describe('ProcessListComponent', () => {
 
   describe('called definitions helpers', () => {
     it('getCalledDefStateLabel should map state to label', () => {
+      vi.spyOn(TestBed.inject(TranslateService), 'instant').mockImplementation((key: string) => en[key] ?? key);
       expect(component.getCalledDefStateLabel('running')).toBe('Running');
       expect(component.getCalledDefStateLabel('referenced')).toBe('Referenced');
       expect(component.getCalledDefStateLabel('running-and-referenced')).toBe('Running and Referenced');

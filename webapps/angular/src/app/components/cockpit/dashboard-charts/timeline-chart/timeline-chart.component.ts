@@ -17,6 +17,7 @@ import Chart from 'chart.js/auto';
 import { ChartCardComponent } from '../chart-card/chart-card.component';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
 import { TranslateService } from '../../../../i18n/translate.service';
+import { skip } from 'rxjs';
 import {
   TimelineDataPoint,
   TimelinePeriod,
@@ -195,6 +196,11 @@ export class TimelineChartComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToStore(): void {
+    // Dataset and date labels are translated when the chart is drawn: redraw them when the language changes
+    this.translateService.currentLang$
+      .pipe(skip(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.updateChart());
+
     // Subscribe to timeline data
     this.store.select(DashboardSelectors.selectTimeline)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -255,7 +261,9 @@ export class TimelineChartComponent implements OnInit, OnDestroy {
       this.createChart(labels, startedData, completedData);
     } else {
       this.chart.data.labels = labels;
+      this.chart.data.datasets[0].label = this.translateService.instant('CHART_STARTED');
       this.chart.data.datasets[0].data = startedData;
+      this.chart.data.datasets[1].label = this.translateService.instant('CHART_COMPLETED');
       this.chart.data.datasets[1].data = completedData;
       this.chart.update('none');
     }

@@ -18,6 +18,7 @@ import { NotificationsService } from '../../../services/notifications.service';
 import * as BatchActions from './batch.actions';
 import * as BatchSelectors from './batch.selectors';
 import { BatchStatistics } from '../../../models/cockpit/batch.model';
+import { TranslateService } from '../../../i18n/translate.service';
 
 @Injectable()
 export class BatchEffects {
@@ -25,6 +26,7 @@ export class BatchEffects {
   private store = inject(Store);
   private batchService = inject(BatchService);
   private notifications = inject(NotificationsService);
+  private translate = inject(TranslateService);
 
   
   // RUNTIME BATCHES
@@ -108,7 +110,7 @@ export class BatchEffects {
               if (batchType === 'runtime') {
                 return of(BatchActions.switchToHistory({ id }));
               }
-              return of(BatchActions.loadBatchDetailsFailure({ error: 'Batch not found' }));
+              return of(BatchActions.loadBatchDetailsFailure({ error: this.translate.instant('BATCHES_NOT_FOUND') }));
             }
             return of(BatchActions.loadBatchDetailsSuccess({ batch, batchType }));
           }),

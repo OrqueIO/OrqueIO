@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, injec
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../../i18n/translate.pipe';
 import { TasklistService } from '../../../services/tasklist/tasklist.service';
+import { TranslateService } from '../../../i18n/translate.service';
 
 export interface VariableDetail {
   name: string;
@@ -25,6 +26,7 @@ type TabId = 'serialized' | 'deserialized';
 })
 export class VariableDetailModalComponent implements OnChanges {
   private readonly tasklistService = inject(TasklistService);
+  private readonly translate = inject(TranslateService);
 
   @Input() isOpen = false;
   @Input() variable: VariableDetail | null = null;
@@ -93,7 +95,7 @@ export class VariableDetailModalComponent implements OnChanges {
         this.loading = false;
       },
       error: (err) => {
-        this.deserializationError = err?.message || 'Failed to deserialize value';
+        this.deserializationError = err?.message || this.translate.instant('tasklist.errors.deserializeValue');
         this.loading = false;
       }
     });
@@ -114,7 +116,7 @@ export class VariableDetailModalComponent implements OnChanges {
   }
 
   get objectTypeName(): string {
-    return this.variable?.valueInfo?.objectTypeName || this.variable?.type || 'Unknown';
+    return this.variable?.valueInfo?.objectTypeName || this.variable?.type || this.translate.instant('common.unknown');
   }
 
   get serializationFormat(): string {

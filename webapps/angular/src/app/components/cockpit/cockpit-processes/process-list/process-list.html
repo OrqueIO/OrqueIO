@@ -134,7 +134,7 @@
             <div class="filter-errors" *ngIf="filterErrors.length > 0">
               <div class="filter-error" *ngFor="let error of filterErrors">
                 <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-                {{ error }}
+                {{ error | translate }}
               </div>
             </div>
 

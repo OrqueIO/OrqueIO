@@ -12,6 +12,7 @@ import {
 } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { initTestEnvironment } from '../../../../testing/test-utils';
+import { TranslateService } from '../../../../i18n/translate.service';
 
 describe('DecisionInstanceComponent', () => {
   beforeAll(() => { initTestEnvironment(); });
@@ -419,7 +420,9 @@ describe('DecisionInstanceComponent', () => {
   describe('formatType', () => {
     beforeEach(() => { createComponent(); });
 
-    it('should return "Unknown" for undefined', () => {
+    it('should return the translated "Unknown" for undefined', () => {
+      const translate = TestBed.inject(TranslateService);
+      vi.spyOn(translate, 'instant').mockImplementation(key => key === 'common.unknown' ? 'Unknown' : key);
       expect(component.formatType(undefined)).toBe('Unknown');
     });
 

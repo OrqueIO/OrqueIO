@@ -1,4 +1,10 @@
 import { Pipe, PipeTransform, OnDestroy, ChangeDetectorRef, inject, NgZone } from '@angular/core';
+import { TranslateService } from '../i18n/translate.service';
+
+interface RelativeTime {
+  key: string;
+  params?: { [key: string]: string };
+}
 
 /**
  * Pipe to display relative time (e.g., "2 hours ago", "in 3 days")
@@ -12,8 +18,10 @@ import { Pipe, PipeTransform, OnDestroy, ChangeDetectorRef, inject, NgZone } fro
 export class TimeAgoPipe implements PipeTransform, OnDestroy {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly ngZone = inject(NgZone);
+  private readonly translate = inject(TranslateService);
 
-  private currentValue: string = '';
+  // Translation key of the relative time; translated on each call so the text follows the current language
+  private currentValue: RelativeTime | null = null;
   private lastDate: Date | null = null;
   private timer: ReturnType<typeof setTimeout> | null = null;
 
@@ -36,54 +44,41 @@ export class TimeAgoPipe implements PipeTransform, OnDestroy {
       this.setTimer();
     }
 
-    return this.currentValue;
+    return this.currentValue ? this.translate.instant(this.currentValue.key, this.currentValue.params) : '';
   }
 
   ngOnDestroy(): void {
     this.removeTimer();
   }
 
-  private getRelativeTime(date: Date): string {
+  private getRelativeTime(date: Date): RelativeTime {
     const now = new Date();
     const diffMs = date.getTime() - now.getTime();
     const diffSec = Math.round(diffMs / 1000);
     const diffMin = Math.round(diffSec / 60);
     const diffHour = Math.round(diffMin / 60);
     const diffDay = Math.round(diffHour / 24);
-    const diffWeek = Math.round(diffDay / 7);
     const diffMonth = Math.round(diffDay / 30);
     const diffYear = Math.round(diffDay / 365);
 
-    const isFuture = diffMs > 0;
     const abs = (n: number) => Math.abs(n);
+    const prefix = diffMs > 0 ? 'common.timeAgo.future.' : 'common.timeAgo.past.';
+    const unit = (name: string, count?: number): RelativeTime => ({
+      key: prefix + name,
+      params: count === undefined ? undefined : { count: String(abs(count)) }
+    });
 
-    // Past times
-    if (!isFuture) {
-      if (abs(diffSec) < 45) return 'a few seconds ago';
-      if (abs(diffSec) < 90) return 'a minute ago';
-      if (abs(diffMin) < 45) return `${abs(diffMin)} minutes ago`;
-      if (abs(diffMin) < 90) return 'an hour ago';
-      if (abs(diffHour) < 22) return `${abs(diffHour)} hours ago`;
-      if (abs(diffHour) < 36) return 'a day ago';
-      if (abs(diffDay) < 25) return `${abs(diffDay)} days ago`;
-      if (abs(diffDay) < 45) return 'a month ago';
-      if (abs(diffMonth) < 10) return `${abs(diffMonth)} months ago`;
-      if (abs(diffMonth) < 18) return 'a year ago';
-      return `${abs(diffYear)} years ago`;
-    }
-
-    // Future times
-    if (abs(diffSec) < 45) return 'in a few seconds';
-    if (abs(diffSec) < 90) return 'in a minute';
-    if (abs(diffMin) < 45) return `in ${abs(diffMin)} minutes`;
-    if (abs(diffMin) < 90) return 'in an hour';
-    if (abs(diffHour) < 22) return `in ${abs(diffHour)} hours`;
-    if (abs(diffHour) < 36) return 'in a day';
-    if (abs(diffDay) < 25) return `in ${abs(diffDay)} days`;
-    if (abs(diffDay) < 45) return 'in a month';
-    if (abs(diffMonth) < 10) return `in ${abs(diffMonth)} months`;
-    if (abs(diffMonth) < 18) return 'in a year';
-    return `in ${abs(diffYear)} years`;
+    if (abs(diffSec) < 45) return unit('seconds');
+    if (abs(diffSec) < 90) return unit('minute');
+    if (abs(diffMin) < 45) return unit('minutes', diffMin);
+    if (abs(diffMin) < 90) return unit('hour');
+    if (abs(diffHour) < 22) return unit('hours', diffHour);
+    if (abs(diffHour) < 36) return unit('day');
+    if (abs(diffDay) < 25) return unit('days', diffDay);
+    if (abs(diffDay) < 45) return unit('month');
+    if (abs(diffMonth) < 10) return unit('months', diffMonth);
+    if (abs(diffMonth) < 18) return unit('year');
+    return unit('years', diffYear);
   }
 
   private setTimer(): void {

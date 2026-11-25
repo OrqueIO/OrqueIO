@@ -8,7 +8,7 @@
       (ngModelChange)="onSearchChange($event)"
       (focus)="onInputFocus()"
       (keydown)="onKeyDown($event)"
-      [placeholder]="placeholder"
+      [placeholder]="placeholder | translate"
       autocomplete="off"
     />
     <fa-icon

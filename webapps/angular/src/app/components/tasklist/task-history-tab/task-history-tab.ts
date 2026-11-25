@@ -225,23 +225,24 @@ export class TaskHistoryTabComponent implements OnInit, OnChanges {
   }
 
   getPropertyLabel(property: string): string {
-    // Map property names to labels
-    const labels: Record<string, string> = {
-      assignee: 'Assignee',
-      owner: 'Owner',
-      dueDate: 'Due Date',
-      followUpDate: 'Follow-up Date',
-      priority: 'Priority',
-      name: 'Name',
-      description: 'Description',
-      delegationState: 'Delegation State',
-      caseInstanceId: 'Case Instance',
-      processInstanceId: 'Process Instance',
-      taskId: 'Task',
-      userId: 'User',
-      groupId: 'Group'
+    // Map property names to translation keys
+    const labelKeys: Record<string, string> = {
+      assignee: 'tasklist.assignee',
+      owner: 'tasklist.owner',
+      dueDate: 'tasklist.dueDate',
+      followUpDate: 'tasklist.followUpDate',
+      priority: 'tasklist.priority',
+      name: 'tasklist.history.property.name',
+      description: 'tasklist.description',
+      delegationState: 'tasklist.delegationState',
+      caseInstanceId: 'tasklist.caseInstance',
+      processInstanceId: 'tasklist.processInstance',
+      taskId: 'tasklist.history.property.task',
+      userId: 'user',
+      groupId: 'group'
     };
-    return labels[property] || property;
+    const key = labelKeys[property];
+    return key ? this.translateService.instant(key) : property;
   }
 
   /**

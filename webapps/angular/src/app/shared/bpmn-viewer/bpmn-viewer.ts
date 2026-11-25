@@ -32,6 +32,7 @@ export interface ParentBreadcrumb {
 // @ts-ignore - bpmn-js doesn't have types
 import NavigatedViewer from 'bpmn-js/lib/NavigatedViewer';
 import { TranslatePipe } from '../../i18n/translate.pipe';
+import { TranslateService } from '../../i18n/translate.service';
 
 export interface ActivityBadge {
   activityId: string;
@@ -63,6 +64,7 @@ export interface CallActivityClickEvent {
 export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private ngZone = inject(NgZone);
+  private translate = inject(TranslateService);
 
   @ViewChild('canvas', { static: true }) private canvasRef!: ElementRef<HTMLDivElement>;
 
@@ -338,7 +340,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
     } catch (err: any) {
       this.loading = false;
       this.currentXml = null;
-      this.errorMessage = err.message || 'Failed to load BPMN diagram';
+      this.errorMessage = err.message || this.translate.instant('common.viewer.loadBpmnError');
       this.cdr.detectChanges();
       this.error.emit(err);
       console.error('BPMN import error:', err);
@@ -455,7 +457,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         const instanceHtml = document.createElement('div');
         instanceHtml.className = 'bpmn-badge bpmn-badge-instances';
         instanceHtml.innerHTML = `<span>${badge.instances}</span>`;
-        instanceHtml.title = `${badge.instances} instance(s)`;
+        instanceHtml.title = this.translate.instant('common.viewer.badge.instances', { count: String(badge.instances) });
 
         try {
           const overlayId = this.overlays.add(badge.activityId, {
@@ -473,7 +475,7 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
         const incidentHtml = document.createElement('div');
         incidentHtml.className = 'bpmn-badge bpmn-badge-incidents';
         incidentHtml.innerHTML = `<span>${badge.incidents}</span>`;
-        incidentHtml.title = `${badge.incidents} incident(s)`;
+        incidentHtml.title = this.translate.instant('common.viewer.badge.incidents', { count: String(badge.incidents) });
 
         try {
           const overlayId = this.overlays.add(badge.activityId, {
@@ -528,12 +530,14 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
       if (isExpression) {
         btn.className = 'bjs-drilldown bpmn-call-activity-overlay bpmn-call-activity-overlay--expression';
-        btn.title = 'Navigation unavailable: calledElement is a dynamic expression';
+        btn.title = this.translate.instant('common.viewer.callActivity.dynamicExpression');
         btn.disabled = true;
       } else {
         // Rule 3: static reference or has instances → blue, clickable
         btn.className = 'bjs-drilldown bpmn-call-activity-overlay';
-        btn.title = hasInstances ? 'Show Called Process Instances' : 'Go to Called Process Definition';
+        btn.title = this.translate.instant(hasInstances
+          ? 'common.viewer.callActivity.showCalledInstances'
+          : 'common.viewer.callActivity.goToCalledDefinition');
         btn.addEventListener('click', (e: Event) => {
           e.stopPropagation();
           this.callActivityClick.emit({ callActivityId: element.id, calledElement });
@@ -790,8 +794,9 @@ export class BpmnViewerComponent implements AfterViewInit, OnChanges, OnDestroy 
 
       const btn = document.createElement('button');
       btn.className = 'bpmn-correlate-overlay bpmn-correlate-overlay--hidden';
-      btn.title = `Correlate message: ${messageName}`;
-      btn.setAttribute('aria-label', `Correlate message: ${messageName}`);
+      const correlateLabel = this.translate.instant('common.viewer.correlateMessage', { name: messageName });
+      btn.title = correlateLabel;
+      btn.setAttribute('aria-label', correlateLabel);
       btn.innerHTML = envelope;
       btn.addEventListener('click', (e: Event) => {
         e.stopPropagation();

@@ -4,6 +4,8 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { Subject, of, NEVER } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { describe, it, expect, beforeAll, beforeEach, vi } from 'vitest';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 import { initTestEnvironment } from '../../../testing/test-utils';
 import { BatchEffects } from './batch.effects';
@@ -11,8 +13,10 @@ import * as BatchActions from './batch.actions';
 import { initialBatchState } from './batch.state';
 import { BatchService } from '../../../services/batch.service';
 import { NotificationsService } from '../../../services/notifications.service';
+import { TranslateService } from '../../../i18n/translate.service';
 
 const mockNotificationsService = { addError: () => {} } as any;
+const mockTranslateService = { instant: (key: string) => key } as any;
 
 function makeRuntimeSuccess(count: number) {
   return BatchActions.loadRuntimeBatchesSuccess({ batches: [], count, users: {} });
@@ -47,6 +51,7 @@ describe('BatchEffects.detectBatchCompletion$', () => {
         provideMockStore({ initialState: { batch: initialBatchState } }),
         { provide: BatchService, useValue: {} as any },
         { provide: NotificationsService, useValue: mockNotificationsService },
+        { provide: TranslateService, useValue: mockTranslateService },
       ],
     });
     effects = TestBed.inject(BatchEffects);
@@ -142,6 +147,7 @@ describe('BatchEffects.loadFailedJobs$ — switchMap: last call wins', () => {
         provideMockStore({ initialState: stateWithSelection }),
         { provide: BatchService, useValue: mockBatchService },
         { provide: NotificationsService, useValue: mockNotificationsService },
+        { provide: TranslateService, useValue: mockTranslateService },
       ],
     });
     effects = TestBed.inject(BatchEffects);
@@ -252,5 +258,43 @@ describe('BatchEffects.loadFailedJobs$ — switchMap: last call wins', () => {
 
     expect(getFailedJobsSpy).toHaveBeenCalledTimes(2);
     expect(dispatched).toHaveLength(2);
+  });
+});
+
+describe('BatchEffects.loadBatchDetails$ — translated "not found" error', () => {
+  beforeAll(() => initTestEnvironment());
+
+  // French translations, to check that the error shown in the batch detail follows the UI language
+  const fr: { [key: string]: string } = JSON.parse(
+    readFileSync(join(__dirname, '../../../../assets/i18n/fr.json'), 'utf-8')
+  );
+
+  let actionsSubject: Subject<Action>;
+  let effects: BatchEffects;
+
+  beforeEach(() => {
+    actionsSubject = new Subject<Action>();
+    TestBed.configureTestingModule({
+      providers: [
+        BatchEffects,
+        provideMockActions(actionsSubject),
+        provideMockStore({ initialState: { batch: initialBatchState } }),
+        { provide: BatchService, useValue: { loadBatchDetails: () => of(null) } as any },
+        { provide: NotificationsService, useValue: mockNotificationsService },
+        { provide: TranslateService, useValue: { instant: (key: string) => fr[key] ?? key } },
+      ],
+    });
+    effects = TestBed.inject(BatchEffects);
+  });
+
+  it('dispatches loadBatchDetailsFailure with the translated message when a history batch is missing', () => {
+    const dispatched: Action[] = [];
+    effects.loadBatchDetails$.subscribe(a => dispatched.push(a));
+
+    actionsSubject.next(BatchActions.loadBatchDetails({ id: 'missing', batchType: 'history' }));
+
+    expect(dispatched).toEqual([
+      BatchActions.loadBatchDetailsFailure({ error: 'Lot introuvable' })
+    ]);
   });
 });

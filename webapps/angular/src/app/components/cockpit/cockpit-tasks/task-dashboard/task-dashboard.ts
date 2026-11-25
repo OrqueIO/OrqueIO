@@ -18,6 +18,7 @@ import { COCKPIT_MENU_ITEMS, COCKPIT_MORE_MENU_ITEMS } from '../../../../shared/
 import { CockpitService, TaskGroupCount, Group } from '../../../../services/cockpit.service';
 import { NavMenuService } from '../../../../services/nav-menu.service';
 import { TranslatePipe } from '../../../../i18n/translate.pipe';
+import { TranslateService } from '../../../../i18n/translate.service';
 
 interface TaskStatistic {
   label?: string;
@@ -29,6 +30,7 @@ interface TaskStatistic {
 
 interface TaskGroupStat {
   groupId: string | null;
+  // empty when the tasks have no candidate group; translated for display by formatGroupName
   groupName: string;
   taskCount: number;
 }
@@ -50,6 +52,7 @@ export class TaskDashboardComponent implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private navMenuService = inject(NavMenuService);
   private cdr = inject(ChangeDetectorRef);
+  private translateService = inject(TranslateService);
 
   // Icons
   faSpinner = faSpinner;
@@ -188,7 +191,7 @@ export class TaskDashboardComponent implements OnInit, OnDestroy {
                     const group = groups.find(g => g.id === gc.groupName);
                     return {
                       groupId: gc.groupName,
-                      groupName: group?.name || gc.groupName || 'Without Group',
+                      groupName: group?.name || gc.groupName || '',
                       taskCount: gc.taskCount
                     };
                   });
@@ -199,7 +202,7 @@ export class TaskDashboardComponent implements OnInit, OnDestroy {
                   // Fallback: use group IDs as names
                   this.taskGroups = groupCounts.map(gc => ({
                     groupId: gc.groupName,
-                    groupName: gc.groupName || 'Without Group',
+                    groupName: gc.groupName || '',
                     taskCount: gc.taskCount
                   }));
                   this.taskGroupsLoading = false;
@@ -209,7 +212,7 @@ export class TaskDashboardComponent implements OnInit, OnDestroy {
           } else {
             this.taskGroups = groupCounts.map(gc => ({
               groupId: gc.groupName,
-              groupName: gc.groupName || 'Without Group',
+              groupName: gc.groupName || '',
               taskCount: gc.taskCount
             }));
             this.taskGroupsLoading = false;
@@ -224,6 +227,6 @@ export class TaskDashboardComponent implements OnInit, OnDestroy {
   }
 
   formatGroupName(name: string | null): string {
-    return name || 'Without Group';
+    return name || this.translateService.instant('cockpit.taskDashboard.withoutGroup');
   }
 }
