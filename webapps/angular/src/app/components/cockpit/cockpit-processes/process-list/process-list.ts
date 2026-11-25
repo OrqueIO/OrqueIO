@@ -889,7 +889,7 @@ export class ProcessListComponent implements OnInit, OnDestroy {
   formatDate(dateStr: string): string {
     if (!dateStr) return '-';
     const date = new Date(dateStr);
-    return date.toLocaleString();
+    return date.toLocaleString(this.translateService.locale);
   }
 
   getVersionLabel(def: ProcessDefinition): string {

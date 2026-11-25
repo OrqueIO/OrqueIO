@@ -8,7 +8,7 @@ import { AuthService } from '../../services/auth';
 import { PermissionService } from '../../services/permission.service';
 import { SystemService } from '../../services/admin/system.service';
 import { TranslatePipe } from '../../i18n/translate.pipe';
-import { TranslateService, Language } from '../../i18n/translate.service';
+import { TranslateService } from '../../i18n/translate.service';
 
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -74,7 +74,6 @@ export class WelcomeComponent implements OnInit {
   faEnvelope = faEnvelope;
 
   userName = '';
-  currentLang: Language = 'fr';
 
   // Limited Access mode flag - true when user is authenticated but has no app permissions
   isLimitedAccess = false;
@@ -96,12 +95,6 @@ export class WelcomeComponent implements OnInit {
         this.userName = auth?.name || this.translateService.instant('GUEST');
         // Re-filter apps when authentication changes
         this.filterApps();
-      });
-
-    this.translateService.currentLang$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(lang => {
-        this.currentLang = lang;
       });
 
     // Re-filter apps when permissions change
@@ -160,11 +153,6 @@ export class WelcomeComponent implements OnInit {
       envKey = 'ENV_TESTING';
     }
     return this.translateService.instant(envKey);
-  }
-
-  toggleLanguage(): void {
-    const newLang = this.currentLang === 'fr' ? 'en' : 'fr';
-    this.translateService.setLanguage(newLang);
   }
 
   // Engine status (connected to SystemService)

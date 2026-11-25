@@ -76,6 +76,27 @@ export class BatchDetailComponent {
   // Detail keys to display
   detailKeys = BATCH_DETAIL_KEYS;
 
+  // Translation key of the label shown for each detail key
+  readonly detailLabels: Record<string, string> = {
+    id: 'BATCHES_BATCH_ID',
+    type: 'BATCHES_TYPE',
+    createUserId: 'BATCHES_PROGRESS_USER',
+    startTime: 'BATCHES_START_TIME',
+    executionStartTime: 'BATCHES_EXECUTION_START_TIME',
+    endTime: 'BATCHES_END_TIME',
+    removalTime: 'BATCHES_PROGRESS_REMOVAL_TIME',
+    totalJobs: 'BATCHES_TOTAL_JOBS',
+    completedJobs: 'BATCHES_COMPLETED_JOBS',
+    remainingJobs: 'BATCHES_REMAINING_JOBS',
+    failedJobs: 'BATCHES_FAILED_JOBS_COUNT',
+    batchJobsPerSeed: 'BATCHES_JOBS_PER_SEED',
+    invocationsPerBatchJob: 'BATCHES_INVOCATIONS_PER_JOB',
+    tenantId: 'BATCHES_TENANT',
+    batchJobDefinitionId: 'BATCHES_BATCH_JOB_DEFINITION',
+    monitorJobDefinitionId: 'BATCHES_MONITOR_JOB_DEFINITION',
+    seedJobDefinitionId: 'BATCHES_SEED_JOB_DEFINITION'
+  };
+
   onToggleSuspension(batch: BatchStatistics | HistoryBatch): void {
     const runtimeBatch = batch as BatchStatistics;
     this.store.dispatch(BatchActions.toggleBatchSuspension({

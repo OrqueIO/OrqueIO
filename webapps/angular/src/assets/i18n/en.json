@@ -1967,7 +1967,6 @@
   "cockpit.batchOps.results.batchError": "Failed to submit the batch operation.",
   "cockpit.batchOps.results.newOperation": "New operation",
   "cockpit.batchOps.results.viewBatches": "View batch monitoring",
-
   "cockpit.modify.hint": "Click activities on the diagram above to add modification instructions.",
   "cockpit.modify.selectVersion": "Select a specific version to enable modifications.",
   "cockpit.modify.source": "Source (Cancel)",
@@ -1998,7 +1997,6 @@
   "cockpit.modify.noEligibleInstances": "No eligible instances at the source activity",
   "cockpit.modify.eligibilityCheckFailed": "Could not check which instances are at the source activity. Please retry.",
   "cockpit.modify.retryEligibility": "Retry",
-
   "cockpit.modify.selectDialog.title": "Select Instances To Modify",
   "cockpit.modify.selectDialog.selectionType": "Choose selection type",
   "cockpit.modify.selectDialog.instance": "Instance",
@@ -2070,7 +2068,6 @@
   "cockpit.modify.selectDialog.desc.startedAfter": "Started after a given date",
   "cockpit.modify.selectDialog.desc.startedBefore": "Started before a given date",
   "cockpit.modify.selectDialog.desc.variable": "Filter by process variable",
-
   "cockpit.modify.confirmDialog.title": "Confirm Modification",
   "cockpit.modify.confirmDialog.options": "Options",
   "cockpit.modify.confirmDialog.asynchronous": "Asynchronous",
@@ -2093,7 +2090,6 @@
   "cockpit.modify.confirmDialog.proceed": "Proceed",
   "cockpit.modify.confirmDialog.multiInstanceWarning": "The target activity is inside a multi-instance subprocess. The batch API cannot specify which instance to target — Camunda will use default ancestor selection, which may produce unexpected results if multiple subprocess instances exist. Proceed with caution.",
   "cockpit.modify.confirmDialog.callActivityWarning": "The source is a Call Activity — canceling it will terminate the child process instance and all its active tasks. This action cannot be undone.",
-
   "cockpit.modify.results.processing": "Submitting modification...",
   "cockpit.modify.results.success": "Modification submitted successfully.",
   "cockpit.modify.results.executing": "Executing modification...",
@@ -2101,5 +2097,14 @@
   "cockpit.modify.results.batchId": "Batch ID: {{id}}",
   "cockpit.modify.results.error": "Failed to submit the modification.",
   "cockpit.modify.results.viewBatches": "View batch monitoring",
-  "cockpit.modify.results.newModification": "New modification"
+  "cockpit.modify.results.newModification": "New modification",
+  "admin.groups.memberAlreadyExists": "User is already a member of this group",
+  "admin.groups.tenantAlreadyAssigned": "Group is already assigned to this tenant",
+  "common.dismiss": "Dismiss",
+  "tasklist.loadingForm": "Loading form...",
+  "BATCHES_BATCH_ID": "Batch ID",
+  "BATCHES_EXECUTION_START_TIME": "Execution Start Time",
+  "BATCHES_JOBS_PER_SEED": "Batch Jobs per Seed",
+  "BATCHES_INVOCATIONS_PER_JOB": "Invocations per Batch Job",
+  "PAGE_TITLE_COCKPIT_DRD_DETAIL": "Decision Requirements Detail"
 }

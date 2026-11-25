@@ -85,11 +85,7 @@
               <tbody>
                 <ng-container *ngFor="let key of detailKeys">
                   <tr *ngIf="shouldShowKey(data.batch, key)" [class]="key">
-                    <td class="prop-name">
-                      <ng-container *ngIf="key === 'createUserId'">{{ 'BATCHES_PROGRESS_USER' | translate }}</ng-container>
-                      <ng-container *ngIf="key === 'removalTime'">{{ 'BATCHES_PROGRESS_REMOVAL_TIME' | translate }}</ng-container>
-                      <ng-container *ngIf="key !== 'createUserId' && key !== 'removalTime'">{{ key }}</ng-container>
-                    </td>
+                    <td class="prop-name">{{ detailLabels[key] ? (detailLabels[key] | translate) : key }}</td>
                     <td class="prop-value">
                       <ng-container *ngIf="key === 'createUserId'">
                         {{ getUserName(data.batch, data.users) }}
@@ -128,7 +124,7 @@
           <app-confirm-dialog
             *ngIf="showDeleteModal"
             [title]="'BATCHES_DELETE_BATCH_TITLE' | translate"
-            [message]="'BATCHES_DELETE_BATCH_MESSAGE' | translate"
+            [message]="'BATCHES_CONFIRM_DELETE' | translate"
             [confirmLabel]="'DELETE' | translate"
             [cancelLabel]="'CANCEL' | translate"
             [isDanger]="true"

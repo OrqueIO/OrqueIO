@@ -1949,7 +1949,6 @@
   "cockpit.batchOps.results.batchError": "Échec de la soumission de l'opération batch.",
   "cockpit.batchOps.results.newOperation": "Nouvelle opération",
   "cockpit.batchOps.results.viewBatches": "Voir le suivi des lots",
-
   "cockpit.modify.hint": "Cliquez sur les activités du diagramme ci-dessus pour ajouter des instructions de modification.",
   "cockpit.modify.selectVersion": "Sélectionnez une version spécifique pour activer les modifications.",
   "cockpit.modify.source": "Source (Annuler)",
@@ -1980,7 +1979,6 @@
   "cockpit.modify.noEligibleInstances": "Aucune instance éligible à l'activité source",
   "cockpit.modify.eligibilityCheckFailed": "Impossible de vérifier quelles instances sont à l'activité source. Veuillez réessayer.",
   "cockpit.modify.retryEligibility": "Réessayer",
-
   "cockpit.modify.selectDialog.title": "Sélectionner les instances à modifier",
   "cockpit.modify.selectDialog.selectionType": "Choisir le type de sélection",
   "cockpit.modify.selectDialog.instance": "Instance",
@@ -2052,7 +2050,6 @@
   "cockpit.modify.selectDialog.desc.startedAfter": "Démarrées après une date",
   "cockpit.modify.selectDialog.desc.startedBefore": "Démarrées avant une date",
   "cockpit.modify.selectDialog.desc.variable": "Filtrer par variable de processus",
-
   "cockpit.modify.confirmDialog.title": "Confirmer la modification",
   "cockpit.modify.confirmDialog.options": "Options",
   "cockpit.modify.confirmDialog.asynchronous": "Asynchrone",
@@ -2075,7 +2072,6 @@
   "cockpit.modify.confirmDialog.proceed": "Procéder",
   "cockpit.modify.confirmDialog.multiInstanceWarning": "L'activité cible se trouve dans un sous-processus multi-instance. L'API par lot ne permet pas de spécifier quelle instance cibler — Camunda utilisera la sélection d'ancêtre par défaut, ce qui peut produire des résultats inattendus si plusieurs instances du sous-processus existent. Procédez avec prudence.",
   "cockpit.modify.confirmDialog.callActivityWarning": "La source est un Call Activity — son annulation terminera l'instance du processus enfant et toutes ses tâches actives. Cette action est irréversible.",
-
   "cockpit.modify.results.processing": "Soumission de la modification...",
   "cockpit.modify.results.success": "Modification soumise avec succès.",
   "cockpit.modify.results.executing": "Exécution de la modification en cours...",
@@ -2083,5 +2079,14 @@
   "cockpit.modify.results.batchId": "ID du batch : {{id}}",
   "cockpit.modify.results.error": "Échec de la soumission de la modification.",
   "cockpit.modify.results.viewBatches": "Voir le suivi des lots",
-  "cockpit.modify.results.newModification": "Nouvelle modification"
+  "cockpit.modify.results.newModification": "Nouvelle modification",
+  "admin.groups.memberAlreadyExists": "Cet utilisateur est déjà membre de ce groupe",
+  "admin.groups.tenantAlreadyAssigned": "Ce groupe est déjà affecté à ce tenant",
+  "common.dismiss": "Ignorer",
+  "tasklist.loadingForm": "Chargement du formulaire...",
+  "BATCHES_BATCH_ID": "ID du batch",
+  "BATCHES_EXECUTION_START_TIME": "Début de l'exécution",
+  "BATCHES_JOBS_PER_SEED": "Jobs de batch par seed",
+  "BATCHES_INVOCATIONS_PER_JOB": "Invocations par job de batch",
+  "PAGE_TITLE_COCKPIT_DRD_DETAIL": "Détail des exigences de décision"
 }
