@@ -352,10 +352,10 @@ describe('ProcessDetailComponent', () => {
       expect(component.activeTab).toBe('variables');
     });
 
-    it('should have all 6 tabs', () => {
-      expect(component.tabs.length).toBe(6);
+    it('should have all 7 tabs', () => {
+      expect(component.tabs.length).toBe(7);
       expect(component.tabs.map((t) => t.id)).toEqual([
-        'variables', 'incidents', 'calledInstances', 'userTasks', 'jobs', 'externalTasks',
+        'variables', 'llmCalls', 'incidents', 'calledInstances', 'userTasks', 'jobs', 'externalTasks',
       ]);
     });
 
@@ -377,6 +377,191 @@ describe('ProcessDetailComponent', () => {
       component.variables = [];
       const variablesTab = component.tabs.find((t) => t.id === 'variables')!;
       expect(component.getTabBadgeCount(variablesTab)).toBeNull();
+    });
+  });
+
+  // =============================================
+  // LLM calls
+  // =============================================
+
+  describe('LLM calls', () => {
+    const record = (activityId: string, fields: Record<string, unknown>): Variable => ({
+      name: 'orqueioLlm_' + activityId, type: 'String', processInstanceId: 'pi-1',
+      value: JSON.stringify({
+        provider: 'openai', model: 'gpt-4o-mini', promptVersion: '3f2a9c1e0b7d4a6f9e8d',
+        inputTokens: 412, outputTokens: 27, latencyMs: 930, fromCache: false,
+        outcome: 'VALID', recordedAt: '2026-11-18T09:30:00Z', ...fields
+      })
+    });
+    const triage = record('Task_Triage', {});
+    const reused = record('Task_Check', {
+      outcome: 'BPMN_ERROR', inputTokens: 0, outputTokens: 0, fromCache: true, recordedAt: '2026-11-18T09:31:00Z',
+      prompt: 'Check <claimText>', answer: '{"valid":false}', truncated: true
+    });
+    const broken: Variable = { name: 'orqueioLlm_Task_Broken', type: 'String', value: 'not json', processInstanceId: 'pi-1' };
+
+    // The component is OnPush: mark its own view, as its handlers do
+    const refresh = () => (component as any).cdr.markForCheck();
+
+    function render(variables: Variable[]): HTMLElement {
+      cockpitService.getProcessInstanceVariables.mockReturnValue(of([...mockVariables, ...variables]));
+      cockpitService.getProcessInstanceActivities.mockReturnValue(of([...mockActivities, {
+        id: 'ai-3', activityId: 'Task_Triage', activityName: 'Triage the claim',
+        activityType: 'serviceTask', startTime: '2026-11-18T09:29:59.000+0000'
+      }]));
+      fixture.detectChanges();
+      routeParams$.next({ id: 'pi-1' });
+      refresh();
+      fixture.detectChanges();
+      return fixture.nativeElement;
+    }
+
+    const tabLabels = (root: HTMLElement) =>
+      Array.from(root.querySelectorAll('.tabs-header li a')).map(a => a.childNodes[0].textContent!.trim());
+
+    const open = (root: HTMLElement) => {
+      component.setActiveTab('llmCalls');
+      refresh();
+      fixture.detectChanges();
+      return Array.from(root.querySelectorAll('.llm-calls-tab tbody tr.llm-record')) as HTMLElement[];
+    };
+
+    it('should hide the tab when no LLM task has run', () => {
+      const root = render([]);
+
+      expect(component.llmRecords).toEqual([]);
+      expect(tabLabels(root)).not.toContain('cockpit.processDetail.tabs.llmCalls');
+    });
+
+    it('should show the tab, with the number of records, next to the variables', () => {
+      const root = render([triage, reused]);
+
+      expect(tabLabels(root)[1]).toBe('cockpit.processDetail.tabs.llmCalls');
+      expect(component.getTabBadgeCount(component.tabs.find(tab => tab.id === 'llmCalls')!)).toBe(2);
+    });
+
+    it('should show one row per LLM task with what its call used and cost', () => {
+      const rows = open(render([reused, triage]));
+      const cells = (row: HTMLElement) => Array.from(row.querySelectorAll('td')).map(td => td.textContent!.replace(/\s+/g, ' ').trim());
+
+      expect(rows.length).toBe(2);
+      // In the order they were written; the task name from the history, else the activity id
+      expect(cells(rows[0])).toEqual([
+        'Triage the claim', 'cockpit.processDetail.llmCalls.outcomeValid', 'gpt-4o-mini openai',
+        '412', '27', '930 ms', '3f2a9c1e0b7d', new Date('2026-11-18T09:30:00Z').toLocaleString(component['translateService'].locale), ''
+      ]);
+      expect(cells(rows[1])[0]).toBe('Task_Check cockpit.processDetail.llmCalls.reused');
+      expect(cells(rows[1])[1]).toBe('cockpit.processDetail.llmCalls.outcomeBpmnError');
+      expect(rows[1].querySelector('.llm-outcome-error')).not.toBeNull();
+      expect(cells(rows[1]).slice(3, 5)).toEqual(['0', '0']);
+    });
+
+    it('should show the prompt and the answer only when they were recorded', () => {
+      const root = render([triage, reused]);
+      const rows = open(root);
+
+      expect(rows[0].querySelector('button')).toBeNull();
+      (rows[1].querySelector('button') as HTMLButtonElement).click();
+      fixture.detectChanges();
+
+      const content = root.querySelector('.llm-calls-tab .llm-content')!;
+      expect(Array.from(content.querySelectorAll('pre')).map(pre => pre.textContent)).toEqual(['Check <claimText>', '{"valid":false}']);
+      expect(content.querySelector('.llm-truncated')).not.toBeNull();
+      // Showing the content does not select the task
+      expect(component.selectedActivityId).toBeNull();
+
+      (rows[1].querySelector('button') as HTMLButtonElement).click();
+      fixture.detectChanges();
+      expect(root.querySelector('.llm-calls-tab .llm-content')).toBeNull();
+    });
+
+    it('should show the instructions from the deployed process above the data sent', () => {
+      cockpitService.getBpmn20Xml.mockReturnValue(of({ bpmn20Xml: `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="D">
+  <bpmn:process id="invoice">
+    <bpmn:serviceTask id="Task_Check">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="orqueio.llm.prompt">Check the claim.
+{{claimText}}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+  </bpmn:process>
+</bpmn:definitions>` }));
+      const root = render([reused]);
+      const rows = open(root);
+
+      (rows[0].querySelector('button') as HTMLButtonElement).click();
+      fixture.detectChanges();
+
+      const blocks = Array.from(root.querySelectorAll('.llm-calls-tab .llm-content .llm-content-block'))
+        .map(block => [block.querySelector('strong')!.textContent!.trim(), block.querySelector('pre')!.textContent]);
+      expect(blocks).toEqual([
+        ['cockpit.processDetail.llmCalls.instructions', 'Check the claim.\n{{claimText}}'],
+        ['cockpit.processDetail.llmCalls.sentData', 'Check <claimText>'],
+        ['cockpit.processDetail.llmCalls.answer', '{"valid":false}']
+      ]);
+    });
+
+    it('should show the raw value of a record that cannot be read', () => {
+      const rows = open(render([broken]));
+
+      expect(rows.length).toBe(1);
+      expect(rows[0].querySelector('.llm-unreadable code')!.textContent).toBe('not json');
+    });
+
+    it('should leave the tab, and close the content, when the next instance has no LLM call', () => {
+      const root = render([triage, reused]);
+      open(root);
+      component.expandedLlmRecord = reused.name;
+
+      cockpitService.getProcessInstanceVariables.mockReturnValue(of(mockVariables));
+      routeParams$.next({ id: 'pi-2' });
+      refresh();
+      fixture.detectChanges();
+
+      expect(component.activeTab).toBe('variables');
+      expect(component.expandedLlmRecord).toBeNull();
+      expect(tabLabels(root)).not.toContain('cockpit.processDetail.tabs.llmCalls');
+    });
+
+    it('should mark a shortened record in the table, and say whether its content is shown', () => {
+      const root = render([triage, reused]);
+      const rows = open(root);
+
+      expect(rows[0].querySelector('.llm-truncated-badge')).toBeNull();
+      expect(rows[1].querySelector('.llm-truncated-badge')).not.toBeNull();
+      const button = rows[1].querySelector('button') as HTMLButtonElement;
+      expect(button.getAttribute('aria-expanded')).toBe('false');
+      button.click();
+      fixture.detectChanges();
+      expect(button.getAttribute('aria-expanded')).toBe('true');
+    });
+
+    it('should select a task from its row with the keyboard', () => {
+      const rows = open(render([triage, reused]));
+
+      expect(rows[0].getAttribute('tabindex')).toBe('0');
+      rows[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      fixture.detectChanges();
+
+      expect(component.selectedActivityId).toBe('Task_Triage');
+    });
+
+    it('should select the task in the diagram from its row, and its row from the diagram', () => {
+      const root = render([triage, reused]);
+      let rows = open(root);
+
+      rows[1].click();
+      fixture.detectChanges();
+      expect(component.selectedActivityId).toBe('Task_Check');
+
+      component.handleBpmnElementSelection({ id: 'Task_Triage', type: 'bpmn:ServiceTask' });
+      refresh();
+      fixture.detectChanges();
+      rows = Array.from(root.querySelectorAll('.llm-calls-tab tbody tr.llm-record')) as HTMLElement[];
+      expect(rows.map(row => row.classList.contains('selected'))).toEqual([true, false]);
     });
   });
 

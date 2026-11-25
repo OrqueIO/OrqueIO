@@ -1993,3 +1993,99 @@ a:focus-visible {
     border: 1px solid #ddd;
   }
 }
+
+/* ========================================
+   LLM Calls Tab
+   ======================================== */
+.llm-calls-tab .llm-record {
+  cursor: pointer;
+}
+
+.llm-calls-tab .llm-record.selected td {
+  background: rgba(21, 92, 181, 0.08);
+}
+
+.llm-calls-tab .llm-number {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.llm-calls-tab .llm-mono,
+.llm-calls-tab .llm-unreadable code {
+  font-family: var(--font-family-monospace, monospace);
+  font-size: 12px;
+}
+
+.llm-calls-tab .llm-provider,
+.llm-calls-tab .llm-reused {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm, 4px);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.llm-calls-tab .llm-outcome-valid {
+  color: var(--success-color);
+  font-weight: 600;
+}
+
+.llm-calls-tab .llm-outcome-error {
+  color: var(--danger-color);
+  font-weight: 600;
+}
+
+.llm-calls-tab .llm-unreadable {
+  color: var(--text-secondary);
+}
+
+.llm-calls-tab .llm-unreadable code {
+  display: block;
+  margin-top: 4px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.llm-calls-tab .llm-content td {
+  background: var(--bg-secondary);
+}
+
+.llm-calls-tab .llm-content-block + .llm-content-block {
+  margin-top: 8px;
+}
+
+.llm-calls-tab .llm-content-block pre {
+  margin: 4px 0 0;
+  padding: 8px;
+  max-height: 240px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm, 4px);
+  font-size: 12px;
+}
+
+.llm-calls-tab .llm-truncated {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.llm-calls-tab .llm-truncated-badge {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm, 4px);
+  background: #fff4e5;
+  color: #92400e;
+  font-size: 11px;
+}
+
+.llm-calls-tab .llm-record:focus-visible td {
+  outline: none;
+  background: rgba(21, 92, 181, 0.12);
+}
