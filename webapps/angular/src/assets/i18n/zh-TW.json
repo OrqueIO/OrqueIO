@@ -625,6 +625,11 @@
   "cockpit.processDetail.incidents.activity": "活動",
   "cockpit.processDetail.incidents.message": "訊息",
   "cockpit.processDetail.incidents.createTime": "建立時間",
+  "cockpit.processDetail.incidents.status": "狀態",
+  "cockpit.processDetail.incidents.state.open": "未解決",
+  "cockpit.processDetail.incidents.state.resolved": "已解決",
+  "cockpit.processDetail.incidents.state.deleted": "已刪除",
+  "cockpit.processDetail.incidents.endTime": "結束時間",
 
   "cockpit.processDetail.tenant": "租戶",
   "cockpit.processDetail.superProcess": "父流程",
