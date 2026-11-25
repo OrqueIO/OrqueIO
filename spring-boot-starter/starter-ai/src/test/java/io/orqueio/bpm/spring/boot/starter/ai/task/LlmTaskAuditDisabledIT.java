@@ -26,6 +26,7 @@ import io.orqueio.bpm.engine.RuntimeService;
 import io.orqueio.bpm.engine.repository.Deployment;
 import io.orqueio.bpm.engine.runtime.ProcessInstance;
 import io.orqueio.bpm.spring.boot.starter.ai.test.TestAiApplication;
+import io.orqueio.bpm.spring.boot.starter.ai.testing.StubChatModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ class LlmTaskAuditDisabledIT {
   private ManagementService managementService;
 
   @Autowired
-  private LlmTaskAuditIT.ReportingChatModel model;
+  private StubChatModel model;
 
   private Deployment deployment;
 
@@ -58,7 +59,7 @@ class LlmTaskAuditDisabledIT {
 
   @Test
   void shouldWriteNoAuditVariable() {
-    model.answer = "{\"category\":\"Theft\"}";
+    model.reset().answer("{\"category\":\"Theft\"}").reportUsage(312, 100).reportModel("qwen2.5:7b-reported");
     deployment = repositoryService.createDeployment().addString("llm-task.bpmn", process("""
         <bpmn:serviceTask id="Task_Llm" camunda:delegateExpression="${orqueioLlmTask}" camunda:asyncBefore="true">
           <bpmn:extensionElements>

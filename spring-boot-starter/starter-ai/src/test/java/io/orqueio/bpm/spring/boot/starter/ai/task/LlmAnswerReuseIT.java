@@ -22,9 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import io.orqueio.bpm.engine.ManagementService;
 import io.orqueio.bpm.engine.RepositoryService;
@@ -37,14 +35,10 @@ import io.orqueio.bpm.spring.boot.starter.ai.cache.InMemoryLlmCallLock;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmAnswerStore;
 import io.orqueio.bpm.spring.boot.starter.ai.cache.LlmCallLock;
 import io.orqueio.bpm.spring.boot.starter.ai.test.TestAiApplication;
+import io.orqueio.bpm.spring.boot.starter.ai.testing.StubChatModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.ai.chat.messages.AssistantMessage;
-import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.chat.model.ChatResponse;
-import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -68,7 +62,7 @@ class LlmAnswerReuseIT {
   private ManagementService managementService;
 
   @Autowired
-  private CountingChatModel model;
+  private StubChatModel model;
 
   @Autowired
   private FailOnce failOnce;
@@ -83,11 +77,7 @@ class LlmAnswerReuseIT {
 
   @BeforeEach
   void reset() {
-    model.calls.set(0);
-    model.answer = null;
-    model.delay = null;
-    model.failure = null;
-    model.failureAfterDelay = null;
+    model.reset();
     failOnce.failed = false;
   }
 
@@ -110,14 +100,14 @@ class LlmAnswerReuseIT {
     deploy("Classify after rollback", "category:string", """
         <bpmn:serviceTask id="Task_After" camunda:expression="${failOnce.run()}" />
         """);
-    model.answer = "{\"category\":\"Theft\"}";
+    model.answer("{\"category\":\"Theft\"}");
 
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess");
     Job job = jobOf(instance);
     assertThatThrownBy(() -> managementService.executeJob(job.getId())).hasMessageContaining("Fails once");
     managementService.executeJob(job.getId());
 
-    assertThat(model.calls).hasValue(1);
+    assertThat(model.calls()).isEqualTo(1);
     assertThat(runtimeService.getVariable(instance.getId(), "category")).isEqualTo("Theft");
   }
 
@@ -125,8 +115,8 @@ class LlmAnswerReuseIT {
   void shouldMakeRetryWaitForCallStillRunningAndReuseItsAnswer() {
     // The client ignores the interrupt: the call keeps running after the task stopped waiting
     deploy("Classify slowly", "category:string", "", property("orqueio.llm.timeout", "PT0.6S"));
-    model.answer = "{\"category\":\"Fire\"}";
-    model.delay = Duration.ofMillis(900);
+    model.answer("{\"category\":\"Fire\"}");
+    model.onCall(prompt -> sleepIgnoringInterrupts(Duration.ofMillis(900)));
 
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess");
     Job job = jobOf(instance);
@@ -134,15 +124,15 @@ class LlmAnswerReuseIT {
         .hasMessage("The model did not answer within PT0.6S");
     managementService.executeJob(job.getId());
 
-    assertThat(model.calls).hasValue(1);
+    assertThat(model.calls()).isEqualTo(1);
     assertThat(runtimeService.getVariable(instance.getId(), "category")).isEqualTo("Fire");
   }
 
   @Test
   void shouldFailRetryWhenCallOfSameRequestIsStillRunningAfterTimeout() {
     deploy("Classify very slowly", "category:string", "", property("orqueio.llm.timeout", "PT0.2S"));
-    model.answer = "{\"category\":\"Water\"}";
-    model.delay = Duration.ofMillis(1500);
+    model.answer("{\"category\":\"Water\"}");
+    model.onCall(prompt -> sleepIgnoringInterrupts(Duration.ofMillis(1500)));
 
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess");
     Job job = jobOf(instance);
@@ -152,44 +142,43 @@ class LlmAnswerReuseIT {
     assertThatThrownBy(() -> managementService.executeJob(job.getId()))
         .isInstanceOf(LlmTransientException.class)
         .hasMessage("A call of the same request is still running after PT0.2S");
-    assertThat(model.calls).hasValue(1);
+    assertThat(model.calls()).isEqualTo(1);
   }
 
   @Test
   void shouldKeepRetryWithinTimeoutWhenItWaitedForTheLock() {
     // The running call fails after 1.8 s: the retry gets the lock but no answer, with part of its 1 s left
     deploy("Classify within budget", "category:string", "", property("orqueio.llm.timeout", "PT1S"));
-    model.answer = "{\"category\":\"Fire\"}";
-    model.delay = Duration.ofMillis(1800);
-    model.failureAfterDelay = new IllegalStateException("provider unavailable");
+    // The first call fails after its delay; the retry's call answers
+    model.respond(new IllegalStateException("provider unavailable"), "{\"category\":\"Fire\"}")
+        .onCall(prompt -> sleepIgnoringInterrupts(Duration.ofMillis(1800)));
 
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess");
     Job job = jobOf(instance);
     assertThatThrownBy(() -> managementService.executeJob(job.getId())).hasMessage("The model did not answer within PT1S");
-    model.failureAfterDelay = null;
 
     long start = System.nanoTime();
     assertThatThrownBy(() -> managementService.executeJob(job.getId())).hasMessage("The model did not answer within PT1S");
 
     // Waiting for the lock and calling the model share the task's timeout
     assertThat(Duration.ofNanos(System.nanoTime() - start)).isLessThan(Duration.ofMillis(1300));
-    assertThat(model.calls).hasValue(2);
+    assertThat(model.calls()).isEqualTo(2);
   }
 
   @Test
   void shouldNotStoreInvalidAnswer() {
     deploy("Classify with an invalid answer first", "urgency:integer", "");
-    model.answer = "{\"urgency\":\"high\"}";
+    model.answer("{\"urgency\":\"high\"}");
 
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess");
     Job job = jobOf(instance);
     assertThatThrownBy(() -> managementService.executeJob(job.getId())).isInstanceOf(LlmInvalidAnswerException.class);
 
-    model.answer = "{\"urgency\":3}";
+    model.answer("{\"urgency\":3}");
     managementService.setJobRetries(job.getId(), 1);
     managementService.executeJob(job.getId());
 
-    assertThat(model.calls).hasValue(2);
+    assertThat(model.calls()).isEqualTo(2);
     assertThat(runtimeService.getVariable(instance.getId(), "urgency")).isEqualTo(3L);
   }
 
@@ -197,17 +186,17 @@ class LlmAnswerReuseIT {
   void shouldNotStoreAnswerOutsideBounds() {
     // Well-formed, but outside the bounds: a retry must ask the model again, not reuse it
     deploy("Rate with an out-of-range answer first", "priority:integer[1..5]", "");
-    model.answer = "{\"priority\":10}";
+    model.answer("{\"priority\":10}");
 
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess");
     Job job = jobOf(instance);
     assertThatThrownBy(() -> managementService.executeJob(job.getId())).isInstanceOf(LlmInvalidAnswerException.class);
 
-    model.answer = "{\"priority\":4}";
+    model.answer("{\"priority\":4}");
     managementService.setJobRetries(job.getId(), 1);
     managementService.executeJob(job.getId());
 
-    assertThat(model.calls).hasValue(2);
+    assertThat(model.calls()).isEqualTo(2);
     assertThat(runtimeService.getVariable(instance.getId(), "priority")).isEqualTo(4L);
   }
 
@@ -215,28 +204,26 @@ class LlmAnswerReuseIT {
   void shouldNotReuseAnswerAcrossInstances() {
     // Only a retry of the same job reuses an answer: each instance gets its own call
     deploy("Classify: {{text}}", "category:string", "", property("orqueio.llm.inputs", "text"));
-    model.answer = "{\"category\":\"Theft\"}";
+    model.answer("{\"category\":\"Theft\"}");
 
     runLlmTask(Map.of("text", "stolen bike"));
     runLlmTask(Map.of("text", "stolen bike"));
 
-    assertThat(model.calls).hasValue(2);
+    assertThat(model.calls()).isEqualTo(2);
   }
 
   @Test
   void shouldNotStoreProviderFailure() {
     deploy("Classify after a provider failure", "category:string", "");
-    model.failure = new IllegalStateException("provider unavailable");
+    model.respond(new IllegalStateException("provider unavailable"), "{\"category\":\"Theft\"}");
 
     ProcessInstance instance = runtimeService.startProcessInstanceByKey("llmTaskProcess");
     Job job = jobOf(instance);
     assertThatThrownBy(() -> managementService.executeJob(job.getId())).isInstanceOf(LlmTransientException.class);
 
-    model.failure = null;
-    model.answer = "{\"category\":\"Theft\"}";
     managementService.executeJob(job.getId());
 
-    assertThat(model.calls).hasValue(2);
+    assertThat(model.calls()).isEqualTo(2);
     assertThat(runtimeService.getVariable(instance.getId(), "category")).isEqualTo("Theft");
   }
 
@@ -269,45 +256,20 @@ class LlmAnswerReuseIT {
     deployment = repositoryService.createDeployment().addString("llm-task.bpmn", bpmn).deploy();
   }
 
-  static class CountingChatModel implements ChatModel {
-
-    final AtomicInteger calls = new AtomicInteger();
-    volatile String answer;
-    volatile Duration delay;
-    volatile RuntimeException failure;
-    volatile RuntimeException failureAfterDelay;
-
-    @Override
-    public ChatResponse call(Prompt prompt) {
-      calls.incrementAndGet();
-      if (failure != null) {
-        throw failure;
+  // Like an HTTP client that does not react to interrupts, but keeps the interrupt flag set
+  static void sleepIgnoringInterrupts(Duration duration) {
+    long deadline = System.nanoTime() + duration.toNanos();
+    boolean interrupted = false;
+    while (System.nanoTime() < deadline) {
+      try {
+        Thread.sleep(Math.max(1, (deadline - System.nanoTime()) / 1_000_000));
       }
-      RuntimeException laterFailure = failureAfterDelay;
-      if (delay != null) {
-        sleepIgnoringInterrupts(delay);
+      catch (InterruptedException e) {
+        interrupted = true;
       }
-      if (laterFailure != null) {
-        throw laterFailure;
-      }
-      return new ChatResponse(List.of(new Generation(new AssistantMessage(answer))));
     }
-
-    // Like an HTTP client that does not react to interrupts, but keeps the interrupt flag set
-    static void sleepIgnoringInterrupts(Duration duration) {
-      long deadline = System.nanoTime() + duration.toNanos();
-      boolean interrupted = false;
-      while (System.nanoTime() < deadline) {
-        try {
-          Thread.sleep(Math.max(1, (deadline - System.nanoTime()) / 1_000_000));
-        }
-        catch (InterruptedException e) {
-          interrupted = true;
-        }
-      }
-      if (interrupted) {
-        Thread.currentThread().interrupt();
-      }
+    if (interrupted) {
+      Thread.currentThread().interrupt();
     }
   }
 
@@ -327,8 +289,8 @@ class LlmAnswerReuseIT {
   static class StubModelConfiguration {
 
     @Bean
-    CountingChatModel countingChatModel() {
-      return new CountingChatModel();
+    StubChatModel stubChatModel() {
+      return new StubChatModel();
     }
 
     @Bean

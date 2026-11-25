@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  targetNamespace="http://orqueio.io/test">
+  <bpmn:error id="Error_Invalid" errorCode="LLM_INVALID_ANSWER" />
+  <bpmn:process id="claimTriage" isExecutable="true" camunda:historyTimeToLive="P1D">
+    <bpmn:startEvent id="Start" />
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Start" targetRef="Task_Extract" />
+    <!-- Names a provider, as a real process does: the stub model stands in for it -->
+    <bpmn:serviceTask id="Task_Extract" name="Extract the facts"
+                      camunda:delegateExpression="${orqueioLlmTask}" camunda:asyncBefore="true">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property name="orqueio.llm.provider" value="openai" />
+          <camunda:property name="orqueio.llm.model" value="gpt-4o-mini" />
+          <camunda:property name="orqueio.llm.inputs" value="claimText" />
+          <camunda:property name="orqueio.llm.outputs" value="claimAmount:number[0..50000], incidentType:Theft|Fire|Water|Other" />
+          <camunda:property name="orqueio.llm.errorCode" value="LLM_INVALID_ANSWER" />
+        </camunda:properties>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="orqueio.llm.prompt">Extract the facts of an insurance claim.
+Claim: {{claimText}}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="Catch_Invalid" attachedToRef="Task_Extract">
+      <bpmn:errorEventDefinition errorRef="Error_Invalid" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_Invalid" sourceRef="Catch_Invalid" targetRef="Task_Review" />
+    <bpmn:userTask id="Task_Review" name="Review the claim" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_Extract" targetRef="Task_Handle" />
+    <bpmn:userTask id="Task_Handle" name="Handle the claim" />
+  </bpmn:process>
+</bpmn:definitions>
